@@ -69,6 +69,10 @@ export class SearchBar implements ComponentInterface {
         this.filter.controls[i] = controlData;
         this.currentFilters[control.name] = controlData;
         this.filter = { ...this.filter };
+        if (this.paginationEl && !this.paginationEl?.disableFetch) this.paginationEl.fetchData = {
+          ...(this.paginationEl?.fetchData || {}),
+          [control.name]: event?.detail?.payload?.value
+        };
       }
       if (!this.paginationEl) return;
       await this.paginationEl.clearResults();
