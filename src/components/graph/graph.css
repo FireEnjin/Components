@@ -1,0 +1,15 @@
+fireenjin-graph {
+  font-family: var(
+    --fireenjin-graph-card-font-family,
+    var(--ion-font-family, Arial, Helvetica, sans-serif)
+  );
+}
+fireenjin-graph .graph-wrapper {
+  max-width: 300px;
+  margin: 0 auto;
+  position: relative;
+}
+fireenjin-graph canvas {
+  z-index: 1;
+  position: relative;
+}
