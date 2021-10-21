@@ -6,7 +6,7 @@
 
 ---
 
-Our component development process uses [StencilJS](https://stenciljs.com) to avoid using any framework and to build out to standard compliant Web Components.  
+Our component development process uses [StencilJS](https://stenciljs.com) to avoid using any framework and to build out to standard compliant Web Components.
 
 ## Release
 
@@ -19,10 +19,3 @@ The components release process is built around [Github Actions](https://github.c
 ---
 
 The components deploy process is built around [Github Actions](https://github.com/features/actions) and will deploy automatically to [Firebase Hosting](https://firebase.google.com/docs/hosting) when commits are made to the master branch. This can be configured in the /.github/workflows/deploy.yml.
-
-
-## Special Thanks
-
----
-
-Special thanks to dutscher for putting together a great example of using StencilJS with Storybook, which we used as the base for this project.
