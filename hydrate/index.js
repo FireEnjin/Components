@@ -21168,6 +21168,9 @@ class Avatar$1 {
   constructor(hostRef) {
     registerInstance(this, hostRef);
   }
+  componentDidLoad() {
+    console.log("wewww");
+  }
   render() {
     var _a, _b, _c;
     return (hAsync("div", { class: "avatar-image", style: {
@@ -37112,6 +37115,7 @@ class InputPhoto {
       return;
     const reader = new FileReader();
     reader.onload = async (event) => {
+      var _a, _b;
       if (event.target.readyState != 2)
         return;
       if (event.target.error) {
@@ -37126,9 +37130,9 @@ class InputPhoto {
           id: this.documentId,
           type: this.type,
           path: this.path,
-          file: this.resize ? resizeImage(file) : file,
+          file,
           fileName: this.fileName,
-          encodedContent: event.target.result,
+          encodedContent: this.resize ? resizeImage((_a = event === null || event === void 0 ? void 0 : event.target) === null || _a === void 0 ? void 0 : _a.result) : (_b = event === null || event === void 0 ? void 0 : event.target) === null || _b === void 0 ? void 0 : _b.result,
         },
       });
     };
@@ -51073,7 +51077,7 @@ class SearchBar {
     this.updateCurrentFilters();
   }
   async onTrigger(event) {
-    var _a, _b, _c, _d, _e, _f, _g;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
     if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.trigger) === "set" && ((_c = (_b = event === null || event === void 0 ? void 0 : event.detail) === null || _b === void 0 ? void 0 : _b.payload) === null || _c === void 0 ? void 0 : _c.name)) {
       for (const [i, control] of this.filter.controls.entries()) {
         if (!(control === null || control === void 0 ? void 0 : control.name) || ((_e = (_d = event === null || event === void 0 ? void 0 : event.detail) === null || _d === void 0 ? void 0 : _d.payload) === null || _e === void 0 ? void 0 : _e.name) !== (control === null || control === void 0 ? void 0 : control.name))
@@ -51082,6 +51086,8 @@ class SearchBar {
         this.filter.controls[i] = controlData;
         this.currentFilters[control.name] = controlData;
         this.filter = Object.assign({}, this.filter);
+        if (this.paginationEl && !((_h = this.paginationEl) === null || _h === void 0 ? void 0 : _h.disableFetch))
+          this.paginationEl.fetchData = Object.assign(Object.assign({}, (((_j = this.paginationEl) === null || _j === void 0 ? void 0 : _j.fetchData) || {})), { [control.name]: (_l = (_k = event === null || event === void 0 ? void 0 : event.detail) === null || _k === void 0 ? void 0 : _k.payload) === null || _l === void 0 ? void 0 : _l.value });
       }
       if (!this.paginationEl)
         return;

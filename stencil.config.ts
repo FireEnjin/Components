@@ -9,6 +9,7 @@ export const config: Config = {
   rollupPlugins: {},
   globalStyle: "src/css/global.css",
   globalScript: "src/global.ts",
+  sourceMap: true,
   devServer: {
     reloadStrategy: "hmr",
     openBrowser: false,

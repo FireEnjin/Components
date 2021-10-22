@@ -10,6 +10,10 @@ export class Avatar implements ComponentInterface {
   @Prop() initials: string;
   @Prop() fallback: string;
 
+  componentDidLoad() {
+    console.log("wewww");
+  }
+
   render() {
     return (
       <div

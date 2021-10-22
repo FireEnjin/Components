@@ -18,6 +18,7 @@
     "build:prerender": "stencil build --prerender",
     "deploy:build": "fireenjin env github && npm run docs && npm run presets:build",
     "dev": " stencil build --docs --dev --watch --serve",
+    "debug": "",
     "docs": " stencil build --docs",
     "start": "npm-run-all --parallel dev presets:watch",
     "test": "stencil test --spec",
