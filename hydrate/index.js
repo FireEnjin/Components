@@ -21628,6 +21628,238 @@ class Buttons {
   }; }
 }
 
+const calendarCss = "fireenjin-calendar{display:block}fireenjin-calendar .calendar-controls{font-weight:var(--fireenjin-calendar-controls-font-weight, 800);font-family:var(--fireenjin-calendar-controls-font-weight, inherit);text-align:var(--fireenjin-calendar-controls-text-align, center)}fireenjin-calendar .calendar-controls ion-col{cursor:pointer}fireenjin-calendar .cell{font-size:var(--fireenjin-calendar-cell-font-size, 12pt);font-weight:var(--fireenjin-calendar-cell-font-weight, bolder);font-family:var(--fireenjin-calendar-cell-font-family, inherit);color:var(--fireenjin-calendar-cell-color, inherit);padding:var(--fireenjin-calendar-cell-padding, 15px 0);background-color:var(--fireenjin-calendar-cell-background, transparent);background:var(--fireenjin-calendar-cell-background, transparent);border:var(--fireenjin-calendar-cell-border, 1px solid #000);cursor:var(--fireenjin-calendar-cell-cursor, pointer) !important;text-align:var(--fireenjin-calendar-cell-text-align, center);position:relative}fireenjin-calendar .cell.selected{background:var(--fireenjin-calendar-selected-background, #000);font-weight:var(--fireenjin-calendar-selected-font-weight, 800);color:var(--fireenjin-calendar-selected-color, #fff) !important;opacity:1 !important}fireenjin-calendar .cell.faded{opacity:0.4}fireenjin-calendar .cell:hover{box-shadow:var(--fireenjin-calendar-hover-box-shadow, 0 0 0 3px inset #000);color:var(\r\n    --fireenjin-calendar-hover-color,\r\n    var(--fireenjin-calendar-selected-background, #000)\r\n  );font-weight:var(--fireenjin-calendar-hover-font-weight, 800);opacity:1 !important}fireenjin-calendar .cell.unavailable{box-shadow:none !important;font-weight:var(--fireenjin-calendar-cell-font-weight, normal);opacity:0.4 !important;cursor:not-allowed !important}fireenjin-calendar .calendar-grid,fireenjin-calendar .month-grid,fireenjin-calendar .year-grid{display:block;opacity:0;height:0;transition:all ease-out 0.4s;pointer-events:none;overflow:hidden}fireenjin-calendar .calendar-grid.viewing,fireenjin-calendar .month-grid.viewing,fireenjin-calendar .year-grid.viewing{opacity:1;height:auto;pointer-events:initial}fireenjin-calendar .calendar-grid{display:grid;grid-template-columns:repeat(7, 1fr);grid-auto-rows:1fr;grid-gap:var(--fireenjin-calendar-grid-gap, 3px);text-align:center}fireenjin-calendar .calendar-grid>.head-cell{font-size:var(--fireenjin-calendar-head-font-size, 13pt);font-weight:var(--fireenjin-calendar-head-font-weight, 300);margin:var(--fireenjin-calendar-head-margin, auto 0);padding:var(--fireenjin-calendar-head-padding, 0 0 5px 0)}fireenjin-calendar .range .start-date{border-radius:var(--fireenjin-calendar-selected-range-notch, 14px) 0 0 0}fireenjin-calendar .range .end-date{border-radius:0 0 var(--fireenjin-calendar-selected-range-notch, 14px) 0}";
+
+class Calendar {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    this.fireenjinDateSelected = createEvent(this, "fireenjinDateSelected", 7);
+    this.fireenjinCalendarNavigate = createEvent(this, "fireenjinCalendarNavigate", 7);
+    /**
+     * The title to use when showing the year selection view
+     */
+    this.yearsTitle = `Select a Year`;
+    /**
+     * The current view being used
+     */
+    this.currentView = "calendar";
+  }
+  /**
+   * Switch the view of the calendar
+   * @param event The click event from the element being used
+   * @param view The view to switch to
+   */
+  async switchView(event, view) {
+    this.fireenjinCalendarNavigate.emit({
+      event,
+      currentView: view,
+      back: false,
+      year: this.year,
+      month: this.month,
+      startDate: this.startDate,
+      endDate: this.endDate
+    });
+    return (this.currentView = view);
+  }
+  /**
+   * Set the current date of the calendar
+   * @param dateString The date in YYYY-MM-DD format to set the calendar to
+   */
+  async setDate(dateString) {
+    if ((this.range && dateString > this.startDate && !this.endDate) ||
+      (this.range && this.endDate && dateString > this.endDate)) {
+      this.endDate = dateString;
+    }
+    else {
+      this.startDate = dateString;
+      if (this.endDate) {
+        this.endDate = null;
+      }
+    }
+  }
+  getDate() {
+    const date = new Date();
+    if (this.year != null) {
+      date.setFullYear(this.year);
+    }
+    if (this.month != null) {
+      date.setMonth(this.month);
+    }
+    date.setDate(1);
+    this.year = date.getFullYear();
+    this.month = date.getMonth();
+    return date;
+  }
+  getTitle() {
+    const date = this.getDate();
+    return this.currentView === "years"
+      ? this.yearsTitle
+      : `${this.currentView === "calendar"
+        ? date.toLocaleString(this.locales, {
+          month: "long"
+        })
+        : ""} ${date.getFullYear()}`;
+  }
+  navigate(event, back = false) {
+    const date = this.getDate();
+    if (this.currentView === "calendar") {
+      this.month = date.getMonth() - (back ? 1 : -1);
+    }
+    else if (this.currentView === "months") {
+      this.year = date.getFullYear() - (back ? 1 : -1);
+    }
+    else if (this.currentView === "years") {
+      this.year = date.getFullYear() - (back ? 9 : -9);
+    }
+    this.fireenjinCalendarNavigate.emit({
+      event,
+      back,
+      currentView: this.currentView,
+      year: this.year,
+      month: this.month,
+      startDate: this.startDate,
+      endDate: this.endDate
+    });
+  }
+  pad(num, size) {
+    return ("0" + num).substr(("0" + num).length - size);
+  }
+  buildCalendar() {
+    const date = this.getDate();
+    const originalDate = this.getDate();
+    if (date.getDay() > 0) {
+      date.setDate(date.getDate() - date.getDay());
+    }
+    const days = [];
+    let xpos = 0;
+    let ypos = 2;
+    for (let index = 1; index <= 35; index++) {
+      const x = date.getDay();
+      if (x < xpos) {
+        ypos++;
+      }
+      xpos = x;
+      days.push({
+        number: date.getDate(),
+        x: xpos + 1,
+        y: ypos,
+        inMonth: date.getMonth() === originalDate.getMonth(),
+        index,
+        dateString: `${date.getFullYear()}-${this.pad(date.getMonth() + 1, 2)}-${this.pad(date.getDate(), 2)}`
+      });
+      date.setDate(date.getDate() + 1);
+    }
+    return days;
+  }
+  async onSelected(event, dateString) {
+    event.preventDefault();
+    event.stopPropagation();
+    await this.setDate(dateString);
+    const [year, month, day] = dateString.split("-");
+    this.fireenjinDateSelected.emit({
+      event,
+      dateString,
+      day,
+      month,
+      year,
+      startDate: this.startDate,
+      endDate: this.endDate
+    });
+    return false;
+  }
+  getMonths() {
+    let months = [];
+    for (var i = 0; i < 12; i++) {
+      months.push(new Date(0, i).toLocaleString(this.locales, { month: "short" }));
+    }
+    return months;
+  }
+  getYears() {
+    let years = [];
+    const selectedYear = this.year ? this.year : new Date().getFullYear();
+    const modifiedYear = selectedYear - 4;
+    for (var i = 0; i < 9; i++) {
+      years.push(modifiedYear + i);
+    }
+    return years;
+  }
+  selectMonth(event, index) {
+    event.preventDefault();
+    this.month = index;
+    this.switchView(event, "calendar");
+  }
+  selectYear(event, year) {
+    event.preventDefault();
+    this.year = year;
+    this.switchView(event, "months");
+  }
+  renderLegend() {
+    const date = new Date(Date.UTC(2015, 0, 1));
+    const formater = new Intl.DateTimeFormat(this.locales, {
+      weekday: "short"
+    });
+    const weekDays = [];
+    for (let day = 1; day <= 7; day++) {
+      date.setDate(day);
+      weekDays.push(hAsync("div", { class: "head-cell" }, formater.format(date)));
+    }
+    return weekDays;
+  }
+  render() {
+    return (hAsync("div", { class: "calendar-wrapper" }, hAsync("ion-grid", { class: "calendar-controls" }, hAsync("ion-row", null, hAsync("ion-col", { size: "1", onClick: event => this.navigate(event, true) }, hAsync("ion-icon", { name: "arrow-back" })), hAsync("ion-col", { class: "calendar-title", size: "10", onClick: event => this.switchView(event, this.currentView === "calendar" ? "months" : "years") }, this.getTitle()), hAsync("ion-col", { size: "1", onClick: event => this.navigate(event) }, hAsync("ion-icon", { name: "arrow-forward" })))), hAsync("div", { class: {
+        "calendar-grid": true,
+        viewing: this.currentView === "calendar",
+        range: this.range
+      } }, [
+      ...this.renderLegend(),
+      ...this.buildCalendar().map(day => {
+        const unavailable = (this.available &&
+          this.available.indexOf(day.dateString) === -1) ||
+          (this.max && day.dateString > this.max) ||
+          (this.min && day.dateString < this.min) ||
+          false;
+        return (hAsync("button", { class: {
+            unavailable,
+            "start-date": this.startDate === day.dateString,
+            "end-date": this.endDate === day.dateString,
+            selected: this.range && this.endDate
+              ? this.startDate <= day.dateString &&
+                this.endDate >= day.dateString
+              : this.startDate && this.startDate === day.dateString,
+            cell: true,
+            faded: !day.inMonth
+          }, disabled: unavailable, onClick: event => this.onSelected(event, day.dateString), style: {
+            gridColumn: `${day.x}`,
+            gridRow: `${day.y}`
+          } }, day.number));
+      })
+    ]), hAsync("div", { class: { "month-grid": true, viewing: this.currentView === "months" } }, hAsync("ion-grid", null, hAsync("ion-row", null, this.getMonths().map((month, index) => (hAsync("ion-col", { size: "4", onClick: event => this.selectMonth(event, index) }, hAsync("div", { class: { cell: true, selected: index === this.month } }, month))))))), hAsync("div", { class: { "year-grid": true, viewing: this.currentView === "years" } }, hAsync("ion-grid", null, hAsync("ion-row", null, this.getYears().map(year => (hAsync("ion-col", { size: "4", onClick: event => this.selectYear(event, year) }, hAsync("div", { class: { cell: true, selected: year === this.year } }, year)))))))));
+  }
+  static get style() { return calendarCss; }
+  static get cmpMeta() { return {
+    "$flags$": 0,
+    "$tagName$": "fireenjin-calendar",
+    "$members$": {
+      "locales": [1],
+      "year": [2],
+      "max": [1],
+      "min": [1],
+      "month": [2],
+      "range": [4],
+      "available": [16],
+      "endDate": [1025, "end-date"],
+      "startDate": [1025, "start-date"],
+      "yearsTitle": [1, "years-title"],
+      "currentView": [32],
+      "switchView": [64],
+      "setDate": [64]
+    },
+    "$listeners$": undefined,
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": []
+  }; }
+}
+
 const cardIosCss = "/*!@:host*/.sc-ion-card-ios-h{--ion-safe-area-left:0px;--ion-safe-area-right:0px;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:block;position:relative;background:var(--background);color:var(--color);font-family:var(--ion-font-family, inherit);overflow:hidden}/*!@:host(.ion-color)*/.ion-color.sc-ion-card-ios-h{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.card-disabled)*/.card-disabled.sc-ion-card-ios-h{cursor:default;opacity:0.3;pointer-events:none}/*!@.card-native*/.card-native.sc-ion-card-ios{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;display:block;width:100%;min-height:var(--min-height);transition:var(--transition);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);outline:none;background:inherit}/*!@.card-native::-moz-focus-inner*/.card-native.sc-ion-card-ios::-moz-focus-inner{border:0}/*!@button, a*/button.sc-ion-card-ios,a.sc-ion-card-ios{cursor:pointer;user-select:none;-webkit-user-drag:none}/*!@ion-ripple-effect*/ion-ripple-effect.sc-ion-card-ios{color:var(--ripple-color)}/*!@:host*/.sc-ion-card-ios-h{--background:var(--ion-card-background, var(--ion-item-background, var(--ion-background-color, #fff)));--color:var(--ion-card-color, var(--ion-item-color, var(--ion-color-step-600, #666666)));margin-left:16px;margin-right:16px;margin-top:24px;margin-bottom:24px;border-radius:8px;transform:translateZ(0);transition:transform 500ms cubic-bezier(0.12, 0.72, 0.29, 1);font-size:14px;box-shadow:0 4px 16px rgba(0, 0, 0, 0.12)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-card-ios-h{margin-left:unset;margin-right:unset;-webkit-margin-start:16px;margin-inline-start:16px;-webkit-margin-end:16px;margin-inline-end:16px}}/*!@:host(.ion-activated)*/.ion-activated.sc-ion-card-ios-h{transform:scale3d(0.97, 0.97, 1)}";
 
 const cardMdCss = "/*!@:host*/.sc-ion-card-md-h{--ion-safe-area-left:0px;--ion-safe-area-right:0px;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:block;position:relative;background:var(--background);color:var(--color);font-family:var(--ion-font-family, inherit);overflow:hidden}/*!@:host(.ion-color)*/.ion-color.sc-ion-card-md-h{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.card-disabled)*/.card-disabled.sc-ion-card-md-h{cursor:default;opacity:0.3;pointer-events:none}/*!@.card-native*/.card-native.sc-ion-card-md{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;display:block;width:100%;min-height:var(--min-height);transition:var(--transition);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);outline:none;background:inherit}/*!@.card-native::-moz-focus-inner*/.card-native.sc-ion-card-md::-moz-focus-inner{border:0}/*!@button, a*/button.sc-ion-card-md,a.sc-ion-card-md{cursor:pointer;user-select:none;-webkit-user-drag:none}/*!@ion-ripple-effect*/ion-ripple-effect.sc-ion-card-md{color:var(--ripple-color)}/*!@:host*/.sc-ion-card-md-h{--background:var(--ion-card-background, var(--ion-item-background, var(--ion-background-color, #fff)));--color:var(--ion-card-color, var(--ion-item-color, var(--ion-color-step-550, #737373)));margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;border-radius:4px;font-size:14px;box-shadow:0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-card-md-h{margin-left:unset;margin-right:unset;-webkit-margin-start:10px;margin-inline-start:10px;-webkit-margin-end:10px;margin-inline-end:10px}}";
@@ -51171,9 +51403,10 @@ class SearchBar {
     this.paginationEl.display = this.displayMode;
   }
   async clearFilter(event, clearingControl) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d, _e;
     event.preventDefault();
     event.stopPropagation();
+    const fetchData = ((_a = this.paginationEl) === null || _a === void 0 ? void 0 : _a.fetchData) || {};
     for (const [i, control] of this.filter.controls.entries()) {
       if (!control.name ||
         !control.value ||
@@ -51181,24 +51414,27 @@ class SearchBar {
         continue;
       this.filter.controls[i] = Object.assign(Object.assign({}, control), { value: null });
       delete this.currentFilters[clearingControl.name];
+      if (fetchData[control.name])
+        delete fetchData[control.name];
       this.filter = Object.assign({}, this.filter);
-      if (!((_a = this.paginationEl) === null || _a === void 0 ? void 0 : _a.clearParamData))
+      if (!((_b = this.paginationEl) === null || _b === void 0 ? void 0 : _b.clearParamData))
         continue;
       await this.paginationEl.clearParamData(control.name);
     }
-    console.log(this.currentFilters);
     const paramData = {};
     for (const filter of Object.values(this.currentFilters)) {
       paramData[filter.name] = filter.value;
     }
-    let fetchData = { paramData };
+    let options = { paramData };
     if (this.beforeGetResults &&
       typeof this.beforeGetResults === "function")
-      fetchData = await this.beforeGetResults(fetchData);
-    if ((_b = this.paginationEl) === null || _b === void 0 ? void 0 : _b.clearResults)
+      options = await this.beforeGetResults(options);
+    if (this.paginationEl && !((_c = this.paginationEl) === null || _c === void 0 ? void 0 : _c.disableFetch))
+      this.paginationEl.fetchData = fetchData;
+    if ((_d = this.paginationEl) === null || _d === void 0 ? void 0 : _d.clearResults)
       await this.paginationEl.clearResults();
-    if ((_c = this.paginationEl) === null || _c === void 0 ? void 0 : _c.getResults)
-      await this.paginationEl.getResults(fetchData);
+    if ((_e = this.paginationEl) === null || _e === void 0 ? void 0 : _e.getResults)
+      await this.paginationEl.getResults(options);
   }
   async updateCurrentFilters() {
     var _a;
@@ -62156,6 +62392,7 @@ registerComponents([
   Badge,
   Button,
   Buttons,
+  Calendar,
   Card,
   CardContent,
   CardHeader,

@@ -1,0 +1,84 @@
+fireenjin-calendar {
+  display: block;
+}
+fireenjin-calendar .calendar-controls {
+  font-weight: var(--fireenjin-calendar-controls-font-weight, 800);
+  font-family: var(--fireenjin-calendar-controls-font-weight, inherit);
+  text-align: var(--fireenjin-calendar-controls-text-align, center);
+}
+fireenjin-calendar .calendar-controls ion-col {
+  cursor: pointer;
+}
+fireenjin-calendar .cell {
+  font-size: var(--fireenjin-calendar-cell-font-size, 12pt);
+  font-weight: var(--fireenjin-calendar-cell-font-weight, bolder);
+  font-family: var(--fireenjin-calendar-cell-font-family, inherit);
+  color: var(--fireenjin-calendar-cell-color, inherit);
+  padding: var(--fireenjin-calendar-cell-padding, 15px 0);
+  background-color: var(--fireenjin-calendar-cell-background, transparent);
+  background: var(--fireenjin-calendar-cell-background, transparent);
+  border: var(--fireenjin-calendar-cell-border, 1px solid #000);
+  cursor: var(--fireenjin-calendar-cell-cursor, pointer) !important;
+  text-align: var(--fireenjin-calendar-cell-text-align, center);
+  position: relative;
+}
+fireenjin-calendar .cell.selected {
+  background: var(--fireenjin-calendar-selected-background, #000);
+  font-weight: var(--fireenjin-calendar-selected-font-weight, 800);
+  color: var(--fireenjin-calendar-selected-color, #fff) !important;
+  opacity: 1 !important;
+}
+fireenjin-calendar .cell.faded {
+  opacity: 0.4;
+}
+fireenjin-calendar .cell:hover {
+  box-shadow: var(--fireenjin-calendar-hover-box-shadow, 0 0 0 3px inset #000);
+  color: var(
+    --fireenjin-calendar-hover-color,
+    var(--fireenjin-calendar-selected-background, #000)
+  );
+  font-weight: var(--fireenjin-calendar-hover-font-weight, 800);
+  opacity: 1 !important;
+}
+fireenjin-calendar .cell.unavailable {
+  box-shadow: none !important;
+  font-weight: var(--fireenjin-calendar-cell-font-weight, normal);
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+fireenjin-calendar .calendar-grid,
+fireenjin-calendar .month-grid,
+fireenjin-calendar .year-grid {
+  display: block;
+  opacity: 0;
+  height: 0;
+  transition: all ease-out 0.4s;
+  pointer-events: none;
+  overflow: hidden;
+}
+fireenjin-calendar .calendar-grid.viewing,
+fireenjin-calendar .month-grid.viewing,
+fireenjin-calendar .year-grid.viewing {
+  opacity: 1;
+  height: auto;
+  pointer-events: initial;
+}
+fireenjin-calendar .calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
+  grid-gap: var(--fireenjin-calendar-grid-gap, 3px);
+  text-align: center;
+}
+fireenjin-calendar .calendar-grid > .head-cell {
+  font-size: var(--fireenjin-calendar-head-font-size, 13pt);
+  font-weight: var(--fireenjin-calendar-head-font-weight, 300);
+  margin: var(--fireenjin-calendar-head-margin, auto 0);
+  padding: var(--fireenjin-calendar-head-padding, 0 0 5px 0);
+}
+fireenjin-calendar .range .start-date {
+  border-radius: var(--fireenjin-calendar-selected-range-notch, 14px) 0 0 0;
+}
+fireenjin-calendar .range .end-date {
+  border-radius: 0 0 var(--fireenjin-calendar-selected-range-notch, 14px) 0;
+}
