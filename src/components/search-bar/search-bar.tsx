@@ -113,6 +113,7 @@ export class SearchBar implements ComponentInterface {
   ) {
     event.preventDefault();
     event.stopPropagation();
+    const fetchData = this.paginationEl?.fetchData || {};
     for (const [i, control] of this.filter.controls.entries()) {
       if (
         !control.name ||
@@ -125,23 +126,24 @@ export class SearchBar implements ComponentInterface {
         value: null,
       };
       delete this.currentFilters[clearingControl.name];
+      if (fetchData[control.name]) delete fetchData[control.name];
       this.filter = { ...this.filter };
       if (!this.paginationEl?.clearParamData) continue;
       await this.paginationEl.clearParamData(control.name);
     }
-    console.log(this.currentFilters);
     const paramData = {};
     for (const filter of Object.values(this.currentFilters)) {
       paramData[filter.name] = filter.value;
     }
-    let fetchData = { paramData };
+    let options = { paramData };
     if (
       this.beforeGetResults &&
       typeof this.beforeGetResults === "function"
     )
-      fetchData = await this.beforeGetResults(fetchData);
+      options = await this.beforeGetResults(options);
+    if (this.paginationEl && !this.paginationEl?.disableFetch) this.paginationEl.fetchData = fetchData;
     if (this.paginationEl?.clearResults) await this.paginationEl.clearResults();
-    if (this.paginationEl?.getResults) await this.paginationEl.getResults(fetchData);
+    if (this.paginationEl?.getResults) await this.paginationEl.getResults(options);
   }
 
   @Method()
