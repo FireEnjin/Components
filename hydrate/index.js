@@ -18933,10 +18933,10 @@ const createOverlay = (tagName, opts) => {
   }
   return Promise.resolve();
 };
-const focusableQueryString = '[tabindex]:not([tabindex^="-"]), input:not([type=hidden]):not([tabindex^="-"]), textarea:not([tabindex^="-"]), button:not([tabindex^="-"]), select:not([tabindex^="-"]), .ion-focusable:not([tabindex^="-"])';
+const focusableQueryString$1 = '[tabindex]:not([tabindex^="-"]), input:not([type=hidden]):not([tabindex^="-"]), textarea:not([tabindex^="-"]), button:not([tabindex^="-"]), select:not([tabindex^="-"]), .ion-focusable:not([tabindex^="-"])';
 const innerFocusableQueryString = 'input:not([type=hidden]), textarea, button, select';
 const focusFirstDescendant = (ref, overlay) => {
-  let firstInput = ref.querySelector(focusableQueryString);
+  let firstInput = ref.querySelector(focusableQueryString$1);
   const shadowRoot = firstInput && firstInput.shadowRoot;
   if (shadowRoot) {
     // If there are no inner focusable elements, just focus the host element.
@@ -18951,7 +18951,7 @@ const focusFirstDescendant = (ref, overlay) => {
   }
 };
 const focusLastDescendant = (ref, overlay) => {
-  const inputs = Array.from(ref.querySelectorAll(focusableQueryString));
+  const inputs = Array.from(ref.querySelectorAll(focusableQueryString$1));
   let lastInput = inputs.length > 0 ? inputs[inputs.length - 1] : null;
   const shadowRoot = lastInput && lastInput.shadowRoot;
   if (shadowRoot) {
@@ -24114,7 +24114,7 @@ class Form {
 }
 
 /*!
- * Chart.js v3.5.1
+ * Chart.js v3.6.0
  * https://www.chartjs.org
  * (c) 2021 Chart.js Contributors
  * Released under the MIT License
@@ -24144,12 +24144,12 @@ function throttled(fn, thisArg, updateFn) {
 }
 function debounce(fn, delay) {
   let timeout;
-  return function() {
+  return function(...args) {
     if (delay) {
       clearTimeout(timeout);
-      timeout = setTimeout(fn, delay);
+      timeout = setTimeout(fn, delay, args);
     } else {
-      fn();
+      fn.apply(this, args);
     }
     return delay;
   };
@@ -25542,12 +25542,17 @@ function resolve(inputs, context, index, info) {
     }
   }
 }
-function _addGrace(minmax, grace) {
+function _addGrace(minmax, grace, beginAtZero) {
   const {min, max} = minmax;
+  const change = toDimension(grace, (max - min) / 2);
+  const keepZero = (value, add) => beginAtZero && value === 0 ? 0 : value + add;
   return {
-    min: min - Math.abs(toDimension(grace, min)),
-    max: max + toDimension(grace, max)
+    min: keepZero(min, -Math.abs(change)),
+    max: keepZero(max, change)
   };
+}
+function createContext(parentContext, context) {
+  return Object.assign(Object.create(parentContext), context);
 }
 
 function _lookup(table, value, cmp) {
@@ -25730,14 +25735,11 @@ function _descriptors(proxy, defaults = {scriptable: true, indexable: true}) {
 const readKey = (prefix, name) => prefix ? prefix + _capitalize(name) : name;
 const needsSubResolver = (prop, value) => isObject$1(value) && prop !== 'adapters';
 function _cached(target, prop, resolve) {
-  let value = target[prop];
-  if (defined(value)) {
-    return value;
+  if (Object.prototype.hasOwnProperty.call(target, prop)) {
+    return target[prop];
   }
-  value = resolve();
-  if (defined(value)) {
-    target[prop] = value;
-  }
+  const value = resolve();
+  target[prop] = value;
   return value;
 }
 function _resolveWithContext(target, prop, receiver) {
@@ -26412,36 +26414,54 @@ function splitByStyles(line, segments, points, segmentOptions) {
   return doSplitByStyles(line, segments, points, segmentOptions);
 }
 function doSplitByStyles(line, segments, points, segmentOptions) {
+  const chartContext = line._chart.getContext();
   const baseStyle = readStyle(line.options);
+  const {_datasetIndex: datasetIndex, options: {spanGaps}} = line;
   const count = points.length;
   const result = [];
+  let prevStyle = baseStyle;
   let start = segments[0].start;
   let i = start;
+  function addStyle(s, e, l, st) {
+    const dir = spanGaps ? -1 : 1;
+    if (s === e) {
+      return;
+    }
+    s += count;
+    while (points[s % count].skip) {
+      s -= dir;
+    }
+    while (points[e % count].skip) {
+      e += dir;
+    }
+    if (s % count !== e % count) {
+      result.push({start: s % count, end: e % count, loop: l, style: st});
+      prevStyle = st;
+      start = e % count;
+    }
+  }
   for (const segment of segments) {
-    let prevStyle = baseStyle;
+    start = spanGaps ? start : segment.start;
     let prev = points[start % count];
     let style;
     for (i = start + 1; i <= segment.end; i++) {
       const pt = points[i % count];
-      style = readStyle(segmentOptions.setContext({
+      style = readStyle(segmentOptions.setContext(createContext(chartContext, {
         type: 'segment',
         p0: prev,
         p1: pt,
         p0DataIndex: (i - 1) % count,
         p1DataIndex: i % count,
-        datasetIndex: line._datasetIndex
-      }));
+        datasetIndex
+      })));
       if (styleChanged(style, prevStyle)) {
-        result.push({start: start, end: i - 1, loop: segment.loop, style: prevStyle});
-        prevStyle = style;
-        start = i - 1;
+        addStyle(start, i - 1, segment.loop, prevStyle);
       }
       prev = pt;
       prevStyle = style;
     }
     if (start < i - 1) {
-      result.push({start, end: i - 1, loop: segment.loop, style});
-      start = i - 1;
+      addStyle(start, i - 1, segment.loop, prevStyle);
     }
   }
   return result;
@@ -26462,7 +26482,7 @@ function styleChanged(style, prevStyle) {
 }
 
 /*!
- * Chart.js v3.5.1
+ * Chart.js v3.6.0
  * https://www.chartjs.org
  * (c) 2021 Chart.js Contributors
  * Released under the MIT License
@@ -26486,23 +26506,21 @@ class Animator {
     }));
   }
   _refresh() {
-    const me = this;
-    if (me._request) {
+    if (this._request) {
       return;
     }
-    me._running = true;
-    me._request = requestAnimFrame.call(window, () => {
-      me._update();
-      me._request = null;
-      if (me._running) {
-        me._refresh();
+    this._running = true;
+    this._request = requestAnimFrame.call(window, () => {
+      this._update();
+      this._request = null;
+      if (this._running) {
+        this._refresh();
       }
     });
   }
   _update(date = Date.now()) {
-    const me = this;
     let remaining = 0;
-    me._charts.forEach((anims, chart) => {
+    this._charts.forEach((anims, chart) => {
       if (!anims.running || !anims.items.length) {
         return;
       }
@@ -26525,18 +26543,18 @@ class Animator {
       }
       if (draw) {
         chart.draw();
-        me._notify(chart, anims, date, 'progress');
+        this._notify(chart, anims, date, 'progress');
       }
       if (!items.length) {
         anims.running = false;
-        me._notify(chart, anims, date, 'complete');
+        this._notify(chart, anims, date, 'complete');
         anims.initial = false;
       }
       remaining += items.length;
     });
-    me._lastDate = date;
+    this._lastDate = date;
     if (remaining === 0) {
-      me._running = false;
+      this._running = false;
     }
   }
   _getAnims(chart) {
@@ -26644,51 +26662,48 @@ class Animation {
     return this._active;
   }
   update(cfg, to, date) {
-    const me = this;
-    if (me._active) {
-      me._notify(false);
-      const currentValue = me._target[me._prop];
-      const elapsed = date - me._start;
-      const remain = me._duration - elapsed;
-      me._start = date;
-      me._duration = Math.floor(Math.max(remain, cfg.duration));
-      me._total += elapsed;
-      me._loop = !!cfg.loop;
-      me._to = resolve([cfg.to, to, currentValue, cfg.from]);
-      me._from = resolve([cfg.from, currentValue, to]);
+    if (this._active) {
+      this._notify(false);
+      const currentValue = this._target[this._prop];
+      const elapsed = date - this._start;
+      const remain = this._duration - elapsed;
+      this._start = date;
+      this._duration = Math.floor(Math.max(remain, cfg.duration));
+      this._total += elapsed;
+      this._loop = !!cfg.loop;
+      this._to = resolve([cfg.to, to, currentValue, cfg.from]);
+      this._from = resolve([cfg.from, currentValue, to]);
     }
   }
   cancel() {
-    const me = this;
-    if (me._active) {
-      me.tick(Date.now());
-      me._active = false;
-      me._notify(false);
+    if (this._active) {
+      this.tick(Date.now());
+      this._active = false;
+      this._notify(false);
     }
   }
   tick(date) {
-    const me = this;
-    const elapsed = date - me._start;
-    const duration = me._duration;
-    const prop = me._prop;
-    const from = me._from;
-    const loop = me._loop;
-    const to = me._to;
+    const elapsed = date - this._start;
+    const duration = this._duration;
+    const prop = this._prop;
+    const from = this._from;
+    const loop = this._loop;
+    const to = this._to;
     let factor;
-    me._active = from !== to && (loop || (elapsed < duration));
-    if (!me._active) {
-      me._target[prop] = to;
-      me._notify(true);
+    this._active = from !== to && (loop || (elapsed < duration));
+    if (!this._active) {
+      this._target[prop] = to;
+      this._notify(true);
       return;
     }
     if (elapsed < 0) {
-      me._target[prop] = from;
+      this._target[prop] = from;
       return;
     }
     factor = (elapsed / duration) % 2;
     factor = loop && factor > 1 ? 2 - factor : factor;
-    factor = me._easing(Math.min(1, Math.max(0, factor)));
-    me._target[prop] = me._fn(from, to, factor);
+    factor = this._easing(Math.min(1, Math.max(0, factor)));
+    this._target[prop] = this._fn(from, to, factor);
   }
   wait() {
     const promises = this._promises || (this._promises = []);
@@ -26937,7 +26952,7 @@ function getSortedDatasetIndices(chart, filterVisible) {
   }
   return keys;
 }
-function applyStack(stack, value, dsIndex, options) {
+function applyStack(stack, value, dsIndex, options = {}) {
   const keys = stack.keys;
   const singleMode = options.mode === 'single';
   let i, ilen, datasetIndex, otherValue;
@@ -26990,8 +27005,8 @@ function getOrCreateStack(stacks, stackKey, indexValue) {
   const subStack = stacks[stackKey] || (stacks[stackKey] = {});
   return subStack[indexValue] || (subStack[indexValue] = {});
 }
-function getLastIndexInStack(stack, vScale, positive) {
-  for (const meta of vScale.getMatchingVisibleMetas('bar').reverse()) {
+function getLastIndexInStack(stack, vScale, positive, type) {
+  for (const meta of vScale.getMatchingVisibleMetas(type).reverse()) {
     const value = stack[meta.index];
     if ((positive && value > 0) || (!positive && value < 0)) {
       return meta.index;
@@ -27014,8 +27029,8 @@ function updateStacks(controller, parsed) {
     const itemStacks = item._stacks || (item._stacks = {});
     stack = itemStacks[vAxis] = getOrCreateStack(stacks, key, index);
     stack[datasetIndex] = value;
-    stack._top = getLastIndexInStack(stack, vScale, true);
-    stack._bottom = getLastIndexInStack(stack, vScale, false);
+    stack._top = getLastIndexInStack(stack, vScale, true, meta.type);
+    stack._bottom = getLastIndexInStack(stack, vScale, false, meta.type);
   }
 }
 function getFirstScaleId(chart, axis) {
@@ -27023,7 +27038,7 @@ function getFirstScaleId(chart, axis) {
   return Object.keys(scales).filter(key => scales[key].axis === axis).shift();
 }
 function createDatasetContext(parent, index) {
-  return Object.assign(Object.create(parent),
+  return createContext(parent,
     {
       active: false,
       dataset: undefined,
@@ -27035,7 +27050,7 @@ function createDatasetContext(parent, index) {
   );
 }
 function createDataContext(parent, index, element) {
-  return Object.assign(Object.create(parent), {
+  return createContext(parent, {
     active: false,
     dataIndex: index,
     parsed: undefined,
@@ -27063,6 +27078,8 @@ function clearStacks(meta, items) {
 }
 const isDirectUpdateMode = (mode) => mode === 'reset' || mode === 'none';
 const cloneIfNotShared = (cached, shared) => shared ? cached : Object.assign({}, cached);
+const createStack = (canStack, meta, chart) => canStack && !meta.hidden && meta._stacked
+  && {keys: getSortedDatasetIndices(chart, true), values: null};
 class DatasetController {
   constructor(chart, datasetIndex) {
     this.chart = chart;
@@ -27084,12 +27101,11 @@ class DatasetController {
     this.initialize();
   }
   initialize() {
-    const me = this;
-    const meta = me._cachedMeta;
-    me.configure();
-    me.linkScales();
+    const meta = this._cachedMeta;
+    this.configure();
+    this.linkScales();
     meta._stacked = isStacked(meta.vScale, meta);
-    me.addElements();
+    this.addElements();
   }
   updateIndex(datasetIndex) {
     if (this.index !== datasetIndex) {
@@ -27098,10 +27114,9 @@ class DatasetController {
     this.index = datasetIndex;
   }
   linkScales() {
-    const me = this;
-    const chart = me.chart;
-    const meta = me._cachedMeta;
-    const dataset = me.getDataset();
+    const chart = this.chart;
+    const meta = this._cachedMeta;
+    const dataset = this.getDataset();
     const chooseId = (axis, x, y, r) => axis === 'x' ? x : axis === 'r' ? r : y;
     const xid = meta.xAxisID = valueOrDefault(dataset.xAxisID, getFirstScaleId(chart, 'x'));
     const yid = meta.yAxisID = valueOrDefault(dataset.yAxisID, getFirstScaleId(chart, 'y'));
@@ -27109,11 +27124,11 @@ class DatasetController {
     const indexAxis = meta.indexAxis;
     const iid = meta.iAxisID = chooseId(indexAxis, xid, yid, rid);
     const vid = meta.vAxisID = chooseId(indexAxis, yid, xid, rid);
-    meta.xScale = me.getScaleForId(xid);
-    meta.yScale = me.getScaleForId(yid);
-    meta.rScale = me.getScaleForId(rid);
-    meta.iScale = me.getScaleForId(iid);
-    meta.vScale = me.getScaleForId(vid);
+    meta.xScale = this.getScaleForId(xid);
+    meta.yScale = this.getScaleForId(yid);
+    meta.rScale = this.getScaleForId(rid);
+    meta.iScale = this.getScaleForId(iid);
+    meta.vScale = this.getScaleForId(vid);
   }
   getDataset() {
     return this.chart.data.datasets[this.index];
@@ -27143,40 +27158,37 @@ class DatasetController {
     }
   }
   _dataCheck() {
-    const me = this;
-    const dataset = me.getDataset();
+    const dataset = this.getDataset();
     const data = dataset.data || (dataset.data = []);
-    const _data = me._data;
+    const _data = this._data;
     if (isObject$1(data)) {
-      me._data = convertObjectDataToArray(data);
+      this._data = convertObjectDataToArray(data);
     } else if (_data !== data) {
       if (_data) {
-        unlistenArrayEvents(_data, me);
-        const meta = me._cachedMeta;
+        unlistenArrayEvents(_data, this);
+        const meta = this._cachedMeta;
         clearStacks(meta);
         meta._parsed = [];
       }
       if (data && Object.isExtensible(data)) {
-        listenArrayEvents(data, me);
+        listenArrayEvents(data, this);
       }
-      me._syncList = [];
-      me._data = data;
+      this._syncList = [];
+      this._data = data;
     }
   }
   addElements() {
-    const me = this;
-    const meta = me._cachedMeta;
-    me._dataCheck();
-    if (me.datasetElementType) {
-      meta.dataset = new me.datasetElementType();
+    const meta = this._cachedMeta;
+    this._dataCheck();
+    if (this.datasetElementType) {
+      meta.dataset = new this.datasetElementType();
     }
   }
   buildOrUpdateElements(resetNewElements) {
-    const me = this;
-    const meta = me._cachedMeta;
-    const dataset = me.getDataset();
+    const meta = this._cachedMeta;
+    const dataset = this.getDataset();
     let stackChanged = false;
-    me._dataCheck();
+    this._dataCheck();
     const oldStacked = meta._stacked;
     meta._stacked = isStacked(meta.vScale, meta);
     if (meta.stack !== dataset.stack) {
@@ -27184,38 +27196,36 @@ class DatasetController {
       clearStacks(meta);
       meta.stack = dataset.stack;
     }
-    me._resyncElements(resetNewElements);
+    this._resyncElements(resetNewElements);
     if (stackChanged || oldStacked !== meta._stacked) {
-      updateStacks(me, meta._parsed);
+      updateStacks(this, meta._parsed);
     }
   }
   configure() {
-    const me = this;
-    const config = me.chart.config;
-    const scopeKeys = config.datasetScopeKeys(me._type);
-    const scopes = config.getOptionScopes(me.getDataset(), scopeKeys, true);
-    me.options = config.createResolver(scopes, me.getContext());
-    me._parsing = me.options.parsing;
+    const config = this.chart.config;
+    const scopeKeys = config.datasetScopeKeys(this._type);
+    const scopes = config.getOptionScopes(this.getDataset(), scopeKeys, true);
+    this.options = config.createResolver(scopes, this.getContext());
+    this._parsing = this.options.parsing;
   }
   parse(start, count) {
-    const me = this;
-    const {_cachedMeta: meta, _data: data} = me;
+    const {_cachedMeta: meta, _data: data} = this;
     const {iScale, _stacked} = meta;
     const iAxis = iScale.axis;
     let sorted = start === 0 && count === data.length ? true : meta._sorted;
     let prev = start > 0 && meta._parsed[start - 1];
     let i, cur, parsed;
-    if (me._parsing === false) {
+    if (this._parsing === false) {
       meta._parsed = data;
       meta._sorted = true;
       parsed = data;
     } else {
       if (isArray$1(data[start])) {
-        parsed = me.parseArrayData(meta, data, start, count);
+        parsed = this.parseArrayData(meta, data, start, count);
       } else if (isObject$1(data[start])) {
-        parsed = me.parseObjectData(meta, data, start, count);
+        parsed = this.parseObjectData(meta, data, start, count);
       } else {
-        parsed = me.parsePrimitiveData(meta, data, start, count);
+        parsed = this.parsePrimitiveData(meta, data, start, count);
       }
       const isNotInOrderComparedToPrev = () => cur[iAxis] === null || (prev && cur[iAxis] < prev[iAxis]);
       for (i = 0; i < count; ++i) {
@@ -27230,7 +27240,7 @@ class DatasetController {
       meta._sorted = sorted;
     }
     if (_stacked) {
-      updateStacks(me, parsed);
+      updateStacks(this, parsed);
     }
   }
   parsePrimitiveData(meta, data, start, count) {
@@ -27301,35 +27311,31 @@ class DatasetController {
     const values = stack && parsed._stacks[scale.axis];
     if (stack && values) {
       stack.values = values;
-      range.min = Math.min(range.min, value);
-      range.max = Math.max(range.max, value);
-      value = applyStack(stack, parsedValue, this._cachedMeta.index, {all: true});
+      value = applyStack(stack, parsedValue, this._cachedMeta.index);
     }
     range.min = Math.min(range.min, value);
     range.max = Math.max(range.max, value);
   }
   getMinMax(scale, canStack) {
-    const me = this;
-    const meta = me._cachedMeta;
+    const meta = this._cachedMeta;
     const _parsed = meta._parsed;
     const sorted = meta._sorted && scale === meta.iScale;
     const ilen = _parsed.length;
-    const otherScale = me._getOtherScale(scale);
-    const stack = canStack && meta._stacked && {keys: getSortedDatasetIndices(me.chart, true), values: null};
+    const otherScale = this._getOtherScale(scale);
+    const stack = createStack(canStack, meta, this.chart);
     const range = {min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY};
     const {min: otherMin, max: otherMax} = getUserBounds(otherScale);
-    let i, value, parsed, otherValue;
+    let i, parsed;
     function _skip() {
       parsed = _parsed[i];
-      value = parsed[scale.axis];
-      otherValue = parsed[otherScale.axis];
-      return !isNumberFinite(value) || otherMin > otherValue || otherMax < otherValue;
+      const otherValue = parsed[otherScale.axis];
+      return !isNumberFinite(parsed[scale.axis]) || otherMin > otherValue || otherMax < otherValue;
     }
     for (i = 0; i < ilen; ++i) {
       if (_skip()) {
         continue;
       }
-      me.updateRangeFromParsed(range, scale, parsed, stack);
+      this.updateRangeFromParsed(range, scale, parsed, stack);
       if (sorted) {
         break;
       }
@@ -27339,7 +27345,7 @@ class DatasetController {
         if (_skip()) {
           continue;
         }
-        me.updateRangeFromParsed(range, scale, parsed, stack);
+        this.updateRangeFromParsed(range, scale, parsed, stack);
         break;
       }
     }
@@ -27361,35 +27367,32 @@ class DatasetController {
     return false;
   }
   getLabelAndValue(index) {
-    const me = this;
-    const meta = me._cachedMeta;
+    const meta = this._cachedMeta;
     const iScale = meta.iScale;
     const vScale = meta.vScale;
-    const parsed = me.getParsed(index);
+    const parsed = this.getParsed(index);
     return {
       label: iScale ? '' + iScale.getLabelForValue(parsed[iScale.axis]) : '',
       value: vScale ? '' + vScale.getLabelForValue(parsed[vScale.axis]) : ''
     };
   }
   _update(mode) {
-    const me = this;
-    const meta = me._cachedMeta;
-    me.configure();
-    me._cachedDataOpts = {};
-    me.update(mode || 'default');
-    meta._clip = toClip(valueOrDefault(me.options.clip, defaultClip(meta.xScale, meta.yScale, me.getMaxOverflow())));
+    const meta = this._cachedMeta;
+    this.configure();
+    this._cachedDataOpts = {};
+    this.update(mode || 'default');
+    meta._clip = toClip(valueOrDefault(this.options.clip, defaultClip(meta.xScale, meta.yScale, this.getMaxOverflow())));
   }
   update(mode) {}
   draw() {
-    const me = this;
-    const ctx = me._ctx;
-    const chart = me.chart;
-    const meta = me._cachedMeta;
+    const ctx = this._ctx;
+    const chart = this.chart;
+    const meta = this._cachedMeta;
     const elements = meta.data || [];
     const area = chart.chartArea;
     const active = [];
-    const start = me._drawStart || 0;
-    const count = me._drawCount || (elements.length - start);
+    const start = this._drawStart || 0;
+    const count = this._drawCount || (elements.length - start);
     let i;
     if (meta.dataset) {
       meta.dataset.draw(ctx, area, start, count);
@@ -27416,21 +27419,20 @@ class DatasetController {
       : this.resolveDataElementOptions(index || 0, mode);
   }
   getContext(index, active, mode) {
-    const me = this;
-    const dataset = me.getDataset();
+    const dataset = this.getDataset();
     let context;
-    if (index >= 0 && index < me._cachedMeta.data.length) {
-      const element = me._cachedMeta.data[index];
+    if (index >= 0 && index < this._cachedMeta.data.length) {
+      const element = this._cachedMeta.data[index];
       context = element.$context ||
-        (element.$context = createDataContext(me.getContext(), index, element));
-      context.parsed = me.getParsed(index);
+        (element.$context = createDataContext(this.getContext(), index, element));
+      context.parsed = this.getParsed(index);
       context.raw = dataset.data[index];
       context.index = context.dataIndex = index;
     } else {
-      context = me.$context ||
-        (me.$context = createDatasetContext(me.chart.getContext(), me.index));
+      context = this.$context ||
+        (this.$context = createDatasetContext(this.chart.getContext(), this.index));
       context.dataset = dataset;
-      context.index = context.datasetIndex = me.index;
+      context.index = context.datasetIndex = this.index;
     }
     context.active = !!active;
     context.mode = mode;
@@ -27443,21 +27445,20 @@ class DatasetController {
     return this._resolveElementOptions(this.dataElementType.id, mode, index);
   }
   _resolveElementOptions(elementType, mode = 'default', index) {
-    const me = this;
     const active = mode === 'active';
-    const cache = me._cachedDataOpts;
+    const cache = this._cachedDataOpts;
     const cacheKey = elementType + '-' + mode;
     const cached = cache[cacheKey];
-    const sharing = me.enableOptionSharing && defined(index);
+    const sharing = this.enableOptionSharing && defined(index);
     if (cached) {
       return cloneIfNotShared(cached, sharing);
     }
-    const config = me.chart.config;
-    const scopeKeys = config.datasetElementScopeKeys(me._type, elementType);
+    const config = this.chart.config;
+    const scopeKeys = config.datasetElementScopeKeys(this._type, elementType);
     const prefixes = active ? [`${elementType}Hover`, 'hover', elementType, ''] : [elementType, ''];
-    const scopes = config.getOptionScopes(me.getDataset(), scopeKeys);
+    const scopes = config.getOptionScopes(this.getDataset(), scopeKeys);
     const names = Object.keys(defaults$1.elements[elementType]);
-    const context = () => me.getContext(index, active);
+    const context = () => this.getContext(index, active);
     const values = config.resolveNamedOptions(scopes, names, context, prefixes);
     if (values.$shared) {
       values.$shared = sharing;
@@ -27466,9 +27467,8 @@ class DatasetController {
     return values;
   }
   _resolveAnimations(index, transition, active) {
-    const me = this;
-    const chart = me.chart;
-    const cache = me._cachedDataOpts;
+    const chart = this.chart;
+    const cache = this._cachedDataOpts;
     const cacheKey = `animation-${transition}`;
     const cached = cache[cacheKey];
     if (cached) {
@@ -27476,10 +27476,10 @@ class DatasetController {
     }
     let options;
     if (chart.options.animation !== false) {
-      const config = me.chart.config;
-      const scopeKeys = config.datasetAnimationScopeKeys(me._type, transition);
-      const scopes = config.getOptionScopes(me.getDataset(), scopeKeys);
-      options = config.createResolver(scopes, me.getContext(index, active, transition));
+      const config = this.chart.config;
+      const scopeKeys = config.datasetAnimationScopeKeys(this._type, transition);
+      const scopes = config.getOptionScopes(this.getDataset(), scopeKeys);
+      options = config.createResolver(scopes, this.getContext(index, active, transition));
     }
     const animations = new Animations(chart, options && options.animations);
     if (options && options._cacheable) {
@@ -27534,28 +27534,26 @@ class DatasetController {
     }
   }
   _resyncElements(resetNewElements) {
-    const me = this;
-    const data = me._data;
-    const elements = me._cachedMeta.data;
-    for (const [method, arg1, arg2] of me._syncList) {
-      me[method](arg1, arg2);
+    const data = this._data;
+    const elements = this._cachedMeta.data;
+    for (const [method, arg1, arg2] of this._syncList) {
+      this[method](arg1, arg2);
     }
-    me._syncList = [];
+    this._syncList = [];
     const numMeta = elements.length;
     const numData = data.length;
     const count = Math.min(numData, numMeta);
     if (count) {
-      me.parse(0, count);
+      this.parse(0, count);
     }
     if (numData > numMeta) {
-      me._insertElements(numMeta, numData - numMeta, resetNewElements);
+      this._insertElements(numMeta, numData - numMeta, resetNewElements);
     } else if (numData < numMeta) {
-      me._removeElements(numData, numMeta - numData);
+      this._removeElements(numData, numMeta - numData);
     }
   }
   _insertElements(start, count, resetNewElements = true) {
-    const me = this;
-    const meta = me._cachedMeta;
+    const meta = this._cachedMeta;
     const data = meta.data;
     const end = start + count;
     let i;
@@ -27567,21 +27565,20 @@ class DatasetController {
     };
     move(data);
     for (i = start; i < end; ++i) {
-      data[i] = new me.dataElementType();
+      data[i] = new this.dataElementType();
     }
-    if (me._parsing) {
+    if (this._parsing) {
       move(meta._parsed);
     }
-    me.parse(start, count);
+    this.parse(start, count);
     if (resetNewElements) {
-      me.updateElements(data, start, count, 'reset');
+      this.updateElements(data, start, count, 'reset');
     }
   }
   updateElements(element, start, count, mode) {}
   _removeElements(start, count) {
-    const me = this;
-    const meta = me._cachedMeta;
-    if (me._parsing) {
+    const meta = this._cachedMeta;
+    if (this._parsing) {
       const removed = meta._parsed.splice(start, count);
       if (meta._stacked) {
         clearStacks(meta, removed);
@@ -27619,19 +27616,20 @@ DatasetController.defaults = {};
 DatasetController.prototype.datasetElementType = null;
 DatasetController.prototype.dataElementType = null;
 
-function getAllScaleValues(scale) {
+function getAllScaleValues(scale, type) {
   if (!scale._cache.$bar) {
-    const metas = scale.getMatchingVisibleMetas('bar');
+    const visibleMetas = scale.getMatchingVisibleMetas(type);
     let values = [];
-    for (let i = 0, ilen = metas.length; i < ilen; i++) {
-      values = values.concat(metas[i].controller.getAllParsedValues(scale));
+    for (let i = 0, ilen = visibleMetas.length; i < ilen; i++) {
+      values = values.concat(visibleMetas[i].controller.getAllParsedValues(scale));
     }
     scale._cache.$bar = _arrayUnique(values.sort((a, b) => a - b));
   }
   return scale._cache.$bar;
 }
-function computeMinSampleSize(scale) {
-  const values = getAllScaleValues(scale);
+function computeMinSampleSize(meta) {
+  const scale = meta.iScale;
+  const values = getAllScaleValues(scale, meta.type);
   let min = scale._length;
   let i, ilen, curr, prev;
   const updateMinAndPrev = () => {
@@ -27800,6 +27798,11 @@ function swap(orig, v1, v2) {
 function startEnd(v, start, end) {
   return v === 'start' ? start : v === 'end' ? end : v;
 }
+function setInflateAmount(properties, {inflateAmount}, ratio) {
+  properties.inflateAmount = inflateAmount === 'auto'
+    ? ratio === 1 ? 0.33 : 0
+    : inflateAmount;
+}
 class BarController extends DatasetController {
   parsePrimitiveData(meta, data, start, count) {
     return parseArrayOrPrimitive(meta, data, start, count);
@@ -27834,10 +27837,9 @@ class BarController extends DatasetController {
     return 0;
   }
   getLabelAndValue(index) {
-    const me = this;
-    const meta = me._cachedMeta;
+    const meta = this._cachedMeta;
     const {iScale, vScale} = meta;
-    const parsed = me.getParsed(index);
+    const parsed = this.getParsed(index);
     const custom = parsed._custom;
     const value = isFloatBar(custom)
       ? '[' + custom.start + ', ' + custom.end + ']'
@@ -27848,32 +27850,29 @@ class BarController extends DatasetController {
     };
   }
   initialize() {
-    const me = this;
-    me.enableOptionSharing = true;
+    this.enableOptionSharing = true;
     super.initialize();
-    const meta = me._cachedMeta;
-    meta.stack = me.getDataset().stack;
+    const meta = this._cachedMeta;
+    meta.stack = this.getDataset().stack;
   }
   update(mode) {
-    const me = this;
-    const meta = me._cachedMeta;
-    me.updateElements(meta.data, 0, meta.data.length, mode);
+    const meta = this._cachedMeta;
+    this.updateElements(meta.data, 0, meta.data.length, mode);
   }
   updateElements(bars, start, count, mode) {
-    const me = this;
     const reset = mode === 'reset';
-    const {index, _cachedMeta: {vScale}} = me;
+    const {index, _cachedMeta: {vScale}} = this;
     const base = vScale.getBasePixel();
     const horizontal = vScale.isHorizontal();
-    const ruler = me._getRuler();
-    const firstOpts = me.resolveDataElementOptions(start, mode);
-    const sharedOptions = me.getSharedOptions(firstOpts);
-    const includeOptions = me.includeOptions(mode, sharedOptions);
-    me.updateSharedOptions(sharedOptions, mode, firstOpts);
+    const ruler = this._getRuler();
+    const firstOpts = this.resolveDataElementOptions(start, mode);
+    const sharedOptions = this.getSharedOptions(firstOpts);
+    const includeOptions = this.includeOptions(mode, sharedOptions);
+    this.updateSharedOptions(sharedOptions, mode, firstOpts);
     for (let i = start; i < start + count; i++) {
-      const parsed = me.getParsed(i);
-      const vpixels = reset || isNullOrUndef(parsed[vScale.axis]) ? {base, head: base} : me._calculateBarValuePixels(i);
-      const ipixels = me._calculateBarIndexPixels(i, ruler);
+      const parsed = this.getParsed(i);
+      const vpixels = reset || isNullOrUndef(parsed[vScale.axis]) ? {base, head: base} : this._calculateBarValuePixels(i);
+      const ipixels = this._calculateBarIndexPixels(i, ruler);
       const stack = (parsed._stacks || {})[vScale.axis];
       const properties = {
         horizontal,
@@ -27885,17 +27884,18 @@ class BarController extends DatasetController {
         width: horizontal ? Math.abs(vpixels.size) : ipixels.size
       };
       if (includeOptions) {
-        properties.options = sharedOptions || me.resolveDataElementOptions(i, bars[i].active ? 'active' : mode);
+        properties.options = sharedOptions || this.resolveDataElementOptions(i, bars[i].active ? 'active' : mode);
       }
-      setBorderSkipped(properties, properties.options || bars[i].options, stack, index);
-      me.updateElement(bars[i], i, properties, mode);
+      const options = properties.options || bars[i].options;
+      setBorderSkipped(properties, options, stack, index);
+      setInflateAmount(properties, options, ruler.ratio);
+      this.updateElement(bars[i], i, properties, mode);
     }
   }
   _getStacks(last, dataIndex) {
-    const me = this;
-    const meta = me._cachedMeta;
+    const meta = this._cachedMeta;
     const iScale = meta.iScale;
-    const metasets = iScale.getMatchingVisibleMetas(me._type);
+    const metasets = iScale.getMatchingVisibleMetas(this._type);
     const stacked = iScale.options.stacked;
     const ilen = metasets.length;
     const stacks = [];
@@ -27939,38 +27939,36 @@ class BarController extends DatasetController {
       : index;
   }
   _getRuler() {
-    const me = this;
-    const opts = me.options;
-    const meta = me._cachedMeta;
+    const opts = this.options;
+    const meta = this._cachedMeta;
     const iScale = meta.iScale;
     const pixels = [];
     let i, ilen;
     for (i = 0, ilen = meta.data.length; i < ilen; ++i) {
-      pixels.push(iScale.getPixelForValue(me.getParsed(i)[iScale.axis], i));
+      pixels.push(iScale.getPixelForValue(this.getParsed(i)[iScale.axis], i));
     }
     const barThickness = opts.barThickness;
-    const min = barThickness || computeMinSampleSize(iScale);
+    const min = barThickness || computeMinSampleSize(meta);
     return {
       min,
       pixels,
       start: iScale._startPixel,
       end: iScale._endPixel,
-      stackCount: me._getStackCount(),
+      stackCount: this._getStackCount(),
       scale: iScale,
       grouped: opts.grouped,
       ratio: barThickness ? 1 : opts.categoryPercentage * opts.barPercentage
     };
   }
   _calculateBarValuePixels(index) {
-    const me = this;
-    const {_cachedMeta: {vScale, _stacked}, options: {base: baseValue, minBarLength}} = me;
+    const {_cachedMeta: {vScale, _stacked}, options: {base: baseValue, minBarLength}} = this;
     const actualBase = baseValue || 0;
-    const parsed = me.getParsed(index);
+    const parsed = this.getParsed(index);
     const custom = parsed._custom;
     const floating = isFloatBar(custom);
     let value = parsed[vScale.axis];
     let start = 0;
-    let length = _stacked ? me.applyStack(vScale, parsed, _stacked) : value;
+    let length = _stacked ? this.applyStack(vScale, parsed, _stacked) : value;
     let head, size;
     if (length !== value) {
       start = length - value;
@@ -27986,7 +27984,7 @@ class BarController extends DatasetController {
     }
     const startValue = !isNullOrUndef(baseValue) && !floating ? baseValue : start;
     let base = vScale.getPixelForValue(startValue);
-    if (me.chart.getDataVisibility(index)) {
+    if (this.chart.getDataVisibility(index)) {
       head = vScale.getPixelForValue(start + length);
     } else {
       head = base;
@@ -28012,22 +28010,21 @@ class BarController extends DatasetController {
     };
   }
   _calculateBarIndexPixels(index, ruler) {
-    const me = this;
     const scale = ruler.scale;
-    const options = me.options;
+    const options = this.options;
     const skipNull = options.skipNull;
     const maxBarThickness = valueOrDefault(options.maxBarThickness, Infinity);
     let center, size;
     if (ruler.grouped) {
-      const stackCount = skipNull ? me._getStackCount(index) : ruler.stackCount;
+      const stackCount = skipNull ? this._getStackCount(index) : ruler.stackCount;
       const range = options.barThickness === 'flex'
         ? computeFlexCategoryTraits(index, ruler, options, stackCount)
         : computeFitCategoryTraits(index, ruler, options, stackCount);
-      const stackIndex = me._getStackIndex(me.index, me._cachedMeta.stack, skipNull ? index : undefined);
+      const stackIndex = this._getStackIndex(this.index, this._cachedMeta.stack, skipNull ? index : undefined);
       center = range.start + (range.chunk * stackIndex) + (range.chunk / 2);
       size = Math.min(maxBarThickness, range.chunk * range.ratio);
     } else {
-      center = scale.getPixelForValue(me.getParsed(index)[scale.axis], index);
+      center = scale.getPixelForValue(this.getParsed(index)[scale.axis], index);
       size = Math.min(maxBarThickness, ruler.min * ruler.ratio);
     }
     return {
@@ -28038,15 +28035,14 @@ class BarController extends DatasetController {
     };
   }
   draw() {
-    const me = this;
-    const meta = me._cachedMeta;
+    const meta = this._cachedMeta;
     const vScale = meta.vScale;
     const rects = meta.data;
     const ilen = rects.length;
     let i = 0;
     for (; i < ilen; ++i) {
-      if (me.getParsed(i)[vScale.axis] !== null) {
-        rects[i].draw(me._ctx);
+      if (this.getParsed(i)[vScale.axis] !== null) {
+        rects[i].draw(this._ctx);
       }
     }
   }
@@ -28119,9 +28115,18 @@ class DoughnutController extends DatasetController {
   parse(start, count) {
     const data = this.getDataset().data;
     const meta = this._cachedMeta;
-    let i, ilen;
-    for (i = start, ilen = start + count; i < ilen; ++i) {
-      meta._parsed[i] = +data[i];
+    if (this._parsing === false) {
+      meta._parsed = data;
+    } else {
+      let getter = (i) => +data[i];
+      if (isObject$1(data[start])) {
+        const {key = 'value'} = this._parsing;
+        getter = (i) => +resolveObjectKey(data[i], key);
+      }
+      let i, ilen;
+      for (i = start, ilen = start + count; i < ilen; ++i) {
+        meta._parsed[i] = getter(i);
+      }
     }
   }
   _getRotation() {
@@ -28133,10 +28138,9 @@ class DoughnutController extends DatasetController {
   _getRotationExtents() {
     let min = TAU;
     let max = -TAU;
-    const me = this;
-    for (let i = 0; i < me.chart.data.datasets.length; ++i) {
-      if (me.chart.isDatasetVisible(i)) {
-        const controller = me.chart.getDatasetMeta(i).controller;
+    for (let i = 0; i < this.chart.data.datasets.length; ++i) {
+      if (this.chart.isDatasetVisible(i)) {
+        const controller = this.chart.getDatasetMeta(i).controller;
         const rotation = controller._getRotation();
         const circumference = controller._getCircumference();
         min = Math.min(min, rotation);
@@ -28149,66 +28153,63 @@ class DoughnutController extends DatasetController {
     };
   }
   update(mode) {
-    const me = this;
-    const chart = me.chart;
+    const chart = this.chart;
     const {chartArea} = chart;
-    const meta = me._cachedMeta;
+    const meta = this._cachedMeta;
     const arcs = meta.data;
-    const spacing = me.getMaxBorderWidth() + me.getMaxOffset(arcs) + me.options.spacing;
+    const spacing = this.getMaxBorderWidth() + this.getMaxOffset(arcs) + this.options.spacing;
     const maxSize = Math.max((Math.min(chartArea.width, chartArea.height) - spacing) / 2, 0);
-    const cutout = Math.min(toPercentage(me.options.cutout, maxSize), 1);
-    const chartWeight = me._getRingWeight(me.index);
-    const {circumference, rotation} = me._getRotationExtents();
+    const cutout = Math.min(toPercentage(this.options.cutout, maxSize), 1);
+    const chartWeight = this._getRingWeight(this.index);
+    const {circumference, rotation} = this._getRotationExtents();
     const {ratioX, ratioY, offsetX, offsetY} = getRatioAndOffset(rotation, circumference, cutout);
     const maxWidth = (chartArea.width - spacing) / ratioX;
     const maxHeight = (chartArea.height - spacing) / ratioY;
     const maxRadius = Math.max(Math.min(maxWidth, maxHeight) / 2, 0);
-    const outerRadius = toDimension(me.options.radius, maxRadius);
+    const outerRadius = toDimension(this.options.radius, maxRadius);
     const innerRadius = Math.max(outerRadius * cutout, 0);
-    const radiusLength = (outerRadius - innerRadius) / me._getVisibleDatasetWeightTotal();
-    me.offsetX = offsetX * outerRadius;
-    me.offsetY = offsetY * outerRadius;
-    meta.total = me.calculateTotal();
-    me.outerRadius = outerRadius - radiusLength * me._getRingWeightOffset(me.index);
-    me.innerRadius = Math.max(me.outerRadius - radiusLength * chartWeight, 0);
-    me.updateElements(arcs, 0, arcs.length, mode);
+    const radiusLength = (outerRadius - innerRadius) / this._getVisibleDatasetWeightTotal();
+    this.offsetX = offsetX * outerRadius;
+    this.offsetY = offsetY * outerRadius;
+    meta.total = this.calculateTotal();
+    this.outerRadius = outerRadius - radiusLength * this._getRingWeightOffset(this.index);
+    this.innerRadius = Math.max(this.outerRadius - radiusLength * chartWeight, 0);
+    this.updateElements(arcs, 0, arcs.length, mode);
   }
   _circumference(i, reset) {
-    const me = this;
-    const opts = me.options;
-    const meta = me._cachedMeta;
-    const circumference = me._getCircumference();
+    const opts = this.options;
+    const meta = this._cachedMeta;
+    const circumference = this._getCircumference();
     if ((reset && opts.animation.animateRotate) || !this.chart.getDataVisibility(i) || meta._parsed[i] === null || meta.data[i].hidden) {
       return 0;
     }
-    return me.calculateCircumference(meta._parsed[i] * circumference / TAU);
+    return this.calculateCircumference(meta._parsed[i] * circumference / TAU);
   }
   updateElements(arcs, start, count, mode) {
-    const me = this;
     const reset = mode === 'reset';
-    const chart = me.chart;
+    const chart = this.chart;
     const chartArea = chart.chartArea;
     const opts = chart.options;
     const animationOpts = opts.animation;
     const centerX = (chartArea.left + chartArea.right) / 2;
     const centerY = (chartArea.top + chartArea.bottom) / 2;
     const animateScale = reset && animationOpts.animateScale;
-    const innerRadius = animateScale ? 0 : me.innerRadius;
-    const outerRadius = animateScale ? 0 : me.outerRadius;
-    const firstOpts = me.resolveDataElementOptions(start, mode);
-    const sharedOptions = me.getSharedOptions(firstOpts);
-    const includeOptions = me.includeOptions(mode, sharedOptions);
-    let startAngle = me._getRotation();
+    const innerRadius = animateScale ? 0 : this.innerRadius;
+    const outerRadius = animateScale ? 0 : this.outerRadius;
+    const firstOpts = this.resolveDataElementOptions(start, mode);
+    const sharedOptions = this.getSharedOptions(firstOpts);
+    const includeOptions = this.includeOptions(mode, sharedOptions);
+    let startAngle = this._getRotation();
     let i;
     for (i = 0; i < start; ++i) {
-      startAngle += me._circumference(i, reset);
+      startAngle += this._circumference(i, reset);
     }
     for (i = start; i < start + count; ++i) {
-      const circumference = me._circumference(i, reset);
+      const circumference = this._circumference(i, reset);
       const arc = arcs[i];
       const properties = {
-        x: centerX + me.offsetX,
-        y: centerY + me.offsetY,
+        x: centerX + this.offsetX,
+        y: centerY + this.offsetY,
         startAngle,
         endAngle: startAngle + circumference,
         circumference,
@@ -28216,12 +28217,12 @@ class DoughnutController extends DatasetController {
         innerRadius
       };
       if (includeOptions) {
-        properties.options = sharedOptions || me.resolveDataElementOptions(i, arc.active ? 'active' : mode);
+        properties.options = sharedOptions || this.resolveDataElementOptions(i, arc.active ? 'active' : mode);
       }
       startAngle += circumference;
-      me.updateElement(arc, i, properties, mode);
+      this.updateElement(arc, i, properties, mode);
     }
-    me.updateSharedOptions(sharedOptions, mode, firstOpts);
+    this.updateSharedOptions(sharedOptions, mode, firstOpts);
   }
   calculateTotal() {
     const meta = this._cachedMeta;
@@ -28244,9 +28245,8 @@ class DoughnutController extends DatasetController {
     return 0;
   }
   getLabelAndValue(index) {
-    const me = this;
-    const meta = me._cachedMeta;
-    const chart = me.chart;
+    const meta = this._cachedMeta;
+    const chart = this.chart;
     const labels = chart.data.labels || [];
     const value = formatNumber(meta._parsed[index], chart.options.locale);
     return {
@@ -28255,9 +28255,8 @@ class DoughnutController extends DatasetController {
     };
   }
   getMaxBorderWidth(arcs) {
-    const me = this;
     let max = 0;
-    const chart = me.chart;
+    const chart = this.chart;
     let i, ilen, meta, controller, options;
     if (!arcs) {
       for (i = 0, ilen = chart.data.datasets.length; i < ilen; ++i) {
@@ -28265,7 +28264,7 @@ class DoughnutController extends DatasetController {
           meta = chart.getDatasetMeta(i);
           arcs = meta.data;
           controller = meta.controller;
-          if (controller !== me) {
+          if (controller !== this) {
             controller.configure();
           }
           break;
@@ -28390,75 +28389,76 @@ class LineController extends DatasetController {
     super.initialize();
   }
   update(mode) {
-    const me = this;
-    const meta = me._cachedMeta;
+    const meta = this._cachedMeta;
     const {dataset: line, data: points = [], _dataset} = meta;
-    const animationsDisabled = me.chart._animationsDisabled;
+    const animationsDisabled = this.chart._animationsDisabled;
     let {start, count} = getStartAndCountOfVisiblePoints(meta, points, animationsDisabled);
-    me._drawStart = start;
-    me._drawCount = count;
+    this._drawStart = start;
+    this._drawCount = count;
     if (scaleRangesChanged(meta)) {
       start = 0;
       count = points.length;
     }
-    line._datasetIndex = me.index;
+    line._chart = this.chart;
+    line._datasetIndex = this.index;
     line._decimated = !!_dataset._decimated;
     line.points = points;
-    const options = me.resolveDatasetElementOptions(mode);
-    if (!me.options.showLine) {
+    const options = this.resolveDatasetElementOptions(mode);
+    if (!this.options.showLine) {
       options.borderWidth = 0;
     }
-    options.segment = me.options.segment;
-    me.updateElement(line, undefined, {
+    options.segment = this.options.segment;
+    this.updateElement(line, undefined, {
       animated: !animationsDisabled,
       options
     }, mode);
-    me.updateElements(points, start, count, mode);
+    this.updateElements(points, start, count, mode);
   }
   updateElements(points, start, count, mode) {
-    const me = this;
     const reset = mode === 'reset';
-    const {iScale, vScale, _stacked} = me._cachedMeta;
-    const firstOpts = me.resolveDataElementOptions(start, mode);
-    const sharedOptions = me.getSharedOptions(firstOpts);
-    const includeOptions = me.includeOptions(mode, sharedOptions);
+    const {iScale, vScale, _stacked, _dataset} = this._cachedMeta;
+    const firstOpts = this.resolveDataElementOptions(start, mode);
+    const sharedOptions = this.getSharedOptions(firstOpts);
+    const includeOptions = this.includeOptions(mode, sharedOptions);
     const iAxis = iScale.axis;
     const vAxis = vScale.axis;
-    const spanGaps = me.options.spanGaps;
+    const {spanGaps, segment} = this.options;
     const maxGapLength = isNumber(spanGaps) ? spanGaps : Number.POSITIVE_INFINITY;
-    const directUpdate = me.chart._animationsDisabled || reset || mode === 'none';
-    let prevParsed = start > 0 && me.getParsed(start - 1);
+    const directUpdate = this.chart._animationsDisabled || reset || mode === 'none';
+    let prevParsed = start > 0 && this.getParsed(start - 1);
     for (let i = start; i < start + count; ++i) {
       const point = points[i];
-      const parsed = me.getParsed(i);
+      const parsed = this.getParsed(i);
       const properties = directUpdate ? point : {};
       const nullData = isNullOrUndef(parsed[vAxis]);
       const iPixel = properties[iAxis] = iScale.getPixelForValue(parsed[iAxis], i);
-      const vPixel = properties[vAxis] = reset || nullData ? vScale.getBasePixel() : vScale.getPixelForValue(_stacked ? me.applyStack(vScale, parsed, _stacked) : parsed[vAxis], i);
+      const vPixel = properties[vAxis] = reset || nullData ? vScale.getBasePixel() : vScale.getPixelForValue(_stacked ? this.applyStack(vScale, parsed, _stacked) : parsed[vAxis], i);
       properties.skip = isNaN(iPixel) || isNaN(vPixel) || nullData;
       properties.stop = i > 0 && (parsed[iAxis] - prevParsed[iAxis]) > maxGapLength;
-      properties.parsed = parsed;
+      if (segment) {
+        properties.parsed = parsed;
+        properties.raw = _dataset.data[i];
+      }
       if (includeOptions) {
-        properties.options = sharedOptions || me.resolveDataElementOptions(i, point.active ? 'active' : mode);
+        properties.options = sharedOptions || this.resolveDataElementOptions(i, point.active ? 'active' : mode);
       }
       if (!directUpdate) {
-        me.updateElement(point, i, properties, mode);
+        this.updateElement(point, i, properties, mode);
       }
       prevParsed = parsed;
     }
-    me.updateSharedOptions(sharedOptions, mode, firstOpts);
+    this.updateSharedOptions(sharedOptions, mode, firstOpts);
   }
   getMaxOverflow() {
-    const me = this;
-    const meta = me._cachedMeta;
+    const meta = this._cachedMeta;
     const dataset = meta.dataset;
     const border = dataset.options && dataset.options.borderWidth || 0;
     const data = meta.data || [];
     if (!data.length) {
       return border;
     }
-    const firstPoint = data[0].size(me.resolveDataElementOptions(0));
-    const lastPoint = data[data.length - 1].size(me.resolveDataElementOptions(data.length - 1));
+    const firstPoint = data[0].size(this.resolveDataElementOptions(0));
+    const lastPoint = data[data.length - 1].size(this.resolveDataElementOptions(data.length - 1));
     return Math.max(border, firstPoint, lastPoint) / 2;
   }
   draw() {
@@ -28931,6 +28931,7 @@ function placeBoxes(boxes, chartArea, params, stacks) {
   chartArea.y = y;
 }
 defaults$1.set('layout', {
+  autoPadding: true,
   padding: {
     top: 0,
     right: 0,
@@ -29050,11 +29051,16 @@ class BasePlatform {
   isAttached(canvas) {
     return true;
   }
+  updateConfig(config) {
+  }
 }
 
 class BasicPlatform extends BasePlatform {
   acquireContext(item) {
     return item && item.getContext && item.getContext('2d') || null;
+  }
+  updateConfig(config) {
+    config.options.animation = false;
   }
 }
 
@@ -29126,39 +29132,30 @@ function fromNativeEvent(event, chart) {
 }
 function createAttachObserver(chart, type, listener) {
   const canvas = chart.canvas;
-  const container = canvas && _getParentNode(canvas);
-  const element = container || canvas;
   const observer = new MutationObserver(entries => {
-    const parent = _getParentNode(element);
-    entries.forEach(entry => {
-      for (let i = 0; i < entry.addedNodes.length; i++) {
-        const added = entry.addedNodes[i];
-        if (added === element || added === parent) {
-          listener(entry.target);
+    for (const entry of entries) {
+      for (const node of entry.addedNodes) {
+        if (node === canvas || node.contains(canvas)) {
+          return listener();
         }
       }
-    });
+    }
   });
   observer.observe(document, {childList: true, subtree: true});
   return observer;
 }
 function createDetachObserver(chart, type, listener) {
   const canvas = chart.canvas;
-  const container = canvas && _getParentNode(canvas);
-  if (!container) {
-    return;
-  }
   const observer = new MutationObserver(entries => {
-    entries.forEach(entry => {
-      for (let i = 0; i < entry.removedNodes.length; i++) {
-        if (entry.removedNodes[i] === canvas) {
-          listener();
-          break;
+    for (const entry of entries) {
+      for (const node of entry.removedNodes) {
+        if (node === canvas || node.contains(canvas)) {
+          return listener();
         }
       }
-    });
+    }
   });
-  observer.observe(container, {childList: true});
+  observer.observe(document, {childList: true, subtree: true});
   return observer;
 }
 const drpListeningCharts = new Map();
@@ -29326,14 +29323,13 @@ class Element$1 {
     return isNumber(this.x) && isNumber(this.y);
   }
   getProps(props, final) {
-    const me = this;
     const anims = this.$animations;
     if (!final || !anims) {
-      return me;
+      return this;
     }
     const ret = {};
     props.forEach(prop => {
-      ret[prop] = anims[prop] && anims[prop].active() ? anims[prop]._to : me[prop];
+      ret[prop] = anims[prop] && anims[prop].active() ? anims[prop]._to : this[prop];
     });
     return ret;
   }
@@ -29621,13 +29617,13 @@ function getTitleHeight(options, fallback) {
   return (lines * font.lineHeight) + padding.height;
 }
 function createScaleContext(parent, scale) {
-  return Object.assign(Object.create(parent), {
+  return createContext(parent, {
     scale,
     type: 'scale'
   });
 }
 function createTickContext(parent, index, tick) {
-  return Object.assign(Object.create(parent), {
+  return createContext(parent, {
     tick,
     index,
     type: 'tick'
@@ -29726,13 +29722,12 @@ class Scale extends Element$1 {
     this.$context = undefined;
   }
   init(options) {
-    const me = this;
-    me.options = options.setContext(me.getContext());
-    me.axis = options.axis;
-    me._userMin = me.parse(options.min);
-    me._userMax = me.parse(options.max);
-    me._suggestedMin = me.parse(options.suggestedMin);
-    me._suggestedMax = me.parse(options.suggestedMax);
+    this.options = options.setContext(this.getContext());
+    this.axis = options.axis;
+    this._userMin = this.parse(options.min);
+    this._userMax = this.parse(options.max);
+    this._suggestedMin = this.parse(options.suggestedMin);
+    this._suggestedMax = this.parse(options.suggestedMax);
   }
   parse(raw, index) {
     return raw;
@@ -29751,15 +29746,14 @@ class Scale extends Element$1 {
     };
   }
   getMinMax(canStack) {
-    const me = this;
-    let {min, max, minDefined, maxDefined} = me.getUserBounds();
+    let {min, max, minDefined, maxDefined} = this.getUserBounds();
     let range;
     if (minDefined && maxDefined) {
       return {min, max};
     }
-    const metas = me.getMatchingVisibleMetas();
+    const metas = this.getMatchingVisibleMetas();
     for (let i = 0, ilen = metas.length; i < ilen; ++i) {
-      range = metas[i].controller.getMinMax(me, canStack);
+      range = metas[i].controller.getMinMax(this, canStack);
       if (!minDefined) {
         min = Math.min(min, range.min);
       }
@@ -29767,18 +29761,19 @@ class Scale extends Element$1 {
         max = Math.max(max, range.max);
       }
     }
+    min = maxDefined && min > max ? max : min;
+    max = minDefined && min > max ? min : max;
     return {
       min: finiteOrDefault(min, finiteOrDefault(max, min)),
       max: finiteOrDefault(max, finiteOrDefault(min, max))
     };
   }
   getPadding() {
-    const me = this;
     return {
-      left: me.paddingLeft || 0,
-      top: me.paddingTop || 0,
-      right: me.paddingRight || 0,
-      bottom: me.paddingBottom || 0
+      left: this.paddingLeft || 0,
+      top: this.paddingTop || 0,
+      right: this.paddingRight || 0,
+      bottom: this.paddingBottom || 0
     };
   }
   getTicks() {
@@ -29796,73 +29791,71 @@ class Scale extends Element$1 {
     callback(this.options.beforeUpdate, [this]);
   }
   update(maxWidth, maxHeight, margins) {
-    const me = this;
-    const tickOpts = me.options.ticks;
+    const {beginAtZero, grace, ticks: tickOpts} = this.options;
     const sampleSize = tickOpts.sampleSize;
-    me.beforeUpdate();
-    me.maxWidth = maxWidth;
-    me.maxHeight = maxHeight;
-    me._margins = margins = Object.assign({
+    this.beforeUpdate();
+    this.maxWidth = maxWidth;
+    this.maxHeight = maxHeight;
+    this._margins = margins = Object.assign({
       left: 0,
       right: 0,
       top: 0,
       bottom: 0
     }, margins);
-    me.ticks = null;
-    me._labelSizes = null;
-    me._gridLineItems = null;
-    me._labelItems = null;
-    me.beforeSetDimensions();
-    me.setDimensions();
-    me.afterSetDimensions();
-    me._maxLength = me.isHorizontal()
-      ? me.width + margins.left + margins.right
-      : me.height + margins.top + margins.bottom;
-    if (!me._dataLimitsCached) {
-      me.beforeDataLimits();
-      me.determineDataLimits();
-      me.afterDataLimits();
-      me._range = _addGrace(me, me.options.grace);
-      me._dataLimitsCached = true;
+    this.ticks = null;
+    this._labelSizes = null;
+    this._gridLineItems = null;
+    this._labelItems = null;
+    this.beforeSetDimensions();
+    this.setDimensions();
+    this.afterSetDimensions();
+    this._maxLength = this.isHorizontal()
+      ? this.width + margins.left + margins.right
+      : this.height + margins.top + margins.bottom;
+    if (!this._dataLimitsCached) {
+      this.beforeDataLimits();
+      this.determineDataLimits();
+      this.afterDataLimits();
+      this._range = _addGrace(this, grace, beginAtZero);
+      this._dataLimitsCached = true;
     }
-    me.beforeBuildTicks();
-    me.ticks = me.buildTicks() || [];
-    me.afterBuildTicks();
-    const samplingEnabled = sampleSize < me.ticks.length;
-    me._convertTicksToLabels(samplingEnabled ? sample(me.ticks, sampleSize) : me.ticks);
-    me.configure();
-    me.beforeCalculateLabelRotation();
-    me.calculateLabelRotation();
-    me.afterCalculateLabelRotation();
+    this.beforeBuildTicks();
+    this.ticks = this.buildTicks() || [];
+    this.afterBuildTicks();
+    const samplingEnabled = sampleSize < this.ticks.length;
+    this._convertTicksToLabels(samplingEnabled ? sample(this.ticks, sampleSize) : this.ticks);
+    this.configure();
+    this.beforeCalculateLabelRotation();
+    this.calculateLabelRotation();
+    this.afterCalculateLabelRotation();
     if (tickOpts.display && (tickOpts.autoSkip || tickOpts.source === 'auto')) {
-      me.ticks = autoSkip(me, me.ticks);
-      me._labelSizes = null;
+      this.ticks = autoSkip(this, this.ticks);
+      this._labelSizes = null;
     }
     if (samplingEnabled) {
-      me._convertTicksToLabels(me.ticks);
+      this._convertTicksToLabels(this.ticks);
     }
-    me.beforeFit();
-    me.fit();
-    me.afterFit();
-    me.afterUpdate();
+    this.beforeFit();
+    this.fit();
+    this.afterFit();
+    this.afterUpdate();
   }
   configure() {
-    const me = this;
-    let reversePixels = me.options.reverse;
+    let reversePixels = this.options.reverse;
     let startPixel, endPixel;
-    if (me.isHorizontal()) {
-      startPixel = me.left;
-      endPixel = me.right;
+    if (this.isHorizontal()) {
+      startPixel = this.left;
+      endPixel = this.right;
     } else {
-      startPixel = me.top;
-      endPixel = me.bottom;
+      startPixel = this.top;
+      endPixel = this.bottom;
       reversePixels = !reversePixels;
     }
-    me._startPixel = startPixel;
-    me._endPixel = endPixel;
-    me._reversePixels = reversePixels;
-    me._length = endPixel - startPixel;
-    me._alignToPixels = me.options.alignToPixels;
+    this._startPixel = startPixel;
+    this._endPixel = endPixel;
+    this._reversePixels = reversePixels;
+    this._length = endPixel - startPixel;
+    this._alignToPixels = this.options.alignToPixels;
   }
   afterUpdate() {
     callback(this.options.afterUpdate, [this]);
@@ -29871,28 +29864,26 @@ class Scale extends Element$1 {
     callback(this.options.beforeSetDimensions, [this]);
   }
   setDimensions() {
-    const me = this;
-    if (me.isHorizontal()) {
-      me.width = me.maxWidth;
-      me.left = 0;
-      me.right = me.width;
+    if (this.isHorizontal()) {
+      this.width = this.maxWidth;
+      this.left = 0;
+      this.right = this.width;
     } else {
-      me.height = me.maxHeight;
-      me.top = 0;
-      me.bottom = me.height;
+      this.height = this.maxHeight;
+      this.top = 0;
+      this.bottom = this.height;
     }
-    me.paddingLeft = 0;
-    me.paddingTop = 0;
-    me.paddingRight = 0;
-    me.paddingBottom = 0;
+    this.paddingLeft = 0;
+    this.paddingTop = 0;
+    this.paddingRight = 0;
+    this.paddingBottom = 0;
   }
   afterSetDimensions() {
     callback(this.options.afterSetDimensions, [this]);
   }
   _callHooks(name) {
-    const me = this;
-    me.chart.notifyPlugins(name, me.getContext());
-    callback(me.options[name], [me]);
+    this.chart.notifyPlugins(name, this.getContext());
+    callback(this.options[name], [this]);
   }
   beforeDataLimits() {
     this._callHooks('beforeDataLimits');
@@ -29914,12 +29905,11 @@ class Scale extends Element$1 {
     callback(this.options.beforeTickToLabelConversion, [this]);
   }
   generateTickLabels(ticks) {
-    const me = this;
-    const tickOpts = me.options.ticks;
+    const tickOpts = this.options.ticks;
     let i, ilen, tick;
     for (i = 0, ilen = ticks.length; i < ilen; i++) {
       tick = ticks[i];
-      tick.label = callback(tickOpts.callback, [tick.value, i, ticks], me);
+      tick.label = callback(tickOpts.callback, [tick.value, i, ticks], this);
     }
   }
   afterTickToLabelConversion() {
@@ -29929,27 +29919,26 @@ class Scale extends Element$1 {
     callback(this.options.beforeCalculateLabelRotation, [this]);
   }
   calculateLabelRotation() {
-    const me = this;
-    const options = me.options;
+    const options = this.options;
     const tickOpts = options.ticks;
-    const numTicks = me.ticks.length;
+    const numTicks = this.ticks.length;
     const minRotation = tickOpts.minRotation || 0;
     const maxRotation = tickOpts.maxRotation;
     let labelRotation = minRotation;
     let tickWidth, maxHeight, maxLabelDiagonal;
-    if (!me._isVisible() || !tickOpts.display || minRotation >= maxRotation || numTicks <= 1 || !me.isHorizontal()) {
-      me.labelRotation = minRotation;
+    if (!this._isVisible() || !tickOpts.display || minRotation >= maxRotation || numTicks <= 1 || !this.isHorizontal()) {
+      this.labelRotation = minRotation;
       return;
     }
-    const labelSizes = me._getLabelSizes();
+    const labelSizes = this._getLabelSizes();
     const maxLabelWidth = labelSizes.widest.width;
     const maxLabelHeight = labelSizes.highest.height;
-    const maxWidth = _limitValue(me.chart.width - maxLabelWidth, 0, me.maxWidth);
-    tickWidth = options.offset ? me.maxWidth / numTicks : maxWidth / (numTicks - 1);
+    const maxWidth = _limitValue(this.chart.width - maxLabelWidth, 0, this.maxWidth);
+    tickWidth = options.offset ? this.maxWidth / numTicks : maxWidth / (numTicks - 1);
     if (maxLabelWidth + 6 > tickWidth) {
       tickWidth = maxWidth / (numTicks - (options.offset ? 0.5 : 1));
-      maxHeight = me.maxHeight - getTickMarkLength(options.grid)
-				- tickOpts.padding - getTitleHeight(options.title, me.chart.options.font);
+      maxHeight = this.maxHeight - getTickMarkLength(options.grid)
+				- tickOpts.padding - getTitleHeight(options.title, this.chart.options.font);
       maxLabelDiagonal = Math.sqrt(maxLabelWidth * maxLabelWidth + maxLabelHeight * maxLabelHeight);
       labelRotation = toDegrees(Math.min(
         Math.asin(_limitValue((labelSizes.highest.height + 6) / tickWidth, -1, 1)),
@@ -29957,7 +29946,7 @@ class Scale extends Element$1 {
       ));
       labelRotation = Math.max(minRotation, Math.min(maxRotation, labelRotation));
     }
-    me.labelRotation = labelRotation;
+    this.labelRotation = labelRotation;
   }
   afterCalculateLabelRotation() {
     callback(this.options.afterCalculateLabelRotation, [this]);
@@ -29966,56 +29955,54 @@ class Scale extends Element$1 {
     callback(this.options.beforeFit, [this]);
   }
   fit() {
-    const me = this;
     const minSize = {
       width: 0,
       height: 0
     };
-    const {chart, options: {ticks: tickOpts, title: titleOpts, grid: gridOpts}} = me;
-    const display = me._isVisible();
-    const isHorizontal = me.isHorizontal();
+    const {chart, options: {ticks: tickOpts, title: titleOpts, grid: gridOpts}} = this;
+    const display = this._isVisible();
+    const isHorizontal = this.isHorizontal();
     if (display) {
       const titleHeight = getTitleHeight(titleOpts, chart.options.font);
       if (isHorizontal) {
-        minSize.width = me.maxWidth;
+        minSize.width = this.maxWidth;
         minSize.height = getTickMarkLength(gridOpts) + titleHeight;
       } else {
-        minSize.height = me.maxHeight;
+        minSize.height = this.maxHeight;
         minSize.width = getTickMarkLength(gridOpts) + titleHeight;
       }
-      if (tickOpts.display && me.ticks.length) {
-        const {first, last, widest, highest} = me._getLabelSizes();
+      if (tickOpts.display && this.ticks.length) {
+        const {first, last, widest, highest} = this._getLabelSizes();
         const tickPadding = tickOpts.padding * 2;
-        const angleRadians = toRadians(me.labelRotation);
+        const angleRadians = toRadians(this.labelRotation);
         const cos = Math.cos(angleRadians);
         const sin = Math.sin(angleRadians);
         if (isHorizontal) {
           const labelHeight = tickOpts.mirror ? 0 : sin * widest.width + cos * highest.height;
-          minSize.height = Math.min(me.maxHeight, minSize.height + labelHeight + tickPadding);
+          minSize.height = Math.min(this.maxHeight, minSize.height + labelHeight + tickPadding);
         } else {
           const labelWidth = tickOpts.mirror ? 0 : cos * widest.width + sin * highest.height;
-          minSize.width = Math.min(me.maxWidth, minSize.width + labelWidth + tickPadding);
+          minSize.width = Math.min(this.maxWidth, minSize.width + labelWidth + tickPadding);
         }
-        me._calculatePadding(first, last, sin, cos);
+        this._calculatePadding(first, last, sin, cos);
       }
     }
-    me._handleMargins();
+    this._handleMargins();
     if (isHorizontal) {
-      me.width = me._length = chart.width - me._margins.left - me._margins.right;
-      me.height = minSize.height;
+      this.width = this._length = chart.width - this._margins.left - this._margins.right;
+      this.height = minSize.height;
     } else {
-      me.width = minSize.width;
-      me.height = me._length = chart.height - me._margins.top - me._margins.bottom;
+      this.width = minSize.width;
+      this.height = this._length = chart.height - this._margins.top - this._margins.bottom;
     }
   }
   _calculatePadding(first, last, sin, cos) {
-    const me = this;
-    const {ticks: {align, padding}, position} = me.options;
-    const isRotated = me.labelRotation !== 0;
-    const labelsBelowTicks = position !== 'top' && me.axis === 'x';
-    if (me.isHorizontal()) {
-      const offsetLeft = me.getPixelForTick(0) - me.left;
-      const offsetRight = me.right - me.getPixelForTick(me.ticks.length - 1);
+    const {ticks: {align, padding}, position} = this.options;
+    const isRotated = this.labelRotation !== 0;
+    const labelsBelowTicks = position !== 'top' && this.axis === 'x';
+    if (this.isHorizontal()) {
+      const offsetLeft = this.getPixelForTick(0) - this.left;
+      const offsetRight = this.right - this.getPixelForTick(this.ticks.length - 1);
       let paddingLeft = 0;
       let paddingRight = 0;
       if (isRotated) {
@@ -30034,8 +30021,8 @@ class Scale extends Element$1 {
         paddingLeft = first.width / 2;
         paddingRight = last.width / 2;
       }
-      me.paddingLeft = Math.max((paddingLeft - offsetLeft + padding) * me.width / (me.width - offsetLeft), 0);
-      me.paddingRight = Math.max((paddingRight - offsetRight + padding) * me.width / (me.width - offsetRight), 0);
+      this.paddingLeft = Math.max((paddingLeft - offsetLeft + padding) * this.width / (this.width - offsetLeft), 0);
+      this.paddingRight = Math.max((paddingRight - offsetRight + padding) * this.width / (this.width - offsetRight), 0);
     } else {
       let paddingTop = last.height / 2;
       let paddingBottom = first.height / 2;
@@ -30046,17 +30033,16 @@ class Scale extends Element$1 {
         paddingTop = last.height;
         paddingBottom = 0;
       }
-      me.paddingTop = paddingTop + padding;
-      me.paddingBottom = paddingBottom + padding;
+      this.paddingTop = paddingTop + padding;
+      this.paddingBottom = paddingBottom + padding;
     }
   }
   _handleMargins() {
-    const me = this;
-    if (me._margins) {
-      me._margins.left = Math.max(me.paddingLeft, me._margins.left);
-      me._margins.top = Math.max(me.paddingTop, me._margins.top);
-      me._margins.right = Math.max(me.paddingRight, me._margins.right);
-      me._margins.bottom = Math.max(me.paddingBottom, me._margins.bottom);
+    if (this._margins) {
+      this._margins.left = Math.max(this.paddingLeft, this._margins.left);
+      this._margins.top = Math.max(this.paddingTop, this._margins.top);
+      this._margins.right = Math.max(this.paddingRight, this._margins.right);
+      this._margins.bottom = Math.max(this.paddingBottom, this._margins.bottom);
     }
   }
   afterFit() {
@@ -30070,9 +30056,8 @@ class Scale extends Element$1 {
     return this.options.fullSize;
   }
   _convertTicksToLabels(ticks) {
-    const me = this;
-    me.beforeTickToLabelConversion();
-    me.generateTickLabels(ticks);
+    this.beforeTickToLabelConversion();
+    this.generateTickLabels(ticks);
     let i, ilen;
     for (i = 0, ilen = ticks.length; i < ilen; i++) {
       if (isNullOrUndef(ticks[i].label)) {
@@ -30081,18 +30066,17 @@ class Scale extends Element$1 {
         i--;
       }
     }
-    me.afterTickToLabelConversion();
+    this.afterTickToLabelConversion();
   }
   _getLabelSizes() {
-    const me = this;
-    let labelSizes = me._labelSizes;
+    let labelSizes = this._labelSizes;
     if (!labelSizes) {
-      const sampleSize = me.options.ticks.sampleSize;
-      let ticks = me.ticks;
+      const sampleSize = this.options.ticks.sampleSize;
+      let ticks = this.ticks;
       if (sampleSize < ticks.length) {
         ticks = sample(ticks, sampleSize);
       }
-      me._labelSizes = labelSizes = me._computeLabelSizes(ticks, ticks.length);
+      this._labelSizes = labelSizes = this._computeLabelSizes(ticks, ticks.length);
     }
     return labelSizes;
   }
@@ -30155,12 +30139,11 @@ class Scale extends Element$1 {
     return this.getPixelForValue(ticks[index].value);
   }
   getPixelForDecimal(decimal) {
-    const me = this;
-    if (me._reversePixels) {
+    if (this._reversePixels) {
       decimal = 1 - decimal;
     }
-    const pixel = me._startPixel + decimal * me._length;
-    return _int16Range(me._alignToPixels ? _alignPixel(me.chart, pixel, 0) : pixel);
+    const pixel = this._startPixel + decimal * this._length;
+    return _int16Range(this._alignToPixels ? _alignPixel(this.chart, pixel, 0) : pixel);
   }
   getDecimalForPixel(pixel) {
     const decimal = (pixel - this._startPixel) / this._length;
@@ -30176,27 +30159,25 @@ class Scale extends Element$1 {
       0;
   }
   getContext(index) {
-    const me = this;
-    const ticks = me.ticks || [];
+    const ticks = this.ticks || [];
     if (index >= 0 && index < ticks.length) {
       const tick = ticks[index];
       return tick.$context ||
-				(tick.$context = createTickContext(me.getContext(), index, tick));
+				(tick.$context = createTickContext(this.getContext(), index, tick));
     }
-    return me.$context ||
-			(me.$context = createScaleContext(me.chart.getContext(), me));
+    return this.$context ||
+			(this.$context = createScaleContext(this.chart.getContext(), this));
   }
   _tickSize() {
-    const me = this;
-    const optionTicks = me.options.ticks;
-    const rot = toRadians(me.labelRotation);
+    const optionTicks = this.options.ticks;
+    const rot = toRadians(this.labelRotation);
     const cos = Math.abs(Math.cos(rot));
     const sin = Math.abs(Math.sin(rot));
-    const labelSizes = me._getLabelSizes();
+    const labelSizes = this._getLabelSizes();
     const padding = optionTicks.autoSkipPadding || 0;
     const w = labelSizes ? labelSizes.widest.width + padding : 0;
     const h = labelSizes ? labelSizes.highest.height + padding : 0;
-    return me.isHorizontal()
+    return this.isHorizontal()
       ? h * cos > w * sin ? w / cos : h / sin
       : h * sin < w * cos ? h / cos : w / sin;
   }
@@ -30208,18 +30189,17 @@ class Scale extends Element$1 {
     return this.getMatchingVisibleMetas().length > 0;
   }
   _computeGridLineItems(chartArea) {
-    const me = this;
-    const axis = me.axis;
-    const chart = me.chart;
-    const options = me.options;
+    const axis = this.axis;
+    const chart = this.chart;
+    const options = this.options;
     const {grid, position} = options;
     const offset = grid.offset;
-    const isHorizontal = me.isHorizontal();
-    const ticks = me.ticks;
+    const isHorizontal = this.isHorizontal();
+    const ticks = this.ticks;
     const ticksLength = ticks.length + (offset ? 1 : 0);
     const tl = getTickMarkLength(grid);
     const items = [];
-    const borderOpts = grid.setContext(me.getContext());
+    const borderOpts = grid.setContext(this.getContext());
     const axisWidth = borderOpts.drawBorder ? borderOpts.borderWidth : 0;
     const axisHalfWidth = axisWidth / 2;
     const alignBorderValue = function(pixel) {
@@ -30228,36 +30208,36 @@ class Scale extends Element$1 {
     let borderValue, i, lineValue, alignedLineValue;
     let tx1, ty1, tx2, ty2, x1, y1, x2, y2;
     if (position === 'top') {
-      borderValue = alignBorderValue(me.bottom);
-      ty1 = me.bottom - tl;
+      borderValue = alignBorderValue(this.bottom);
+      ty1 = this.bottom - tl;
       ty2 = borderValue - axisHalfWidth;
       y1 = alignBorderValue(chartArea.top) + axisHalfWidth;
       y2 = chartArea.bottom;
     } else if (position === 'bottom') {
-      borderValue = alignBorderValue(me.top);
+      borderValue = alignBorderValue(this.top);
       y1 = chartArea.top;
       y2 = alignBorderValue(chartArea.bottom) - axisHalfWidth;
       ty1 = borderValue + axisHalfWidth;
-      ty2 = me.top + tl;
+      ty2 = this.top + tl;
     } else if (position === 'left') {
-      borderValue = alignBorderValue(me.right);
-      tx1 = me.right - tl;
+      borderValue = alignBorderValue(this.right);
+      tx1 = this.right - tl;
       tx2 = borderValue - axisHalfWidth;
       x1 = alignBorderValue(chartArea.left) + axisHalfWidth;
       x2 = chartArea.right;
     } else if (position === 'right') {
-      borderValue = alignBorderValue(me.left);
+      borderValue = alignBorderValue(this.left);
       x1 = chartArea.left;
       x2 = alignBorderValue(chartArea.right) - axisHalfWidth;
       tx1 = borderValue + axisHalfWidth;
-      tx2 = me.left + tl;
+      tx2 = this.left + tl;
     } else if (axis === 'x') {
       if (position === 'center') {
         borderValue = alignBorderValue((chartArea.top + chartArea.bottom) / 2 + 0.5);
       } else if (isObject$1(position)) {
         const positionAxisID = Object.keys(position)[0];
         const value = position[positionAxisID];
-        borderValue = alignBorderValue(me.chart.scales[positionAxisID].getPixelForValue(value));
+        borderValue = alignBorderValue(this.chart.scales[positionAxisID].getPixelForValue(value));
       }
       y1 = chartArea.top;
       y2 = chartArea.bottom;
@@ -30269,7 +30249,7 @@ class Scale extends Element$1 {
       } else if (isObject$1(position)) {
         const positionAxisID = Object.keys(position)[0];
         const value = position[positionAxisID];
-        borderValue = alignBorderValue(me.chart.scales[positionAxisID].getPixelForValue(value));
+        borderValue = alignBorderValue(this.chart.scales[positionAxisID].getPixelForValue(value));
       }
       tx1 = borderValue - axisHalfWidth;
       tx2 = tx1 - tl;
@@ -30279,7 +30259,7 @@ class Scale extends Element$1 {
     const limit = valueOrDefault(options.ticks.maxTicksLimit, ticksLength);
     const step = Math.max(1, Math.ceil(ticksLength / limit));
     for (i = 0; i < ticksLength; i += step) {
-      const optsAtIndex = grid.setContext(me.getContext(i));
+      const optsAtIndex = grid.setContext(this.getContext(i));
       const lineWidth = optsAtIndex.lineWidth;
       const lineColor = optsAtIndex.color;
       const borderDash = grid.borderDash || [];
@@ -30288,7 +30268,7 @@ class Scale extends Element$1 {
       const tickColor = optsAtIndex.tickColor;
       const tickBorderDash = optsAtIndex.tickBorderDash || [];
       const tickBorderDashOffset = optsAtIndex.tickBorderDashOffset;
-      lineValue = getPixelForGridLine(me, i, offset);
+      lineValue = getPixelForGridLine(this, i, offset);
       if (lineValue === undefined) {
         continue;
       }
@@ -30317,37 +30297,36 @@ class Scale extends Element$1 {
         tickBorderDashOffset,
       });
     }
-    me._ticksLength = ticksLength;
-    me._borderValue = borderValue;
+    this._ticksLength = ticksLength;
+    this._borderValue = borderValue;
     return items;
   }
   _computeLabelItems(chartArea) {
-    const me = this;
-    const axis = me.axis;
-    const options = me.options;
+    const axis = this.axis;
+    const options = this.options;
     const {position, ticks: optionTicks} = options;
-    const isHorizontal = me.isHorizontal();
-    const ticks = me.ticks;
+    const isHorizontal = this.isHorizontal();
+    const ticks = this.ticks;
     const {align, crossAlign, padding, mirror} = optionTicks;
     const tl = getTickMarkLength(options.grid);
     const tickAndPadding = tl + padding;
     const hTickAndPadding = mirror ? -padding : tickAndPadding;
-    const rotation = -toRadians(me.labelRotation);
+    const rotation = -toRadians(this.labelRotation);
     const items = [];
     let i, ilen, tick, label, x, y, textAlign, pixel, font, lineHeight, lineCount, textOffset;
     let textBaseline = 'middle';
     if (position === 'top') {
-      y = me.bottom - hTickAndPadding;
-      textAlign = me._getXAxisLabelAlignment();
+      y = this.bottom - hTickAndPadding;
+      textAlign = this._getXAxisLabelAlignment();
     } else if (position === 'bottom') {
-      y = me.top + hTickAndPadding;
-      textAlign = me._getXAxisLabelAlignment();
+      y = this.top + hTickAndPadding;
+      textAlign = this._getXAxisLabelAlignment();
     } else if (position === 'left') {
-      const ret = me._getYAxisLabelAlignment(tl);
+      const ret = this._getYAxisLabelAlignment(tl);
       textAlign = ret.textAlign;
       x = ret.x;
     } else if (position === 'right') {
-      const ret = me._getYAxisLabelAlignment(tl);
+      const ret = this._getYAxisLabelAlignment(tl);
       textAlign = ret.textAlign;
       x = ret.x;
     } else if (axis === 'x') {
@@ -30356,18 +30335,18 @@ class Scale extends Element$1 {
       } else if (isObject$1(position)) {
         const positionAxisID = Object.keys(position)[0];
         const value = position[positionAxisID];
-        y = me.chart.scales[positionAxisID].getPixelForValue(value) + tickAndPadding;
+        y = this.chart.scales[positionAxisID].getPixelForValue(value) + tickAndPadding;
       }
-      textAlign = me._getXAxisLabelAlignment();
+      textAlign = this._getXAxisLabelAlignment();
     } else if (axis === 'y') {
       if (position === 'center') {
         x = ((chartArea.left + chartArea.right) / 2) - tickAndPadding;
       } else if (isObject$1(position)) {
         const positionAxisID = Object.keys(position)[0];
         const value = position[positionAxisID];
-        x = me.chart.scales[positionAxisID].getPixelForValue(value);
+        x = this.chart.scales[positionAxisID].getPixelForValue(value);
       }
-      textAlign = me._getYAxisLabelAlignment(tl).textAlign;
+      textAlign = this._getYAxisLabelAlignment(tl).textAlign;
     }
     if (axis === 'y') {
       if (align === 'start') {
@@ -30376,13 +30355,13 @@ class Scale extends Element$1 {
         textBaseline = 'bottom';
       }
     }
-    const labelSizes = me._getLabelSizes();
+    const labelSizes = this._getLabelSizes();
     for (i = 0, ilen = ticks.length; i < ilen; ++i) {
       tick = ticks[i];
       label = tick.label;
-      const optsAtIndex = optionTicks.setContext(me.getContext(i));
-      pixel = me.getPixelForTick(i) + optionTicks.labelOffset;
-      font = me._resolveTickFontOptions(i);
+      const optsAtIndex = optionTicks.setContext(this.getContext(i));
+      pixel = this.getPixelForTick(i) + optionTicks.labelOffset;
+      font = this._resolveTickFontOptions(i);
       lineHeight = font.lineHeight;
       lineCount = isArray$1(label) ? label.length : 1;
       const halfCount = lineCount / 2;
@@ -30463,9 +30442,8 @@ class Scale extends Element$1 {
     return items;
   }
   _getXAxisLabelAlignment() {
-    const me = this;
-    const {position, ticks} = me.options;
-    const rotation = -toRadians(me.labelRotation);
+    const {position, ticks} = this.options;
+    const rotation = -toRadians(this.labelRotation);
     if (rotation) {
       return position === 'top' ? 'left' : 'right';
     }
@@ -30478,16 +30456,15 @@ class Scale extends Element$1 {
     return align;
   }
   _getYAxisLabelAlignment(tl) {
-    const me = this;
-    const {position, ticks: {crossAlign, mirror, padding}} = me.options;
-    const labelSizes = me._getLabelSizes();
+    const {position, ticks: {crossAlign, mirror, padding}} = this.options;
+    const labelSizes = this._getLabelSizes();
     const tickAndPadding = tl + padding;
     const widest = labelSizes.widest.width;
     let textAlign;
     let x;
     if (position === 'left') {
       if (mirror) {
-        x = me.right + padding;
+        x = this.right + padding;
         if (crossAlign === 'near') {
           textAlign = 'left';
         } else if (crossAlign === 'center') {
@@ -30498,7 +30475,7 @@ class Scale extends Element$1 {
           x += widest;
         }
       } else {
-        x = me.right - tickAndPadding;
+        x = this.right - tickAndPadding;
         if (crossAlign === 'near') {
           textAlign = 'right';
         } else if (crossAlign === 'center') {
@@ -30506,12 +30483,12 @@ class Scale extends Element$1 {
           x -= (widest / 2);
         } else {
           textAlign = 'left';
-          x = me.left;
+          x = this.left;
         }
       }
     } else if (position === 'right') {
       if (mirror) {
-        x = me.left + padding;
+        x = this.left + padding;
         if (crossAlign === 'near') {
           textAlign = 'right';
         } else if (crossAlign === 'center') {
@@ -30522,7 +30499,7 @@ class Scale extends Element$1 {
           x -= widest;
         }
       } else {
-        x = me.left + tickAndPadding;
+        x = this.left + tickAndPadding;
         if (crossAlign === 'near') {
           textAlign = 'left';
         } else if (crossAlign === 'center') {
@@ -30530,7 +30507,7 @@ class Scale extends Element$1 {
           x += widest / 2;
         } else {
           textAlign = 'right';
-          x = me.right;
+          x = this.right;
         }
       }
     } else {
@@ -30539,16 +30516,15 @@ class Scale extends Element$1 {
     return {textAlign, x};
   }
   _computeLabelArea() {
-    const me = this;
-    if (me.options.ticks.mirror) {
+    if (this.options.ticks.mirror) {
       return;
     }
-    const chart = me.chart;
-    const position = me.options.position;
+    const chart = this.chart;
+    const position = this.options.position;
     if (position === 'left' || position === 'right') {
-      return {top: 0, left: me.left, bottom: chart.height, right: me.right};
+      return {top: 0, left: this.left, bottom: chart.height, right: this.right};
     } if (position === 'top' || position === 'bottom') {
-      return {top: me.top, left: 0, bottom: me.bottom, right: chart.width};
+      return {top: this.top, left: 0, bottom: this.bottom, right: chart.width};
     }
   }
   drawBackground() {
@@ -30561,24 +30537,22 @@ class Scale extends Element$1 {
     }
   }
   getLineWidthForValue(value) {
-    const me = this;
-    const grid = me.options.grid;
-    if (!me._isVisible() || !grid.display) {
+    const grid = this.options.grid;
+    if (!this._isVisible() || !grid.display) {
       return 0;
     }
-    const ticks = me.ticks;
+    const ticks = this.ticks;
     const index = ticks.findIndex(t => t.value === value);
     if (index >= 0) {
-      const opts = grid.setContext(me.getContext(index));
+      const opts = grid.setContext(this.getContext(index));
       return opts.lineWidth;
     }
     return 0;
   }
   drawGrid(chartArea) {
-    const me = this;
-    const grid = me.options.grid;
-    const ctx = me.ctx;
-    const items = me._gridLineItems || (me._gridLineItems = me._computeGridLineItems(chartArea));
+    const grid = this.options.grid;
+    const ctx = this.ctx;
+    const items = this._gridLineItems || (this._gridLineItems = this._computeGridLineItems(chartArea));
     let i, ilen;
     const drawLine = (p1, p2, style) => {
       if (!style.width || !style.color) {
@@ -30621,23 +30595,22 @@ class Scale extends Element$1 {
     }
   }
   drawBorder() {
-    const me = this;
-    const {chart, ctx, options: {grid}} = me;
-    const borderOpts = grid.setContext(me.getContext());
+    const {chart, ctx, options: {grid}} = this;
+    const borderOpts = grid.setContext(this.getContext());
     const axisWidth = grid.drawBorder ? borderOpts.borderWidth : 0;
     if (!axisWidth) {
       return;
     }
-    const lastLineWidth = grid.setContext(me.getContext(0)).lineWidth;
-    const borderValue = me._borderValue;
+    const lastLineWidth = grid.setContext(this.getContext(0)).lineWidth;
+    const borderValue = this._borderValue;
     let x1, x2, y1, y2;
-    if (me.isHorizontal()) {
-      x1 = _alignPixel(chart, me.left, axisWidth) - axisWidth / 2;
-      x2 = _alignPixel(chart, me.right, lastLineWidth) + lastLineWidth / 2;
+    if (this.isHorizontal()) {
+      x1 = _alignPixel(chart, this.left, axisWidth) - axisWidth / 2;
+      x2 = _alignPixel(chart, this.right, lastLineWidth) + lastLineWidth / 2;
       y1 = y2 = borderValue;
     } else {
-      y1 = _alignPixel(chart, me.top, axisWidth) - axisWidth / 2;
-      y2 = _alignPixel(chart, me.bottom, lastLineWidth) + lastLineWidth / 2;
+      y1 = _alignPixel(chart, this.top, axisWidth) - axisWidth / 2;
+      y2 = _alignPixel(chart, this.bottom, lastLineWidth) + lastLineWidth / 2;
       x1 = x2 = borderValue;
     }
     ctx.save();
@@ -30650,17 +30623,16 @@ class Scale extends Element$1 {
     ctx.restore();
   }
   drawLabels(chartArea) {
-    const me = this;
-    const optionTicks = me.options.ticks;
+    const optionTicks = this.options.ticks;
     if (!optionTicks.display) {
       return;
     }
-    const ctx = me.ctx;
-    const area = me._computeLabelArea();
+    const ctx = this.ctx;
+    const area = this._computeLabelArea();
     if (area) {
       clipArea(ctx, area);
     }
-    const items = me._labelItems || (me._labelItems = me._computeLabelItems(chartArea));
+    const items = this._labelItems || (this._labelItems = this._computeLabelItems(chartArea));
     let i, ilen;
     for (i = 0, ilen = items.length; i < ilen; ++i) {
       const item = items[i];
@@ -30705,57 +30677,54 @@ class Scale extends Element$1 {
     });
   }
   draw(chartArea) {
-    const me = this;
-    if (!me._isVisible()) {
+    if (!this._isVisible()) {
       return;
     }
-    me.drawBackground();
-    me.drawGrid(chartArea);
-    me.drawBorder();
-    me.drawTitle();
-    me.drawLabels(chartArea);
+    this.drawBackground();
+    this.drawGrid(chartArea);
+    this.drawBorder();
+    this.drawTitle();
+    this.drawLabels(chartArea);
   }
   _layers() {
-    const me = this;
-    const opts = me.options;
+    const opts = this.options;
     const tz = opts.ticks && opts.ticks.z || 0;
     const gz = valueOrDefault(opts.grid && opts.grid.z, -1);
-    if (!me._isVisible() || me.draw !== Scale.prototype.draw) {
+    if (!this._isVisible() || this.draw !== Scale.prototype.draw) {
       return [{
         z: tz,
-        draw(chartArea) {
-          me.draw(chartArea);
+        draw: (chartArea) => {
+          this.draw(chartArea);
         }
       }];
     }
     return [{
       z: gz,
-      draw(chartArea) {
-        me.drawBackground();
-        me.drawGrid(chartArea);
-        me.drawTitle();
+      draw: (chartArea) => {
+        this.drawBackground();
+        this.drawGrid(chartArea);
+        this.drawTitle();
       }
     }, {
       z: gz + 1,
-      draw() {
-        me.drawBorder();
+      draw: () => {
+        this.drawBorder();
       }
     }, {
       z: tz,
-      draw(chartArea) {
-        me.drawLabels(chartArea);
+      draw: (chartArea) => {
+        this.drawLabels(chartArea);
       }
     }];
   }
   getMatchingVisibleMetas(type) {
-    const me = this;
-    const metas = me.chart.getSortedVisibleDatasetMetas();
-    const axisID = me.axis + 'AxisID';
+    const metas = this.chart.getSortedVisibleDatasetMetas();
+    const axisID = this.axis + 'AxisID';
     const result = [];
     let i, ilen;
     for (i = 0, ilen = metas.length; i < ilen; ++i) {
       const meta = metas[i];
-      if (meta[axisID] === me.id && (!type || meta.type === type)) {
+      if (meta[axisID] === this.id && (!type || meta.type === type)) {
         result.push(meta);
       }
     }
@@ -30766,9 +30735,8 @@ class Scale extends Element$1 {
     return toFont(opts.font);
   }
   _maxDigits() {
-    const me = this;
-    const fontSize = me._resolveTickFontOptions(0).lineHeight;
-    return (me.isHorizontal() ? me.width : me.height) / fontSize;
+    const fontSize = this._resolveTickFontOptions(0).lineHeight;
+    return (this.isHorizontal() ? this.width : this.height) / fontSize;
   }
 }
 
@@ -30783,15 +30751,14 @@ class TypedRegistry {
     return Object.prototype.isPrototypeOf.call(this.type.prototype, type.prototype);
   }
   register(item) {
-    const me = this;
     const proto = Object.getPrototypeOf(item);
     let parentScope;
     if (isIChartComponent(proto)) {
-      parentScope = me.register(proto);
+      parentScope = this.register(proto);
     }
-    const items = me.items;
+    const items = this.items;
     const id = item.id;
-    const scope = me.scope + '.' + id;
+    const scope = this.scope + '.' + id;
     if (!id) {
       throw new Error('class does not have id: ' + item);
     }
@@ -30800,7 +30767,7 @@ class TypedRegistry {
     }
     items[id] = item;
     registerDefaults(item, scope, parentScope);
-    if (me.override) {
+    if (this.override) {
       defaults$1.override(item.id, item.overrides);
     }
     return scope;
@@ -30903,15 +30870,14 @@ class Registry {
     this._each('unregister', args, this.scales);
   }
   _each(method, args, typedRegistry) {
-    const me = this;
     [...args].forEach(arg => {
-      const reg = typedRegistry || me._getRegistryForType(arg);
-      if (typedRegistry || reg.isForType(arg) || (reg === me.plugins && arg.id)) {
-        me._exec(method, reg, arg);
+      const reg = typedRegistry || this._getRegistryForType(arg);
+      if (typedRegistry || reg.isForType(arg) || (reg === this.plugins && arg.id)) {
+        this._exec(method, reg, arg);
       } else {
         each$1(arg, item => {
-          const itemReg = typedRegistry || me._getRegistryForType(item);
-          me._exec(method, itemReg, item);
+          const itemReg = typedRegistry || this._getRegistryForType(item);
+          this._exec(method, itemReg, item);
         });
       }
     });
@@ -30946,16 +30912,15 @@ class PluginService {
     this._init = [];
   }
   notify(chart, hook, args, filter) {
-    const me = this;
     if (hook === 'beforeInit') {
-      me._init = me._createDescriptors(chart, true);
-      me._notify(me._init, chart, 'install');
+      this._init = this._createDescriptors(chart, true);
+      this._notify(this._init, chart, 'install');
     }
-    const descriptors = filter ? me._descriptors(chart).filter(filter) : me._descriptors(chart);
-    const result = me._notify(descriptors, chart, hook, args);
+    const descriptors = filter ? this._descriptors(chart).filter(filter) : this._descriptors(chart);
+    const result = this._notify(descriptors, chart, hook, args);
     if (hook === 'destroy') {
-      me._notify(descriptors, chart, 'stop');
-      me._notify(me._init, chart, 'uninstall');
+      this._notify(descriptors, chart, 'stop');
+      this._notify(this._init, chart, 'uninstall');
     }
     return result;
   }
@@ -31085,6 +31050,12 @@ function mergeScaleConfig(config, options) {
   const scales = Object.create(null);
   Object.keys(configScales).forEach(id => {
     const scaleConf = configScales[id];
+    if (!isObject$1(scaleConf)) {
+      return console.error(`Invalid scale configuration for scale: ${id}`);
+    }
+    if (scaleConf._proxy) {
+      return console.warn(`Ignoring resolver passed as options for scale: ${id}`);
+    }
     const axis = determineAxis(id, scaleConf);
     const defaultId = getDefaultScaleIDFromAxis(axis, chartIndexAxis);
     const defaultScaleOptions = chartDefaults.scales || {};
@@ -31307,18 +31278,23 @@ function getResolver(resolverCache, scopes, prefixes) {
   }
   return cached;
 }
+const hasFunction = value => isObject$1(value)
+  && Object.getOwnPropertyNames(value).reduce((acc, key) => acc || isFunction$1(value[key]), false);
 function needContext(proxy, names) {
   const {isScriptable, isIndexable} = _descriptors(proxy);
   for (const prop of names) {
-    if ((isScriptable(prop) && isFunction$1(proxy[prop]))
-      || (isIndexable(prop) && isArray$1(proxy[prop]))) {
+    const scriptable = isScriptable(prop);
+    const indexable = isIndexable(prop);
+    const value = (indexable || scriptable) && proxy[prop];
+    if ((scriptable && (isFunction$1(value) || hasFunction(value)))
+      || (indexable && isArray$1(value))) {
       return true;
     }
   }
   return false;
 }
 
-var version = "3.5.1";
+var version = "3.6.0";
 
 const KNOWN_POSITIONS = ['top', 'bottom', 'left', 'right', 'chartArea'];
 function positionIsHorizontal(position, axis) {
@@ -31360,7 +31336,6 @@ const getChart = (key) => {
 };
 class Chart {
   constructor(item, userConfig) {
-    const me = this;
     const config = this.config = new Config(userConfig);
     const initialCanvas = getCanvas(item);
     const existingChart = getChart(initialCanvas);
@@ -31370,9 +31345,10 @@ class Chart {
 				' must be destroyed before the canvas can be reused.'
       );
     }
-    const options = config.createResolver(config.chartOptionScopes(), me.getContext());
+    const options = config.createResolver(config.chartOptionScopes(), this.getContext());
     this.platform = new (config.platform || _detectPlatform(initialCanvas))();
-    const context = me.platform.acquireContext(initialCanvas, options.aspectRatio);
+    this.platform.updateConfig(config);
+    const context = this.platform.acquireContext(initialCanvas, options.aspectRatio);
     const canvas = context && context.canvas;
     const height = canvas && canvas.height;
     const width = canvas && canvas.width;
@@ -31401,17 +31377,17 @@ class Chart {
     this.attached = false;
     this._animationsDisabled = undefined;
     this.$context = undefined;
-    this._doResize = debounce(() => this.update('resize'), options.resizeDelay || 0);
-    instances[me.id] = me;
+    this._doResize = debounce(mode => this.update(mode), options.resizeDelay || 0);
+    instances[this.id] = this;
     if (!context || !canvas) {
       console.error("Failed to create chart: can't acquire context from the given item");
       return;
     }
-    animator.listen(me, 'complete', onAnimationsComplete);
-    animator.listen(me, 'progress', onAnimationProgress);
-    me._initialize();
-    if (me.attached) {
-      me.update();
+    animator.listen(this, 'complete', onAnimationsComplete);
+    animator.listen(this, 'progress', onAnimationProgress);
+    this._initialize();
+    if (this.attached) {
+      this.update();
     }
   }
   get aspectRatio() {
@@ -31437,16 +31413,15 @@ class Chart {
     this.config.options = options;
   }
   _initialize() {
-    const me = this;
-    me.notifyPlugins('beforeInit');
-    if (me.options.responsive) {
-      me.resize();
+    this.notifyPlugins('beforeInit');
+    if (this.options.responsive) {
+      this.resize();
     } else {
-      retinaScale(me, me.options.devicePixelRatio);
+      retinaScale(this, this.options.devicePixelRatio);
     }
-    me.bindEvents();
-    me.notifyPlugins('afterInit');
-    return me;
+    this.bindEvents();
+    this.notifyPlugins('afterInit');
+    return this;
   }
   clear() {
     clearCanvas(this.canvas, this.ctx);
@@ -31464,23 +31439,23 @@ class Chart {
     }
   }
   _resize(width, height) {
-    const me = this;
-    const options = me.options;
-    const canvas = me.canvas;
-    const aspectRatio = options.maintainAspectRatio && me.aspectRatio;
-    const newSize = me.platform.getMaximumSize(canvas, width, height, aspectRatio);
-    const newRatio = options.devicePixelRatio || me.platform.getDevicePixelRatio();
-    me.width = newSize.width;
-    me.height = newSize.height;
-    me._aspectRatio = me.aspectRatio;
-    if (!retinaScale(me, newRatio, true)) {
+    const options = this.options;
+    const canvas = this.canvas;
+    const aspectRatio = options.maintainAspectRatio && this.aspectRatio;
+    const newSize = this.platform.getMaximumSize(canvas, width, height, aspectRatio);
+    const newRatio = options.devicePixelRatio || this.platform.getDevicePixelRatio();
+    const mode = this.width ? 'resize' : 'attach';
+    this.width = newSize.width;
+    this.height = newSize.height;
+    this._aspectRatio = this.aspectRatio;
+    if (!retinaScale(this, newRatio, true)) {
       return;
     }
-    me.notifyPlugins('resize', {size: newSize});
-    callback(options.onResize, [me, newSize], me);
-    if (me.attached) {
-      if (me._doResize()) {
-        me.render();
+    this.notifyPlugins('resize', {size: newSize});
+    callback(options.onResize, [this, newSize], this);
+    if (this.attached) {
+      if (this._doResize(mode)) {
+        this.render();
       }
     }
   }
@@ -31492,10 +31467,9 @@ class Chart {
     });
   }
   buildOrUpdateScales() {
-    const me = this;
-    const options = me.options;
+    const options = this.options;
     const scaleOpts = options.scales;
-    const scales = me.scales;
+    const scales = this.scales;
     const updated = Object.keys(scales).reduce((obj, id) => {
       obj[id] = false;
       return obj;
@@ -31533,8 +31507,8 @@ class Chart {
         scale = new scaleClass({
           id,
           type: scaleType,
-          ctx: me.ctx,
-          chart: me
+          ctx: this.ctx,
+          chart: this
         });
         scales[scale.id] = scale;
       }
@@ -31546,56 +31520,53 @@ class Chart {
       }
     });
     each$1(scales, (scale) => {
-      layouts.configure(me, scale, scale.options);
-      layouts.addBox(me, scale);
+      layouts.configure(this, scale, scale.options);
+      layouts.addBox(this, scale);
     });
   }
   _updateMetasets() {
-    const me = this;
-    const metasets = me._metasets;
-    const numData = me.data.datasets.length;
+    const metasets = this._metasets;
+    const numData = this.data.datasets.length;
     const numMeta = metasets.length;
     metasets.sort((a, b) => a.index - b.index);
     if (numMeta > numData) {
       for (let i = numData; i < numMeta; ++i) {
-        me._destroyDatasetMeta(i);
+        this._destroyDatasetMeta(i);
       }
       metasets.splice(numData, numMeta - numData);
     }
-    me._sortedMetasets = metasets.slice(0).sort(compare2Level('order', 'index'));
+    this._sortedMetasets = metasets.slice(0).sort(compare2Level('order', 'index'));
   }
   _removeUnreferencedMetasets() {
-    const me = this;
-    const {_metasets: metasets, data: {datasets}} = me;
+    const {_metasets: metasets, data: {datasets}} = this;
     if (metasets.length > datasets.length) {
-      delete me._stacks;
+      delete this._stacks;
     }
     metasets.forEach((meta, index) => {
       if (datasets.filter(x => x === meta._dataset).length === 0) {
-        me._destroyDatasetMeta(index);
+        this._destroyDatasetMeta(index);
       }
     });
   }
   buildOrUpdateControllers() {
-    const me = this;
     const newControllers = [];
-    const datasets = me.data.datasets;
+    const datasets = this.data.datasets;
     let i, ilen;
-    me._removeUnreferencedMetasets();
+    this._removeUnreferencedMetasets();
     for (i = 0, ilen = datasets.length; i < ilen; i++) {
       const dataset = datasets[i];
-      let meta = me.getDatasetMeta(i);
-      const type = dataset.type || me.config.type;
+      let meta = this.getDatasetMeta(i);
+      const type = dataset.type || this.config.type;
       if (meta.type && meta.type !== type) {
-        me._destroyDatasetMeta(i);
-        meta = me.getDatasetMeta(i);
+        this._destroyDatasetMeta(i);
+        meta = this.getDatasetMeta(i);
       }
       meta.type = type;
-      meta.indexAxis = dataset.indexAxis || getIndexAxis(type, me.options);
+      meta.indexAxis = dataset.indexAxis || getIndexAxis(type, this.options);
       meta.order = dataset.order || 0;
       meta.index = i;
       meta.label = '' + dataset.label;
-      meta.visible = me.isDatasetVisible(i);
+      meta.visible = this.isDatasetVisible(i);
       if (meta.controller) {
         meta.controller.updateIndex(i);
         meta.controller.linkScales();
@@ -31606,155 +31577,146 @@ class Chart {
           dataElementType: registry.getElement(dataElementType),
           datasetElementType: datasetElementType && registry.getElement(datasetElementType)
         });
-        meta.controller = new ControllerClass(me, i);
+        meta.controller = new ControllerClass(this, i);
         newControllers.push(meta.controller);
       }
     }
-    me._updateMetasets();
+    this._updateMetasets();
     return newControllers;
   }
   _resetElements() {
-    const me = this;
-    each$1(me.data.datasets, (dataset, datasetIndex) => {
-      me.getDatasetMeta(datasetIndex).controller.reset();
-    }, me);
+    each$1(this.data.datasets, (dataset, datasetIndex) => {
+      this.getDatasetMeta(datasetIndex).controller.reset();
+    }, this);
   }
   reset() {
     this._resetElements();
     this.notifyPlugins('reset');
   }
   update(mode) {
-    const me = this;
-    const config = me.config;
+    const config = this.config;
     config.update();
-    me._options = config.createResolver(config.chartOptionScopes(), me.getContext());
-    each$1(me.scales, (scale) => {
-      layouts.removeBox(me, scale);
+    const options = this._options = config.createResolver(config.chartOptionScopes(), this.getContext());
+    each$1(this.scales, (scale) => {
+      layouts.removeBox(this, scale);
     });
-    const animsDisabled = me._animationsDisabled = !me.options.animation;
-    me.ensureScalesHaveIDs();
-    me.buildOrUpdateScales();
-    const existingEvents = new Set(Object.keys(me._listeners));
-    const newEvents = new Set(me.options.events);
-    if (!setsEqual(existingEvents, newEvents) || !!this._responsiveListeners !== me.options.responsive) {
-      me.unbindEvents();
-      me.bindEvents();
+    const animsDisabled = this._animationsDisabled = !options.animation;
+    this.ensureScalesHaveIDs();
+    this.buildOrUpdateScales();
+    const existingEvents = new Set(Object.keys(this._listeners));
+    const newEvents = new Set(options.events);
+    if (!setsEqual(existingEvents, newEvents) || !!this._responsiveListeners !== options.responsive) {
+      this.unbindEvents();
+      this.bindEvents();
     }
-    me._plugins.invalidate();
-    if (me.notifyPlugins('beforeUpdate', {mode, cancelable: true}) === false) {
+    this._plugins.invalidate();
+    if (this.notifyPlugins('beforeUpdate', {mode, cancelable: true}) === false) {
       return;
     }
-    const newControllers = me.buildOrUpdateControllers();
-    me.notifyPlugins('beforeElementsUpdate');
+    const newControllers = this.buildOrUpdateControllers();
+    this.notifyPlugins('beforeElementsUpdate');
     let minPadding = 0;
-    for (let i = 0, ilen = me.data.datasets.length; i < ilen; i++) {
-      const {controller} = me.getDatasetMeta(i);
+    for (let i = 0, ilen = this.data.datasets.length; i < ilen; i++) {
+      const {controller} = this.getDatasetMeta(i);
       const reset = !animsDisabled && newControllers.indexOf(controller) === -1;
       controller.buildOrUpdateElements(reset);
       minPadding = Math.max(+controller.getMaxOverflow(), minPadding);
     }
-    me._minPadding = minPadding;
-    me._updateLayout(minPadding);
+    minPadding = this._minPadding = options.layout.autoPadding ? minPadding : 0;
+    this._updateLayout(minPadding);
     if (!animsDisabled) {
       each$1(newControllers, (controller) => {
         controller.reset();
       });
     }
-    me._updateDatasets(mode);
-    me.notifyPlugins('afterUpdate', {mode});
-    me._layers.sort(compare2Level('z', '_idx'));
-    if (me._lastEvent) {
-      me._eventHandler(me._lastEvent, true);
+    this._updateDatasets(mode);
+    this.notifyPlugins('afterUpdate', {mode});
+    this._layers.sort(compare2Level('z', '_idx'));
+    if (this._lastEvent) {
+      this._eventHandler(this._lastEvent, true);
     }
-    me.render();
+    this.render();
   }
   _updateLayout(minPadding) {
-    const me = this;
-    if (me.notifyPlugins('beforeLayout', {cancelable: true}) === false) {
+    if (this.notifyPlugins('beforeLayout', {cancelable: true}) === false) {
       return;
     }
-    layouts.update(me, me.width, me.height, minPadding);
-    const area = me.chartArea;
+    layouts.update(this, this.width, this.height, minPadding);
+    const area = this.chartArea;
     const noArea = area.width <= 0 || area.height <= 0;
-    me._layers = [];
-    each$1(me.boxes, (box) => {
+    this._layers = [];
+    each$1(this.boxes, (box) => {
       if (noArea && box.position === 'chartArea') {
         return;
       }
       if (box.configure) {
         box.configure();
       }
-      me._layers.push(...box._layers());
-    }, me);
-    me._layers.forEach((item, index) => {
+      this._layers.push(...box._layers());
+    }, this);
+    this._layers.forEach((item, index) => {
       item._idx = index;
     });
-    me.notifyPlugins('afterLayout');
+    this.notifyPlugins('afterLayout');
   }
   _updateDatasets(mode) {
-    const me = this;
-    const isFunction = typeof mode === 'function';
-    if (me.notifyPlugins('beforeDatasetsUpdate', {mode, cancelable: true}) === false) {
+    if (this.notifyPlugins('beforeDatasetsUpdate', {mode, cancelable: true}) === false) {
       return;
     }
-    for (let i = 0, ilen = me.data.datasets.length; i < ilen; ++i) {
-      me._updateDataset(i, isFunction ? mode({datasetIndex: i}) : mode);
+    for (let i = 0, ilen = this.data.datasets.length; i < ilen; ++i) {
+      this._updateDataset(i, isFunction$1(mode) ? mode({datasetIndex: i}) : mode);
     }
-    me.notifyPlugins('afterDatasetsUpdate', {mode});
+    this.notifyPlugins('afterDatasetsUpdate', {mode});
   }
   _updateDataset(index, mode) {
-    const me = this;
-    const meta = me.getDatasetMeta(index);
+    const meta = this.getDatasetMeta(index);
     const args = {meta, index, mode, cancelable: true};
-    if (me.notifyPlugins('beforeDatasetUpdate', args) === false) {
+    if (this.notifyPlugins('beforeDatasetUpdate', args) === false) {
       return;
     }
     meta.controller._update(mode);
     args.cancelable = false;
-    me.notifyPlugins('afterDatasetUpdate', args);
+    this.notifyPlugins('afterDatasetUpdate', args);
   }
   render() {
-    const me = this;
-    if (me.notifyPlugins('beforeRender', {cancelable: true}) === false) {
+    if (this.notifyPlugins('beforeRender', {cancelable: true}) === false) {
       return;
     }
-    if (animator.has(me)) {
-      if (me.attached && !animator.running(me)) {
-        animator.start(me);
+    if (animator.has(this)) {
+      if (this.attached && !animator.running(this)) {
+        animator.start(this);
       }
     } else {
-      me.draw();
-      onAnimationsComplete({chart: me});
+      this.draw();
+      onAnimationsComplete({chart: this});
     }
   }
   draw() {
-    const me = this;
     let i;
-    if (me._resizeBeforeDraw) {
-      const {width, height} = me._resizeBeforeDraw;
-      me._resize(width, height);
-      me._resizeBeforeDraw = null;
+    if (this._resizeBeforeDraw) {
+      const {width, height} = this._resizeBeforeDraw;
+      this._resize(width, height);
+      this._resizeBeforeDraw = null;
     }
-    me.clear();
-    if (me.width <= 0 || me.height <= 0) {
+    this.clear();
+    if (this.width <= 0 || this.height <= 0) {
       return;
     }
-    if (me.notifyPlugins('beforeDraw', {cancelable: true}) === false) {
+    if (this.notifyPlugins('beforeDraw', {cancelable: true}) === false) {
       return;
     }
-    const layers = me._layers;
+    const layers = this._layers;
     for (i = 0; i < layers.length && layers[i].z <= 0; ++i) {
-      layers[i].draw(me.chartArea);
+      layers[i].draw(this.chartArea);
     }
-    me._drawDatasets();
+    this._drawDatasets();
     for (; i < layers.length; ++i) {
-      layers[i].draw(me.chartArea);
+      layers[i].draw(this.chartArea);
     }
-    me.notifyPlugins('afterDraw');
+    this.notifyPlugins('afterDraw');
   }
   _getSortedDatasetMetas(filterVisible) {
-    const me = this;
-    const metasets = me._sortedMetasets;
+    const metasets = this._sortedMetasets;
     const result = [];
     let i, ilen;
     for (i = 0, ilen = metasets.length; i < ilen; ++i) {
@@ -31769,36 +31731,34 @@ class Chart {
     return this._getSortedDatasetMetas(true);
   }
   _drawDatasets() {
-    const me = this;
-    if (me.notifyPlugins('beforeDatasetsDraw', {cancelable: true}) === false) {
+    if (this.notifyPlugins('beforeDatasetsDraw', {cancelable: true}) === false) {
       return;
     }
-    const metasets = me.getSortedVisibleDatasetMetas();
+    const metasets = this.getSortedVisibleDatasetMetas();
     for (let i = metasets.length - 1; i >= 0; --i) {
-      me._drawDataset(metasets[i]);
+      this._drawDataset(metasets[i]);
     }
-    me.notifyPlugins('afterDatasetsDraw');
+    this.notifyPlugins('afterDatasetsDraw');
   }
   _drawDataset(meta) {
-    const me = this;
-    const ctx = me.ctx;
+    const ctx = this.ctx;
     const clip = meta._clip;
     const useClip = !clip.disabled;
-    const area = me.chartArea;
+    const area = this.chartArea;
     const args = {
       meta,
       index: meta.index,
       cancelable: true
     };
-    if (me.notifyPlugins('beforeDatasetDraw', args) === false) {
+    if (this.notifyPlugins('beforeDatasetDraw', args) === false) {
       return;
     }
     if (useClip) {
       clipArea(ctx, {
         left: clip.left === false ? 0 : area.left - clip.left,
-        right: clip.right === false ? me.width : area.right + clip.right,
+        right: clip.right === false ? this.width : area.right + clip.right,
         top: clip.top === false ? 0 : area.top - clip.top,
-        bottom: clip.bottom === false ? me.height : area.bottom + clip.bottom
+        bottom: clip.bottom === false ? this.height : area.bottom + clip.bottom
       });
     }
     meta.controller.draw();
@@ -31806,7 +31766,7 @@ class Chart {
       unclipArea(ctx);
     }
     args.cancelable = false;
-    me.notifyPlugins('afterDatasetDraw', args);
+    this.notifyPlugins('afterDatasetDraw', args);
   }
   getElementsAtEventForMode(e, mode, options, useFinalPosition) {
     const method = Interaction.modes[mode];
@@ -31816,9 +31776,8 @@ class Chart {
     return [];
   }
   getDatasetMeta(datasetIndex) {
-    const me = this;
-    const dataset = me.data.datasets[datasetIndex];
-    const metasets = me._metasets;
+    const dataset = this.data.datasets[datasetIndex];
+    const metasets = this._metasets;
     let meta = metasets.filter(x => x && x._dataset === dataset).pop();
     if (!meta) {
       meta = {
@@ -31840,7 +31799,7 @@ class Chart {
     return meta;
   }
   getContext() {
-    return this.$context || (this.$context = {chart: this, type: 'chart'});
+    return this.$context || (this.$context = createContext(null, {chart: this, type: 'chart'}));
   }
   getVisibleDatasetCount() {
     return this.getSortedVisibleDatasetMetas().length;
@@ -31864,17 +31823,16 @@ class Chart {
     return !this._hiddenIndices[index];
   }
   _updateVisibility(datasetIndex, dataIndex, visible) {
-    const me = this;
     const mode = visible ? 'show' : 'hide';
-    const meta = me.getDatasetMeta(datasetIndex);
+    const meta = this.getDatasetMeta(datasetIndex);
     const anims = meta.controller._resolveAnimations(undefined, mode);
     if (defined(dataIndex)) {
       meta.data[dataIndex].hidden = !visible;
-      me.update();
+      this.update();
     } else {
-      me.setDatasetVisibility(datasetIndex, visible);
+      this.setDatasetVisibility(datasetIndex, visible);
       anims.update(meta, {visible});
-      me.update((ctx) => ctx.datasetIndex === datasetIndex ? mode : undefined);
+      this.update((ctx) => ctx.datasetIndex === datasetIndex ? mode : undefined);
     }
   }
   hide(datasetIndex, dataIndex) {
@@ -31884,32 +31842,33 @@ class Chart {
     this._updateVisibility(datasetIndex, dataIndex, true);
   }
   _destroyDatasetMeta(datasetIndex) {
-    const me = this;
-    const meta = me._metasets && me._metasets[datasetIndex];
+    const meta = this._metasets[datasetIndex];
     if (meta && meta.controller) {
       meta.controller._destroy();
-      delete me._metasets[datasetIndex];
+    }
+    delete this._metasets[datasetIndex];
+  }
+  _stop() {
+    let i, ilen;
+    this.stop();
+    animator.remove(this);
+    for (i = 0, ilen = this.data.datasets.length; i < ilen; ++i) {
+      this._destroyDatasetMeta(i);
     }
   }
   destroy() {
-    const me = this;
-    const {canvas, ctx} = me;
-    let i, ilen;
-    me.stop();
-    animator.remove(me);
-    for (i = 0, ilen = me.data.datasets.length; i < ilen; ++i) {
-      me._destroyDatasetMeta(i);
-    }
-    me.config.clearCache();
+    const {canvas, ctx} = this;
+    this._stop();
+    this.config.clearCache();
     if (canvas) {
-      me.unbindEvents();
+      this.unbindEvents();
       clearCanvas(canvas, ctx);
-      me.platform.releaseContext(ctx);
-      me.canvas = null;
-      me.ctx = null;
+      this.platform.releaseContext(ctx);
+      this.canvas = null;
+      this.ctx = null;
     }
-    me.notifyPlugins('destroy');
-    delete instances[me.id];
+    this.notifyPlugins('destroy');
+    delete instances[this.id];
   }
   toBase64Image(...args) {
     return this.canvas.toDataURL(...args);
@@ -31923,71 +31882,70 @@ class Chart {
     }
   }
   bindUserEvents() {
-    const me = this;
-    const listeners = me._listeners;
-    const platform = me.platform;
+    const listeners = this._listeners;
+    const platform = this.platform;
     const _add = (type, listener) => {
-      platform.addEventListener(me, type, listener);
+      platform.addEventListener(this, type, listener);
       listeners[type] = listener;
     };
-    const listener = function(e, x, y) {
+    const listener = (e, x, y) => {
       e.offsetX = x;
       e.offsetY = y;
-      me._eventHandler(e);
+      this._eventHandler(e);
     };
-    each$1(me.options.events, (type) => _add(type, listener));
+    each$1(this.options.events, (type) => _add(type, listener));
   }
   bindResponsiveEvents() {
-    const me = this;
-    if (!me._responsiveListeners) {
-      me._responsiveListeners = {};
+    if (!this._responsiveListeners) {
+      this._responsiveListeners = {};
     }
-    const listeners = me._responsiveListeners;
-    const platform = me.platform;
+    const listeners = this._responsiveListeners;
+    const platform = this.platform;
     const _add = (type, listener) => {
-      platform.addEventListener(me, type, listener);
+      platform.addEventListener(this, type, listener);
       listeners[type] = listener;
     };
     const _remove = (type, listener) => {
       if (listeners[type]) {
-        platform.removeEventListener(me, type, listener);
+        platform.removeEventListener(this, type, listener);
         delete listeners[type];
       }
     };
     const listener = (width, height) => {
-      if (me.canvas) {
-        me.resize(width, height);
+      if (this.canvas) {
+        this.resize(width, height);
       }
     };
     let detached;
     const attached = () => {
       _remove('attach', attached);
-      me.attached = true;
-      me.resize();
+      this.attached = true;
+      this.resize();
       _add('resize', listener);
       _add('detach', detached);
     };
     detached = () => {
-      me.attached = false;
+      this.attached = false;
       _remove('resize', listener);
+      this._stop();
+      this._resize(0, 0);
       _add('attach', attached);
     };
-    if (platform.isAttached(me.canvas)) {
+    if (platform.isAttached(this.canvas)) {
       attached();
     } else {
       detached();
     }
   }
   unbindEvents() {
-    const me = this;
-    each$1(me._listeners, (listener, type) => {
-      me.platform.removeEventListener(me, type, listener);
+    each$1(this._listeners, (listener, type) => {
+      this.platform.removeEventListener(this, type, listener);
     });
-    me._listeners = {};
-    each$1(me._responsiveListeners, (listener, type) => {
-      me.platform.removeEventListener(me, type, listener);
+    this._listeners = {};
+    each$1(this._responsiveListeners, (listener, type) => {
+      this.platform.removeEventListener(this, type, listener);
     });
-    me._responsiveListeners = undefined;
+    this._responsiveListeners = undefined;
   }
   updateHoverStyle(items, mode, enabled) {
     const prefix = enabled ? 'set' : 'remove';
@@ -32008,10 +31966,9 @@ class Chart {
     return this._active || [];
   }
   setActiveElements(activeElements) {
-    const me = this;
-    const lastActive = me._active || [];
+    const lastActive = this._active || [];
     const active = activeElements.map(({datasetIndex, index}) => {
-      const meta = me.getDatasetMeta(datasetIndex);
+      const meta = this.getDatasetMeta(datasetIndex);
       if (!meta) {
         throw new Error('No dataset found at index ' + datasetIndex);
       }
@@ -32023,66 +31980,63 @@ class Chart {
     });
     const changed = !_elementsEqual(active, lastActive);
     if (changed) {
-      me._active = active;
-      me._updateHoverStyles(active, lastActive);
+      this._active = active;
+      this._updateHoverStyles(active, lastActive);
     }
   }
   notifyPlugins(hook, args, filter) {
     return this._plugins.notify(this, hook, args, filter);
   }
   _updateHoverStyles(active, lastActive, replay) {
-    const me = this;
-    const hoverOptions = me.options.hover;
+    const hoverOptions = this.options.hover;
     const diff = (a, b) => a.filter(x => !b.some(y => x.datasetIndex === y.datasetIndex && x.index === y.index));
     const deactivated = diff(lastActive, active);
     const activated = replay ? active : diff(active, lastActive);
     if (deactivated.length) {
-      me.updateHoverStyle(deactivated, hoverOptions.mode, false);
+      this.updateHoverStyle(deactivated, hoverOptions.mode, false);
     }
     if (activated.length && hoverOptions.mode) {
-      me.updateHoverStyle(activated, hoverOptions.mode, true);
+      this.updateHoverStyle(activated, hoverOptions.mode, true);
     }
   }
   _eventHandler(e, replay) {
-    const me = this;
     const args = {event: e, replay, cancelable: true};
-    const eventFilter = (plugin) => (plugin.options.events || this.options.events).includes(e.type);
-    if (me.notifyPlugins('beforeEvent', args, eventFilter) === false) {
+    const eventFilter = (plugin) => (plugin.options.events || this.options.events).includes(e.native.type);
+    if (this.notifyPlugins('beforeEvent', args, eventFilter) === false) {
       return;
     }
-    const changed = me._handleEvent(e, replay);
+    const changed = this._handleEvent(e, replay);
     args.cancelable = false;
-    me.notifyPlugins('afterEvent', args, eventFilter);
+    this.notifyPlugins('afterEvent', args, eventFilter);
     if (changed || args.changed) {
-      me.render();
+      this.render();
     }
-    return me;
+    return this;
   }
   _handleEvent(e, replay) {
-    const me = this;
-    const {_active: lastActive = [], options} = me;
+    const {_active: lastActive = [], options} = this;
     const hoverOptions = options.hover;
     const useFinalPosition = replay;
     let active = [];
     let changed = false;
     let lastEvent = null;
     if (e.type !== 'mouseout') {
-      active = me.getElementsAtEventForMode(e, hoverOptions.mode, hoverOptions, useFinalPosition);
-      lastEvent = e.type === 'click' ? me._lastEvent : e;
+      active = this.getElementsAtEventForMode(e, hoverOptions.mode, hoverOptions, useFinalPosition);
+      lastEvent = e.type === 'click' ? this._lastEvent : e;
     }
-    me._lastEvent = null;
-    if (_isPointInArea(e, me.chartArea, me._minPadding)) {
-      callback(options.onHover, [e, active, me], me);
+    this._lastEvent = null;
+    if (_isPointInArea(e, this.chartArea, this._minPadding)) {
+      callback(options.onHover, [e, active, this], this);
       if (e.type === 'mouseup' || e.type === 'click' || e.type === 'contextmenu') {
-        callback(options.onClick, [e, active, me], me);
+        callback(options.onClick, [e, active, this], this);
       }
     }
     changed = !_elementsEqual(active, lastActive);
     if (changed || replay) {
-      me._active = active;
-      me._updateHoverStyles(active, lastActive, replay);
+      this._active = active;
+      this._updateHoverStyles(active, lastActive, replay);
     }
-    me._lastEvent = lastEvent;
+    this._lastEvent = lastEvent;
     return changed;
   }
 }
@@ -32330,29 +32284,28 @@ class ArcElement extends Element$1 {
     return this.getCenterPoint(useFinalPosition);
   }
   draw(ctx) {
-    const me = this;
-    const {options, circumference} = me;
+    const {options, circumference} = this;
     const offset = (options.offset || 0) / 2;
     const spacing = (options.spacing || 0) / 2;
-    me.pixelMargin = (options.borderAlign === 'inner') ? 0.33 : 0;
-    me.fullCircles = circumference > TAU ? Math.floor(circumference / TAU) : 0;
-    if (circumference === 0 || me.innerRadius < 0 || me.outerRadius < 0) {
+    this.pixelMargin = (options.borderAlign === 'inner') ? 0.33 : 0;
+    this.fullCircles = circumference > TAU ? Math.floor(circumference / TAU) : 0;
+    if (circumference === 0 || this.innerRadius < 0 || this.outerRadius < 0) {
       return;
     }
     ctx.save();
     let radiusOffset = 0;
     if (offset) {
       radiusOffset = offset / 2;
-      const halfAngle = (me.startAngle + me.endAngle) / 2;
+      const halfAngle = (this.startAngle + this.endAngle) / 2;
       ctx.translate(Math.cos(halfAngle) * radiusOffset, Math.sin(halfAngle) * radiusOffset);
-      if (me.circumference >= PI) {
+      if (this.circumference >= PI) {
         radiusOffset = offset;
       }
     }
     ctx.fillStyle = options.backgroundColor;
     ctx.strokeStyle = options.borderColor;
-    const endAngle = drawArc(ctx, me, radiusOffset, spacing);
-    drawBorder(ctx, me, radiusOffset, spacing, endAngle);
+    const endAngle = drawArc(ctx, this, radiusOffset, spacing);
+    drawBorder(ctx, this, radiusOffset, spacing, endAngle);
     ctx.restore();
   }
 }
@@ -32513,7 +32466,7 @@ function strokePathDirect(ctx, line, start, count) {
 }
 const usePath2D = typeof Path2D === 'function';
 function draw(ctx, line, start, count) {
-  if (usePath2D && line.segments.length === 1) {
+  if (usePath2D && !line.options.segment) {
     strokePathWithCache(ctx, line, start, count);
   } else {
     strokePathDirect(ctx, line, start, count);
@@ -32524,6 +32477,7 @@ class LineElement extends Element$1 {
     super();
     this.animated = true;
     this.options = undefined;
+    this._chart = undefined;
     this._loop = undefined;
     this._fullLoop = undefined;
     this._path = undefined;
@@ -32537,20 +32491,18 @@ class LineElement extends Element$1 {
     }
   }
   updateControlPoints(chartArea, indexAxis) {
-    const me = this;
-    const options = me.options;
-    if ((options.tension || options.cubicInterpolationMode === 'monotone') && !options.stepped && !me._pointsUpdated) {
-      const loop = options.spanGaps ? me._loop : me._fullLoop;
-      _updateBezierControlPoints(me._points, options, chartArea, loop, indexAxis);
-      me._pointsUpdated = true;
+    const options = this.options;
+    if ((options.tension || options.cubicInterpolationMode === 'monotone') && !options.stepped && !this._pointsUpdated) {
+      const loop = options.spanGaps ? this._loop : this._fullLoop;
+      _updateBezierControlPoints(this._points, options, chartArea, loop, indexAxis);
+      this._pointsUpdated = true;
     }
   }
   set points(points) {
-    const me = this;
-    me._points = points;
-    delete me._segments;
-    delete me._path;
-    me._pointsUpdated = false;
+    this._points = points;
+    delete this._segments;
+    delete this._path;
+    this._pointsUpdated = false;
   }
   get points() {
     return this._points;
@@ -32570,11 +32522,10 @@ class LineElement extends Element$1 {
     return count && points[segments[count - 1].end];
   }
   interpolate(point, property) {
-    const me = this;
-    const options = me.options;
+    const options = this.options;
     const value = point[property];
-    const points = me.points;
-    const segments = _boundSegments(me, {property, start: value, end: value});
+    const points = this.points;
+    const segments = _boundSegments(this, {property, start: value, end: value});
     if (!segments.length) {
       return;
     }
@@ -32601,30 +32552,27 @@ class LineElement extends Element$1 {
     return segmentMethod(ctx, this, segment, params);
   }
   path(ctx, start, count) {
-    const me = this;
-    const segments = me.segments;
-    const segmentMethod = _getSegmentMethod(me);
-    let loop = me._loop;
+    const segments = this.segments;
+    const segmentMethod = _getSegmentMethod(this);
+    let loop = this._loop;
     start = start || 0;
-    count = count || (me.points.length - start);
+    count = count || (this.points.length - start);
     for (const segment of segments) {
-      loop &= segmentMethod(ctx, me, segment, {start, end: start + count - 1});
+      loop &= segmentMethod(ctx, this, segment, {start, end: start + count - 1});
     }
     return !!loop;
   }
   draw(ctx, chartArea, start, count) {
-    const me = this;
-    const options = me.options || {};
-    const points = me.points || [];
-    if (!points.length || !options.borderWidth) {
-      return;
+    const options = this.options || {};
+    const points = this.points || [];
+    if (points.length && options.borderWidth) {
+      ctx.save();
+      draw(ctx, this, start, count);
+      ctx.restore();
     }
-    ctx.save();
-    draw(ctx, me, start, count);
-    ctx.restore();
-    if (me.animated) {
-      me._pointsUpdated = false;
-      me._path = undefined;
+    if (this.animated) {
+      this._pointsUpdated = false;
+      this._path = undefined;
     }
   }
 }
@@ -32690,15 +32638,14 @@ class PointElement extends Element$1 {
     return (radius + borderWidth) * 2;
   }
   draw(ctx, area) {
-    const me = this;
-    const options = me.options;
-    if (me.skip || options.radius < 0.1 || !_isPointInArea(me, area, me.size(options) / 2)) {
+    const options = this.options;
+    if (this.skip || options.radius < 0.1 || !_isPointInArea(this, area, this.size(options) / 2)) {
       return;
     }
     ctx.strokeStyle = options.borderColor;
     ctx.lineWidth = options.borderWidth;
     ctx.fillStyle = options.backgroundColor;
-    drawPoint(ctx, options, me.x, me.y);
+    drawPoint(ctx, options, this.x, this.y);
   }
   getRange() {
     const options = this.options || {};
@@ -32830,27 +32777,27 @@ class BarElement extends Element$1 {
     this.base = undefined;
     this.width = undefined;
     this.height = undefined;
+    this.inflateAmount = undefined;
     if (cfg) {
       Object.assign(this, cfg);
     }
   }
   draw(ctx) {
-    const options = this.options;
+    const {inflateAmount, options: {borderColor, backgroundColor}} = this;
     const {inner, outer} = boundingRects(this);
     const addRectPath = hasRadius(outer.radius) ? addRoundedRectPath : addNormalRectPath;
-    const inflateAmount = 0.33;
     ctx.save();
     if (outer.w !== inner.w || outer.h !== inner.h) {
       ctx.beginPath();
       addRectPath(ctx, inflateRect(outer, inflateAmount, inner));
       ctx.clip();
       addRectPath(ctx, inflateRect(inner, -inflateAmount, outer));
-      ctx.fillStyle = options.borderColor;
+      ctx.fillStyle = borderColor;
       ctx.fill('evenodd');
     }
     ctx.beginPath();
-    addRectPath(ctx, inflateRect(inner, inflateAmount, outer));
-    ctx.fillStyle = options.backgroundColor;
+    addRectPath(ctx, inflateRect(inner, inflateAmount));
+    ctx.fillStyle = backgroundColor;
     ctx.fill();
     ctx.restore();
   }
@@ -32879,7 +32826,7 @@ BarElement.defaults = {
   borderSkipped: 'start',
   borderWidth: 0,
   borderRadius: 0,
-  enableBorderRadius: true,
+  inflateAmount: 'auto',
   pointStyle: undefined
 };
 BarElement.defaultRoutes = {
@@ -32905,23 +32852,22 @@ class Title extends Element$1 {
     this.fullSize = undefined;
   }
   update(maxWidth, maxHeight) {
-    const me = this;
-    const opts = me.options;
-    me.left = 0;
-    me.top = 0;
+    const opts = this.options;
+    this.left = 0;
+    this.top = 0;
     if (!opts.display) {
-      me.width = me.height = me.right = me.bottom = 0;
+      this.width = this.height = this.right = this.bottom = 0;
       return;
     }
-    me.width = me.right = maxWidth;
-    me.height = me.bottom = maxHeight;
+    this.width = this.right = maxWidth;
+    this.height = this.bottom = maxHeight;
     const lineCount = isArray$1(opts.text) ? opts.text.length : 1;
-    me._padding = toPadding(opts.padding);
-    const textSize = lineCount * toFont(opts.font).lineHeight + me._padding.height;
-    if (me.isHorizontal()) {
-      me.height = textSize;
+    this._padding = toPadding(opts.padding);
+    const textSize = lineCount * toFont(opts.font).lineHeight + this._padding.height;
+    if (this.isHorizontal()) {
+      this.height = textSize;
     } else {
-      me.width = textSize;
+      this.width = textSize;
     }
   }
   isHorizontal() {
@@ -32952,16 +32898,15 @@ class Title extends Element$1 {
     return {titleX, titleY, maxWidth, rotation};
   }
   draw() {
-    const me = this;
-    const ctx = me.ctx;
-    const opts = me.options;
+    const ctx = this.ctx;
+    const opts = this.options;
     if (!opts.display) {
       return;
     }
     const fontOpts = toFont(opts.font);
     const lineHeight = fontOpts.lineHeight;
-    const offset = lineHeight / 2 + me._padding.top;
-    const {titleX, titleY, maxWidth, rotation} = me._drawArgs(offset);
+    const offset = lineHeight / 2 + this._padding.top;
+    const {titleX, titleY, maxWidth, rotation} = this._drawArgs(offset);
     renderText(ctx, opts.text, 0, 0, fontOpts, {
       color: opts.color,
       maxWidth,
@@ -33047,68 +32992,61 @@ class CategoryScale extends Scale {
     return validIndex(index, labels.length - 1);
   }
   determineDataLimits() {
-    const me = this;
-    const {minDefined, maxDefined} = me.getUserBounds();
-    let {min, max} = me.getMinMax(true);
-    if (me.options.bounds === 'ticks') {
+    const {minDefined, maxDefined} = this.getUserBounds();
+    let {min, max} = this.getMinMax(true);
+    if (this.options.bounds === 'ticks') {
       if (!minDefined) {
         min = 0;
       }
       if (!maxDefined) {
-        max = me.getLabels().length - 1;
+        max = this.getLabels().length - 1;
       }
     }
-    me.min = min;
-    me.max = max;
+    this.min = min;
+    this.max = max;
   }
   buildTicks() {
-    const me = this;
-    const min = me.min;
-    const max = me.max;
-    const offset = me.options.offset;
+    const min = this.min;
+    const max = this.max;
+    const offset = this.options.offset;
     const ticks = [];
-    let labels = me.getLabels();
+    let labels = this.getLabels();
     labels = (min === 0 && max === labels.length - 1) ? labels : labels.slice(min, max + 1);
-    me._valueRange = Math.max(labels.length - (offset ? 0 : 1), 1);
-    me._startValue = me.min - (offset ? 0.5 : 0);
+    this._valueRange = Math.max(labels.length - (offset ? 0 : 1), 1);
+    this._startValue = this.min - (offset ? 0.5 : 0);
     for (let value = min; value <= max; value++) {
       ticks.push({value});
     }
     return ticks;
   }
   getLabelForValue(value) {
-    const me = this;
-    const labels = me.getLabels();
+    const labels = this.getLabels();
     if (value >= 0 && value < labels.length) {
       return labels[value];
     }
     return value;
   }
   configure() {
-    const me = this;
     super.configure();
-    if (!me.isHorizontal()) {
-      me._reversePixels = !me._reversePixels;
+    if (!this.isHorizontal()) {
+      this._reversePixels = !this._reversePixels;
     }
   }
   getPixelForValue(value) {
-    const me = this;
     if (typeof value !== 'number') {
-      value = me.parse(value);
+      value = this.parse(value);
     }
-    return value === null ? NaN : me.getPixelForDecimal((value - me._startValue) / me._valueRange);
+    return value === null ? NaN : this.getPixelForDecimal((value - this._startValue) / this._valueRange);
   }
   getPixelForTick(index) {
-    const me = this;
-    const ticks = me.ticks;
+    const ticks = this.ticks;
     if (index < 0 || index > ticks.length - 1) {
       return null;
     }
-    return me.getPixelForValue(ticks[index].value);
+    return this.getPixelForValue(ticks[index].value);
   }
   getValueForPixel(pixel) {
-    const me = this;
-    return Math.round(me._startValue + me.getDecimalForPixel(pixel) * me._valueRange);
+    return Math.round(this._startValue + this.getDecimalForPixel(pixel) * this._valueRange);
   }
   getBasePixel() {
     return this.bottom;
@@ -33195,7 +33133,7 @@ function generateTicks$1(generationOptions, dataRange) {
     ticks.push({value: Math.round((niceMin + j * spacing) * factor) / factor});
   }
   if (maxDefined && includeBounds && niceMax !== max) {
-    if (almostEquals(ticks[ticks.length - 1].value, max, relativeLabelSize(max, minSpacing, generationOptions))) {
+    if (ticks.length && almostEquals(ticks[ticks.length - 1].value, max, relativeLabelSize(max, minSpacing, generationOptions))) {
       ticks[ticks.length - 1].value = max;
     } else {
       ticks.push({value: max});
@@ -33230,10 +33168,9 @@ class LinearScaleBase extends Scale {
     return +raw;
   }
   handleTickRangeOptions() {
-    const me = this;
-    const {beginAtZero} = me.options;
-    const {minDefined, maxDefined} = me.getUserBounds();
-    let {min, max} = me;
+    const {beginAtZero} = this.options;
+    const {minDefined, maxDefined} = this.getUserBounds();
+    let {min, max} = this;
     const setMin = v => (min = minDefined ? min : v);
     const setMax = v => (max = maxDefined ? max : v);
     if (beginAtZero) {
@@ -33255,18 +33192,21 @@ class LinearScaleBase extends Scale {
         setMin(min - offset);
       }
     }
-    me.min = min;
-    me.max = max;
+    this.min = min;
+    this.max = max;
   }
   getTickLimit() {
-    const me = this;
-    const tickOpts = me.options.ticks;
+    const tickOpts = this.options.ticks;
     let {maxTicksLimit, stepSize} = tickOpts;
     let maxTicks;
     if (stepSize) {
-      maxTicks = Math.ceil(me.max / stepSize) - Math.floor(me.min / stepSize) + 1;
+      maxTicks = Math.ceil(this.max / stepSize) - Math.floor(this.min / stepSize) + 1;
+      if (maxTicks > 1000) {
+        console.warn(`scales.${this.id}.ticks.stepSize: ${stepSize} would result generating up to ${maxTicks} ticks. Limiting to 1000.`);
+        maxTicks = 1000;
+      }
     } else {
-      maxTicks = me.computeTickLimit();
+      maxTicks = this.computeTickLimit();
       maxTicksLimit = maxTicksLimit || 11;
     }
     if (maxTicksLimit) {
@@ -33278,10 +33218,9 @@ class LinearScaleBase extends Scale {
     return Number.POSITIVE_INFINITY;
   }
   buildTicks() {
-    const me = this;
-    const opts = me.options;
+    const opts = this.options;
     const tickOpts = opts.ticks;
-    let maxTicks = me.getTickLimit();
+    let maxTicks = this.getTickLimit();
     maxTicks = Math.max(2, maxTicks);
     const numericGeneratorOptions = {
       maxTicks,
@@ -33291,40 +33230,39 @@ class LinearScaleBase extends Scale {
       precision: tickOpts.precision,
       step: tickOpts.stepSize,
       count: tickOpts.count,
-      maxDigits: me._maxDigits(),
-      horizontal: me.isHorizontal(),
+      maxDigits: this._maxDigits(),
+      horizontal: this.isHorizontal(),
       minRotation: tickOpts.minRotation || 0,
       includeBounds: tickOpts.includeBounds !== false
     };
-    const dataRange = me._range || me;
+    const dataRange = this._range || this;
     const ticks = generateTicks$1(numericGeneratorOptions, dataRange);
     if (opts.bounds === 'ticks') {
-      _setMinAndMaxByKey(ticks, me, 'value');
+      _setMinAndMaxByKey(ticks, this, 'value');
     }
     if (opts.reverse) {
       ticks.reverse();
-      me.start = me.max;
-      me.end = me.min;
+      this.start = this.max;
+      this.end = this.min;
     } else {
-      me.start = me.min;
-      me.end = me.max;
+      this.start = this.min;
+      this.end = this.max;
     }
     return ticks;
   }
   configure() {
-    const me = this;
-    const ticks = me.ticks;
-    let start = me.min;
-    let end = me.max;
+    const ticks = this.ticks;
+    let start = this.min;
+    let end = this.max;
     super.configure();
-    if (me.options.offset && ticks.length) {
+    if (this.options.offset && ticks.length) {
       const offset = (end - start) / Math.max(ticks.length - 1, 1) / 2;
       start -= offset;
       end += offset;
     }
-    me._startValue = start;
-    me._endValue = end;
-    me._valueRange = end - start;
+    this._startValue = start;
+    this._endValue = end;
+    this._valueRange = end - start;
   }
   getLabelForValue(value) {
     return formatNumber(value, this.chart.options.locale);
@@ -33333,19 +33271,17 @@ class LinearScaleBase extends Scale {
 
 class LinearScale extends LinearScaleBase {
   determineDataLimits() {
-    const me = this;
-    const {min, max} = me.getMinMax(true);
-    me.min = isNumberFinite(min) ? min : 0;
-    me.max = isNumberFinite(max) ? max : 1;
-    me.handleTickRangeOptions();
+    const {min, max} = this.getMinMax(true);
+    this.min = isNumberFinite(min) ? min : 0;
+    this.max = isNumberFinite(max) ? max : 1;
+    this.handleTickRangeOptions();
   }
   computeTickLimit() {
-    const me = this;
-    const horizontal = me.isHorizontal();
-    const length = horizontal ? me.width : me.height;
-    const minRotation = toRadians(me.options.ticks.minRotation);
+    const horizontal = this.isHorizontal();
+    const length = horizontal ? this.width : this.height;
+    const minRotation = toRadians(this.options.ticks.minRotation);
     const ratio = (horizontal ? Math.sin(minRotation) : Math.cos(minRotation)) || 0.001;
-    const tickFont = me._resolveTickFontOptions(0);
+    const tickFont = this._resolveTickFontOptions(0);
     return Math.ceil(length / Math.min(40, tickFont.lineHeight / ratio));
   }
   getPixelForValue(value) {
@@ -33775,7 +33711,9 @@ class Header {
     const { translucent, inheritedAttributes } = this;
     const mode = getIonMode$1(this);
     const collapse = this.collapse || 'none';
-    return (hAsync(Host, Object.assign({ role: "banner", class: {
+    // banner role must be at top level, so remove role if inside a menu
+    const roleType = hostContext('ion-menu', this.el) ? 'none' : 'banner';
+    return (hAsync(Host, Object.assign({ role: roleType, class: {
         [mode]: true,
         // Used internally for styling
         [`header-${mode}`]: true,
@@ -38744,6 +38682,7 @@ class Item {
     this.labelColorStyles = {};
     this.itemStyles = new Map();
     this.multipleInputs = false;
+    this.focusable = true;
     /**
      * If `true`, a button tag will be rendered and the item will be tappable.
      */
@@ -38817,7 +38756,10 @@ class Item {
     }
   }
   componentDidLoad() {
-    raf(() => this.setMultipleInputs());
+    raf(() => {
+      this.setMultipleInputs();
+      this.focusable = this.isFocusable();
+    });
   }
   // If the item contains multiple clickable elements and/or inputs, then the item
   // should not have a clickable input cover over the entire item to prevent
@@ -38852,6 +38794,10 @@ class Item {
   }
   canActivate() {
     return (this.isClickable() || this.hasCover());
+  }
+  isFocusable() {
+    const focusableChild = this.el.querySelector('.ion-focusable');
+    return (this.canActivate() || focusableChild !== null);
   }
   getFirstInput() {
     const inputs = this.el.querySelectorAll('ion-input, ion-textarea');
@@ -38914,7 +38860,7 @@ class Item {
         'in-list': hostContext('ion-list', this.el),
         'item-multiple-inputs': this.multipleInputs,
         'ion-activatable': canActivate,
-        'ion-focusable': true,
+        'ion-focusable': this.focusable
       })) }, hAsync(TagType, Object.assign({}, attrs, { class: "item-native", part: "native", disabled: disabled }, clickFn), hAsync("slot", { name: "start" }), hAsync("div", { class: "item-inner" }, hAsync("div", { class: "input-wrapper" }, hAsync("slot", null)), hAsync("slot", { name: "end" }), showDetail && hAsync("ion-icon", { icon: detailIcon, lazy: false, class: "item-detail-icon", part: "detail-icon", "aria-hidden": "true" }), hAsync("div", { class: "item-inner-highlight" })), canActivate && mode === 'md' && hAsync("ion-ripple-effect", null)), hAsync("div", { class: "item-highlight" })));
   }
   static get delegatesFocus() { return true; }
@@ -38940,7 +38886,8 @@ class Item {
       "routerDirection": [1, "router-direction"],
       "target": [1],
       "type": [1],
-      "multipleInputs": [32]
+      "multipleInputs": [32],
+      "focusable": [32]
     },
     "$listeners$": [[0, "ionColor", "labelColorChanged"], [0, "ionStyle", "itemStyle"]],
     "$lazyBundleId$": "-",
@@ -44150,6 +44097,7 @@ const iosEasing = 'cubic-bezier(0.32,0.72,0,1)';
 const mdEasing = 'cubic-bezier(0.0,0.0,0.2,1)';
 const iosEasingReverse = 'cubic-bezier(1, 0, 0.68, 0.28)';
 const mdEasingReverse = 'cubic-bezier(0.4, 0, 0.6, 1)';
+const focusableQueryString = '[tabindex]:not([tabindex^="-"]), input:not([type=hidden]):not([tabindex^="-"]), textarea:not([tabindex^="-"]), button:not([tabindex^="-"]), select:not([tabindex^="-"]), .ion-focusable:not([tabindex^="-"])';
 /**
  * @part container - The container for the menu content.
  * @part backdrop - The backdrop that appears over the main content when the menu is open.
@@ -44166,6 +44114,8 @@ class Menu {
     this.blocker = GESTURE_CONTROLLER.createBlocker({ disableScroll: true });
     this.isAnimating = false;
     this._isOpen = false;
+    this.inheritedAttributes = {};
+    this.handleFocus = (ev) => this.trapKeyboardFocus(ev, document);
     this.isPaneVisible = false;
     this.isEndSide = false;
     /**
@@ -44223,6 +44173,9 @@ class Menu {
       return;
     }
   }
+  componentWillLoad() {
+    this.inheritedAttributes = inheritAttributes(this.el, ['aria-label']);
+  }
   async componentDidLoad() {
     this.ionMenuChange.emit({ disabled: this.disabled, open: this._isOpen });
     this.updateState();
@@ -44254,6 +44207,11 @@ class Menu {
         ev.stopPropagation();
         this.close();
       }
+    }
+  }
+  onKeydown(ev) {
+    if (ev.key === 'Escape') {
+      this.close();
     }
   }
   /**
@@ -44298,6 +44256,62 @@ class Menu {
    */
   setOpen(shouldOpen, animated = true) {
     return menuController._setOpen(this, shouldOpen, animated);
+  }
+  focusFirstDescendant() {
+    const { el } = this;
+    const firstInput = el.querySelector(focusableQueryString);
+    if (firstInput) {
+      firstInput.focus();
+    }
+    else {
+      el.focus();
+    }
+  }
+  focusLastDescendant() {
+    const { el } = this;
+    const inputs = Array.from(el.querySelectorAll(focusableQueryString));
+    const lastInput = inputs.length > 0 ? inputs[inputs.length - 1] : null;
+    if (lastInput) {
+      lastInput.focus();
+    }
+    else {
+      el.focus();
+    }
+  }
+  trapKeyboardFocus(ev, doc) {
+    const target = ev.target;
+    if (!target) {
+      return;
+    }
+    /**
+     * If the target is inside the menu contents, let the browser
+     * focus as normal and keep a log of the last focused element.
+     */
+    if (this.el.contains(target)) {
+      this.lastFocus = target;
+    }
+    else {
+      /**
+       * Otherwise, we are about to have focus go out of the menu.
+       * Wrap the focus to either the first or last element.
+       */
+      /**
+       * Once we call `focusFirstDescendant`, another focus event
+       * will fire, which will cause `lastFocus` to be updated
+       * before we can run the code after that. We cache the value
+       * here to avoid that.
+       */
+      this.focusFirstDescendant();
+      /**
+       * If the cached last focused element is the same as the now-
+       * active element, that means the user was on the first element
+       * already and pressed Shift + Tab, so we need to wrap to the
+       * last descendant.
+       */
+      if (this.lastFocus === doc.activeElement) {
+        this.focusLastDescendant();
+      }
+    }
   }
   async _setOpen(shouldOpen, animated = true) {
     // If the menu is disabled or it is currently being animated, let's do nothing
@@ -44443,6 +44457,15 @@ class Menu {
     // this places the menu into the correct location before it animates in
     // this css class doesn't actually kick off any animations
     this.el.classList.add(SHOW_MENU);
+    /**
+     * We add a tabindex here so that focus trapping
+     * still works even if the menu does not have
+     * any focusable elements slotted inside. The
+     * focus trapping utility will fallback to focusing
+     * the menu so focus does not leave when the menu
+     * is open.
+     */
+    this.el.setAttribute('tabindex', '0');
     if (this.backdropEl) {
       this.backdropEl.classList.add(SHOW_BACKDROP);
     }
@@ -44467,18 +44490,44 @@ class Menu {
       this.blocker.unblock();
     }
     if (isOpen) {
-      // add css class
+      // add css class and hide content behind menu from screen readers
       if (this.contentEl) {
         this.contentEl.classList.add(MENU_CONTENT_OPEN);
+        /**
+         * When the menu is open and overlaying the main
+         * content, the main content should not be announced
+         * by the screenreader as the menu is the main
+         * focus. This is useful with screenreaders that have
+         * "read from top" gestures that read the entire
+         * page from top to bottom when activated.
+         */
+        this.contentEl.setAttribute('aria-hidden', 'true');
       }
       // emit open event
       this.ionDidOpen.emit();
+      // focus menu content for screen readers
+      if (this.menuInnerEl) {
+        this.focusFirstDescendant();
+      }
+      // setup focus trapping
+      document.addEventListener('focus', this.handleFocus, true);
     }
     else {
-      // remove css classes
+      // remove css classes and unhide content from screen readers
       this.el.classList.remove(SHOW_MENU);
+      /**
+       * Remove tabindex from the menu component
+       * so that is cannot be tabbed to.
+       */
+      this.el.removeAttribute('tabindex');
       if (this.contentEl) {
         this.contentEl.classList.remove(MENU_CONTENT_OPEN);
+        /**
+         * Remove aria-hidden so screen readers
+         * can announce the main content again
+         * now that the menu is not the main focus.
+         */
+        this.contentEl.removeAttribute('aria-hidden');
       }
       if (this.backdropEl) {
         this.backdropEl.classList.remove(SHOW_BACKDROP);
@@ -44488,6 +44537,8 @@ class Menu {
       }
       // emit close event
       this.ionDidClose.emit();
+      // undo focus trapping so multiple menus don't collide
+      document.removeEventListener('focus', this.handleFocus, true);
     }
   }
   updateState() {
@@ -44513,9 +44564,9 @@ class Menu {
     this.afterAnimation(false);
   }
   render() {
-    const { isEndSide, type, disabled, isPaneVisible } = this;
+    const { isEndSide, type, disabled, isPaneVisible, inheritedAttributes } = this;
     const mode = getIonMode$1(this);
-    return (hAsync(Host, { role: "navigation", class: {
+    return (hAsync(Host, { role: "navigation", "aria-label": inheritedAttributes['aria-label'] || 'menu', class: {
         [mode]: true,
         [`menu-type-${type}`]: true,
         'menu-enabled': !disabled,
@@ -44555,7 +44606,7 @@ class Menu {
       "toggle": [64],
       "setOpen": [64]
     },
-    "$listeners$": [[16, "ionSplitPaneVisible", "onSplitPaneChanged"], [2, "click", "onBackdropClick"]],
+    "$listeners$": [[16, "ionSplitPaneVisible", "onSplitPaneChanged"], [2, "click", "onBackdropClick"], [0, "keydown", "onKeydown"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": [["contentId", "content-id"], ["menuId", "menu-id"], ["side", "side"]]
   }; }
@@ -51077,7 +51128,7 @@ class SearchBar {
     this.updateCurrentFilters();
   }
   async onTrigger(event) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
     if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.trigger) === "set" && ((_c = (_b = event === null || event === void 0 ? void 0 : event.detail) === null || _b === void 0 ? void 0 : _b.payload) === null || _c === void 0 ? void 0 : _c.name)) {
       for (const [i, control] of this.filter.controls.entries()) {
         if (!(control === null || control === void 0 ? void 0 : control.name) || ((_e = (_d = event === null || event === void 0 ? void 0 : event.detail) === null || _d === void 0 ? void 0 : _d.payload) === null || _e === void 0 ? void 0 : _e.name) !== (control === null || control === void 0 ? void 0 : control.name))
@@ -51089,7 +51140,7 @@ class SearchBar {
         if (this.paginationEl && !((_h = this.paginationEl) === null || _h === void 0 ? void 0 : _h.disableFetch))
           this.paginationEl.fetchData = Object.assign(Object.assign({}, (((_j = this.paginationEl) === null || _j === void 0 ? void 0 : _j.fetchData) || {})), { [control.name]: (_l = (_k = event === null || event === void 0 ? void 0 : event.detail) === null || _k === void 0 ? void 0 : _k.payload) === null || _l === void 0 ? void 0 : _l.value });
       }
-      if (!this.paginationEl)
+      if (!((_m = this.paginationEl) === null || _m === void 0 ? void 0 : _m.clearResults) || !((_o = this.paginationEl) === null || _o === void 0 ? void 0 : _o.getResults))
         return;
       await this.paginationEl.clearResults();
       await this.paginationEl.getResults();
@@ -51102,11 +51153,13 @@ class SearchBar {
     this.selectOptions[event.detail.target.name] = event.detail.data.results;
   }
   async onChange(event) {
-    var _a, _b;
-    if (((_a = event === null || event === void 0 ? void 0 : event.target) === null || _a === void 0 ? void 0 : _a.name) === "orderBy") {
+    var _a, _b, _c;
+    if (!((_a = this.paginationEl) === null || _a === void 0 ? void 0 : _a.clearParamData))
+      return;
+    if (((_b = event === null || event === void 0 ? void 0 : event.target) === null || _b === void 0 ? void 0 : _b.name) === "orderBy") {
       this.paginationEl.orderBy = event.detail.value;
     }
-    if (((_b = event === null || event === void 0 ? void 0 : event.target) === null || _b === void 0 ? void 0 : _b.tagName) === "ION-SEARCHBAR") {
+    if (((_c = event === null || event === void 0 ? void 0 : event.target) === null || _c === void 0 ? void 0 : _c.tagName) === "ION-SEARCHBAR") {
       await this.paginationEl.clearParamData("next");
       await this.paginationEl.clearParamData("back");
       await this.paginationEl.clearParamData("page");
@@ -51118,6 +51171,7 @@ class SearchBar {
     this.paginationEl.display = this.displayMode;
   }
   async clearFilter(event, clearingControl) {
+    var _a, _b, _c;
     event.preventDefault();
     event.stopPropagation();
     for (const [i, control] of this.filter.controls.entries()) {
@@ -51128,26 +51182,23 @@ class SearchBar {
       this.filter.controls[i] = Object.assign(Object.assign({}, control), { value: null });
       delete this.currentFilters[clearingControl.name];
       this.filter = Object.assign({}, this.filter);
+      if (!((_a = this.paginationEl) === null || _a === void 0 ? void 0 : _a.clearParamData))
+        continue;
       await this.paginationEl.clearParamData(control.name);
     }
-    await this.paginationEl.clearResults();
-    await this.paginationEl.getResults(await new Promise(async (resolve, reject) => {
-      try {
-        const paramData = {};
-        for (const filter of Object.values(this.currentFilters)) {
-          paramData[filter.name] = filter.value;
-        }
-        let fetchData = { paramData };
-        if (this.beforeGetResults &&
-          typeof this.beforeGetResults === "function")
-          fetchData = await this.beforeGetResults(fetchData);
-        resolve(fetchData);
-      }
-      catch (err) {
-        console.log(err);
-        reject({});
-      }
-    }));
+    console.log(this.currentFilters);
+    const paramData = {};
+    for (const filter of Object.values(this.currentFilters)) {
+      paramData[filter.name] = filter.value;
+    }
+    let fetchData = { paramData };
+    if (this.beforeGetResults &&
+      typeof this.beforeGetResults === "function")
+      fetchData = await this.beforeGetResults(fetchData);
+    if ((_b = this.paginationEl) === null || _b === void 0 ? void 0 : _b.clearResults)
+      await this.paginationEl.clearResults();
+    if ((_c = this.paginationEl) === null || _c === void 0 ? void 0 : _c.getResults)
+      await this.paginationEl.getResults(fetchData);
   }
   async updateCurrentFilters() {
     var _a;

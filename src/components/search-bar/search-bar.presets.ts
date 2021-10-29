@@ -3,7 +3,15 @@ import { OrganismPresets } from "@madnesslabs/fireenjin-designer/dist/types/inte
 export default {
   default: {
     name: "Default",
+    afterHTML: () => `<fireenjin-pagination id="paginator" endpoint="test" />`,
+    hooks: {
+      onComponentWillLoad: () => {
+        const paginationEl: any = document.getElementById("#paginator");
+        if (paginationEl) paginationEl.fetchData = { status: ["dry"] };
+      },
+    },
     props: {
+      paginationEl: document.getElementById("#paginator"),
       filter: {
         label: "Filter By",
         controls: [
@@ -42,7 +50,7 @@ export default {
                 value: "lost",
               },
             ],
-            value: "dry",
+            value: ["dry"],
           },
         ],
       },

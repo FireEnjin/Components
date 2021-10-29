@@ -74,7 +74,7 @@ export class SearchBar implements ComponentInterface {
           [control.name]: event?.detail?.payload?.value
         };
       }
-      if (!this.paginationEl) return;
+      if (!this.paginationEl?.clearResults || !this.paginationEl?.getResults) return;
       await this.paginationEl.clearResults();
       await this.paginationEl.getResults();
     }
@@ -88,6 +88,7 @@ export class SearchBar implements ComponentInterface {
 
   @Listen("ionChange")
   async onChange(event) {
+    if (!this.paginationEl?.clearParamData) return;
     if (event?.target?.name === "orderBy") {
       this.paginationEl.orderBy = event.detail.value;
     }
@@ -125,29 +126,22 @@ export class SearchBar implements ComponentInterface {
       };
       delete this.currentFilters[clearingControl.name];
       this.filter = { ...this.filter };
+      if (!this.paginationEl?.clearParamData) continue;
       await this.paginationEl.clearParamData(control.name);
     }
-    await this.paginationEl.clearResults();
-    await this.paginationEl.getResults(
-      await new Promise(async (resolve, reject) => {
-        try {
-          const paramData = {};
-          for (const filter of Object.values(this.currentFilters)) {
-            paramData[filter.name] = filter.value;
-          }
-          let fetchData = { paramData };
-          if (
-            this.beforeGetResults &&
-            typeof this.beforeGetResults === "function"
-          )
-            fetchData = await this.beforeGetResults(fetchData);
-          resolve(fetchData);
-        } catch (err) {
-          console.log(err);
-          reject({});
-        }
-      })
-    );
+    console.log(this.currentFilters);
+    const paramData = {};
+    for (const filter of Object.values(this.currentFilters)) {
+      paramData[filter.name] = filter.value;
+    }
+    let fetchData = { paramData };
+    if (
+      this.beforeGetResults &&
+      typeof this.beforeGetResults === "function"
+    )
+      fetchData = await this.beforeGetResults(fetchData);
+    if (this.paginationEl?.clearResults) await this.paginationEl.clearResults();
+    if (this.paginationEl?.getResults) await this.paginationEl.getResults(fetchData);
   }
 
   @Method()
