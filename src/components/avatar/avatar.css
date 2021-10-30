@@ -13,4 +13,5 @@ fireenjin-avatar .avatar-image {
   text-align: center;
   color: var(--ion-color-medium);
   text-decoration: none;
+  margin: auto !important;
 }
