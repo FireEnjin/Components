@@ -1,17 +1,17 @@
-import { OrganismPresets } from "@madnesslabs/fireenjin-designer/dist/types/interfaces";
+import { OrganismPresets } from "@fireenjin/docs/dist/types/interfaces";
 
 export default {
   default: {
     name: "Default",
     props: {
       template: {
-        html: "<p>testing {{user.firstName}}</p>"
+        html: "<p>testing {{user.firstName}}</p>",
       },
       data: {
         user: {
-          firstName: "Bobby"
-        }
-      }
+          firstName: "Bobby",
+        },
+      },
     },
   },
 } as OrganismPresets;
