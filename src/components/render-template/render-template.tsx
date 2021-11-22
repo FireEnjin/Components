@@ -22,7 +22,7 @@ export class RenderTemplate implements ComponentInterface {
   @Prop() templateId: string;
   @Prop() data: any = {};
   @Prop({ mutable: true }) template: any = {};
-  @Prop({ mutable: true }) partials: {id: string; html: string;}[]; 
+  @Prop({ mutable: true }) partials: { id: string; html: string; }[];
 
   @State() html = "";
 
@@ -44,9 +44,9 @@ export class RenderTemplate implements ComponentInterface {
   }
 
   @Method()
-  async setPartials(partials?: {id: string; html: string; }[]) {
+  async setPartials(partials?: { id: string; html: string; }[]) {
     const localPartials = localStorage?.getItem ? JSON.parse(localStorage.getItem(
-      "enjin-editor-partials"
+      "fireenjin-editor-partials"
     )) : null;
     this.partials = partials ? partials : localPartials ? localPartials : [];
     for (const partial of this.partials) {
@@ -54,7 +54,7 @@ export class RenderTemplate implements ComponentInterface {
       (window as any).Handlebars.registerPartial(partial.id, partial.html);
     }
     if (localStorage?.setItem) {
-      localStorage.setItem("enjin-editor-partials", JSON.stringify(this.partials));
+      localStorage.setItem("fireenjin-editor-partials", JSON.stringify(this.partials));
     }
   }
 
