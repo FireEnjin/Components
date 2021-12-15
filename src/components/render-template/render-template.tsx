@@ -38,9 +38,7 @@ export class RenderTemplate implements ComponentInterface {
 
   componentDidLoad() {
     backoff(10, this.renderTemplate.bind(this));
-    if (this.partials) {
-      this.setPartials(this.partials);
-    }
+    this.setPartials(this.partials);
   }
 
   @Method()
@@ -48,7 +46,7 @@ export class RenderTemplate implements ComponentInterface {
     const localPartials = localStorage?.getItem ? JSON.parse(localStorage.getItem(
       "fireenjin-editor-partials"
     )) : null;
-    this.partials = partials ? partials : localPartials ? localPartials : [];
+    this.partials = partials?.length ? partials : localPartials ? localPartials : [];
     for (const partial of this.partials) {
       if (!partial.html) continue;
       (window as any).Handlebars.registerPartial(partial.id, partial.html);

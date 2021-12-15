@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 /*!
- Stencil Mock Doc v2.10.0 | MIT Licensed | https://stenciljs.com
+ Stencil Mock Doc v2.11.0 | MIT Licensed | https://stenciljs.com
  */
 const CONTENT_REF_ID = 'r';
 const ORG_LOCATION_ID = 'o';
