@@ -26,8 +26,8 @@ export class RenderTemplate implements ComponentInterface {
 
   @State() html = "";
 
-  componentWillLoad() {
-    if (!(window as any)?.Handlebars) injectScript('https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js');
+  async componentWillLoad() {
+    if (!(window as any)?.Handlebars) await injectScript('https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js');
     if (this.templateId) this.fireenjinFetch.emit({
       endpoint: "findTemplate",
       params: {
