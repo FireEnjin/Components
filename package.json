@@ -34,7 +34,7 @@
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
-    "@ionic/core": "^6.0.1",
+    "@ionic/core": "^5.9.1",
     "@stencil/core": "^2.12.0",
     "@stripe/stripe-js": "^1.21.1",
     "chart.js": "^3.6.2",
