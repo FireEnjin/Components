@@ -1,3 +1,4 @@
+import { Loader, LoaderOptions, google } from 'google-maps';
 import { Geolocation } from "@ionic-native/geolocation";
 import {
   Component,
@@ -19,6 +20,7 @@ import {
   styleUrl: "map.css",
 })
 export class Map implements ComponentInterface {
+  google: google;
   /**
    * The Google Maps instance
    */
@@ -103,15 +105,15 @@ export class Map implements ComponentInterface {
   }) {
     const marker =
       typeof location === "string" ? JSON.parse(location) : location;
-    const mapMarker = new google.maps.Marker({
+    const mapMarker = new this.google.maps.Marker({
       position: marker.position,
       map: this.map,
       title: marker?.name || "",
       icon: marker?.icon ? {
         url: marker.icon,
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(15, 15),
-        scaledSize: new google.maps.Size(34, 34),
+        origin: new this.google.maps.Point(0, 0),
+        anchor: new this.google.maps.Point(15, 15),
+        scaledSize: new this.google.maps.Size(34, 34),
         shape: { coords: [17, 17, 18], type: "circle" },
         optimized: false,
       } : null as any,
@@ -247,7 +249,7 @@ export class Map implements ComponentInterface {
    * @param position The latitude and longitude to center the map on
    */
   createMap(position: { latitude: number; longitude: number }) {
-    this.map = new google.maps.Map(this.mapEl.querySelector("#map"), {
+    this.map = new this.google.maps.Map(this.mapEl.querySelector("#map"), {
       zoom: 9,
       center: {
         lat: position.latitude,
@@ -256,26 +258,11 @@ export class Map implements ComponentInterface {
     });
   }
 
-  async loadGoogleMaps() {
-    return new Promise((resolve, reject) => {
-      try {
-        // Create the script tag, set the appropriate attributes
-        var script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
-        script.async = true;
+  async loadGoogleMaps(options?: LoaderOptions) {
+    const loader = new Loader(this.apiKey, options || {});
+    this.google = await loader.load();
 
-        // Attach your callback function to the `window` object
-        (window as any).initMap = () => {
-          // JS API is loaded and available
-          resolve({});
-        };
-
-        // Append the 'script' element to 'head'
-        document.head.appendChild(script);
-      } catch (error) {
-        reject(error)
-      }
-    });
+    return this.google;
   }
 
   componentDidLoad() {

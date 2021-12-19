@@ -42808,6 +42808,68 @@ class LogItem {
   }; }
 }
 
+class Loader {
+    constructor(apiKey = null, options = {}) {
+        this.apiKey = apiKey;
+        this.options = options;
+        if (typeof window === 'undefined') {
+            throw new Error('google-maps is supported only in browser environment');
+        }
+    }
+    load() {
+        if (typeof this.api !== 'undefined') {
+            return Promise.resolve(this.api);
+        }
+        if (typeof this.loader !== 'undefined') {
+            return this.loader;
+        }
+        window[Loader.CALLBACK_NAME] = () => {
+            this.api = window['google'];
+            if (typeof this.resolve === 'undefined') {
+                throw new Error('Should not happen');
+            }
+            this.resolve(this.api);
+        };
+        window['gm_authFailure'] = () => {
+            if (typeof this.reject === 'undefined') {
+                throw new Error('Should not happen');
+            }
+            this.reject(new Error('google-maps: authentication error'));
+        };
+        return this.loader = new Promise((resolve, reject) => {
+            this.resolve = resolve;
+            this.reject = reject;
+            const script = document.createElement('script');
+            script.src = this.createUrl();
+            script.async = true;
+            script.onerror = (e) => reject(e);
+            document.head.appendChild(script);
+        });
+    }
+    createUrl() {
+        const parameters = [
+            `callback=${Loader.CALLBACK_NAME}`,
+        ];
+        if (this.apiKey) {
+            parameters.push(`key=${this.apiKey}`);
+        }
+        for (let name in this.options) {
+            if (this.options.hasOwnProperty(name)) {
+                let value = this.options[name];
+                if (name === 'version') {
+                    name = 'v';
+                }
+                if (name === 'libraries') {
+                    value = value.join(',');
+                }
+                parameters.push(`${name}=${value}`);
+            }
+        }
+        return `https://maps.googleapis.com/maps/api/js?${parameters.join('&')}`;
+    }
+}
+Loader.CALLBACK_NAME = '_dk_google_maps_loader_cb';
+
 function checkReady() {
     if (typeof process === 'undefined') {
         var win_1 = typeof window !== 'undefined' ? window : {};
@@ -44153,15 +44215,15 @@ class Map$1 {
    */
   async addMarker(location) {
     const marker = typeof location === "string" ? JSON.parse(location) : location;
-    const mapMarker = new google.maps.Marker({
+    const mapMarker = new this.google.maps.Marker({
       position: marker.position,
       map: this.map,
       title: (marker === null || marker === void 0 ? void 0 : marker.name) || "",
       icon: (marker === null || marker === void 0 ? void 0 : marker.icon) ? {
         url: marker.icon,
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(15, 15),
-        scaledSize: new google.maps.Size(34, 34),
+        origin: new this.google.maps.Point(0, 0),
+        anchor: new this.google.maps.Point(15, 15),
+        scaledSize: new this.google.maps.Size(34, 34),
         shape: { coords: [17, 17, 18], type: "circle" },
         optimized: false,
       } : null,
@@ -44262,7 +44324,7 @@ class Map$1 {
    * @param position The latitude and longitude to center the map on
    */
   createMap(position) {
-    this.map = new google.maps.Map(this.mapEl.querySelector("#map"), {
+    this.map = new this.google.maps.Map(this.mapEl.querySelector("#map"), {
       zoom: 9,
       center: {
         lat: position.latitude,
@@ -44270,25 +44332,10 @@ class Map$1 {
       },
     });
   }
-  async loadGoogleMaps() {
-    return new Promise((resolve, reject) => {
-      try {
-        // Create the script tag, set the appropriate attributes
-        var script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
-        script.async = true;
-        // Attach your callback function to the `window` object
-        window.initMap = () => {
-          // JS API is loaded and available
-          resolve({});
-        };
-        // Append the 'script' element to 'head'
-        document.head.appendChild(script);
-      }
-      catch (error) {
-        reject(error);
-      }
-    });
+  async loadGoogleMaps(options) {
+    const loader = new Loader(this.apiKey, options || {});
+    this.google = await loader.load();
+    return this.google;
   }
   componentDidLoad() {
   }
@@ -49684,10 +49731,10 @@ class RenderTemplate {
     this.template = {};
     this.html = "";
   }
-  componentWillLoad() {
+  async componentWillLoad() {
     var _a;
     if (!((_a = window) === null || _a === void 0 ? void 0 : _a.Handlebars))
-      injectScript('https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js');
+      await injectScript('https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js');
     if (this.templateId)
       this.fireenjinFetch.emit({
         endpoint: "findTemplate",
@@ -49698,13 +49745,11 @@ class RenderTemplate {
   }
   componentDidLoad() {
     backoff(10, this.renderTemplate.bind(this));
-    if (this.partials) {
-      this.setPartials(this.partials);
-    }
+    this.setPartials(this.partials);
   }
   async setPartials(partials) {
     const localPartials = (localStorage === null || localStorage === void 0 ? void 0 : localStorage.getItem) ? JSON.parse(localStorage.getItem("fireenjin-editor-partials")) : null;
-    this.partials = partials ? partials : localPartials ? localPartials : [];
+    this.partials = (partials === null || partials === void 0 ? void 0 : partials.length) ? partials : localPartials ? localPartials : [];
     for (const partial of this.partials) {
       if (!partial.html)
         continue;
