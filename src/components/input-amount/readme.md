@@ -49,6 +49,7 @@ graph TD;
   fireenjin-input-amount --> ion-input
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
+  ion-item --> ion-note
   style fireenjin-input-amount fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

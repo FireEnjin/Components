@@ -41,6 +41,15 @@ graph TD;
   fireenjin-select --> ion-select-option
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
+  ion-item --> ion-note
+  ion-select --> ion-select-popover
+  ion-select-popover --> ion-item
+  ion-select-popover --> ion-checkbox
+  ion-select-popover --> ion-label
+  ion-select-popover --> ion-radio-group
+  ion-select-popover --> ion-radio
+  ion-select-popover --> ion-list
+  ion-select-popover --> ion-list-header
   style fireenjin-popover-filter fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
