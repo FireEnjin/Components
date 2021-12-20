@@ -27,7 +27,7 @@
     "test:generate": "stencil test --spec --json --outputFile=src/jest-test-results.json",
     "test:generate:watch": "stencil test --spec --json --outputFile=src/jest-test-results.json --watch",
     "test:watch": "stencil test --spec --watch",
-    "presets:build": "fireenjin presets",
+    "presets": "fireenjin presets",
     "presets:watch": "fireenjin presets watch"
   },
   "dependencies": {
