@@ -31,7 +31,6 @@ graph TD;
   ion-infinite-scroll-content --> ion-spinner
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
-  ion-item --> ion-note
   style fireenjin-renderer fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
