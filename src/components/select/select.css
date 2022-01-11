@@ -3,3 +3,12 @@ fireenjin-select ion-icon {
   color: var(--ion-text-color);
   opacity: 0.33;
 }
+
+fireenjin-select select {
+  border: none;
+  width: auto;
+  padding: 10px;
+  min-width: 30%;
+  cursor: pointer;
+  text-align: justify;
+}

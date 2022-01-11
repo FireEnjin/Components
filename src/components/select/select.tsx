@@ -10,7 +10,6 @@ import {
   h,
   Build,
   State,
-  Element,
 } from "@stencil/core";
 
 @Component({
@@ -18,10 +17,12 @@ import {
   styleUrl: "select.css",
 })
 export class Select implements ComponentInterface {
-  @Element() selectEl: HTMLFireenjinSelectElement;
-
   @Event() fireenjinFetch: EventEmitter;
-
+  @Event() ionChange: EventEmitter<{
+    event;
+    name: string;
+    value: any;
+  }>;
   /**
   * If `true`, the user cannot interact with the select.
   */
@@ -90,6 +91,7 @@ export class Select implements ComponentInterface {
     disabled?: boolean;
     payload?: any;
   }[] = [];
+  @Prop() required = false;
   @Prop() resultsKey?: string;
   @Prop() labelPosition?: "stacked" | "fixed" | "floating";
   @Prop() lines: "full" | "inset" | "none";
@@ -135,7 +137,34 @@ export class Select implements ComponentInterface {
         <ion-item lines={this.lines}>
           {this.icon && <ion-icon slot="start" name={this.icon} />}
           {this.label && <ion-label position={this.labelPosition}>{this.label}</ion-label>}
-          <ion-select
+          <select
+            title={this.placeholder || this.name}
+            disabled={this.disabled}
+            multiple={this.multiple}
+            name={this.name}
+            required={this.required}
+            onChange={(event) => this.ionChange.emit({
+              event,
+              name: this.name,
+              value: this.value
+            })}
+          >
+            <slot />
+
+            {this.options.map((option) => (
+              <option
+                selected={
+                  this.multiple
+                    ? this.value && this.value.indexOf(option.value) >= 0
+                    : option.value + "" === this.value + ""
+                }
+                value={option.value}
+              >
+                {option.label}
+              </option>
+            ))}
+          </select>
+          {/* <ion-select
             disabled={this.disabled}
             selectedText={this.selectedText}
             interface={this.interface}
@@ -171,7 +200,7 @@ export class Select implements ComponentInterface {
                 </ion-select-option>
               )
             )}
-          </ion-select>
+          </ion-select> */}
         </ion-item>
       </Host>
     );

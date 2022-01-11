@@ -43,7 +43,9 @@ export class StarRating implements ComponentInterface {
     });
   }
 
-  @Method()
+  @Method({
+    test: 123
+  })
   async setCurrentRating(rating: any) {
     this.currentRating = parseFloat(rating);
   }

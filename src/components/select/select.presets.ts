@@ -17,8 +17,8 @@ export default {
   default: {
     name: "With Options",
     props: {
-      label: "Tags",
-      multiple: true,
+      label: "With Options",
+      multiple: false,
       options,
     },
   },
@@ -27,7 +27,7 @@ export default {
     props: {
       label: "Tags",
       options,
-      multiple: true,
+      multiple: false,
       value: ["important"],
     },
   },

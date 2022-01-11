@@ -32,6 +32,7 @@
 | `params`           | `params`            |                                                                                                                                                                                                                                                                                                                                                           | `any`                                                                   | `undefined` |
 | `placeholder`      | `placeholder`       | The text to display when the select is empty.                                                                                                                                                                                                                                                                                                             | `string`                                                                | `undefined` |
 | `query`            | `query`             |                                                                                                                                                                                                                                                                                                                                                           | `string`                                                                | `undefined` |
+| `required`         | `required`          |                                                                                                                                                                                                                                                                                                                                                           | `boolean`                                                               | `false`     |
 | `resultsKey`       | `results-key`       |                                                                                                                                                                                                                                                                                                                                                           | `string`                                                                | `undefined` |
 | `selectedText`     | `selected-text`     | The text to display instead of the selected option's value.                                                                                                                                                                                                                                                                                               | `string`                                                                | `undefined` |
 | `subHeader`        | `sub-header`        |                                                                                                                                                                                                                                                                                                                                                           | `string`                                                                | `undefined` |
@@ -40,9 +41,10 @@
 
 ## Events
 
-| Event            | Description | Type               |
-| ---------------- | ----------- | ------------------ |
-| `fireenjinFetch` |             | `CustomEvent<any>` |
+| Event            | Description | Type                                                     |
+| ---------------- | ----------- | -------------------------------------------------------- |
+| `fireenjinFetch` |             | `CustomEvent<any>`                                       |
+| `ionChange`      |             | `CustomEvent<{ event: any; name: string; value: any; }>` |
 
 
 ## Dependencies
@@ -56,8 +58,6 @@
 - ion-item
 - ion-icon
 - ion-label
-- ion-select
-- ion-select-option
 
 ### Graph
 ```mermaid
@@ -65,10 +65,9 @@ graph TD;
   fireenjin-select --> ion-item
   fireenjin-select --> ion-icon
   fireenjin-select --> ion-label
-  fireenjin-select --> ion-select
-  fireenjin-select --> ion-select-option
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
+  ion-item --> ion-note
   fireenjin-popover-filter --> fireenjin-select
   style fireenjin-select fill:#f9f,stroke:#333,stroke-width:4px
 ```

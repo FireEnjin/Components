@@ -313,6 +313,7 @@ export class SelectTags implements ComponentInterface {
       <ion-item ref={(el) => (this.itemEl = el)} lines={this.lines}>
         {this.label && <ion-label position={this.labelPosition}>{this.label}</ion-label>}
         <select
+          title={this.placeholder || this.name}
           disabled={this.disabled}
           multiple={this.multiple}
           name={this.name}
