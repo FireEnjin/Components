@@ -137,7 +137,7 @@ export class Select implements ComponentInterface {
         <ion-item lines={this.lines}>
           {this.icon && <ion-icon slot="start" name={this.icon} />}
           {this.label && <ion-label position={this.labelPosition}>{this.label}</ion-label>}
-          <select
+          {/* <select
             title={this.placeholder || this.name}
             disabled={this.disabled}
             multiple={this.multiple}
@@ -163,8 +163,8 @@ export class Select implements ComponentInterface {
                 {option.label}
               </option>
             ))}
-          </select>
-          {/* <ion-select
+          </select> */}
+          <ion-select
             disabled={this.disabled}
             selectedText={this.selectedText}
             interface={this.interface}
@@ -200,7 +200,7 @@ export class Select implements ComponentInterface {
                 </ion-select-option>
               )
             )}
-          </ion-select> */}
+          </ion-select>
         </ion-item>
       </Host>
     );
