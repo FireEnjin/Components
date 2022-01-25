@@ -1,4 +1,5 @@
 import {
+  Build,
   Component,
   ComponentInterface,
   Event,
@@ -27,6 +28,7 @@ export class RenderTemplate implements ComponentInterface {
   @State() html = "";
 
   async componentWillLoad() {
+    if (!Build?.isBrowser) return;
     if (!(window as any)?.Handlebars) await injectScript('https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js');
     if (this.templateId) this.fireenjinFetch.emit({
       endpoint: "findTemplate",
@@ -43,16 +45,14 @@ export class RenderTemplate implements ComponentInterface {
 
   @Method()
   async setPartials(partials?: { id: string; html: string; }[]) {
-    const localPartials = localStorage?.getItem ? JSON.parse(localStorage.getItem(
-      "fireenjin-editor-partials"
-    )) : null;
-    this.partials = partials?.length ? partials : localPartials ? localPartials : [];
+    this.partials = partials?.length && partials || [];
     for (const partial of this.partials) {
       if (!partial.html) continue;
-      (window as any).Handlebars.registerPartial(partial.id, partial.html);
-    }
-    if (localStorage?.setItem) {
-      localStorage.setItem("fireenjin-editor-partials", JSON.stringify(this.partials));
+      try {
+        (window as any).Handlebars.registerPartial(partial.id, partial.html);
+      } catch {
+        console.log(`Failed to load partial: ${partial?.id}`, partial);
+      }
     }
   }
 
