@@ -58,6 +58,8 @@
 - ion-item
 - ion-icon
 - ion-label
+- ion-select
+- ion-select-option
 
 ### Graph
 ```mermaid
@@ -65,6 +67,8 @@ graph TD;
   fireenjin-select --> ion-item
   fireenjin-select --> ion-icon
   fireenjin-select --> ion-label
+  fireenjin-select --> ion-select
+  fireenjin-select --> ion-select-option
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   fireenjin-popover-filter --> fireenjin-select

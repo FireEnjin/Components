@@ -37,6 +37,8 @@ graph TD;
   fireenjin-select --> ion-item
   fireenjin-select --> ion-icon
   fireenjin-select --> ion-label
+  fireenjin-select --> ion-select
+  fireenjin-select --> ion-select-option
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   style fireenjin-popover-filter fill:#f9f,stroke:#333,stroke-width:4px

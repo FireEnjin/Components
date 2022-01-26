@@ -241,10 +241,7 @@ export class InputAddress implements ComponentInterface {
           onClick={() => this.toggleManualEntry()}
           slot="end"
         >
-          <span class="button-inner">
-            Search
-            <ion-icon name="search" />
-          </span>
+          Search
         </ion-button>
       </ion-item>,
       <ion-item class={{ "is-hidden": this.manualEntry }}>
@@ -264,10 +261,7 @@ export class InputAddress implements ComponentInterface {
           onClick={() => this.toggleManualEntry()}
           slot="end"
         >
-          <span class="button-inner">
-            Manual
-            <ion-icon name="create" />
-          </span>
+          Manual
         </ion-button>
       </ion-item>,
     ];
