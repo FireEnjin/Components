@@ -11,7 +11,7 @@
 | --------- | --------- | ------------------------------------- | ------------------------------------------------------------------------------------------- | ----------- |
 | `apiKey`  | `api-key` | The Google Maps API Key               | `string`                                                                                    | `undefined` |
 | `markers` | --        | A list of markers to put onto the map | `{ position: { lat: number; lng: number; }; name: string; icon: string; payload?: any; }[]` | `[]`        |
-| `optins`  | `optins`  | Google Maps options                   | `any`                                                                                       | `{}`        |
+| `options` | `options` | Google Maps options                   | `any`                                                                                       | `{}`        |
 | `visible` | `visible` | Should the map be visible?            | `boolean`                                                                                   | `true`      |
 
 

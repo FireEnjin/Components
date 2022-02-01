@@ -1,3 +1,4 @@
+import { Loader, LoaderOptions, google } from 'google-maps';
 import {
   Component,
   ComponentInterface,
@@ -11,13 +12,12 @@ import {
   Build,
 } from "@stencil/core";
 
-declare var google;
-
 @Component({
   tag: "fireenjin-input-address",
   styleUrl: "input-address.css",
 })
 export class InputAddress implements ComponentInterface {
+  google: google;
   autocompleteFieldEl: HTMLIonInputElement;
   streetInputEl: HTMLIonInputElement;
   unitInputEl: HTMLIonInputElement;
@@ -27,6 +27,10 @@ export class InputAddress implements ComponentInterface {
 
   @Element() addressAutocompleteEl: any;
 
+  /**
+   * The Google Maps API Key
+   */
+  @Prop() apiKey: string;
   /**
    * The placeholder text for the input field
    */
@@ -79,30 +83,11 @@ export class InputAddress implements ComponentInterface {
     }
   }
 
-  injectScript(src) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.async = true;
-      script.src = src;
-      script.addEventListener("load", resolve);
-      script.addEventListener("error", () => reject("Error loading script."));
-      script.addEventListener("abort", () => reject("Script loading aborted."));
-      document.head.appendChild(script);
-    });
-  }
+  async loadGoogleMaps(options?: LoaderOptions) {
+    const loader = new Loader(this.apiKey, { libraries: ["places"], ...options });
+    this.google = await loader.load();
 
-  async componentWillLoad() {
-    if (Build.isBrowser) {
-      try {
-        if (this.googleMapsKey && !window?.google?.maps) {
-          await this.injectScript(
-            `https://maps.googleapis.com/maps/api/js?key=${this.googleMapsKey}&libraries=places`
-          );
-        }
-      } catch (e) {
-        console.log("Error injecting Google Maps");
-      }
-    }
+    return this.google;
   }
 
   async componentDidLoad() {
@@ -111,11 +96,12 @@ export class InputAddress implements ComponentInterface {
       setTimeout(() => {
         inputEl.setAttribute("autocomplete", "new-password");
       }, 200);
-      const autocomplete = new google.maps.places.Autocomplete(inputEl, {
+      if (!window?.google?.maps && this.apiKey) await this.loadGoogleMaps();
+      const autocomplete = new this.google.maps.places.Autocomplete(inputEl, {
         types: ["address"],
       });
 
-      google.maps.event.addListener(autocomplete, "place_changed", () => {
+      this.google.maps.event.addListener(autocomplete, "place_changed", () => {
         this.place = autocomplete.getPlace();
         if (!this.value) {
           this.value = {};

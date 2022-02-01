@@ -7,6 +7,7 @@
 
 | Property        | Attribute         | Description                              | Type                                 | Default     |
 | --------------- | ----------------- | ---------------------------------------- | ------------------------------------ | ----------- |
+| `apiKey`        | `api-key`         | The Google Maps API Key                  | `string`                             | `undefined` |
 | `googleMapsKey` | `google-maps-key` | The Google Maps API Key                  | `string`                             | `undefined` |
 | `label`         | `label`           | The label of the input field             | `string`                             | `undefined` |
 | `labelPosition` | `label-position`  |                                          | `"fixed" \| "floating" \| "stacked"` | `undefined` |

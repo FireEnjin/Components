@@ -24852,6 +24852,68 @@ class Input {
 }
 let inputIds = 0;
 
+class Loader {
+    constructor(apiKey = null, options = {}) {
+        this.apiKey = apiKey;
+        this.options = options;
+        if (typeof window === 'undefined') {
+            throw new Error('google-maps is supported only in browser environment');
+        }
+    }
+    load() {
+        if (typeof this.api !== 'undefined') {
+            return Promise.resolve(this.api);
+        }
+        if (typeof this.loader !== 'undefined') {
+            return this.loader;
+        }
+        window[Loader.CALLBACK_NAME] = () => {
+            this.api = window['google'];
+            if (typeof this.resolve === 'undefined') {
+                throw new Error('Should not happen');
+            }
+            this.resolve(this.api);
+        };
+        window['gm_authFailure'] = () => {
+            if (typeof this.reject === 'undefined') {
+                throw new Error('Should not happen');
+            }
+            this.reject(new Error('google-maps: authentication error'));
+        };
+        return this.loader = new Promise((resolve, reject) => {
+            this.resolve = resolve;
+            this.reject = reject;
+            const script = document.createElement('script');
+            script.src = this.createUrl();
+            script.async = true;
+            script.onerror = (e) => reject(e);
+            document.head.appendChild(script);
+        });
+    }
+    createUrl() {
+        const parameters = [
+            `callback=${Loader.CALLBACK_NAME}`,
+        ];
+        if (this.apiKey) {
+            parameters.push(`key=${this.apiKey}`);
+        }
+        for (let name in this.options) {
+            if (this.options.hasOwnProperty(name)) {
+                let value = this.options[name];
+                if (name === 'version') {
+                    name = 'v';
+                }
+                if (name === 'libraries') {
+                    value = value.join(',');
+                }
+                parameters.push(`${name}=${value}`);
+            }
+        }
+        return `https://maps.googleapis.com/maps/api/js?${parameters.join('&')}`;
+    }
+}
+Loader.CALLBACK_NAME = '_dk_google_maps_loader_cb';
+
 const inputAddressCss = "fireenjin-input-address ion-label{font-size:12px;font-weight:bold;font-family:arial;display:block;background:transparent;text-align:left;padding:0 0 8px 0}fireenjin-input-address .invalid .input-wrapper{border-bottom-color:var(--ion-color-danger) !important}fireenjin-input-address .invalid .label{color:var(--ion-color-danger) !important}fireenjin-input-address ion-item{position:relative;border-bottom:none !important;box-shadow:none !important}fireenjin-input-address ion-item.is-hidden{display:none}fireenjin-input-address ion-item ion-label{color:var(--ion-color-medium) !important}fireenjin-input-address ion-item ion-input{border:none;box-shadow:none !important;outline:none !important;font-size:16px;font-weight:normal !important}fireenjin-input-address ion-item.item-has-focus{--border-width:0;border-color:var(--ion-color-primary)}fireenjin-input-address ion-item.item-has-focus ion-label{color:var(--ion-color-primary) !important}fireenjin-input-address ion-input.autocomplete-field{--padding-top:13px !important}fireenjin-input-address ion-button{text-decoration:none;position:absolute;right:0px;top:3px;z-index:3}fireenjin-input-address ion-button .button-inner{font-size:14px;color:var(--ion-color-primary);padding-right:25px}fireenjin-input-address ion-button ion-icon{position:absolute;top:6px;right:10px;color:var(--ion-color-primary)}fireenjin-input-address .manual-fields{width:100%;padding-top:5px}fireenjin-input-address .manual-fields ion-input{--padding-top:8px;--padding-bottom:8px;--padding-start:17px}fireenjin-input-address .manual-fields ion-grid floodbot-state-autocomplete,fireenjin-input-address .manual-fields ion-grid ion-input{display:block;min-width:150px}fireenjin-input-address .autocomplete-field{display:block;padding-top:8px}fireenjin-input-address .manual-fields ion-grid,fireenjin-input-address .manual-fields ion-grid ion-row ion-col{padding-bottom:0 !important;padding-top:0 !important}fireenjin-input-address .manual-fields ion-input:not(.zip-input){border-bottom:1px solid var(--ion-color-light-shade, #eee) !important}";
 
 class InputAddress {
@@ -24879,18 +24941,10 @@ class InputAddress {
       }, 100);
     }
   }
-  injectScript(src) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.async = true;
-      script.src = src;
-      script.addEventListener("load", resolve);
-      script.addEventListener("error", () => reject("Error loading script."));
-      script.addEventListener("abort", () => reject("Script loading aborted."));
-      document.head.appendChild(script);
-    });
-  }
-  async componentWillLoad() {
+  async loadGoogleMaps(options) {
+    const loader = new Loader(this.apiKey, Object.assign({ libraries: ["places"] }, options));
+    this.google = await loader.load();
+    return this.google;
   }
   async componentDidLoad() {
   }
@@ -24926,6 +24980,7 @@ class InputAddress {
     "$flags$": 0,
     "$tagName$": "fireenjin-input-address",
     "$members$": {
+      "apiKey": [1, "api-key"],
       "placeholder": [1],
       "value": [1032],
       "label": [1],
@@ -30883,68 +30938,6 @@ class LogItem {
   }; }
 }
 
-class Loader {
-    constructor(apiKey = null, options = {}) {
-        this.apiKey = apiKey;
-        this.options = options;
-        if (typeof window === 'undefined') {
-            throw new Error('google-maps is supported only in browser environment');
-        }
-    }
-    load() {
-        if (typeof this.api !== 'undefined') {
-            return Promise.resolve(this.api);
-        }
-        if (typeof this.loader !== 'undefined') {
-            return this.loader;
-        }
-        window[Loader.CALLBACK_NAME] = () => {
-            this.api = window['google'];
-            if (typeof this.resolve === 'undefined') {
-                throw new Error('Should not happen');
-            }
-            this.resolve(this.api);
-        };
-        window['gm_authFailure'] = () => {
-            if (typeof this.reject === 'undefined') {
-                throw new Error('Should not happen');
-            }
-            this.reject(new Error('google-maps: authentication error'));
-        };
-        return this.loader = new Promise((resolve, reject) => {
-            this.resolve = resolve;
-            this.reject = reject;
-            const script = document.createElement('script');
-            script.src = this.createUrl();
-            script.async = true;
-            script.onerror = (e) => reject(e);
-            document.head.appendChild(script);
-        });
-    }
-    createUrl() {
-        const parameters = [
-            `callback=${Loader.CALLBACK_NAME}`,
-        ];
-        if (this.apiKey) {
-            parameters.push(`key=${this.apiKey}`);
-        }
-        for (let name in this.options) {
-            if (this.options.hasOwnProperty(name)) {
-                let value = this.options[name];
-                if (name === 'version') {
-                    name = 'v';
-                }
-                if (name === 'libraries') {
-                    value = value.join(',');
-                }
-                parameters.push(`${name}=${value}`);
-            }
-        }
-        return `https://maps.googleapis.com/maps/api/js?${parameters.join('&')}`;
-    }
-}
-Loader.CALLBACK_NAME = '_dk_google_maps_loader_cb';
-
 function checkReady() {
     if (typeof process === 'undefined') {
         var win_1 = typeof window !== 'undefined' ? window : {};
@@ -32081,7 +32074,7 @@ class Map$1 {
     /**
      * Google Maps options
      */
-    this.optins = {};
+    this.options = {};
     /**
      * Should the map be visible?
      */
@@ -32238,7 +32231,7 @@ class Map$1 {
     "$tagName$": "fireenjin-map",
     "$members$": {
       "apiKey": [1, "api-key"],
-      "optins": [8],
+      "options": [8],
       "visible": [4],
       "markers": [1040],
       "position": [32],

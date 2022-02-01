@@ -57,7 +57,7 @@ export class Map implements ComponentInterface {
   /**
    * Google Maps options
    */
-  @Prop() optins: any = {};
+  @Prop() options: any = {};
   /**
    * Should the map be visible?
    */
