@@ -85,6 +85,16 @@ Type: `Promise<any>`
 
 
 
+### `initializeStripeElements() => Promise<boolean>`
+
+
+
+#### Returns
+
+Type: `Promise<boolean>`
+
+
+
 ### `reportValidity() => Promise<boolean>`
 
 

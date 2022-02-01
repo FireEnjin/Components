@@ -288,12 +288,13 @@ export class Input implements ComponentInterface {
     }, 50);
   }
 
-  initializeStripeElements() {
+  @Method()
+  async initializeStripeElements() {
     if (!this.stripeKey) {
       console.log("Stripe Key prop is required to create card field.");
       return false;
     }
-    this.stripe = (window?.Stripe ? window.Stripe : loadStripe)(this.stripeKey);
+    this.stripe = await loadStripe(this.stripeKey);
     const elements = this.stripe.elements({
       fonts: this.stripeElements.fonts
         ? this.stripeElements.fonts
