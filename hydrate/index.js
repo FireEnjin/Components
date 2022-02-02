@@ -34425,7 +34425,7 @@ class Pagination$1 {
     this.fireenjinFetch = createEvent(this, "fireenjinFetch", 7);
     this.disablePageCheck = false;
     this.disableFetch = false;
-    this.display = "grid";
+    this.display = "list";
     this.page = 0;
     this.results = [];
     this.loadingSpinner = "bubbles";

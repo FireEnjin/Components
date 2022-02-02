@@ -38,7 +38,7 @@ export class Pagination implements ComponentInterface {
   @Prop() orderBy?: string;
   @Prop() orderDirection?: string;
   @Prop() dataPropsMap: any;
-  @Prop() display: "list" | "grid" = "grid";
+  @Prop() display: "list" | "grid" = "list";
   @Prop({ mutable: true }) page?= 0;
   @Prop({ mutable: true }) results: any[] = [];
   @Prop() groupBy: string;
