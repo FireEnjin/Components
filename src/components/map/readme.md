@@ -17,20 +17,20 @@
 
 ## Events
 
-| Event              | Description                         | Type                                                                                                                                                                 |
-| ------------------ | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fireenjinTrigger` | When a marker on the map is clicked | `CustomEvent<{ trigger: string; payload: { marker: Marker; location: { position: { lat: number; lng: number; }; name: string; icon: string; payload?: any; }; }; }>` |
+| Event              | Description                         | Type                                                                                                                                                              |
+| ------------------ | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fireenjinTrigger` | When a marker on the map is clicked | `CustomEvent<{ trigger: string; payload: { marker: any; location: { position: { lat: number; lng: number; }; name: string; icon: string; payload?: any; }; }; }>` |
 
 
 ## Methods
 
-### `addMarker(location: { position: { lat: number; lng: number; }; name: string; icon: string; payload?: any; }) => Promise<google.maps.Marker>`
+### `addMarker(location: { position: { lat: number; lng: number; }; name: string; icon: string; payload?: any; }) => Promise<any>`
 
 Add a marker to the map
 
 #### Returns
 
-Type: `Promise<Marker>`
+Type: `Promise<any>`
 
 
 
@@ -44,13 +44,13 @@ Type: `Promise<boolean>`
 
 
 
-### `setCenter(latLng: google.maps.LatLng | google.maps.LatLngLiteral) => Promise<void>`
+### `setCenter(latLng: any) => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
@@ -64,13 +64,13 @@ Type: `Promise<{ position: { lat: number; lng: number; }; name: string; icon: st
 
 
 
-### `setZoom(level: number) => Promise<void>`
+### `setZoom(level: number) => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 

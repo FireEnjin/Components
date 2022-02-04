@@ -1,4 +1,4 @@
-import { Loader, LoaderOptions, google } from 'google-maps';
+import { Loader, LoaderOptions } from "google-maps";
 import { Geolocation } from "@ionic-native/geolocation";
 import {
   Component,
@@ -20,15 +20,15 @@ import {
   styleUrl: "map.css",
 })
 export class Map implements ComponentInterface {
-  google: google;
+  google: any;
   /**
    * The Google Maps instance
    */
-  map: google.maps.Map;
+  map: any;
   /**
    * The current list of map markers
    */
-  mapMarkers: google.maps.Marker[] = [];
+  mapMarkers: any[] = [];
 
   @Element() mapEl: HTMLElement;
   /**
@@ -37,7 +37,7 @@ export class Map implements ComponentInterface {
   @Event() fireenjinTrigger: EventEmitter<{
     trigger: string;
     payload: {
-      marker: google.maps.Marker;
+      marker: any;
       location: {
         position: {
           lat: number;
@@ -47,7 +47,7 @@ export class Map implements ComponentInterface {
         icon: string;
         payload?: any;
       };
-    }
+    };
   }>;
 
   /**
@@ -109,14 +109,16 @@ export class Map implements ComponentInterface {
       position: marker.position,
       map: this.map,
       title: marker?.name || "",
-      icon: marker?.icon ? {
-        url: marker.icon,
-        origin: new this.google.maps.Point(0, 0),
-        anchor: new this.google.maps.Point(15, 15),
-        scaledSize: new this.google.maps.Size(34, 34),
-        shape: { coords: [17, 17, 18], type: "circle" },
-        optimized: false,
-      } : null as any,
+      icon: marker?.icon
+        ? {
+            url: marker.icon,
+            origin: new this.google.maps.Point(0, 0),
+            anchor: new this.google.maps.Point(15, 15),
+            scaledSize: new this.google.maps.Size(34, 34),
+            shape: { coords: [17, 17, 18], type: "circle" },
+            optimized: false,
+          }
+        : (null as any),
     });
     mapMarker.addListener("click", () => {
       this.onMarkerClick(mapMarker, marker);
@@ -165,7 +167,7 @@ export class Map implements ComponentInterface {
   }
 
   @Method()
-  async setCenter(latLng: google.maps.LatLng | google.maps.LatLngLiteral) {
+  async setCenter(latLng: any) {
     return this.map.setCenter(latLng);
   }
 
@@ -190,7 +192,7 @@ export class Map implements ComponentInterface {
    * @param location The location information tied to the map marker
    */
   onMarkerClick(
-    marker: google.maps.Marker,
+    marker: any,
     location: {
       position: {
         lat: number;
@@ -208,7 +210,7 @@ export class Map implements ComponentInterface {
       payload: {
         marker,
         location,
-      }
+      },
     });
   }
 

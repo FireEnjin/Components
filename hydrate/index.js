@@ -32098,14 +32098,16 @@ class Map$1 {
       position: marker.position,
       map: this.map,
       title: (marker === null || marker === void 0 ? void 0 : marker.name) || "",
-      icon: (marker === null || marker === void 0 ? void 0 : marker.icon) ? {
-        url: marker.icon,
-        origin: new this.google.maps.Point(0, 0),
-        anchor: new this.google.maps.Point(15, 15),
-        scaledSize: new this.google.maps.Size(34, 34),
-        shape: { coords: [17, 17, 18], type: "circle" },
-        optimized: false,
-      } : null,
+      icon: (marker === null || marker === void 0 ? void 0 : marker.icon)
+        ? {
+          url: marker.icon,
+          origin: new this.google.maps.Point(0, 0),
+          anchor: new this.google.maps.Point(15, 15),
+          scaledSize: new this.google.maps.Size(34, 34),
+          shape: { coords: [17, 17, 18], type: "circle" },
+          optimized: false,
+        }
+        : null,
     });
     mapMarker.addListener("click", () => {
       this.onMarkerClick(mapMarker, marker);
@@ -32165,7 +32167,7 @@ class Map$1 {
       payload: {
         marker,
         location,
-      }
+      },
     });
   }
   /**
@@ -48713,7 +48715,7 @@ class SelectTags {
 
 createCommonjsModule(function (module, exports) {
 /*!
- * clipboard.js v2.0.9
+ * clipboard.js v2.0.10
  * https://clipboardjs.com/
  *
  * Licensed MIT © Zeno Rocha
@@ -48986,16 +48988,17 @@ var Clipboard = /*#__PURE__*/function (_Emitter) {
     key: "onClick",
     value: function onClick(e) {
       var trigger = e.delegateTarget || e.currentTarget;
-      var selectedText = actions_default({
-        action: this.action(trigger),
+      var action = this.action(trigger) || 'copy';
+      var text = actions_default({
+        action: action,
         container: this.container,
         target: this.target(trigger),
         text: this.text(trigger)
       }); // Fires an event based on the copy operation result.
 
-      this.emit(selectedText ? 'success' : 'error', {
-        action: this.action,
-        text: selectedText,
+      this.emit(text ? 'success' : 'error', {
+        action: action,
+        text: text,
         trigger: trigger,
         clearSelection: function clearSelection() {
           if (trigger) {
