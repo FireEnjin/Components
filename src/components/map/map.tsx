@@ -1,4 +1,4 @@
-import { Loader, LoaderOptions } from "google-maps";
+import { Loader, LoaderOptions, google } from "google-maps";
 import { Geolocation } from "@ionic-native/geolocation";
 import {
   Component,
@@ -20,15 +20,15 @@ import {
   styleUrl: "map.css",
 })
 export class Map implements ComponentInterface {
-  google: any;
+  google: google;
   /**
    * The Google Maps instance
    */
-  map: any;
+  map: google.maps.Map;
   /**
    * The current list of map markers
    */
-  mapMarkers: any[] = [];
+  mapMarkers: google.maps.Marker[] = [];
 
   @Element() mapEl: HTMLElement;
   /**
@@ -37,7 +37,7 @@ export class Map implements ComponentInterface {
   @Event() fireenjinTrigger: EventEmitter<{
     trigger: string;
     payload: {
-      marker: any;
+      marker: google.maps.Marker;
       location: {
         position: {
           lat: number;
@@ -167,7 +167,7 @@ export class Map implements ComponentInterface {
   }
 
   @Method()
-  async setCenter(latLng: any) {
+  async setCenter(latLng: google.maps.LatLng | google.maps.LatLngLiteral) {
     return this.map.setCenter(latLng);
   }
 
@@ -192,7 +192,7 @@ export class Map implements ComponentInterface {
    * @param location The location information tied to the map marker
    */
   onMarkerClick(
-    marker: any,
+    marker: google.maps.Marker,
     location: {
       position: {
         lat: number;
