@@ -1,3 +1,4 @@
+import { FireEnjinFetchEvent } from "@fireenjin/sdk";
 import {
   Component,
   ComponentInterface,
@@ -24,7 +25,7 @@ export class Pagination implements ComponentInterface {
   resizeInterval: NodeJS.Timeout;
   initailizedOnPath: string;
 
-  @Event() fireenjinFetch: EventEmitter;
+  @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
 
   @Prop() gridEl: FunctionalComponent<any>;
   @Prop() listEl: FunctionalComponent<any>;
@@ -39,7 +40,7 @@ export class Pagination implements ComponentInterface {
   @Prop() orderDirection?: string;
   @Prop() dataPropsMap: any;
   @Prop() display: "list" | "grid" = "list";
-  @Prop({ mutable: true }) page?= 0;
+  @Prop({ mutable: true }) page? = 0;
   @Prop({ mutable: true }) results: any[] = [];
   @Prop() groupBy: string;
   @Prop() loadingSpinner = "bubbles";
@@ -143,9 +144,9 @@ export class Pagination implements ComponentInterface {
         (this.pageCountKey &&
           this.pageKey &&
           this.pageKey.split(".").reduce((o, i) => o[i], event.detail.data) ===
-          this.pageCountKey
-            .split(".")
-            .reduce((o, i) => o[i], event.detail.data))
+            this.pageCountKey
+              .split(".")
+              .reduce((o, i) => o[i], event.detail.data))
       ) {
         this.infiniteScrollEl.disabled = true;
       }
@@ -172,9 +173,8 @@ export class Pagination implements ComponentInterface {
       this.display === "list" &&
       this.virtualScrollEl?.querySelector("ion-item")
     ) {
-      this.approxItemHeight = this.virtualScrollEl.querySelector(
-        "ion-item"
-      ).offsetHeight;
+      this.approxItemHeight =
+        this.virtualScrollEl.querySelector("ion-item").offsetHeight;
     } else if (
       this.display === "grid" &&
       this.virtualScrollEl?.querySelectorAll("ion-col")
@@ -213,8 +213,11 @@ export class Pagination implements ComponentInterface {
   @Method()
   async addResults(results: any[] = []) {
     if (this.removeDuplicates) {
-      const newResultIds = results.map(result => result.id);
-      this.results = [...this.results.filter(result => !newResultIds.includes(result.id)), ...results];
+      const newResultIds = results.map((result) => result.id);
+      this.results = [
+        ...this.results.filter((result) => !newResultIds.includes(result.id)),
+        ...results,
+      ];
     } else {
       this.results = [...this.results, ...results];
     }

@@ -1,3 +1,4 @@
+import { FireEnjinUploadEvent } from "@fireenjin/sdk";
 import {
   Component,
   ComponentInterface,
@@ -39,7 +40,8 @@ export class InputFile implements ComponentInterface {
   @State() selectedFile: string;
   @State() dragOver = false;
 
-  @Event() fireenjinUpload: EventEmitter;
+  @Event() fireenjinUpload: EventEmitter<FireEnjinUploadEvent>;
+
   @Event() ionInput: EventEmitter;
 
   @Watch("value")
@@ -159,15 +161,15 @@ export class InputFile implements ComponentInterface {
               {this.dragOver
                 ? "Drop File Here"
                 : this.label
-                  ? this.label
-                  : "Upload a File"}
+                ? this.label
+                : "Upload a File"}
             </h2>
             <p>
               {this.selectedFile
                 ? this.selectedFile
                 : this.defaultValue
-                  ? this.defaultValue
-                  : "Select a letterhead"}
+                ? this.defaultValue
+                : "Select a letterhead"}
             </p>
           </div>
         </ion-item>

@@ -11,6 +11,7 @@ import {
 import Debounce from "debounce-decorator";
 import { popoverController, TextFieldTypes } from "@ionic/core";
 import pathToValue from "../../helpers/pathToValue";
+import { FireEnjinFetchEvent } from "@fireenjin/sdk";
 
 @Component({
   tag: "fireenjin-input-search",
@@ -43,9 +44,8 @@ export class InputSearch implements ComponentInterface {
   @Prop() lines: "full" | "inset" | "none";
   @Prop() labelPosition?: "stacked" | "fixed" | "floating";
 
-
   @Event() ionInput: EventEmitter;
-  @Event() fireenjinFetch: EventEmitter;
+  @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
 
   @Method()
   async checkValidity(options?: {
@@ -170,7 +170,9 @@ export class InputSearch implements ComponentInterface {
       >
         <slot name="start" />
         {this.iconStart && <ion-icon name={this.iconStart} slot="start" />}
-        {this.label && <ion-label position={this.labelPosition}>{this.label}</ion-label>}
+        {this.label && (
+          <ion-label position={this.labelPosition}>{this.label}</ion-label>
+        )}
         <ion-input
           onInput={(event) => this.onInput(event)}
           ref={(el) => (this.inputEl = el)}

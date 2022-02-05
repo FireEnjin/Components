@@ -1,3 +1,4 @@
+import { FireEnjinFetchEvent } from "@fireenjin/sdk";
 import { SelectCompareFn, SelectInterface } from "@ionic/core";
 import {
   Component,
@@ -17,24 +18,24 @@ import {
   styleUrl: "select.css",
 })
 export class Select implements ComponentInterface {
-  @Event() fireenjinFetch: EventEmitter;
+  @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
   @Event() ionChange: EventEmitter<{
     event;
     name: string;
     value: any;
   }>;
   /**
-  * If `true`, the user cannot interact with the select.
-  */
+   * If `true`, the user cannot interact with the select.
+   */
   @Prop() disabled = false;
   /**
    * The text to display on the cancel button.
    */
-  @Prop() cancelText = 'Dismiss';
+  @Prop() cancelText = "Dismiss";
   /**
    * The text to display on the ok button.
    */
-  @Prop() okText = 'Okay';
+  @Prop() okText = "Okay";
   /**
    * The text to display when the select is empty.
    */
@@ -54,7 +55,7 @@ export class Select implements ComponentInterface {
   /**
    * The interface the select should use: `action-sheet`, `popover` or `alert`.
    */
-  @Prop() interface: SelectInterface = 'alert';
+  @Prop() interface: SelectInterface = "alert";
   /**
    * Any additional options that the `alert`, `action-sheet` or `popover` interface
    * can take. See the [ion-alert docs](../alert), the
@@ -100,7 +101,11 @@ export class Select implements ComponentInterface {
 
   @Listen("fireenjinSuccess", { target: "body" })
   onSuccess(event) {
-    if (event?.detail?.name !== "select" || event.detail.endpoint !== this.endpoint) return;
+    if (
+      event?.detail?.name !== "select" ||
+      event.detail.endpoint !== this.endpoint
+    )
+      return;
     this.results = event?.detail?.data?.results
       ? event.detail.data.results
       : [];
@@ -114,7 +119,11 @@ export class Select implements ComponentInterface {
     this.fireenjinFetch.emit({
       name: "select",
       endpoint: this.endpoint,
-      dataPropsMap: this.dataPropsMap ? this.dataPropsMap : this.resultsKey ? { [this.resultsKey]: "results" } : null,
+      dataPropsMap: this.dataPropsMap
+        ? this.dataPropsMap
+        : this.resultsKey
+        ? { [this.resultsKey]: "results" }
+        : null,
       params: {
         data: {
           ...(this.query ? { query: this.query } : {}),
@@ -136,7 +145,9 @@ export class Select implements ComponentInterface {
       <Host>
         <ion-item lines={this.lines}>
           {this.icon && <ion-icon slot="start" name={this.icon} />}
-          {this.label && <ion-label position={this.labelPosition}>{this.label}</ion-label>}
+          {this.label && (
+            <ion-label position={this.labelPosition}>{this.label}</ion-label>
+          )}
           {/* <select
             title={this.placeholder || this.name}
             disabled={this.disabled}
@@ -175,22 +186,28 @@ export class Select implements ComponentInterface {
             multiple={this.multiple}
             cancelText={this.cancelText}
             placeholder={this.placeholder}
-            interfaceOptions={this.interfaceOptions ? this.interfaceOptions : {
-              header: this.header,
-              subHeader: this.subHeader,
-              message: this.message,
-            }}
+            interfaceOptions={
+              this.interfaceOptions
+                ? this.interfaceOptions
+                : {
+                    header: this.header,
+                    subHeader: this.subHeader,
+                    message: this.message,
+                  }
+            }
           >
-            {(this.options ? this.options : []).map((option) => this.optionEl ? (
-              this.optionEl(option)
-            ) : (
-              <ion-select-option
-                value={option.value}
-                disabled={option.disabled}
-              >
-                {option.label}
-              </ion-select-option>
-            ))}
+            {(this.options ? this.options : []).map((option) =>
+              this.optionEl ? (
+                this.optionEl(option)
+              ) : (
+                <ion-select-option
+                  value={option.value}
+                  disabled={option.disabled}
+                >
+                  {option.label}
+                </ion-select-option>
+              )
+            )}
             {(this.results ? this.results : []).map((result) =>
               this.optionEl ? (
                 this.optionEl(result)

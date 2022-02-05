@@ -1,3 +1,4 @@
+import { FireEnjinUploadEvent } from "@fireenjin/sdk";
 import {
   Component,
   ComponentInterface,
@@ -80,7 +81,7 @@ export class InputPhoto implements ComponentInterface {
   @Prop({ mutable: true }) loading: boolean;
   @State() photoUrl: string;
 
-  @Event() fireenjinUpload: EventEmitter;
+  @Event() fireenjinUpload: EventEmitter<FireEnjinUploadEvent>;
   @Event() ionInput: EventEmitter;
 
   @Listen("fireenjinSuccess", { target: "body" })
@@ -103,8 +104,8 @@ export class InputPhoto implements ComponentInterface {
     this.photoUrl = this.value
       ? this.value
       : this.fallback
-        ? this.fallback
-        : null;
+      ? this.fallback
+      : null;
     if (this.value) {
       this.ionInput.emit({
         name: this.name,
@@ -118,9 +119,8 @@ export class InputPhoto implements ComponentInterface {
     if (this.disabled) {
       return false;
     }
-    const fileInputEl: any = this.photoUploaderEl.querySelector(
-      'input[type="file"]'
-    );
+    const fileInputEl: any =
+      this.photoUploaderEl.querySelector('input[type="file"]');
     fileInputEl.click();
   }
 
@@ -152,7 +152,9 @@ export class InputPhoto implements ComponentInterface {
           path: this.path,
           file,
           fileName: this.fileName,
-          encodedContent: this.resize ? resizeImage(event?.target?.result as any) : event?.target?.result,
+          encodedContent: this.resize
+            ? resizeImage(event?.target?.result as any)
+            : event?.target?.result,
         },
       });
     };

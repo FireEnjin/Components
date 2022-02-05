@@ -26,10 +26,10 @@
 
 ## Events
 
-| Event             | Description | Type               |
-| ----------------- | ----------- | ------------------ |
-| `fireenjinUpload` |             | `CustomEvent<any>` |
-| `ionInput`        |             | `CustomEvent<any>` |
+| Event             | Description | Type                                |
+| ----------------- | ----------- | ----------------------------------- |
+| `fireenjinUpload` |             | `CustomEvent<FireEnjinUploadEvent>` |
+| `ionInput`        |             | `CustomEvent<any>`                  |
 
 
 ## Methods

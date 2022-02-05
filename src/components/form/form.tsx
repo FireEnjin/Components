@@ -1,3 +1,4 @@
+import { FireEnjinFetchEvent, FireEnjinSubmitEvent } from "@fireenjin/sdk";
 import {
   Component,
   ComponentInterface,
@@ -121,17 +122,15 @@ export class Form implements ComponentInterface {
    * The action to use for the form
    */
   @Prop() action: string;
-  @Prop() apiUrl: string;
+  /**
+   * Disable the fetch event emitted when component loads
+   */
+  @Prop() disableFetch = false;
 
   /**
    * Emitted on load with endpoint
    */
-  @Event() fireenjinFetch: EventEmitter<{
-    event?;
-    endpoint: string;
-    params?: any;
-    name?: string;
-  }>;
+  @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
   /**
    * Emitted when the user resets the form
    */
@@ -145,13 +144,7 @@ export class Form implements ComponentInterface {
   /**
    * Emitted when the user submits the form
    */
-  @Event() fireenjinSubmit: EventEmitter<{
-    event;
-    id: string;
-    endpoint: string;
-    data: any;
-    name: string;
-  }>;
+  @Event() fireenjinSubmit: EventEmitter<FireEnjinSubmitEvent>;
   /**
    * Emitted when a filed checks validation
    */
@@ -206,7 +199,7 @@ export class Form implements ComponentInterface {
     }
   }
 
-  @Listen("fireenjinSuccess", { target: "body" })
+  @Listen("fireenjinSuccess", { target: "document" })
   async onSuccess(event) {
     if (event.detail.target === this.fireenjinFormEl && this.findDataMap) {
       this.formData = await this.mapFormData(
@@ -217,19 +210,17 @@ export class Form implements ComponentInterface {
     }
   }
 
-  @Method()
-  async setLoading(value: boolean) {
-    this.loading = !!value;
-  }
-
   /**
    * Emit fireenjinSubmit event with form data
    * @param event The form submit event
    */
   @Method()
-  async submit(event?, options = {
-    manual: false
-  }) {
+  async submit(
+    event?,
+    options = {
+      manual: false,
+    }
+  ) {
     if (event) event.preventDefault();
     await this.checkFormValidity();
     this.loading = !this.disableLoader;
@@ -283,10 +274,10 @@ export class Form implements ComponentInterface {
         !(await inputEl.checkValidity(
           !reportValidity
             ? {
-              validationClassOptions: {
-                ignoreInvalid: true,
-              },
-            }
+                validationClassOptions: {
+                  ignoreInvalid: true,
+                },
+              }
             : null
         ))
       ) {
@@ -372,9 +363,9 @@ export class Form implements ComponentInterface {
     setTimeout(() => {
       this.componentIsLoaded = true;
     }, 2000);
-    if (this.findEndpoint && this.documentId) {
+    if (!this.disableFetch && (this.endpoint || this.findEndpoint)) {
       this.fireenjinFetch.emit({
-        endpoint: this.findEndpoint,
+        endpoint: this.findEndpoint || this.endpoint,
         params: {
           ...(this.findParams ? this.findParams : {}),
           id: this.documentId,
@@ -392,7 +383,7 @@ export class Form implements ComponentInterface {
         ref={(el) => (this.formEl = el as HTMLFormElement)}
         name={this.name}
         id={this.name}
-        action={this.action ? this.action : `${this.apiUrl ? this.apiUrl : "http://localhost:4000"}/${this.endpoint}`}
+        action={this.action ? this.action : `/${this.endpoint}`}
         method={this.method}
         onReset={(event) => this.reset(event)}
         onSubmit={(event) => this.submit(event)}

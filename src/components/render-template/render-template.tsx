@@ -1,3 +1,4 @@
+import { FireEnjinFetchEvent } from "@fireenjin/sdk";
 import {
   Build,
   Component,
@@ -15,27 +16,31 @@ import backoff from "../../helpers/backoff";
 import injectScript from "../../helpers/injectScript";
 
 @Component({
-  tag: "fireenjin-render-template"
+  tag: "fireenjin-render-template",
 })
 export class RenderTemplate implements ComponentInterface {
-  @Event() fireenjinFetch: EventEmitter;
+  @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
 
   @Prop() templateId: string;
   @Prop() data: any = {};
   @Prop({ mutable: true }) template: any = {};
-  @Prop({ mutable: true }) partials: { id: string; html: string; }[];
+  @Prop({ mutable: true }) partials: { id: string; html: string }[];
 
   @State() html = "";
 
   async componentWillLoad() {
     if (!Build?.isBrowser) return;
-    if (!(window as any)?.Handlebars) await injectScript('https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js');
-    if (this.templateId) this.fireenjinFetch.emit({
-      endpoint: "findTemplate",
-      params: {
-        id: this.templateId
-      }
-    });
+    if (!(window as any)?.Handlebars)
+      await injectScript(
+        "https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"
+      );
+    if (this.templateId)
+      this.fireenjinFetch.emit({
+        endpoint: "findTemplate",
+        params: {
+          id: this.templateId,
+        },
+      });
   }
 
   componentDidLoad() {
@@ -44,8 +49,8 @@ export class RenderTemplate implements ComponentInterface {
   }
 
   @Method()
-  async setPartials(partials?: { id: string; html: string; }[]) {
-    this.partials = partials?.length && partials || [];
+  async setPartials(partials?: { id: string; html: string }[]) {
+    this.partials = (partials?.length && partials) || [];
     for (const partial of this.partials) {
       if (!partial.html) continue;
       try {
@@ -58,12 +63,17 @@ export class RenderTemplate implements ComponentInterface {
 
   @Method()
   async renderTemplate() {
-    this.html = (window as any).Handlebars.compile(this.template?.html ? this.template?.html : "")(this.data ? this.data : {});
+    this.html = (window as any).Handlebars.compile(
+      this.template?.html ? this.template?.html : ""
+    )(this.data ? this.data : {});
   }
 
   @Listen("fireenjinSuccess", { target: "body" })
   onSuccess(event) {
-    if (event?.detail?.endpoint === "findTemplate" && event.detail?.data?.template?.id === this.templateId) {
+    if (
+      event?.detail?.endpoint === "findTemplate" &&
+      event.detail?.data?.template?.id === this.templateId
+    ) {
       this.template = event?.detail?.data?.template
         ? event.detail.data.template
         : null;

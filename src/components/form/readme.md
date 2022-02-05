@@ -10,10 +10,10 @@
 | Property             | Attribute              | Description                                                            | Type                                           | Default     |
 | -------------------- | ---------------------- | ---------------------------------------------------------------------- | ---------------------------------------------- | ----------- |
 | `action`             | `action`               | The action to use for the form                                         | `string`                                       | `undefined` |
-| `apiUrl`             | `api-url`              |                                                                        | `string`                                       | `undefined` |
 | `beforeSubmit`       | --                     | A method that runs before form submission to allow editing of formData | `(data: any, options?: any) => Promise<any>`   | `undefined` |
 | `confirmExit`        | `confirm-exit`         | Confirm leaving the page when the form is filled                       | `boolean`                                      | `false`     |
 | `disableEnterButton` | `disable-enter-button` | Should the enter button binding be disabled                            | `boolean`                                      | `false`     |
+| `disableFetch`       | `disable-fetch`        | Disable the fetch event emitted when component loads                   | `boolean`                                      | `false`     |
 | `disableLoader`      | `disable-loader`       | Should the form disable the loader on submit                           | `boolean`                                      | `false`     |
 | `disableReset`       | `disable-reset`        | Should the form disable reset                                          | `boolean`                                      | `false`     |
 | `documentId`         | `document-id`          | The id of the document being edited                                    | `string`                                       | `undefined` |
@@ -40,9 +40,9 @@
 
 | Event                 | Description                            | Type                                                                                  |
 | --------------------- | -------------------------------------- | ------------------------------------------------------------------------------------- |
-| `fireenjinFetch`      | Emitted on load with endpoint          | `CustomEvent<{ event?: any; endpoint: string; params?: any; name?: string; }>`        |
+| `fireenjinFetch`      | Emitted on load with endpoint          | `CustomEvent<FireEnjinFetchEvent>`                                                    |
 | `fireenjinReset`      | Emitted when the user resets the form  | `CustomEvent<{ event: any; id: string; endpoint: string; data: any; name: string; }>` |
-| `fireenjinSubmit`     | Emitted when the user submits the form | `CustomEvent<{ event: any; id: string; endpoint: string; data: any; name: string; }>` |
+| `fireenjinSubmit`     | Emitted when the user submits the form | `CustomEvent<FireEnjinSubmitEvent>`                                                   |
 | `fireenjinValidation` | Emitted when a filed checks validation | `CustomEvent<{ event: any; isValid: boolean; name: string; }>`                        |
 
 
@@ -79,16 +79,6 @@ Type: `Promise<boolean>`
 
 
 ### `setFormData(data: any) => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `setLoading(value: boolean) => Promise<void>`
 
 
 

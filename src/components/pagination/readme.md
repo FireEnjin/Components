@@ -41,9 +41,9 @@
 
 ## Events
 
-| Event            | Description | Type               |
-| ---------------- | ----------- | ------------------ |
-| `fireenjinFetch` |             | `CustomEvent<any>` |
+| Event            | Description | Type                               |
+| ---------------- | ----------- | ---------------------------------- |
+| `fireenjinFetch` |             | `CustomEvent<FireEnjinFetchEvent>` |
 
 
 ## Methods

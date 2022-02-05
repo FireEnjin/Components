@@ -12032,6 +12032,10 @@ class Form {
      * The HTTP method to use when submitting the form
      */
     this.method = "post";
+    /**
+     * Disable the fetch event emitted when component loads
+     */
+    this.disableFetch = false;
   }
   onInput(event) {
     if (event &&
@@ -12070,15 +12074,12 @@ class Form {
       await this.setFormData(this.formData);
     }
   }
-  async setLoading(value) {
-    this.loading = !!value;
-  }
   /**
    * Emit fireenjinSubmit event with form data
    * @param event The form submit event
    */
   async submit(event, options = {
-    manual: false
+    manual: false,
   }) {
     if (event)
       event.preventDefault();
@@ -12204,9 +12205,9 @@ class Form {
     setTimeout(() => {
       this.componentIsLoaded = true;
     }, 2000);
-    if (this.findEndpoint && this.documentId) {
+    if (!this.disableFetch && (this.endpoint || this.findEndpoint)) {
       this.fireenjinFetch.emit({
-        endpoint: this.findEndpoint,
+        endpoint: this.findEndpoint || this.endpoint,
         params: Object.assign(Object.assign({}, (this.findParams ? this.findParams : {})), { id: this.documentId }),
       });
     }
@@ -12215,7 +12216,7 @@ class Form {
     }
   }
   render() {
-    return (hAsync("form", { ref: (el) => (this.formEl = el), name: this.name, id: this.name, action: this.action ? this.action : `${this.apiUrl ? this.apiUrl : "http://localhost:4000"}/${this.endpoint}`, method: this.method, onReset: (event) => this.reset(event), onSubmit: (event) => this.submit(event), class: { "is-loading": this.loading } }, hAsync("slot", null), !this.hideControls && (hAsync("ion-grid", { class: "form-controls" }, hAsync("ion-row", null, hAsync("ion-col", null, this.resetButton ? (hAsync("ion-button", { ref: (el) => (this.resetButtonEl = el), type: "reset", fill: this.resetButtonFill, color: this.resetButtonColor, innerHTML: this.resetButton })) : null), hAsync("ion-col", null, this.submitButton ? (hAsync("ion-button", { ref: (el) => (this.submitButtonEl = el), type: "submit", color: this.submitButtonColor, fill: this.submitButtonFill, innerHTML: this.submitButton })) : null))))));
+    return (hAsync("form", { ref: (el) => (this.formEl = el), name: this.name, id: this.name, action: this.action ? this.action : `/${this.endpoint}`, method: this.method, onReset: (event) => this.reset(event), onSubmit: (event) => this.submit(event), class: { "is-loading": this.loading } }, hAsync("slot", null), !this.hideControls && (hAsync("ion-grid", { class: "form-controls" }, hAsync("ion-row", null, hAsync("ion-col", null, this.resetButton ? (hAsync("ion-button", { ref: (el) => (this.resetButtonEl = el), type: "reset", fill: this.resetButtonFill, color: this.resetButtonColor, innerHTML: this.resetButton })) : null), hAsync("ion-col", null, this.submitButton ? (hAsync("ion-button", { ref: (el) => (this.submitButtonEl = el), type: "submit", color: this.submitButtonColor, fill: this.submitButtonFill, innerHTML: this.submitButton })) : null))))));
   }
   get fireenjinFormEl() { return getElement(this); }
   static get style() { return formCss; }
@@ -12247,15 +12248,14 @@ class Form {
       "findDataMap": [8, "find-data-map"],
       "method": [1],
       "action": [1],
-      "apiUrl": [1, "api-url"],
-      "setLoading": [64],
+      "disableFetch": [4, "disable-fetch"],
       "submit": [64],
       "reset": [64],
       "checkFormValidity": [64],
       "reportFormValidity": [64],
       "setFormData": [64]
     },
-    "$listeners$": [[0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onSelect"], [0, "keydown", "onKeyDown"], [16, "fireenjinSuccess", "onSuccess"]],
+    "$listeners$": [[0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onSelect"], [0, "keydown", "onKeyDown"], [4, "fireenjinSuccess", "onSuccess"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
@@ -25433,7 +25433,9 @@ class InputPhoto {
           path: this.path,
           file,
           fileName: this.fileName,
-          encodedContent: this.resize ? resizeImage((_a = event === null || event === void 0 ? void 0 : event.target) === null || _a === void 0 ? void 0 : _a.result) : (_b = event === null || event === void 0 ? void 0 : event.target) === null || _b === void 0 ? void 0 : _b.result,
+          encodedContent: this.resize
+            ? resizeImage((_a = event === null || event === void 0 ? void 0 : event.target) === null || _a === void 0 ? void 0 : _a.result)
+            : (_b = event === null || event === void 0 ? void 0 : event.target) === null || _b === void 0 ? void 0 : _b.result,
         },
       });
     };
@@ -26805,7 +26807,7 @@ class InputSearch {
   render() {
     var _a;
     return [
-      hAsync("ion-item", { lines: this.lines, class: "search-input", ref: (el) => (this.itemEl = el), onClick: (event) => this.onInput(event) }, hAsync("slot", { name: "start" }), this.iconStart && hAsync("ion-icon", { name: this.iconStart, slot: "start" }), this.label && hAsync("ion-label", { position: this.labelPosition }, this.label), hAsync("ion-input", { onInput: (event) => this.onInput(event), ref: (el) => (this.inputEl = el), disabled: this.disabled, type: this.type, name: this.name, placeholder: this.placeholder, required: this.required, autofocus: this.autofocus, value: this.value }), this.iconEnd && hAsync("ion-icon", { name: this.iconEnd, slot: "end" }), hAsync("slot", { name: "end" })),
+      hAsync("ion-item", { lines: this.lines, class: "search-input", ref: (el) => (this.itemEl = el), onClick: (event) => this.onInput(event) }, hAsync("slot", { name: "start" }), this.iconStart && hAsync("ion-icon", { name: this.iconStart, slot: "start" }), this.label && (hAsync("ion-label", { position: this.labelPosition }, this.label)), hAsync("ion-input", { onInput: (event) => this.onInput(event), ref: (el) => (this.inputEl = el), disabled: this.disabled, type: this.type, name: this.name, placeholder: this.placeholder, required: this.required, autofocus: this.autofocus, value: this.value }), this.iconEnd && hAsync("ion-icon", { name: this.iconEnd, slot: "end" }), hAsync("slot", { name: "end" })),
       this.mode === "inline" && ((_a = this.results) === null || _a === void 0 ? void 0 : _a.length)
         ? this.results.map((result) => this.template(result))
         : null,
@@ -34509,7 +34511,8 @@ class Pagination$1 {
       return;
     if (this.display === "list" &&
       ((_a = this.virtualScrollEl) === null || _a === void 0 ? void 0 : _a.querySelector("ion-item"))) {
-      this.approxItemHeight = this.virtualScrollEl.querySelector("ion-item").offsetHeight;
+      this.approxItemHeight =
+        this.virtualScrollEl.querySelector("ion-item").offsetHeight;
     }
     else if (this.display === "grid" &&
       ((_b = this.virtualScrollEl) === null || _b === void 0 ? void 0 : _b.querySelectorAll("ion-col"))) {
@@ -34542,8 +34545,11 @@ class Pagination$1 {
   }
   async addResults(results = []) {
     if (this.removeDuplicates) {
-      const newResultIds = results.map(result => result.id);
-      this.results = [...this.results.filter(result => !newResultIds.includes(result.id)), ...results];
+      const newResultIds = results.map((result) => result.id);
+      this.results = [
+        ...this.results.filter((result) => !newResultIds.includes(result.id)),
+        ...results,
+      ];
     }
     else {
       this.results = [...this.results, ...results];
@@ -37617,13 +37623,13 @@ class RenderTemplate {
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
       return;
     if (!((_a = window) === null || _a === void 0 ? void 0 : _a.Handlebars))
-      await injectScript('https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js');
+      await injectScript("https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js");
     if (this.templateId)
       this.fireenjinFetch.emit({
         endpoint: "findTemplate",
         params: {
-          id: this.templateId
-        }
+          id: this.templateId,
+        },
       });
   }
   componentDidLoad() {
@@ -37631,7 +37637,7 @@ class RenderTemplate {
     this.setPartials(this.partials);
   }
   async setPartials(partials) {
-    this.partials = (partials === null || partials === void 0 ? void 0 : partials.length) && partials || [];
+    this.partials = ((partials === null || partials === void 0 ? void 0 : partials.length) && partials) || [];
     for (const partial of this.partials) {
       if (!partial.html)
         continue;
@@ -37649,7 +37655,8 @@ class RenderTemplate {
   }
   onSuccess(event) {
     var _a, _b, _c, _d, _e, _f;
-    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.endpoint) === "findTemplate" && ((_d = (_c = (_b = event.detail) === null || _b === void 0 ? void 0 : _b.data) === null || _c === void 0 ? void 0 : _c.template) === null || _d === void 0 ? void 0 : _d.id) === this.templateId) {
+    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.endpoint) === "findTemplate" &&
+      ((_d = (_c = (_b = event.detail) === null || _b === void 0 ? void 0 : _b.data) === null || _c === void 0 ? void 0 : _c.template) === null || _d === void 0 ? void 0 : _d.id) === this.templateId) {
       this.template = ((_f = (_e = event === null || event === void 0 ? void 0 : event.detail) === null || _e === void 0 ? void 0 : _e.data) === null || _f === void 0 ? void 0 : _f.template)
         ? event.detail.data.template
         : null;
@@ -40341,17 +40348,17 @@ class Select$1 {
     this.fireenjinFetch = createEvent(this, "fireenjinFetch", 7);
     this.ionChange = createEvent(this, "ionChange", 7);
     /**
-    * If `true`, the user cannot interact with the select.
-    */
+     * If `true`, the user cannot interact with the select.
+     */
     this.disabled = false;
     /**
      * The text to display on the cancel button.
      */
-    this.cancelText = 'Dismiss';
+    this.cancelText = "Dismiss";
     /**
      * The text to display on the ok button.
      */
-    this.okText = 'Okay';
+    this.okText = "Okay";
     /**
      * If `true`, the select can accept multiple values.
      */
@@ -40359,7 +40366,7 @@ class Select$1 {
     /**
      * The interface the select should use: `action-sheet`, `popover` or `alert`.
      */
-    this.interface = 'alert';
+    this.interface = "alert";
     /**
      * Any additional options that the `alert`, `action-sheet` or `popover` interface
      * can take. See the [ion-alert docs](../alert), the
@@ -40377,7 +40384,8 @@ class Select$1 {
   }
   onSuccess(event) {
     var _a, _b, _c;
-    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.name) !== "select" || event.detail.endpoint !== this.endpoint)
+    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.name) !== "select" ||
+      event.detail.endpoint !== this.endpoint)
       return;
     this.results = ((_c = (_b = event === null || event === void 0 ? void 0 : event.detail) === null || _b === void 0 ? void 0 : _b.data) === null || _c === void 0 ? void 0 : _c.results)
       ? event.detail.data.results
@@ -40392,7 +40400,11 @@ class Select$1 {
     this.fireenjinFetch.emit({
       name: "select",
       endpoint: this.endpoint,
-      dataPropsMap: this.dataPropsMap ? this.dataPropsMap : this.resultsKey ? { [this.resultsKey]: "results" } : null,
+      dataPropsMap: this.dataPropsMap
+        ? this.dataPropsMap
+        : this.resultsKey
+          ? { [this.resultsKey]: "results" }
+          : null,
       params: Object.assign({ data: Object.assign(Object.assign(Object.assign({}, (this.query ? { query: this.query } : {})), (this.orderBy ? { orderBy: this.orderBy } : {})), { limit: this.limit ? this.limit : 15 }) }, (this.params ? this.params : {})),
     });
   }
@@ -40400,11 +40412,13 @@ class Select$1 {
     return;
   }
   render() {
-    return (hAsync(Host, null, hAsync("ion-item", { lines: this.lines }, this.icon && hAsync("ion-icon", { slot: "start", name: this.icon }), this.label && hAsync("ion-label", { position: this.labelPosition }, this.label), hAsync("ion-select", { disabled: this.disabled, selectedText: this.selectedText, interface: this.interface, compareWith: this.compareWith, name: this.name, value: this.value, okText: this.okText, multiple: this.multiple, cancelText: this.cancelText, placeholder: this.placeholder, interfaceOptions: this.interfaceOptions ? this.interfaceOptions : {
-        header: this.header,
-        subHeader: this.subHeader,
-        message: this.message,
-      } }, (this.options ? this.options : []).map((option) => this.optionEl ? (this.optionEl(option)) : (hAsync("ion-select-option", { value: option.value, disabled: option.disabled }, option.label))), (this.results ? this.results : []).map((result) => this.optionEl ? (this.optionEl(result)) : (hAsync("ion-select-option", { value: result.id }, result.name)))))));
+    return (hAsync(Host, null, hAsync("ion-item", { lines: this.lines }, this.icon && hAsync("ion-icon", { slot: "start", name: this.icon }), this.label && (hAsync("ion-label", { position: this.labelPosition }, this.label)), hAsync("ion-select", { disabled: this.disabled, selectedText: this.selectedText, interface: this.interface, compareWith: this.compareWith, name: this.name, value: this.value, okText: this.okText, multiple: this.multiple, cancelText: this.cancelText, placeholder: this.placeholder, interfaceOptions: this.interfaceOptions
+        ? this.interfaceOptions
+        : {
+          header: this.header,
+          subHeader: this.subHeader,
+          message: this.message,
+        } }, (this.options ? this.options : []).map((option) => this.optionEl ? (this.optionEl(option)) : (hAsync("ion-select-option", { value: option.value, disabled: option.disabled }, option.label))), (this.results ? this.results : []).map((result) => this.optionEl ? (this.optionEl(result)) : (hAsync("ion-select-option", { value: result.id }, result.name)))))));
   }
   static get style() { return selectCss; }
   static get cmpMeta() { return {
@@ -48500,11 +48514,13 @@ class SelectTags {
     }
     if (this.multiple) {
       try {
-        this.value = this.choices.getValue().map((choice) => this.options.find((option) => option.value === choice.value).value);
+        this.value = this.choices
+          .getValue()
+          .map((choice) => this.options.find((option) => option.value === choice.value).value);
         this.ionChange.emit({
           event,
           name: this.name,
-          value: this.value
+          value: this.value,
         });
       }
       catch (error) {
@@ -48516,19 +48532,21 @@ class SelectTags {
       this.ionChange.emit({
         event,
         name: this.name,
-        value: this.value
+        value: this.value,
       });
     }
   }
   async onKeyDown(event) {
     var _a, _b;
-    if (event.key === "Enter" && this.allowAdding && ((_b = (_a = event.target) === null || _a === void 0 ? void 0 : _a.value) === null || _b === void 0 ? void 0 : _b.length) >= 1) {
+    if (event.key === "Enter" &&
+      this.allowAdding &&
+      ((_b = (_a = event.target) === null || _a === void 0 ? void 0 : _a.value) === null || _b === void 0 ? void 0 : _b.length) >= 1) {
       const value = event.target.value.toLocaleLowerCase();
       this.value = [...(this.value ? this.value : []), value];
       const option = {
         label: event.target.value,
         value,
-        selected: true
+        selected: true,
       };
       this.options.push(option);
       this.choices.setChoices([option]);
@@ -48536,7 +48554,7 @@ class SelectTags {
       this.ionChange.emit({
         event,
         name: this.name,
-        value: this.value
+        value: this.value,
       });
     }
   }
@@ -48574,9 +48592,15 @@ class SelectTags {
   }
   async addResults(results = []) {
     this.results = [...this.results, ...results];
-    this.options = this.results.map(result => ({
-      label: result.label ? result.label : result.name ? result.name : result.id ? result.id : null,
-      value: result.value ? result.value : result.id ? result.id : null
+    this.options = this.results.map((result) => ({
+      label: result.label
+        ? result.label
+        : result.name
+          ? result.name
+          : result.id
+            ? result.id
+            : null,
+      value: result.value ? result.value : result.id ? result.id : null,
     }));
   }
   async clearResults() {
@@ -48598,7 +48622,11 @@ class SelectTags {
     this.fireenjinFetch.emit({
       name: "selectTags",
       endpoint: this.endpoint,
-      dataPropsMap: this.dataPropsMap ? this.dataPropsMap : this.resultsKey ? { [this.resultsKey]: "results" } : null,
+      dataPropsMap: this.dataPropsMap
+        ? this.dataPropsMap
+        : this.resultsKey
+          ? { [this.resultsKey]: "results" }
+          : null,
       disableFetch: this.disableFetch,
       params: {
         data: this.fetchData ? this.fetchData : this.paramData,
@@ -48661,7 +48689,7 @@ class SelectTags {
   }
   render() {
     const OptionEl = "option";
-    return (hAsync("ion-item", { ref: (el) => (this.itemEl = el), lines: this.lines }, this.label && hAsync("ion-label", { position: this.labelPosition }, this.label), hAsync("select", { title: this.placeholder || this.name, disabled: this.disabled, multiple: this.multiple, name: this.name, required: this.required, ref: (el) => (this.choicesEl = el) }, hAsync("slot", null), !this.multiple && this.placeholder ? (hAsync(OptionEl, { placeholder: true }, this.placeholder)) : null, this.options.map((option) => (hAsync("option", { selected: this.multiple
+    return (hAsync("ion-item", { ref: (el) => (this.itemEl = el), lines: this.lines }, this.label && (hAsync("ion-label", { position: this.labelPosition }, this.label)), hAsync("select", { title: this.placeholder || this.name, disabled: this.disabled, multiple: this.multiple, name: this.name, required: this.required, ref: (el) => (this.choicesEl = el) }, hAsync("slot", null), !this.multiple && this.placeholder ? (hAsync(OptionEl, { placeholder: true }, this.placeholder)) : null, this.options.map((option) => (hAsync("option", { selected: this.multiple
         ? this.value && this.value.indexOf(option.value) >= 0
         : option.value + "" === this.value + "", value: option.value }, option.label))))));
   }

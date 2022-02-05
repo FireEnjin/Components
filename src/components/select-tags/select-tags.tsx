@@ -1,3 +1,4 @@
+import { FireEnjinFetchEvent } from "@fireenjin/sdk";
 import {
   Component,
   ComponentInterface,
@@ -26,7 +27,7 @@ export class SelectTags implements ComponentInterface {
     name: string;
     value: any;
   }>;
-  @Event() fireenjinFetch: EventEmitter;
+  @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
 
   @Prop() disableFetch = false;
   @Prop() name = "tags";
@@ -45,7 +46,7 @@ export class SelectTags implements ComponentInterface {
   @Prop() orderBy?: string;
   @Prop() orderDirection?: string;
   @Prop() dataPropsMap: any;
-  @Prop({ mutable: true }) page?= 0;
+  @Prop({ mutable: true }) page? = 0;
   @Prop({ mutable: true }) results: any[] = [];
   @Prop() fetchData?: any;
   @Prop() query?: string;
@@ -101,14 +102,17 @@ export class SelectTags implements ComponentInterface {
 
     if (this.multiple) {
       try {
-        this.value = this.choices.getValue().map((choice) =>
-          this.options.find((option) => option.value === choice.value).value
-        );
+        this.value = this.choices
+          .getValue()
+          .map(
+            (choice) =>
+              this.options.find((option) => option.value === choice.value).value
+          );
 
         this.ionChange.emit({
           event,
           name: this.name,
-          value: this.value
+          value: this.value,
         });
       } catch (error) {
         console.log("Error setting value");
@@ -118,20 +122,24 @@ export class SelectTags implements ComponentInterface {
       this.ionChange.emit({
         event,
         name: this.name,
-        value: this.value
+        value: this.value,
       });
     }
   }
 
   @Listen("keydown")
   async onKeyDown(event: any) {
-    if (event.key === "Enter" && this.allowAdding && event.target?.value?.length >= 1) {
+    if (
+      event.key === "Enter" &&
+      this.allowAdding &&
+      event.target?.value?.length >= 1
+    ) {
       const value = event.target.value.toLocaleLowerCase();
       this.value = [...(this.value ? this.value : []), value];
       const option = {
         label: event.target.value,
         value,
-        selected: true
+        selected: true,
       };
       this.options.push(option);
       this.choices.setChoices([option]);
@@ -139,7 +147,7 @@ export class SelectTags implements ComponentInterface {
       this.ionChange.emit({
         event,
         name: this.name,
-        value: this.value
+        value: this.value,
       });
     }
   }
@@ -186,9 +194,15 @@ export class SelectTags implements ComponentInterface {
   @Method()
   async addResults(results: any[] = []) {
     this.results = [...this.results, ...results];
-    this.options = this.results.map(result => ({
-      label: result.label ? result.label : result.name ? result.name : result.id ? result.id : null,
-      value: result.value ? result.value : result.id ? result.id : null
+    this.options = this.results.map((result) => ({
+      label: result.label
+        ? result.label
+        : result.name
+        ? result.name
+        : result.id
+        ? result.id
+        : null,
+      value: result.value ? result.value : result.id ? result.id : null,
     }));
   }
 
@@ -230,7 +244,11 @@ export class SelectTags implements ComponentInterface {
     this.fireenjinFetch.emit({
       name: "selectTags",
       endpoint: this.endpoint,
-      dataPropsMap: this.dataPropsMap ? this.dataPropsMap : this.resultsKey ? { [this.resultsKey]: "results" } : null,
+      dataPropsMap: this.dataPropsMap
+        ? this.dataPropsMap
+        : this.resultsKey
+        ? { [this.resultsKey]: "results" }
+        : null,
       disableFetch: this.disableFetch,
       params: {
         data: this.fetchData ? this.fetchData : this.paramData,
@@ -256,30 +274,37 @@ export class SelectTags implements ComponentInterface {
             },
             item: (classNames, data) => {
               return template(`
-                      <div class="${classNames.item} ${data.highlighted
+                      <div class="${classNames.item} ${
+                data.highlighted
                   ? classNames.highlightedState
                   : classNames.itemSelectable
-                }" data-item data-deletable data-id="${data.id}" data-value="${data.value
-                }" ${data.active ? 'aria-selected="true"' : ""} ${data.disabled ? 'aria-disabled="true"' : ""
-                }>
+              }" data-item data-deletable data-id="${data.id}" data-value="${
+                data.value
+              }" ${data.active ? 'aria-selected="true"' : ""} ${
+                data.disabled ? 'aria-disabled="true"' : ""
+              }>
                         <p class="choice-label-text">${data.label}</p>
-                        ${this.multiple
-                  ? `<ion-icon name="close-circle" data-button />`
-                  : ""
-                }
+                        ${
+                          this.multiple
+                            ? `<ion-icon name="close-circle" data-button />`
+                            : ""
+                        }
                       </div>
                     `);
             },
             choice: (classNames, data) => {
               return template(`
-                      <div class="${classNames.item} ${classNames.itemChoice} ${data.disabled
+                      <div class="${classNames.item} ${classNames.itemChoice} ${
+                data.disabled
                   ? classNames.itemDisabled
                   : classNames.itemSelectable
-                }" data-choice ${data.disabled
+              }" data-choice ${
+                data.disabled
                   ? 'data-choice-disabled aria-disabled="true"'
                   : "data-choice-selectable"
-                } data-id="${data.id}" data-value="${data.value}" ${data.groupId > 0 ? 'role="treeitem"' : 'role="option"'
-                }>
+              } data-id="${data.id}" data-value="${data.value}" ${
+                data.groupId > 0 ? 'role="treeitem"' : 'role="option"'
+              }>
                         <p class="choice-label-text">${data.label}</p>
                       </div>
                     `);
@@ -302,16 +327,18 @@ export class SelectTags implements ComponentInterface {
     if (!this.itemEl || !this.itemEl.shadowRoot) {
       return false;
     }
-    (this.itemEl.shadowRoot.querySelector(
-      ".input-wrapper"
-    ) as HTMLElement).style.overflow = "visible";
+    (
+      this.itemEl.shadowRoot.querySelector(".input-wrapper") as HTMLElement
+    ).style.overflow = "visible";
   }
 
   render() {
     const OptionEl: any = "option";
     return (
       <ion-item ref={(el) => (this.itemEl = el)} lines={this.lines}>
-        {this.label && <ion-label position={this.labelPosition}>{this.label}</ion-label>}
+        {this.label && (
+          <ion-label position={this.labelPosition}>{this.label}</ion-label>
+        )}
         <select
           title={this.placeholder || this.name}
           disabled={this.disabled}
