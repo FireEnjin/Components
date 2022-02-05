@@ -12208,6 +12208,8 @@ class Form {
     if (!this.disableFetch && (this.endpoint || this.findEndpoint)) {
       this.fireenjinFetch.emit({
         endpoint: this.findEndpoint || this.endpoint,
+        name: this.name || null,
+        dataPropsMap: this.findDataMap || null,
         params: Object.assign(Object.assign({}, (this.findParams ? this.findParams : {})), { id: this.documentId }),
       });
     }

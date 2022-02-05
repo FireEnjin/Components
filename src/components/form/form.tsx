@@ -366,6 +366,8 @@ export class Form implements ComponentInterface {
     if (!this.disableFetch && (this.endpoint || this.findEndpoint)) {
       this.fireenjinFetch.emit({
         endpoint: this.findEndpoint || this.endpoint,
+        name: this.name || null,
+        dataPropsMap: this.findDataMap || null,
         params: {
           ...(this.findParams ? this.findParams : {}),
           id: this.documentId,
