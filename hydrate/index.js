@@ -12212,6 +12212,7 @@ class Form {
         endpoint: this.findEndpoint || this.endpoint,
         name: this.name || null,
         dataPropsMap: this.findDataMap || null,
+        method: "get",
         params: Object.assign(Object.assign({}, (this.findParams ? this.findParams : {})), { id: this.documentId }),
       });
     }

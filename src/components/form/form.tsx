@@ -369,6 +369,7 @@ export class Form implements ComponentInterface {
         endpoint: this.findEndpoint || this.endpoint,
         name: this.name || null,
         dataPropsMap: this.findDataMap || null,
+        method: "get",
         params: {
           ...(this.findParams ? this.findParams : {}),
           id: this.documentId,
