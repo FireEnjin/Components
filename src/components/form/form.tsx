@@ -123,9 +123,9 @@ export class Form implements ComponentInterface {
    */
   @Prop() action: string;
   /**
-   * Disable the fetch event emitted when component loads
+   * Emit the fetch event emitted when component loads
    */
-  @Prop() disableFetch = false;
+  @Prop() fetch = false;
 
   /**
    * Emitted on load with endpoint
@@ -364,7 +364,7 @@ export class Form implements ComponentInterface {
     setTimeout(() => {
       this.componentIsLoaded = true;
     }, 2000);
-    if (!this.disableFetch && (this.endpoint || this.findEndpoint)) {
+    if (this.fetch || this.findEndpoint) {
       this.fireenjinFetch.emit({
         endpoint: this.findEndpoint || this.endpoint,
         name: this.name || null,

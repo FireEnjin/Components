@@ -13,12 +13,12 @@
 | `beforeSubmit`       | --                     | A method that runs before form submission to allow editing of formData | `(data: any, options?: any) => Promise<any>`   | `undefined` |
 | `confirmExit`        | `confirm-exit`         | Confirm leaving the page when the form is filled                       | `boolean`                                      | `false`     |
 | `disableEnterButton` | `disable-enter-button` | Should the enter button binding be disabled                            | `boolean`                                      | `false`     |
-| `disableFetch`       | `disable-fetch`        | Disable the fetch event emitted when component loads                   | `boolean`                                      | `false`     |
 | `disableLoader`      | `disable-loader`       | Should the form disable the loader on submit                           | `boolean`                                      | `false`     |
 | `disableReset`       | `disable-reset`        | Should the form disable reset                                          | `boolean`                                      | `false`     |
 | `documentId`         | `document-id`          | The id of the document being edited                                    | `string`                                       | `undefined` |
 | `endpoint`           | `endpoint`             | The endpoint that form submission should link to                       | `string`                                       | `undefined` |
 | `excludeData`        | --                     | The data to exclude from the form submit event                         | `string[]`                                     | `[]`        |
+| `fetch`              | `fetch`                | Emit the fetch event emitted when component loads                      | `boolean`                                      | `false`     |
 | `findDataMap`        | `find-data-map`        | The data map to find                                                   | `any`                                          | `undefined` |
 | `findEndpoint`       | `find-endpoint`        | The endpoint to get data to fill the form                              | `string`                                       | `undefined` |
 | `findParams`         | `find-params`          | The form params                                                        | `any`                                          | `undefined` |

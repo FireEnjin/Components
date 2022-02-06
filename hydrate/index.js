@@ -12033,9 +12033,9 @@ class Form {
      */
     this.method = "post";
     /**
-     * Disable the fetch event emitted when component loads
+     * Emit the fetch event emitted when component loads
      */
-    this.disableFetch = false;
+    this.fetch = false;
   }
   onInput(event) {
     if (event &&
@@ -12207,7 +12207,7 @@ class Form {
     setTimeout(() => {
       this.componentIsLoaded = true;
     }, 2000);
-    if (!this.disableFetch && (this.endpoint || this.findEndpoint)) {
+    if (this.fetch || this.findEndpoint) {
       this.fireenjinFetch.emit({
         endpoint: this.findEndpoint || this.endpoint,
         name: this.name || null,
@@ -12253,7 +12253,7 @@ class Form {
       "findDataMap": [8, "find-data-map"],
       "method": [1],
       "action": [1],
-      "disableFetch": [4, "disable-fetch"],
+      "fetch": [4],
       "submit": [64],
       "reset": [64],
       "checkFormValidity": [64],
