@@ -12065,7 +12065,7 @@ class Form {
   }
   async onSuccess(event) {
     var _a;
-    if (this.fetchDataMap) {
+    if (this.fetch || this.fetchDataMap) {
       this.formData = await this.mapFormData(this.fetchDataMap, ((_a = event.detail) === null || _a === void 0 ? void 0 : _a.data) ? event.detail.data : {});
       await this.setFormData(this.formData);
     }
