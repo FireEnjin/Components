@@ -18,10 +18,9 @@
 | `documentId`         | `document-id`          | The id of the document being edited                                    | `string`                                       | `undefined` |
 | `endpoint`           | `endpoint`             | The endpoint that form submission should link to                       | `string`                                       | `undefined` |
 | `excludeData`        | --                     | The data to exclude from the form submit event                         | `string[]`                                     | `[]`        |
-| `fetch`              | `fetch`                | Emit the fetch event emitted when component loads                      | `boolean`                                      | `false`     |
-| `findDataMap`        | `find-data-map`        | The data map to find                                                   | `any`                                          | `undefined` |
-| `findEndpoint`       | `find-endpoint`        | The endpoint to get data to fill the form                              | `string`                                       | `undefined` |
-| `findParams`         | `find-params`          | The form params                                                        | `any`                                          | `undefined` |
+| `fetch`              | `fetch`                | Emit the fetch event emitted when component loads                      | `boolean \| string`                            | `undefined` |
+| `fetchDataMap`       | `fetch-data-map`       | The map to bind data from fetch response to form data                  | `any`                                          | `undefined` |
+| `fetchParams`        | `fetch-params`         | The fetch params                                                       | `any`                                          | `undefined` |
 | `formData`           | `form-data`            | The data from the form being filled out                                | `any`                                          | `{}`        |
 | `hasChanged`         | `has-changed`          | Has the form fields been changed                                       | `boolean`                                      | `false`     |
 | `hideControls`       | `hide-controls`        | Should the form controls be hidden?                                    | `boolean`                                      | `false`     |

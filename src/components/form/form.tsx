@@ -64,10 +64,6 @@ export class Form implements ComponentInterface {
    */
   @Prop() endpoint: string;
   /**
-   * The endpoint to get data to fill the form
-   */
-  @Prop() findEndpoint: string;
-  /**
    * The id of the document being edited
    */
   @Prop() documentId: string;
@@ -107,14 +103,6 @@ export class Form implements ComponentInterface {
   })
   hasChanged = false;
   /**
-   * The form params
-   */
-  @Prop() findParams: any;
-  /**
-   * The data map to find
-   */
-  @Prop() findDataMap: any;
-  /**
    * The HTTP method to use when submitting the form
    */
   @Prop() method: string = "post";
@@ -125,7 +113,15 @@ export class Form implements ComponentInterface {
   /**
    * Emit the fetch event emitted when component loads
    */
-  @Prop() fetch = false;
+  @Prop() fetch: string | boolean;
+  /**
+   * The fetch params
+   */
+  @Prop() fetchParams: any;
+  /**
+   * The map to bind data from fetch response to form data
+   */
+  @Prop() fetchDataMap: any;
 
   /**
    * Emitted on load with endpoint
@@ -199,11 +195,11 @@ export class Form implements ComponentInterface {
     }
   }
 
-  @Listen("fireenjinSuccess", { target: "document" })
+  @Listen("fireenjinSuccess")
   async onSuccess(event) {
-    if (event.detail.target === this.fireenjinFormEl && this.findDataMap) {
+    if (this.fetchDataMap) {
       this.formData = await this.mapFormData(
-        this.findDataMap,
+        this.fetchDataMap,
         event.detail?.data ? event.detail.data : {}
       );
       await this.setFormData(this.formData);
@@ -266,9 +262,7 @@ export class Form implements ComponentInterface {
   @Method()
   async checkFormValidity(reportValidity = true) {
     let isValid = true;
-    const inputEls = [].slice.call(
-      this.formEl.querySelectorAll("fireenjin-input")
-    );
+    const inputEls = [].slice.call(this.formEl.querySelectorAll("[value]"));
     for (const inputEl of inputEls) {
       if (
         !(await inputEl.checkValidity(
@@ -364,14 +358,14 @@ export class Form implements ComponentInterface {
     setTimeout(() => {
       this.componentIsLoaded = true;
     }, 2000);
-    if (this.fetch || this.findEndpoint) {
+    if (this.fetch) {
       this.fireenjinFetch.emit({
-        endpoint: this.findEndpoint || this.endpoint,
+        endpoint: typeof this.fetch === "string" ? this.fetch : this.endpoint,
         name: this.name || null,
-        dataPropsMap: this.findDataMap || null,
+        dataPropsMap: this.fetchDataMap || null,
         method: "get",
         params: {
-          ...(this.findParams ? this.findParams : {}),
+          ...(this.fetchParams ? this.fetchParams : {}),
           id: this.documentId,
         },
       });

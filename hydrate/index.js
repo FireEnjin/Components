@@ -12032,10 +12032,6 @@ class Form {
      * The HTTP method to use when submitting the form
      */
     this.method = "post";
-    /**
-     * Emit the fetch event emitted when component loads
-     */
-    this.fetch = false;
   }
   onInput(event) {
     if (event &&
@@ -12069,8 +12065,8 @@ class Form {
   }
   async onSuccess(event) {
     var _a;
-    if (event.detail.target === this.fireenjinFormEl && this.findDataMap) {
-      this.formData = await this.mapFormData(this.findDataMap, ((_a = event.detail) === null || _a === void 0 ? void 0 : _a.data) ? event.detail.data : {});
+    if (this.fetchDataMap) {
+      this.formData = await this.mapFormData(this.fetchDataMap, ((_a = event.detail) === null || _a === void 0 ? void 0 : _a.data) ? event.detail.data : {});
       await this.setFormData(this.formData);
     }
   }
@@ -12123,7 +12119,7 @@ class Form {
   }
   async checkFormValidity(reportValidity = true) {
     let isValid = true;
-    const inputEls = [].slice.call(this.formEl.querySelectorAll("fireenjin-input"));
+    const inputEls = [].slice.call(this.formEl.querySelectorAll("[value]"));
     for (const inputEl of inputEls) {
       if (!(await inputEl.checkValidity(!reportValidity
         ? {
@@ -12207,13 +12203,13 @@ class Form {
     setTimeout(() => {
       this.componentIsLoaded = true;
     }, 2000);
-    if (this.fetch || this.findEndpoint) {
+    if (this.fetch) {
       this.fireenjinFetch.emit({
-        endpoint: this.findEndpoint || this.endpoint,
+        endpoint: typeof this.fetch === "string" ? this.fetch : this.endpoint,
         name: this.name || null,
-        dataPropsMap: this.findDataMap || null,
+        dataPropsMap: this.fetchDataMap || null,
         method: "get",
-        params: Object.assign(Object.assign({}, (this.findParams ? this.findParams : {})), { id: this.documentId }),
+        params: Object.assign(Object.assign({}, (this.fetchParams ? this.fetchParams : {})), { id: this.documentId }),
       });
     }
     if (this.formData) {
@@ -12239,7 +12235,6 @@ class Form {
       "resetButtonFill": [1, "reset-button-fill"],
       "hideControls": [4, "hide-controls"],
       "endpoint": [1],
-      "findEndpoint": [1, "find-endpoint"],
       "documentId": [1, "document-id"],
       "excludeData": [16],
       "beforeSubmit": [16],
@@ -12249,18 +12244,18 @@ class Form {
       "disableReset": [4, "disable-reset"],
       "confirmExit": [4, "confirm-exit"],
       "hasChanged": [1028, "has-changed"],
-      "findParams": [8, "find-params"],
-      "findDataMap": [8, "find-data-map"],
       "method": [1],
       "action": [1],
-      "fetch": [4],
+      "fetch": [8],
+      "fetchParams": [8, "fetch-params"],
+      "fetchDataMap": [8, "fetch-data-map"],
       "submit": [64],
       "reset": [64],
       "checkFormValidity": [64],
       "reportFormValidity": [64],
       "setFormData": [64]
     },
-    "$listeners$": [[0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onSelect"], [0, "keydown", "onKeyDown"], [4, "fireenjinSuccess", "onSuccess"]],
+    "$listeners$": [[0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onSelect"], [0, "keydown", "onKeyDown"], [0, "fireenjinSuccess", "onSuccess"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
