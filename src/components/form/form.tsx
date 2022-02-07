@@ -197,7 +197,10 @@ export class Form implements ComponentInterface {
 
   @Listen("fireenjinSuccess")
   async onSuccess(event) {
-    if (this.fetch || this.fetchDataMap) {
+    if (
+      (this.fetch || this.fetchDataMap) &&
+      event?.detail?.event?.type === "fireenjinFetch"
+    ) {
       this.formData = await this.mapFormData(
         this.fetchDataMap,
         event.detail?.data ? event.detail.data : {}

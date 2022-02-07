@@ -12064,9 +12064,10 @@ class Form {
     }
   }
   async onSuccess(event) {
-    var _a;
-    if (this.fetch || this.fetchDataMap) {
-      this.formData = await this.mapFormData(this.fetchDataMap, ((_a = event.detail) === null || _a === void 0 ? void 0 : _a.data) ? event.detail.data : {});
+    var _a, _b, _c;
+    if ((this.fetch || this.fetchDataMap) &&
+      ((_b = (_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.event) === null || _b === void 0 ? void 0 : _b.type) === "fireenjinFetch") {
+      this.formData = await this.mapFormData(this.fetchDataMap, ((_c = event.detail) === null || _c === void 0 ? void 0 : _c.data) ? event.detail.data : {});
       await this.setFormData(this.formData);
     }
   }
