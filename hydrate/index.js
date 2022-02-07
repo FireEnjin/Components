@@ -12148,8 +12148,6 @@ class Form {
     }
   }
   async setFormData(data) {
-    if (this.formData === data)
-      return;
     const fields = this.formEl.querySelectorAll("[data-fill]");
     fields.forEach((field) => {
       var _a, _b;

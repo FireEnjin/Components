@@ -301,7 +301,6 @@ export class Form implements ComponentInterface {
 
   @Method()
   async setFormData(data: any) {
-    if (this.formData === data) return;
     const fields = this.formEl.querySelectorAll("[data-fill]");
     fields.forEach((field: HTMLInputElement) => {
       const dataKey =
