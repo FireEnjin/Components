@@ -103,6 +103,10 @@ export class Map implements ComponentInterface {
     icon: string;
     payload?: any;
   }) {
+    if (!this.google)
+      this.google = window?.google?.maps
+        ? window.google
+        : await this.loadGoogleMaps();
     const marker =
       typeof location === "string" ? JSON.parse(location) : location;
     const mapMarker = new this.google.maps.Marker({
@@ -250,7 +254,11 @@ export class Map implements ComponentInterface {
    * Create the instance of Google Maps
    * @param position The latitude and longitude to center the map on
    */
-  createMap(position: { latitude: number; longitude: number }) {
+  async createMap(position: { latitude: number; longitude: number }) {
+    if (!this.google)
+      this.google = window?.google?.maps
+        ? window.google
+        : await this.loadGoogleMaps();
     this.map = new this.google.maps.Map(this.mapEl.querySelector("#map"), {
       zoom: 9,
       center: {
@@ -262,19 +270,20 @@ export class Map implements ComponentInterface {
 
   async loadGoogleMaps(options?: LoaderOptions) {
     const loader = new Loader(this.apiKey, options || {});
-    this.google = await loader.load();
-
-    return this.google;
+    return loader.load();
   }
 
-  componentDidLoad() {
+  async componentDidLoad() {
     if (Build.isBrowser) {
       this.isVisible = this.visible;
+      this.google = window?.google?.maps
+        ? window.google
+        : await this.loadGoogleMaps();
       this.getLocationCoords(async (coords) => {
         this.position = coords
           ? coords
           : { latitude: 38.6270025, longitude: -90.19940419999999 };
-        if (!window?.google?.maps && this.apiKey) await this.loadGoogleMaps();
+
         this.createMap(this.position);
         await this.setMarkers(this.markers);
       });
