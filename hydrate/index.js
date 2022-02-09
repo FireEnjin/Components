@@ -4718,92 +4718,9 @@ function hydrateFactory($stencilWindow, $stencilHydrateOpts, $stencilHydrateResu
 const NAMESPACE = 'fireenjin';
 const BUILD = /* fireenjin */ { allRenderFn: false, appendChildSlotFix: false, asyncLoading: true, attachStyles: true, cloneNodeFix: false, cmpDidLoad: true, cmpDidRender: false, cmpDidUnload: false, cmpDidUpdate: true, cmpShouldUpdate: false, cmpWillLoad: true, cmpWillRender: true, cmpWillUpdate: false, connectedCallback: true, constructableCSS: false, cssAnnotations: true, cssVarShim: false, devTools: false, disconnectedCallback: true, dynamicImportShim: false, element: false, event: true, hasRenderFn: true, hostListener: true, hostListenerTarget: true, hostListenerTargetBody: true, hostListenerTargetDocument: true, hostListenerTargetParent: false, hostListenerTargetWindow: true, hotModuleReplacement: false, hydrateClientSide: true, hydrateServerSide: true, hydratedAttribute: false, hydratedClass: true, isDebug: false, isDev: false, isTesting: false, lazyLoad: true, lifecycle: true, lifecycleDOMEvents: false, member: true, method: true, mode: true, observeAttribute: true, profile: false, prop: true, propBoolean: true, propMutable: true, propNumber: true, propString: true, reflect: true, safari10: false, scoped: true, scriptDataOpts: false, shadowDelegatesFocus: true, shadowDom: true, shadowDomShim: true, slot: true, slotChildNodesFix: false, slotRelocation: true, state: true, style: true, svg: true, taskQueue: true, updatable: true, vdomAttribute: true, vdomClass: true, vdomFunctional: true, vdomKey: true, vdomListener: true, vdomPropOrAttr: true, vdomRef: true, vdomRender: true, vdomStyle: true, vdomText: true, vdomXlink: true, watchCallback: true };
 
-const getPlatforms = (win) => setupPlatforms(win);
-const isPlatform = (winOrPlatform, platform) => {
-  if (typeof winOrPlatform === 'string') {
-    platform = winOrPlatform;
-    winOrPlatform = undefined;
-  }
-  return getPlatforms(winOrPlatform).includes(platform);
-};
-const setupPlatforms = (win = window) => {
-  if (typeof win === 'undefined') {
-    return [];
-  }
-  win.Ionic = win.Ionic || {};
-  let platforms = win.Ionic.platforms;
-  if (platforms == null) {
-    platforms = win.Ionic.platforms = detectPlatforms(win);
-    platforms.forEach(p => win.document.documentElement.classList.add(`plt-${p}`));
-  }
-  return platforms;
-};
-const detectPlatforms = (win) => Object.keys(PLATFORMS_MAP).filter(p => PLATFORMS_MAP[p](win));
-const isMobileWeb = (win) => isMobile(win) && !isHybrid(win);
-const isIpad = (win) => {
-  // iOS 12 and below
-  if (testUserAgent(win, /iPad/i)) {
-    return true;
-  }
-  // iOS 13+
-  if (testUserAgent(win, /Macintosh/i) && isMobile(win)) {
-    return true;
-  }
-  return false;
-};
-const isIphone = (win) => testUserAgent(win, /iPhone/i);
-const isIOS = (win) => testUserAgent(win, /iPhone|iPod/i) || isIpad(win);
-const isAndroid = (win) => testUserAgent(win, /android|sink/i);
-const isAndroidTablet = (win) => {
-  return isAndroid(win) && !testUserAgent(win, /mobile/i);
-};
-const isPhablet = (win) => {
-  const width = win.innerWidth;
-  const height = win.innerHeight;
-  const smallest = Math.min(width, height);
-  const largest = Math.max(width, height);
-  return (smallest > 390 && smallest < 520) &&
-    (largest > 620 && largest < 800);
-};
-const isTablet = (win) => {
-  const width = win.innerWidth;
-  const height = win.innerHeight;
-  const smallest = Math.min(width, height);
-  const largest = Math.max(width, height);
-  return (isIpad(win) ||
-    isAndroidTablet(win) ||
-    ((smallest > 460 && smallest < 820) &&
-      (largest > 780 && largest < 1400)));
-};
-const isMobile = (win) => matchMedia(win, '(any-pointer:coarse)');
-const isDesktop = (win) => !isMobile(win);
-const isHybrid = (win) => isCordova(win) || isCapacitorNative(win);
-const isCordova = (win) => !!(win['cordova'] || win['phonegap'] || win['PhoneGap']);
-const isCapacitorNative = (win) => {
-  const capacitor = win['Capacitor'];
-  return !!(capacitor && capacitor.isNative);
-};
-const isElectron = (win) => testUserAgent(win, /electron/i);
-const isPWA = (win) => !!(win.matchMedia('(display-mode: standalone)').matches || win.navigator.standalone);
-const testUserAgent = (win, expr) => expr.test(win.navigator.userAgent);
-const matchMedia = (win, query) => win.matchMedia(query).matches;
-const PLATFORMS_MAP = {
-  'ipad': isIpad,
-  'iphone': isIphone,
-  'ios': isIOS,
-  'android': isAndroid,
-  'phablet': isPhablet,
-  'tablet': isTablet,
-  'cordova': isCordova,
-  'capacitor': isCapacitorNative,
-  'electron': isElectron,
-  'pwa': isPWA,
-  'mobile': isMobile,
-  'mobileweb': isMobileWeb,
-  'desktop': isDesktop,
-  'hybrid': isHybrid
-};
-
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 class Config$1 {
   constructor() {
     this.m = new Map();
@@ -4871,6 +4788,101 @@ const startsWith = (input, search) => {
 const IONIC_PREFIX = 'ionic:';
 const IONIC_SESSION_KEY = 'ionic-persist-config';
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const getPlatforms = (win) => setupPlatforms(win);
+const isPlatform = (winOrPlatform, platform) => {
+  if (typeof winOrPlatform === 'string') {
+    platform = winOrPlatform;
+    winOrPlatform = undefined;
+  }
+  return getPlatforms(winOrPlatform).includes(platform);
+};
+const setupPlatforms = (win = window) => {
+  if (typeof win === 'undefined') {
+    return [];
+  }
+  win.Ionic = win.Ionic || {};
+  let platforms = win.Ionic.platforms;
+  if (platforms == null) {
+    platforms = win.Ionic.platforms = detectPlatforms(win);
+    platforms.forEach(p => win.document.documentElement.classList.add(`plt-${p}`));
+  }
+  return platforms;
+};
+const detectPlatforms = (win) => {
+  const customPlatformMethods = config$1.get('platform');
+  return Object.keys(PLATFORMS_MAP).filter(p => {
+    const customMethod = customPlatformMethods && customPlatformMethods[p];
+    return typeof customMethod === 'function' ? customMethod(win) : PLATFORMS_MAP[p](win);
+  });
+};
+const isMobileWeb = (win) => isMobile(win) && !isHybrid(win);
+const isIpad = (win) => {
+  // iOS 12 and below
+  if (testUserAgent(win, /iPad/i)) {
+    return true;
+  }
+  // iOS 13+
+  if (testUserAgent(win, /Macintosh/i) && isMobile(win)) {
+    return true;
+  }
+  return false;
+};
+const isIphone = (win) => testUserAgent(win, /iPhone/i);
+const isIOS = (win) => testUserAgent(win, /iPhone|iPod/i) || isIpad(win);
+const isAndroid = (win) => testUserAgent(win, /android|sink/i);
+const isAndroidTablet = (win) => {
+  return isAndroid(win) && !testUserAgent(win, /mobile/i);
+};
+const isPhablet = (win) => {
+  const width = win.innerWidth;
+  const height = win.innerHeight;
+  const smallest = Math.min(width, height);
+  const largest = Math.max(width, height);
+  return (smallest > 390 && smallest < 520) &&
+    (largest > 620 && largest < 800);
+};
+const isTablet = (win) => {
+  const width = win.innerWidth;
+  const height = win.innerHeight;
+  const smallest = Math.min(width, height);
+  const largest = Math.max(width, height);
+  return (isIpad(win) ||
+    isAndroidTablet(win) ||
+    ((smallest > 460 && smallest < 820) &&
+      (largest > 780 && largest < 1400)));
+};
+const isMobile = (win) => matchMedia$1(win, '(any-pointer:coarse)');
+const isDesktop = (win) => !isMobile(win);
+const isHybrid = (win) => isCordova(win) || isCapacitorNative(win);
+const isCordova = (win) => !!(win['cordova'] || win['phonegap'] || win['PhoneGap']);
+const isCapacitorNative = (win) => {
+  const capacitor = win['Capacitor'];
+  return !!(capacitor && capacitor.isNative);
+};
+const isElectron = (win) => testUserAgent(win, /electron/i);
+const isPWA = (win) => !!((win.matchMedia && win.matchMedia('(display-mode: standalone)').matches) || win.navigator.standalone);
+const testUserAgent = (win, expr) => expr.test(win.navigator.userAgent);
+const matchMedia$1 = (win, query) => win.matchMedia && win.matchMedia(query).matches;
+const PLATFORMS_MAP = {
+  'ipad': isIpad,
+  'iphone': isIphone,
+  'ios': isIOS,
+  'android': isAndroid,
+  'phablet': isPhablet,
+  'tablet': isTablet,
+  'cordova': isCordova,
+  'capacitor': isCapacitorNative,
+  'electron': isElectron,
+  'pwa': isPWA,
+  'mobile': isMobile,
+  'mobileweb': isMobileWeb,
+  'desktop': isDesktop,
+  'hybrid': isHybrid
+};
+
 let defaultMode;
 const getIonMode$1 = (ref) => {
   return (ref && getMode(ref)) || defaultMode;
@@ -4882,8 +4894,17 @@ const initialize = (userConfig = {}) => {
   const doc = window.document;
   const win = window;
   const Ionic = win.Ionic = win.Ionic || {};
-  // Setup platforms
-  setupPlatforms(win);
+  const platformHelpers = {};
+  if (userConfig._ael) {
+    platformHelpers.ael = userConfig._ael;
+  }
+  if (userConfig._rel) {
+    platformHelpers.rel = userConfig._rel;
+  }
+  if (userConfig._ce) {
+    platformHelpers.ce = userConfig._ce;
+  }
+  setPlatformHelpers(platformHelpers);
   // create the Ionic.config from raw config object (if it exists)
   // and convert Ionic.config into a ConfigApi that has a get() fn
   const configObj = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, configFromSession(win)), { persistConfig: false }), Ionic.config), configFromURL(win)), userConfig);
@@ -4891,6 +4912,8 @@ const initialize = (userConfig = {}) => {
   if (config$1.getBoolean('persistConfig')) {
     saveConfig(win, configObj);
   }
+  // Setup platforms
+  setupPlatforms(win);
   // first see if the mode was set as an attribute on <html>
   // which could have been set by the user, or by pre-rendering
   // otherwise get the mode via config settings, and fallback to md
@@ -5727,6 +5750,8 @@ const cmpModules = new Map, getModule = e => {
  ael: (e, t, o, n) => e.addEventListener(t, o, n),
  rel: (e, t, o, n) => e.removeEventListener(t, o, n),
  ce: (e, t) => new win$2.CustomEvent(e, t)
+}, setPlatformHelpers = e => {
+ Object.assign(plt, e);
 }, supportsShadow = !1, hostRefs = new WeakMap, getHostRef = e => hostRefs.get(e), registerInstance = (e, t) => hostRefs.set(t.$lazyInstance$ = e, t), registerHost = (e, t) => {
  const o = {
   $flags$: 0,
@@ -5744,6 +5769,905 @@ const cmpModules = new Map, getModule = e => {
  isTesting: !1
 }, styles$2 = new Map, modeResolutionChain = [];
 
+/* Ionicons v6.0.1, ES Modules */
+const arrowBackSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Arrow Back</title><path stroke-linecap='square' stroke-miterlimit='10' stroke-width='48' d='M244 400L100 256l144-144M120 256h292' class='ionicon-fill-none'/></svg>";
+const arrowDown = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Arrow Down</title><path stroke-linecap='round' stroke-linejoin='round' stroke-width='48' d='M112 268l144 144 144-144M256 392V100' class='ionicon-fill-none'/></svg>";
+const caretBackSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Caret Back</title><path d='M368 64L144 256l224 192V64z'/></svg>";
+const caretDownSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Caret Down</title><path d='M64 144l192 224 192-224H64z'/></svg>";
+const caretUpSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Caret Up</title><path d='M448 368L256 144 64 368h384z'/></svg>";
+const chevronBack = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Chevron Back</title><path stroke-linecap='round' stroke-linejoin='round' stroke-width='48' d='M328 112L184 256l144 144' class='ionicon-fill-none'/></svg>";
+const chevronDown = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Chevron Down</title><path stroke-linecap='round' stroke-linejoin='round' stroke-width='48' d='M112 184l144 144 144-144' class='ionicon-fill-none'/></svg>";
+const chevronForward = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Chevron Forward</title><path stroke-linecap='round' stroke-linejoin='round' stroke-width='48' d='M184 112l144 144-144 144' class='ionicon-fill-none'/></svg>";
+const chevronForwardOutline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Chevron Forward</title><path stroke-linecap='round' stroke-linejoin='round' stroke-width='48' d='M184 112l144 144-144 144' class='ionicon-fill-none'/></svg>";
+const close = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Close</title><path d='M289.94 256l95-95A24 24 0 00351 127l-95 95-95-95a24 24 0 00-34 34l95 95-95 95a24 24 0 1034 34l95-95 95 95a24 24 0 0034-34z'/></svg>";
+const closeCircle = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Close Circle</title><path d='M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm75.31 260.69a16 16 0 11-22.62 22.62L256 278.63l-52.69 52.68a16 16 0 01-22.62-22.62L233.37 256l-52.68-52.69a16 16 0 0122.62-22.62L256 233.37l52.69-52.68a16 16 0 0122.62 22.62L278.63 256z'/></svg>";
+const closeSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Close</title><path d='M400 145.49L366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49z'/></svg>";
+const ellipsisHorizontal = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Ellipsis Horizontal</title><circle cx='256' cy='256' r='48'/><circle cx='416' cy='256' r='48'/><circle cx='96' cy='256' r='48'/></svg>";
+const menuOutline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Menu</title><path stroke-linecap='round' stroke-miterlimit='10' d='M80 160h352M80 256h352M80 352h352' class='ionicon-fill-none ionicon-stroke-width'/></svg>";
+const menuSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Menu</title><path d='M64 384h384v-42.67H64zm0-106.67h384v-42.66H64zM64 128v42.67h384V128z'/></svg>";
+const reorderThreeOutline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Reorder Three</title><path stroke-linecap='round' stroke-linejoin='round' d='M96 256h320M96 176h320M96 336h320' class='ionicon-fill-none ionicon-stroke-width'/></svg>";
+const reorderTwoSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Reorder Two</title><path stroke-linecap='square' stroke-linejoin='round' stroke-width='44' d='M118 304h276M118 208h276' class='ionicon-fill-none'/></svg>";
+const searchOutline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Search</title><path d='M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z' stroke-miterlimit='10' class='ionicon-fill-none ionicon-stroke-width'/><path stroke-linecap='round' stroke-miterlimit='10' d='M338.29 338.29L448 448' class='ionicon-fill-none ionicon-stroke-width'/></svg>";
+const searchSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Search</title><path d='M464 428L339.92 303.9a160.48 160.48 0 0030.72-94.58C370.64 120.37 298.27 48 209.32 48S48 120.37 48 209.32s72.37 161.32 161.32 161.32a160.48 160.48 0 0094.58-30.72L428 464zM209.32 319.69a110.38 110.38 0 11110.37-110.37 110.5 110.5 0 01-110.37 110.37z'/></svg>";
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const transitionEndAsync = (el, expectedDuration = 0) => {
+  return new Promise(resolve => {
+    transitionEnd$2(el, expectedDuration, resolve);
+  });
+};
+/**
+ * Allows developer to wait for a transition
+ * to finish and fallback to a timer if the
+ * transition is cancelled or otherwise
+ * never finishes. Also see transitionEndAsync
+ * which is an await-able version of this.
+ */
+const transitionEnd$2 = (el, expectedDuration = 0, callback) => {
+  let unRegTrans;
+  let animationTimeout;
+  const opts = { passive: true };
+  const ANIMATION_FALLBACK_TIMEOUT = 500;
+  const unregister = () => {
+    if (unRegTrans) {
+      unRegTrans();
+    }
+  };
+  const onTransitionEnd = (ev) => {
+    if (ev === undefined || el === ev.target) {
+      unregister();
+      callback(ev);
+    }
+  };
+  if (el) {
+    el.addEventListener('webkitTransitionEnd', onTransitionEnd, opts);
+    el.addEventListener('transitionend', onTransitionEnd, opts);
+    animationTimeout = setTimeout(onTransitionEnd, expectedDuration + ANIMATION_FALLBACK_TIMEOUT);
+    unRegTrans = () => {
+      if (animationTimeout) {
+        clearTimeout(animationTimeout);
+        animationTimeout = undefined;
+      }
+      el.removeEventListener('webkitTransitionEnd', onTransitionEnd, opts);
+      el.removeEventListener('transitionend', onTransitionEnd, opts);
+    };
+  }
+  return unregister;
+};
+/**
+ * Waits for a component to be ready for
+ * both custom element and non-custom element builds.
+ * If non-custom element build, el.componentOnReady
+ * will be used.
+ * For custom element builds, we wait a frame
+ * so that the inner contents of the component
+ * have a chance to render.
+ *
+ * Use this utility rather than calling
+ * el.componentOnReady yourself.
+ */
+const componentOnReady = (el, callback) => {
+  if (el.componentOnReady) {
+    el.componentOnReady().then((resolvedEl) => callback(resolvedEl));
+  }
+  else {
+    raf(() => callback(el));
+  }
+};
+/**
+ * Elements inside of web components sometimes need to inherit global attributes
+ * set on the host. For example, the inner input in `ion-input` should inherit
+ * the `title` attribute that developers set directly on `ion-input`. This
+ * helper function should be called in componentWillLoad and assigned to a variable
+ * that is later used in the render function.
+ *
+ * This does not need to be reactive as changing attributes on the host element
+ * does not trigger a re-render.
+ */
+const inheritAttributes$1 = (el, attributes = []) => {
+  const attributeObject = {};
+  attributes.forEach(attr => {
+    if (el.hasAttribute(attr)) {
+      const value = el.getAttribute(attr);
+      if (value !== null) {
+        attributeObject[attr] = el.getAttribute(attr);
+      }
+      el.removeAttribute(attr);
+    }
+  });
+  return attributeObject;
+};
+const addEventListener$1 = (el, eventName, callback, opts) => {
+  if (typeof window !== 'undefined') {
+    const win = window;
+    const config = win && win.Ionic && win.Ionic.config;
+    if (config) {
+      const ael = config.get('_ael');
+      if (ael) {
+        return ael(el, eventName, callback, opts);
+      }
+      else if (config._ael) {
+        return config._ael(el, eventName, callback, opts);
+      }
+    }
+  }
+  return el.addEventListener(eventName, callback, opts);
+};
+const removeEventListener = (el, eventName, callback, opts) => {
+  if (typeof window !== 'undefined') {
+    const win = window;
+    const config = win && win.Ionic && win.Ionic.config;
+    if (config) {
+      const rel = config.get('_rel');
+      if (rel) {
+        return rel(el, eventName, callback, opts);
+      }
+      else if (config._rel) {
+        return config._rel(el, eventName, callback, opts);
+      }
+    }
+  }
+  return el.removeEventListener(eventName, callback, opts);
+};
+/**
+ * Gets the root context of a shadow dom element
+ * On newer browsers this will be the shadowRoot,
+ * but for older browser this may just be the
+ * element itself.
+ *
+ * Useful for whenever you need to explicitly
+ * do "myElement.shadowRoot!.querySelector(...)".
+ */
+const getElementRoot = (el, fallback = el) => {
+  return el.shadowRoot || fallback;
+};
+/**
+ * Patched version of requestAnimationFrame that avoids ngzone
+ * Use only when you know ngzone should not run
+ */
+const raf = (h) => {
+  if (typeof __zone_symbol__requestAnimationFrame === 'function') {
+    return __zone_symbol__requestAnimationFrame(h);
+  }
+  if (typeof requestAnimationFrame === 'function') {
+    return requestAnimationFrame(h);
+  }
+  return setTimeout(h);
+};
+const hasShadowDom = (el) => {
+  return !!el.shadowRoot && !!el.attachShadow;
+};
+const findItemLabel = (componentEl) => {
+  const itemEl = componentEl.closest('ion-item');
+  if (itemEl) {
+    return itemEl.querySelector('ion-label');
+  }
+  return null;
+};
+const focusElement = (el) => {
+  el.focus();
+  /**
+   * When programmatically focusing an element,
+   * the focus-visible utility will not run because
+   * it is expecting a keyboard event to have triggered this;
+   * however, there are times when we need to manually control
+   * this behavior so we call the `setFocus` method on ion-app
+   * which will let us explicitly set the elements to focus.
+   */
+  if (el.classList.contains('ion-focusable')) {
+    const app = el.closest('ion-app');
+    if (app) {
+      app.setFocus([el]);
+    }
+  }
+};
+/**
+ * This method is used for Ionic's input components that use Shadow DOM. In
+ * order to properly label the inputs to work with screen readers, we need
+ * to get the text content of the label outside of the shadow root and pass
+ * it to the input inside of the shadow root.
+ *
+ * Referencing label elements by id from outside of the component is
+ * impossible due to the shadow boundary, read more here:
+ * https://developer.salesforce.com/blogs/2020/01/accessibility-for-web-components.html
+ *
+ * @param componentEl The shadow element that needs the aria label
+ * @param inputId The unique identifier for the input
+ */
+const getAriaLabel = (componentEl, inputId) => {
+  let labelText;
+  // If the user provides their own label via the aria-labelledby attr
+  // we should use that instead of looking for an ion-label
+  const labelledBy = componentEl.getAttribute('aria-labelledby');
+  // Grab the id off of the component in case they are using
+  // a custom label using the label element
+  const componentId = componentEl.id;
+  let labelId = labelledBy !== null && labelledBy.trim() !== ''
+    ? labelledBy
+    : inputId + '-lbl';
+  let label = labelledBy !== null && labelledBy.trim() !== ''
+    ? document.getElementById(labelledBy)
+    : findItemLabel(componentEl);
+  if (label) {
+    if (labelledBy === null) {
+      label.id = labelId;
+    }
+    labelText = label.textContent;
+    label.setAttribute('aria-hidden', 'true');
+    // if there is no label, check to see if the user has provided
+    // one by setting an id on the component and using the label element
+  }
+  else if (componentId.trim() !== '') {
+    label = document.querySelector(`label[for="${componentId}"]`);
+    if (label) {
+      if (label.id !== '') {
+        labelId = label.id;
+      }
+      else {
+        label.id = labelId = `${componentId}-lbl`;
+      }
+      labelText = label.textContent;
+    }
+  }
+  return { label, labelId, labelText };
+};
+/**
+ * This method is used to add a hidden input to a host element that contains
+ * a Shadow DOM. It does not add the input inside of the Shadow root which
+ * allows it to be picked up inside of forms. It should contain the same
+ * values as the host element.
+ *
+ * @param always Add a hidden input even if the container does not use Shadow
+ * @param container The element where the input will be added
+ * @param name The name of the input
+ * @param value The value of the input
+ * @param disabled If true, the input is disabled
+ */
+const renderHiddenInput = (always, container, name, value, disabled) => {
+  if (always || hasShadowDom(container)) {
+    let input = container.querySelector('input.aux-input');
+    if (!input) {
+      input = container.ownerDocument.createElement('input');
+      input.type = 'hidden';
+      input.classList.add('aux-input');
+      container.appendChild(input);
+    }
+    input.disabled = disabled;
+    input.name = name;
+    input.value = value || '';
+  }
+};
+const clamp = (min, n, max) => {
+  return Math.max(min, Math.min(n, max));
+};
+const assert = (actual, reason) => {
+  if (!actual) {
+    const message = 'ASSERT: ' + reason;
+    console.error(message);
+    debugger; // tslint:disable-line
+    throw new Error(message);
+  }
+};
+const pointerCoord = (ev) => {
+  // get X coordinates for either a mouse click
+  // or a touch depending on the given event
+  if (ev) {
+    const changedTouches = ev.changedTouches;
+    if (changedTouches && changedTouches.length > 0) {
+      const touch = changedTouches[0];
+      return { x: touch.clientX, y: touch.clientY };
+    }
+    if (ev.pageX !== undefined) {
+      return { x: ev.pageX, y: ev.pageY };
+    }
+  }
+  return { x: 0, y: 0 };
+};
+/**
+ * @hidden
+ * Given a side, return if it should be on the end
+ * based on the value of dir
+ * @param side the side
+ * @param isRTL whether the application dir is rtl
+ */
+const isEndSide = (side) => {
+  const isRTL = document.dir === 'rtl';
+  switch (side) {
+    case 'start': return isRTL;
+    case 'end': return !isRTL;
+    default:
+      throw new Error(`"${side}" is not a valid value for [side]. Use "start" or "end" instead.`);
+  }
+};
+const debounceEvent = (event, wait) => {
+  const original = event._original || event;
+  return {
+    _original: event,
+    emit: debounce$1(original.emit.bind(original), wait)
+  };
+};
+const debounce$1 = (func, wait = 0) => {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(func, wait, ...args);
+  };
+};
+
+const accordionIosCss = "/*!@:host*/.sc-ion-accordion-ios-h{display:block;position:relative;width:100%;background-color:var(--ion-background-color, #ffffff);overflow:hidden;z-index:0}/*!@:host(.accordion-expanding) ::slotted(ion-item[slot=header]),\n:host(.accordion-expanded) ::slotted(ion-item[slot=header])*/.sc-ion-accordion-ios-h.accordion-expanding .sc-ion-accordion-ios-s>ion-item[slot=header],.sc-ion-accordion-ios-h.accordion-expanded .sc-ion-accordion-ios-s>ion-item[slot=header]{--border-width:0px}/*!@:host(.accordion-animated)*/.accordion-animated.sc-ion-accordion-ios-h{transition:all 300ms cubic-bezier(0.25, 0.8, 0.5, 1)}/*!@:host(.accordion-animated) #content*/.accordion-animated.sc-ion-accordion-ios-h #content.sc-ion-accordion-ios{transition:max-height 300ms cubic-bezier(0.25, 0.8, 0.5, 1)}/*!@#content*/#content.sc-ion-accordion-ios{overflow:hidden;will-change:max-height}/*!@:host(.accordion-collapsing) #content*/.accordion-collapsing.sc-ion-accordion-ios-h #content.sc-ion-accordion-ios{max-height:0 !important}/*!@:host(.accordion-collapsed) #content*/.accordion-collapsed.sc-ion-accordion-ios-h #content.sc-ion-accordion-ios{display:none}/*!@:host(.accordion-expanding) #content*/.accordion-expanding.sc-ion-accordion-ios-h #content.sc-ion-accordion-ios{max-height:0}/*!@:host(.accordion-disabled) #header,\n:host(.accordion-readonly) #header,\n:host(.accordion-disabled) #content,\n:host(.accordion-readonly) #content*/.accordion-disabled.sc-ion-accordion-ios-h #header.sc-ion-accordion-ios,.accordion-readonly.sc-ion-accordion-ios-h #header.sc-ion-accordion-ios,.accordion-disabled.sc-ion-accordion-ios-h #content.sc-ion-accordion-ios,.accordion-readonly.sc-ion-accordion-ios-h #content.sc-ion-accordion-ios{pointer-events:none}/*!@:host(.accordion-disabled) #header,\n:host(.accordion-disabled) #content*/.accordion-disabled.sc-ion-accordion-ios-h #header.sc-ion-accordion-ios,.accordion-disabled.sc-ion-accordion-ios-h #content.sc-ion-accordion-ios{opacity:0.4}@media (prefers-reduced-motion: reduce){/*!@:host,\n#content*/.sc-ion-accordion-ios-h,#content.sc-ion-accordion-ios{transition:none !important}}/*!@:host(.accordion-next) ::slotted(ion-item[slot=header])*/.sc-ion-accordion-ios-h.accordion-next .sc-ion-accordion-ios-s>ion-item[slot=header]{--border-width:0.55px 0px 0.55px 0px}";
+
+const accordionMdCss = "/*!@:host*/.sc-ion-accordion-md-h{display:block;position:relative;width:100%;background-color:var(--ion-background-color, #ffffff);overflow:hidden;z-index:0}/*!@:host(.accordion-expanding) ::slotted(ion-item[slot=header]),\n:host(.accordion-expanded) ::slotted(ion-item[slot=header])*/.sc-ion-accordion-md-h.accordion-expanding .sc-ion-accordion-md-s>ion-item[slot=header],.sc-ion-accordion-md-h.accordion-expanded .sc-ion-accordion-md-s>ion-item[slot=header]{--border-width:0px}/*!@:host(.accordion-animated)*/.accordion-animated.sc-ion-accordion-md-h{transition:all 300ms cubic-bezier(0.25, 0.8, 0.5, 1)}/*!@:host(.accordion-animated) #content*/.accordion-animated.sc-ion-accordion-md-h #content.sc-ion-accordion-md{transition:max-height 300ms cubic-bezier(0.25, 0.8, 0.5, 1)}/*!@#content*/#content.sc-ion-accordion-md{overflow:hidden;will-change:max-height}/*!@:host(.accordion-collapsing) #content*/.accordion-collapsing.sc-ion-accordion-md-h #content.sc-ion-accordion-md{max-height:0 !important}/*!@:host(.accordion-collapsed) #content*/.accordion-collapsed.sc-ion-accordion-md-h #content.sc-ion-accordion-md{display:none}/*!@:host(.accordion-expanding) #content*/.accordion-expanding.sc-ion-accordion-md-h #content.sc-ion-accordion-md{max-height:0}/*!@:host(.accordion-disabled) #header,\n:host(.accordion-readonly) #header,\n:host(.accordion-disabled) #content,\n:host(.accordion-readonly) #content*/.accordion-disabled.sc-ion-accordion-md-h #header.sc-ion-accordion-md,.accordion-readonly.sc-ion-accordion-md-h #header.sc-ion-accordion-md,.accordion-disabled.sc-ion-accordion-md-h #content.sc-ion-accordion-md,.accordion-readonly.sc-ion-accordion-md-h #content.sc-ion-accordion-md{pointer-events:none}/*!@:host(.accordion-disabled) #header,\n:host(.accordion-disabled) #content*/.accordion-disabled.sc-ion-accordion-md-h #header.sc-ion-accordion-md,.accordion-disabled.sc-ion-accordion-md-h #content.sc-ion-accordion-md{opacity:0.4}@media (prefers-reduced-motion: reduce){/*!@:host,\n#content*/.sc-ion-accordion-md-h,#content.sc-ion-accordion-md{transition:none !important}}";
+
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ *
+ * @slot header - Content is placed at the top and is used to
+ * expand or collapse the accordion item.
+ * @slot content - Content is placed below the header and is
+ * shown or hidden based on expanded state.
+ *
+ * @part header - The wrapper element for the header slot.
+ * @part content - The wrapper element for the content slot.
+ * @part expanded - The expanded element. Can be used in combination
+ * with the `header` and `content` parts (i.e. `::part(header expanded)`).
+ */
+class Accordion {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    this.updateListener = () => this.updateState(false);
+    this.state = 1 /* Collapsed */;
+    this.isNext = false;
+    this.isPrevious = false;
+    /**
+     * The value of the accordion. Defaults to an autogenerated
+     * value.
+     */
+    this.value = `ion-accordion-${accordionIds++}`;
+    /**
+     * If `true`, the accordion cannot be interacted with.
+     */
+    this.disabled = false;
+    /**
+     * If `true`, the accordion cannot be interacted with,
+     * but does not alter the opacity.
+     */
+    this.readonly = false;
+    /**
+     * The toggle icon to use. This icon will be
+     * rotated when the accordion is expanded
+     * or collapsed.
+     */
+    this.toggleIcon = chevronDown;
+    /**
+     * The slot inside of `ion-item` to
+     * place the toggle icon. Defaults to `'end'`.
+     */
+    this.toggleIconSlot = 'end';
+    this.setItemDefaults = () => {
+      const ionItem = this.getSlottedHeaderIonItem();
+      if (!ionItem) {
+        return;
+      }
+      /**
+       * For a11y purposes, we make
+       * the ion-item a button so users
+       * can tab to it and use keyboard
+       * navigation to get around.
+       */
+      ionItem.button = true;
+      ionItem.detail = false;
+      /**
+       * By default, the lines in an
+       * item should be full here, but
+       * only do that if a user has
+       * not explicitly overridden them
+       */
+      if (ionItem.lines === undefined) {
+        ionItem.lines = 'full';
+      }
+    };
+    this.getSlottedHeaderIonItem = () => {
+      const { headerEl } = this;
+      if (!headerEl) {
+        return;
+      }
+      /**
+       * Get the first ion-item
+       * slotted in the header slot
+       */
+      const slot = headerEl.querySelector('slot');
+      if (!slot) {
+        return;
+      }
+      // This is not defined in unit tests
+      const ionItem = slot.assignedElements && slot.assignedElements().find(el => el.tagName === 'ION-ITEM');
+      return ionItem;
+    };
+    this.setAria = (expanded = false) => {
+      const ionItem = this.getSlottedHeaderIonItem();
+      if (!ionItem) {
+        return;
+      }
+      /**
+       * Get the native <button> element inside of
+       * ion-item because that is what will be focused
+       */
+      const root = getElementRoot(ionItem);
+      const button = root.querySelector('button');
+      if (!button) {
+        return;
+      }
+      button.setAttribute('aria-expanded', `${expanded}`);
+    };
+    this.slotToggleIcon = () => {
+      const ionItem = this.getSlottedHeaderIonItem();
+      if (!ionItem) {
+        return;
+      }
+      const { toggleIconSlot, toggleIcon } = this;
+      /**
+       * Check if there already is a toggle icon.
+       * If so, do not add another one.
+       */
+      const existingToggleIcon = ionItem.querySelector('.ion-accordion-toggle-icon');
+      if (existingToggleIcon) {
+        return;
+      }
+      const iconEl = document.createElement('ion-icon');
+      iconEl.slot = toggleIconSlot;
+      iconEl.lazy = false;
+      iconEl.classList.add('ion-accordion-toggle-icon');
+      iconEl.icon = toggleIcon;
+      iconEl.setAttribute('aria-hidden', 'true');
+      ionItem.appendChild(iconEl);
+    };
+    this.expandAccordion = (initialUpdate = false) => {
+      if (initialUpdate) {
+        this.state = 4 /* Expanded */;
+        return;
+      }
+      if (this.state === 4 /* Expanded */) {
+        return;
+      }
+      const { contentEl, contentElWrapper } = this;
+      if (contentEl === undefined || contentElWrapper === undefined) {
+        return;
+      }
+      if (this.currentRaf !== undefined) {
+        cancelAnimationFrame(this.currentRaf);
+      }
+      if (this.shouldAnimate()) {
+        raf(() => {
+          this.state = 8 /* Expanding */;
+          this.currentRaf = raf(async () => {
+            const contentHeight = contentElWrapper.offsetHeight;
+            const waitForTransition = transitionEndAsync(contentEl, 2000);
+            contentEl.style.setProperty('max-height', `${contentHeight}px`);
+            await waitForTransition;
+            this.state = 4 /* Expanded */;
+            contentEl.style.removeProperty('max-height');
+          });
+        });
+      }
+      else {
+        this.state = 4 /* Expanded */;
+      }
+    };
+    this.collapseAccordion = (initialUpdate = false) => {
+      if (initialUpdate) {
+        this.state = 1 /* Collapsed */;
+        return;
+      }
+      if (this.state === 1 /* Collapsed */) {
+        return;
+      }
+      const { contentEl } = this;
+      if (contentEl === undefined) {
+        return;
+      }
+      if (this.currentRaf !== undefined) {
+        cancelAnimationFrame(this.currentRaf);
+      }
+      if (this.shouldAnimate()) {
+        this.currentRaf = raf(async () => {
+          const contentHeight = contentEl.offsetHeight;
+          contentEl.style.setProperty('max-height', `${contentHeight}px`);
+          raf(async () => {
+            const waitForTransition = transitionEndAsync(contentEl, 2000);
+            this.state = 2 /* Collapsing */;
+            await waitForTransition;
+            this.state = 1 /* Collapsed */;
+            contentEl.style.removeProperty('max-height');
+          });
+        });
+      }
+      else {
+        this.state = 1 /* Collapsed */;
+      }
+    };
+    /**
+     * Helper function to determine if
+     * something should animate.
+     * If prefers-reduced-motion is set
+     * then we should not animate, regardless
+     * of what is set in the config.
+     */
+    this.shouldAnimate = () => {
+      if (typeof window === 'undefined') {
+        return false;
+      }
+      const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        return false;
+      }
+      const animated = config$1.get('animated', true);
+      if (!animated) {
+        return false;
+      }
+      if (this.accordionGroupEl && !this.accordionGroupEl.animated) {
+        return false;
+      }
+      return true;
+    };
+    this.updateState = async (initialUpdate = false) => {
+      const accordionGroup = this.accordionGroupEl;
+      const accordionValue = this.value;
+      if (!accordionGroup) {
+        return;
+      }
+      const value = accordionGroup.value;
+      const shouldExpand = (Array.isArray(value)) ? value.includes(accordionValue) : value === accordionValue;
+      if (shouldExpand) {
+        this.expandAccordion(initialUpdate);
+        this.isNext = this.isPrevious = false;
+      }
+      else {
+        this.collapseAccordion(initialUpdate);
+        /**
+         * When using popout or inset,
+         * the collapsed accordion items
+         * may need additional border radius
+         * applied. Check to see if the
+         * next or previous accordion is selected.
+         */
+        const nextAccordion = this.getNextSibling();
+        const nextAccordionValue = nextAccordion && nextAccordion.value;
+        if (nextAccordionValue !== undefined) {
+          this.isPrevious = (Array.isArray(value)) ? value.includes(nextAccordionValue) : value === nextAccordionValue;
+        }
+        const previousAccordion = this.getPreviousSibling();
+        const previousAccordionValue = previousAccordion && previousAccordion.value;
+        if (previousAccordionValue !== undefined) {
+          this.isNext = (Array.isArray(value)) ? value.includes(previousAccordionValue) : value === previousAccordionValue;
+        }
+      }
+    };
+    this.getNextSibling = () => {
+      if (!this.el) {
+        return;
+      }
+      const nextSibling = this.el.nextElementSibling;
+      if ((nextSibling === null || nextSibling === void 0 ? void 0 : nextSibling.tagName) !== 'ION-ACCORDION') {
+        return;
+      }
+      return nextSibling;
+    };
+    this.getPreviousSibling = () => {
+      if (!this.el) {
+        return;
+      }
+      const previousSibling = this.el.previousElementSibling;
+      if ((previousSibling === null || previousSibling === void 0 ? void 0 : previousSibling.tagName) !== 'ION-ACCORDION') {
+        return;
+      }
+      return previousSibling;
+    };
+  }
+  connectedCallback() {
+    const accordionGroupEl = this.accordionGroupEl = this.el && this.el.closest('ion-accordion-group');
+    if (accordionGroupEl) {
+      this.updateState(true);
+      addEventListener$1(accordionGroupEl, 'ionChange', this.updateListener);
+    }
+  }
+  disconnectedCallback() {
+    const accordionGroupEl = this.accordionGroupEl;
+    if (accordionGroupEl) {
+      removeEventListener(accordionGroupEl, 'ionChange', this.updateListener);
+    }
+  }
+  componentDidLoad() {
+    this.setItemDefaults();
+    this.slotToggleIcon();
+    /**
+     * We need to wait a tick because we
+     * just set ionItem.button = true and
+     * the button has not have been rendered yet.
+     */
+    raf(() => {
+      /**
+       * Set aria label on button inside of ion-item
+       * once the inner content has been rendered.
+       */
+      const expanded = this.state === 4 /* Expanded */ || this.state === 8 /* Expanding */;
+      this.setAria(expanded);
+    });
+  }
+  toggleExpanded() {
+    const { accordionGroupEl, value, state } = this;
+    if (accordionGroupEl) {
+      /**
+       * Because the accordion group may or may
+       * not allow multiple accordions open, we
+       * need to request the toggling of this
+       * accordion and the accordion group will
+       * make the decision on whether or not
+       * to allow it.
+       */
+      const expand = state === 1 /* Collapsed */ || state === 2 /* Collapsing */;
+      accordionGroupEl.requestAccordionToggle(value, expand);
+    }
+  }
+  render() {
+    const { disabled, readonly } = this;
+    const mode = getIonMode$1(this);
+    const expanded = this.state === 4 /* Expanded */ || this.state === 8 /* Expanding */;
+    const headerPart = expanded ? 'header expanded' : 'header';
+    const contentPart = expanded ? 'content expanded' : 'content';
+    this.setAria(expanded);
+    return (hAsync(Host, { class: {
+        [mode]: true,
+        'accordion-expanding': this.state === 8 /* Expanding */,
+        'accordion-expanded': this.state === 4 /* Expanded */,
+        'accordion-collapsing': this.state === 2 /* Collapsing */,
+        'accordion-collapsed': this.state === 1 /* Collapsed */,
+        'accordion-next': this.isNext,
+        'accordion-previous': this.isPrevious,
+        'accordion-disabled': disabled,
+        'accordion-readonly': readonly,
+        'accordion-animated': config$1.getBoolean('animated', true)
+      } }, hAsync("div", { onClick: () => this.toggleExpanded(), id: "header", part: headerPart, "aria-controls": "content", ref: headerEl => this.headerEl = headerEl }, hAsync("slot", { name: "header" })), hAsync("div", { id: "content", part: contentPart, role: "region", "aria-labelledby": "header", ref: contentEl => this.contentEl = contentEl }, hAsync("div", { id: "content-wrapper", ref: contentElWrapper => this.contentElWrapper = contentElWrapper }, hAsync("slot", { name: "content" })))));
+  }
+  static get delegatesFocus() { return true; }
+  get el() { return getElement(this); }
+  static get style() { return {
+    ios: accordionIosCss,
+    md: accordionMdCss
+  }; }
+  static get cmpMeta() { return {
+    "$flags$": 57,
+    "$tagName$": "ion-accordion",
+    "$members$": {
+      "value": [1],
+      "disabled": [4],
+      "readonly": [4],
+      "toggleIcon": [1, "toggle-icon"],
+      "toggleIconSlot": [1, "toggle-icon-slot"],
+      "state": [32],
+      "isNext": [32],
+      "isPrevious": [32]
+    },
+    "$listeners$": undefined,
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": []
+  }; }
+}
+let accordionIds = 0;
+
+const accordionGroupIosCss = "/*!@:host*/.sc-ion-accordion-group-ios-h{display:block}/*!@:host(.accordion-group-expand-inset)*/.accordion-group-expand-inset.sc-ion-accordion-group-ios-h{margin-left:16px;margin-right:16px;margin-top:16px;margin-bottom:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.accordion-group-expand-inset)*/.accordion-group-expand-inset.sc-ion-accordion-group-ios-h{margin-left:unset;margin-right:unset;-webkit-margin-start:16px;margin-inline-start:16px;-webkit-margin-end:16px;margin-inline-end:16px}}/*!@:host(.accordion-group-expand-inset) ::slotted(ion-accordion.accordion-expanding),\n:host(.accordion-group-expand-inset) ::slotted(ion-accordion.accordion-expanded)*/.sc-ion-accordion-group-ios-h.accordion-group-expand-inset .sc-ion-accordion-group-ios-s>ion-accordion.accordion-expanding,.sc-ion-accordion-group-ios-h.accordion-group-expand-inset .sc-ion-accordion-group-ios-s>ion-accordion.accordion-expanded{border-bottom:none}";
+
+const accordionGroupMdCss = "/*!@:host*/.sc-ion-accordion-group-md-h{display:block}/*!@:host(.accordion-group-expand-inset)*/.accordion-group-expand-inset.sc-ion-accordion-group-md-h{margin-left:16px;margin-right:16px;margin-top:16px;margin-bottom:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.accordion-group-expand-inset)*/.accordion-group-expand-inset.sc-ion-accordion-group-md-h{margin-left:unset;margin-right:unset;-webkit-margin-start:16px;margin-inline-start:16px;-webkit-margin-end:16px;margin-inline-end:16px}}/*!@:host(.accordion-group-expand-inset) ::slotted(ion-accordion)*/.sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion{box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)}/*!@:host(.accordion-group-expand-inset) ::slotted(ion-accordion.accordion-expanding),\n:host(.accordion-group-expand-inset) ::slotted(ion-accordion.accordion-expanded)*/.sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-expanding,.sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-expanded{margin-left:0;margin-right:0;margin-top:16px;margin-bottom:16px;border-radius:6px}/*!@:host(.accordion-group-expand-inset) ::slotted(ion-accordion.accordion-previous)*/.sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-previous{border-bottom-right-radius:6px;border-bottom-left-radius:6px}/*!@:host-context([dir=rtl]):host(.accordion-group-expand-inset) ::slotted(ion-accordion.accordion-previous), :host-context([dir=rtl]).accordion-group-expand-inset ::slotted(ion-accordion.accordion-previous)*/.sc-ion-accordion-group-md-h[dir=rtl].sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-previous,[dir=rtl] .sc-ion-accordion-group-md-h.sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-previous,.sc-ion-accordion-group-md-h[dir=rtl].accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-previous,[dir=rtl] .sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-previous{border-bottom-right-radius:6px;border-bottom-left-radius:6px}/*!@:host(.accordion-group-expand-inset) ::slotted(ion-accordion.accordion-next)*/.sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-next{border-top-left-radius:6px;border-top-right-radius:6px}/*!@:host-context([dir=rtl]):host(.accordion-group-expand-inset) ::slotted(ion-accordion.accordion-next), :host-context([dir=rtl]).accordion-group-expand-inset ::slotted(ion-accordion.accordion-next)*/.sc-ion-accordion-group-md-h[dir=rtl].sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-next,[dir=rtl] .sc-ion-accordion-group-md-h.sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-next,.sc-ion-accordion-group-md-h[dir=rtl].accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-next,[dir=rtl] .sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion.accordion-next{border-top-left-radius:6px;border-top-right-radius:6px}/*!@:host(.accordion-group-expand-inset) ::slotted(ion-accordion):first-of-type,\n:host(.accordion-group-expand-inset) ::slotted(ion-accordion):first-of-type*/.sc-ion-accordion-group-md-h.accordion-group-expand-inset .sc-ion-accordion-group-md-s>ion-accordion:first-of-type{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}";
+
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ */
+class AccordionGroup {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    this.ionChange = createEvent(this, "ionChange", 7);
+    /**
+     * If `true`, all accordions inside of the
+     * accordion group will animate when expanding
+     * or collapsing.
+     */
+    this.animated = true;
+    /**
+     * If `true`, the accordion group cannot be interacted with.
+     */
+    this.disabled = false;
+    /**
+     * If `true`, the accordion group cannot be interacted with,
+     * but does not alter the opacity.
+     */
+    this.readonly = false;
+    /**
+     * Describes the expansion behavior for each accordion.
+     * Possible values are `"compact"` and `"inset"`.
+     * Defaults to `"compact"`.
+     */
+    this.expand = 'compact';
+  }
+  valueChanged() {
+    const { value, multiple } = this;
+    /**
+     * If accordion group does not
+     * let multiple accordions be open
+     * at once, but user passes an array
+     * just grab the first value.
+     */
+    if (!multiple && Array.isArray(value)) {
+      this.value = value[0];
+    }
+    else {
+      this.ionChange.emit({ value: this.value });
+    }
+  }
+  async disabledChanged() {
+    const { disabled } = this;
+    const accordions = await this.getAccordions();
+    for (const accordion of accordions) {
+      accordion.disabled = disabled;
+    }
+  }
+  async readonlyChanged() {
+    const { readonly } = this;
+    const accordions = await this.getAccordions();
+    for (const accordion of accordions) {
+      accordion.readonly = readonly;
+    }
+  }
+  async onKeydown(ev) {
+    const activeElement = document.activeElement;
+    if (!activeElement) {
+      return;
+    }
+    const accordionEl = (activeElement.tagName === 'ION-ACCORDION') ? activeElement : activeElement.closest('ion-accordion');
+    if (!accordionEl) {
+      return;
+    }
+    const closestGroup = accordionEl.closest('ion-accordion-group');
+    if (closestGroup !== this.el) {
+      return;
+    }
+    // If the active accordion is not in the current array of accordions, do not do anything
+    const accordions = await this.getAccordions();
+    const startingIndex = accordions.findIndex(a => a === accordionEl);
+    if (startingIndex === -1) {
+      return;
+    }
+    let accordion;
+    if (ev.key === 'ArrowDown') {
+      accordion = this.findNextAccordion(accordions, startingIndex);
+    }
+    else if (ev.key === 'ArrowUp') {
+      accordion = this.findPreviousAccordion(accordions, startingIndex);
+    }
+    else if (ev.key === 'Home') {
+      accordion = accordions[0];
+    }
+    else if (ev.key === 'End') {
+      accordion = accordions[accordions.length - 1];
+    }
+    if (accordion !== undefined && accordion !== activeElement) {
+      accordion.focus();
+    }
+  }
+  async componentDidLoad() {
+    if (this.disabled) {
+      this.disabledChanged();
+    }
+    if (this.readonly) {
+      this.readonlyChanged();
+    }
+  }
+  /**
+   * @internal
+   */
+  async requestAccordionToggle(accordionValue, accordionExpand) {
+    const { multiple, value, readonly, disabled } = this;
+    if (readonly || disabled) {
+      return;
+    }
+    if (accordionExpand) {
+      /**
+       * If group accepts multiple values
+       * check to see if value is already in
+       * in values array. If not, add it
+       * to the array.
+       */
+      if (multiple) {
+        const groupValue = value || [];
+        const processedValue = Array.isArray(groupValue) ? groupValue : [groupValue];
+        const valueExists = processedValue.find(v => v === accordionValue);
+        if (valueExists === undefined && accordionValue !== undefined) {
+          this.value = [...processedValue, accordionValue];
+        }
+      }
+      else {
+        this.value = accordionValue;
+      }
+    }
+    else {
+      /**
+       * If collapsing accordion, either filter the value
+       * out of the values array or unset the value.
+       */
+      if (multiple) {
+        const groupValue = value || [];
+        const processedValue = Array.isArray(groupValue) ? groupValue : [groupValue];
+        this.value = processedValue.filter(v => v !== accordionValue);
+      }
+      else {
+        this.value = undefined;
+      }
+    }
+  }
+  findNextAccordion(accordions, startingIndex) {
+    const nextAccordion = accordions[startingIndex + 1];
+    // tslint:disable-next-line:strict-type-predicates
+    if (nextAccordion === undefined) {
+      return accordions[0];
+    }
+    return nextAccordion;
+  }
+  findPreviousAccordion(accordions, startingIndex) {
+    const prevAccordion = accordions[startingIndex - 1];
+    // tslint:disable-next-line:strict-type-predicates
+    if (prevAccordion === undefined) {
+      return accordions[accordions.length - 1];
+    }
+    return prevAccordion;
+  }
+  /**
+   * @internal
+   */
+  async getAccordions() {
+    return Array.from(this.el.querySelectorAll(':scope > ion-accordion'));
+  }
+  render() {
+    const { disabled, readonly, expand } = this;
+    const mode = getIonMode$1(this);
+    return (hAsync(Host, { class: {
+        [mode]: true,
+        'accordion-group-disabled': disabled,
+        'accordion-group-readonly': readonly,
+        [`accordion-group-expand-${expand}`]: true
+      }, role: "presentation" }, hAsync("slot", null)));
+  }
+  get el() { return getElement(this); }
+  static get watchers() { return {
+    "value": ["valueChanged"],
+    "disabled": ["disabledChanged"],
+    "readonly": ["readonlyChanged"]
+  }; }
+  static get style() { return {
+    ios: accordionGroupIosCss,
+    md: accordionGroupMdCss
+  }; }
+  static get cmpMeta() { return {
+    "$flags$": 41,
+    "$tagName$": "ion-accordion-group",
+    "$members$": {
+      "animated": [4],
+      "multiple": [4],
+      "value": [1025],
+      "disabled": [4],
+      "readonly": [4],
+      "expand": [1],
+      "requestAccordionToggle": [64],
+      "getAccordions": [64]
+    },
+    "$listeners$": [[0, "keydown", "onKeydown"]],
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": []
+  }; }
+}
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const HapticEngine = {
   getEngine() {
     const win = window;
@@ -5849,6 +6773,9 @@ const hapticImpact = (options) => {
   HapticEngine.impact(options);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 class GestureController {
   constructor() {
     this.gestureId = 0;
@@ -6039,7 +6966,10 @@ class BlockerDelegate {
 const BACKDROP_NO_SCROLL = 'backdrop-no-scroll';
 const GESTURE_CONTROLLER = new GestureController();
 
-const addEventListener$1 = (el, eventName, callback, opts) => {
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const addEventListener = (el, eventName, callback, opts) => {
   // use event listener options when supported
   // otherwise it's just a boolean for the "capture" arg
   const listenerOpts = supportsPassive(el) ? {
@@ -6079,6 +7009,9 @@ const supportsPassive = (node) => {
 };
 let _sPassive;
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const MOUSE_WAIT = 2000;
 const createPointerEvents = (el, pointerDown, pointerMove, pointerUp, options) => {
   let rmTouchStart;
@@ -6095,7 +7028,7 @@ const createPointerEvents = (el, pointerDown, pointerMove, pointerUp, options) =
       return;
     }
     if (!rmTouchMove && pointerMove) {
-      rmTouchMove = addEventListener$1(el, 'touchmove', pointerMove, options);
+      rmTouchMove = addEventListener(el, 'touchmove', pointerMove, options);
     }
     /**
      * Events are dispatched on the element that is tapped and bubble up to
@@ -6107,10 +7040,10 @@ const createPointerEvents = (el, pointerDown, pointerMove, pointerUp, options) =
      * is removed from the DOM.
      */
     if (!rmTouchEnd) {
-      rmTouchEnd = addEventListener$1(ev.target, 'touchend', handleTouchEnd, options);
+      rmTouchEnd = addEventListener(ev.target, 'touchend', handleTouchEnd, options);
     }
     if (!rmTouchCancel) {
-      rmTouchCancel = addEventListener$1(ev.target, 'touchcancel', handleTouchEnd, options);
+      rmTouchCancel = addEventListener(ev.target, 'touchcancel', handleTouchEnd, options);
     }
   };
   const handleMouseDown = (ev) => {
@@ -6121,10 +7054,10 @@ const createPointerEvents = (el, pointerDown, pointerMove, pointerUp, options) =
       return;
     }
     if (!rmMouseMove && pointerMove) {
-      rmMouseMove = addEventListener$1(getDocument(el), 'mousemove', pointerMove, options);
+      rmMouseMove = addEventListener(getDocument(el), 'mousemove', pointerMove, options);
     }
     if (!rmMouseUp) {
-      rmMouseUp = addEventListener$1(getDocument(el), 'mouseup', handleMouseUp, options);
+      rmMouseUp = addEventListener(getDocument(el), 'mouseup', handleMouseUp, options);
     }
   };
   const handleTouchEnd = (ev) => {
@@ -6177,10 +7110,10 @@ const createPointerEvents = (el, pointerDown, pointerMove, pointerUp, options) =
     }
     else {
       if (!rmTouchStart) {
-        rmTouchStart = addEventListener$1(el, 'touchstart', handleTouchStart, options);
+        rmTouchStart = addEventListener(el, 'touchstart', handleTouchStart, options);
       }
       if (!rmMouseStart) {
-        rmMouseStart = addEventListener$1(el, 'mousedown', handleMouseDown, options);
+        rmMouseStart = addEventListener(el, 'mousedown', handleMouseDown, options);
       }
     }
   };
@@ -6198,6 +7131,9 @@ const getDocument = (node) => {
   return node instanceof Document ? node : node.ownerDocument;
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const createPanRecognizer = (direction, thresh, maxAngle) => {
   const radians = maxAngle * (Math.PI / 180);
   const isDirX = direction === 'x';
@@ -6247,6 +7183,9 @@ const createPanRecognizer = (direction, thresh, maxAngle) => {
   };
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const createGesture = (config) => {
   let hasCapturedPan = false;
   let hasStartedPan = false;
@@ -6489,6 +7428,9 @@ var index$1 = /*#__PURE__*/Object.freeze({
   GESTURE_CONTROLLER: GESTURE_CONTROLLER
 });
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const createButtonActiveGesture = (el, isButton) => {
   let currentTouchedButton;
   let initialTouchedButton;
@@ -6548,262 +7490,15 @@ const createButtonActiveGesture = (el, isButton) => {
   });
 };
 
-/**
- * When hardwareBackButton: false in config,
- * we need to make sure we also block the default
- * webview behavior. If we don't then it will be
- * possible for users to navigate backward while
- * an overlay is still open. Additionally, it will
- * give the appearance that the hardwareBackButton
- * config is not working as the page transition
- * will still happen.
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
  */
 const OVERLAY_BACK_BUTTON_PRIORITY = 100;
 const MENU_BACK_BUTTON_PRIORITY = 99; // 1 less than overlay priority since menu is displayed behind overlays
 
-/**
- * Waits for a component to be ready for
- * both custom element and non-custom element builds.
- * If non-custom element build, el.componentOnReady
- * will be used.
- * For custom element builds, we wait a frame
- * so that the inner contents of the component
- * have a chance to render.
- *
- * Use this utility rather than calling
- * el.componentOnReady yourself.
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
  */
-const componentOnReady = (el, callback) => {
-  if (el.componentOnReady) {
-    el.componentOnReady().then((resolvedEl) => callback(resolvedEl));
-  }
-  else {
-    raf(() => callback(el));
-  }
-};
-/**
- * Elements inside of web components sometimes need to inherit global attributes
- * set on the host. For example, the inner input in `ion-input` should inherit
- * the `title` attribute that developers set directly on `ion-input`. This
- * helper function should be called in componentWillLoad and assigned to a variable
- * that is later used in the render function.
- *
- * This does not need to be reactive as changing attributes on the host element
- * does not trigger a re-render.
- */
-const inheritAttributes = (el, attributes = []) => {
-  const attributeObject = {};
-  attributes.forEach(attr => {
-    if (el.hasAttribute(attr)) {
-      const value = el.getAttribute(attr);
-      if (value !== null) {
-        attributeObject[attr] = el.getAttribute(attr);
-      }
-      el.removeAttribute(attr);
-    }
-  });
-  return attributeObject;
-};
-const addEventListener = (el, eventName, callback, opts) => {
-  if (typeof window !== 'undefined') {
-    const win = window;
-    const config = win && win.Ionic && win.Ionic.config;
-    if (config) {
-      const ael = config.get('_ael');
-      if (ael) {
-        return ael(el, eventName, callback, opts);
-      }
-      else if (config._ael) {
-        return config._ael(el, eventName, callback, opts);
-      }
-    }
-  }
-  return el.addEventListener(eventName, callback, opts);
-};
-const removeEventListener = (el, eventName, callback, opts) => {
-  if (typeof window !== 'undefined') {
-    const win = window;
-    const config = win && win.Ionic && win.Ionic.config;
-    if (config) {
-      const rel = config.get('_rel');
-      if (rel) {
-        return rel(el, eventName, callback, opts);
-      }
-      else if (config._rel) {
-        return config._rel(el, eventName, callback, opts);
-      }
-    }
-  }
-  return el.removeEventListener(eventName, callback, opts);
-};
-/**
- * Gets the root context of a shadow dom element
- * On newer browsers this will be the shadowRoot,
- * but for older browser this may just be the
- * element itself.
- *
- * Useful for whenever you need to explicitly
- * do "myElement.shadowRoot!.querySelector(...)".
- */
-const getElementRoot = (el, fallback = el) => {
-  return el.shadowRoot || fallback;
-};
-/**
- * Patched version of requestAnimationFrame that avoids ngzone
- * Use only when you know ngzone should not run
- */
-const raf = (h) => {
-  if (typeof __zone_symbol__requestAnimationFrame === 'function') {
-    return __zone_symbol__requestAnimationFrame(h);
-  }
-  if (typeof requestAnimationFrame === 'function') {
-    return requestAnimationFrame(h);
-  }
-  return setTimeout(h);
-};
-const hasShadowDom = (el) => {
-  return !!el.shadowRoot && !!el.attachShadow;
-};
-const findItemLabel = (componentEl) => {
-  const itemEl = componentEl.closest('ion-item');
-  if (itemEl) {
-    return itemEl.querySelector('ion-label');
-  }
-  return null;
-};
-/**
- * This method is used for Ionic's input components that use Shadow DOM. In
- * order to properly label the inputs to work with screen readers, we need
- * to get the text content of the label outside of the shadow root and pass
- * it to the input inside of the shadow root.
- *
- * Referencing label elements by id from outside of the component is
- * impossible due to the shadow boundary, read more here:
- * https://developer.salesforce.com/blogs/2020/01/accessibility-for-web-components.html
- *
- * @param componentEl The shadow element that needs the aria label
- * @param inputId The unique identifier for the input
- */
-const getAriaLabel = (componentEl, inputId) => {
-  let labelText;
-  // If the user provides their own label via the aria-labelledby attr
-  // we should use that instead of looking for an ion-label
-  const labelledBy = componentEl.getAttribute('aria-labelledby');
-  // Grab the id off of the component in case they are using
-  // a custom label using the label element
-  const componentId = componentEl.id;
-  let labelId = labelledBy !== null && labelledBy.trim() !== ''
-    ? labelledBy
-    : inputId + '-lbl';
-  let label = labelledBy !== null && labelledBy.trim() !== ''
-    ? document.getElementById(labelledBy)
-    : findItemLabel(componentEl);
-  if (label) {
-    if (labelledBy === null) {
-      label.id = labelId;
-    }
-    labelText = label.textContent;
-    label.setAttribute('aria-hidden', 'true');
-    // if there is no label, check to see if the user has provided
-    // one by setting an id on the component and using the label element
-  }
-  else if (componentId.trim() !== '') {
-    label = document.querySelector(`label[for="${componentId}"]`);
-    if (label) {
-      if (label.id !== '') {
-        labelId = label.id;
-      }
-      else {
-        label.id = labelId = `${componentId}-lbl`;
-      }
-      labelText = label.textContent;
-    }
-  }
-  return { label, labelId, labelText };
-};
-/**
- * This method is used to add a hidden input to a host element that contains
- * a Shadow DOM. It does not add the input inside of the Shadow root which
- * allows it to be picked up inside of forms. It should contain the same
- * values as the host element.
- *
- * @param always Add a hidden input even if the container does not use Shadow
- * @param container The element where the input will be added
- * @param name The name of the input
- * @param value The value of the input
- * @param disabled If true, the input is disabled
- */
-const renderHiddenInput = (always, container, name, value, disabled) => {
-  if (always || hasShadowDom(container)) {
-    let input = container.querySelector('input.aux-input');
-    if (!input) {
-      input = container.ownerDocument.createElement('input');
-      input.type = 'hidden';
-      input.classList.add('aux-input');
-      container.appendChild(input);
-    }
-    input.disabled = disabled;
-    input.name = name;
-    input.value = value || '';
-  }
-};
-const clamp = (min, n, max) => {
-  return Math.max(min, Math.min(n, max));
-};
-const assert = (actual, reason) => {
-  if (!actual) {
-    const message = 'ASSERT: ' + reason;
-    console.error(message);
-    debugger; // tslint:disable-line
-    throw new Error(message);
-  }
-};
-const pointerCoord = (ev) => {
-  // get X coordinates for either a mouse click
-  // or a touch depending on the given event
-  if (ev) {
-    const changedTouches = ev.changedTouches;
-    if (changedTouches && changedTouches.length > 0) {
-      const touch = changedTouches[0];
-      return { x: touch.clientX, y: touch.clientY };
-    }
-    if (ev.pageX !== undefined) {
-      return { x: ev.pageX, y: ev.pageY };
-    }
-  }
-  return { x: 0, y: 0 };
-};
-/**
- * @hidden
- * Given a side, return if it should be on the end
- * based on the value of dir
- * @param side the side
- * @param isRTL whether the application dir is rtl
- */
-const isEndSide = (side) => {
-  const isRTL = document.dir === 'rtl';
-  switch (side) {
-    case 'start': return isRTL;
-    case 'end': return !isRTL;
-    default:
-      throw new Error(`"${side}" is not a valid value for [side]. Use "start" or "end" instead.`);
-  }
-};
-const debounceEvent = (event, wait) => {
-  const original = event._original || event;
-  return {
-    _original: event,
-    emit: debounce$1(original.emit.bind(original), wait)
-  };
-};
-const debounce$1 = (func, wait = 0) => {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(func, wait, ...args);
-  };
-};
-
 let lastId = 0;
 const activeAnimations = new WeakMap();
 const createController = (tagName) => {
@@ -6821,12 +7516,13 @@ const createController = (tagName) => {
 };
 const alertController = /*@__PURE__*/ createController('ion-alert');
 const actionSheetController = /*@__PURE__*/ createController('ion-action-sheet');
-const pickerController = /*@__PURE__*/ createController('ion-picker');
 const popoverController = /*@__PURE__*/ createController('ion-popover');
-const prepareOverlay = (el) => {
+const prepareOverlay = (el, options = {
+  trapKeyboardFocus: true
+}) => {
   /* tslint:disable-next-line */
   if (typeof document !== 'undefined') {
-    connectListeners(document);
+    connectListeners(document, options);
   }
   const overlayIndex = lastId++;
   el.overlayIndex = overlayIndex;
@@ -6836,13 +7532,15 @@ const prepareOverlay = (el) => {
 };
 const createOverlay = (tagName, opts) => {
   /* tslint:disable-next-line */
-  if (typeof customElements !== 'undefined') {
-    return customElements.whenDefined(tagName).then(() => {
+  if (typeof window !== 'undefined' && typeof window.customElements !== 'undefined') {
+    return window.customElements.whenDefined(tagName).then(() => {
       const element = document.createElement(tagName);
       element.classList.add('overlay-hidden');
-      // convert the passed in overlay options into props
-      // that get passed down into the new overlay
-      Object.assign(element, opts);
+      /**
+       * Convert the passed in overlay options into props
+       * that get passed down into the new overlay.
+       */
+      Object.assign(element, Object.assign(Object.assign({}, opts), { hasController: true }));
       // append the overlay element to the document body
       getAppRoot(document).appendChild(element);
       return new Promise(resolve => componentOnReady(element, resolve));
@@ -6860,13 +7558,14 @@ const focusFirstDescendant = (ref, overlay) => {
     firstInput = shadowRoot.querySelector(innerFocusableQueryString) || firstInput;
   }
   if (firstInput) {
-    firstInput.focus();
+    focusElement(firstInput);
   }
   else {
     // Focus overlay instead of letting focus escape
     overlay.focus();
   }
 };
+const isOverlayHidden = (overlay) => overlay.classList.contains('overlay-hidden');
 const focusLastDescendant = (ref, overlay) => {
   const inputs = Array.from(ref.querySelectorAll(focusableQueryString$1));
   let lastInput = inputs.length > 0 ? inputs[inputs.length - 1] : null;
@@ -6893,51 +7592,102 @@ const focusLastDescendant = (ref, overlay) => {
 const trapKeyboardFocus = (ev, doc) => {
   const lastOverlay = getOverlay(doc);
   const target = ev.target;
-  // If no active overlay, ignore this event
+  /**
+   * If no active overlay, ignore this event.
+   *
+   * If this component uses the shadow dom,
+   * this global listener is pointless
+   * since it will not catch the focus
+   * traps as they are inside the shadow root.
+   * We need to add a listener to the shadow root
+   * itself to ensure the focus trap works.
+   */
   if (!lastOverlay || !target) {
     return;
   }
-  /**
-   * If we are focusing the overlay, clear
-   * the last focused element so that hitting
-   * tab activates the first focusable element
-   * in the overlay wrapper.
-   */
-  if (lastOverlay === target) {
-    lastOverlay.lastFocus = undefined;
+  const trapScopedFocus = () => {
     /**
-     * Otherwise, we must be focusing an element
-     * inside of the overlay. The two possible options
-     * here are an input/button/etc or the ion-focus-trap
-     * element. The focus trap element is used to prevent
-     * the keyboard focus from leaving the overlay when
-     * using Tab or screen assistants.
+     * If we are focusing the overlay, clear
+     * the last focused element so that hitting
+     * tab activates the first focusable element
+     * in the overlay wrapper.
      */
-  }
-  else {
-    /**
-     * We do not want to focus the traps, so get the overlay
-     * wrapper element as the traps live outside of the wrapper.
-     */
-    const overlayRoot = getElementRoot(lastOverlay);
-    if (!overlayRoot.contains(target)) {
-      return;
+    if (lastOverlay === target) {
+      lastOverlay.lastFocus = undefined;
+      /**
+       * Otherwise, we must be focusing an element
+       * inside of the overlay. The two possible options
+       * here are an input/button/etc or the ion-focus-trap
+       * element. The focus trap element is used to prevent
+       * the keyboard focus from leaving the overlay when
+       * using Tab or screen assistants.
+       */
     }
-    const overlayWrapper = overlayRoot.querySelector('.ion-overlay-wrapper');
-    if (!overlayWrapper) {
-      return;
+    else {
+      /**
+       * We do not want to focus the traps, so get the overlay
+       * wrapper element as the traps live outside of the wrapper.
+       */
+      const overlayRoot = getElementRoot(lastOverlay);
+      if (!overlayRoot.contains(target)) {
+        return;
+      }
+      const overlayWrapper = overlayRoot.querySelector('.ion-overlay-wrapper');
+      if (!overlayWrapper) {
+        return;
+      }
+      /**
+       * If the target is inside the wrapper, let the browser
+       * focus as normal and keep a log of the last focused element.
+       */
+      if (overlayWrapper.contains(target)) {
+        lastOverlay.lastFocus = target;
+      }
+      else {
+        /**
+         * Otherwise, we must have focused one of the focus traps.
+         * We need to wrap the focus to either the first element
+         * or the last element.
+         */
+        /**
+         * Once we call `focusFirstDescendant` and focus the first
+         * descendant, another focus event will fire which will
+         * cause `lastOverlay.lastFocus` to be updated before
+         * we can run the code after that. We will cache the value
+         * here to avoid that.
+         */
+        const lastFocus = lastOverlay.lastFocus;
+        // Focus the first element in the overlay wrapper
+        focusFirstDescendant(overlayWrapper, lastOverlay);
+        /**
+         * If the cached last focused element is the
+         * same as the active element, then we need
+         * to wrap focus to the last descendant. This happens
+         * when the first descendant is focused, and the user
+         * presses Shift + Tab. The previous line will focus
+         * the same descendant again (the first one), causing
+         * last focus to equal the active element.
+         */
+        if (lastFocus === doc.activeElement) {
+          focusLastDescendant(overlayWrapper, lastOverlay);
+        }
+        lastOverlay.lastFocus = doc.activeElement;
+      }
     }
+  };
+  const trapShadowFocus = () => {
     /**
      * If the target is inside the wrapper, let the browser
      * focus as normal and keep a log of the last focused element.
      */
-    if (overlayWrapper.contains(target)) {
+    if (lastOverlay.contains(target)) {
       lastOverlay.lastFocus = target;
     }
     else {
       /**
-       * Otherwise, we must have focused one of the focus traps.
-       * We need to wrap the focus to either the first element
+       * Otherwise, we are about to have focus
+       * go out of the overlay. We need to wrap
+       * the focus to either the first element
        * or the last element.
        */
       /**
@@ -6949,7 +7699,7 @@ const trapKeyboardFocus = (ev, doc) => {
        */
       const lastFocus = lastOverlay.lastFocus;
       // Focus the first element in the overlay wrapper
-      focusFirstDescendant(overlayWrapper, lastOverlay);
+      focusFirstDescendant(lastOverlay, lastOverlay);
       /**
        * If the cached last focused element is the
        * same as the active element, then we need
@@ -6960,16 +7710,34 @@ const trapKeyboardFocus = (ev, doc) => {
        * last focus to equal the active element.
        */
       if (lastFocus === doc.activeElement) {
-        focusLastDescendant(overlayWrapper, lastOverlay);
+        focusLastDescendant(lastOverlay, lastOverlay);
       }
       lastOverlay.lastFocus = doc.activeElement;
     }
+  };
+  if (lastOverlay.shadowRoot) {
+    trapShadowFocus();
+  }
+  else {
+    trapScopedFocus();
   }
 };
-const connectListeners = (doc) => {
+const connectListeners = (doc, options) => {
   if (lastId === 0) {
     lastId = 1;
-    doc.addEventListener('focus', ev => trapKeyboardFocus(ev, doc), true);
+    if (options.trapKeyboardFocus) {
+      doc.addEventListener('focus', (ev) => {
+        /**
+         * ion-menu has its own focus trapping listener
+         * so we do not want the two listeners to conflict
+         * with each other.
+         */
+        if (ev.target && ev.target.tagName === 'ION-MENU') {
+          return;
+        }
+        trapKeyboardFocus(ev, doc);
+      }, true);
+    }
     // handle back-button click
     doc.addEventListener('ionBackButton', ev => {
       const lastOverlay = getOverlay(doc);
@@ -7004,8 +7772,15 @@ const getOverlays = (doc, selector) => {
   return Array.from(doc.querySelectorAll(selector))
     .filter(c => c.overlayIndex > 0);
 };
+/**
+ * Returns an overlay element
+ * @param doc The document to find the element within.
+ * @param overlayTag The selector for the overlay, defaults to Ionic overlay components.
+ * @param id The unique identifier for the overlay instance.
+ * @returns The overlay element or `undefined` if no overlay element is found.
+ */
 const getOverlay = (doc, overlayTag, id) => {
-  const overlays = getOverlays(doc, overlayTag);
+  const overlays = getOverlays(doc, overlayTag).filter(o => !isOverlayHidden(o));
   return (id === undefined)
     ? overlays[overlays.length - 1]
     : overlays.find(o => o.id === id);
@@ -7046,12 +7821,14 @@ const setRootAriaHidden = (hidden = false) => {
   }
 };
 const present = async (overlay, name, iosEnterAnimation, mdEnterAnimation, opts) => {
+  var _a, _b;
   if (overlay.presented) {
     return;
   }
   setRootAriaHidden(true);
   overlay.presented = true;
   overlay.willPresent.emit();
+  (_a = overlay.willPresentShorthand) === null || _a === void 0 ? void 0 : _a.emit();
   const mode = getIonMode$1(overlay);
   // get the user's animation fn if one was provided
   const animationBuilder = (overlay.enterAnimation)
@@ -7060,6 +7837,7 @@ const present = async (overlay, name, iosEnterAnimation, mdEnterAnimation, opts)
   const completed = await overlayAnimation(overlay, animationBuilder, overlay.el, opts);
   if (completed) {
     overlay.didPresent.emit();
+    (_b = overlay.didPresentShorthand) === null || _b === void 0 ? void 0 : _b.emit();
   }
   /**
    * When an overlay that steals focus
@@ -7100,6 +7878,7 @@ const focusPreviousElementOnDismiss = async (overlayEl) => {
   previousElement.focus();
 };
 const dismiss = async (overlay, data, role, name, iosLeaveAnimation, mdLeaveAnimation, opts) => {
+  var _a, _b;
   if (!overlay.presented) {
     return false;
   }
@@ -7109,6 +7888,7 @@ const dismiss = async (overlay, data, role, name, iosLeaveAnimation, mdLeaveAnim
     // Overlay contents should not be clickable during dismiss
     overlay.el.style.setProperty('pointer-events', 'none');
     overlay.willDismiss.emit({ data, role });
+    (_a = overlay.willDismissShorthand) === null || _a === void 0 ? void 0 : _a.emit({ data, role });
     const mode = getIonMode$1(overlay);
     const animationBuilder = (overlay.leaveAnimation)
       ? overlay.leaveAnimation
@@ -7118,7 +7898,15 @@ const dismiss = async (overlay, data, role, name, iosLeaveAnimation, mdLeaveAnim
       await overlayAnimation(overlay, animationBuilder, overlay.el, opts);
     }
     overlay.didDismiss.emit({ data, role });
+    (_b = overlay.didDismissShorthand) === null || _b === void 0 ? void 0 : _b.emit({ data, role });
     activeAnimations.delete(overlay);
+    /**
+     * Make overlay hidden again in case it is being reused.
+     * We can safely remove pointer-events: none as
+     * overlay-hidden will set display: none.
+     */
+    overlay.el.classList.add('overlay-hidden');
+    overlay.el.style.removeProperty('pointer-events');
   }
   catch (err) {
     console.error(err);
@@ -7132,7 +7920,7 @@ const getAppRoot = (doc) => {
 const overlayAnimation = async (overlay, animationBuilder, baseEl, opts) => {
   // Make overlay visible in case it's hidden
   baseEl.classList.remove('overlay-hidden');
-  const aniRoot = baseEl.shadowRoot || overlay.el;
+  const aniRoot = overlay.el;
   const animation = animationBuilder(aniRoot, opts);
   if (!overlay.animated || !config$1.getBoolean('animated', true)) {
     animation.duration(0);
@@ -7140,7 +7928,7 @@ const overlayAnimation = async (overlay, animationBuilder, baseEl, opts) => {
   if (overlay.keyboardClose) {
     animation.beforeAddWrite(() => {
       const activeElement = baseEl.ownerDocument.activeElement;
-      if (activeElement && activeElement.matches('input, ion-input, ion-textarea')) {
+      if (activeElement && activeElement.matches('input,ion-input, ion-textarea')) {
         activeElement.blur();
       }
     });
@@ -7163,12 +7951,19 @@ const onceEvent = (element, eventName, callback) => {
     removeEventListener(element, eventName, handler);
     callback(ev);
   };
-  addEventListener(element, eventName, handler);
+  addEventListener$1(element, eventName, handler);
 };
 const isCancel = (role) => {
   return role === 'cancel' || role === BACKDROP;
 };
 const defaultGate = (h) => h();
+/**
+ * Calls a developer provided method while avoiding
+ * Angular Zones. Since the handler is provided by
+ * the developer, we should throw any errors
+ * received so that developer-provided bug
+ * tracking software can log it.
+ */
 const safeCall = (handler, arg) => {
   if (typeof handler === 'function') {
     const jmp = config$1.get('_zoneGate', defaultGate);
@@ -7177,7 +7972,7 @@ const safeCall = (handler, arg) => {
         return handler(arg);
       }
       catch (e) {
-        console.error(e);
+        throw e;
       }
     });
   }
@@ -7185,6 +7980,9 @@ const safeCall = (handler, arg) => {
 };
 const BACKDROP = 'backdrop';
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const hostContext = (selector, el) => {
   return el.closest(selector) !== null;
 };
@@ -7223,6 +8021,9 @@ const openURL = async (url, ev, direction, animation) => {
   return false;
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 let animationPrefix;
 /**
  * Web Animations requires hyphenated CSS properties
@@ -7338,6 +8139,9 @@ const addClassToArray = (classes = [], className) => {
   return classes;
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const createAnimation = (animationId) => {
   let _delay;
   let _duration;
@@ -7680,8 +8484,28 @@ const createAnimation = (animationId) => {
     return ani;
   };
   const keyframes = (keyframeValues) => {
+    const different = _keyframes !== keyframeValues;
     _keyframes = keyframeValues;
+    if (different) {
+      updateKeyframes(_keyframes);
+    }
     return ani;
+  };
+  const updateKeyframes = (keyframeValues) => {
+    if (supportsWebAnimations) {
+      getWebAnimations().forEach(animation => {
+        if (animation.effect.setKeyframes) {
+          animation.effect.setKeyframes(keyframeValues);
+        }
+        else {
+          const newEffect = new KeyframeEffect(animation.effect.target, keyframeValues, animation.effect.getTiming());
+          animation.effect = newEffect;
+        }
+      });
+    }
+    else {
+      initializeCSSAnimation();
+    }
   };
   /**
    * Run all "before" animation hooks.
@@ -7893,9 +8717,7 @@ const createAnimation = (animationId) => {
     if (!initialized) {
       initializeAnimation();
     }
-    else {
-      update(false, true, step);
-    }
+    update(false, true, step);
     return ani;
   };
   const progressStep = (step) => {
@@ -8175,6 +8997,9 @@ const createAnimation = (animationId) => {
   };
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * iOS Action Sheet Enter Animation
  */
@@ -8199,6 +9024,9 @@ const iosEnterAnimation$6 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * iOS Action Sheet Leave Animation
  */
@@ -8219,6 +9047,9 @@ const iosLeaveAnimation$6 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * MD Action Sheet Enter Animation
  */
@@ -8243,6 +9074,9 @@ const mdEnterAnimation$5 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * MD Action Sheet Leave Animation
  */
@@ -8263,9 +9097,9 @@ const mdLeaveAnimation$5 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
-const actionSheetIosCss = ".sc-ion-action-sheet-ios-h{--color:initial;--button-color-activated:var(--button-color);--button-color-focused:var(--button-color);--button-color-hover:var(--button-color);--button-color-selected:var(--button-color);--min-width:auto;--width:100%;--max-width:500px;--min-height:auto;--height:100%;--max-height:calc(100% - (var(--ion-safe-area-top) + var(--ion-safe-area-bottom)));-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;left:0;right:0;top:0;bottom:0;display:block;position:fixed;outline:none;font-family:var(--ion-font-family, inherit);touch-action:none;user-select:none;z-index:1001}.overlay-hidden.sc-ion-action-sheet-ios-h{display:none}.action-sheet-wrapper.sc-ion-action-sheet-ios{left:0;right:0;bottom:0;margin-left:auto;margin-right:auto;margin-top:var(--ion-safe-area-top, 0);margin-bottom:var(--ion-safe-area-bottom, 0);transform:translate3d(0,  100%,  0);display:block;position:absolute;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);z-index:10;pointer-events:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-wrapper.sc-ion-action-sheet-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}.action-sheet-button.sc-ion-action-sheet-ios{display:block;position:relative;width:100%;border:0;outline:none;background:var(--button-background);color:var(--button-color);font-family:inherit;overflow:hidden}.action-sheet-button-inner.sc-ion-action-sheet-ios{display:flex;position:relative;flex-flow:row nowrap;flex-shrink:0;align-items:center;justify-content:center;pointer-events:none;width:100%;height:100%;z-index:1}.action-sheet-container.sc-ion-action-sheet-ios{display:flex;flex-flow:column;justify-content:flex-end;height:100%;max-height:100%}.action-sheet-group.sc-ion-action-sheet-ios{flex-shrink:2;overscroll-behavior-y:contain;overflow-y:auto;-webkit-overflow-scrolling:touch;pointer-events:all;background:var(--background)}.action-sheet-group.sc-ion-action-sheet-ios::-webkit-scrollbar{display:none}.action-sheet-group-cancel.sc-ion-action-sheet-ios{flex-shrink:0;overflow:hidden}.action-sheet-button.sc-ion-action-sheet-ios::after{left:0;right:0;top:0;bottom:0;position:absolute;content:\"\";opacity:0}.action-sheet-selected.sc-ion-action-sheet-ios{color:var(--button-color-selected)}.action-sheet-selected.sc-ion-action-sheet-ios::after{background:var(--button-background-selected);opacity:var(--button-background-selected-opacity)}.action-sheet-button.ion-activated.sc-ion-action-sheet-ios{color:var(--button-color-activated)}.action-sheet-button.ion-activated.sc-ion-action-sheet-ios::after{background:var(--button-background-activated);opacity:var(--button-background-activated-opacity)}.action-sheet-button.ion-focused.sc-ion-action-sheet-ios{color:var(--button-color-focused)}.action-sheet-button.ion-focused.sc-ion-action-sheet-ios::after{background:var(--button-background-focused);opacity:var(--button-background-focused-opacity)}@media (any-hover: hover){.action-sheet-button.sc-ion-action-sheet-ios:hover{color:var(--button-color-hover)}.action-sheet-button.sc-ion-action-sheet-ios:hover::after{background:var(--button-background-hover);opacity:var(--button-background-hover-opacity)}}.sc-ion-action-sheet-ios-h{--background:var(--ion-overlay-background-color, var(--ion-color-step-100, #f9f9f9));--backdrop-opacity:var(--ion-backdrop-opacity, 0.4);--button-background:linear-gradient(0deg, rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08), rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08) 50%, transparent 50%) bottom/100% 1px no-repeat transparent;--button-background-activated:var(--ion-text-color, #000);--button-background-activated-opacity:.08;--button-background-hover:currentColor;--button-background-hover-opacity:.04;--button-background-focused:currentColor;--button-background-focused-opacity:.12;--button-background-selected:var(--ion-color-step-150, var(--ion-background-color, #fff));--button-background-selected-opacity:1;--button-color:var(--ion-color-primary, #3880ff);--color:var(--ion-color-step-400, #999999);text-align:center}.action-sheet-container.sc-ion-action-sheet-ios{padding-left:8px;padding-right:8px;padding-top:0;padding-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-container.sc-ion-action-sheet-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}.action-sheet-group.sc-ion-action-sheet-ios{border-radius:13px;margin-bottom:8px}.action-sheet-group.sc-ion-action-sheet-ios:first-child{margin-top:10px}.action-sheet-group.sc-ion-action-sheet-ios:last-child{margin-bottom:10px}@supports (backdrop-filter: blur(0)){.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-group.sc-ion-action-sheet-ios{background-color:transparent;backdrop-filter:saturate(280%) blur(20px)}.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-title.sc-ion-action-sheet-ios,.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-button.sc-ion-action-sheet-ios{background-color:transparent;background-image:linear-gradient(0deg, rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8), rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8) 100%), linear-gradient(0deg, rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.4), rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.4) 50%, rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8) 50%);background-repeat:no-repeat;background-position:top, bottom;background-size:100% calc(100% - 1px), 100% 1px;backdrop-filter:saturate(120%)}.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-button.ion-activated.sc-ion-action-sheet-ios{background-color:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.7);background-image:none}.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-cancel.sc-ion-action-sheet-ios{background:var(--button-background-selected)}}.action-sheet-title.sc-ion-action-sheet-ios{background:linear-gradient(0deg, rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08), rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08) 50%, transparent 50%) bottom/100% 1px no-repeat transparent}.action-sheet-title.sc-ion-action-sheet-ios{padding-left:10px;padding-right:10px;padding-top:14px;padding-bottom:13px;color:var(--color, var(--ion-color-step-400, #999999));font-size:13px;font-weight:400;text-align:center}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-title.sc-ion-action-sheet-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:10px;padding-inline-start:10px;-webkit-padding-end:10px;padding-inline-end:10px}}.action-sheet-title.action-sheet-has-sub-title.sc-ion-action-sheet-ios{font-weight:600}.action-sheet-sub-title.sc-ion-action-sheet-ios{padding-left:0;padding-right:0;padding-top:6px;padding-bottom:0;font-size:13px;font-weight:400}.action-sheet-button.sc-ion-action-sheet-ios{padding-left:18px;padding-right:18px;padding-top:18px;padding-bottom:18px;height:56px;font-size:20px;contain:strict}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-button.sc-ion-action-sheet-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:18px;padding-inline-start:18px;-webkit-padding-end:18px;padding-inline-end:18px}}.action-sheet-button.sc-ion-action-sheet-ios .action-sheet-icon.sc-ion-action-sheet-ios{margin-right:0.3em;font-size:28px;pointer-events:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-button.sc-ion-action-sheet-ios .action-sheet-icon.sc-ion-action-sheet-ios{margin-right:unset;-webkit-margin-end:0.3em;margin-inline-end:0.3em}}.action-sheet-button.sc-ion-action-sheet-ios:last-child{background-image:none}.action-sheet-selected.sc-ion-action-sheet-ios{font-weight:bold}.action-sheet-cancel.sc-ion-action-sheet-ios{font-weight:600}.action-sheet-cancel.sc-ion-action-sheet-ios::after{background:var(--button-background-selected);opacity:var(--button-background-selected-opacity)}.action-sheet-destructive.sc-ion-action-sheet-ios,.action-sheet-destructive.ion-activated.sc-ion-action-sheet-ios,.action-sheet-destructive.ion-focused.sc-ion-action-sheet-ios{color:var(--ion-color-danger, #eb445a)}@media (any-hover: hover){.action-sheet-destructive.sc-ion-action-sheet-ios:hover{color:var(--ion-color-danger, #eb445a)}}";
+const actionSheetIosCss = ".sc-ion-action-sheet-ios-h{--color:initial;--button-color-activated:var(--button-color);--button-color-focused:var(--button-color);--button-color-hover:var(--button-color);--button-color-selected:var(--button-color);--min-width:auto;--width:100%;--max-width:500px;--min-height:auto;--height:100%;--max-height:calc(100% - (var(--ion-safe-area-top) + var(--ion-safe-area-bottom)));-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;left:0;right:0;top:0;bottom:0;display:block;position:fixed;outline:none;font-family:var(--ion-font-family, inherit);touch-action:none;user-select:none;z-index:1001}.overlay-hidden.sc-ion-action-sheet-ios-h{display:none}.action-sheet-wrapper.sc-ion-action-sheet-ios{left:0;right:0;bottom:0;transform:translate3d(0,  100%,  0);display:block;position:absolute;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);z-index:10;pointer-events:none}.action-sheet-button.sc-ion-action-sheet-ios{display:block;position:relative;width:100%;border:0;outline:none;background:var(--button-background);color:var(--button-color);font-family:inherit;overflow:hidden}.action-sheet-button-inner.sc-ion-action-sheet-ios{display:flex;position:relative;flex-flow:row nowrap;flex-shrink:0;align-items:center;justify-content:center;pointer-events:none;width:100%;height:100%;z-index:1}.action-sheet-container.sc-ion-action-sheet-ios{display:flex;flex-flow:column;justify-content:flex-end;height:100%;max-height:100%}.action-sheet-group.sc-ion-action-sheet-ios{flex-shrink:2;overscroll-behavior-y:contain;overflow-y:auto;-webkit-overflow-scrolling:touch;pointer-events:all;background:var(--background)}.action-sheet-group.sc-ion-action-sheet-ios::-webkit-scrollbar{display:none}.action-sheet-group-cancel.sc-ion-action-sheet-ios{flex-shrink:0;overflow:hidden}.action-sheet-button.sc-ion-action-sheet-ios::after{left:0;right:0;top:0;bottom:0;position:absolute;content:\"\";opacity:0}.action-sheet-selected.sc-ion-action-sheet-ios{color:var(--button-color-selected)}.action-sheet-selected.sc-ion-action-sheet-ios::after{background:var(--button-background-selected);opacity:var(--button-background-selected-opacity)}.action-sheet-button.ion-activated.sc-ion-action-sheet-ios{color:var(--button-color-activated)}.action-sheet-button.ion-activated.sc-ion-action-sheet-ios::after{background:var(--button-background-activated);opacity:var(--button-background-activated-opacity)}.action-sheet-button.ion-focused.sc-ion-action-sheet-ios{color:var(--button-color-focused)}.action-sheet-button.ion-focused.sc-ion-action-sheet-ios::after{background:var(--button-background-focused);opacity:var(--button-background-focused-opacity)}@media (any-hover: hover){.action-sheet-button.sc-ion-action-sheet-ios:hover{color:var(--button-color-hover)}.action-sheet-button.sc-ion-action-sheet-ios:hover::after{background:var(--button-background-hover);opacity:var(--button-background-hover-opacity)}}.sc-ion-action-sheet-ios-h{--background:var(--ion-overlay-background-color, var(--ion-color-step-100, #f9f9f9));--backdrop-opacity:var(--ion-backdrop-opacity, 0.4);--button-background:linear-gradient(0deg, rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08), rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08) 50%, transparent 50%) bottom/100% 1px no-repeat transparent;--button-background-activated:var(--ion-text-color, #000);--button-background-activated-opacity:.08;--button-background-hover:currentColor;--button-background-hover-opacity:.04;--button-background-focused:currentColor;--button-background-focused-opacity:.12;--button-background-selected:var(--ion-color-step-150, var(--ion-background-color, #fff));--button-background-selected-opacity:1;--button-color:var(--ion-color-primary, #3880ff);--color:var(--ion-color-step-400, #999999);text-align:center}.action-sheet-wrapper.sc-ion-action-sheet-ios{margin-left:auto;margin-right:auto;margin-top:var(--ion-safe-area-top, 0);margin-bottom:var(--ion-safe-area-bottom, 0)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-wrapper.sc-ion-action-sheet-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}.action-sheet-container.sc-ion-action-sheet-ios{padding-left:8px;padding-right:8px;padding-top:0;padding-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-container.sc-ion-action-sheet-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}.action-sheet-group.sc-ion-action-sheet-ios{border-radius:13px;margin-bottom:8px}.action-sheet-group.sc-ion-action-sheet-ios:first-child{margin-top:10px}.action-sheet-group.sc-ion-action-sheet-ios:last-child{margin-bottom:10px}@supports (backdrop-filter: blur(0)){.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-group.sc-ion-action-sheet-ios{background-color:transparent;backdrop-filter:saturate(280%) blur(20px)}.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-title.sc-ion-action-sheet-ios,.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-button.sc-ion-action-sheet-ios{background-color:transparent;background-image:linear-gradient(0deg, rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8), rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8) 100%), linear-gradient(0deg, rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.4), rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.4) 50%, rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8) 50%);background-repeat:no-repeat;background-position:top, bottom;background-size:100% calc(100% - 1px), 100% 1px;backdrop-filter:saturate(120%)}.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-button.ion-activated.sc-ion-action-sheet-ios{background-color:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.7);background-image:none}.action-sheet-translucent.sc-ion-action-sheet-ios-h .action-sheet-cancel.sc-ion-action-sheet-ios{background:var(--button-background-selected)}}.action-sheet-title.sc-ion-action-sheet-ios{background:linear-gradient(0deg, rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08), rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.08) 50%, transparent 50%) bottom/100% 1px no-repeat transparent}.action-sheet-title.sc-ion-action-sheet-ios{padding-left:10px;padding-right:10px;padding-top:14px;padding-bottom:13px;color:var(--color, var(--ion-color-step-400, #999999));font-size:13px;font-weight:400;text-align:center}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-title.sc-ion-action-sheet-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:10px;padding-inline-start:10px;-webkit-padding-end:10px;padding-inline-end:10px}}.action-sheet-title.action-sheet-has-sub-title.sc-ion-action-sheet-ios{font-weight:600}.action-sheet-sub-title.sc-ion-action-sheet-ios{padding-left:0;padding-right:0;padding-top:6px;padding-bottom:0;font-size:13px;font-weight:400}.action-sheet-button.sc-ion-action-sheet-ios{padding-left:18px;padding-right:18px;padding-top:18px;padding-bottom:18px;height:56px;font-size:20px;contain:strict}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-button.sc-ion-action-sheet-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:18px;padding-inline-start:18px;-webkit-padding-end:18px;padding-inline-end:18px}}.action-sheet-button.sc-ion-action-sheet-ios .action-sheet-icon.sc-ion-action-sheet-ios{margin-right:0.3em;font-size:28px;pointer-events:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-button.sc-ion-action-sheet-ios .action-sheet-icon.sc-ion-action-sheet-ios{margin-right:unset;-webkit-margin-end:0.3em;margin-inline-end:0.3em}}.action-sheet-button.sc-ion-action-sheet-ios:last-child{background-image:none}.action-sheet-selected.sc-ion-action-sheet-ios{font-weight:bold}.action-sheet-cancel.sc-ion-action-sheet-ios{font-weight:600}.action-sheet-cancel.sc-ion-action-sheet-ios::after{background:var(--button-background-selected);opacity:var(--button-background-selected-opacity)}.action-sheet-destructive.sc-ion-action-sheet-ios,.action-sheet-destructive.ion-activated.sc-ion-action-sheet-ios,.action-sheet-destructive.ion-focused.sc-ion-action-sheet-ios{color:var(--ion-color-danger, #eb445a)}@media (any-hover: hover){.action-sheet-destructive.sc-ion-action-sheet-ios:hover{color:var(--ion-color-danger, #eb445a)}}";
 
-const actionSheetMdCss = ".sc-ion-action-sheet-md-h{--color:initial;--button-color-activated:var(--button-color);--button-color-focused:var(--button-color);--button-color-hover:var(--button-color);--button-color-selected:var(--button-color);--min-width:auto;--width:100%;--max-width:500px;--min-height:auto;--height:100%;--max-height:calc(100% - (var(--ion-safe-area-top) + var(--ion-safe-area-bottom)));-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;left:0;right:0;top:0;bottom:0;display:block;position:fixed;outline:none;font-family:var(--ion-font-family, inherit);touch-action:none;user-select:none;z-index:1001}.overlay-hidden.sc-ion-action-sheet-md-h{display:none}.action-sheet-wrapper.sc-ion-action-sheet-md{left:0;right:0;bottom:0;margin-left:auto;margin-right:auto;margin-top:var(--ion-safe-area-top, 0);margin-bottom:var(--ion-safe-area-bottom, 0);transform:translate3d(0,  100%,  0);display:block;position:absolute;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);z-index:10;pointer-events:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-wrapper.sc-ion-action-sheet-md{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}.action-sheet-button.sc-ion-action-sheet-md{display:block;position:relative;width:100%;border:0;outline:none;background:var(--button-background);color:var(--button-color);font-family:inherit;overflow:hidden}.action-sheet-button-inner.sc-ion-action-sheet-md{display:flex;position:relative;flex-flow:row nowrap;flex-shrink:0;align-items:center;justify-content:center;pointer-events:none;width:100%;height:100%;z-index:1}.action-sheet-container.sc-ion-action-sheet-md{display:flex;flex-flow:column;justify-content:flex-end;height:100%;max-height:100%}.action-sheet-group.sc-ion-action-sheet-md{flex-shrink:2;overscroll-behavior-y:contain;overflow-y:auto;-webkit-overflow-scrolling:touch;pointer-events:all;background:var(--background)}.action-sheet-group.sc-ion-action-sheet-md::-webkit-scrollbar{display:none}.action-sheet-group-cancel.sc-ion-action-sheet-md{flex-shrink:0;overflow:hidden}.action-sheet-button.sc-ion-action-sheet-md::after{left:0;right:0;top:0;bottom:0;position:absolute;content:\"\";opacity:0}.action-sheet-selected.sc-ion-action-sheet-md{color:var(--button-color-selected)}.action-sheet-selected.sc-ion-action-sheet-md::after{background:var(--button-background-selected);opacity:var(--button-background-selected-opacity)}.action-sheet-button.ion-activated.sc-ion-action-sheet-md{color:var(--button-color-activated)}.action-sheet-button.ion-activated.sc-ion-action-sheet-md::after{background:var(--button-background-activated);opacity:var(--button-background-activated-opacity)}.action-sheet-button.ion-focused.sc-ion-action-sheet-md{color:var(--button-color-focused)}.action-sheet-button.ion-focused.sc-ion-action-sheet-md::after{background:var(--button-background-focused);opacity:var(--button-background-focused-opacity)}@media (any-hover: hover){.action-sheet-button.sc-ion-action-sheet-md:hover{color:var(--button-color-hover)}.action-sheet-button.sc-ion-action-sheet-md:hover::after{background:var(--button-background-hover);opacity:var(--button-background-hover-opacity)}}.sc-ion-action-sheet-md-h{--background:var(--ion-overlay-background-color, var(--ion-background-color, #fff));--backdrop-opacity:var(--ion-backdrop-opacity, 0.32);--button-background:transparent;--button-background-selected:currentColor;--button-background-selected-opacity:0;--button-background-activated:transparent;--button-background-activated-opacity:0;--button-background-hover:currentColor;--button-background-hover-opacity:.04;--button-background-focused:currentColor;--button-background-focused-opacity:.12;--button-color:var(--ion-color-step-850, #262626);--color:rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.54)}.action-sheet-title.sc-ion-action-sheet-md{padding-left:16px;padding-right:16px;padding-top:20px;padding-bottom:17px;min-height:60px;color:var(--color, rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.54));font-size:16px;text-align:start}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-title.sc-ion-action-sheet-md{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}.action-sheet-sub-title.sc-ion-action-sheet-md{padding-left:0;padding-right:0;padding-top:16px;padding-bottom:0;font-size:14px}.action-sheet-group.sc-ion-action-sheet-md:first-child{padding-top:0}.action-sheet-group.sc-ion-action-sheet-md:last-child{padding-bottom:0}.action-sheet-button.sc-ion-action-sheet-md{padding-left:16px;padding-right:16px;padding-top:0;padding-bottom:0;position:relative;height:52px;font-size:16px;text-align:start;contain:strict;overflow:hidden}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-button.sc-ion-action-sheet-md{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}.action-sheet-icon.sc-ion-action-sheet-md{padding-bottom:4px;margin-left:0;margin-right:32px;margin-top:0;margin-bottom:0;color:var(--color);font-size:24px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-icon.sc-ion-action-sheet-md{margin-left:unset;margin-right:unset;-webkit-margin-start:0;margin-inline-start:0;-webkit-margin-end:32px;margin-inline-end:32px}}.action-sheet-button-inner.sc-ion-action-sheet-md{justify-content:flex-start}.action-sheet-selected.sc-ion-action-sheet-md{font-weight:bold}";
+const actionSheetMdCss = ".sc-ion-action-sheet-md-h{--color:initial;--button-color-activated:var(--button-color);--button-color-focused:var(--button-color);--button-color-hover:var(--button-color);--button-color-selected:var(--button-color);--min-width:auto;--width:100%;--max-width:500px;--min-height:auto;--height:100%;--max-height:calc(100% - (var(--ion-safe-area-top) + var(--ion-safe-area-bottom)));-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;left:0;right:0;top:0;bottom:0;display:block;position:fixed;outline:none;font-family:var(--ion-font-family, inherit);touch-action:none;user-select:none;z-index:1001}.overlay-hidden.sc-ion-action-sheet-md-h{display:none}.action-sheet-wrapper.sc-ion-action-sheet-md{left:0;right:0;bottom:0;transform:translate3d(0,  100%,  0);display:block;position:absolute;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);z-index:10;pointer-events:none}.action-sheet-button.sc-ion-action-sheet-md{display:block;position:relative;width:100%;border:0;outline:none;background:var(--button-background);color:var(--button-color);font-family:inherit;overflow:hidden}.action-sheet-button-inner.sc-ion-action-sheet-md{display:flex;position:relative;flex-flow:row nowrap;flex-shrink:0;align-items:center;justify-content:center;pointer-events:none;width:100%;height:100%;z-index:1}.action-sheet-container.sc-ion-action-sheet-md{display:flex;flex-flow:column;justify-content:flex-end;height:100%;max-height:100%}.action-sheet-group.sc-ion-action-sheet-md{flex-shrink:2;overscroll-behavior-y:contain;overflow-y:auto;-webkit-overflow-scrolling:touch;pointer-events:all;background:var(--background)}.action-sheet-group.sc-ion-action-sheet-md::-webkit-scrollbar{display:none}.action-sheet-group-cancel.sc-ion-action-sheet-md{flex-shrink:0;overflow:hidden}.action-sheet-button.sc-ion-action-sheet-md::after{left:0;right:0;top:0;bottom:0;position:absolute;content:\"\";opacity:0}.action-sheet-selected.sc-ion-action-sheet-md{color:var(--button-color-selected)}.action-sheet-selected.sc-ion-action-sheet-md::after{background:var(--button-background-selected);opacity:var(--button-background-selected-opacity)}.action-sheet-button.ion-activated.sc-ion-action-sheet-md{color:var(--button-color-activated)}.action-sheet-button.ion-activated.sc-ion-action-sheet-md::after{background:var(--button-background-activated);opacity:var(--button-background-activated-opacity)}.action-sheet-button.ion-focused.sc-ion-action-sheet-md{color:var(--button-color-focused)}.action-sheet-button.ion-focused.sc-ion-action-sheet-md::after{background:var(--button-background-focused);opacity:var(--button-background-focused-opacity)}@media (any-hover: hover){.action-sheet-button.sc-ion-action-sheet-md:hover{color:var(--button-color-hover)}.action-sheet-button.sc-ion-action-sheet-md:hover::after{background:var(--button-background-hover);opacity:var(--button-background-hover-opacity)}}.sc-ion-action-sheet-md-h{--background:var(--ion-overlay-background-color, var(--ion-background-color, #fff));--backdrop-opacity:var(--ion-backdrop-opacity, 0.32);--button-background:transparent;--button-background-selected:currentColor;--button-background-selected-opacity:0;--button-background-activated:transparent;--button-background-activated-opacity:0;--button-background-hover:currentColor;--button-background-hover-opacity:.04;--button-background-focused:currentColor;--button-background-focused-opacity:.12;--button-color:var(--ion-color-step-850, #262626);--color:rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.54)}.action-sheet-wrapper.sc-ion-action-sheet-md{margin-left:auto;margin-right:auto;margin-top:var(--ion-safe-area-top, 0);margin-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-wrapper.sc-ion-action-sheet-md{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}.action-sheet-title.sc-ion-action-sheet-md{padding-left:16px;padding-right:16px;padding-top:20px;padding-bottom:17px;min-height:60px;color:var(--color, rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.54));font-size:16px;text-align:start}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-title.sc-ion-action-sheet-md{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}.action-sheet-sub-title.sc-ion-action-sheet-md{padding-left:0;padding-right:0;padding-top:16px;padding-bottom:0;font-size:14px}.action-sheet-group.sc-ion-action-sheet-md:first-child{padding-top:0}.action-sheet-group.sc-ion-action-sheet-md:last-child{padding-bottom:var(--ion-safe-area-bottom)}.action-sheet-button.sc-ion-action-sheet-md{padding-left:16px;padding-right:16px;padding-top:0;padding-bottom:0;position:relative;height:52px;font-size:16px;text-align:start;contain:strict;overflow:hidden}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-button.sc-ion-action-sheet-md{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}.action-sheet-icon.sc-ion-action-sheet-md{padding-bottom:4px;margin-left:0;margin-right:32px;margin-top:0;margin-bottom:0;color:var(--color);font-size:24px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.action-sheet-icon.sc-ion-action-sheet-md{margin-left:unset;margin-right:unset;-webkit-margin-start:0;margin-inline-start:0;-webkit-margin-end:32px;margin-inline-end:32px}}.action-sheet-button-inner.sc-ion-action-sheet-md{justify-content:flex-start}.action-sheet-selected.sc-ion-action-sheet-md{font-weight:bold}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -8348,11 +9182,11 @@ class ActionSheet {
   async buttonClick(button) {
     const role = button.role;
     if (isCancel(role)) {
-      return this.dismiss(undefined, role);
+      return this.dismiss(button.data, role);
     }
     const shouldDismiss = await this.callButtonHandler(button);
     if (shouldDismiss) {
-      return this.dismiss(undefined, button.role);
+      return this.dismiss(button.data, button.role);
     }
     return Promise.resolve();
   }
@@ -8408,11 +9242,11 @@ class ActionSheet {
     const buttons = allButtons.filter(b => b.role !== 'cancel');
     return (hAsync(Host, Object.assign({ role: "dialog", "aria-modal": "true", tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${20000 + this.overlayIndex}`,
-      }, class: Object.assign(Object.assign({ [mode]: true }, getClassMap(this.cssClass)), { 'action-sheet-translucent': this.translucent }), onIonActionSheetWillDismiss: this.dispatchCancelHandler, onIonBackdropTap: this.onBackdropTap }), hAsync("ion-backdrop", { tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "action-sheet-wrapper ion-overlay-wrapper", role: "dialog", ref: el => this.wrapperEl = el }, hAsync("div", { class: "action-sheet-container" }, hAsync("div", { class: "action-sheet-group", ref: el => this.groupEl = el }, this.header !== undefined &&
+      }, class: Object.assign(Object.assign({ [mode]: true }, getClassMap(this.cssClass)), { 'overlay-hidden': true, 'action-sheet-translucent': this.translucent }), onIonActionSheetWillDismiss: this.dispatchCancelHandler, onIonBackdropTap: this.onBackdropTap }), hAsync("ion-backdrop", { tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "action-sheet-wrapper ion-overlay-wrapper", role: "dialog", ref: el => this.wrapperEl = el }, hAsync("div", { class: "action-sheet-container" }, hAsync("div", { class: "action-sheet-group", ref: el => this.groupEl = el }, this.header !== undefined &&
       hAsync("div", { class: {
           'action-sheet-title': true,
           'action-sheet-has-sub-title': this.subHeader !== undefined
-        } }, this.header, this.subHeader && hAsync("div", { class: "action-sheet-sub-title" }, this.subHeader)), buttons.map(b => hAsync("button", { type: "button", class: buttonClass$3(b), onClick: () => this.buttonClick(b) }, hAsync("span", { class: "action-sheet-button-inner" }, b.icon && hAsync("ion-icon", { icon: b.icon, lazy: false, class: "action-sheet-icon" }), b.text), mode === 'md' && hAsync("ion-ripple-effect", null)))), cancelButton &&
+        } }, this.header, this.subHeader && hAsync("div", { class: "action-sheet-sub-title" }, this.subHeader)), buttons.map(b => hAsync("button", { type: "button", id: b.id, class: buttonClass$3(b), onClick: () => this.buttonClick(b) }, hAsync("span", { class: "action-sheet-button-inner" }, b.icon && hAsync("ion-icon", { icon: b.icon, lazy: false, class: "action-sheet-icon" }), b.text), mode === 'md' && hAsync("ion-ripple-effect", null)))), cancelButton &&
       hAsync("div", { class: "action-sheet-group action-sheet-group-cancel" }, hAsync("button", { type: "button", class: buttonClass$3(cancelButton), onClick: () => this.buttonClick(cancelButton) }, hAsync("span", { class: "action-sheet-button-inner" }, cancelButton.icon &&
         hAsync("ion-icon", { icon: cancelButton.icon, lazy: false, class: "action-sheet-icon" }), cancelButton.text), mode === 'md' && hAsync("ion-ripple-effect", null))))), hAsync("div", { tabindex: "0" })));
   }
@@ -8451,6 +9285,9 @@ const buttonClass$3 = (button) => {
   return Object.assign({ 'action-sheet-button': true, 'ion-activatable': true, 'ion-focusable': true, [`action-sheet-${button.role}`]: button.role !== undefined }, getClassMap(button.cssClass));
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * Does a simple sanitization of all elements
  * in an untrusted string
@@ -8583,6 +9420,9 @@ class IonicSafeString {
   }
 }
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * iOS Alert Enter Animation
  */
@@ -8610,6 +9450,9 @@ const iosEnterAnimation$5 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * iOS Alert Leave Animation
  */
@@ -8633,6 +9476,9 @@ const iosLeaveAnimation$5 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * Md Alert Enter Animation
  */
@@ -8660,6 +9506,9 @@ const mdEnterAnimation$4 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * Md Alert Leave Animation
  */
@@ -8993,7 +9842,7 @@ class Alert {
       'alert-button-group': true,
       'alert-button-group-vertical': buttons.length > 2
     };
-    return (hAsync("div", { class: alertButtonGroupClass }, buttons.map(button => hAsync("button", { type: "button", class: buttonClass$2(button), tabIndex: 0, onClick: () => this.buttonClick(button) }, hAsync("span", { class: "alert-button-inner" }, button.text), mode === 'md' && hAsync("ion-ripple-effect", null)))));
+    return (hAsync("div", { class: alertButtonGroupClass }, buttons.map(button => hAsync("button", { type: "button", id: button.id, class: buttonClass$2(button), tabIndex: 0, onClick: () => this.buttonClick(button) }, hAsync("span", { class: "alert-button-inner" }, button.text), mode === 'md' && hAsync("ion-ripple-effect", null)))));
   }
   render() {
     const { overlayIndex, header, subHeader, htmlAttributes } = this;
@@ -9004,7 +9853,7 @@ class Alert {
     const role = this.inputs.length > 0 || this.buttons.length > 0 ? 'alertdialog' : 'alert';
     return (hAsync(Host, Object.assign({ role: role, "aria-modal": "true", tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${20000 + overlayIndex}`,
-      }, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'alert-translucent': this.translucent }), onIonAlertWillDismiss: this.dispatchCancelHandler, onIonBackdropTap: this.onBackdropTap }), hAsync("ion-backdrop", { tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "alert-wrapper ion-overlay-wrapper", ref: el => this.wrapperEl = el }, hAsync("div", { class: "alert-head" }, header && hAsync("h2", { id: hdrId, class: "alert-title" }, header), subHeader && hAsync("h2", { id: subHdrId, class: "alert-sub-title" }, subHeader)), hAsync("div", { id: msgId, class: "alert-message", innerHTML: sanitizeDOMString(this.message) }), this.renderAlertInputs(), this.renderAlertButtons()), hAsync("div", { tabindex: "0" })));
+      }, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'overlay-hidden': true, 'alert-translucent': this.translucent }), onIonAlertWillDismiss: this.dispatchCancelHandler, onIonBackdropTap: this.onBackdropTap }), hAsync("ion-backdrop", { tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "alert-wrapper ion-overlay-wrapper", ref: el => this.wrapperEl = el }, hAsync("div", { class: "alert-head" }, header && hAsync("h2", { id: hdrId, class: "alert-title" }, header), subHeader && hAsync("h2", { id: subHdrId, class: "alert-sub-title" }, subHeader)), hAsync("div", { id: msgId, class: "alert-message", innerHTML: sanitizeDOMString(this.message) }), this.renderAlertInputs(), this.renderAlertButtons()), hAsync("div", { tabindex: "0" })));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -9059,6 +9908,21 @@ class App {
   }
   componentDidLoad() {
   }
+  /**
+   * @internal
+   * Used to set focus on an element that uses `ion-focusable`.
+   * Do not use this if focusing the element as a result of a keyboard
+   * event as the focus utility should handle this for us. This method
+   * should be used when we want to programmatically focus an element as
+   * a result of another user action. (Ex: We focus the first element
+   * inside of a popover when the user presents it, but the popover is not always
+   * presented as a result of keyboard action.)
+   */
+  async setFocus(elements) {
+    if (this.focusVisible) {
+      this.focusVisible.setFocus(elements);
+    }
+  }
   render() {
     const mode = getIonMode$1(this);
     return (hAsync(Host, { class: {
@@ -9072,7 +9936,9 @@ class App {
   static get cmpMeta() { return {
     "$flags$": 0,
     "$tagName$": "ion-app",
-    "$members$": undefined,
+    "$members$": {
+      "setFocus": [64]
+    },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
@@ -9172,7 +10038,7 @@ class BackButton {
     };
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes(this.el, ['aria-label']);
+    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
     if (this.defaultHref === undefined) {
       this.defaultHref = config$1.get('backButtonDefaultHref');
     }
@@ -9185,10 +10051,10 @@ class BackButton {
     }
     if (getIonMode$1(this) === 'ios') {
       // default ios back button icon
-      return config$1.get('backButtonIcon', 'chevron-back');
+      return config$1.get('backButtonIcon', chevronBack);
     }
     // default md back button icon
-    return config$1.get('backButtonIcon', 'arrow-back-sharp');
+    return config$1.get('backButtonIcon', arrowBackSharp);
   }
   get backButtonText() {
     const defaultBackButtonText = getIonMode$1(this) === 'ios' ? 'Back' : null;
@@ -9348,6 +10214,272 @@ class Badge {
   }; }
 }
 
+const breadcrumbIosCss = "/*!@:host*/.sc-ion-breadcrumb-ios-h{display:flex;flex:0 0 auto;align-items:center;color:var(--color);font-size:16px;font-weight:400;line-height:1.5}/*!@.breadcrumb-native*/.breadcrumb-native.sc-ion-breadcrumb-ios{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;display:flex;align-items:center;width:100%;outline:none;background:inherit}/*!@:host(.breadcrumb-disabled)*/.breadcrumb-disabled.sc-ion-breadcrumb-ios-h{cursor:default;opacity:0.5;pointer-events:none}/*!@:host(.breadcrumb-active)*/.breadcrumb-active.sc-ion-breadcrumb-ios-h{color:var(--color-active)}/*!@:host(.ion-focused)*/.ion-focused.sc-ion-breadcrumb-ios-h{color:var(--color-focused)}/*!@:host(.ion-focused) .breadcrumb-native*/.ion-focused.sc-ion-breadcrumb-ios-h .breadcrumb-native.sc-ion-breadcrumb-ios{background:var(--background-focused)}@media (any-hover: hover){/*!@:host(.ion-activatable:hover)*/.ion-activatable.sc-ion-breadcrumb-ios-h:hover{color:var(--color-hover)}/*!@:host(.ion-activatable.in-breadcrumbs-color:hover),\n:host(.ion-activatable.ion-color:hover)*/.ion-activatable.in-breadcrumbs-color.sc-ion-breadcrumb-ios-h:hover,.ion-activatable.ion-color.sc-ion-breadcrumb-ios-h:hover{color:var(--ion-color-shade)}}/*!@.breadcrumb-separator*/.breadcrumb-separator.sc-ion-breadcrumb-ios{display:inline-flex}/*!@:host(.breadcrumb-collapsed) .breadcrumb-native*/.breadcrumb-collapsed.sc-ion-breadcrumb-ios-h .breadcrumb-native.sc-ion-breadcrumb-ios{display:none}/*!@:host(.in-breadcrumbs-color),\n:host(.in-breadcrumbs-color.breadcrumb-active)*/.in-breadcrumbs-color.sc-ion-breadcrumb-ios-h,.in-breadcrumbs-color.breadcrumb-active.sc-ion-breadcrumb-ios-h{color:var(--ion-color-base)}/*!@:host(.in-breadcrumbs-color) .breadcrumb-separator*/.in-breadcrumbs-color.sc-ion-breadcrumb-ios-h .breadcrumb-separator.sc-ion-breadcrumb-ios{color:var(--ion-color-base)}/*!@:host(.ion-color)*/.ion-color.sc-ion-breadcrumb-ios-h{color:var(--ion-color-base)}/*!@:host(.in-toolbar-color),\n:host(.in-toolbar-color) .breadcrumb-separator*/.in-toolbar-color.sc-ion-breadcrumb-ios-h,.in-toolbar-color.sc-ion-breadcrumb-ios-h .breadcrumb-separator.sc-ion-breadcrumb-ios{color:rgba(var(--ion-color-contrast-rgb), 0.8)}/*!@:host(.in-toolbar-color.breadcrumb-active)*/.in-toolbar-color.breadcrumb-active.sc-ion-breadcrumb-ios-h{color:var(--ion-color-contrast)}/*!@.breadcrumbs-collapsed-indicator*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-ios{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:14px;margin-right:14px;margin-top:0;margin-bottom:0;display:flex;flex:1 1 100%;align-items:center;justify-content:center;width:32px;height:18px;border:0;outline:none;cursor:pointer;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.breadcrumbs-collapsed-indicator*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:14px;margin-inline-start:14px;-webkit-margin-end:14px;margin-inline-end:14px}}/*!@.breadcrumbs-collapsed-indicator ion-icon*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-ios ion-icon.sc-ion-breadcrumb-ios{margin-top:1px;font-size:22px}/*!@:host*/.sc-ion-breadcrumb-ios-h{--color:var(--ion-color-step-850, #2d4665);--color-active:var(--ion-text-color, #03060b);--color-hover:var(--ion-text-color, #03060b);--color-focused:var(--color-active);--background-focused:var(--ion-color-step-50, rgba(233, 237, 243, 0.7))}/*!@:host(.breadcrumb-active)*/.breadcrumb-active.sc-ion-breadcrumb-ios-h{font-weight:600}/*!@.breadcrumb-native*/.breadcrumb-native.sc-ion-breadcrumb-ios{border-radius:4px;padding-left:12px;padding-right:12px;padding-top:5px;padding-bottom:5px;border:1px solid transparent}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.breadcrumb-native*/.breadcrumb-native.sc-ion-breadcrumb-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}/*!@:host(.ion-focused) .breadcrumb-native*/.ion-focused.sc-ion-breadcrumb-ios-h .breadcrumb-native.sc-ion-breadcrumb-ios{border-radius:8px}/*!@:host(.in-breadcrumbs-color.ion-focused) .breadcrumb-native,\n:host(.ion-color.ion-focused) .breadcrumb-native*/.in-breadcrumbs-color.ion-focused.sc-ion-breadcrumb-ios-h .breadcrumb-native.sc-ion-breadcrumb-ios,.ion-color.ion-focused.sc-ion-breadcrumb-ios-h .breadcrumb-native.sc-ion-breadcrumb-ios{background:rgba(var(--ion-color-base-rgb), 0.1);color:var(--ion-color-base)}/*!@:host(.ion-focused) ::slotted(ion-icon),\n:host(.in-breadcrumbs-color.ion-focused) ::slotted(ion-icon),\n:host(.ion-color.ion-focused) ::slotted(ion-icon)*/.sc-ion-breadcrumb-ios-h.ion-focused .sc-ion-breadcrumb-ios-s>ion-icon,.sc-ion-breadcrumb-ios-h.in-breadcrumbs-color.ion-focused .sc-ion-breadcrumb-ios-s>ion-icon,.sc-ion-breadcrumb-ios-h.ion-color.ion-focused .sc-ion-breadcrumb-ios-s>ion-icon{color:var(--ion-color-step-750, #445b78)}/*!@.breadcrumb-separator*/.breadcrumb-separator.sc-ion-breadcrumb-ios{color:var(--ion-color-step-550, #73849a)}/*!@::slotted(ion-icon)*/.sc-ion-breadcrumb-ios-s>ion-icon{color:var(--ion-color-step-400, #92a0b3);font-size:18px}/*!@::slotted(ion-icon[slot=start])*/.sc-ion-breadcrumb-ios-s>ion-icon[slot=start]{margin-right:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=start])*/.sc-ion-breadcrumb-ios-s>ion-icon[slot=start]{margin-right:unset;-webkit-margin-end:8px;margin-inline-end:8px}}/*!@::slotted(ion-icon[slot=end])*/.sc-ion-breadcrumb-ios-s>ion-icon[slot=end]{margin-left:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=end])*/.sc-ion-breadcrumb-ios-s>ion-icon[slot=end]{margin-left:unset;-webkit-margin-start:8px;margin-inline-start:8px}}/*!@:host(.breadcrumb-active) ::slotted(ion-icon)*/.sc-ion-breadcrumb-ios-h.breadcrumb-active .sc-ion-breadcrumb-ios-s>ion-icon{color:var(--ion-color-step-850, #242d39)}/*!@.breadcrumbs-collapsed-indicator*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-ios{border-radius:4px;background:var(--ion-color-step-100, #e9edf3);color:var(--ion-color-step-550, #73849a)}/*!@.breadcrumbs-collapsed-indicator:hover*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-ios:hover{opacity:0.45}/*!@.breadcrumbs-collapsed-indicator:focus*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-ios:focus{background:var(--ion-color-step-150, #d9e0ea)}";
+
+const breadcrumbMdCss = "/*!@:host*/.sc-ion-breadcrumb-md-h{display:flex;flex:0 0 auto;align-items:center;color:var(--color);font-size:16px;font-weight:400;line-height:1.5}/*!@.breadcrumb-native*/.breadcrumb-native.sc-ion-breadcrumb-md{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;display:flex;align-items:center;width:100%;outline:none;background:inherit}/*!@:host(.breadcrumb-disabled)*/.breadcrumb-disabled.sc-ion-breadcrumb-md-h{cursor:default;opacity:0.5;pointer-events:none}/*!@:host(.breadcrumb-active)*/.breadcrumb-active.sc-ion-breadcrumb-md-h{color:var(--color-active)}/*!@:host(.ion-focused)*/.ion-focused.sc-ion-breadcrumb-md-h{color:var(--color-focused)}/*!@:host(.ion-focused) .breadcrumb-native*/.ion-focused.sc-ion-breadcrumb-md-h .breadcrumb-native.sc-ion-breadcrumb-md{background:var(--background-focused)}@media (any-hover: hover){/*!@:host(.ion-activatable:hover)*/.ion-activatable.sc-ion-breadcrumb-md-h:hover{color:var(--color-hover)}/*!@:host(.ion-activatable.in-breadcrumbs-color:hover),\n:host(.ion-activatable.ion-color:hover)*/.ion-activatable.in-breadcrumbs-color.sc-ion-breadcrumb-md-h:hover,.ion-activatable.ion-color.sc-ion-breadcrumb-md-h:hover{color:var(--ion-color-shade)}}/*!@.breadcrumb-separator*/.breadcrumb-separator.sc-ion-breadcrumb-md{display:inline-flex}/*!@:host(.breadcrumb-collapsed) .breadcrumb-native*/.breadcrumb-collapsed.sc-ion-breadcrumb-md-h .breadcrumb-native.sc-ion-breadcrumb-md{display:none}/*!@:host(.in-breadcrumbs-color),\n:host(.in-breadcrumbs-color.breadcrumb-active)*/.in-breadcrumbs-color.sc-ion-breadcrumb-md-h,.in-breadcrumbs-color.breadcrumb-active.sc-ion-breadcrumb-md-h{color:var(--ion-color-base)}/*!@:host(.in-breadcrumbs-color) .breadcrumb-separator*/.in-breadcrumbs-color.sc-ion-breadcrumb-md-h .breadcrumb-separator.sc-ion-breadcrumb-md{color:var(--ion-color-base)}/*!@:host(.ion-color)*/.ion-color.sc-ion-breadcrumb-md-h{color:var(--ion-color-base)}/*!@:host(.in-toolbar-color),\n:host(.in-toolbar-color) .breadcrumb-separator*/.in-toolbar-color.sc-ion-breadcrumb-md-h,.in-toolbar-color.sc-ion-breadcrumb-md-h .breadcrumb-separator.sc-ion-breadcrumb-md{color:rgba(var(--ion-color-contrast-rgb), 0.8)}/*!@:host(.in-toolbar-color.breadcrumb-active)*/.in-toolbar-color.breadcrumb-active.sc-ion-breadcrumb-md-h{color:var(--ion-color-contrast)}/*!@.breadcrumbs-collapsed-indicator*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-md{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:14px;margin-right:14px;margin-top:0;margin-bottom:0;display:flex;flex:1 1 100%;align-items:center;justify-content:center;width:32px;height:18px;border:0;outline:none;cursor:pointer;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.breadcrumbs-collapsed-indicator*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-md{margin-left:unset;margin-right:unset;-webkit-margin-start:14px;margin-inline-start:14px;-webkit-margin-end:14px;margin-inline-end:14px}}/*!@.breadcrumbs-collapsed-indicator ion-icon*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-md ion-icon.sc-ion-breadcrumb-md{margin-top:1px;font-size:22px}/*!@:host*/.sc-ion-breadcrumb-md-h{--color:var(--ion-color-step-600, #677483);--color-active:var(--ion-text-color, #03060b);--color-hover:var(--ion-text-color, #03060b);--color-focused:var(--ion-color-step-800, #35404e);--background-focused:$breadcrumb-md-background-focused}/*!@:host(.breadcrumb-active)*/.breadcrumb-active.sc-ion-breadcrumb-md-h{font-weight:500}/*!@.breadcrumb-native*/.breadcrumb-native.sc-ion-breadcrumb-md{padding-left:12px;padding-right:12px;padding-top:6px;padding-bottom:6px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.breadcrumb-native*/.breadcrumb-native.sc-ion-breadcrumb-md{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}/*!@.breadcrumb-separator*/.breadcrumb-separator.sc-ion-breadcrumb-md{margin-left:10px;margin-right:10px;margin-top:-1px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.breadcrumb-separator*/.breadcrumb-separator.sc-ion-breadcrumb-md{margin-left:unset;margin-right:unset;-webkit-margin-start:10px;margin-inline-start:10px;-webkit-margin-end:10px;margin-inline-end:10px}}/*!@:host(.ion-focused) .breadcrumb-native*/.ion-focused.sc-ion-breadcrumb-md-h .breadcrumb-native.sc-ion-breadcrumb-md{border-radius:4px;box-shadow:0px 1px 2px rgba(0, 0, 0, 0.2), 0px 2px 8px rgba(0, 0, 0, 0.12)}/*!@.breadcrumb-separator*/.breadcrumb-separator.sc-ion-breadcrumb-md{color:var(--ion-color-step-550, #73849a)}/*!@::slotted(ion-icon)*/.sc-ion-breadcrumb-md-s>ion-icon{color:var(--ion-color-step-550, #7d8894);font-size:18px}/*!@::slotted(ion-icon[slot=start])*/.sc-ion-breadcrumb-md-s>ion-icon[slot=start]{margin-right:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=start])*/.sc-ion-breadcrumb-md-s>ion-icon[slot=start]{margin-right:unset;-webkit-margin-end:8px;margin-inline-end:8px}}/*!@::slotted(ion-icon[slot=end])*/.sc-ion-breadcrumb-md-s>ion-icon[slot=end]{margin-left:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=end])*/.sc-ion-breadcrumb-md-s>ion-icon[slot=end]{margin-left:unset;-webkit-margin-start:8px;margin-inline-start:8px}}/*!@:host(.breadcrumb-active) ::slotted(ion-icon)*/.sc-ion-breadcrumb-md-h.breadcrumb-active .sc-ion-breadcrumb-md-s>ion-icon{color:var(--ion-color-step-850, #222d3a)}/*!@.breadcrumbs-collapsed-indicator*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-md{border-radius:2px;background:var(--ion-color-step-100, #eef1f3);color:var(--ion-color-step-550, #73849a)}/*!@.breadcrumbs-collapsed-indicator:hover*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-md:hover{opacity:0.7}/*!@.breadcrumbs-collapsed-indicator:focus*/.breadcrumbs-collapsed-indicator.sc-ion-breadcrumb-md:focus{background:var(--ion-color-step-150, #dfe5e8)}";
+
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ *
+ * @part native - The native HTML anchor or div element that wraps all child elements.
+ * @part separator - The separator element between each breadcrumb.
+ * @part collapsed-indicator - The indicator element that shows the breadcrumbs are collapsed.
+ */
+class Breadcrumb {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    this.ionFocus = createEvent(this, "ionFocus", 7);
+    this.ionBlur = createEvent(this, "ionBlur", 7);
+    this.collapsedClick = createEvent(this, "collapsedClick", 7);
+    this.inheritedAttributes = {};
+    /** @internal */
+    this.collapsed = false;
+    /**
+     * If `true`, the breadcrumb will take on a different look to show that
+     * it is the currently active breadcrumb. Defaults to `true` for the
+     * last breadcrumb if it is not set on any.
+     */
+    this.active = false;
+    /**
+     * If `true`, the user cannot interact with the breadcrumb.
+     */
+    this.disabled = false;
+    /**
+     * When using a router, it specifies the transition direction when navigating to
+     * another page using `href`.
+     */
+    this.routerDirection = 'forward';
+    this.onFocus = () => {
+      this.ionFocus.emit();
+    };
+    this.onBlur = () => {
+      this.ionBlur.emit();
+    };
+    this.collapsedIndicatorClick = () => {
+      this.collapsedClick.emit({ ionShadowTarget: this.collapsedRef });
+    };
+  }
+  componentWillLoad() {
+    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
+  }
+  isClickable() {
+    return this.href !== undefined;
+  }
+  render() {
+    const { color, active, collapsed, disabled, download, el, inheritedAttributes, last, routerAnimation, routerDirection, separator, showCollapsedIndicator, target } = this;
+    const clickable = this.isClickable();
+    const TagType = this.href === undefined ? 'span' : 'a';
+    // Links can still be tabbed to when set to disabled if they have an href
+    // in order to truly disable them we can keep it as an anchor but remove the href
+    const href = disabled ? undefined : this.href;
+    const mode = getIonMode$1(this);
+    const attrs = (TagType === 'span')
+      ? {}
+      : {
+        download,
+        href,
+        target
+      };
+    // If the breadcrumb is collapsed, check if it contains the collapsed indicator
+    // to show the separator as long as it isn't also the last breadcrumb
+    // otherwise if not collapsed use the value in separator
+    const showSeparator = last
+      ? false
+      : collapsed
+        ? showCollapsedIndicator && !last ? true : false
+        : separator;
+    return (hAsync(Host, { onClick: (ev) => openURL(href, ev, routerDirection, routerAnimation), "aria-disabled": disabled ? 'true' : null, class: createColorClasses$1(color, {
+        [mode]: true,
+        'breadcrumb-active': active,
+        'breadcrumb-collapsed': collapsed,
+        'breadcrumb-disabled': disabled,
+        'in-breadcrumbs-color': hostContext('ion-breadcrumbs[color]', el),
+        'in-toolbar': hostContext('ion-toolbar', this.el),
+        'in-toolbar-color': hostContext('ion-toolbar[color]', this.el),
+        'ion-activatable': clickable,
+        'ion-focusable': clickable,
+      }) }, hAsync(TagType, Object.assign({}, attrs, { class: "breadcrumb-native", part: "native", disabled: disabled, onFocus: this.onFocus, onBlur: this.onBlur }, inheritedAttributes), hAsync("slot", { name: "start" }), hAsync("slot", null), hAsync("slot", { name: "end" })), showCollapsedIndicator &&
+      hAsync("button", { part: "collapsed-indicator", onClick: () => this.collapsedIndicatorClick(), ref: collapsedEl => this.collapsedRef = collapsedEl, class: {
+          'breadcrumbs-collapsed-indicator': true,
+        } }, hAsync("ion-icon", { icon: ellipsisHorizontal, lazy: false })), showSeparator &&
+      hAsync("span", { class: "breadcrumb-separator", part: "separator" }, hAsync("slot", { name: "separator" }, mode === 'ios'
+        ? hAsync("ion-icon", { icon: chevronForwardOutline, lazy: false })
+        : hAsync("span", null, "/")))));
+  }
+  get el() { return getElement(this); }
+  static get style() { return {
+    ios: breadcrumbIosCss,
+    md: breadcrumbMdCss
+  }; }
+  static get cmpMeta() { return {
+    "$flags$": 41,
+    "$tagName$": "ion-breadcrumb",
+    "$members$": {
+      "collapsed": [4],
+      "last": [4],
+      "showCollapsedIndicator": [4, "show-collapsed-indicator"],
+      "color": [1],
+      "active": [4],
+      "disabled": [4],
+      "download": [1],
+      "href": [1],
+      "rel": [1],
+      "separator": [4],
+      "target": [1],
+      "routerDirection": [1, "router-direction"],
+      "routerAnimation": [16]
+    },
+    "$listeners$": undefined,
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": []
+  }; }
+}
+
+const breadcrumbsIosCss = "/*!@:host*/.sc-ion-breadcrumbs-ios-h{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:flex;flex-wrap:wrap;align-items:center}/*!@:host(.in-toolbar-color),\n:host(.in-toolbar-color) .breadcrumbs-collapsed-indicator ion-icon*/.in-toolbar-color.sc-ion-breadcrumbs-ios-h,.in-toolbar-color.sc-ion-breadcrumbs-ios-h .breadcrumbs-collapsed-indicator.sc-ion-breadcrumbs-ios ion-icon.sc-ion-breadcrumbs-ios{color:var(--ion-color-contrast)}/*!@:host(.in-toolbar-color) .breadcrumbs-collapsed-indicator*/.in-toolbar-color.sc-ion-breadcrumbs-ios-h .breadcrumbs-collapsed-indicator.sc-ion-breadcrumbs-ios{background:rgba(var(--ion-color-contrast-rgb), 0.11)}/*!@:host(.in-toolbar)*/.in-toolbar.sc-ion-breadcrumbs-ios-h{padding-left:20px;padding-right:20px;padding-top:0;padding-bottom:0;justify-content:center}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.in-toolbar)*/.in-toolbar.sc-ion-breadcrumbs-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:20px;padding-inline-start:20px;-webkit-padding-end:20px;padding-inline-end:20px}}";
+
+const breadcrumbsMdCss = "/*!@:host*/.sc-ion-breadcrumbs-md-h{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:flex;flex-wrap:wrap;align-items:center}/*!@:host(.in-toolbar-color),\n:host(.in-toolbar-color) .breadcrumbs-collapsed-indicator ion-icon*/.in-toolbar-color.sc-ion-breadcrumbs-md-h,.in-toolbar-color.sc-ion-breadcrumbs-md-h .breadcrumbs-collapsed-indicator.sc-ion-breadcrumbs-md ion-icon.sc-ion-breadcrumbs-md{color:var(--ion-color-contrast)}/*!@:host(.in-toolbar-color) .breadcrumbs-collapsed-indicator*/.in-toolbar-color.sc-ion-breadcrumbs-md-h .breadcrumbs-collapsed-indicator.sc-ion-breadcrumbs-md{background:rgba(var(--ion-color-contrast-rgb), 0.11)}/*!@:host(.in-toolbar)*/.in-toolbar.sc-ion-breadcrumbs-md-h{padding-left:8px;padding-right:8px;padding-top:0;padding-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.in-toolbar)*/.in-toolbar.sc-ion-breadcrumbs-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}";
+
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ *
+ */
+class Breadcrumbs {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    this.ionCollapsedClick = createEvent(this, "ionCollapsedClick", 7);
+    /**
+     * The number of breadcrumbs to show before the collapsed indicator.
+     * If this property exists `maxItems` will be ignored.
+     */
+    this.itemsBeforeCollapse = 1;
+    /**
+     * The number of breadcrumbs to show after the collapsed indicator.
+     * If this property exists `maxItems` will be ignored.
+     */
+    this.itemsAfterCollapse = 1;
+    this.breadcrumbsInit = () => {
+      this.setBreadcrumbSeparator();
+      this.setMaxItems();
+    };
+    this.resetActiveBreadcrumb = () => {
+      const breadcrumbs = this.getBreadcrumbs();
+      // Only reset the active breadcrumb if we were the ones to change it
+      // otherwise use the one set on the component
+      const activeBreadcrumb = breadcrumbs.find(breadcrumb => breadcrumb.active);
+      if (activeBreadcrumb && this.activeChanged) {
+        activeBreadcrumb.active = false;
+      }
+    };
+    this.setMaxItems = () => {
+      const { itemsAfterCollapse, itemsBeforeCollapse, maxItems } = this;
+      const breadcrumbs = this.getBreadcrumbs();
+      for (const breadcrumb of breadcrumbs) {
+        breadcrumb.showCollapsedIndicator = false;
+        breadcrumb.collapsed = false;
+      }
+      // If the number of breadcrumbs exceeds the maximum number of items
+      // that should show and the items before / after collapse do not
+      // exceed the maximum items then we need to collapse the breadcrumbs
+      const shouldCollapse = maxItems !== undefined
+        && breadcrumbs.length > maxItems
+        && itemsBeforeCollapse + itemsAfterCollapse <= maxItems;
+      if (shouldCollapse) {
+        // Show the collapsed indicator in the first breadcrumb that collapses
+        breadcrumbs.forEach((breadcrumb, index) => {
+          if (index === itemsBeforeCollapse) {
+            breadcrumb.showCollapsedIndicator = true;
+          }
+          // Collapse all breadcrumbs that have an index greater than or equal to
+          // the number before collapse and an index less than the total number
+          // of breadcrumbs minus the items that should show after the collapse
+          if (index >= itemsBeforeCollapse && index < breadcrumbs.length - itemsAfterCollapse) {
+            breadcrumb.collapsed = true;
+          }
+        });
+      }
+    };
+    this.setBreadcrumbSeparator = () => {
+      const { itemsAfterCollapse, itemsBeforeCollapse, maxItems } = this;
+      const breadcrumbs = this.getBreadcrumbs();
+      // Check if an active breadcrumb exists already
+      const active = breadcrumbs.find(breadcrumb => breadcrumb.active);
+      // Set the separator on all but the last breadcrumb
+      for (const breadcrumb of breadcrumbs) {
+        // The only time the last breadcrumb changes is when
+        // itemsAfterCollapse is set to 0, in this case the
+        // last breadcrumb will be the collapsed indicator
+        const last = maxItems !== undefined && itemsAfterCollapse === 0
+          ? breadcrumb === breadcrumbs[itemsBeforeCollapse]
+          : breadcrumb === breadcrumbs[breadcrumbs.length - 1];
+        breadcrumb.last = last;
+        // If the breadcrumb has defined whether or not to show the
+        // separator then use that value, otherwise check if it's the
+        // last breadcrumb
+        const separator = breadcrumb.separator !== undefined
+          ? breadcrumb.separator
+          : (last ? undefined : true);
+        breadcrumb.separator = separator;
+        // If there is not an active breadcrumb already
+        // set the last one to active
+        if (!active && last) {
+          breadcrumb.active = true;
+          this.activeChanged = true;
+        }
+      }
+    };
+    this.getBreadcrumbs = () => {
+      return Array.from(this.el.querySelectorAll('ion-breadcrumb'));
+    };
+  }
+  onCollapsedClick(ev) {
+    const breadcrumbs = this.getBreadcrumbs();
+    const collapsedBreadcrumbs = breadcrumbs.filter(breadcrumb => breadcrumb.collapsed);
+    this.ionCollapsedClick.emit(Object.assign(Object.assign({}, ev.detail), { collapsedBreadcrumbs }));
+  }
+  maxItemsChanged() {
+    this.resetActiveBreadcrumb();
+    this.breadcrumbsInit();
+  }
+  componentWillLoad() {
+    this.breadcrumbsInit();
+  }
+  render() {
+    const { color, collapsed } = this;
+    const mode = getIonMode$1(this);
+    return (hAsync(Host, { class: createColorClasses$1(color, {
+        [mode]: true,
+        'in-toolbar': hostContext('ion-toolbar', this.el),
+        'in-toolbar-color': hostContext('ion-toolbar[color]', this.el),
+        'breadcrumbs-collapsed': collapsed,
+      }) }, hAsync("slot", null)));
+  }
+  get el() { return getElement(this); }
+  static get watchers() { return {
+    "maxItems": ["maxItemsChanged"],
+    "itemsBeforeCollapse": ["maxItemsChanged"],
+    "itemsAfterCollapse": ["maxItemsChanged"]
+  }; }
+  static get style() { return {
+    ios: breadcrumbsIosCss,
+    md: breadcrumbsMdCss
+  }; }
+  static get cmpMeta() { return {
+    "$flags$": 41,
+    "$tagName$": "ion-breadcrumbs",
+    "$members$": {
+      "color": [1],
+      "maxItems": [2, "max-items"],
+      "itemsBeforeCollapse": [2, "items-before-collapse"],
+      "itemsAfterCollapse": [2, "items-after-collapse"],
+      "collapsed": [32],
+      "activeChanged": [32]
+    },
+    "$listeners$": [[0, "collapsedClick", "onCollapsedClick"]],
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": []
+  }; }
+}
+
 const buttonIosCss = "/*!@:host*/.sc-ion-button-ios-h{--overflow:hidden;--ripple-color:currentColor;--border-width:initial;--border-color:initial;--border-style:initial;--color-activated:var(--color);--color-focused:var(--color);--color-hover:var(--color);--box-shadow:none;display:inline-block;width:auto;color:var(--color);font-family:var(--ion-font-family, inherit);text-align:center;text-decoration:none;text-overflow:ellipsis;white-space:nowrap;user-select:none;vertical-align:top;vertical-align:-webkit-baseline-middle;font-kerning:none}/*!@:host(.button-disabled)*/.button-disabled.sc-ion-button-ios-h{cursor:default;opacity:0.5;pointer-events:none}/*!@:host(.button-solid)*/.button-solid.sc-ion-button-ios-h{--background:var(--ion-color-primary, #3880ff);--color:var(--ion-color-primary-contrast, #fff)}/*!@:host(.button-outline)*/.button-outline.sc-ion-button-ios-h{--border-color:var(--ion-color-primary, #3880ff);--background:transparent;--color:var(--ion-color-primary, #3880ff)}/*!@:host(.button-clear)*/.button-clear.sc-ion-button-ios-h{--border-width:0;--background:transparent;--color:var(--ion-color-primary, #3880ff)}/*!@:host(.button-block)*/.button-block.sc-ion-button-ios-h{display:block}/*!@:host(.button-block) .button-native*/.button-block.sc-ion-button-ios-h .button-native.sc-ion-button-ios{margin-left:0;margin-right:0;display:block;width:100%;clear:both;contain:content}/*!@:host(.button-block) .button-native::after*/.button-block.sc-ion-button-ios-h .button-native.sc-ion-button-ios::after{clear:both}/*!@:host(.button-full)*/.button-full.sc-ion-button-ios-h{display:block}/*!@:host(.button-full) .button-native*/.button-full.sc-ion-button-ios-h .button-native.sc-ion-button-ios{margin-left:0;margin-right:0;display:block;width:100%;contain:content}/*!@:host(.button-full:not(.button-round)) .button-native*/.button-full.sc-ion-button-ios-h:not(.button-round) .button-native.sc-ion-button-ios{border-radius:0;border-right-width:0;border-left-width:0}/*!@.button-native*/.button-native.sc-ion-button-ios{border-radius:var(--border-radius);-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;display:block;position:relative;width:100%;height:100%;transition:var(--transition);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);outline:none;background:var(--background);line-height:1;box-shadow:var(--box-shadow);contain:layout style;cursor:pointer;opacity:var(--opacity);overflow:var(--overflow);z-index:0;box-sizing:border-box;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.button-native*/.button-native.sc-ion-button-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.button-native::-moz-focus-inner*/.button-native.sc-ion-button-ios::-moz-focus-inner{border:0}/*!@.button-inner*/.button-inner.sc-ion-button-ios{display:flex;position:relative;flex-flow:row nowrap;flex-shrink:0;align-items:center;justify-content:center;width:100%;height:100%;z-index:1}/*!@::slotted(ion-icon)*/.sc-ion-button-ios-s>ion-icon{font-size:1.4em;pointer-events:none}/*!@::slotted(ion-icon[slot=start])*/.sc-ion-button-ios-s>ion-icon[slot=start]{margin-left:-0.3em;margin-right:0.3em;margin-top:0;margin-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=start])*/.sc-ion-button-ios-s>ion-icon[slot=start]{margin-left:unset;margin-right:unset;-webkit-margin-start:-0.3em;margin-inline-start:-0.3em;-webkit-margin-end:0.3em;margin-inline-end:0.3em}}/*!@::slotted(ion-icon[slot=end])*/.sc-ion-button-ios-s>ion-icon[slot=end]{margin-left:0.3em;margin-right:-0.2em;margin-top:0;margin-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=end])*/.sc-ion-button-ios-s>ion-icon[slot=end]{margin-left:unset;margin-right:unset;-webkit-margin-start:0.3em;margin-inline-start:0.3em;-webkit-margin-end:-0.2em;margin-inline-end:-0.2em}}/*!@::slotted(ion-icon[slot=icon-only])*/.sc-ion-button-ios-s>ion-icon[slot=icon-only]{font-size:1.8em}/*!@ion-ripple-effect*/ion-ripple-effect.sc-ion-button-ios{color:var(--ripple-color)}/*!@.button-native::after*/.button-native.sc-ion-button-ios::after{left:0;right:0;top:0;bottom:0;position:absolute;content:\"\";opacity:0}/*!@:host(.ion-activated)*/.ion-activated.sc-ion-button-ios-h{color:var(--color-activated)}/*!@:host(.ion-activated) .button-native::after*/.ion-activated.sc-ion-button-ios-h .button-native.sc-ion-button-ios::after{background:var(--background-activated);opacity:var(--background-activated-opacity)}/*!@:host(.ion-focused)*/.ion-focused.sc-ion-button-ios-h{color:var(--color-focused)}/*!@:host(.ion-focused) .button-native::after*/.ion-focused.sc-ion-button-ios-h .button-native.sc-ion-button-ios::after{background:var(--background-focused);opacity:var(--background-focused-opacity)}@media (any-hover: hover){/*!@:host(:hover)*/.sc-ion-button-ios-h:hover{color:var(--color-hover)}/*!@:host(:hover) .button-native::after*/.sc-ion-button-ios-h:hover .button-native.sc-ion-button-ios::after{background:var(--background-hover);opacity:var(--background-hover-opacity)}}/*!@:host(.button-solid.ion-color) .button-native*/.button-solid.ion-color.sc-ion-button-ios-h .button-native.sc-ion-button-ios{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.button-outline.ion-color) .button-native*/.button-outline.ion-color.sc-ion-button-ios-h .button-native.sc-ion-button-ios{border-color:var(--ion-color-base);background:transparent;color:var(--ion-color-base)}/*!@:host(.button-clear.ion-color) .button-native*/.button-clear.ion-color.sc-ion-button-ios-h .button-native.sc-ion-button-ios{background:transparent;color:var(--ion-color-base)}/*!@:host(.in-toolbar:not(.ion-color):not(.in-toolbar-color)) .button-native*/.in-toolbar.sc-ion-button-ios-h:not(.ion-color):not(.in-toolbar-color) .button-native.sc-ion-button-ios{color:var(--ion-toolbar-color, var(--color))}/*!@:host(.button-outline.in-toolbar:not(.ion-color):not(.in-toolbar-color)) .button-native*/.button-outline.in-toolbar.sc-ion-button-ios-h:not(.ion-color):not(.in-toolbar-color) .button-native.sc-ion-button-ios{border-color:var(--ion-toolbar-color, var(--color, var(--border-color)))}/*!@:host(.button-solid.in-toolbar:not(.ion-color):not(.in-toolbar-color)) .button-native*/.button-solid.in-toolbar.sc-ion-button-ios-h:not(.ion-color):not(.in-toolbar-color) .button-native.sc-ion-button-ios{background:var(--ion-toolbar-color, var(--background));color:var(--ion-toolbar-background, var(--color))}/*!@:host*/.sc-ion-button-ios-h{--border-radius:10px;--padding-top:0;--padding-bottom:0;--padding-start:1em;--padding-end:1em;--transition:background-color, opacity 100ms linear;margin-left:2px;margin-right:2px;margin-top:4px;margin-bottom:4px;height:2.8em;font-size:16px;font-weight:500;letter-spacing:-0.03em}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-button-ios-h{margin-left:unset;margin-right:unset;-webkit-margin-start:2px;margin-inline-start:2px;-webkit-margin-end:2px;margin-inline-end:2px}}/*!@:host(.button-solid)*/.button-solid.sc-ion-button-ios-h{--background-activated:var(--ion-color-primary-shade, #3171e0);--background-focused:var(--ion-color-primary-shade, #3171e0);--background-hover:var(--ion-color-primary-tint, #4c8dff);--background-activated-opacity:1;--background-focused-opacity:1;--background-hover-opacity:1}/*!@:host(.button-outline)*/.button-outline.sc-ion-button-ios-h{--border-radius:10px;--border-width:1px;--border-style:solid;--background-activated:var(--ion-color-primary, #3880ff);--background-focused:var(--ion-color-primary, #3880ff);--background-hover:transparent;--background-focused-opacity:.1;--color-activated:var(--ion-color-primary-contrast, #fff)}/*!@:host(.button-clear)*/.button-clear.sc-ion-button-ios-h{--background-activated:transparent;--background-focused:var(--ion-color-primary, #3880ff);--background-hover:transparent;--background-focused-opacity:.1;font-size:17px;font-weight:normal;letter-spacing:0}/*!@:host(.button-large)*/.button-large.sc-ion-button-ios-h{--border-radius:12px;--padding-top:0;--padding-start:1em;--padding-end:1em;--padding-bottom:0;height:2.8em;font-size:20px}/*!@:host(.button-small)*/.button-small.sc-ion-button-ios-h{--border-radius:6px;--padding-top:0;--padding-start:0.9em;--padding-end:0.9em;--padding-bottom:0;height:2.1em;font-size:13px}/*!@:host(.button-round)*/.button-round.sc-ion-button-ios-h{--border-radius:64px;--padding-top:0;--padding-start:26px;--padding-end:26px;--padding-bottom:0}/*!@:host(.button-strong)*/.button-strong.sc-ion-button-ios-h{font-weight:600}/*!@:host(.button-clear.ion-activated)*/.button-clear.ion-activated.sc-ion-button-ios-h{opacity:0.4}/*!@:host(.button-outline.ion-activated.ion-color) .button-native*/.button-outline.ion-activated.ion-color.sc-ion-button-ios-h .button-native.sc-ion-button-ios{color:var(--ion-color-contrast)}/*!@:host(.button-outline.ion-activated.ion-color) .button-native::after*/.button-outline.ion-activated.ion-color.sc-ion-button-ios-h .button-native.sc-ion-button-ios::after{background:var(--ion-color-base)}/*!@:host(.button-solid.ion-color.ion-activated) .button-native::after*/.button-solid.ion-color.ion-activated.sc-ion-button-ios-h .button-native.sc-ion-button-ios::after{background:var(--ion-color-shade)}/*!@:host(.button-outline.ion-focused.ion-color) .button-native,\n:host(.button-clear.ion-focused.ion-color) .button-native*/.button-outline.ion-focused.ion-color.sc-ion-button-ios-h .button-native.sc-ion-button-ios,.button-clear.ion-focused.ion-color.sc-ion-button-ios-h .button-native.sc-ion-button-ios{color:var(--ion-color-base)}/*!@:host(.button-outline.ion-focused.ion-color) .button-native::after,\n:host(.button-clear.ion-focused.ion-color) .button-native::after*/.button-outline.ion-focused.ion-color.sc-ion-button-ios-h .button-native.sc-ion-button-ios::after,.button-clear.ion-focused.ion-color.sc-ion-button-ios-h .button-native.sc-ion-button-ios::after{background:var(--ion-color-base)}/*!@:host(.button-solid.ion-color.ion-focused) .button-native::after*/.button-solid.ion-color.ion-focused.sc-ion-button-ios-h .button-native.sc-ion-button-ios::after{background:var(--ion-color-shade)}@media (any-hover: hover){/*!@:host(.button-clear:hover),\n:host(.button-outline:hover)*/.button-clear.sc-ion-button-ios-h:hover,.button-outline.sc-ion-button-ios-h:hover{opacity:0.6}/*!@:host(.button-clear.ion-color:hover) .button-native,\n:host(.button-outline.ion-color:hover) .button-native*/.button-clear.ion-color.sc-ion-button-ios-h:hover .button-native.sc-ion-button-ios,.button-outline.ion-color.sc-ion-button-ios-h:hover .button-native.sc-ion-button-ios{color:var(--ion-color-base)}/*!@:host(.button-clear.ion-color:hover) .button-native::after,\n:host(.button-outline.ion-color:hover) .button-native::after*/.button-clear.ion-color.sc-ion-button-ios-h:hover .button-native.sc-ion-button-ios::after,.button-outline.ion-color.sc-ion-button-ios-h:hover .button-native.sc-ion-button-ios::after{background:transparent}/*!@:host(.button-solid.ion-color:hover) .button-native::after*/.button-solid.ion-color.sc-ion-button-ios-h:hover .button-native.sc-ion-button-ios::after{background:var(--ion-color-tint)}/*!@:host(:hover.button-solid.in-toolbar:not(.ion-color):not(.in-toolbar-color)) .button-native::after*/.sc-ion-button-ios-h:hover.button-solid.in-toolbar:not(.ion-color):not(.in-toolbar-color) .button-native.sc-ion-button-ios::after{background:#fff;opacity:0.1}}";
 
 const buttonMdCss = "/*!@:host*/.sc-ion-button-md-h{--overflow:hidden;--ripple-color:currentColor;--border-width:initial;--border-color:initial;--border-style:initial;--color-activated:var(--color);--color-focused:var(--color);--color-hover:var(--color);--box-shadow:none;display:inline-block;width:auto;color:var(--color);font-family:var(--ion-font-family, inherit);text-align:center;text-decoration:none;text-overflow:ellipsis;white-space:nowrap;user-select:none;vertical-align:top;vertical-align:-webkit-baseline-middle;font-kerning:none}/*!@:host(.button-disabled)*/.button-disabled.sc-ion-button-md-h{cursor:default;opacity:0.5;pointer-events:none}/*!@:host(.button-solid)*/.button-solid.sc-ion-button-md-h{--background:var(--ion-color-primary, #3880ff);--color:var(--ion-color-primary-contrast, #fff)}/*!@:host(.button-outline)*/.button-outline.sc-ion-button-md-h{--border-color:var(--ion-color-primary, #3880ff);--background:transparent;--color:var(--ion-color-primary, #3880ff)}/*!@:host(.button-clear)*/.button-clear.sc-ion-button-md-h{--border-width:0;--background:transparent;--color:var(--ion-color-primary, #3880ff)}/*!@:host(.button-block)*/.button-block.sc-ion-button-md-h{display:block}/*!@:host(.button-block) .button-native*/.button-block.sc-ion-button-md-h .button-native.sc-ion-button-md{margin-left:0;margin-right:0;display:block;width:100%;clear:both;contain:content}/*!@:host(.button-block) .button-native::after*/.button-block.sc-ion-button-md-h .button-native.sc-ion-button-md::after{clear:both}/*!@:host(.button-full)*/.button-full.sc-ion-button-md-h{display:block}/*!@:host(.button-full) .button-native*/.button-full.sc-ion-button-md-h .button-native.sc-ion-button-md{margin-left:0;margin-right:0;display:block;width:100%;contain:content}/*!@:host(.button-full:not(.button-round)) .button-native*/.button-full.sc-ion-button-md-h:not(.button-round) .button-native.sc-ion-button-md{border-radius:0;border-right-width:0;border-left-width:0}/*!@.button-native*/.button-native.sc-ion-button-md{border-radius:var(--border-radius);-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;display:block;position:relative;width:100%;height:100%;transition:var(--transition);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);outline:none;background:var(--background);line-height:1;box-shadow:var(--box-shadow);contain:layout style;cursor:pointer;opacity:var(--opacity);overflow:var(--overflow);z-index:0;box-sizing:border-box;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.button-native*/.button-native.sc-ion-button-md{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.button-native::-moz-focus-inner*/.button-native.sc-ion-button-md::-moz-focus-inner{border:0}/*!@.button-inner*/.button-inner.sc-ion-button-md{display:flex;position:relative;flex-flow:row nowrap;flex-shrink:0;align-items:center;justify-content:center;width:100%;height:100%;z-index:1}/*!@::slotted(ion-icon)*/.sc-ion-button-md-s>ion-icon{font-size:1.4em;pointer-events:none}/*!@::slotted(ion-icon[slot=start])*/.sc-ion-button-md-s>ion-icon[slot=start]{margin-left:-0.3em;margin-right:0.3em;margin-top:0;margin-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=start])*/.sc-ion-button-md-s>ion-icon[slot=start]{margin-left:unset;margin-right:unset;-webkit-margin-start:-0.3em;margin-inline-start:-0.3em;-webkit-margin-end:0.3em;margin-inline-end:0.3em}}/*!@::slotted(ion-icon[slot=end])*/.sc-ion-button-md-s>ion-icon[slot=end]{margin-left:0.3em;margin-right:-0.2em;margin-top:0;margin-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=end])*/.sc-ion-button-md-s>ion-icon[slot=end]{margin-left:unset;margin-right:unset;-webkit-margin-start:0.3em;margin-inline-start:0.3em;-webkit-margin-end:-0.2em;margin-inline-end:-0.2em}}/*!@::slotted(ion-icon[slot=icon-only])*/.sc-ion-button-md-s>ion-icon[slot=icon-only]{font-size:1.8em}/*!@ion-ripple-effect*/ion-ripple-effect.sc-ion-button-md{color:var(--ripple-color)}/*!@.button-native::after*/.button-native.sc-ion-button-md::after{left:0;right:0;top:0;bottom:0;position:absolute;content:\"\";opacity:0}/*!@:host(.ion-activated)*/.ion-activated.sc-ion-button-md-h{color:var(--color-activated)}/*!@:host(.ion-activated) .button-native::after*/.ion-activated.sc-ion-button-md-h .button-native.sc-ion-button-md::after{background:var(--background-activated);opacity:var(--background-activated-opacity)}/*!@:host(.ion-focused)*/.ion-focused.sc-ion-button-md-h{color:var(--color-focused)}/*!@:host(.ion-focused) .button-native::after*/.ion-focused.sc-ion-button-md-h .button-native.sc-ion-button-md::after{background:var(--background-focused);opacity:var(--background-focused-opacity)}@media (any-hover: hover){/*!@:host(:hover)*/.sc-ion-button-md-h:hover{color:var(--color-hover)}/*!@:host(:hover) .button-native::after*/.sc-ion-button-md-h:hover .button-native.sc-ion-button-md::after{background:var(--background-hover);opacity:var(--background-hover-opacity)}}/*!@:host(.button-solid.ion-color) .button-native*/.button-solid.ion-color.sc-ion-button-md-h .button-native.sc-ion-button-md{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.button-outline.ion-color) .button-native*/.button-outline.ion-color.sc-ion-button-md-h .button-native.sc-ion-button-md{border-color:var(--ion-color-base);background:transparent;color:var(--ion-color-base)}/*!@:host(.button-clear.ion-color) .button-native*/.button-clear.ion-color.sc-ion-button-md-h .button-native.sc-ion-button-md{background:transparent;color:var(--ion-color-base)}/*!@:host(.in-toolbar:not(.ion-color):not(.in-toolbar-color)) .button-native*/.in-toolbar.sc-ion-button-md-h:not(.ion-color):not(.in-toolbar-color) .button-native.sc-ion-button-md{color:var(--ion-toolbar-color, var(--color))}/*!@:host(.button-outline.in-toolbar:not(.ion-color):not(.in-toolbar-color)) .button-native*/.button-outline.in-toolbar.sc-ion-button-md-h:not(.ion-color):not(.in-toolbar-color) .button-native.sc-ion-button-md{border-color:var(--ion-toolbar-color, var(--color, var(--border-color)))}/*!@:host(.button-solid.in-toolbar:not(.ion-color):not(.in-toolbar-color)) .button-native*/.button-solid.in-toolbar.sc-ion-button-md-h:not(.ion-color):not(.in-toolbar-color) .button-native.sc-ion-button-md{background:var(--ion-toolbar-color, var(--background));color:var(--ion-toolbar-background, var(--color))}/*!@:host*/.sc-ion-button-md-h{--border-radius:4px;--padding-top:0;--padding-bottom:0;--padding-start:1.1em;--padding-end:1.1em;--transition:box-shadow 280ms cubic-bezier(.4, 0, .2, 1),\n                background-color 15ms linear,\n                color 15ms linear;margin-left:2px;margin-right:2px;margin-top:4px;margin-bottom:4px;height:36px;font-size:14px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-button-md-h{margin-left:unset;margin-right:unset;-webkit-margin-start:2px;margin-inline-start:2px;-webkit-margin-end:2px;margin-inline-end:2px}}/*!@:host(.button-solid)*/.button-solid.sc-ion-button-md-h{--background-activated:transparent;--background-hover:var(--ion-color-primary-contrast, #fff);--background-focused:var(--ion-color-primary-contrast, #fff);--background-activated-opacity:0;--background-focused-opacity:.24;--background-hover-opacity:.08;--box-shadow:0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12)}/*!@:host(.button-solid.ion-activated)*/.button-solid.ion-activated.sc-ion-button-md-h{--box-shadow:0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12)}/*!@:host(.button-outline)*/.button-outline.sc-ion-button-md-h{--border-width:2px;--border-style:solid;--box-shadow:none;--background-activated:transparent;--background-focused:var(--ion-color-primary, #3880ff);--background-hover:var(--ion-color-primary, #3880ff);--background-activated-opacity:0;--background-focused-opacity:.12;--background-hover-opacity:.04}/*!@:host(.button-outline.ion-activated.ion-color) .button-native*/.button-outline.ion-activated.ion-color.sc-ion-button-md-h .button-native.sc-ion-button-md{background:transparent}/*!@:host(.button-clear)*/.button-clear.sc-ion-button-md-h{--background-activated:transparent;--background-focused:var(--ion-color-primary, #3880ff);--background-hover:var(--ion-color-primary, #3880ff);--background-activated-opacity:0;--background-focused-opacity:.12;--background-hover-opacity:.04}/*!@:host(.button-round)*/.button-round.sc-ion-button-md-h{--border-radius:64px;--padding-top:0;--padding-start:26px;--padding-end:26px;--padding-bottom:0}/*!@:host(.button-large)*/.button-large.sc-ion-button-md-h{--padding-top:0;--padding-start:1em;--padding-end:1em;--padding-bottom:0;height:2.8em;font-size:20px}/*!@:host(.button-small)*/.button-small.sc-ion-button-md-h{--padding-top:0;--padding-start:0.9em;--padding-end:0.9em;--padding-bottom:0;height:2.1em;font-size:13px}/*!@:host(.button-strong)*/.button-strong.sc-ion-button-md-h{font-weight:bold}/*!@::slotted(ion-icon[slot=icon-only])*/.sc-ion-button-md-s>ion-icon[slot=icon-only]{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0}/*!@:host(.button-solid.ion-color.ion-focused) .button-native::after*/.button-solid.ion-color.ion-focused.sc-ion-button-md-h .button-native.sc-ion-button-md::after{background:var(--ion-color-contrast)}/*!@:host(.button-clear.ion-color.ion-focused) .button-native::after,\n:host(.button-outline.ion-color.ion-focused) .button-native::after*/.button-clear.ion-color.ion-focused.sc-ion-button-md-h .button-native.sc-ion-button-md::after,.button-outline.ion-color.ion-focused.sc-ion-button-md-h .button-native.sc-ion-button-md::after{background:var(--ion-color-base)}@media (any-hover: hover){/*!@:host(.button-solid.ion-color:hover) .button-native::after*/.button-solid.ion-color.sc-ion-button-md-h:hover .button-native.sc-ion-button-md::after{background:var(--ion-color-contrast)}/*!@:host(.button-clear.ion-color:hover) .button-native::after,\n:host(.button-outline.ion-color:hover) .button-native::after*/.button-clear.ion-color.sc-ion-button-md-h:hover .button-native.sc-ion-button-md::after,.button-outline.ion-color.sc-ion-button-md-h:hover .button-native.sc-ion-button-md::after{background:var(--ion-color-base)}}";
@@ -9423,7 +10555,7 @@ class Button {
     this.inToolbar = !!this.el.closest('ion-buttons');
     this.inListHeader = !!this.el.closest('ion-list-header');
     this.inItem = !!this.el.closest('ion-item') || !!this.el.closest('ion-item-divider');
-    this.inheritedAttributes = inheritAttributes(this.el, ['aria-label']);
+    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
   }
   get hasIconOnly() {
     return !!this.el.querySelector('[slot="icon-only"]');
@@ -10124,7 +11256,7 @@ class Checkbox {
       "checked": [1028],
       "indeterminate": [1028],
       "disabled": [4],
-      "value": [1]
+      "value": [8]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",
@@ -10179,6 +11311,9 @@ class Chip {
   }; }
 }
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const SIZE_TO_MEDIA = {
   'xs': '(min-width: 0px)',
   'sm': '(min-width: 576px)',
@@ -10202,8 +11337,8 @@ const matchBreakpoint = (breakpoint) => {
 
 const colCss = "/*!@:host*/.sc-ion-col-h{padding-left:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));padding-right:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));padding-top:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));padding-bottom:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;box-sizing:border-box;position:relative;flex-basis:0;flex-grow:1;width:100%;max-width:100%;min-height:1px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-col-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));padding-inline-start:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));-webkit-padding-end:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));padding-inline-end:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px))}}@media (min-width: 576px){/*!@:host*/.sc-ion-col-h{padding-left:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));padding-right:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));padding-top:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));padding-bottom:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px))}/*!@@supports (margin-inline-start: 0) or (-webkit-margin-start: 0)*/@supports .sc-ion-col (margin-inline-start.sc-ion-col: 0).sc-ion-col or.sc-ion-col (-webkit-margin-start.sc-ion-col: 0).sc-ion-col{.sc-ion-col-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));padding-inline-start:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));-webkit-padding-end:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));padding-inline-end:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px))}}}@media (min-width: 768px){/*!@:host*/.sc-ion-col-h{padding-left:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));padding-right:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));padding-top:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));padding-bottom:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px))}/*!@@supports (margin-inline-start: 0) or (-webkit-margin-start: 0)*/@supports .sc-ion-col (margin-inline-start.sc-ion-col: 0).sc-ion-col or.sc-ion-col (-webkit-margin-start.sc-ion-col: 0).sc-ion-col{.sc-ion-col-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));padding-inline-start:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));-webkit-padding-end:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));padding-inline-end:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px))}}}@media (min-width: 992px){/*!@:host*/.sc-ion-col-h{padding-left:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));padding-right:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));padding-top:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));padding-bottom:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px))}/*!@@supports (margin-inline-start: 0) or (-webkit-margin-start: 0)*/@supports .sc-ion-col (margin-inline-start.sc-ion-col: 0).sc-ion-col or.sc-ion-col (-webkit-margin-start.sc-ion-col: 0).sc-ion-col{.sc-ion-col-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));padding-inline-start:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));-webkit-padding-end:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));padding-inline-end:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px))}}}@media (min-width: 1200px){/*!@:host*/.sc-ion-col-h{padding-left:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));padding-right:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));padding-top:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));padding-bottom:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px))}/*!@@supports (margin-inline-start: 0) or (-webkit-margin-start: 0)*/@supports .sc-ion-col (margin-inline-start.sc-ion-col: 0).sc-ion-col or.sc-ion-col (-webkit-margin-start.sc-ion-col: 0).sc-ion-col{.sc-ion-col-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));padding-inline-start:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));-webkit-padding-end:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));padding-inline-end:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px))}}}";
 
-const win$1 = window;
-const SUPPORTS_VARS = !!(win$1.CSS && win$1.CSS.supports && win$1.CSS.supports('--a: 0'));
+const win$1 = (typeof window !== 'undefined') ? window : undefined;
+const SUPPORTS_VARS = win$1 && !!(win$1.CSS && win$1.CSS.supports && win$1.CSS.supports('--a: 0'));
 const BREAKPOINTS = ['', 'xs', 'sm', 'md', 'lg', 'xl'];
 class Col {
   constructor(hostRef) {
@@ -10322,7 +11457,7 @@ class Col {
   }; }
 }
 
-const contentCss = "/*!@:host*/.sc-ion-content-h{--background:var(--ion-background-color, #fff);--color:var(--ion-text-color, #000);--padding-top:0px;--padding-bottom:0px;--padding-start:0px;--padding-end:0px;--keyboard-offset:0px;--offset-top:0px;--offset-bottom:0px;--overflow:auto;display:block;position:relative;flex:1;width:100%;height:100%;margin:0 !important;padding:0 !important;font-family:var(--ion-font-family, inherit);contain:size style}/*!@:host(.ion-color) .inner-scroll*/.ion-color.sc-ion-content-h .inner-scroll.sc-ion-content{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.outer-content)*/.outer-content.sc-ion-content-h{--background:var(--ion-color-step-50, #f2f2f2)}/*!@#background-content*/#background-content.sc-ion-content{left:0px;right:0px;top:calc(var(--offset-top) * -1);bottom:calc(var(--offset-bottom) * -1);position:absolute;background:var(--background)}/*!@.inner-scroll*/.inner-scroll.sc-ion-content{left:0px;right:0px;top:calc(var(--offset-top) * -1);bottom:calc(var(--offset-bottom) * -1);padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:calc(var(--padding-top) + var(--offset-top));padding-bottom:calc(var(--padding-bottom) + var(--keyboard-offset) + var(--offset-bottom));position:absolute;color:var(--color);box-sizing:border-box;overflow:hidden}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.inner-scroll*/.inner-scroll.sc-ion-content{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.scroll-y,\n.scroll-x*/.scroll-y.sc-ion-content,.scroll-x.sc-ion-content{-webkit-overflow-scrolling:touch;z-index:0;will-change:scroll-position}/*!@.scroll-y*/.scroll-y.sc-ion-content{touch-action:pan-y;overflow-y:var(--overflow);overscroll-behavior-y:contain}/*!@.scroll-x*/.scroll-x.sc-ion-content{touch-action:pan-x;overflow-x:var(--overflow);overscroll-behavior-x:contain}/*!@.scroll-x.scroll-y*/.scroll-x.scroll-y.sc-ion-content{touch-action:auto}/*!@.overscroll::before,\n.overscroll::after*/.overscroll.sc-ion-content::before,.overscroll.sc-ion-content::after{position:absolute;width:1px;height:1px;content:\"\"}/*!@.overscroll::before*/.overscroll.sc-ion-content::before{bottom:-1px}/*!@.overscroll::after*/.overscroll.sc-ion-content::after{top:-1px}/*!@:host(.content-sizing)*/.content-sizing.sc-ion-content-h{display:flex;flex-direction:column;min-height:0;contain:none}/*!@:host(.content-sizing) .inner-scroll*/.content-sizing.sc-ion-content-h .inner-scroll.sc-ion-content{position:relative;top:0;bottom:0;margin-top:calc(var(--offset-top) * -1);margin-bottom:calc(var(--offset-bottom) * -1)}/*!@.transition-effect*/.transition-effect.sc-ion-content{display:none;position:absolute;left:-100%;width:100%;height:100vh;opacity:0;pointer-events:none}/*!@.transition-cover*/.transition-cover.sc-ion-content{position:absolute;right:0;width:100%;height:100%;background:black;opacity:0.1}/*!@.transition-shadow*/.transition-shadow.sc-ion-content{display:block;position:absolute;right:0;width:10px;height:100%;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAgCAYAAAAIXrg4AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MTE3MDgzRkQ5QTkyMTFFOUEwNzQ5MkJFREE1NUY2MjQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MTE3MDgzRkU5QTkyMTFFOUEwNzQ5MkJFREE1NUY2MjQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxMTcwODNGQjlBOTIxMUU5QTA3NDkyQkVEQTU1RjYyNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxMTcwODNGQzlBOTIxMUU5QTA3NDkyQkVEQTU1RjYyNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmePEuQAAABNSURBVHjaYvz//z8DIxAwMDAwATGMhmFmPDQuOSZks0AMmoJBaQHjkPfB0Lfg/2gQjVow+HPy/yHvg9GiYjQfjMbBqAWjFgy/4hogwADYqwdzxy5BuwAAAABJRU5ErkJggg==);background-repeat:repeat-y;background-size:10px 16px}/*!@::slotted([slot=fixed])*/.sc-ion-content-s>[slot=fixed]{position:absolute;transform:translateZ(0)}";
+const contentCss = "/*!@:host*/.sc-ion-content-h{--background:var(--ion-background-color, #fff);--color:var(--ion-text-color, #000);--padding-top:0px;--padding-bottom:0px;--padding-start:0px;--padding-end:0px;--keyboard-offset:0px;--offset-top:0px;--offset-bottom:0px;--overflow:auto;display:block;position:relative;flex:1;width:100%;height:100%;margin:0 !important;padding:0 !important;font-family:var(--ion-font-family, inherit);contain:size style}/*!@:host(.ion-color) .inner-scroll*/.ion-color.sc-ion-content-h .inner-scroll.sc-ion-content{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.outer-content)*/.outer-content.sc-ion-content-h{--background:var(--ion-color-step-50, #f2f2f2)}/*!@#background-content*/#background-content.sc-ion-content{left:0px;right:0px;top:calc(var(--offset-top) * -1);bottom:calc(var(--offset-bottom) * -1);position:absolute;background:var(--background)}/*!@.inner-scroll*/.inner-scroll.sc-ion-content{left:0px;right:0px;top:calc(var(--offset-top) * -1);bottom:calc(var(--offset-bottom) * -1);padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:calc(var(--padding-top) + var(--offset-top));padding-bottom:calc(var(--padding-bottom) + var(--keyboard-offset) + var(--offset-bottom));position:absolute;color:var(--color);box-sizing:border-box;overflow:hidden;touch-action:manipulation}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.inner-scroll*/.inner-scroll.sc-ion-content{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.scroll-y,\n.scroll-x*/.scroll-y.sc-ion-content,.scroll-x.sc-ion-content{-webkit-overflow-scrolling:touch;z-index:0;will-change:scroll-position}/*!@.scroll-y*/.scroll-y.sc-ion-content{overflow-y:var(--overflow);overscroll-behavior-y:contain}/*!@.scroll-x*/.scroll-x.sc-ion-content{overflow-x:var(--overflow);overscroll-behavior-x:contain}/*!@.overscroll::before,\n.overscroll::after*/.overscroll.sc-ion-content::before,.overscroll.sc-ion-content::after{position:absolute;width:1px;height:1px;content:\"\"}/*!@.overscroll::before*/.overscroll.sc-ion-content::before{bottom:-1px}/*!@.overscroll::after*/.overscroll.sc-ion-content::after{top:-1px}/*!@:host(.content-sizing)*/.content-sizing.sc-ion-content-h{display:flex;flex-direction:column;min-height:0;contain:none}/*!@:host(.content-sizing) .inner-scroll*/.content-sizing.sc-ion-content-h .inner-scroll.sc-ion-content{position:relative;top:0;bottom:0;margin-top:calc(var(--offset-top) * -1);margin-bottom:calc(var(--offset-bottom) * -1)}/*!@.transition-effect*/.transition-effect.sc-ion-content{display:none;position:absolute;left:-100%;width:100%;height:100vh;opacity:0;pointer-events:none}/*!@.transition-cover*/.transition-cover.sc-ion-content{position:absolute;right:0;width:100%;height:100%;background:black;opacity:0.1}/*!@.transition-shadow*/.transition-shadow.sc-ion-content{display:block;position:absolute;right:0;width:10px;height:100%;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAgCAYAAAAIXrg4AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MTE3MDgzRkQ5QTkyMTFFOUEwNzQ5MkJFREE1NUY2MjQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MTE3MDgzRkU5QTkyMTFFOUEwNzQ5MkJFREE1NUY2MjQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxMTcwODNGQjlBOTIxMUU5QTA3NDkyQkVEQTU1RjYyNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxMTcwODNGQzlBOTIxMUU5QTA3NDkyQkVEQTU1RjYyNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmePEuQAAABNSURBVHjaYvz//z8DIxAwMDAwATGMhmFmPDQuOSZks0AMmoJBaQHjkPfB0Lfg/2gQjVow+HPy/yHvg9GiYjQfjMbBqAWjFgy/4hogwADYqwdzxy5BuwAAAABJRU5ErkJggg==);background-repeat:repeat-y;background-size:10px 16px}/*!@::slotted([slot=fixed])*/.sc-ion-content-s>[slot=fixed]{position:absolute;transform:translateZ(0)}";
 
 /**
  * @slot - Content is placed in the scrollable area if provided without a slot.
@@ -10445,7 +11580,14 @@ class Content {
    * i.e. Using `ionScroll`, `ionScrollStart`, `ionScrollEnd` for scrolling events
    * and `scrollToPoint()` to scroll the content into a certain point.
    */
-  getScrollElement() {
+  async getScrollElement() {
+    /**
+     * If this gets called in certain early lifecycle hooks (ex: Vue onMounted),
+     * scrollEl won't be defined yet with the custom elements build, so wait for it to load in.
+     */
+    if (!this.scrollEl) {
+      await new Promise(resolve => componentOnReady(this.el, resolve));
+    }
     return Promise.resolve(this.scrollEl);
   }
   /**
@@ -10461,8 +11603,9 @@ class Content {
    *
    * @param duration The amount of time to take scrolling to the bottom. Defaults to `0`.
    */
-  scrollToBottom(duration = 0) {
-    const y = this.scrollEl.scrollHeight - this.scrollEl.clientHeight;
+  async scrollToBottom(duration = 0) {
+    const scrollEl = await this.getScrollElement();
+    const y = scrollEl.scrollHeight - scrollEl.clientHeight;
     return this.scrollToPoint(undefined, y, duration);
   }
   /**
@@ -10472,8 +11615,9 @@ class Content {
    * @param y The amount to scroll by on the vertical axis.
    * @param duration The amount of time to take scrolling by that amount.
    */
-  scrollByPoint(x, y, duration) {
-    return this.scrollToPoint(x + this.scrollEl.scrollLeft, y + this.scrollEl.scrollTop, duration);
+  async scrollByPoint(x, y, duration) {
+    const scrollEl = await this.getScrollElement();
+    return this.scrollToPoint(x + scrollEl.scrollLeft, y + scrollEl.scrollTop, duration);
   }
   /**
    * Scroll to a specified X/Y location in the component.
@@ -10483,7 +11627,7 @@ class Content {
    * @param duration The amount of time to take scrolling to that point. Defaults to `0`.
    */
   async scrollToPoint(x, y, duration = 0) {
-    const el = this.scrollEl;
+    const el = await this.getScrollElement();
     if (duration < 32) {
       if (y != null) {
         el.scrollTop = y;
@@ -10556,8 +11700,8 @@ class Content {
     const { isMainContent, scrollX, scrollY } = this;
     const mode = getIonMode$1(this);
     const forceOverscroll = this.shouldForceOverscroll();
+    const transitionShadow = mode === 'ios';
     const TagType = isMainContent ? 'main' : 'div';
-    const transitionShadow = (mode === 'ios' && config$1.getBoolean('experimentalTransitionShadow', true));
     this.resize();
     return (hAsync(Host, { class: createColorClasses$1(this.color, {
         [mode]: true,
@@ -10651,165 +11795,852 @@ const updateScrollDetail = (detail, el, timestamp, shouldStart) => {
   }
 };
 
-/**
- * Gets a date value given a format
- * Defaults to the current date if
- * no date given
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
  */
-const getDateValue = (date, format) => {
-  const getValue = getValueFromFormat(date, format);
-  if (getValue !== undefined) {
-    if (format === FORMAT_A || format === FORMAT_a) {
-      date.ampm = getValue;
+const ION_FOCUSED = 'ion-focused';
+const ION_FOCUSABLE = 'ion-focusable';
+const FOCUS_KEYS = ['Tab', 'ArrowDown', 'Space', 'Escape', ' ', 'Shift', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'Home', 'End'];
+const startFocusVisible = (rootEl) => {
+  let currentFocus = [];
+  let keyboardMode = true;
+  const ref = (rootEl) ? rootEl.shadowRoot : document;
+  const root = (rootEl) ? rootEl : document.body;
+  const setFocus = (elements) => {
+    currentFocus.forEach(el => el.classList.remove(ION_FOCUSED));
+    elements.forEach(el => el.classList.add(ION_FOCUSED));
+    currentFocus = elements;
+  };
+  const pointerDown = () => {
+    keyboardMode = false;
+    setFocus([]);
+  };
+  const onKeydown = (ev) => {
+    keyboardMode = FOCUS_KEYS.includes(ev.key);
+    if (!keyboardMode) {
+      setFocus([]);
     }
-    return getValue;
-  }
-  const defaultDate = parseDate(new Date().toISOString());
-  return getValueFromFormat(defaultDate, format);
+  };
+  const onFocusin = (ev) => {
+    if (keyboardMode && ev.composedPath) {
+      const toFocus = ev.composedPath().filter((el) => {
+        if (el.classList) {
+          return el.classList.contains(ION_FOCUSABLE);
+        }
+        return false;
+      });
+      setFocus(toFocus);
+    }
+  };
+  const onFocusout = () => {
+    if (ref.activeElement === root) {
+      setFocus([]);
+    }
+  };
+  ref.addEventListener('keydown', onKeydown);
+  ref.addEventListener('focusin', onFocusin);
+  ref.addEventListener('focusout', onFocusout);
+  ref.addEventListener('touchstart', pointerDown);
+  ref.addEventListener('mousedown', pointerDown);
+  const destroy = () => {
+    ref.removeEventListener('keydown', onKeydown);
+    ref.removeEventListener('focusin', onFocusin);
+    ref.removeEventListener('focusout', onFocusout);
+    ref.removeEventListener('touchstart', pointerDown);
+    ref.removeEventListener('mousedown', pointerDown);
+  };
+  return {
+    destroy,
+    setFocus
+  };
 };
-const renderDatetime = (template, value, locale) => {
-  if (value === undefined) {
-    return undefined;
-  }
-  const tokens = [];
-  let hasText = false;
-  FORMAT_KEYS.forEach((format, index) => {
-    if (template.indexOf(format.f) > -1) {
-      const token = '{' + index + '}';
-      const text = renderTextFormat(format.f, value[format.k], value, locale);
-      if (!hasText && text !== undefined && value[format.k] != null) {
-        hasText = true;
-      }
-      tokens.push(token, text || '');
-      template = template.replace(format.f, token);
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+/**
+ * Returns `true` if the document or host element
+ * has a `dir` set to `rtl`. The host value will always
+ * take priority over the root document value.
+ */
+const isRTL = (hostEl) => {
+  if (hostEl) {
+    if (hostEl.dir !== '') {
+      return hostEl.dir.toLowerCase() === 'rtl';
     }
-  });
-  if (!hasText) {
-    return undefined;
   }
-  for (let i = 0; i < tokens.length; i += 2) {
-    template = template.replace(tokens[i], tokens[i + 1]);
-  }
-  return template;
+  return (document === null || document === void 0 ? void 0 : document.dir.toLowerCase()) === 'rtl';
 };
-const renderTextFormat = (format, value, date, locale) => {
-  if ((format === FORMAT_DDDD || format === FORMAT_DDD)) {
-    try {
-      value = (new Date(date.year, date.month - 1, date.day)).getDay();
-      if (format === FORMAT_DDDD) {
-        return (locale.dayNames ? locale.dayNames : DAY_NAMES)[value];
-      }
-      return (locale.dayShortNames ? locale.dayShortNames : DAY_SHORT_NAMES)[value];
-    }
-    catch (e) {
-      // ignore
-    }
-    return undefined;
-  }
-  if (format === FORMAT_A) {
-    return date !== undefined && date.hour !== undefined
-      ? (date.hour < 12 ? 'AM' : 'PM')
-      : value ? value.toUpperCase() : '';
-  }
-  if (format === FORMAT_a) {
-    return date !== undefined && date.hour !== undefined
-      ? (date.hour < 12 ? 'am' : 'pm')
-      : value || '';
-  }
-  if (value == null) {
-    return '';
-  }
-  if (format === FORMAT_YY || format === FORMAT_MM ||
-    format === FORMAT_DD || format === FORMAT_HH ||
-    format === FORMAT_mm || format === FORMAT_ss) {
-    return twoDigit(value);
-  }
-  if (format === FORMAT_YYYY) {
-    return fourDigit(value);
-  }
-  if (format === FORMAT_MMMM) {
-    return (locale.monthNames ? locale.monthNames : MONTH_NAMES)[value - 1];
-  }
-  if (format === FORMAT_MMM) {
-    return (locale.monthShortNames ? locale.monthShortNames : MONTH_SHORT_NAMES)[value - 1];
-  }
-  if (format === FORMAT_hh || format === FORMAT_h) {
-    if (value === 0) {
-      return '12';
-    }
-    if (value > 12) {
-      value -= 12;
-    }
-    if (format === FORMAT_hh && value < 10) {
-      return ('0' + value);
-    }
-  }
-  return value.toString();
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+/**
+ * Returns true if the selected day is equal to the reference day
+ */
+const isSameDay = (baseParts, compareParts) => {
+  return (baseParts.month === compareParts.month &&
+    baseParts.day === compareParts.day &&
+    baseParts.year === compareParts.year);
 };
-const dateValueRange = (format, min, max) => {
-  const opts = [];
-  if (format === FORMAT_YYYY || format === FORMAT_YY) {
-    // year
-    if (max.year === undefined || min.year === undefined) {
-      throw new Error('min and max year is undefined');
-    }
-    for (let i = max.year; i >= min.year; i--) {
-      opts.push(i);
-    }
-  }
-  else if (format === FORMAT_MMMM || format === FORMAT_MMM ||
-    format === FORMAT_MM || format === FORMAT_M ||
-    format === FORMAT_hh || format === FORMAT_h) {
-    // month or 12-hour
-    for (let i = 1; i < 13; i++) {
-      opts.push(i);
-    }
-  }
-  else if (format === FORMAT_DDDD || format === FORMAT_DDD ||
-    format === FORMAT_DD || format === FORMAT_D) {
-    // day
-    for (let i = 1; i < 32; i++) {
-      opts.push(i);
-    }
-  }
-  else if (format === FORMAT_HH || format === FORMAT_H) {
-    // 24-hour
-    for (let i = 0; i < 24; i++) {
-      opts.push(i);
-    }
-  }
-  else if (format === FORMAT_mm || format === FORMAT_m) {
-    // minutes
-    for (let i = 0; i < 60; i++) {
-      opts.push(i);
-    }
-  }
-  else if (format === FORMAT_ss || format === FORMAT_s) {
-    // seconds
-    for (let i = 0; i < 60; i++) {
-      opts.push(i);
-    }
-  }
-  else if (format === FORMAT_A || format === FORMAT_a) {
-    // AM/PM
-    opts.push('am', 'pm');
-  }
-  return opts;
+/**
+ * Returns true is the selected day is before the reference day.
+ */
+const isBefore = (baseParts, compareParts) => {
+  return (baseParts.year < compareParts.year ||
+    baseParts.year === compareParts.year && baseParts.month < compareParts.month ||
+    baseParts.year === compareParts.year && baseParts.month === compareParts.month && baseParts.day < compareParts.day);
 };
-const dateSortValue = (year, month, day, hour = 0, minute = 0) => {
-  return parseInt(`1${fourDigit(year)}${twoDigit(month)}${twoDigit(day)}${twoDigit(hour)}${twoDigit(minute)}`, 10);
+/**
+ * Returns true is the selected day is after the reference day.
+ */
+const isAfter = (baseParts, compareParts) => {
+  return (baseParts.year > compareParts.year ||
+    baseParts.year === compareParts.year && baseParts.month > compareParts.month ||
+    baseParts.year === compareParts.year && baseParts.month === compareParts.month && baseParts.day > compareParts.day);
 };
-const dateDataSortValue = (data) => {
-  return dateSortValue(data.year, data.month, data.day, data.hour, data.minute);
-};
-const daysInMonth = (month, year) => {
-  return (month === 4 || month === 6 || month === 9 || month === 11) ? 30 : (month === 2) ? isLeapYear(year) ? 29 : 28 : 31;
-};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+/**
+ * Determines if given year is a
+ * leap year. Returns `true` if year
+ * is a leap year. Returns `false`
+ * otherwise.
+ */
 const isLeapYear = (year) => {
   return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
 };
+const is24Hour = (locale, hourCycle) => {
+  /**
+   * If developer has explicitly enabled h23 time
+   * then return early and do not look at the system default.
+   */
+  if (hourCycle !== undefined) {
+    return hourCycle === 'h23';
+  }
+  /**
+   * If hourCycle was not specified, check the locale
+   * that is set on the user's device. We first check the
+   * Intl.DateTimeFormat hourCycle option as developers can encode this
+   * option into the locale string. Example: `en-US-u-hc-h23`
+   */
+  const formatted = new Intl.DateTimeFormat(locale, { hour: 'numeric' });
+  const options = formatted.resolvedOptions();
+  if (options.hourCycle !== undefined) {
+    return options.hourCycle === 'h23';
+  }
+  /**
+   * If hourCycle is not specified (either through lack
+   * of browser support or locale information) then fall
+   * back to this slower hourCycle check.
+   */
+  const date = new Date('5/18/2021 00:00');
+  const parts = formatted.formatToParts(date);
+  const hour = parts.find(p => p.type === 'hour');
+  if (!hour) {
+    throw new Error('Hour value not found from DateTimeFormat');
+  }
+  return hour.value === '00';
+};
+/**
+ * Given a date object, returns the number
+ * of days in that month.
+ * Month value begin at 1, not 0.
+ * i.e. January = month 1.
+ */
+const getNumDaysInMonth = (month, year) => {
+  return (month === 4 || month === 6 || month === 9 || month === 11) ? 30 : (month === 2) ? isLeapYear(year) ? 29 : 28 : 31;
+};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const twoDigit = (val) => {
+  return ('0' + (val !== undefined ? Math.abs(val) : '0')).slice(-2);
+};
+const fourDigit = (val) => {
+  return ('000' + (val !== undefined ? Math.abs(val) : '0')).slice(-4);
+};
+const convertDataToISO = (data) => {
+  // https://www.w3.org/TR/NOTE-datetime
+  let rtn = '';
+  if (data.year !== undefined) {
+    // YYYY
+    rtn = fourDigit(data.year);
+    if (data.month !== undefined) {
+      // YYYY-MM
+      rtn += '-' + twoDigit(data.month);
+      if (data.day !== undefined) {
+        // YYYY-MM-DD
+        rtn += '-' + twoDigit(data.day);
+        if (data.hour !== undefined) {
+          // YYYY-MM-DDTHH:mm:SS
+          rtn += `T${twoDigit(data.hour)}:${twoDigit(data.minute)}:00`;
+          if (data.tzOffset === undefined) {
+            // YYYY-MM-DDTHH:mm:SSZ
+            rtn += 'Z';
+          }
+          else {
+            // YYYY-MM-DDTHH:mm:SS+/-HH:mm
+            rtn += (data.tzOffset > 0 ? '+' : '-') + twoDigit(Math.floor(Math.abs(data.tzOffset / 60))) + ':' + twoDigit(data.tzOffset % 60);
+          }
+        }
+      }
+    }
+  }
+  else if (data.hour !== undefined) {
+    // HH:mm
+    rtn = twoDigit(data.hour) + ':' + twoDigit(data.minute);
+  }
+  return rtn;
+};
+/**
+ * Converts an 12 hour value to 24 hours.
+ */
+const convert12HourTo24Hour = (hour, ampm) => {
+  if (ampm === undefined) {
+    return hour;
+  }
+  /**
+   * If AM and 12am
+   * then return 00:00.
+   * Otherwise just return
+   * the hour since it is
+   * already in 24 hour format.
+   */
+  if (ampm === 'am') {
+    if (hour === 12) {
+      return 0;
+    }
+    return hour;
+  }
+  /**
+   * If PM and 12pm
+   * just return 12:00
+   * since it is already
+   * in 24 hour format.
+   * Otherwise add 12 hours
+   * to the time.
+   */
+  if (hour === 12) {
+    return 12;
+  }
+  return hour + 12;
+};
+const getStartOfWeek = (refParts) => {
+  const { dayOfWeek } = refParts;
+  if (dayOfWeek === null || dayOfWeek === undefined) {
+    throw new Error('No day of week provided');
+  }
+  return subtractDays(refParts, dayOfWeek);
+};
+const getEndOfWeek = (refParts) => {
+  const { dayOfWeek } = refParts;
+  if (dayOfWeek === null || dayOfWeek === undefined) {
+    throw new Error('No day of week provided');
+  }
+  return addDays(refParts, 6 - dayOfWeek);
+};
+const getNextDay = (refParts) => {
+  return addDays(refParts, 1);
+};
+const getPreviousDay = (refParts) => {
+  return subtractDays(refParts, 1);
+};
+const getPreviousWeek = (refParts) => {
+  return subtractDays(refParts, 7);
+};
+const getNextWeek = (refParts) => {
+  return addDays(refParts, 7);
+};
+/**
+ * Given datetime parts, subtract
+ * numDays from the date.
+ * Returns a new DatetimeParts object
+ * Currently can only go backward at most 1 month.
+ */
+const subtractDays = (refParts, numDays) => {
+  const { month, day, year } = refParts;
+  if (day === null) {
+    throw new Error('No day provided');
+  }
+  const workingParts = {
+    month,
+    day,
+    year
+  };
+  workingParts.day = day - numDays;
+  /**
+   * If wrapping to previous month
+   * update days and decrement month
+   */
+  if (workingParts.day < 1) {
+    workingParts.month -= 1;
+  }
+  /**
+   * If moving to previous year, reset
+   * month to December and decrement year
+   */
+  if (workingParts.month < 1) {
+    workingParts.month = 12;
+    workingParts.year -= 1;
+  }
+  /**
+   * Determine how many days are in the current
+   * month
+   */
+  if (workingParts.day < 1) {
+    const daysInMonth = getNumDaysInMonth(workingParts.month, workingParts.year);
+    /**
+     * Take num days in month and add the
+     * number of underflow days. This number will
+     * be negative.
+     * Example: 1 week before Jan 2, 2021 is
+     * December 26, 2021 so:
+     * 2 - 7 = -5
+     * 31 + (-5) = 26
+     */
+    workingParts.day = daysInMonth + workingParts.day;
+  }
+  return workingParts;
+};
+/**
+ * Given datetime parts, add
+ * numDays to the date.
+ * Returns a new DatetimeParts object
+ * Currently can only go forward at most 1 month.
+ */
+const addDays = (refParts, numDays) => {
+  const { month, day, year } = refParts;
+  if (day === null) {
+    throw new Error('No day provided');
+  }
+  const workingParts = {
+    month,
+    day,
+    year
+  };
+  const daysInMonth = getNumDaysInMonth(month, year);
+  workingParts.day = day + numDays;
+  /**
+   * If wrapping to next month
+   * update days and increment month
+   */
+  if (workingParts.day > daysInMonth) {
+    workingParts.day -= daysInMonth;
+    workingParts.month += 1;
+  }
+  /**
+   * If moving to next year, reset
+   * month to January and increment year
+   */
+  if (workingParts.month > 12) {
+    workingParts.month = 1;
+    workingParts.year += 1;
+  }
+  return workingParts;
+};
+/**
+ * Given DatetimeParts, generate the previous month.
+ */
+const getPreviousMonth = (refParts) => {
+  /**
+   * If current month is January, wrap backwards
+   *  to December of the previous year.
+   */
+  const month = (refParts.month === 1) ? 12 : refParts.month - 1;
+  const year = (refParts.month === 1) ? refParts.year - 1 : refParts.year;
+  const numDaysInMonth = getNumDaysInMonth(month, year);
+  const day = (numDaysInMonth < refParts.day) ? numDaysInMonth : refParts.day;
+  return { month, year, day };
+};
+/**
+ * Given DatetimeParts, generate the next month.
+ */
+const getNextMonth = (refParts) => {
+  /**
+   * If current month is December, wrap forwards
+   *  to January of the next year.
+   */
+  const month = (refParts.month === 12) ? 1 : refParts.month + 1;
+  const year = (refParts.month === 12) ? refParts.year + 1 : refParts.year;
+  const numDaysInMonth = getNumDaysInMonth(month, year);
+  const day = (numDaysInMonth < refParts.day) ? numDaysInMonth : refParts.day;
+  return { month, year, day };
+};
+const changeYear = (refParts, yearDelta) => {
+  const month = refParts.month;
+  const year = refParts.year + yearDelta;
+  const numDaysInMonth = getNumDaysInMonth(month, year);
+  const day = (numDaysInMonth < refParts.day) ? numDaysInMonth : refParts.day;
+  return { month, year, day };
+};
+/**
+ * Given DatetimeParts, generate the previous year.
+ */
+const getPreviousYear = (refParts) => {
+  return changeYear(refParts, -1);
+};
+/**
+ * Given DatetimeParts, generate the next year.
+ */
+const getNextYear = (refParts) => {
+  return changeYear(refParts, 1);
+};
+/**
+ * If PM, then internal value should
+ * be converted to 24-hr time.
+ * Does not apply when public
+ * values are already 24-hr time.
+ */
+const getInternalHourValue = (hour, use24Hour, ampm) => {
+  if (use24Hour) {
+    return hour;
+  }
+  return convert12HourTo24Hour(hour, ampm);
+};
+/**
+ * Unless otherwise stated, all month values are
+ * 1 indexed instead of the typical 0 index in JS Date.
+ * Example:
+ *   January = Month 0 when using JS Date
+ *   January = Month 1 when using this datetime util
+ */
+/**
+ * Given the current datetime parts and a new AM/PM value
+ * calculate what the hour should be in 24-hour time format.
+ * Used when toggling the AM/PM segment since we store our hours
+ * in 24-hour time format internally.
+ */
+const calculateHourFromAMPM = (currentParts, newAMPM) => {
+  const { ampm: currentAMPM, hour } = currentParts;
+  let newHour = hour;
+  /**
+   * If going from AM --> PM, need to update the
+   *
+   */
+  if (currentAMPM === 'am' && newAMPM === 'pm') {
+    newHour = convert12HourTo24Hour(newHour, 'pm');
+    /**
+     * If going from PM --> AM
+     */
+  }
+  else if (currentAMPM === 'pm' && newAMPM === 'am') {
+    newHour = Math.abs(newHour - 12);
+  }
+  return newHour;
+};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+/**
+ * Returns the current date as
+ * an ISO string in the user's
+ * timezone.
+ */
+const getToday = () => {
+  /**
+   * Grab the current date object
+   * as well as the timezone offset
+   */
+  const date = new Date();
+  const tzOffset = date.getTimezoneOffset();
+  /**
+   * When converting to ISO string, everything is
+   * set to UTC. Since we want to show these dates
+   * relative to the user's timezone, we need to
+   * subtract the timezone offset from the date
+   * so that when `toISOString()` adds it back
+   * there was a net change of zero hours from the
+   * local date.
+   */
+  date.setHours(date.getHours() - (tzOffset / 60));
+  return date.toISOString();
+};
+const minutes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59];
+const hour12 = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+const hour23 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+/**
+ * Given a locale and a mode,
+ * return an array with formatted days
+ * of the week. iOS should display days
+ * such as "Mon" or "Tue".
+ * MD should display days such as "M"
+ * or "T".
+ */
+const getDaysOfWeek = (locale, mode, firstDayOfWeek = 0) => {
+  /**
+   * Nov 1st, 2020 starts on a Sunday.
+   * ion-datetime assumes weeks start on Sunday,
+   * but is configurable via `firstDayOfWeek`.
+   */
+  const weekdayFormat = mode === 'ios' ? 'short' : 'narrow';
+  const intl = new Intl.DateTimeFormat(locale, { weekday: weekdayFormat });
+  const startDate = new Date('11/01/2020');
+  const daysOfWeek = [];
+  /**
+   * For each day of the week,
+   * get the day name.
+   */
+  for (let i = firstDayOfWeek; i < firstDayOfWeek + 7; i++) {
+    const currentDate = new Date(startDate);
+    currentDate.setDate(currentDate.getDate() + i);
+    daysOfWeek.push(intl.format(currentDate));
+  }
+  return daysOfWeek;
+};
+/**
+ * Returns an array containing all of the
+ * days in a month for a given year. Values are
+ * aligned with a week calendar starting on
+ * the firstDayOfWeek value (Sunday by default)
+ * using null values.
+ */
+const getDaysOfMonth = (month, year, firstDayOfWeek) => {
+  const numDays = getNumDaysInMonth(month, year);
+  const firstOfMonth = new Date(`${month}/1/${year}`).getDay();
+  /**
+   * To get the first day of the month aligned on the correct
+   * day of the week, we need to determine how many "filler" days
+   * to generate. These filler days as empty/disabled buttons
+   * that fill the space of the days of the week before the first
+   * of the month.
+   *
+   * There are two cases here:
+   *
+   * 1. If firstOfMonth = 4, firstDayOfWeek = 0 then the offset
+   * is (4 - (0 + 1)) = 3. Since the offset loop goes from 0 to 3 inclusive,
+   * this will generate 4 filler days (0, 1, 2, 3), and then day of week 4 will have
+   * the first day of the month.
+   *
+   * 2. If firstOfMonth = 2, firstDayOfWeek = 4 then the offset
+   * is (6 - (4 - 2)) = 4. Since the offset loop goes from 0 to 4 inclusive,
+   * this will generate 5 filler days (0, 1, 2, 3, 4), and then day of week 5 will have
+   * the first day of the month.
+   */
+  const offset = firstOfMonth >= firstDayOfWeek ? firstOfMonth - (firstDayOfWeek + 1) : 6 - (firstDayOfWeek - firstOfMonth);
+  let days = [];
+  for (let i = 1; i <= numDays; i++) {
+    days.push({ day: i, dayOfWeek: (offset + i) % 7 });
+  }
+  for (let i = 0; i <= offset; i++) {
+    days = [
+      { day: null, dayOfWeek: null },
+      ...days
+    ];
+  }
+  return days;
+};
+/**
+ * Given a local, reference datetime parts and option
+ * max/min bound datetime parts, calculate the acceptable
+ * hour and minute values according to the bounds and locale.
+ */
+const generateTime = (refParts, hourCycle = 'h12', minParts, maxParts, hourValues, minuteValues) => {
+  const use24Hour = hourCycle === 'h23';
+  let processedHours = use24Hour ? hour23 : hour12;
+  let processedMinutes = minutes;
+  let isAMAllowed = true;
+  let isPMAllowed = true;
+  if (hourValues) {
+    processedHours = processedHours.filter(hour => hourValues.includes(hour));
+  }
+  if (minuteValues) {
+    processedMinutes = processedMinutes.filter(minute => minuteValues.includes(minute));
+  }
+  if (minParts) {
+    /**
+     * If ref day is the same as the
+     * minimum allowed day, filter hour/minute
+     * values according to min hour and minute.
+     */
+    if (isSameDay(refParts, minParts)) {
+      /**
+       * Users may not always set the hour/minute for
+       * min value (i.e. 2021-06-02) so we should allow
+       * all hours/minutes in that case.
+       */
+      if (minParts.hour !== undefined) {
+        processedHours = processedHours.filter(hour => {
+          const convertedHour = refParts.ampm === 'pm' ? (hour + 12) % 24 : hour;
+          return (use24Hour ? hour : convertedHour) >= minParts.hour;
+        });
+        isAMAllowed = minParts.hour < 13;
+      }
+      if (minParts.minute !== undefined) {
+        /**
+         * The minimum minute range should not be enforced when
+         * the hour is greater than the min hour.
+         *
+         * For example with a minimum range of 09:30, users
+         * should be able to select 10:00-10:29 and beyond.
+         */
+        let isPastMinHour = false;
+        if (minParts.hour !== undefined && refParts.hour !== undefined) {
+          if (refParts.hour > minParts.hour) {
+            isPastMinHour = true;
+          }
+        }
+        processedMinutes = processedMinutes.filter(minute => {
+          if (isPastMinHour) {
+            return true;
+          }
+          return minute >= minParts.minute;
+        });
+      }
+      /**
+       * If ref day is before minimum
+       * day do not render any hours/minute values
+       */
+    }
+    else if (isBefore(refParts, minParts)) {
+      processedHours = [];
+      processedMinutes = [];
+      isAMAllowed = isPMAllowed = false;
+    }
+  }
+  if (maxParts) {
+    /**
+     * If ref day is the same as the
+     * maximum allowed day, filter hour/minute
+     * values according to max hour and minute.
+     */
+    if (isSameDay(refParts, maxParts)) {
+      /**
+       * Users may not always set the hour/minute for
+       * max value (i.e. 2021-06-02) so we should allow
+       * all hours/minutes in that case.
+       */
+      if (maxParts.hour !== undefined) {
+        processedHours = processedHours.filter(hour => {
+          const convertedHour = refParts.ampm === 'pm' ? (hour + 12) % 24 : hour;
+          return (use24Hour ? hour : convertedHour) <= maxParts.hour;
+        });
+        isPMAllowed = maxParts.hour >= 13;
+      }
+      if (maxParts.minute !== undefined && refParts.hour === maxParts.hour) {
+        // The available minutes should only be filtered when the hour is the same as the max hour.
+        // For example if the max hour is 10:30 and the current hour is 10:00,
+        // users should be able to select 00-30 minutes.
+        // If the current hour is 09:00, users should be able to select 00-60 minutes.
+        processedMinutes = processedMinutes.filter(minute => minute <= maxParts.minute);
+      }
+      /**
+       * If ref day is after minimum
+       * day do not render any hours/minute values
+       */
+    }
+    else if (isAfter(refParts, maxParts)) {
+      processedHours = [];
+      processedMinutes = [];
+      isAMAllowed = isPMAllowed = false;
+    }
+  }
+  return {
+    hours: processedHours,
+    minutes: processedMinutes,
+    am: isAMAllowed,
+    pm: isPMAllowed
+  };
+};
+/**
+ * Given DatetimeParts, generate the previous,
+ * current, and and next months.
+ */
+const generateMonths = (refParts) => {
+  return [
+    getPreviousMonth(refParts),
+    { month: refParts.month, year: refParts.year, day: refParts.day },
+    getNextMonth(refParts)
+  ];
+};
+const getPickerMonths = (locale, refParts, minParts, maxParts, monthValues) => {
+  const { year } = refParts;
+  const months = [];
+  if (monthValues !== undefined) {
+    let processedMonths = monthValues;
+    if ((maxParts === null || maxParts === void 0 ? void 0 : maxParts.month) !== undefined) {
+      processedMonths = processedMonths.filter(month => month <= maxParts.month);
+    }
+    if ((minParts === null || minParts === void 0 ? void 0 : minParts.month) !== undefined) {
+      processedMonths = processedMonths.filter(month => month >= minParts.month);
+    }
+    processedMonths.forEach(processedMonth => {
+      const date = new Date(`${processedMonth}/1/${year}`);
+      const monthString = new Intl.DateTimeFormat(locale, { month: 'long' }).format(date);
+      months.push({ text: monthString, value: processedMonth });
+    });
+  }
+  else {
+    const maxMonth = maxParts && maxParts.year === year ? maxParts.month : 12;
+    const minMonth = minParts && minParts.year === year ? minParts.month : 1;
+    for (let i = minMonth; i <= maxMonth; i++) {
+      const date = new Date(`${i}/1/${year}`);
+      const monthString = new Intl.DateTimeFormat(locale, { month: 'long' }).format(date);
+      months.push({ text: monthString, value: i });
+    }
+  }
+  return months;
+};
+const getCalendarYears = (refParts, minParts, maxParts, yearValues) => {
+  if (yearValues !== undefined) {
+    let processedYears = yearValues;
+    if ((maxParts === null || maxParts === void 0 ? void 0 : maxParts.year) !== undefined) {
+      processedYears = processedYears.filter(year => year <= maxParts.year);
+    }
+    if ((minParts === null || minParts === void 0 ? void 0 : minParts.year) !== undefined) {
+      processedYears = processedYears.filter(year => year >= minParts.year);
+    }
+    return processedYears;
+  }
+  else {
+    const { year } = refParts;
+    const maxYear = ((maxParts === null || maxParts === void 0 ? void 0 : maxParts.year) || year);
+    const minYear = ((minParts === null || minParts === void 0 ? void 0 : minParts.year) || year - 100);
+    const years = [];
+    for (let i = maxYear; i >= minYear; i--) {
+      years.push(i);
+    }
+    return years;
+  }
+};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const get12HourTime = (hour) => {
+  return hour % 12 || 12;
+};
+const getFormattedAMPM = (ampm) => {
+  if (ampm === undefined) {
+    return '';
+  }
+  return ampm.toUpperCase();
+};
+const getFormattedTime = (refParts, use24Hour) => {
+  if (refParts.hour === undefined || refParts.minute === undefined) {
+    return 'Invalid Time';
+  }
+  const hour = use24Hour ? getFormattedHour(refParts.hour, use24Hour) : get12HourTime(refParts.hour);
+  const minute = addTimePadding(refParts.minute);
+  if (use24Hour) {
+    return `${hour}:${minute}`;
+  }
+  return `${hour}:${minute} ${getFormattedAMPM(refParts.ampm)}`;
+};
+/**
+ * Adds padding to a time value so
+ * that it is always 2 digits.
+ */
+const addTimePadding = (value) => {
+  const valueToString = value.toString();
+  if (valueToString.length > 1) {
+    return valueToString;
+  }
+  return `0${valueToString}`;
+};
+/**
+ * Formats the hour value so that it
+ * is always 2 digits. Only applies
+ * if using 12 hour format.
+ */
+const getFormattedHour = (hour, use24Hour) => {
+  if (!use24Hour) {
+    return hour.toString();
+  }
+  return addTimePadding(hour);
+};
+/**
+ * Generates an aria-label to be read by screen readers
+ * given a local, a date, and whether or not that date is
+ * today's date.
+ */
+const generateDayAriaLabel = (locale, today, refParts) => {
+  if (refParts.day === null) {
+    return null;
+  }
+  /**
+   * MM/DD/YYYY will return midnight in the user's timezone.
+   */
+  const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year}`);
+  const labelString = new Intl.DateTimeFormat(locale, { weekday: 'long', month: 'long', day: 'numeric' }).format(date);
+  /**
+   * If date is today, prepend "Today" so screen readers indicate
+   * that the date is today.
+   */
+  return (today) ? `Today, ${labelString}` : labelString;
+};
+/**
+ * Gets the day of the week, month, and day
+ * Used for the header in MD mode.
+ */
+const getMonthAndDay = (locale, refParts) => {
+  const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year}`);
+  return new Intl.DateTimeFormat(locale, { weekday: 'short', month: 'short', day: 'numeric' }).format(date);
+};
+/**
+ * Given a locale and a date object,
+ * return a formatted string that includes
+ * the month name and full year.
+ * Example: May 2021
+ */
+const getMonthAndYear = (locale, refParts) => {
+  const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year}`);
+  return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(date);
+};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const ISO_8601_REGEXP = /^(\d{4}|[+\-]\d{6})(?:-(\d{2})(?:-(\d{2}))?)?(?:T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/;
 const TIME_REGEXP = /^((\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/;
+/**
+ * Use to convert a string of comma separated numbers or
+ * an array of numbers, and clean up any user input
+ */
+const convertToArrayOfNumbers = (input) => {
+  if (input === undefined) {
+    return;
+  }
+  let processedInput = input;
+  if (typeof input === 'string') {
+    // convert the string to an array of strings
+    // auto remove any whitespace and [] characters
+    processedInput = input.replace(/\[|\]|\s/g, '').split(',');
+  }
+  let values;
+  if (Array.isArray(processedInput)) {
+    // ensure each value is an actual number in the returned array
+    values = processedInput
+      .map((num) => parseInt(num, 10))
+      .filter(isFinite);
+  }
+  else {
+    values = [processedInput];
+  }
+  return values;
+};
+/**
+ * Extracts date information
+ * from a .calendar-day element
+ * into DatetimeParts.
+ */
+const getPartsFromCalendarDay = (el) => {
+  return {
+    month: parseInt(el.getAttribute('data-month'), 10),
+    day: parseInt(el.getAttribute('data-day'), 10),
+    year: parseInt(el.getAttribute('data-year'), 10),
+    dayOfWeek: parseInt(el.getAttribute('data-day-of-week'), 10)
+  };
+};
+/**
+ * Given an ISO-8601 string, format out the parts
+ * We do not use the JS Date object here because
+ * it adjusts the date for the current timezone.
+ */
 const parseDate = (val) => {
   // manually parse IS0 cuz Date.parse cannot be trusted
   // ISO 8601 format: 1994-12-15T13:47:20Z
@@ -10859,362 +12690,140 @@ const parseDate = (val) => {
     tzOffset,
   };
 };
-/**
- * Converts a valid UTC datetime string to JS Date time object.
- * By default uses the users local timezone, but an optional
- * timezone can be provided.
- * Note: This is not meant for time strings
- * such as "01:47"
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
  */
-const getDateTime = (dateString = '', timeZone = '') => {
-  /**
-   * If user passed in undefined
-   * or null, convert it to the
-   * empty string since the rest
-   * of this functions expects
-   * a string
-   */
-  if (dateString === undefined || dateString === null) {
-    dateString = '';
+const isYearDisabled = (refYear, minParts, maxParts) => {
+  if (minParts && minParts.year > refYear) {
+    return true;
   }
-  /**
-   * Ensures that YYYY-MM-DD, YYYY-MM,
-   * YYYY-DD, YYYY, etc does not get affected
-   * by timezones and stays on the day/month
-   * that the user provided
-   */
-  if (dateString.length === 10 ||
-    dateString.length === 7 ||
-    dateString.length === 4) {
-    dateString += ' ';
-  }
-  const date = (typeof dateString === 'string' && dateString.length > 0) ? new Date(dateString) : new Date();
-  const localDateTime = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
-  if (timeZone && timeZone.length > 0) {
-    return new Date(date.getTime() - getTimezoneOffset(localDateTime, timeZone));
-  }
-  return localDateTime;
-};
-const getTimezoneOffset = (localDate, timeZone) => {
-  const utcDateTime = new Date(localDate.toLocaleString('en-US', { timeZone: 'utc' }));
-  const tzDateTime = new Date(localDate.toLocaleString('en-US', { timeZone }));
-  return utcDateTime.getTime() - tzDateTime.getTime();
-};
-const updateDate = (existingData, newData, displayTimezone) => {
-  if (!newData || typeof newData === 'string') {
-    const dateTime = getDateTime(newData, displayTimezone);
-    if (!Number.isNaN(dateTime.getTime())) {
-      newData = dateTime.toISOString();
-    }
-  }
-  if (newData && newData !== '') {
-    if (typeof newData === 'string') {
-      // new date is a string, and hopefully in the ISO format
-      // convert it to our DatetimeData if a valid ISO
-      newData = parseDate(newData);
-      if (newData) {
-        // successfully parsed the ISO string to our DatetimeData
-        Object.assign(existingData, newData);
-        return true;
-      }
-    }
-    else if ((newData.year || newData.hour || newData.month || newData.day || newData.minute || newData.second)) {
-      // newData is from the datetime picker's selected values
-      // update the existing datetimeValue with the new values
-      if (newData.ampm !== undefined && newData.hour !== undefined) {
-        // change the value of the hour based on whether or not it is am or pm
-        // if the meridiem is pm and equal to 12, it remains 12
-        // otherwise we add 12 to the hour value
-        // if the meridiem is am and equal to 12, we change it to 0
-        // otherwise we use its current hour value
-        // for example: 8 pm becomes 20, 12 am becomes 0, 4 am becomes 4
-        newData.hour.value = (newData.ampm.value === 'pm')
-          ? (newData.hour.value === 12 ? 12 : newData.hour.value + 12)
-          : (newData.hour.value === 12 ? 0 : newData.hour.value);
-      }
-      // merge new values from the picker's selection
-      // to the existing DatetimeData values
-      for (const key of Object.keys(newData)) {
-        existingData[key] = newData[key].value;
-      }
-      return true;
-    }
-    else if (newData.ampm) {
-      // Even though in the picker column hour values are between 1 and 12, the hour value is actually normalized
-      // to [0, 23] interval. Because of this when changing between AM and PM we have to update the hour so it points
-      // to the correct HH hour
-      newData.hour = {
-        value: newData.hour
-          ? newData.hour.value
-          : (newData.ampm.value === 'pm'
-            ? (existingData.hour < 12 ? existingData.hour + 12 : existingData.hour)
-            : (existingData.hour >= 12 ? existingData.hour - 12 : existingData.hour))
-      };
-      existingData['hour'] = newData['hour'].value;
-      existingData['ampm'] = newData['ampm'].value;
-      return true;
-    }
-    // eww, invalid data
-    console.warn(`Error parsing date: "${newData}". Please provide a valid ISO 8601 datetime format: https://www.w3.org/TR/NOTE-datetime`);
-  }
-  else {
-    // blank data, clear everything out
-    for (const k in existingData) {
-      if (existingData.hasOwnProperty(k)) {
-        delete existingData[k];
-      }
-    }
+  if (maxParts && maxParts.year < refYear) {
+    return true;
   }
   return false;
 };
-const parseTemplate = (template) => {
-  const formats = [];
-  template = template.replace(/[^\w\s]/gi, ' ');
-  FORMAT_KEYS.forEach(format => {
-    if (format.f.length > 1 && template.indexOf(format.f) > -1 && template.indexOf(format.f + format.f.charAt(0)) < 0) {
-      template = template.replace(format.f, ' ' + format.f + ' ');
-    }
-  });
-  const words = template.split(' ').filter(w => w.length > 0);
-  words.forEach((word, i) => {
-    FORMAT_KEYS.forEach(format => {
-      if (word === format.f) {
-        if (word === FORMAT_A || word === FORMAT_a) {
-          // this format is an am/pm format, so it's an "a" or "A"
-          if ((formats.indexOf(FORMAT_h) < 0 && formats.indexOf(FORMAT_hh) < 0) ||
-            VALID_AMPM_PREFIX.indexOf(words[i - 1]) === -1) {
-            // template does not already have a 12-hour format
-            // or this am/pm format doesn't have a hour, minute, or second format immediately before it
-            // so do not treat this word "a" or "A" as the am/pm format
-            return;
-          }
-        }
-        formats.push(word);
-      }
-    });
-  });
-  return formats;
-};
-const getValueFromFormat = (date, format) => {
-  if (format === FORMAT_A || format === FORMAT_a) {
-    return (date.hour < 12 ? 'am' : 'pm');
+/**
+ * Returns true if a given day should
+ * not be interactive according to its value,
+ * or the max/min dates.
+ */
+const isDayDisabled = (refParts, minParts, maxParts, dayValues) => {
+  /**
+   * If this is a filler date (i.e. padding)
+   * then the date is disabled.
+   */
+  if (refParts.day === null) {
+    return true;
   }
-  if (format === FORMAT_hh || format === FORMAT_h) {
-    return (date.hour > 12 ? date.hour - 12 : (date.hour === 0 ? 12 : date.hour));
+  /**
+   * If user passed in a list of acceptable day values
+   * check to make sure that the date we are looking
+   * at is in this array.
+   */
+  if (dayValues !== undefined && !dayValues.includes(refParts.day)) {
+    return true;
   }
-  return date[convertFormatToKey(format)];
-};
-const convertFormatToKey = (format) => {
-  for (const k in FORMAT_KEYS) {
-    if (FORMAT_KEYS[k].f === format) {
-      return FORMAT_KEYS[k].k;
-    }
+  /**
+   * Given a min date, perform the following
+   * checks. If any of them are true, then the
+   * day should be disabled:
+   * 1. Is the current year < the min allowed year?
+   * 2. Is the current year === min allowed year,
+   * but the current month < the min allowed month?
+   * 3. Is the current year === min allowed year, the
+   * current month === min allow month, but the current
+   * day < the min allowed day?
+   */
+  if (minParts && isBefore(refParts, minParts)) {
+    return true;
   }
-  return undefined;
-};
-const convertDataToISO = (data) => {
-  // https://www.w3.org/TR/NOTE-datetime
-  let rtn = '';
-  if (data.year !== undefined) {
-    // YYYY
-    rtn = fourDigit(data.year);
-    if (data.month !== undefined) {
-      // YYYY-MM
-      rtn += '-' + twoDigit(data.month);
-      if (data.day !== undefined) {
-        // YYYY-MM-DD
-        rtn += '-' + twoDigit(data.day);
-        if (data.hour !== undefined) {
-          // YYYY-MM-DDTHH:mm:SS
-          rtn += `T${twoDigit(data.hour)}:${twoDigit(data.minute)}:${twoDigit(data.second)}`;
-          if (data.millisecond > 0) {
-            // YYYY-MM-DDTHH:mm:SS.SSS
-            rtn += '.' + threeDigit(data.millisecond);
-          }
-          if (data.tzOffset === undefined) {
-            // YYYY-MM-DDTHH:mm:SSZ
-            rtn += 'Z';
-          }
-          else {
-            // YYYY-MM-DDTHH:mm:SS+/-HH:mm
-            rtn += (data.tzOffset > 0 ? '+' : '-') + twoDigit(Math.floor(Math.abs(data.tzOffset / 60))) + ':' + twoDigit(data.tzOffset % 60);
-          }
-        }
-      }
-    }
+  /**
+   * Given a max date, perform the following
+   * checks. If any of them are true, then the
+   * day should be disabled:
+   * 1. Is the current year > the max allowed year?
+   * 2. Is the current year === max allowed year,
+   * but the current month > the max allowed month?
+   * 3. Is the current year === max allowed year, the
+   * current month === max allow month, but the current
+   * day > the max allowed day?
+   */
+  if (maxParts && isAfter(refParts, maxParts)) {
+    return true;
   }
-  else if (data.hour !== undefined) {
-    // HH:mm
-    rtn = twoDigit(data.hour) + ':' + twoDigit(data.minute);
-    if (data.second !== undefined) {
-      // HH:mm:SS
-      rtn += ':' + twoDigit(data.second);
-      if (data.millisecond !== undefined) {
-        // HH:mm:SS.SSS
-        rtn += '.' + threeDigit(data.millisecond);
-      }
-    }
-  }
-  return rtn;
+  /**
+   * If none of these checks
+   * passed then the date should
+   * be interactive.
+   */
+  return false;
 };
 /**
- * Use to convert a string of comma separated strings or
- * an array of strings, and clean up any user input
+ * Given a locale, a date, the selected date, and today's date,
+ * generate the state for a given calendar day button.
  */
-const convertToArrayOfStrings = (input, type) => {
-  if (input == null) {
-    return undefined;
-  }
-  if (typeof input === 'string') {
-    // convert the string to an array of strings
-    // auto remove any [] characters
-    input = input.replace(/\[|\]/g, '').split(',');
-  }
-  let values;
-  if (Array.isArray(input)) {
-    // trim up each string value
-    values = input.map(val => val.toString().trim());
-  }
-  if (values === undefined || values.length === 0) {
-    console.warn(`Invalid "${type}Names". Must be an array of strings, or a comma separated string.`);
-  }
-  return values;
+const getCalendarDayState = (locale, refParts, activeParts, todayParts, minParts, maxParts, dayValues) => {
+  const isActive = isSameDay(refParts, activeParts);
+  const isToday = isSameDay(refParts, todayParts);
+  const disabled = isDayDisabled(refParts, minParts, maxParts, dayValues);
+  return {
+    disabled,
+    isActive,
+    isToday,
+    ariaSelected: isActive ? 'true' : null,
+    ariaLabel: generateDayAriaLabel(locale, isToday, refParts)
+  };
 };
 /**
- * Use to convert a string of comma separated numbers or
- * an array of numbers, and clean up any user input
+ * Returns `true` if the month is disabled given the
+ * current date value and min/max date constraints.
  */
-const convertToArrayOfNumbers = (input, type) => {
-  if (typeof input === 'string') {
-    // convert the string to an array of strings
-    // auto remove any whitespace and [] characters
-    input = input.replace(/\[|\]|\s/g, '').split(',');
+const isMonthDisabled = (refParts, { minParts, maxParts }) => {
+  // If the year is disabled then the month is disabled.
+  if (isYearDisabled(refParts.year, minParts, maxParts)) {
+    return true;
   }
-  let values;
-  if (Array.isArray(input)) {
-    // ensure each value is an actual number in the returned array
-    values = input
-      .map((num) => parseInt(num, 10))
-      .filter(isFinite);
+  // If the date value is before the min date, then the month is disabled.
+  // If the date value is after the max date, then the month is disabled.
+  if (minParts && isBefore(refParts, minParts) || maxParts && isAfter(refParts, maxParts)) {
+    return true;
   }
-  else {
-    values = [input];
-  }
-  if (values.length === 0) {
-    console.warn(`Invalid "${type}Values". Must be an array of numbers, or a comma separated string of numbers.`);
-  }
-  return values;
+  return false;
 };
-const twoDigit = (val) => {
-  return ('0' + (val !== undefined ? Math.abs(val) : '0')).slice(-2);
+/**
+ * Given a working date, an optional minimum date range,
+ * and an optional maximum date range; determine if the
+ * previous navigation button is disabled.
+ */
+const isPrevMonthDisabled = (refParts, minParts, maxParts) => {
+  const prevMonth = getPreviousMonth(refParts);
+  return isMonthDisabled(prevMonth, {
+    minParts,
+    maxParts
+  });
 };
-const threeDigit = (val) => {
-  return ('00' + (val !== undefined ? Math.abs(val) : '0')).slice(-3);
+/**
+ * Given a working date and a maximum date range,
+ * determine if the next navigation button is disabled.
+ */
+const isNextMonthDisabled = (refParts, maxParts) => {
+  const nextMonth = getNextMonth(refParts);
+  return isMonthDisabled(nextMonth, {
+    maxParts
+  });
 };
-const fourDigit = (val) => {
-  return ('000' + (val !== undefined ? Math.abs(val) : '0')).slice(-4);
-};
-const FORMAT_YYYY = 'YYYY';
-const FORMAT_YY = 'YY';
-const FORMAT_MMMM = 'MMMM';
-const FORMAT_MMM = 'MMM';
-const FORMAT_MM = 'MM';
-const FORMAT_M = 'M';
-const FORMAT_DDDD = 'DDDD';
-const FORMAT_DDD = 'DDD';
-const FORMAT_DD = 'DD';
-const FORMAT_D = 'D';
-const FORMAT_HH = 'HH';
-const FORMAT_H = 'H';
-const FORMAT_hh = 'hh';
-const FORMAT_h = 'h';
-const FORMAT_mm = 'mm';
-const FORMAT_m = 'm';
-const FORMAT_ss = 'ss';
-const FORMAT_s = 's';
-const FORMAT_A = 'A';
-const FORMAT_a = 'a';
-const FORMAT_KEYS = [
-  { f: FORMAT_YYYY, k: 'year' },
-  { f: FORMAT_MMMM, k: 'month' },
-  { f: FORMAT_DDDD, k: 'day' },
-  { f: FORMAT_MMM, k: 'month' },
-  { f: FORMAT_DDD, k: 'day' },
-  { f: FORMAT_YY, k: 'year' },
-  { f: FORMAT_MM, k: 'month' },
-  { f: FORMAT_DD, k: 'day' },
-  { f: FORMAT_HH, k: 'hour' },
-  { f: FORMAT_hh, k: 'hour' },
-  { f: FORMAT_mm, k: 'minute' },
-  { f: FORMAT_ss, k: 'second' },
-  { f: FORMAT_M, k: 'month' },
-  { f: FORMAT_D, k: 'day' },
-  { f: FORMAT_H, k: 'hour' },
-  { f: FORMAT_h, k: 'hour' },
-  { f: FORMAT_m, k: 'minute' },
-  { f: FORMAT_s, k: 'second' },
-  { f: FORMAT_A, k: 'ampm' },
-  { f: FORMAT_a, k: 'ampm' },
-];
-const DAY_NAMES = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-];
-const DAY_SHORT_NAMES = [
-  'Sun',
-  'Mon',
-  'Tue',
-  'Wed',
-  'Thu',
-  'Fri',
-  'Sat',
-];
-const MONTH_NAMES = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-const MONTH_SHORT_NAMES = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
-const VALID_AMPM_PREFIX = [
-  FORMAT_hh, FORMAT_h, FORMAT_mm, FORMAT_m, FORMAT_ss, FORMAT_s
-];
 
-const datetimeIosCss = "/*!@:host*/.sc-ion-datetime-ios-h{padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:flex;position:relative;min-width:16px;min-height:1.2em;font-family:var(--ion-font-family, inherit);text-overflow:ellipsis;white-space:nowrap;overflow:hidden;z-index:2}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-datetime-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@:host(.in-item)*/.in-item.sc-ion-datetime-ios-h{position:static}/*!@:host(.datetime-placeholder)*/.datetime-placeholder.sc-ion-datetime-ios-h{color:var(--placeholder-color)}/*!@:host(.datetime-disabled)*/.datetime-disabled.sc-ion-datetime-ios-h{opacity:0.3;pointer-events:none}/*!@:host(.datetime-readonly)*/.datetime-readonly.sc-ion-datetime-ios-h{pointer-events:none}/*!@button*/button.sc-ion-datetime-ios{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;appearance:none;outline:none}/*!@[dir=rtl] button, :host-context([dir=rtl]) button*/[dir=rtl].sc-ion-datetime-ios button.sc-ion-datetime-ios,[dir=rtl].sc-ion-datetime-ios-h button.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h button.sc-ion-datetime-ios{left:unset;right:unset;right:0}/*!@button::-moz-focus-inner*/button.sc-ion-datetime-ios::-moz-focus-inner{border:0}/*!@.datetime-text*/.datetime-text.sc-ion-datetime-ios{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;flex:1;min-height:inherit;direction:ltr;overflow:inherit}/*!@[dir=rtl] .datetime-text, :host-context([dir=rtl]) .datetime-text*/[dir=rtl].sc-ion-datetime-ios .datetime-text.sc-ion-datetime-ios,[dir=rtl].sc-ion-datetime-ios-h .datetime-text.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h .datetime-text.sc-ion-datetime-ios{direction:rtl}/*!@:host*/.sc-ion-datetime-ios-h{--placeholder-color:var(--ion-color-step-400, #999999);--padding-top:10px;--padding-end:10px;--padding-bottom:10px;--padding-start:20px}";
+const datetimeIosCss = "/*!@:host*/.sc-ion-datetime-ios-h{display:flex;flex-flow:column;background:var(--background);overflow:hidden}/*!@:host(.datetime-size-fixed)*/.datetime-size-fixed.sc-ion-datetime-ios-h{width:auto;max-width:350px;height:auto}/*!@:host(.datetime-size-cover)*/.datetime-size-cover.sc-ion-datetime-ios-h{width:100%}/*!@:host .calendar-body,\n:host .datetime-year*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{opacity:0}/*!@:host(:not(.datetime-ready)) .datetime-year*/.sc-ion-datetime-ios-h:not(.datetime-ready) .datetime-year.sc-ion-datetime-ios{position:absolute;pointer-events:none}/*!@:host(.datetime-ready) .calendar-body*/.datetime-ready.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios{opacity:1}/*!@:host(.datetime-ready) .datetime-year*/.datetime-ready.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{display:none;opacity:1}/*!@:host .datetime-calendar,\n:host .datetime-year*/.sc-ion-datetime-ios-h .datetime-calendar.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{display:flex;flex:1 1 auto;flex-flow:column}/*!@:host(.show-month-and-year) .datetime-year*/.show-month-and-year.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{display:flex}@supports (background: -webkit-named-image(apple-pay-logo-black)) and (not (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{left:-99999px;position:absolute;visibility:hidden;pointer-events:none}/*!@:host-context([dir=rtl]):host(.show-month-and-year) .calendar-next-prev, :host-context([dir=rtl]).show-month-and-year .calendar-next-prev, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-days-of-week, :host-context([dir=rtl]).show-month-and-year .calendar-days-of-week, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-body, :host-context([dir=rtl]).show-month-and-year .calendar-body, :host-context([dir=rtl]):host(.show-month-and-year) .datetime-time, :host-context([dir=rtl]).show-month-and-year .datetime-time*/[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{left:unset;right:unset;right:-99999px}}@supports (not (background: -webkit-named-image(apple-pay-logo-black))) or ((background: -webkit-named-image(apple-pay-logo-black)) and (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{display:none}}/*!@:host(.datetime-readonly),\n:host(.datetime-disabled)*/.datetime-readonly.sc-ion-datetime-ios-h,.datetime-disabled.sc-ion-datetime-ios-h{pointer-events:none}/*!@:host(.datetime-disabled)*/.datetime-disabled.sc-ion-datetime-ios-h{opacity:0.4}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios .datetime-title.sc-ion-datetime-ios{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}/*!@:host .datetime-action-buttons.has-clear-button*/.sc-ion-datetime-ios-h .datetime-action-buttons.has-clear-button.sc-ion-datetime-ios{width:100%}/*!@:host .datetime-action-buttons ion-buttons*/.sc-ion-datetime-ios-h .datetime-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons ion-item,\n:host .calendar-action-buttons ion-button*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-button.sc-ion-datetime-ios{--background:translucent}/*!@:host .calendar-action-buttons ion-item ion-label*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-label.sc-ion-datetime-ios{display:flex;align-items:center}/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-icon.sc-ion-datetime-ios{padding-left:4px;padding-right:0;padding-top:0;padding-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-icon.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:0;padding-inline-end:0}}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios{display:grid;grid-template-columns:repeat(7, 1fr);text-align:center}/*!@:host .calendar-body*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios{display:flex;flex-grow:1;scroll-snap-type:x mandatory;overflow-x:scroll;overflow-y:hidden;scrollbar-width:none;outline:none}/*!@:host .calendar-body .calendar-month*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month.sc-ion-datetime-ios{scroll-snap-align:start;scroll-snap-stop:always;flex-shrink:0;width:100%}/*!@:host .calendar-body .calendar-month-disabled*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month-disabled.sc-ion-datetime-ios{scroll-snap-align:none}/*!@:host .calendar-body::-webkit-scrollbar*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios::-webkit-scrollbar{display:none}/*!@:host .calendar-body .calendar-month-grid*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month-grid.sc-ion-datetime-ios{display:grid;grid-template-columns:repeat(7, 1fr);height:100%}/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{padding-left:0px;padding-right:0px;padding-top:0px;padding-bottom:0px;margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:0px;display:flex;position:relative;align-items:center;justify-content:center;border:none;outline:none;background:none;color:currentColor;cursor:pointer;appearance:none;z-index:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:0px;padding-inline-start:0px;-webkit-padding-end:0px;padding-inline-end:0px}}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:0px;margin-inline-start:0px;-webkit-margin-end:0px;margin-inline-end:0px}}/*!@:host .calendar-day[disabled]*/.sc-ion-datetime-ios-h .calendar-day[disabled].sc-ion-datetime-ios{pointer-events:none;opacity:0.4}/*!@:host .calendar-day:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:after{border-radius:32px;padding-left:4px;padding-right:4px;padding-top:4px;padding-bottom:4px;left:50%;top:50%;position:absolute;width:32px;height:32px;transform:translate(-50%, -50%);content:\" \";z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:after{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:4px;padding-inline-end:4px}}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-datetime-ios-h,[dir=rtl] .sc-ion-datetime-ios-h{left:unset;right:unset;right:50%}/*!@:host .datetime-time*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{display:flex;justify-content:space-between}/*!@:host(.datetime-presentation-time) .datetime-time*/.datetime-presentation-time.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0}/*!@:host ion-popover*/.sc-ion-datetime-ios-h ion-popover.sc-ion-datetime-ios{--height:200px}/*!@:host .time-header*/.sc-ion-datetime-ios-h .time-header.sc-ion-datetime-ios{display:flex;align-items:center}/*!@:host .time-body*/.sc-ion-datetime-ios-h .time-body.sc-ion-datetime-ios{border-radius:8px;padding-left:12px;padding-right:12px;padding-top:6px;padding-bottom:6px;display:flex;border:none;background:var(--ion-color-step-300, #edeef0);color:var(--ion-text-color, #000);font-family:inherit;font-size:inherit;cursor:pointer;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .time-body*/.sc-ion-datetime-ios-h .time-body.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}/*!@:host .time-body-active*/.sc-ion-datetime-ios-h .time-body-active.sc-ion-datetime-ios{color:var(--ion-color-base)}/*!@:host(.in-item)*/.in-item.sc-ion-datetime-ios-h{position:static}/*!@:host(.show-month-and-year) .calendar-action-buttons ion-item*/.show-month-and-year.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios{--color:var(--ion-color-base)}/*!@:host*/.sc-ion-datetime-ios-h{--background:var(--ion-color-light, #ffffff);--background-rgb:var(--ion-color-light-rgb);--title-color:var(--ion-color-step-600, #666666)}/*!@:host(.datetime-presentation-date-time),\n:host(.datetime-presentation-time-date),\n:host(.datetime-presentation-date)*/.datetime-presentation-date-time.sc-ion-datetime-ios-h,.datetime-presentation-time-date.sc-ion-datetime-ios-h,.datetime-presentation-date.sc-ion-datetime-ios-h{min-height:350px}/*!@:host .datetime-header*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios{padding-left:16px;padding-right:16px;padding-top:16px;padding-bottom:16px;border-bottom:0.55px solid var(--ion-color-step-200, #cccccc)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-header*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios .datetime-title.sc-ion-datetime-ios{color:var(--title-color);font-size:14px}/*!@:host .calendar-action-buttons ion-item*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios{--padding-start:16px;--background-hover:transparent;--background-activated:transparent;font-size:16px;font-weight:600}/*!@:host .calendar-action-buttons ion-item ion-icon,\n:host .calendar-action-buttons ion-buttons ion-button*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-icon.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios ion-button.sc-ion-datetime-ios{color:var(--ion-color-base)}/*!@:host .calendar-action-buttons ion-buttons*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios{padding-left:0;padding-right:0;padding-top:8px;padding-bottom:0}/*!@:host .calendar-action-buttons ion-buttons ion-button*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios ion-button.sc-ion-datetime-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios{padding-left:8px;padding-right:8px;padding-top:0;padding-bottom:0;color:var(--ion-color-step-300, #b3b3b3);font-size:12px;font-weight:600;line-height:24px;text-transform:uppercase}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-days-of-week*/.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month.sc-ion-datetime-ios .calendar-month-grid.sc-ion-datetime-ios{padding-left:8px;padding-right:8px;padding-top:8px;padding-bottom:8px;height:calc(100% - 16px)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month.sc-ion-datetime-ios .calendar-month-grid.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{font-size:20px}/*!@:host .calendar-day:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:after{opacity:0.2}/*!@:host .calendar-day:focus:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:focus:after{background:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-today*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-today.sc-ion-datetime-ios{color:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-active*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-active.sc-ion-datetime-ios{color:var(--ion-color-base);font-weight:600}/*!@:host .calendar-day.calendar-day-active:after*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-active.sc-ion-datetime-ios:after{background:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-today.calendar-day-active*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-today.calendar-day-active.sc-ion-datetime-ios{color:var(--ion-color-contrast)}/*!@:host .calendar-day.calendar-day-today.calendar-day-active:after*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-today.calendar-day-active.sc-ion-datetime-ios:after{background:var(--ion-color-base);opacity:1}/*!@:host .datetime-time*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{padding-left:16px;padding-right:16px;padding-top:8px;padding-bottom:16px;font-size:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-time*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host .datetime-time .time-header*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios .time-header.sc-ion-datetime-ios{font-weight:600}/*!@:host .datetime-buttons*/.sc-ion-datetime-ios-h .datetime-buttons.sc-ion-datetime-ios{padding-left:8px;padding-right:8px;padding-top:8px;padding-bottom:8px;border-top:0.55px solid var(--ion-color-step-200, #cccccc)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-buttons*/.sc-ion-datetime-ios-h .datetime-buttons.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}/*!@:host .datetime-buttons ::slotted(ion-buttons),\n:host .datetime-buttons ion-buttons*/.sc-ion-datetime-ios-h .datetime-buttons .sc-ion-datetime-ios-s>ion-buttons,.sc-ion-datetime-ios-h .datetime-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios{display:flex;align-items:center;justify-content:space-between}/*!@:host .datetime-action-buttons*/.sc-ion-datetime-ios-h .datetime-action-buttons.sc-ion-datetime-ios{width:100%}";
 
-const datetimeMdCss = "/*!@:host*/.sc-ion-datetime-md-h{padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:flex;position:relative;min-width:16px;min-height:1.2em;font-family:var(--ion-font-family, inherit);text-overflow:ellipsis;white-space:nowrap;overflow:hidden;z-index:2}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-datetime-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@:host(.in-item)*/.in-item.sc-ion-datetime-md-h{position:static}/*!@:host(.datetime-placeholder)*/.datetime-placeholder.sc-ion-datetime-md-h{color:var(--placeholder-color)}/*!@:host(.datetime-disabled)*/.datetime-disabled.sc-ion-datetime-md-h{opacity:0.3;pointer-events:none}/*!@:host(.datetime-readonly)*/.datetime-readonly.sc-ion-datetime-md-h{pointer-events:none}/*!@button*/button.sc-ion-datetime-md{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;appearance:none;outline:none}/*!@[dir=rtl] button, :host-context([dir=rtl]) button*/[dir=rtl].sc-ion-datetime-md button.sc-ion-datetime-md,[dir=rtl].sc-ion-datetime-md-h button.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h button.sc-ion-datetime-md{left:unset;right:unset;right:0}/*!@button::-moz-focus-inner*/button.sc-ion-datetime-md::-moz-focus-inner{border:0}/*!@.datetime-text*/.datetime-text.sc-ion-datetime-md{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;flex:1;min-height:inherit;direction:ltr;overflow:inherit}/*!@[dir=rtl] .datetime-text, :host-context([dir=rtl]) .datetime-text*/[dir=rtl].sc-ion-datetime-md .datetime-text.sc-ion-datetime-md,[dir=rtl].sc-ion-datetime-md-h .datetime-text.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h .datetime-text.sc-ion-datetime-md{direction:rtl}/*!@:host*/.sc-ion-datetime-md-h{--placeholder-color:var(--ion-placeholder-color, var(--ion-color-step-400, #999999));--padding-top:10px;--padding-end:0;--padding-bottom:11px;--padding-start:16px}";
+const datetimeMdCss = "/*!@:host*/.sc-ion-datetime-md-h{display:flex;flex-flow:column;background:var(--background);overflow:hidden}/*!@:host(.datetime-size-fixed)*/.datetime-size-fixed.sc-ion-datetime-md-h{width:auto;max-width:350px;height:auto}/*!@:host(.datetime-size-cover)*/.datetime-size-cover.sc-ion-datetime-md-h{width:100%}/*!@:host .calendar-body,\n:host .datetime-year*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{opacity:0}/*!@:host(:not(.datetime-ready)) .datetime-year*/.sc-ion-datetime-md-h:not(.datetime-ready) .datetime-year.sc-ion-datetime-md{position:absolute;pointer-events:none}/*!@:host(.datetime-ready) .calendar-body*/.datetime-ready.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md{opacity:1}/*!@:host(.datetime-ready) .datetime-year*/.datetime-ready.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{display:none;opacity:1}/*!@:host .datetime-calendar,\n:host .datetime-year*/.sc-ion-datetime-md-h .datetime-calendar.sc-ion-datetime-md,.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{display:flex;flex:1 1 auto;flex-flow:column}/*!@:host(.show-month-and-year) .datetime-year*/.show-month-and-year.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{display:flex}@supports (background: -webkit-named-image(apple-pay-logo-black)) and (not (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{left:-99999px;position:absolute;visibility:hidden;pointer-events:none}/*!@:host-context([dir=rtl]):host(.show-month-and-year) .calendar-next-prev, :host-context([dir=rtl]).show-month-and-year .calendar-next-prev, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-days-of-week, :host-context([dir=rtl]).show-month-and-year .calendar-days-of-week, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-body, :host-context([dir=rtl]).show-month-and-year .calendar-body, :host-context([dir=rtl]):host(.show-month-and-year) .datetime-time, :host-context([dir=rtl]).show-month-and-year .datetime-time*/[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{left:unset;right:unset;right:-99999px}}@supports (not (background: -webkit-named-image(apple-pay-logo-black))) or ((background: -webkit-named-image(apple-pay-logo-black)) and (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{display:none}}/*!@:host(.datetime-readonly),\n:host(.datetime-disabled)*/.datetime-readonly.sc-ion-datetime-md-h,.datetime-disabled.sc-ion-datetime-md-h{pointer-events:none}/*!@:host(.datetime-disabled)*/.datetime-disabled.sc-ion-datetime-md-h{opacity:0.4}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md .datetime-title.sc-ion-datetime-md{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}/*!@:host .datetime-action-buttons.has-clear-button*/.sc-ion-datetime-md-h .datetime-action-buttons.has-clear-button.sc-ion-datetime-md{width:100%}/*!@:host .datetime-action-buttons ion-buttons*/.sc-ion-datetime-md-h .datetime-action-buttons.sc-ion-datetime-md ion-buttons.sc-ion-datetime-md{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons ion-item,\n:host .calendar-action-buttons ion-button*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md,.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-button.sc-ion-datetime-md{--background:translucent}/*!@:host .calendar-action-buttons ion-item ion-label*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md ion-label.sc-ion-datetime-md{display:flex;align-items:center}/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md ion-icon.sc-ion-datetime-md{padding-left:4px;padding-right:0;padding-top:0;padding-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md ion-icon.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:0;padding-inline-end:0}}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md{display:grid;grid-template-columns:repeat(7, 1fr);text-align:center}/*!@:host .calendar-body*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md{display:flex;flex-grow:1;scroll-snap-type:x mandatory;overflow-x:scroll;overflow-y:hidden;scrollbar-width:none;outline:none}/*!@:host .calendar-body .calendar-month*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month.sc-ion-datetime-md{scroll-snap-align:start;scroll-snap-stop:always;flex-shrink:0;width:100%}/*!@:host .calendar-body .calendar-month-disabled*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month-disabled.sc-ion-datetime-md{scroll-snap-align:none}/*!@:host .calendar-body::-webkit-scrollbar*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md::-webkit-scrollbar{display:none}/*!@:host .calendar-body .calendar-month-grid*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month-grid.sc-ion-datetime-md{display:grid;grid-template-columns:repeat(7, 1fr);height:100%}/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:0px;padding-right:0px;padding-top:0px;padding-bottom:0px;margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:0px;display:flex;position:relative;align-items:center;justify-content:center;border:none;outline:none;background:none;color:currentColor;cursor:pointer;appearance:none;z-index:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:0px;padding-inline-start:0px;-webkit-padding-end:0px;padding-inline-end:0px}}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{margin-left:unset;margin-right:unset;-webkit-margin-start:0px;margin-inline-start:0px;-webkit-margin-end:0px;margin-inline-end:0px}}/*!@:host .calendar-day[disabled]*/.sc-ion-datetime-md-h .calendar-day[disabled].sc-ion-datetime-md{pointer-events:none;opacity:0.4}/*!@:host .calendar-day:after*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md:after{border-radius:32px;padding-left:4px;padding-right:4px;padding-top:4px;padding-bottom:4px;left:50%;top:50%;position:absolute;width:32px;height:32px;transform:translate(-50%, -50%);content:\" \";z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day:after*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md:after{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:4px;padding-inline-end:4px}}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-datetime-md-h,[dir=rtl] .sc-ion-datetime-md-h{left:unset;right:unset;right:50%}/*!@:host .datetime-time*/.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{display:flex;justify-content:space-between}/*!@:host(.datetime-presentation-time) .datetime-time*/.datetime-presentation-time.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0}/*!@:host ion-popover*/.sc-ion-datetime-md-h ion-popover.sc-ion-datetime-md{--height:200px}/*!@:host .time-header*/.sc-ion-datetime-md-h .time-header.sc-ion-datetime-md{display:flex;align-items:center}/*!@:host .time-body*/.sc-ion-datetime-md-h .time-body.sc-ion-datetime-md{border-radius:8px;padding-left:12px;padding-right:12px;padding-top:6px;padding-bottom:6px;display:flex;border:none;background:var(--ion-color-step-300, #edeef0);color:var(--ion-text-color, #000);font-family:inherit;font-size:inherit;cursor:pointer;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .time-body*/.sc-ion-datetime-md-h .time-body.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}/*!@:host .time-body-active*/.sc-ion-datetime-md-h .time-body-active.sc-ion-datetime-md{color:var(--ion-color-base)}/*!@:host(.in-item)*/.in-item.sc-ion-datetime-md-h{position:static}/*!@:host(.show-month-and-year) .calendar-action-buttons ion-item*/.show-month-and-year.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md{--color:var(--ion-color-base)}/*!@:host*/.sc-ion-datetime-md-h{--background:var(--ion-color-step-100, #ffffff);--title-color:var(--ion-color-contrast)}/*!@:host .datetime-header*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md{padding-left:20px;padding-right:20px;padding-top:20px;padding-bottom:20px;background:var(--ion-color-base);color:var(--title-color)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-header*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:20px;padding-inline-start:20px;-webkit-padding-end:20px;padding-inline-end:20px}}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md .datetime-title.sc-ion-datetime-md{font-size:12px;text-transform:uppercase}/*!@:host .datetime-header .datetime-selected-date*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md .datetime-selected-date.sc-ion-datetime-md{margin-top:30px;font-size:34px}/*!@:host .datetime-calendar .calendar-action-buttons ion-item*/.sc-ion-datetime-md-h .datetime-calendar.sc-ion-datetime-md .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md{--padding-start:20px}/*!@:host .calendar-action-buttons ion-item,\n:host .calendar-action-buttons ion-button*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md,.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-button.sc-ion-datetime-md{color:var(--ion-color-step-650, #595959)}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md{padding-left:10px;padding-right:10px;padding-top:0px;padding-bottom:0px;color:var(--ion-color-step-500, gray);font-size:14px;line-height:36px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-days-of-week*/.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:10px;padding-inline-start:10px;-webkit-padding-end:10px;padding-inline-end:10px}}/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month.sc-ion-datetime-md .calendar-month-grid.sc-ion-datetime-md{padding-left:10px;padding-right:10px;padding-top:3px;padding-bottom:0px;grid-template-rows:repeat(6, 1fr)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month.sc-ion-datetime-md .calendar-month-grid.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:10px;padding-inline-start:10px;-webkit-padding-end:10px;padding-inline-end:10px}}/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:0px;padding-right:0;padding-top:13px;padding-bottom:13px;font-size:14px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:0px;padding-inline-start:0px;-webkit-padding-end:0;padding-inline-end:0}}/*!@:host .calendar-day:focus:after*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md:focus:after{background:rgba(var(--ion-color-base-rgb), 0.2);box-shadow:0px 0px 0px 4px rgba(var(--ion-color-base-rgb), 0.2)}/*!@:host .calendar-day.calendar-day-today*/.sc-ion-datetime-md-h .calendar-day.calendar-day-today.sc-ion-datetime-md{color:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-today:after*/.sc-ion-datetime-md-h .calendar-day.calendar-day-today.sc-ion-datetime-md:after{border:1px solid var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-active*/.sc-ion-datetime-md-h .calendar-day.calendar-day-active.sc-ion-datetime-md{color:var(--ion-color-contrast)}/*!@:host .calendar-day.calendar-day-active:after*/.sc-ion-datetime-md-h .calendar-day.calendar-day-active.sc-ion-datetime-md:after{border:1px solid var(--ion-color-base);background:var(--ion-color-base)}/*!@:host .datetime-time*/.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{padding-left:16px;padding-right:16px;padding-top:8px;padding-bottom:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-time*/.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host .time-header*/.sc-ion-datetime-md-h .time-header.sc-ion-datetime-md{color:var(--ion-color-step-650, #595959)}/*!@:host(.datetime-presentation-month) .datetime-year,\n:host(.datetime-presentation-year) .datetime-year,\n:host(.datetime-presentation-month-year) .datetime-year*/.datetime-presentation-month.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md,.datetime-presentation-year.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md,.datetime-presentation-month-year.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{margin-top:20px;margin-bottom:20px}/*!@:host .datetime-buttons*/.sc-ion-datetime-md-h .datetime-buttons.sc-ion-datetime-md{padding-left:10px;padding-right:10px;padding-top:10px;padding-bottom:10px;display:flex;align-items:center;justify-content:flex-end}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-buttons*/.sc-ion-datetime-md-h .datetime-buttons.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:10px;padding-inline-start:10px;-webkit-padding-end:10px;padding-inline-end:10px}}/*!@:host .datetime-view-buttons ion-button*/.sc-ion-datetime-md-h .datetime-view-buttons.sc-ion-datetime-md ion-button.sc-ion-datetime-md{color:var(--ion-color-step-800, #333333)}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
  *
- * @part text - The value of the datetime.
- * @part placeholder - The placeholder of the datetime.
+ * @slot title - The title of the datetime.
+ * @slot buttons - The buttons in the datetime.
+ * @slot time-label - The label for the time selector in the datetime.
  */
 class Datetime {
   constructor(hostRef) {
@@ -11225,11 +12834,33 @@ class Datetime {
     this.ionBlur = createEvent(this, "ionBlur", 7);
     this.ionStyle = createEvent(this, "ionStyle", 7);
     this.inputId = `ion-dt-${datetimeIds++}`;
-    this.locale = {};
-    this.datetimeMin = {};
-    this.datetimeMax = {};
-    this.datetimeValue = {};
-    this.isExpanded = false;
+    this.overlayIsPresenting = false;
+    this.showMonthAndYear = false;
+    this.activeParts = {
+      month: 5,
+      day: 28,
+      year: 2021,
+      hour: 13,
+      minute: 52,
+      ampm: 'pm'
+    };
+    this.workingParts = {
+      month: 5,
+      day: 28,
+      year: 2021,
+      hour: 13,
+      minute: 52,
+      ampm: 'pm'
+    };
+    this.todayParts = parseDate(getToday());
+    this.isPresented = false;
+    this.isTimePopoverOpen = false;
+    /**
+     * The color to use from your application's color palette.
+     * Default options are: `"primary"`, `"secondary"`, `"tertiary"`, `"success"`, `"warning"`, `"danger"`, `"light"`, `"medium"`, and `"dark"`.
+     * For more information on colors, see [theming](/docs/theming/basics).
+     */
+    this.color = 'primary';
     /**
      * The name of the control, which is submitted with the form data.
      */
@@ -11243,13 +12874,13 @@ class Datetime {
      */
     this.readonly = false;
     /**
-     * The display format of the date and time as text that shows
-     * within the item. When the `pickerFormat` input is not used, then the
-     * `displayFormat` is used for both display the formatted text, and determining
-     * the datetime picker's columns. See the `pickerFormat` input description for
-     * more info. Defaults to `MMM D, YYYY`.
+     * Which values you want to select. `'date'` will show
+     * a calendar picker to select the month, day, and year. `'time'`
+     * will show a time picker to select the hour, minute, and (optionally)
+     * AM/PM. `'date-time'` will show the date picker first and time picker second.
+     * `'time-date'` will show the time picker first and date picker second.
      */
-    this.displayFormat = 'MMM D, YYYY';
+    this.presentation = 'date-time';
     /**
      * The text to display on the picker's cancel button.
      */
@@ -11258,9 +12889,453 @@ class Datetime {
      * The text to display on the picker's "Done" button.
      */
     this.doneText = 'Done';
-    this.onClick = () => {
-      this.setFocus();
-      this.open();
+    /**
+     * The text to display on the picker's "Clear" button.
+     */
+    this.clearText = 'Clear';
+    /**
+     * The locale to use for `ion-datetime`. This
+     * impacts month and day name formatting.
+     * The `'default'` value refers to the default
+     * locale set by your device.
+     */
+    this.locale = 'default';
+    /**
+     * The first day of the week to use for `ion-datetime`. The
+     * default value is `0` and represents Sunday.
+     */
+    this.firstDayOfWeek = 0;
+    /**
+     * If `true`, a header will be shown above the calendar
+     * picker. On `ios` mode this will include the
+     * slotted title, and on `md` mode this will include
+     * the slotted title and the selected date.
+     */
+    this.showDefaultTitle = false;
+    /**
+     * If `true`, the default "Cancel" and "OK" buttons
+     * will be rendered at the bottom of the `ion-datetime`
+     * component. Developers can also use the `button` slot
+     * if they want to customize these buttons. If custom
+     * buttons are set in the `button` slot then the
+     * default buttons will not be rendered.
+     */
+    this.showDefaultButtons = false;
+    /**
+     * If `true`, a "Clear" button will be rendered alongside
+     * the default "Cancel" and "OK" buttons at the bottom of the `ion-datetime`
+     * component. Developers can also use the `button` slot
+     * if they want to customize these buttons. If custom
+     * buttons are set in the `button` slot then the
+     * default buttons will not be rendered.
+     */
+    this.showClearButton = false;
+    /**
+     * If `true`, the default "Time" label will be rendered
+     * for the time selector of the `ion-datetime` component.
+     * Developers can also use the `time-label` slot
+     * if they want to customize this label. If a custom
+     * label is set in the `time-label` slot then the
+     * default label will not be rendered.
+     */
+    this.showDefaultTimeLabel = true;
+    /**
+     * If `cover`, the `ion-datetime` will expand to cover the full width of its container.
+     * If `fixed`, the `ion-datetime` will have a fixed width.
+     */
+    this.size = 'fixed';
+    this.closeParentOverlay = () => {
+      const popoverOrModal = this.el.closest('ion-modal, ion-popover');
+      if (popoverOrModal) {
+        popoverOrModal.dismiss();
+      }
+    };
+    this.setWorkingParts = (parts) => {
+      this.workingParts = Object.assign({}, parts);
+    };
+    this.setActiveParts = (parts) => {
+      this.activeParts = Object.assign({}, parts);
+      const hasSlottedButtons = this.el.querySelector('[slot="buttons"]') !== null;
+      if (hasSlottedButtons || this.showDefaultButtons) {
+        return;
+      }
+      this.confirm();
+    };
+    this.initializeKeyboardListeners = () => {
+      const { calendarBodyRef } = this;
+      if (!calendarBodyRef) {
+        return;
+      }
+      const root = this.el.shadowRoot;
+      /**
+       * Get a reference to the month
+       * element we are currently viewing.
+       */
+      const currentMonth = calendarBodyRef.querySelector('.calendar-month:nth-of-type(2)');
+      /**
+       * When focusing the calendar body, we want to pass focus
+       * to the working day, but other days should
+       * only be accessible using the arrow keys. Pressing
+       * Tab should jump between bodies of selectable content.
+       */
+      const checkCalendarBodyFocus = (ev) => {
+        var _a;
+        const record = ev[0];
+        /**
+         * If calendar body was already focused
+         * when this fired or if the calendar body
+         * if not currently focused, we should not re-focus
+         * the inner day.
+         */
+        if (((_a = record.oldValue) === null || _a === void 0 ? void 0 : _a.includes('ion-focused')) ||
+          !calendarBodyRef.classList.contains('ion-focused')) {
+          return;
+        }
+        this.focusWorkingDay(currentMonth);
+      };
+      const mo = new MutationObserver(checkCalendarBodyFocus);
+      mo.observe(calendarBodyRef, { attributeFilter: ['class'], attributeOldValue: true });
+      this.destroyKeyboardMO = () => {
+        mo === null || mo === void 0 ? void 0 : mo.disconnect();
+      };
+      /**
+       * We must use keydown not keyup as we want
+       * to prevent scrolling when using the arrow keys.
+       */
+      this.calendarBodyRef.addEventListener('keydown', (ev) => {
+        const activeElement = root.activeElement;
+        if (!activeElement || !activeElement.classList.contains('calendar-day')) {
+          return;
+        }
+        const parts = getPartsFromCalendarDay(activeElement);
+        let partsToFocus;
+        switch (ev.key) {
+          case 'ArrowDown':
+            ev.preventDefault();
+            partsToFocus = getNextWeek(parts);
+            break;
+          case 'ArrowUp':
+            ev.preventDefault();
+            partsToFocus = getPreviousWeek(parts);
+            break;
+          case 'ArrowRight':
+            ev.preventDefault();
+            partsToFocus = getNextDay(parts);
+            break;
+          case 'ArrowLeft':
+            ev.preventDefault();
+            partsToFocus = getPreviousDay(parts);
+            break;
+          case 'Home':
+            ev.preventDefault();
+            partsToFocus = getStartOfWeek(parts);
+            break;
+          case 'End':
+            ev.preventDefault();
+            partsToFocus = getEndOfWeek(parts);
+            break;
+          case 'PageUp':
+            ev.preventDefault();
+            partsToFocus = ev.shiftKey ? getPreviousYear(parts) : getPreviousMonth(parts);
+            break;
+          case 'PageDown':
+            ev.preventDefault();
+            partsToFocus = ev.shiftKey ? getNextYear(parts) : getNextMonth(parts);
+            break;
+          /**
+           * Do not preventDefault here
+           * as we do not want to override other
+           * browser defaults such as pressing Enter/Space
+           * to select a day.
+           */
+          default:
+            return;
+        }
+        /**
+         * If the day we want to move focus to is
+         * disabled, do not do anything.
+         */
+        if (isDayDisabled(partsToFocus, this.minParts, this.maxParts)) {
+          return;
+        }
+        this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), partsToFocus));
+        /**
+         * Give view a chance to re-render
+         * then move focus to the new working day
+         */
+        requestAnimationFrame(() => this.focusWorkingDay(currentMonth));
+      });
+    };
+    this.focusWorkingDay = (currentMonth) => {
+      /**
+       * Get the number of padding days so
+       * we know how much to offset our next selector by
+       * to grab the correct calenday-day element.
+       */
+      const padding = currentMonth.querySelectorAll('.calendar-day-padding');
+      const { day } = this.workingParts;
+      if (day === null) {
+        return;
+      }
+      /**
+       * Get the calendar day element
+       * and focus it.
+       */
+      const dayEl = currentMonth.querySelector(`.calendar-day:nth-of-type(${padding.length + day})`);
+      if (dayEl) {
+        dayEl.focus();
+      }
+    };
+    this.processMinParts = () => {
+      if (this.min === undefined) {
+        this.minParts = undefined;
+        return;
+      }
+      const { month, day, year, hour, minute } = parseDate(this.min);
+      this.minParts = {
+        month,
+        day,
+        year,
+        hour,
+        minute
+      };
+    };
+    this.processMaxParts = () => {
+      if (this.max === undefined) {
+        this.maxParts = undefined;
+        return;
+      }
+      const { month, day, year, hour, minute } = parseDate(this.max);
+      this.maxParts = {
+        month,
+        day,
+        year,
+        hour,
+        minute
+      };
+    };
+    this.initializeCalendarIOListeners = () => {
+      const { calendarBodyRef } = this;
+      if (!calendarBodyRef) {
+        return;
+      }
+      const mode = getIonMode$1(this);
+      /**
+       * For performance reasons, we only render 3
+       * months at a time: The current month, the previous
+       * month, and the next month. We have IntersectionObservers
+       * on the previous and next month elements to append/prepend
+       * new months.
+       *
+       * We can do this because Stencil is smart enough to not
+       * re-create the .calendar-month containers, but rather
+       * update the content within those containers.
+       *
+       * As an added bonus, WebKit has some troubles with
+       * scroll-snap-stop: always, so not rendering all of
+       * the months in a row allows us to mostly sidestep
+       * that issue.
+       */
+      const months = calendarBodyRef.querySelectorAll('.calendar-month');
+      const startMonth = months[0];
+      const workingMonth = months[1];
+      const endMonth = months[2];
+      /**
+       * Before setting up the IntersectionObserver,
+       * scroll the middle month into view.
+       * scrollIntoView() will scroll entire page
+       * if element is not in viewport. Use scrollLeft instead.
+       */
+      writeTask(() => {
+        calendarBodyRef.scrollLeft = startMonth.clientWidth * (isRTL(this.el) ? -1 : 1);
+        let endIO;
+        let startIO;
+        const ioCallback = (callbackType, entries) => {
+          const refIO = (callbackType === 'start') ? startIO : endIO;
+          const refMonth = (callbackType === 'start') ? startMonth : endMonth;
+          const refMonthFn = (callbackType === 'start') ? getPreviousMonth : getNextMonth;
+          /**
+           * If the month is not fully in view, do not do anything
+           */
+          const ev = entries[0];
+          if (!ev.isIntersecting) {
+            return;
+          }
+          /**
+           * When presenting an inline overlay,
+           * subsequent presentations will cause
+           * the IO to fire again (since the overlay
+           * is now visible and therefore the calendar
+           * months are intersecting).
+           */
+          if (this.overlayIsPresenting) {
+            this.overlayIsPresenting = false;
+            return;
+          }
+          const { month, year, day } = refMonthFn(this.workingParts);
+          if (isMonthDisabled({ month, year, day: null }, {
+            minParts: this.minParts,
+            maxParts: this.maxParts
+          })) {
+            return;
+          }
+          /**
+           * On iOS, we need to set pointer-events: none
+           * when the user is almost done with the gesture
+           * so that they cannot quickly swipe while
+           * the scrollable container is snapping.
+           * Updating the container while snapping
+           * causes WebKit to snap incorrectly.
+           */
+          if (mode === 'ios') {
+            const ratio = ev.intersectionRatio;
+            // `maxTouchPoints` will be 1 in device preview, but > 1 on device
+            const shouldDisable = Math.abs(ratio - 0.7) <= 0.1 && navigator.maxTouchPoints > 1;
+            if (shouldDisable) {
+              calendarBodyRef.style.setProperty('pointer-events', 'none');
+              return;
+            }
+          }
+          /**
+           * Prevent scrolling for other browsers
+           * to give the DOM time to update and the container
+           * time to properly snap.
+           */
+          calendarBodyRef.style.setProperty('overflow', 'hidden');
+          /**
+           * Remove the IO temporarily
+           * otherwise you can sometimes get duplicate
+           * events when rubber banding.
+           */
+          if (refIO === undefined) {
+            return;
+          }
+          refIO.disconnect();
+          /**
+           * Use a writeTask here to ensure
+           * that the state is updated and the
+           * correct month is scrolled into view
+           * in the same frame. This is not
+           * typically a problem on newer devices
+           * but older/slower device may have a flicker
+           * if we did not do this.
+           */
+          writeTask(() => {
+            // Disconnect all active intersection observers
+            // to avoid a re-render causing a duplicate event.
+            if (this.destroyCalendarIO) {
+              this.destroyCalendarIO();
+            }
+            raf(() => {
+              this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { month, day: day, year }));
+              calendarBodyRef.scrollLeft = workingMonth.clientWidth * (isRTL(this.el) ? -1 : 1);
+              calendarBodyRef.style.removeProperty('overflow');
+              calendarBodyRef.style.removeProperty('pointer-events');
+              endIO === null || endIO === void 0 ? void 0 : endIO.observe(endMonth);
+              startIO === null || startIO === void 0 ? void 0 : startIO.observe(startMonth);
+            });
+            /**
+             * Now that state has been updated
+             * and the correct month is in view,
+             * we can resume the IO.
+             */
+            // tslint:disable-next-line
+            if (refIO === undefined) {
+              return;
+            }
+            refIO.observe(refMonth);
+          });
+        };
+        const threshold = mode === 'ios' &&
+          // tslint:disable-next-line
+          typeof navigator !== 'undefined' &&
+          navigator.maxTouchPoints > 1 ?
+          [0.7, 1] : 1;
+        /**
+         * Listen on the first month to
+         * prepend a new month and on the last
+         * month to append a new month.
+         * The 0.7 threshold is required on ios
+         * so that we can remove pointer-events
+         * when adding new months.
+         * Adding to a scroll snapping container
+         * while the container is snapping does not
+         * completely work as expected in WebKit.
+         * Adding pointer-events: none allows us to
+         * avoid these issues.
+         *
+         * This should be fine on Chromium, but
+         * when you set pointer-events: none
+         * it applies to active gestures which is not
+         * something WebKit does.
+         */
+        endIO = new IntersectionObserver(ev => ioCallback('end', ev), {
+          threshold,
+          root: calendarBodyRef
+        });
+        endIO.observe(endMonth);
+        startIO = new IntersectionObserver(ev => ioCallback('start', ev), {
+          threshold,
+          root: calendarBodyRef
+        });
+        startIO.observe(startMonth);
+        this.destroyCalendarIO = () => {
+          endIO === null || endIO === void 0 ? void 0 : endIO.disconnect();
+          startIO === null || startIO === void 0 ? void 0 : startIO.disconnect();
+        };
+      });
+    };
+    /**
+     * Clean up all listeners except for the overlay
+     * listener. This is so that we can re-create the listeners
+     * if the datetime has been hidden/presented by a modal or popover.
+     */
+    this.destroyListeners = () => {
+      const { destroyCalendarIO, destroyKeyboardMO } = this;
+      if (destroyCalendarIO !== undefined) {
+        destroyCalendarIO();
+      }
+      if (destroyKeyboardMO !== undefined) {
+        destroyKeyboardMO();
+      }
+    };
+    /**
+     * When doing subsequent presentations of an inline
+     * overlay, the IO callback will fire again causing
+     * the calendar to go back one month. We need to listen
+     * for the presentation of the overlay so we can properly
+     * cancel that IO callback.
+     */
+    this.initializeOverlayListener = () => {
+      const overlay = this.el.closest('ion-popover, ion-modal');
+      if (overlay === null) {
+        return;
+      }
+      overlay.addEventListener('willPresent', () => {
+        this.overlayIsPresenting = true;
+      });
+    };
+    this.processValue = (value) => {
+      const valueToProcess = value || getToday();
+      const { month, day, year, hour, minute, tzOffset } = parseDate(valueToProcess);
+      this.workingParts = {
+        month,
+        day,
+        year,
+        hour,
+        minute,
+        tzOffset,
+        ampm: hour >= 12 ? 'pm' : 'am'
+      };
+      this.activeParts = {
+        month,
+        day,
+        year,
+        hour,
+        minute,
+        tzOffset,
+        ampm: hour >= 12 ? 'pm' : 'am'
+      };
     };
     this.onFocus = () => {
       this.ionFocus.emit();
@@ -11268,337 +13343,537 @@ class Datetime {
     this.onBlur = () => {
       this.ionBlur.emit();
     };
+    this.hasValue = () => {
+      return this.value != null && this.value !== '';
+    };
+    this.nextMonth = () => {
+      const { calendarBodyRef } = this;
+      if (!calendarBodyRef) {
+        return;
+      }
+      const nextMonth = calendarBodyRef.querySelector('.calendar-month:last-of-type');
+      if (!nextMonth) {
+        return;
+      }
+      const left = nextMonth.offsetWidth * 2;
+      calendarBodyRef.scrollTo({
+        top: 0,
+        left: left * (isRTL(this.el) ? -1 : 1),
+        behavior: 'smooth'
+      });
+    };
+    this.prevMonth = () => {
+      const { calendarBodyRef } = this;
+      if (!calendarBodyRef) {
+        return;
+      }
+      const prevMonth = calendarBodyRef.querySelector('.calendar-month:first-of-type');
+      if (!prevMonth) {
+        return;
+      }
+      calendarBodyRef.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+    };
+    this.toggleMonthAndYearView = () => {
+      this.showMonthAndYear = !this.showMonthAndYear;
+    };
   }
   disabledChanged() {
     this.emitStyle();
+  }
+  minChanged() {
+    this.processMinParts();
+  }
+  maxChanged() {
+    this.processMaxParts();
+  }
+  yearValuesChanged() {
+    this.parsedYearValues = convertToArrayOfNumbers(this.yearValues);
+  }
+  monthValuesChanged() {
+    this.parsedMonthValues = convertToArrayOfNumbers(this.monthValues);
+  }
+  dayValuesChanged() {
+    this.parsedDayValues = convertToArrayOfNumbers(this.dayValues);
+  }
+  hourValuesChanged() {
+    this.parsedHourValues = convertToArrayOfNumbers(this.hourValues);
+  }
+  minuteValuesChanged() {
+    this.parsedMinuteValues = convertToArrayOfNumbers(this.minuteValues);
+  }
+  activePartsChanged() {
+    this.activePartsClone = this.activeParts;
   }
   /**
    * Update the datetime value when the value changes
    */
   valueChanged() {
-    this.updateDatetimeValue(this.value);
+    if (this.hasValue()) {
+      /**
+       * Clones the value of the `activeParts` to the private clone, to update
+       * the date display on the current render cycle without causing another render.
+       *
+       * This allows us to update the current value's date/time display without
+       * refocusing or shifting the user's display (leaves the user in place).
+       */
+      const { month, day, year, hour, minute } = parseDate(this.value);
+      this.activePartsClone = Object.assign(Object.assign({}, this.activeParts), { month,
+        day,
+        year,
+        hour,
+        minute });
+    }
     this.emitStyle();
     this.ionChange.emit({
       value: this.value
     });
   }
-  componentWillLoad() {
-    // first see if locale names were provided in the inputs
-    // then check to see if they're in the config
-    // if neither were provided then it will use default English names
-    this.locale = {
-      // this.locale[type] = convertToArrayOfStrings((this[type] ? this[type] : this.config.get(type), type);
-      monthNames: convertToArrayOfStrings(this.monthNames, 'monthNames'),
-      monthShortNames: convertToArrayOfStrings(this.monthShortNames, 'monthShortNames'),
-      dayNames: convertToArrayOfStrings(this.dayNames, 'dayNames'),
-      dayShortNames: convertToArrayOfStrings(this.dayShortNames, 'dayShortNames')
-    };
-    this.updateDatetimeValue(this.value);
-    this.emitStyle();
+  /**
+   * Confirms the selected datetime value, updates the
+   * `value` property, and optionally closes the popover
+   * or modal that the datetime was presented in.
+   */
+  async confirm(closeOverlay = false) {
+    /**
+     * Prevent convertDataToISO from doing any
+     * kind of transformation based on timezone
+     * This cancels out any change it attempts to make
+     *
+     * Important: Take the timezone offset based on
+     * the date that is currently selected, otherwise
+     * there can be 1 hr difference when dealing w/ DST
+     */
+    const date = new Date(convertDataToISO(this.workingParts));
+    this.workingParts.tzOffset = date.getTimezoneOffset() * -1;
+    this.value = convertDataToISO(this.workingParts);
+    if (closeOverlay) {
+      this.closeParentOverlay();
+    }
   }
   /**
-   * Opens the datetime overlay.
+   * Resets the internal state of the datetime but does not update the value.
+   * Passing a valid ISO-8601 string will reset the state of the component to the provided date.
+   * If no value is provided, the internal state will be reset to today.
    */
-  async open() {
-    if (this.disabled || this.isExpanded) {
-      return;
+  async reset(startDate) {
+    this.processValue(startDate);
+  }
+  /**
+   * Emits the ionCancel event and
+   * optionally closes the popover
+   * or modal that the datetime was
+   * presented in.
+   */
+  async cancel(closeOverlay = false) {
+    this.ionCancel.emit();
+    if (closeOverlay) {
+      this.closeParentOverlay();
     }
-    const pickerOptions = this.generatePickerOptions();
-    const picker = await pickerController.create(pickerOptions);
-    this.isExpanded = true;
-    picker.onDidDismiss().then(() => {
-      this.isExpanded = false;
-      this.setFocus();
-    });
-    addEventListener(picker, 'ionPickerColChange', async (event) => {
-      const data = event.detail;
-      const colSelectedIndex = data.selectedIndex;
-      const colOptions = data.options;
-      const changeData = {};
-      changeData[data.name] = {
-        value: colOptions[colSelectedIndex].value
-      };
-      if (data.name !== 'ampm' && this.datetimeValue.ampm !== undefined) {
-        changeData['ampm'] = {
-          value: this.datetimeValue.ampm
-        };
+  }
+  connectedCallback() {
+    this.clearFocusVisible = startFocusVisible(this.el).destroy;
+  }
+  disconnectedCallback() {
+    if (this.clearFocusVisible) {
+      this.clearFocusVisible();
+      this.clearFocusVisible = undefined;
+    }
+  }
+  componentDidLoad() {
+    /**
+     * If a scrollable element is hidden using `display: none`,
+     * it will not have a scroll height meaning we cannot scroll elements
+     * into view. As a result, we will need to wait for the datetime to become
+     * visible if used inside of a modal or a popover otherwise the scrollable
+     * areas will not have the correct values snapped into place.
+     */
+    let visibleIO;
+    const visibleCallback = (entries) => {
+      const ev = entries[0];
+      if (!ev.isIntersecting) {
+        return;
       }
-      this.updateDatetimeValue(changeData);
-      picker.columns = this.generateColumns();
-    });
-    await picker.present();
+      this.initializeCalendarIOListeners();
+      this.initializeKeyboardListeners();
+      this.initializeOverlayListener();
+      /**
+       * TODO: Datetime needs a frame to ensure that it
+       * can properly scroll contents into view. As a result
+       * we hide the scrollable content until after that frame
+       * so users do not see the content quickly shifting. The downside
+       * is that the content will pop into view a frame after. Maybe there
+       * is a better way to handle this?
+       */
+      writeTask(() => {
+        this.el.classList.add('datetime-ready');
+      });
+    };
+    visibleIO = new IntersectionObserver(visibleCallback, { threshold: 0.01 });
+    /**
+     * Use raf to avoid a race condition between the component loading and
+     * its display animation starting (such as when shown in a modal). This
+     * could cause the datetime to start at a visibility of 0, erroneously
+     * triggering the `hiddenIO` observer below.
+     */
+    raf(() => visibleIO === null || visibleIO === void 0 ? void 0 : visibleIO.observe(this.el));
+    /**
+     * We need to clean up listeners when the datetime is hidden
+     * in a popover/modal so that we can properly scroll containers
+     * back into view if they are re-presented. When the datetime is hidden
+     * the scroll areas have scroll widths/heights of 0px, so any snapping
+     * we did originally has been lost.
+     */
+    let hiddenIO;
+    const hiddenCallback = (entries) => {
+      const ev = entries[0];
+      if (ev.isIntersecting) {
+        return;
+      }
+      this.destroyListeners();
+      writeTask(() => {
+        this.el.classList.remove('datetime-ready');
+      });
+    };
+    hiddenIO = new IntersectionObserver(hiddenCallback, { threshold: 0 });
+    raf(() => hiddenIO === null || hiddenIO === void 0 ? void 0 : hiddenIO.observe(this.el));
+    /**
+     * Datetime uses Ionic components that emit
+     * ionFocus and ionBlur. These events are
+     * composed meaning they will cross
+     * the shadow dom boundary. We need to
+     * stop propagation on these events otherwise
+     * developers will see 2 ionFocus or 2 ionBlur
+     * events at a time.
+     */
+    const root = getElementRoot(this.el);
+    root.addEventListener('ionFocus', (ev) => ev.stopPropagation());
+    root.addEventListener('ionBlur', (ev) => ev.stopPropagation());
+  }
+  componentWillLoad() {
+    this.processMinParts();
+    this.processMaxParts();
+    this.processValue(this.value);
+    this.parsedHourValues = convertToArrayOfNumbers(this.hourValues);
+    this.parsedMinuteValues = convertToArrayOfNumbers(this.minuteValues);
+    this.parsedMonthValues = convertToArrayOfNumbers(this.monthValues);
+    this.parsedYearValues = convertToArrayOfNumbers(this.yearValues);
+    this.parsedDayValues = convertToArrayOfNumbers(this.dayValues);
+    this.emitStyle();
   }
   emitStyle() {
     this.ionStyle.emit({
       'interactive': true,
       'datetime': true,
-      'has-placeholder': this.placeholder != null,
-      'has-value': this.hasValue(),
       'interactive-disabled': this.disabled,
     });
   }
-  updateDatetimeValue(value) {
-    updateDate(this.datetimeValue, value, this.displayTimezone);
-  }
-  generatePickerOptions() {
-    const mode = getIonMode$1(this);
-    this.locale = {
-      monthNames: convertToArrayOfStrings(this.monthNames, 'monthNames'),
-      monthShortNames: convertToArrayOfStrings(this.monthShortNames, 'monthShortNames'),
-      dayNames: convertToArrayOfStrings(this.dayNames, 'dayNames'),
-      dayShortNames: convertToArrayOfStrings(this.dayShortNames, 'dayShortNames')
-    };
-    const pickerOptions = Object.assign(Object.assign({ mode }, this.pickerOptions), { columns: this.generateColumns() });
-    // If the user has not passed in picker buttons,
-    // add a cancel and ok button to the picker
-    const buttons = pickerOptions.buttons;
-    if (!buttons || buttons.length === 0) {
-      pickerOptions.buttons = [
-        {
-          text: this.cancelText,
-          role: 'cancel',
-          handler: () => {
-            this.updateDatetimeValue(this.value);
-            this.ionCancel.emit();
-          }
-        },
-        {
-          text: this.doneText,
-          handler: (data) => {
-            this.updateDatetimeValue(data);
-            /**
-             * Prevent convertDataToISO from doing any
-             * kind of transformation based on timezone
-             * This cancels out any change it attempts to make
-             *
-             * Important: Take the timezone offset based on
-             * the date that is currently selected, otherwise
-             * there can be 1 hr difference when dealing w/ DST
-             */
-            const date = new Date(convertDataToISO(this.datetimeValue));
-            // If a custom display timezone is provided, use that tzOffset value instead
-            this.datetimeValue.tzOffset = (this.displayTimezone !== undefined && this.displayTimezone.length > 0)
-              ? ((getTimezoneOffset(date, this.displayTimezone)) / 1000 / 60) * -1
-              : date.getTimezoneOffset() * -1;
-            this.value = convertDataToISO(this.datetimeValue);
-          }
-        }
-      ];
-    }
-    return pickerOptions;
-  }
-  generateColumns() {
-    // if a picker format wasn't provided, then fallback
-    // to use the display format
-    let template = this.pickerFormat || this.displayFormat || DEFAULT_FORMAT;
-    if (template.length === 0) {
-      return [];
-    }
-    // make sure we've got up to date sizing information
-    this.calcMinMax();
-    // does not support selecting by day name
-    // automatically remove any day name formats
-    template = template.replace('DDDD', '{~}').replace('DDD', '{~}');
-    if (template.indexOf('D') === -1) {
-      // there is not a day in the template
-      // replace the day name with a numeric one if it exists
-      template = template.replace('{~}', 'D');
-    }
-    // make sure no day name replacer is left in the string
-    template = template.replace(/{~}/g, '');
-    // parse apart the given template into an array of "formats"
-    const columns = parseTemplate(template).map((format) => {
-      // loop through each format in the template
-      // create a new picker column to build up with data
-      const key = convertFormatToKey(format);
-      let values;
-      // check if they have exact values to use for this date part
-      // otherwise use the default date part values
-      const self = this;
-      values = self[key + 'Values']
-        ? convertToArrayOfNumbers(self[key + 'Values'], key)
-        : dateValueRange(format, this.datetimeMin, this.datetimeMax);
-      const colOptions = values.map(val => {
-        return {
-          value: val,
-          text: renderTextFormat(format, val, undefined, this.locale),
-        };
-      });
-      // cool, we've loaded up the columns with options
-      // preselect the option for this column
-      const optValue = getDateValue(this.datetimeValue, format);
-      const selectedIndex = colOptions.findIndex(opt => opt.value === optValue);
-      return {
-        name: key,
-        selectedIndex: selectedIndex >= 0 ? selectedIndex : 0,
-        options: colOptions
-      };
-    });
-    // Normalize min/max
-    const min = this.datetimeMin;
-    const max = this.datetimeMax;
-    ['month', 'day', 'hour', 'minute']
-      .filter(name => !columns.find(column => column.name === name))
-      .forEach(name => {
-      min[name] = 0;
-      max[name] = 0;
-    });
-    return this.validateColumns(divyColumns(columns));
-  }
-  validateColumns(columns) {
-    const today = new Date();
-    const minCompareVal = dateDataSortValue(this.datetimeMin);
-    const maxCompareVal = dateDataSortValue(this.datetimeMax);
-    const yearCol = columns.find(c => c.name === 'year');
-    let selectedYear = today.getFullYear();
-    if (yearCol) {
-      // default to the first value if the current year doesn't exist in the options
-      if (!yearCol.options.find(col => col.value === today.getFullYear())) {
-        selectedYear = yearCol.options[0].value;
-      }
-      const selectedIndex = yearCol.selectedIndex;
-      if (selectedIndex !== undefined) {
-        const yearOpt = yearCol.options[selectedIndex];
-        if (yearOpt) {
-          // they have a selected year value
-          selectedYear = yearOpt.value;
-        }
-      }
-    }
-    const selectedMonth = this.validateColumn(columns, 'month', 1, minCompareVal, maxCompareVal, [selectedYear, 0, 0, 0, 0], [selectedYear, 12, 31, 23, 59]);
-    const numDaysInMonth = daysInMonth(selectedMonth, selectedYear);
-    const selectedDay = this.validateColumn(columns, 'day', 2, minCompareVal, maxCompareVal, [selectedYear, selectedMonth, 0, 0, 0], [selectedYear, selectedMonth, numDaysInMonth, 23, 59]);
-    const selectedHour = this.validateColumn(columns, 'hour', 3, minCompareVal, maxCompareVal, [selectedYear, selectedMonth, selectedDay, 0, 0], [selectedYear, selectedMonth, selectedDay, 23, 59]);
-    this.validateColumn(columns, 'minute', 4, minCompareVal, maxCompareVal, [selectedYear, selectedMonth, selectedDay, selectedHour, 0], [selectedYear, selectedMonth, selectedDay, selectedHour, 59]);
-    return columns;
-  }
-  calcMinMax() {
-    const todaysYear = new Date().getFullYear();
-    if (this.yearValues !== undefined) {
-      const years = convertToArrayOfNumbers(this.yearValues, 'year');
-      if (this.min === undefined) {
-        this.min = Math.min(...years).toString();
-      }
-      if (this.max === undefined) {
-        this.max = Math.max(...years).toString();
-      }
-    }
-    else {
-      if (this.min === undefined) {
-        this.min = (todaysYear - 100).toString();
-      }
-      if (this.max === undefined) {
-        this.max = todaysYear.toString();
-      }
-    }
-    const min = this.datetimeMin = parseDate(this.min);
-    const max = this.datetimeMax = parseDate(this.max);
-    min.year = min.year || todaysYear;
-    max.year = max.year || todaysYear;
-    min.month = min.month || 1;
-    max.month = max.month || 12;
-    min.day = min.day || 1;
-    max.day = max.day || 31;
-    min.hour = min.hour || 0;
-    max.hour = max.hour === undefined ? 23 : max.hour;
-    min.minute = min.minute || 0;
-    max.minute = max.minute === undefined ? 59 : max.minute;
-    min.second = min.second || 0;
-    max.second = max.second === undefined ? 59 : max.second;
-    // Ensure min/max constraints
-    if (min.year > max.year) {
-      console.error('min.year > max.year');
-      min.year = max.year - 100;
-    }
-    if (min.year === max.year) {
-      if (min.month > max.month) {
-        console.error('min.month > max.month');
-        min.month = 1;
-      }
-      else if (min.month === max.month && min.day > max.day) {
-        console.error('min.day > max.day');
-        min.day = 1;
-      }
-    }
-  }
-  validateColumn(columns, name, index, min, max, lowerBounds, upperBounds) {
-    const column = columns.find(c => c.name === name);
-    if (!column) {
-      return 0;
-    }
-    const lb = lowerBounds.slice();
-    const ub = upperBounds.slice();
-    const options = column.options;
-    let indexMin = options.length - 1;
-    let indexMax = 0;
-    for (let i = 0; i < options.length; i++) {
-      const opts = options[i];
-      const value = opts.value;
-      lb[index] = opts.value;
-      ub[index] = opts.value;
-      const disabled = opts.disabled = (value < lowerBounds[index] ||
-        value > upperBounds[index] ||
-        dateSortValue(ub[0], ub[1], ub[2], ub[3], ub[4]) < min ||
-        dateSortValue(lb[0], lb[1], lb[2], lb[3], lb[4]) > max);
-      if (!disabled) {
-        indexMin = Math.min(indexMin, i);
-        indexMax = Math.max(indexMax, i);
-      }
-    }
-    const selectedIndex = column.selectedIndex = clamp(indexMin, column.selectedIndex, indexMax);
-    const opt = column.options[selectedIndex];
-    if (opt) {
-      return opt.value;
-    }
-    return 0;
-  }
-  get text() {
-    // create the text of the formatted data
-    const template = this.displayFormat || this.pickerFormat || DEFAULT_FORMAT;
-    if (this.value === undefined ||
-      this.value === null ||
-      this.value.length === 0) {
+  renderFooter() {
+    const { showDefaultButtons, showClearButton } = this;
+    const hasSlottedButtons = this.el.querySelector('[slot="buttons"]') !== null;
+    if (!hasSlottedButtons && !showDefaultButtons && !showClearButton) {
       return;
     }
-    return renderDatetime(template, this.datetimeValue, this.locale);
+    const clearButtonClick = () => {
+      this.reset();
+      this.value = undefined;
+    };
+    /**
+     * By default we render two buttons:
+     * Cancel - Dismisses the datetime and
+     * does not update the `value` prop.
+     * OK - Dismisses the datetime and
+     * updates the `value` prop.
+     */
+    return (hAsync("div", { class: "datetime-footer" }, hAsync("div", { class: "datetime-buttons" }, hAsync("div", { class: {
+        ['datetime-action-buttons']: true,
+        ['has-clear-button']: this.showClearButton
+      } }, hAsync("slot", { name: "buttons" }, hAsync("ion-buttons", null, showDefaultButtons && hAsync("ion-button", { id: "cancel-button", color: this.color, onClick: () => this.cancel(true) }, this.cancelText), hAsync("div", null, showClearButton && hAsync("ion-button", { id: "clear-button", color: this.color, onClick: () => clearButtonClick() }, this.clearText), showDefaultButtons && hAsync("ion-button", { id: "confirm-button", color: this.color, onClick: () => this.confirm(true) }, this.doneText))))))));
   }
-  hasValue() {
-    return this.text !== undefined;
+  renderYearView() {
+    const { presentation, workingParts } = this;
+    const calendarYears = getCalendarYears(this.todayParts, this.minParts, this.maxParts, this.parsedYearValues);
+    const showMonth = presentation !== 'year';
+    const showYear = presentation !== 'month';
+    const months = getPickerMonths(this.locale, workingParts, this.minParts, this.maxParts, this.parsedMonthValues);
+    const years = calendarYears.map(year => {
+      return {
+        text: `${year}`,
+        value: year
+      };
+    });
+    return (hAsync("div", { class: "datetime-year" }, hAsync("div", { class: "datetime-year-body" }, hAsync("ion-picker-internal", null, showMonth &&
+      hAsync("ion-picker-column-internal", { color: this.color, items: months, value: workingParts.month, onIonChange: (ev) => {
+          // Due to a Safari 14 issue we need to destroy
+          // the intersection observer before we update state
+          // and trigger a re-render.
+          if (this.destroyCalendarIO) {
+            this.destroyCalendarIO();
+          }
+          this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { month: ev.detail.value }));
+          if (presentation === 'month' || presentation === 'month-year') {
+            this.setActiveParts(Object.assign(Object.assign({}, this.activeParts), { month: ev.detail.value }));
+          }
+          // We can re-attach the intersection observer after
+          // the working parts have been updated.
+          this.initializeCalendarIOListeners();
+          ev.stopPropagation();
+        } }), showYear &&
+      hAsync("ion-picker-column-internal", { color: this.color, items: years, value: workingParts.year, onIonChange: (ev) => {
+          // Due to a Safari 14 issue we need to destroy
+          // the intersection observer before we update state
+          // and trigger a re-render.
+          if (this.destroyCalendarIO) {
+            this.destroyCalendarIO();
+          }
+          this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { year: ev.detail.value }));
+          if (presentation === 'year' || presentation === 'month-year') {
+            this.setActiveParts(Object.assign(Object.assign({}, this.activeParts), { year: ev.detail.value }));
+          }
+          // We can re-attach the intersection observer after
+          // the working parts have been updated.
+          this.initializeCalendarIOListeners();
+          ev.stopPropagation();
+        } })))));
   }
-  setFocus() {
-    if (this.buttonEl) {
-      this.buttonEl.focus();
+  renderCalendarHeader(mode) {
+    const expandedIcon = mode === 'ios' ? chevronDown : caretUpSharp;
+    const collapsedIcon = mode === 'ios' ? chevronForward : caretDownSharp;
+    const prevMonthDisabled = isPrevMonthDisabled(this.workingParts, this.minParts, this.maxParts);
+    const nextMonthDisabled = isNextMonthDisabled(this.workingParts, this.maxParts);
+    return (hAsync("div", { class: "calendar-header" }, hAsync("div", { class: "calendar-action-buttons" }, hAsync("div", { class: "calendar-month-year" }, hAsync("ion-item", { button: true, detail: false, lines: "none", onClick: () => this.toggleMonthAndYearView() }, hAsync("ion-label", null, getMonthAndYear(this.locale, this.workingParts), " ", hAsync("ion-icon", { icon: this.showMonthAndYear ? expandedIcon : collapsedIcon, lazy: false })))), hAsync("div", { class: "calendar-next-prev" }, hAsync("ion-buttons", null, hAsync("ion-button", { disabled: prevMonthDisabled, onClick: () => this.prevMonth() }, hAsync("ion-icon", { slot: "icon-only", icon: chevronBack, lazy: false, flipRtl: true })), hAsync("ion-button", { disabled: nextMonthDisabled, onClick: () => this.nextMonth() }, hAsync("ion-icon", { slot: "icon-only", icon: chevronForward, lazy: false, flipRtl: true }))))), hAsync("div", { class: "calendar-days-of-week" }, getDaysOfWeek(this.locale, mode, this.firstDayOfWeek % 7).map(d => {
+      return hAsync("div", { class: "day-of-week" }, d);
+    }))));
+  }
+  renderMonth(month, year) {
+    const yearAllowed = this.parsedYearValues === undefined || this.parsedYearValues.includes(year);
+    const monthAllowed = this.parsedMonthValues === undefined || this.parsedMonthValues.includes(month);
+    const isCalMonthDisabled = !yearAllowed || !monthAllowed;
+    const swipeDisabled = isMonthDisabled({
+      month,
+      year,
+      day: null
+    }, {
+      minParts: this.minParts,
+      maxParts: this.maxParts
+    });
+    // The working month should never have swipe disabled.
+    // Otherwise the CSS scroll snap will not work and the user
+    // can free-scroll the calendar.
+    const isWorkingMonth = this.workingParts.month === month && this.workingParts.year === year;
+    return (hAsync("div", { class: {
+        'calendar-month': true,
+        // Prevents scroll snap swipe gestures for months outside of the min/max bounds
+        'calendar-month-disabled': !isWorkingMonth && swipeDisabled
+      } }, hAsync("div", { class: "calendar-month-grid" }, getDaysOfMonth(month, year, this.firstDayOfWeek % 7).map((dateObject, index) => {
+      const { day, dayOfWeek } = dateObject;
+      const referenceParts = { month, day, year };
+      const { isActive, isToday, ariaLabel, ariaSelected, disabled } = getCalendarDayState(this.locale, referenceParts, this.activePartsClone, this.todayParts, this.minParts, this.maxParts, this.parsedDayValues);
+      return (hAsync("button", { tabindex: "-1", "data-day": day, "data-month": month, "data-year": year, "data-index": index, "data-day-of-week": dayOfWeek, disabled: isCalMonthDisabled || disabled, class: {
+          'calendar-day-padding': day === null,
+          'calendar-day': true,
+          'calendar-day-active': isActive,
+          'calendar-day-today': isToday
+        }, "aria-selected": ariaSelected, "aria-label": ariaLabel, onClick: () => {
+          if (day === null) {
+            return;
+          }
+          this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { month,
+            day,
+            year }));
+          this.setActiveParts(Object.assign(Object.assign({}, this.activeParts), { month,
+            day,
+            year }));
+        } }, day));
+    }))));
+  }
+  renderCalendarBody() {
+    return (hAsync("div", { class: "calendar-body ion-focusable", ref: el => this.calendarBodyRef = el, tabindex: "0" }, generateMonths(this.workingParts).map(({ month, year }) => {
+      return this.renderMonth(month, year);
+    })));
+  }
+  renderCalendar(mode) {
+    return (hAsync("div", { class: "datetime-calendar" }, this.renderCalendarHeader(mode), this.renderCalendarBody()));
+  }
+  renderTimeLabel() {
+    const hasSlottedTimeLabel = this.el.querySelector('[slot="time-label"]') !== null;
+    if (!hasSlottedTimeLabel && !this.showDefaultTimeLabel) {
+      return;
+    }
+    return (hAsync("slot", { name: "time-label" }, "Time"));
+  }
+  renderTimePicker(hoursItems, minutesItems, ampmItems, use24Hour) {
+    const { color, activePartsClone, workingParts } = this;
+    return (hAsync("ion-picker-internal", null, hAsync("ion-picker-column-internal", { color: color, value: activePartsClone.hour, items: hoursItems, numericInput: true, onIonChange: (ev) => {
+        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { hour: ev.detail.value }));
+        this.setActiveParts(Object.assign(Object.assign({}, activePartsClone), { hour: ev.detail.value }));
+        ev.stopPropagation();
+      } }), hAsync("ion-picker-column-internal", { color: color, value: activePartsClone.minute, items: minutesItems, numericInput: true, onIonChange: (ev) => {
+        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { minute: ev.detail.value }));
+        this.setActiveParts(Object.assign(Object.assign({}, activePartsClone), { minute: ev.detail.value }));
+        ev.stopPropagation();
+      } }), !use24Hour && hAsync("ion-picker-column-internal", { color: color, value: activePartsClone.ampm, items: ampmItems, onIonChange: (ev) => {
+        const hour = calculateHourFromAMPM(workingParts, ev.detail.value);
+        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { ampm: ev.detail.value, hour }));
+        this.setActiveParts(Object.assign(Object.assign({}, activePartsClone), { ampm: ev.detail.value, hour }));
+        ev.stopPropagation();
+      } })));
+  }
+  renderTimeOverlay(hoursItems, minutesItems, ampmItems, use24Hour) {
+    return [
+      hAsync("div", { class: "time-header" }, this.renderTimeLabel()),
+      hAsync("button", { class: {
+          'time-body': true,
+          'time-body-active': this.isTimePopoverOpen
+        }, "aria-expanded": "false", "aria-haspopup": "true", onClick: async (ev) => {
+          const { popoverRef } = this;
+          if (popoverRef) {
+            this.isTimePopoverOpen = true;
+            popoverRef.present(new CustomEvent('ionShadowTarget', {
+              detail: {
+                ionShadowTarget: ev.target
+              }
+            }));
+            await popoverRef.onWillDismiss();
+            this.isTimePopoverOpen = false;
+          }
+        } }, getFormattedTime(this.activePartsClone, use24Hour)),
+      hAsync("ion-popover", { alignment: "center", translucent: true, overlayIndex: 1, arrow: false, onWillPresent: ev => {
+          /**
+           * Intersection Observers do not consistently fire between Blink and Webkit
+           * when toggling the visibility of the popover and trying to scroll the picker
+           * column to the correct time value.
+           *
+           * This will correctly scroll the element position to the correct time value,
+           * before the popover is fully presented.
+           */
+          const cols = ev.target.querySelectorAll('ion-picker-column-internal');
+          // TODO (FW-615): Potentially remove this when intersection observers are fixed in picker column
+          cols.forEach(col => col.scrollActiveItemIntoView());
+        }, style: {
+          '--offset-y': '-10px'
+        },
+        // Allow native browser keyboard events to support up/down/home/end key
+        // navigation within the time picker.
+        keyboardEvents: true, ref: el => this.popoverRef = el }, this.renderTimePicker(hoursItems, minutesItems, ampmItems, use24Hour))
+    ];
+  }
+  /**
+   * Render time picker inside of datetime.
+   * Do not pass color prop to segment on
+   * iOS mode. MD segment has been customized and
+   * should take on the color prop, but iOS
+   * should just be the default segment.
+   */
+  renderTime() {
+    const { workingParts, presentation } = this;
+    const timeOnlyPresentation = presentation === 'time';
+    const use24Hour = is24Hour(this.locale, this.hourCycle);
+    const { hours, minutes, am, pm } = generateTime(this.workingParts, use24Hour ? 'h23' : 'h12', this.minParts, this.maxParts, this.parsedHourValues, this.parsedMinuteValues);
+    const hoursItems = hours.map(hour => {
+      return {
+        text: getFormattedHour(hour, use24Hour),
+        value: getInternalHourValue(hour, use24Hour, workingParts.ampm)
+      };
+    });
+    const minutesItems = minutes.map(minute => {
+      return {
+        text: addTimePadding(minute),
+        value: minute
+      };
+    });
+    const ampmItems = [];
+    if (am) {
+      ampmItems.push({
+        text: 'AM',
+        value: 'am'
+      });
+    }
+    if (pm) {
+      ampmItems.push({
+        text: 'PM',
+        value: 'pm'
+      });
+    }
+    return (hAsync("div", { class: "datetime-time" }, timeOnlyPresentation ? this.renderTimePicker(hoursItems, minutesItems, ampmItems, use24Hour) : this.renderTimeOverlay(hoursItems, minutesItems, ampmItems, use24Hour)));
+  }
+  renderCalendarViewHeader(mode) {
+    const hasSlottedTitle = this.el.querySelector('[slot="title"]') !== null;
+    if (!hasSlottedTitle && !this.showDefaultTitle) {
+      return;
+    }
+    return (hAsync("div", { class: "datetime-header" }, hAsync("div", { class: "datetime-title" }, hAsync("slot", { name: "title" }, "Select Date")), mode === 'md' && hAsync("div", { class: "datetime-selected-date" }, getMonthAndDay(this.locale, this.activeParts))));
+  }
+  renderDatetime(mode) {
+    const { presentation } = this;
+    switch (presentation) {
+      case 'date-time':
+        return [
+          this.renderCalendarViewHeader(mode),
+          this.renderCalendar(mode),
+          this.renderYearView(),
+          this.renderTime(),
+          this.renderFooter()
+        ];
+      case 'time-date':
+        return [
+          this.renderCalendarViewHeader(mode),
+          this.renderTime(),
+          this.renderCalendar(mode),
+          this.renderYearView(),
+          this.renderFooter()
+        ];
+      case 'time':
+        return [
+          this.renderTime(),
+          this.renderFooter()
+        ];
+      case 'month':
+      case 'month-year':
+      case 'year':
+        return [
+          this.renderYearView(),
+          this.renderFooter()
+        ];
+      default:
+        return [
+          this.renderCalendarViewHeader(mode),
+          this.renderCalendar(mode),
+          this.renderYearView(),
+          this.renderFooter()
+        ];
     }
   }
   render() {
-    const { inputId, text, disabled, readonly, isExpanded, el, placeholder } = this;
+    const { name, value, disabled, el, color, isPresented, readonly, showMonthAndYear, presentation, size } = this;
     const mode = getIonMode$1(this);
-    const labelId = inputId + '-lbl';
-    const label = findItemLabel(el);
-    const addPlaceholderClass = (text === undefined && placeholder != null) ? true : false;
-    // If selected text has been passed in, use that first
-    // otherwise use the placeholder
-    const datetimeText = text === undefined
-      ? (placeholder != null ? placeholder : '')
-      : text;
-    const datetimeTextPart = text === undefined
-      ? (placeholder != null ? 'placeholder' : undefined)
-      : 'text';
-    if (label) {
-      label.id = labelId;
-    }
-    renderHiddenInput(true, el, this.name, this.value, this.disabled);
-    return (hAsync(Host, { onClick: this.onClick, "aria-disabled": disabled ? 'true' : null, "aria-expanded": `${isExpanded}`, "aria-haspopup": "true", "aria-labelledby": label ? labelId : null, class: {
+    const isMonthAndYearPresentation = presentation === 'year' || presentation === 'month' || presentation === 'month-year';
+    const shouldShowMonthAndYear = showMonthAndYear || isMonthAndYearPresentation;
+    renderHiddenInput(true, el, name, value, disabled);
+    return (hAsync(Host, { "aria-disabled": disabled ? 'true' : null, onFocus: this.onFocus, onBlur: this.onBlur, class: Object.assign({}, createColorClasses$1(color, {
         [mode]: true,
-        'datetime-disabled': disabled,
-        'datetime-readonly': readonly,
-        'datetime-placeholder': addPlaceholderClass,
-        'in-item': hostContext('ion-item', el)
-      } }, hAsync("div", { class: "datetime-text", part: datetimeTextPart }, datetimeText), hAsync("button", { type: "button", onFocus: this.onFocus, onBlur: this.onBlur, disabled: this.disabled, ref: btnEl => this.buttonEl = btnEl })));
+        ['datetime-presented']: isPresented,
+        ['datetime-readonly']: readonly,
+        ['datetime-disabled']: disabled,
+        'show-month-and-year': shouldShowMonthAndYear,
+        [`datetime-presentation-${presentation}`]: true,
+        [`datetime-size-${size}`]: true
+      })) }, this.renderDatetime(mode)));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
     "disabled": ["disabledChanged"],
+    "min": ["minChanged"],
+    "max": ["maxChanged"],
+    "yearValues": ["yearValuesChanged"],
+    "monthValues": ["monthValuesChanged"],
+    "dayValues": ["dayValuesChanged"],
+    "hourValues": ["hourValuesChanged"],
+    "minuteValues": ["minuteValuesChanged"],
+    "activeParts": ["activePartsChanged"],
     "value": ["valueChanged"]
   }; }
   static get style() { return {
@@ -11609,66 +13884,44 @@ class Datetime {
     "$flags$": 41,
     "$tagName$": "ion-datetime",
     "$members$": {
+      "color": [1],
       "name": [1],
       "disabled": [4],
       "readonly": [4],
       "min": [1025],
       "max": [1025],
-      "displayFormat": [1, "display-format"],
-      "displayTimezone": [1, "display-timezone"],
-      "pickerFormat": [1, "picker-format"],
+      "presentation": [1],
       "cancelText": [1, "cancel-text"],
       "doneText": [1, "done-text"],
+      "clearText": [1, "clear-text"],
       "yearValues": [8, "year-values"],
       "monthValues": [8, "month-values"],
       "dayValues": [8, "day-values"],
       "hourValues": [8, "hour-values"],
       "minuteValues": [8, "minute-values"],
-      "monthNames": [1, "month-names"],
-      "monthShortNames": [1, "month-short-names"],
-      "dayNames": [1, "day-names"],
-      "dayShortNames": [1, "day-short-names"],
-      "pickerOptions": [16],
-      "placeholder": [1],
+      "locale": [1],
+      "firstDayOfWeek": [2, "first-day-of-week"],
       "value": [1025],
-      "isExpanded": [32],
-      "open": [64]
+      "showDefaultTitle": [4, "show-default-title"],
+      "showDefaultButtons": [4, "show-default-buttons"],
+      "showClearButton": [4, "show-clear-button"],
+      "showDefaultTimeLabel": [4, "show-default-time-label"],
+      "hourCycle": [1, "hour-cycle"],
+      "size": [1],
+      "showMonthAndYear": [32],
+      "activeParts": [32],
+      "workingParts": [32],
+      "isPresented": [32],
+      "isTimePopoverOpen": [32],
+      "confirm": [64],
+      "reset": [64],
+      "cancel": [64]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
 }
-const divyColumns = (columns) => {
-  const columnsWidth = [];
-  let col;
-  let width;
-  for (let i = 0; i < columns.length; i++) {
-    col = columns[i];
-    columnsWidth.push(0);
-    for (const option of col.options) {
-      width = option.text.length;
-      if (width > columnsWidth[i]) {
-        columnsWidth[i] = width;
-      }
-    }
-  }
-  if (columnsWidth.length === 2) {
-    width = Math.max(columnsWidth[0], columnsWidth[1]);
-    columns[0].align = 'right';
-    columns[1].align = 'left';
-    columns[0].optionsWidth = columns[1].optionsWidth = `${width * 17}px`;
-  }
-  else if (columnsWidth.length === 3) {
-    width = Math.max(columnsWidth[0], columnsWidth[2]);
-    columns[0].align = 'right';
-    columns[1].columnWidth = `${columnsWidth[1] * 17}px`;
-    columns[0].optionsWidth = columns[2].optionsWidth = `${width * 17}px`;
-    columns[2].align = 'left';
-  }
-  return columns;
-};
-const DEFAULT_FORMAT = 'MMM D, YYYY';
 let datetimeIds = 0;
 
 const fabCss = "/*!@:host*/.sc-ion-fab-h{position:absolute;z-index:999}/*!@:host(.fab-horizontal-center)*/.fab-horizontal-center.sc-ion-fab-h{left:50%;margin-left:-28px}/*!@:host-context([dir=rtl]):host(.fab-horizontal-center), :host-context([dir=rtl]).fab-horizontal-center*/[dir=rtl].sc-ion-fab-h -no-combinator.fab-horizontal-center.sc-ion-fab-h,[dir=rtl] .sc-ion-fab-h -no-combinator.fab-horizontal-center.sc-ion-fab-h,[dir=rtl].fab-horizontal-center.sc-ion-fab-h,[dir=rtl] .fab-horizontal-center.sc-ion-fab-h{left:unset;right:unset;right:50%}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.fab-horizontal-center)*/.fab-horizontal-center.sc-ion-fab-h{margin-left:unset;-webkit-margin-start:-28px;margin-inline-start:-28px}}/*!@:host(.fab-horizontal-start)*/.fab-horizontal-start.sc-ion-fab-h{left:calc(10px + var(--ion-safe-area-left, 0px))}/*!@:host-context([dir=rtl]):host(.fab-horizontal-start), :host-context([dir=rtl]).fab-horizontal-start*/[dir=rtl].sc-ion-fab-h -no-combinator.fab-horizontal-start.sc-ion-fab-h,[dir=rtl] .sc-ion-fab-h -no-combinator.fab-horizontal-start.sc-ion-fab-h,[dir=rtl].fab-horizontal-start.sc-ion-fab-h,[dir=rtl] .fab-horizontal-start.sc-ion-fab-h{left:unset;right:unset;right:calc(10px + var(--ion-safe-area-left, 0px))}/*!@:host(.fab-horizontal-end)*/.fab-horizontal-end.sc-ion-fab-h{right:calc(10px + var(--ion-safe-area-right, 0px))}/*!@:host-context([dir=rtl]):host(.fab-horizontal-end), :host-context([dir=rtl]).fab-horizontal-end*/[dir=rtl].sc-ion-fab-h -no-combinator.fab-horizontal-end.sc-ion-fab-h,[dir=rtl] .sc-ion-fab-h -no-combinator.fab-horizontal-end.sc-ion-fab-h,[dir=rtl].fab-horizontal-end.sc-ion-fab-h,[dir=rtl] .fab-horizontal-end.sc-ion-fab-h{left:unset;right:unset;left:calc(10px + var(--ion-safe-area-right, 0px))}/*!@:host(.fab-vertical-top)*/.fab-vertical-top.sc-ion-fab-h{top:10px}/*!@:host(.fab-vertical-top.fab-edge)*/.fab-vertical-top.fab-edge.sc-ion-fab-h{top:-28px}/*!@:host(.fab-vertical-bottom)*/.fab-vertical-bottom.sc-ion-fab-h{bottom:10px}/*!@:host(.fab-vertical-bottom.fab-edge)*/.fab-vertical-bottom.fab-edge.sc-ion-fab-h{bottom:-28px}/*!@:host(.fab-vertical-center)*/.fab-vertical-center.sc-ion-fab-h{margin-top:-28px;top:50%}";
@@ -11798,7 +14051,7 @@ class FabButton {
      * is pressed. Only applies if it is the main button inside of a fab containing a
      * fab list.
      */
-    this.closeIcon = 'close';
+    this.closeIcon = close;
     this.onFocus = () => {
       this.ionFocus.emit();
     };
@@ -11910,7 +14163,39 @@ class FabList {
   }; }
 }
 
-const footerIosCss = "ion-footer{display:block;position:relative;order:1;width:100%;z-index:10}ion-footer ion-toolbar:last-of-type{padding-bottom:var(--ion-safe-area-bottom, 0)}.footer-ios ion-toolbar:first-of-type{--border-width:0.55px 0 0}@supports (backdrop-filter: blur(0)){.footer-background{left:0;right:0;top:0;bottom:0;position:absolute;backdrop-filter:saturate(180%) blur(20px)}.footer-translucent-ios ion-toolbar{--opacity:.8}}.footer-ios.ion-no-border ion-toolbar:first-of-type{--border-width:0}";
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const handleFooterFade = (scrollEl, baseEl) => {
+  readTask(() => {
+    const scrollTop = scrollEl.scrollTop;
+    const maxScroll = scrollEl.scrollHeight - scrollEl.clientHeight;
+    /**
+     * Toolbar background will fade
+     * out over fadeDuration in pixels.
+     */
+    const fadeDuration = 10;
+    /**
+     * Begin fading out maxScroll - 30px
+     * from the bottom of the content.
+     * Also determine how close we are
+     * to starting the fade. If we are
+     * before the starting point, the
+     * scale value will get clamped to 0.
+     * If we are after the maxScroll (rubber
+     * band scrolling), the scale value will
+     * get clamped to 1.
+     */
+    const fadeStart = maxScroll - fadeDuration;
+    const distanceToStart = scrollTop - fadeStart;
+    const scale = clamp(0, 1 - (distanceToStart / fadeDuration), 1);
+    writeTask(() => {
+      baseEl.style.setProperty('--opacity-scale', scale.toString());
+    });
+  });
+};
+
+const footerIosCss = "ion-footer{display:block;position:relative;order:1;width:100%;z-index:10}ion-footer ion-toolbar:last-of-type{padding-bottom:var(--ion-safe-area-bottom, 0)}.footer-ios ion-toolbar:first-of-type{--border-width:0.55px 0 0}@supports (backdrop-filter: blur(0)){.footer-background{left:0;right:0;top:0;bottom:0;position:absolute;backdrop-filter:saturate(180%) blur(20px)}.footer-translucent-ios ion-toolbar{--opacity:.8}}.footer-ios.ion-no-border ion-toolbar:first-of-type{--border-width:0}.footer-collapse-fade ion-toolbar{--opacity-scale:inherit}";
 
 const footerMdCss = "ion-footer{display:block;position:relative;order:1;width:100%;z-index:10}ion-footer ion-toolbar:last-of-type{padding-bottom:var(--ion-safe-area-bottom, 0)}.footer-md::before{left:0;top:-2px;bottom:auto;background-position:left 0 top 0;position:absolute;width:100%;height:2px;background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAHBAMAAADzDtBxAAAAD1BMVEUAAAAAAAAAAAAAAAAAAABPDueNAAAABXRSTlMUCS0gBIh/TXEAAAAaSURBVAjXYxCEAgY4UIICBmMogMsgFLtAAQCNSwXZKOdPxgAAAABJRU5ErkJggg==\");background-repeat:repeat-x;content:\"\"}[dir=rtl] .footer-md::before,:host-context([dir=rtl]) .footer-md::before{left:unset;right:unset;right:0}[dir=rtl] .footer-md::before,:host-context([dir=rtl]) .footer-md::before{background-position:right 0 top 0}.footer-md.ion-no-border::before{display:none}";
 
@@ -11929,19 +14214,61 @@ class Footer {
      * attribute needs to be set on the content.
      */
     this.translucent = false;
+    this.checkCollapsibleFooter = () => {
+      const mode = getIonMode$1(this);
+      if (mode !== 'ios') {
+        return;
+      }
+      const { collapse } = this;
+      const hasFade = collapse === 'fade';
+      this.destroyCollapsibleFooter();
+      if (hasFade) {
+        const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
+        const contentEl = (pageEl) ? pageEl.querySelector('ion-content') : null;
+        this.setupFadeFooter(contentEl);
+      }
+    };
+    this.setupFadeFooter = async (contentEl) => {
+      if (!contentEl) {
+        console.error('ion-footer requires a content to collapse. Make sure there is an ion-content.');
+        return;
+      }
+      await new Promise(resolve => componentOnReady(contentEl, resolve));
+      const scrollEl = this.scrollEl = await contentEl.getScrollElement();
+      /**
+       * Handle fading of toolbars on scroll
+       */
+      this.contentScrollCallback = () => { handleFooterFade(scrollEl, this.el); };
+      scrollEl.addEventListener('scroll', this.contentScrollCallback);
+      handleFooterFade(scrollEl, this.el);
+    };
+  }
+  componentDidLoad() {
+    this.checkCollapsibleFooter();
+  }
+  componentDidUpdate() {
+    this.checkCollapsibleFooter();
+  }
+  destroyCollapsibleFooter() {
+    if (this.scrollEl && this.contentScrollCallback) {
+      this.scrollEl.removeEventListener('scroll', this.contentScrollCallback);
+      this.contentScrollCallback = undefined;
+    }
   }
   render() {
+    const { translucent, collapse } = this;
     const mode = getIonMode$1(this);
-    const translucent = this.translucent;
     return (hAsync(Host, { role: "contentinfo", class: {
         [mode]: true,
         // Used internally for styling
         [`footer-${mode}`]: true,
         [`footer-translucent`]: translucent,
         [`footer-translucent-${mode}`]: translucent,
+        [`footer-collapse-${collapse}`]: collapse !== undefined,
       } }, mode === 'ios' && translucent &&
       hAsync("div", { class: "footer-background" }), hAsync("slot", null)));
   }
+  get el() { return getElement(this); }
   static get style() { return {
     ios: footerIosCss,
     md: footerMdCss
@@ -11950,6 +14277,7 @@ class Footer {
     "$flags$": 36,
     "$tagName$": "ion-footer",
     "$members$": {
+      "collapse": [1],
       "translucent": [4]
     },
     "$listeners$": undefined,
@@ -21746,6 +24074,9 @@ class Grid {
   }; }
 }
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const TRANSITION = 'all 0.2s ease-in-out';
 const cloneElement = (tagName) => {
   const getCachedEl = document.querySelector(`${tagName}.ion-cloned-element`);
@@ -21790,12 +24121,21 @@ const handleContentScroll = (scrollEl, scrollHeaderIndex, contentEl) => {
     }
   });
 };
-const setToolbarBackgroundOpacity = (toolbar, opacity) => {
+const setToolbarBackgroundOpacity = (headerEl, opacity) => {
+  /**
+   * Fading in the backdrop opacity
+   * should happen after the large title
+   * has collapsed, so it is handled
+   * by handleHeaderFade()
+   */
+  if (headerEl.collapse === 'fade') {
+    return;
+  }
   if (opacity === undefined) {
-    toolbar.background.style.removeProperty('--opacity');
+    headerEl.style.removeProperty('--opacity-scale');
   }
   else {
-    toolbar.background.style.setProperty('--opacity', opacity.toString());
+    headerEl.style.setProperty('--opacity-scale', opacity.toString());
   }
 };
 const handleToolbarBorderIntersection = (ev, mainHeaderIndex, scrollTop) => {
@@ -21814,9 +24154,7 @@ const handleToolbarBorderIntersection = (ev, mainHeaderIndex, scrollTop) => {
    * fire here as well.
    */
   const scale = (ev[0].intersectionRatio > 0.9 || scrollTop <= 0) ? 0 : ((1 - ev[0].intersectionRatio) * 100) / 75;
-  mainHeaderIndex.toolbars.forEach(toolbar => {
-    setToolbarBackgroundOpacity(toolbar, (scale === 1) ? undefined : scale);
-  });
+  setToolbarBackgroundOpacity(mainHeaderIndex.el, (scale === 1) ? undefined : scale);
 };
 /**
  * If toolbars are intersecting, hide the scrollable toolbar content
@@ -21855,7 +24193,7 @@ const handleToolbarIntersection = (ev, mainHeaderIndex, scrollHeaderIndex, scrol
       if (hasValidIntersection && scrollTop > 0) {
         setHeaderActive(mainHeaderIndex);
         setHeaderActive(scrollHeaderIndex, false);
-        setToolbarBackgroundOpacity(mainHeaderIndex.toolbars[0]);
+        setToolbarBackgroundOpacity(mainHeaderIndex.el);
       }
     }
   });
@@ -21879,8 +24217,39 @@ const scaleLargeTitles = (toolbars = [], scale = 1, transition = false) => {
     titleDiv.style.transform = `scale3d(${scale}, ${scale}, 1)`;
   });
 };
+const handleHeaderFade = (scrollEl, baseEl, condenseHeader) => {
+  readTask(() => {
+    const scrollTop = scrollEl.scrollTop;
+    const baseElHeight = baseEl.clientHeight;
+    const fadeStart = (condenseHeader) ? condenseHeader.clientHeight : 0;
+    /**
+     * If we are using fade header with a condense
+     * header, then the toolbar backgrounds should
+     * not begin to fade in until the condense
+     * header has fully collapsed.
+     *
+     * Additionally, the main content should not
+     * overflow out of the container until the
+     * condense header has fully collapsed. When
+     * using just the condense header the content
+     * should overflow out of the container.
+     */
+    if ((condenseHeader !== null) && (scrollTop < fadeStart)) {
+      baseEl.style.setProperty('--opacity-scale', '0');
+      scrollEl.style.setProperty('clip-path', `inset(${baseElHeight}px 0px 0px 0px)`);
+      return;
+    }
+    const distanceToStart = scrollTop - fadeStart;
+    const fadeDuration = 10;
+    const scale = clamp(0, (distanceToStart / fadeDuration), 1);
+    writeTask(() => {
+      scrollEl.style.removeProperty('clip-path');
+      baseEl.style.setProperty('--opacity-scale', scale.toString());
+    });
+  });
+};
 
-const headerIosCss = "ion-header{display:block;position:relative;order:-1;width:100%;z-index:10}ion-header ion-toolbar:first-of-type{padding-top:var(--ion-safe-area-top, 0)}.header-ios ion-toolbar:last-of-type{--border-width:0 0 0.55px}@supports (backdrop-filter: blur(0)){.header-background{left:0;right:0;top:0;bottom:0;position:absolute;backdrop-filter:saturate(180%) blur(20px)}.header-translucent-ios ion-toolbar{--opacity:.8}.header-collapse-condense-inactive .header-background{backdrop-filter:blur(20px)}}.header-ios.ion-no-border ion-toolbar:last-of-type{--border-width:0}.header-collapse-condense{z-index:9}.header-collapse-condense ion-toolbar{position:sticky;top:0}.header-collapse-condense ion-toolbar:first-of-type{padding-top:7px;z-index:1}.header-collapse-condense ion-toolbar{--background:var(--ion-background-color, #fff);z-index:0}.header-collapse-condense ion-toolbar ion-searchbar{height:48px;padding-top:0px;padding-bottom:13px}.header-collapse-main ion-toolbar.in-toolbar ion-title,.header-collapse-main ion-toolbar.in-toolbar ion-buttons{transition:all 0.2s ease-in-out}.header-collapse-condense-inactive:not(.header-collapse-condense) ion-toolbar.in-toolbar ion-title,.header-collapse-condense-inactive:not(.header-collapse-condense) ion-toolbar.in-toolbar ion-buttons.buttons-collapse{opacity:0;pointer-events:none}.header-collapse-condense-inactive.header-collapse-condense ion-toolbar.in-toolbar ion-title,.header-collapse-condense-inactive.header-collapse-condense ion-toolbar.in-toolbar ion-buttons.buttons-collapse{visibility:hidden}";
+const headerIosCss = "ion-header{display:block;position:relative;order:-1;width:100%;z-index:10}ion-header ion-toolbar:first-of-type{padding-top:var(--ion-safe-area-top, 0)}.header-ios ion-toolbar:last-of-type{--border-width:0 0 0.55px}@supports (backdrop-filter: blur(0)){.header-background{left:0;right:0;top:0;bottom:0;position:absolute;backdrop-filter:saturate(180%) blur(20px)}.header-translucent-ios ion-toolbar{--opacity:.8}.header-collapse-condense-inactive .header-background{backdrop-filter:blur(20px)}}.header-ios.ion-no-border ion-toolbar:last-of-type{--border-width:0}.header-collapse-fade ion-toolbar{--opacity-scale:inherit}.header-collapse-condense{z-index:9}.header-collapse-condense ion-toolbar{position:sticky;top:0}.header-collapse-condense ion-toolbar:first-of-type{padding-top:7px;z-index:1}.header-collapse-condense ion-toolbar{--background:var(--ion-background-color, #fff);z-index:0}.header-collapse-condense ion-toolbar:last-of-type{--border-width:0px}.header-collapse-condense ion-toolbar ion-searchbar{height:48px;padding-top:0px;padding-bottom:13px}.header-collapse-main{--opacity-scale:1}.header-collapse-main ion-toolbar{--opacity-scale:inherit}.header-collapse-main ion-toolbar.in-toolbar ion-title,.header-collapse-main ion-toolbar.in-toolbar ion-buttons{transition:all 0.2s ease-in-out}.header-collapse-condense-inactive:not(.header-collapse-condense) ion-toolbar.in-toolbar ion-title,.header-collapse-condense-inactive:not(.header-collapse-condense) ion-toolbar.in-toolbar ion-buttons.buttons-collapse{opacity:0;pointer-events:none}.header-collapse-condense-inactive.header-collapse-condense ion-toolbar.in-toolbar ion-title,.header-collapse-condense-inactive.header-collapse-condense ion-toolbar.in-toolbar ion-buttons.buttons-collapse{visibility:hidden}";
 
 const headerMdCss = "ion-header{display:block;position:relative;order:-1;width:100%;z-index:10}ion-header ion-toolbar:first-of-type{padding-top:var(--ion-safe-area-top, 0)}.header-md::after{left:0;bottom:-5px;background-position:left 0 top -2px;position:absolute;width:100%;height:5px;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAHBAMAAADzDtBxAAAAD1BMVEUAAAAAAAAAAAAAAAAAAABPDueNAAAABXRSTlMUCS0gBIh/TXEAAAAaSURBVAjXYxCEAgY4UIICBmMogMsgFLtAAQCNSwXZKOdPxgAAAABJRU5ErkJggg==);background-repeat:repeat-x;content:\"\"}[dir=rtl] .header-md::after,:host-context([dir=rtl]) .header-md::after{left:unset;right:unset;right:0}[dir=rtl] .header-md::after,:host-context([dir=rtl]) .header-md::after{background-position:right 0 top -2px}.header-collapse-condense{display:none}.header-md.ion-no-border::after{display:none}";
 
@@ -21890,7 +24259,6 @@ const headerMdCss = "ion-header{display:block;position:relative;order:-1;width:1
 class Header {
   constructor(hostRef) {
     registerInstance(this, hostRef);
-    this.collapsibleHeaderInitialized = false;
     this.inheritedAttributes = {};
     /**
      * If `true`, the header will be translucent.
@@ -21901,27 +24269,43 @@ class Header {
      * attribute needs to be set on the content.
      */
     this.translucent = false;
+    this.setupFadeHeader = async (contentEl, condenseHeader) => {
+      if (!contentEl) {
+        console.error('ion-header requires a content to collapse. Make sure there is an ion-content.');
+        return;
+      }
+      await new Promise(resolve => componentOnReady(contentEl, resolve));
+      const scrollEl = this.scrollEl = await contentEl.getScrollElement();
+      /**
+       * Handle fading of toolbars on scroll
+       */
+      this.contentScrollCallback = () => { handleHeaderFade(this.scrollEl, this.el, condenseHeader); };
+      scrollEl.addEventListener('scroll', this.contentScrollCallback);
+      handleHeaderFade(this.scrollEl, this.el, condenseHeader);
+    };
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes(this.el, ['role']);
+    this.inheritedAttributes = inheritAttributes$1(this.el, ['role']);
   }
-  async componentDidLoad() {
-    await this.checkCollapsibleHeader();
+  componentDidLoad() {
+    this.checkCollapsibleHeader();
   }
-  async componentDidUpdate() {
-    await this.checkCollapsibleHeader();
+  componentDidUpdate() {
+    this.checkCollapsibleHeader();
   }
   disconnectedCallback() {
     this.destroyCollapsibleHeader();
   }
   async checkCollapsibleHeader() {
-    // Determine if the header can collapse
-    const hasCollapse = this.collapse === 'condense';
-    const canCollapse = (hasCollapse && getIonMode$1(this) === 'ios') ? hasCollapse : false;
-    if (!canCollapse && this.collapsibleHeaderInitialized) {
-      this.destroyCollapsibleHeader();
+    const mode = getIonMode$1(this);
+    if (mode !== 'ios') {
+      return;
     }
-    else if (canCollapse && !this.collapsibleHeaderInitialized) {
+    const { collapse } = this;
+    const hasCondense = collapse === 'condense';
+    const hasFade = collapse === 'fade';
+    this.destroyCollapsibleHeader();
+    if (hasCondense) {
       const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
       const contentEl = (pageEl) ? pageEl.querySelector('ion-content') : null;
       // Cloned elements are always needed in iOS transition
@@ -21930,7 +24314,13 @@ class Header {
         title.size = 'large';
         cloneElement('ion-back-button');
       });
-      await this.setupCollapsibleHeader(contentEl, pageEl);
+      await this.setupCondenseHeader(contentEl, pageEl);
+    }
+    else if (hasFade) {
+      const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
+      const contentEl = (pageEl) ? pageEl.querySelector('ion-content') : null;
+      const condenseHeader = (contentEl) ? contentEl.querySelector('ion-header[collapse="condense"]') : null;
+      await this.setupFadeHeader(contentEl, condenseHeader);
     }
   }
   destroyCollapsibleHeader() {
@@ -21947,7 +24337,7 @@ class Header {
       this.collapsibleMainHeader = undefined;
     }
   }
-  async setupCollapsibleHeader(contentEl, pageEl) {
+  async setupCondenseHeader(contentEl, pageEl) {
     if (!contentEl || !pageEl) {
       console.error('ion-header requires a content to collapse, make sure there is an ion-content.');
       return;
@@ -21955,6 +24345,7 @@ class Header {
     if (typeof IntersectionObserver === 'undefined') {
       return;
     }
+    await new Promise(resolve => componentOnReady(contentEl, resolve));
     this.scrollEl = await contentEl.getScrollElement();
     const headers = pageEl.querySelectorAll('ion-header');
     this.collapsibleMainHeader = Array.from(headers).find((header) => header.collapse !== 'condense');
@@ -21967,9 +24358,7 @@ class Header {
       return;
     }
     setHeaderActive(mainHeaderIndex, false);
-    mainHeaderIndex.toolbars.forEach(toolbar => {
-      setToolbarBackgroundOpacity(toolbar, 0);
-    });
+    setToolbarBackgroundOpacity(mainHeaderIndex.el, 0);
     /**
      * Handle interaction between toolbar collapse and
      * showing/hiding content in the primary ion-header
@@ -21991,7 +24380,6 @@ class Header {
         this.collapsibleMainHeader.classList.add('header-collapse-main');
       }
     });
-    this.collapsibleHeaderInitialized = true;
   }
   render() {
     const { translucent, inheritedAttributes } = this;
@@ -22059,6 +24447,29 @@ const getName = (iconName, icon, mode, ios, md) => {
 const isSrc = (str) => str.length > 0 && /(\/|\.)/.test(str);
 const isStr = (val) => typeof val === 'string';
 const toLower = (val) => val.toLowerCase();
+/**
+ * Elements inside of web components sometimes need to inherit global attributes
+ * set on the host. For example, the inner input in `ion-input` should inherit
+ * the `title` attribute that developers set directly on `ion-input`. This
+ * helper function should be called in componentWillLoad and assigned to a variable
+ * that is later used in the render function.
+ *
+ * This does not need to be reactive as changing attributes on the host element
+ * does not trigger a re-render.
+ */
+const inheritAttributes = (el, attributes = []) => {
+  const attributeObject = {};
+  attributes.forEach(attr => {
+    if (el.hasAttribute(attr)) {
+      const value = el.getAttribute(attr);
+      if (value !== null) {
+        attributeObject[attr] = el.getAttribute(attr);
+      }
+      el.removeAttribute(attr);
+    }
+  });
+  return attributeObject;
+};
 
 const iconCss = "/*!@:host*/.sc-ion-icon-h{display:inline-block;width:1em;height:1em;contain:strict;fill:currentColor;box-sizing:content-box !important}/*!@:host .ionicon*/.sc-ion-icon-h .ionicon.sc-ion-icon{stroke:currentColor}/*!@.ionicon-fill-none*/.ionicon-fill-none.sc-ion-icon{fill:none}/*!@.ionicon-stroke-width*/.ionicon-stroke-width.sc-ion-icon{stroke-width:32px;stroke-width:var(--ionicon-stroke-width, 32px)}/*!@.icon-inner,\n.ionicon,\nsvg*/.icon-inner.sc-ion-icon,.ionicon.sc-ion-icon,svg.sc-ion-icon{display:block;height:100%;width:100%}/*!@:host(.flip-rtl) .icon-inner*/.flip-rtl.sc-ion-icon-h .icon-inner.sc-ion-icon{transform:scaleX(-1)}/*!@:host(.icon-small)*/.icon-small.sc-ion-icon-h{font-size:18px !important}/*!@:host(.icon-large)*/.icon-large.sc-ion-icon-h{font-size:32px !important}/*!@:host(.ion-color)*/.ion-color.sc-ion-icon-h{color:var(--ion-color-base) !important}/*!@:host(.ion-color-primary)*/.ion-color-primary.sc-ion-icon-h{--ion-color-base:var(--ion-color-primary, #3880ff)}/*!@:host(.ion-color-secondary)*/.ion-color-secondary.sc-ion-icon-h{--ion-color-base:var(--ion-color-secondary, #0cd1e8)}/*!@:host(.ion-color-tertiary)*/.ion-color-tertiary.sc-ion-icon-h{--ion-color-base:var(--ion-color-tertiary, #f4a942)}/*!@:host(.ion-color-success)*/.ion-color-success.sc-ion-icon-h{--ion-color-base:var(--ion-color-success, #10dc60)}/*!@:host(.ion-color-warning)*/.ion-color-warning.sc-ion-icon-h{--ion-color-base:var(--ion-color-warning, #ffce00)}/*!@:host(.ion-color-danger)*/.ion-color-danger.sc-ion-icon-h{--ion-color-base:var(--ion-color-danger, #f14141)}/*!@:host(.ion-color-light)*/.ion-color-light.sc-ion-icon-h{--ion-color-base:var(--ion-color-light, #f4f5f8)}/*!@:host(.ion-color-medium)*/.ion-color-medium.sc-ion-icon-h{--ion-color-base:var(--ion-color-medium, #989aa2)}/*!@:host(.ion-color-dark)*/.ion-color-dark.sc-ion-icon-h{--ion-color-base:var(--ion-color-dark, #222428)}";
 
@@ -22066,6 +24477,7 @@ class Icon {
   constructor(hostRef) {
     registerInstance(this, hostRef);
     this.iconName = null;
+    this.inheritedAttributes = {};
     this.isVisible = false;
     /**
      * The mode determines which platform styles to use.
@@ -22083,6 +24495,13 @@ class Icon {
      * @default true
      */
     this.sanitize = true;
+    this.hasAriaHidden = () => {
+      const { el } = this;
+      return el.hasAttribute('aria-hidden') && el.getAttribute('aria-hidden') === 'true';
+    };
+  }
+  componentWillLoad() {
+    this.inheritedAttributes = inheritAttributes(this.el, ['aria-label']);
   }
   connectedCallback() {
     // purposely do not return the promise here because loading
@@ -22108,22 +24527,29 @@ class Icon {
   }
   loadIcon() {
     const label = this.iconName = getName(this.name, this.icon, this.mode, this.ios, this.md);
-    if (!this.ariaLabel && this.ariaHidden !== 'true') {
-      // user did not provide a label
-      // come up with the label based on the icon name
-      if (label) {
-        this.ariaLabel = label.replace(/\-/g, ' ');
-      }
+    /**
+     * Come up with a default label
+     * in case user does not provide their own.
+     */
+    if (label) {
+      this.ariaLabel = label.replace(/\-/g, ' ');
     }
   }
   render() {
-    const { iconName } = this;
+    const { iconName, ariaLabel, inheritedAttributes } = this;
     const mode = this.mode || 'md';
     const flipRtl = this.flipRtl ||
       (iconName &&
         (iconName.indexOf('arrow') > -1 || iconName.indexOf('chevron') > -1) &&
         this.flipRtl !== false);
-    return (hAsync(Host, { role: "img", class: Object.assign(Object.assign({ [mode]: true }, createColorClasses(this.color)), { [`icon-${this.size}`]: !!this.size, 'flip-rtl': !!flipRtl && this.el.ownerDocument.dir === 'rtl' }) }, (hAsync("div", { class: "icon-inner" }))));
+    /**
+     * Only set the aria-label if a) we have generated
+     * one for the icon and if aria-hidden is not set to "true".
+     * If developer wants to set their own aria-label, then
+     * inheritedAttributes down below will override whatever
+     * default label we have set.
+     */
+    return (hAsync(Host, Object.assign({ "aria-label": ariaLabel !== undefined && !this.hasAriaHidden() ? ariaLabel : null, role: "img", class: Object.assign(Object.assign({ [mode]: true }, createColorClasses(this.color)), { [`icon-${this.size}`]: !!this.size, 'flip-rtl': !!flipRtl && this.el.ownerDocument.dir === 'rtl' }) }, inheritedAttributes), (hAsync("div", { class: "icon-inner" }))));
   }
   static get assetsDirs() { return ["svg"]; }
   get el() { return getElement(this); }
@@ -22139,8 +24565,6 @@ class Icon {
     "$members$": {
       "mode": [1025],
       "color": [1],
-      "ariaLabel": [1537, "aria-label"],
-      "ariaHidden": [513, "aria-hidden"],
       "ios": [1],
       "md": [1],
       "flipRtl": [4, "flip-rtl"],
@@ -22151,11 +24575,12 @@ class Icon {
       "lazy": [4],
       "sanitize": [4],
       "svgContent": [32],
-      "isVisible": [32]
+      "isVisible": [32],
+      "ariaLabel": [32]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",
-    "$attrsToReflect$": [["ariaLabel", "aria-label"], ["ariaHidden", "aria-hidden"], ["name", "name"]]
+    "$attrsToReflect$": [["name", "name"]]
   }; }
 }
 const getIonMode = () => 'md';
@@ -22345,6 +24770,7 @@ class InfiniteScroll {
       console.error('<ion-infinite-scroll> must be used inside an <ion-content>');
       return;
     }
+    await new Promise(resolve => componentOnReady(contentEl, resolve));
     this.scrollEl = await contentEl.getScrollElement();
     this.thresholdChanged();
     this.disabledChanged();
@@ -24579,6 +27005,7 @@ class Input {
     this.inputId = `ion-input-${inputIds++}`;
     this.didBlurAfterEdit = false;
     this.inheritedAttributes = {};
+    this.isComposing = false;
     /**
      * This is required for a WebKit bug which requires us to
      * blur and focus an input to properly focus the input in
@@ -24677,6 +27104,12 @@ class Input {
         this.didBlurAfterEdit = false;
       }
     };
+    this.onCompositionStart = () => {
+      this.isComposing = true;
+    };
+    this.onCompositionEnd = () => {
+      this.isComposing = false;
+    };
     this.clearTextOnEnter = (ev) => {
       if (ev.key === 'Enter') {
         this.clearTextInput(ev);
@@ -24716,17 +27149,46 @@ class Input {
    * Update the native input element when the value changes
    */
   valueChanged() {
+    if (this.nativeInput && !this.isComposing) {
+      /**
+       * Assigning the native input's value on attribute
+       * value change, allows `ionInput` implementations
+       * to override the control's value.
+       *
+       * Used for patterns such as input trimming (removing whitespace),
+       * or input masking.
+       */
+      const { selectionStart, selectionEnd } = this.nativeInput;
+      this.nativeInput.value = this.getValue();
+      // TODO: FW-727 Remove this when we drop support for iOS 15.3
+      // Set the cursor position back to where it was before the value change
+      this.nativeInput.setSelectionRange(selectionStart, selectionEnd);
+    }
     this.emitStyle();
     this.ionChange.emit({ value: this.value == null ? this.value : this.value.toString() });
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes(this.el, ['aria-label', 'tabindex', 'title']);
+    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label', 'tabindex', 'title']);
   }
   connectedCallback() {
     this.emitStyle();
     this.debounceChanged();
   }
+  componentDidLoad() {
+    const nativeInput = this.nativeInput;
+    if (nativeInput) {
+      // TODO: FW-729 Update to JSX bindings when Stencil resolves bug with:
+      // https://github.com/ionic-team/stencil/issues/3235
+      nativeInput.addEventListener('compositionstart', this.onCompositionStart);
+      nativeInput.addEventListener('compositionend', this.onCompositionEnd);
+    }
+  }
   disconnectedCallback() {
+    const nativeInput = this.nativeInput;
+    if (nativeInput) {
+      nativeInput.removeEventListener('compositionstart', this.onCompositionStart);
+      nativeInput.removeEventListener('compositionEnd', this.onCompositionEnd);
+    }
   }
   /**
    * Sets focus on the native `input` in `ion-input`. Use this method instead of the global
@@ -24767,7 +27229,7 @@ class Input {
     this.ionStyle.emit({
       'interactive': true,
       'input': true,
-      'has-placeholder': this.placeholder != null,
+      'has-placeholder': this.placeholder !== undefined,
       'has-value': this.hasValue(),
       'has-focus': this.hasFocus,
       'interactive-disabled': this.disabled,
@@ -24824,9 +27286,9 @@ class Input {
       "disabled": [4],
       "enterkeyhint": [1],
       "inputmode": [1],
-      "max": [1],
+      "max": [8],
       "maxlength": [2],
-      "min": [1],
+      "min": [8],
       "minlength": [2],
       "multiple": [4],
       "name": [1],
@@ -25578,12 +28040,18 @@ _defaults(exports, _interopExportWildcard(Debounce$1, _defaults));
 
 var Debounce = /*@__PURE__*/getDefaultExportFromCjs(dist);
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const LIFECYCLE_WILL_ENTER = 'ionViewWillEnter';
 const LIFECYCLE_DID_ENTER = 'ionViewDidEnter';
 const LIFECYCLE_WILL_LEAVE = 'ionViewWillLeave';
 const LIFECYCLE_DID_LEAVE = 'ionViewDidLeave';
 const LIFECYCLE_WILL_UNLOAD = 'ionViewWillUnload';
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const iosTransitionAnimation$1 = () => Promise.resolve().then(function () { return ios_transition; });
 const mdTransitionAnimation$1 = () => Promise.resolve().then(function () { return md_transition; });
 const transition$2 = (opts) => {
@@ -25750,6 +28218,18 @@ const deepReady = async (el) => {
       if (stencilEl != null) {
         return;
       }
+      /**
+       * Custom elements in Stencil will have __registerHost.
+       */
+    }
+    else if (element.__registerHost != null) {
+      /**
+       * Non-lazy loaded custom elements need to wait
+       * one frame for component to be loaded.
+       */
+      const waitForCustomElement = new Promise(resolve => raf(resolve));
+      await waitForCustomElement;
+      return;
     }
     await Promise.all(Array.from(element.children).map(deepReady));
   }
@@ -25787,6 +28267,9 @@ const getIonPageElement = (element) => {
   return element;
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const DURATION = 540;
 const getClonedElement = (tagName) => {
   return document.querySelector(`${tagName}.ion-cloned-element`);
@@ -26243,6 +28726,9 @@ var ios_transition = /*#__PURE__*/Object.freeze({
   iosTransitionAnimation: iosTransitionAnimation
 });
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const mdTransitionAnimation = (_, opts) => {
   const OFF_BOTTOM = '40px';
   const CENTER = '0px';
@@ -26301,6 +28787,9 @@ var md_transition = /*#__PURE__*/Object.freeze({
   mdTransitionAnimation: mdTransitionAnimation
 });
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * Based on:
  * https://stackoverflow.com/questions/7348009/y-coordinate-for-a-given-x-cubic-bezier
@@ -26389,6 +28878,9 @@ const solveCubicEquation = (a, b, c, d) => {
   ];
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * baseAnimation
  * Base class which is extended by the various types. Each
@@ -26406,6 +28898,9 @@ const baseAnimation = (isIos) => {
   return createAnimation().duration(isIos ? 400 : 300);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * Menu Overlay Type
  * The menu slides over the content. The content
@@ -26439,6 +28934,9 @@ const menuOverlayAnimation = (menu) => {
   return baseAnimation(isIos).addAnimation([menuAnimation, backdropAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * Menu Push Type
  * The content slides over to reveal the menu underneath.
@@ -26469,6 +28967,9 @@ const menuPushAnimation = (menu) => {
   return baseAnimation(mode === 'ios').addAnimation([menuAnimation, contentAnimation, backdropAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * Menu Reveal Type
  * The content slides over to reveal the menu underneath.
@@ -26483,6 +28984,9 @@ const menuRevealAnimation = (menu) => {
   return baseAnimation(mode === 'ios').addAnimation(contentOpen);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const createMenuController = () => {
   const menuAnimations = new Map();
   const menus = [];
@@ -27026,9 +29530,9 @@ class InputState {
   }; }
 }
 
-const itemIosCss = "/*!@:host*/.sc-ion-item-ios-h{--border-radius:0px;--border-width:0px;--border-style:solid;--padding-top:0px;--padding-bottom:0px;--padding-end:0px;--padding-start:0px;--inner-border-width:0px;--inner-padding-top:0px;--inner-padding-bottom:0px;--inner-padding-start:0px;--inner-padding-end:0px;--inner-box-shadow:none;--show-full-highlight:0;--show-inset-highlight:0;--detail-icon-color:initial;--detail-icon-font-size:20px;--detail-icon-opacity:0.25;--color-activated:var(--color);--color-focused:var(--color);--color-hover:var(--color);--ripple-color:currentColor;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:block;position:relative;align-items:center;justify-content:space-between;outline:none;color:var(--color);font-family:var(--ion-font-family, inherit);text-align:initial;text-decoration:none;overflow:hidden;box-sizing:border-box}/*!@:host(.ion-color) .item-native*/.ion-color.sc-ion-item-ios-h .item-native.sc-ion-item-ios{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.ion-color) .item-native,\n:host(.ion-color) .item-inner*/.ion-color.sc-ion-item-ios-h .item-native.sc-ion-item-ios,.ion-color.sc-ion-item-ios-h .item-inner.sc-ion-item-ios{border-color:var(--ion-color-shade)}/*!@:host(.ion-activated) .item-native*/.ion-activated.sc-ion-item-ios-h .item-native.sc-ion-item-ios{color:var(--color-activated)}/*!@:host(.ion-activated) .item-native::after*/.ion-activated.sc-ion-item-ios-h .item-native.sc-ion-item-ios::after{background:var(--background-activated);opacity:var(--background-activated-opacity)}/*!@:host(.ion-color.ion-activated) .item-native*/.ion-color.ion-activated.sc-ion-item-ios-h .item-native.sc-ion-item-ios{color:var(--ion-color-contrast)}/*!@:host(.ion-focused) .item-native*/.ion-focused.sc-ion-item-ios-h .item-native.sc-ion-item-ios{color:var(--color-focused)}/*!@:host(.ion-focused) .item-native::after*/.ion-focused.sc-ion-item-ios-h .item-native.sc-ion-item-ios::after{background:var(--background-focused);opacity:var(--background-focused-opacity)}/*!@:host(.ion-color.ion-focused) .item-native*/.ion-color.ion-focused.sc-ion-item-ios-h .item-native.sc-ion-item-ios{color:var(--ion-color-contrast)}/*!@:host(.ion-color.ion-focused) .item-native::after*/.ion-color.ion-focused.sc-ion-item-ios-h .item-native.sc-ion-item-ios::after{background:var(--ion-color-contrast)}@media (any-hover: hover){/*!@:host(.ion-activatable:hover) .item-native*/.ion-activatable.sc-ion-item-ios-h:hover .item-native.sc-ion-item-ios{color:var(--color-hover)}/*!@:host(.ion-activatable:hover) .item-native::after*/.ion-activatable.sc-ion-item-ios-h:hover .item-native.sc-ion-item-ios::after{background:var(--background-hover);opacity:var(--background-hover-opacity)}/*!@:host(.ion-color.ion-activatable:hover) .item-native*/.ion-color.ion-activatable.sc-ion-item-ios-h:hover .item-native.sc-ion-item-ios{color:var(--ion-color-contrast)}/*!@:host(.ion-color.ion-activatable:hover) .item-native::after*/.ion-color.ion-activatable.sc-ion-item-ios-h:hover .item-native.sc-ion-item-ios::after{background:var(--ion-color-contrast)}}/*!@:host(.item-interactive-disabled:not(.item-multiple-inputs))*/.item-interactive-disabled.sc-ion-item-ios-h:not(.item-multiple-inputs){cursor:default;pointer-events:none}/*!@:host(.item-disabled)*/.item-disabled.sc-ion-item-ios-h{cursor:default;opacity:0.3;pointer-events:none}/*!@.item-native*/.item-native.sc-ion-item-ios{border-radius:var(--border-radius);margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;display:flex;position:relative;align-items:inherit;justify-content:inherit;width:100%;min-height:var(--min-height);transition:var(--transition);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);outline:none;background:var(--background);overflow:inherit;box-sizing:border-box;z-index:1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-native*/.item-native.sc-ion-item-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-inline-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.item-native::-moz-focus-inner*/.item-native.sc-ion-item-ios::-moz-focus-inner{border:0}/*!@.item-native::after*/.item-native.sc-ion-item-ios::after{left:0;right:0;top:0;bottom:0;position:absolute;content:\"\";opacity:0;transition:var(--transition);z-index:-1}/*!@button, a*/button.sc-ion-item-ios,a.sc-ion-item-ios{cursor:pointer;user-select:none;-webkit-user-drag:none}/*!@.item-inner*/.item-inner.sc-ion-item-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:var(--inner-padding-start);padding-right:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end));padding-top:var(--inner-padding-top);padding-bottom:var(--inner-padding-bottom);display:flex;position:relative;flex:1;flex-direction:inherit;align-items:inherit;align-self:stretch;min-height:inherit;border-width:var(--inner-border-width);border-style:var(--border-style);border-color:var(--border-color);box-shadow:var(--inner-box-shadow);overflow:inherit;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-inner*/.item-inner.sc-ion-item-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--inner-padding-start);padding-inline-start:var(--inner-padding-start);-webkit-padding-end:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end));padding-inline-end:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end))}}/*!@.item-detail-icon*/.item-detail-icon.sc-ion-item-ios{color:var(--detail-icon-color);font-size:var(--detail-icon-font-size);opacity:var(--detail-icon-opacity)}/*!@::slotted(ion-icon)*/.sc-ion-item-ios-s>ion-icon{font-size:1.6em}/*!@::slotted(ion-button)*/.sc-ion-item-ios-s>ion-button{--margin-top:0;--margin-bottom:0;--margin-start:0;--margin-end:0;z-index:1}/*!@::slotted(ion-label:not([slot=end]))*/.sc-ion-item-ios-s>ion-label:not([slot=end]){flex:1}/*!@:host(.item-input)*/.item-input.sc-ion-item-ios-h{align-items:center}/*!@.input-wrapper*/.input-wrapper.sc-ion-item-ios{display:flex;flex:1;flex-direction:inherit;align-items:inherit;align-self:stretch;text-overflow:ellipsis;overflow:inherit;box-sizing:border-box}/*!@:host(.item-label-stacked),\n:host(.item-label-floating)*/.item-label-stacked.sc-ion-item-ios-h,.item-label-floating.sc-ion-item-ios-h{align-items:start}/*!@:host(.item-label-stacked) .input-wrapper,\n:host(.item-label-floating) .input-wrapper*/.item-label-stacked.sc-ion-item-ios-h .input-wrapper.sc-ion-item-ios,.item-label-floating.sc-ion-item-ios-h .input-wrapper.sc-ion-item-ios{flex:1;flex-direction:column}/*!@.item-highlight,\n.item-inner-highlight*/.item-highlight.sc-ion-item-ios,.item-inner-highlight.sc-ion-item-ios{left:0;right:0;bottom:0;position:absolute;background:var(--highlight-background);z-index:1}/*!@.item-highlight*/.item-highlight.sc-ion-item-ios{height:var(--full-highlight-height)}/*!@.item-inner-highlight*/.item-inner-highlight.sc-ion-item-ios{height:var(--inset-highlight-height)}/*!@:host(.item-interactive.item-has-focus),\n:host(.item-interactive.ion-touched.ion-invalid)*/.item-interactive.item-has-focus.sc-ion-item-ios-h,.item-interactive.ion-touched.ion-invalid.sc-ion-item-ios-h{--full-highlight-height:calc(var(--highlight-height) * var(--show-full-highlight));--inset-highlight-height:calc(var(--highlight-height) * var(--show-inset-highlight))}/*!@:host(.item-interactive.item-has-focus)*/.item-interactive.item-has-focus.sc-ion-item-ios-h{--highlight-background:var(--highlight-color-focused)}/*!@:host(.item-interactive.ion-valid)*/.item-interactive.ion-valid.sc-ion-item-ios-h{--highlight-background:var(--highlight-color-valid)}/*!@:host(.item-interactive.ion-invalid)*/.item-interactive.ion-invalid.sc-ion-item-ios-h{--highlight-background:var(--highlight-color-invalid)}/*!@:host(:not(.item-label)) ::slotted(ion-select)*/.sc-ion-item-ios-h:not(.item-label) .sc-ion-item-ios-s>ion-select{--padding-start:0;max-width:none}/*!@:host(.item-label-stacked) ::slotted(ion-select),\n:host(.item-label-floating) ::slotted(ion-select)*/.sc-ion-item-ios-h.item-label-stacked .sc-ion-item-ios-s>ion-select,.sc-ion-item-ios-h.item-label-floating .sc-ion-item-ios-s>ion-select{--padding-top:8px;--padding-bottom:8px;--padding-start:0;align-self:stretch;width:100%;max-width:100%}/*!@:host(:not(.item-label)) ::slotted(ion-datetime)*/.sc-ion-item-ios-h:not(.item-label) .sc-ion-item-ios-s>ion-datetime{--padding-start:0}/*!@:host(.item-label-stacked) ::slotted(ion-datetime),\n:host(.item-label-floating) ::slotted(ion-datetime)*/.sc-ion-item-ios-h.item-label-stacked .sc-ion-item-ios-s>ion-datetime,.sc-ion-item-ios-h.item-label-floating .sc-ion-item-ios-s>ion-datetime{--padding-start:0;width:100%}/*!@:host(.item-multiple-inputs) ::slotted(ion-checkbox),\n:host(.item-multiple-inputs) ::slotted(ion-datetime),\n:host(.item-multiple-inputs) ::slotted(ion-radio),\n:host(.item-multiple-inputs) ::slotted(ion-select)*/.sc-ion-item-ios-h.item-multiple-inputs .sc-ion-item-ios-s>ion-checkbox,.sc-ion-item-ios-h.item-multiple-inputs .sc-ion-item-ios-s>ion-datetime,.sc-ion-item-ios-h.item-multiple-inputs .sc-ion-item-ios-s>ion-radio,.sc-ion-item-ios-h.item-multiple-inputs .sc-ion-item-ios-s>ion-select{position:relative}/*!@:host(.item-textarea)*/.item-textarea.sc-ion-item-ios-h{align-items:stretch}/*!@::slotted(ion-reorder[slot])*/.sc-ion-item-ios-s>ion-reorder[slot]{margin-top:0;margin-bottom:0}/*!@ion-ripple-effect*/ion-ripple-effect.sc-ion-item-ios{color:var(--ripple-color)}/*!@:host*/.sc-ion-item-ios-h{--min-height:44px;--transition:background-color 200ms linear, opacity 200ms linear;--padding-start:20px;--inner-padding-end:10px;--inner-border-width:0px 0px 0.55px 0px;--background:var(--ion-item-background, var(--ion-background-color, #fff));--background-activated:#000;--background-focused:#000;--background-hover:currentColor;--background-activated-opacity:.12;--background-focused-opacity:.15;--background-hover-opacity:.04;--border-color:var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-250, #c8c7cc)));--color:var(--ion-item-color, var(--ion-text-color, #000));--highlight-height:0;--highlight-color-focused:var(--ion-color-primary, #3880ff);--highlight-color-valid:var(--ion-color-success, #2dd36f);--highlight-color-invalid:var(--ion-color-danger, #eb445a);font-size:17px}/*!@:host(.ion-activated)*/.ion-activated.sc-ion-item-ios-h{--transition:none}/*!@:host(.ion-color.ion-focused) .item-native::after*/.ion-color.ion-focused.sc-ion-item-ios-h .item-native.sc-ion-item-ios::after{background:#000;opacity:0.15}/*!@:host(.ion-color.ion-activated) .item-native::after*/.ion-color.ion-activated.sc-ion-item-ios-h .item-native.sc-ion-item-ios::after{background:#000;opacity:0.12}/*!@:host(.item-interactive)*/.item-interactive.sc-ion-item-ios-h{--show-full-highlight:0;--show-inset-highlight:1}/*!@:host(.item-lines-full)*/.item-lines-full.sc-ion-item-ios-h{--border-width:0px 0px 0.55px 0px;--show-full-highlight:1;--show-inset-highlight:0}/*!@:host(.item-lines-inset)*/.item-lines-inset.sc-ion-item-ios-h{--inner-border-width:0px 0px 0.55px 0px;--show-full-highlight:0;--show-inset-highlight:1}/*!@:host(.item-lines-inset),\n:host(.item-lines-none)*/.item-lines-inset.sc-ion-item-ios-h,.item-lines-none.sc-ion-item-ios-h{--border-width:0px;--show-full-highlight:0}/*!@:host(.item-lines-full),\n:host(.item-lines-none)*/.item-lines-full.sc-ion-item-ios-h,.item-lines-none.sc-ion-item-ios-h{--inner-border-width:0px;--show-inset-highlight:0}/*!@::slotted([slot=start])*/.sc-ion-item-ios-s>[slot=start]{margin-left:0;margin-right:20px;margin-top:2px;margin-bottom:2px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted([slot=start])*/.sc-ion-item-ios-s>[slot=start]{margin-left:unset;margin-right:unset;-webkit-margin-start:0;margin-inline-start:0;-webkit-margin-end:20px;margin-inline-end:20px}}/*!@::slotted([slot=end])*/.sc-ion-item-ios-s>[slot=end]{margin-left:10px;margin-right:10px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted([slot=end])*/.sc-ion-item-ios-s>[slot=end]{margin-left:unset;margin-right:unset;-webkit-margin-start:10px;margin-inline-start:10px;-webkit-margin-end:10px;margin-inline-end:10px}}/*!@::slotted(ion-icon[slot=start]),\n::slotted(ion-icon[slot=end])*/.sc-ion-item-ios-s>ion-icon[slot=start],.sc-ion-item-ios-s>ion-icon[slot=end]{margin-top:7px;margin-bottom:7px}/*!@::slotted(ion-toggle[slot=start]),\n::slotted(ion-toggle[slot=end])*/.sc-ion-item-ios-s>ion-toggle[slot=start],.sc-ion-item-ios-s>ion-toggle[slot=end]{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}/*!@:host(.item-label-stacked) ::slotted([slot=end]),\n:host(.item-label-floating) ::slotted([slot=end])*/.sc-ion-item-ios-h.item-label-stacked .sc-ion-item-ios-s>[slot=end],.sc-ion-item-ios-h.item-label-floating .sc-ion-item-ios-s>[slot=end]{margin-top:7px;margin-bottom:7px}/*!@::slotted(.button-small)*/.sc-ion-item-ios-s>.button-small{--padding-top:0px;--padding-bottom:0px;--padding-start:.5em;--padding-end:.5em;height:24px;font-size:13px}/*!@::slotted(ion-avatar)*/.sc-ion-item-ios-s>ion-avatar{width:36px;height:36px}/*!@::slotted(ion-thumbnail)*/.sc-ion-item-ios-s>ion-thumbnail{width:56px;height:56px}/*!@::slotted(ion-avatar[slot=end]),\n::slotted(ion-thumbnail[slot=end])*/.sc-ion-item-ios-s>ion-avatar[slot=end],.sc-ion-item-ios-s>ion-thumbnail[slot=end]{margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-avatar[slot=end]),\n::slotted(ion-thumbnail[slot=end])*/.sc-ion-item-ios-s>ion-avatar[slot=end],.sc-ion-item-ios-s>ion-thumbnail[slot=end]{margin-left:unset;margin-right:unset;-webkit-margin-start:10px;margin-inline-start:10px;-webkit-margin-end:10px;margin-inline-end:10px}}/*!@:host(.item-radio) ::slotted(ion-label),\n:host(.item-toggle) ::slotted(ion-label)*/.sc-ion-item-ios-h.item-radio .sc-ion-item-ios-s>ion-label,.sc-ion-item-ios-h.item-toggle .sc-ion-item-ios-s>ion-label{margin-left:0px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.item-radio) ::slotted(ion-label),\n:host(.item-toggle) ::slotted(ion-label)*/.sc-ion-item-ios-h.item-radio .sc-ion-item-ios-s>ion-label,.sc-ion-item-ios-h.item-toggle .sc-ion-item-ios-s>ion-label{margin-left:unset;-webkit-margin-start:0px;margin-inline-start:0px}}/*!@::slotted(ion-label)*/.sc-ion-item-ios-s>ion-label{margin-left:0;margin-right:8px;margin-top:10px;margin-bottom:10px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-label)*/.sc-ion-item-ios-s>ion-label{margin-left:unset;margin-right:unset;-webkit-margin-start:0;margin-inline-start:0;-webkit-margin-end:8px;margin-inline-end:8px}}/*!@:host(.item-label-floating),\n:host(.item-label-stacked)*/.item-label-floating.sc-ion-item-ios-h,.item-label-stacked.sc-ion-item-ios-h{--min-height:68px}/*!@:host(.item-label-stacked) ::slotted(ion-select),\n:host(.item-label-floating) ::slotted(ion-select)*/.sc-ion-item-ios-h.item-label-stacked .sc-ion-item-ios-s>ion-select,.sc-ion-item-ios-h.item-label-floating .sc-ion-item-ios-s>ion-select{--padding-top:8px;--padding-bottom:8px;--padding-start:0px}/*!@:host(.item-label-fixed) ::slotted(ion-select),\n:host(.item-label-fixed) ::slotted(ion-datetime)*/.sc-ion-item-ios-h.item-label-fixed .sc-ion-item-ios-s>ion-select,.sc-ion-item-ios-h.item-label-fixed .sc-ion-item-ios-s>ion-datetime{--padding-start:0}";
+const itemIosCss = "/*!@:host*/.sc-ion-item-ios-h{--border-radius:0px;--border-width:0px;--border-style:solid;--padding-top:0px;--padding-bottom:0px;--padding-end:0px;--padding-start:0px;--inner-border-width:0px;--inner-padding-top:0px;--inner-padding-bottom:0px;--inner-padding-start:0px;--inner-padding-end:0px;--inner-box-shadow:none;--show-full-highlight:0;--show-inset-highlight:0;--detail-icon-color:initial;--detail-icon-font-size:20px;--detail-icon-opacity:0.25;--color-activated:var(--color);--color-focused:var(--color);--color-hover:var(--color);--ripple-color:currentColor;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:block;position:relative;align-items:center;justify-content:space-between;outline:none;color:var(--color);font-family:var(--ion-font-family, inherit);text-align:initial;text-decoration:none;overflow:hidden;box-sizing:border-box}/*!@:host(.ion-color:not(.item-fill-solid):not(.item-fill-outline)) .item-native*/.ion-color.sc-ion-item-ios-h:not(.item-fill-solid):not(.item-fill-outline) .item-native.sc-ion-item-ios{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.ion-color:not(.item-fill-solid):not(.item-fill-outline)) .item-native,\n:host(.ion-color:not(.item-fill-solid):not(.item-fill-outline)) .item-inner*/.ion-color.sc-ion-item-ios-h:not(.item-fill-solid):not(.item-fill-outline) .item-native.sc-ion-item-ios,.ion-color.sc-ion-item-ios-h:not(.item-fill-solid):not(.item-fill-outline) .item-inner.sc-ion-item-ios{border-color:var(--ion-color-shade)}/*!@:host(.ion-activated) .item-native*/.ion-activated.sc-ion-item-ios-h .item-native.sc-ion-item-ios{color:var(--color-activated)}/*!@:host(.ion-activated) .item-native::after*/.ion-activated.sc-ion-item-ios-h .item-native.sc-ion-item-ios::after{background:var(--background-activated);opacity:var(--background-activated-opacity)}/*!@:host(.ion-color.ion-activated) .item-native*/.ion-color.ion-activated.sc-ion-item-ios-h .item-native.sc-ion-item-ios{color:var(--ion-color-contrast)}/*!@:host(.ion-focused) .item-native*/.ion-focused.sc-ion-item-ios-h .item-native.sc-ion-item-ios{color:var(--color-focused)}/*!@:host(.ion-focused) .item-native::after*/.ion-focused.sc-ion-item-ios-h .item-native.sc-ion-item-ios::after{background:var(--background-focused);opacity:var(--background-focused-opacity)}/*!@:host(.ion-color.ion-focused) .item-native*/.ion-color.ion-focused.sc-ion-item-ios-h .item-native.sc-ion-item-ios{color:var(--ion-color-contrast)}/*!@:host(.ion-color.ion-focused) .item-native::after*/.ion-color.ion-focused.sc-ion-item-ios-h .item-native.sc-ion-item-ios::after{background:var(--ion-color-contrast)}@media (any-hover: hover){/*!@:host(.ion-activatable:not(.ion-focused):hover) .item-native*/.ion-activatable.sc-ion-item-ios-h:not(.ion-focused):hover .item-native.sc-ion-item-ios{color:var(--color-hover)}/*!@:host(.ion-activatable:not(.ion-focused):hover) .item-native::after*/.ion-activatable.sc-ion-item-ios-h:not(.ion-focused):hover .item-native.sc-ion-item-ios::after{background:var(--background-hover);opacity:var(--background-hover-opacity)}/*!@:host(.ion-color.ion-activatable:not(.ion-focused):hover) .item-native*/.ion-color.ion-activatable.sc-ion-item-ios-h:not(.ion-focused):hover .item-native.sc-ion-item-ios{color:var(--ion-color-contrast)}/*!@:host(.ion-color.ion-activatable:not(.ion-focused):hover) .item-native::after*/.ion-color.ion-activatable.sc-ion-item-ios-h:not(.ion-focused):hover .item-native.sc-ion-item-ios::after{background:var(--ion-color-contrast)}}/*!@:host(.item-interactive-disabled:not(.item-multiple-inputs))*/.item-interactive-disabled.sc-ion-item-ios-h:not(.item-multiple-inputs){cursor:default;pointer-events:none}/*!@:host(.item-disabled)*/.item-disabled.sc-ion-item-ios-h{cursor:default;opacity:0.3;pointer-events:none}/*!@.item-native*/.item-native.sc-ion-item-ios{border-radius:var(--border-radius);margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;display:flex;position:relative;align-items:inherit;justify-content:inherit;width:100%;min-height:var(--min-height);transition:var(--transition);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);outline:none;background:var(--background);overflow:inherit;box-sizing:border-box;z-index:1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-native*/.item-native.sc-ion-item-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-inline-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.item-native::-moz-focus-inner*/.item-native.sc-ion-item-ios::-moz-focus-inner{border:0}/*!@.item-native::after*/.item-native.sc-ion-item-ios::after{left:0;right:0;top:0;bottom:0;position:absolute;content:\"\";opacity:0;transition:var(--transition);z-index:-1}/*!@button, a*/button.sc-ion-item-ios,a.sc-ion-item-ios{cursor:pointer;user-select:none;-webkit-user-drag:none}/*!@.item-inner*/.item-inner.sc-ion-item-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:var(--inner-padding-start);padding-right:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end));padding-top:var(--inner-padding-top);padding-bottom:var(--inner-padding-bottom);display:flex;position:relative;flex:1;flex-direction:inherit;align-items:inherit;align-self:stretch;min-height:inherit;border-width:var(--inner-border-width);border-style:var(--border-style);border-color:var(--border-color);box-shadow:var(--inner-box-shadow);overflow:inherit;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-inner*/.item-inner.sc-ion-item-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--inner-padding-start);padding-inline-start:var(--inner-padding-start);-webkit-padding-end:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end));padding-inline-end:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end))}}/*!@.item-bottom*/.item-bottom.sc-ion-item-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-right:var(--inner-padding-end);padding-top:0;padding-bottom:0;display:flex;justify-content:space-between}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-bottom*/.item-bottom.sc-ion-item-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-inline-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));-webkit-padding-end:var(--inner-padding-end);padding-inline-end:var(--inner-padding-end)}}/*!@.item-detail-icon*/.item-detail-icon.sc-ion-item-ios{color:var(--detail-icon-color);font-size:var(--detail-icon-font-size);opacity:var(--detail-icon-opacity)}/*!@::slotted(ion-icon)*/.sc-ion-item-ios-s>ion-icon{font-size:1.6em}/*!@::slotted(ion-button)*/.sc-ion-item-ios-s>ion-button{--margin-top:0;--margin-bottom:0;--margin-start:0;--margin-end:0;z-index:1}/*!@::slotted(ion-label:not([slot=end]))*/.sc-ion-item-ios-s>ion-label:not([slot=end]){flex:1}/*!@:host(.item-input)*/.item-input.sc-ion-item-ios-h{align-items:center}/*!@.input-wrapper*/.input-wrapper.sc-ion-item-ios{display:flex;flex:1;flex-direction:inherit;align-items:inherit;align-self:stretch;text-overflow:ellipsis;overflow:inherit;box-sizing:border-box}/*!@:host(.item-label-stacked),\n:host(.item-label-floating)*/.item-label-stacked.sc-ion-item-ios-h,.item-label-floating.sc-ion-item-ios-h{align-items:start}/*!@:host(.item-label-stacked) .input-wrapper,\n:host(.item-label-floating) .input-wrapper*/.item-label-stacked.sc-ion-item-ios-h .input-wrapper.sc-ion-item-ios,.item-label-floating.sc-ion-item-ios-h .input-wrapper.sc-ion-item-ios{flex:1;flex-direction:column}/*!@.item-highlight,\n.item-inner-highlight*/.item-highlight.sc-ion-item-ios,.item-inner-highlight.sc-ion-item-ios{left:0;right:0;top:0;bottom:0;border-radius:inherit;position:absolute;width:100%;height:100%;transform:scaleX(0);transition:transform 200ms, border-bottom-width 200ms;z-index:2;box-sizing:border-box;pointer-events:none}/*!@:host(.item-interactive.item-has-focus) .item-native*/.item-interactive.item-has-focus.sc-ion-item-ios-h .item-native.sc-ion-item-ios{caret-color:var(--highlight-background)}/*!@:host(.item-interactive.ion-focused),\n:host(.item-interactive.item-has-focus),\n:host(.item-interactive.ion-touched.ion-invalid)*/.item-interactive.ion-focused.sc-ion-item-ios-h,.item-interactive.item-has-focus.sc-ion-item-ios-h,.item-interactive.ion-touched.ion-invalid.sc-ion-item-ios-h{--full-highlight-height:calc(var(--highlight-height) * var(--show-full-highlight));--inset-highlight-height:calc(var(--highlight-height) * var(--show-inset-highlight))}/*!@:host(.item-interactive.ion-focused),\n:host(.item-interactive.item-has-focus)*/.item-interactive.ion-focused.sc-ion-item-ios-h,.item-interactive.item-has-focus.sc-ion-item-ios-h{--highlight-background:var(--highlight-color-focused)}/*!@:host(.item-interactive.ion-valid)*/.item-interactive.ion-valid.sc-ion-item-ios-h{--highlight-background:var(--highlight-color-valid)}/*!@:host(.item-interactive.ion-invalid)*/.item-interactive.ion-invalid.sc-ion-item-ios-h{--highlight-background:var(--highlight-color-invalid)}/*!@:host(.item-interactive.ion-invalid) ::slotted([slot=helper])*/.sc-ion-item-ios-h.item-interactive.ion-invalid .sc-ion-item-ios-s>[slot=helper]{display:none}/*!@::slotted([slot=error])*/.sc-ion-item-ios-s>[slot=error]{display:none;color:var(--highlight-color-invalid)}/*!@:host(.item-interactive.ion-invalid) ::slotted([slot=error])*/.sc-ion-item-ios-h.item-interactive.ion-invalid .sc-ion-item-ios-s>[slot=error]{display:block}/*!@:host(:not(.item-label)) ::slotted(ion-select)*/.sc-ion-item-ios-h:not(.item-label) .sc-ion-item-ios-s>ion-select{--padding-start:0;max-width:none}/*!@:host(.item-label-stacked) ::slotted(ion-select),\n:host(.item-label-floating) ::slotted(ion-select)*/.sc-ion-item-ios-h.item-label-stacked .sc-ion-item-ios-s>ion-select,.sc-ion-item-ios-h.item-label-floating .sc-ion-item-ios-s>ion-select{--padding-top:8px;--padding-bottom:8px;--padding-start:0;align-self:stretch;width:100%;max-width:100%}/*!@:host(:not(.item-label)) ::slotted(ion-datetime)*/.sc-ion-item-ios-h:not(.item-label) .sc-ion-item-ios-s>ion-datetime{--padding-start:0}/*!@:host(.item-label-stacked) ::slotted(ion-datetime),\n:host(.item-label-floating) ::slotted(ion-datetime)*/.sc-ion-item-ios-h.item-label-stacked .sc-ion-item-ios-s>ion-datetime,.sc-ion-item-ios-h.item-label-floating .sc-ion-item-ios-s>ion-datetime{--padding-start:0;width:100%}/*!@:host(.item-multiple-inputs) ::slotted(ion-checkbox),\n:host(.item-multiple-inputs) ::slotted(ion-datetime),\n:host(.item-multiple-inputs) ::slotted(ion-radio),\n:host(.item-multiple-inputs) ::slotted(ion-select)*/.sc-ion-item-ios-h.item-multiple-inputs .sc-ion-item-ios-s>ion-checkbox,.sc-ion-item-ios-h.item-multiple-inputs .sc-ion-item-ios-s>ion-datetime,.sc-ion-item-ios-h.item-multiple-inputs .sc-ion-item-ios-s>ion-radio,.sc-ion-item-ios-h.item-multiple-inputs .sc-ion-item-ios-s>ion-select{position:relative}/*!@:host(.item-textarea)*/.item-textarea.sc-ion-item-ios-h{align-items:stretch}/*!@::slotted(ion-reorder[slot])*/.sc-ion-item-ios-s>ion-reorder[slot]{margin-top:0;margin-bottom:0}/*!@ion-ripple-effect*/ion-ripple-effect.sc-ion-item-ios{color:var(--ripple-color)}/*!@:host(.item-fill-solid) ::slotted([slot=start]),\n:host(.item-fill-solid) ::slotted([slot=end]),\n:host(.item-fill-outline) ::slotted([slot=start]),\n:host(.item-fill-outline) ::slotted([slot=end])*/.sc-ion-item-ios-h.item-fill-solid .sc-ion-item-ios-s>[slot=start],.sc-ion-item-ios-h.item-fill-solid .sc-ion-item-ios-s>[slot=end],.sc-ion-item-ios-h.item-fill-outline .sc-ion-item-ios-s>[slot=start],.sc-ion-item-ios-h.item-fill-outline .sc-ion-item-ios-s>[slot=end]{align-self:center}/*!@::slotted([slot=helper]),\n::slotted([slot=error]),\n.item-counter*/.sc-ion-item-ios-s>[slot=helper],.sc-ion-item-ios-s>[slot=error],.item-counter.sc-ion-item-ios{padding-top:5px;font-size:12px;z-index:1}/*!@.item-counter*/.item-counter.sc-ion-item-ios{margin-left:auto;padding-inline-start:16px;white-space:nowrap}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-counter*/.item-counter.sc-ion-item-ios{margin-left:unset;-webkit-margin-start:auto;margin-inline-start:auto}}@media (prefers-reduced-motion: reduce){/*!@.item-highlight,\n.item-inner-highlight*/.item-highlight.sc-ion-item-ios,.item-inner-highlight.sc-ion-item-ios{transition:none}}/*!@:host*/.sc-ion-item-ios-h{--min-height:44px;--transition:background-color 200ms linear, opacity 200ms linear;--padding-start:20px;--inner-padding-end:10px;--inner-border-width:0px 0px 0.55px 0px;--background:var(--ion-item-background, var(--ion-background-color, #fff));--background-activated:#000;--background-focused:#000;--background-hover:currentColor;--background-activated-opacity:.12;--background-focused-opacity:.15;--background-hover-opacity:.04;--border-color:var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-250, #c8c7cc)));--color:var(--ion-item-color, var(--ion-text-color, #000));--highlight-height:0px;--highlight-color-focused:var(--ion-color-primary, #3880ff);--highlight-color-valid:var(--ion-color-success, #2dd36f);--highlight-color-invalid:var(--ion-color-danger, #eb445a);--bottom-padding-start:0px;font-size:17px}/*!@:host(.ion-activated)*/.ion-activated.sc-ion-item-ios-h{--transition:none}/*!@:host(.ion-color.ion-focused) .item-native::after*/.ion-color.ion-focused.sc-ion-item-ios-h .item-native.sc-ion-item-ios::after{background:#000;opacity:0.15}/*!@:host(.ion-color.ion-activated) .item-native::after*/.ion-color.ion-activated.sc-ion-item-ios-h .item-native.sc-ion-item-ios::after{background:#000;opacity:0.12}/*!@:host(.item-interactive)*/.item-interactive.sc-ion-item-ios-h{--show-full-highlight:0;--show-inset-highlight:1}/*!@:host(.item-lines-full)*/.item-lines-full.sc-ion-item-ios-h{--border-width:0px 0px 0.55px 0px;--show-full-highlight:1;--show-inset-highlight:0}/*!@:host(.item-lines-inset)*/.item-lines-inset.sc-ion-item-ios-h{--inner-border-width:0px 0px 0.55px 0px;--show-full-highlight:0;--show-inset-highlight:1}/*!@:host(.item-lines-inset),\n:host(.item-lines-none)*/.item-lines-inset.sc-ion-item-ios-h,.item-lines-none.sc-ion-item-ios-h{--border-width:0px;--show-full-highlight:0}/*!@:host(.item-lines-full),\n:host(.item-lines-none)*/.item-lines-full.sc-ion-item-ios-h,.item-lines-none.sc-ion-item-ios-h{--inner-border-width:0px;--show-inset-highlight:0}/*!@.item-highlight,\n.item-inner-highlight*/.item-highlight.sc-ion-item-ios,.item-inner-highlight.sc-ion-item-ios{transition:none}/*!@:host(.item-has-focus) .item-inner-highlight,\n:host(.item-has-focus) .item-highlight*/.item-has-focus.sc-ion-item-ios-h .item-inner-highlight.sc-ion-item-ios,.item-has-focus.sc-ion-item-ios-h .item-highlight.sc-ion-item-ios{border-top:none;border-right:none;border-left:none}/*!@::slotted([slot=start])*/.sc-ion-item-ios-s>[slot=start]{margin-left:0;margin-right:20px;margin-top:2px;margin-bottom:2px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted([slot=start])*/.sc-ion-item-ios-s>[slot=start]{margin-left:unset;margin-right:unset;-webkit-margin-start:0;margin-inline-start:0;-webkit-margin-end:20px;margin-inline-end:20px}}/*!@::slotted([slot=end])*/.sc-ion-item-ios-s>[slot=end]{margin-left:10px;margin-right:10px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted([slot=end])*/.sc-ion-item-ios-s>[slot=end]{margin-left:unset;margin-right:unset;-webkit-margin-start:10px;margin-inline-start:10px;-webkit-margin-end:10px;margin-inline-end:10px}}/*!@::slotted(ion-icon[slot=start]),\n::slotted(ion-icon[slot=end])*/.sc-ion-item-ios-s>ion-icon[slot=start],.sc-ion-item-ios-s>ion-icon[slot=end]{margin-top:7px;margin-bottom:7px}/*!@::slotted(ion-toggle[slot=start]),\n::slotted(ion-toggle[slot=end])*/.sc-ion-item-ios-s>ion-toggle[slot=start],.sc-ion-item-ios-s>ion-toggle[slot=end]{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}/*!@:host(.item-label-stacked) ::slotted([slot=end]),\n:host(.item-label-floating) ::slotted([slot=end])*/.sc-ion-item-ios-h.item-label-stacked .sc-ion-item-ios-s>[slot=end],.sc-ion-item-ios-h.item-label-floating .sc-ion-item-ios-s>[slot=end]{margin-top:7px;margin-bottom:7px}/*!@::slotted(.button-small)*/.sc-ion-item-ios-s>.button-small{--padding-top:0px;--padding-bottom:0px;--padding-start:.5em;--padding-end:.5em;height:24px;font-size:13px}/*!@::slotted(ion-avatar)*/.sc-ion-item-ios-s>ion-avatar{width:36px;height:36px}/*!@::slotted(ion-thumbnail)*/.sc-ion-item-ios-s>ion-thumbnail{width:56px;height:56px}/*!@::slotted(ion-avatar[slot=end]),\n::slotted(ion-thumbnail[slot=end])*/.sc-ion-item-ios-s>ion-avatar[slot=end],.sc-ion-item-ios-s>ion-thumbnail[slot=end]{margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-avatar[slot=end]),\n::slotted(ion-thumbnail[slot=end])*/.sc-ion-item-ios-s>ion-avatar[slot=end],.sc-ion-item-ios-s>ion-thumbnail[slot=end]{margin-left:unset;margin-right:unset;-webkit-margin-start:10px;margin-inline-start:10px;-webkit-margin-end:10px;margin-inline-end:10px}}/*!@:host(.item-radio) ::slotted(ion-label),\n:host(.item-toggle) ::slotted(ion-label)*/.sc-ion-item-ios-h.item-radio .sc-ion-item-ios-s>ion-label,.sc-ion-item-ios-h.item-toggle .sc-ion-item-ios-s>ion-label{margin-left:0px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.item-radio) ::slotted(ion-label),\n:host(.item-toggle) ::slotted(ion-label)*/.sc-ion-item-ios-h.item-radio .sc-ion-item-ios-s>ion-label,.sc-ion-item-ios-h.item-toggle .sc-ion-item-ios-s>ion-label{margin-left:unset;-webkit-margin-start:0px;margin-inline-start:0px}}/*!@::slotted(ion-label)*/.sc-ion-item-ios-s>ion-label{margin-left:0;margin-right:8px;margin-top:10px;margin-bottom:10px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-label)*/.sc-ion-item-ios-s>ion-label{margin-left:unset;margin-right:unset;-webkit-margin-start:0;margin-inline-start:0;-webkit-margin-end:8px;margin-inline-end:8px}}/*!@:host(.item-label-floating),\n:host(.item-label-stacked)*/.item-label-floating.sc-ion-item-ios-h,.item-label-stacked.sc-ion-item-ios-h{--min-height:68px}/*!@:host(.item-label-stacked) ::slotted(ion-select),\n:host(.item-label-floating) ::slotted(ion-select)*/.sc-ion-item-ios-h.item-label-stacked .sc-ion-item-ios-s>ion-select,.sc-ion-item-ios-h.item-label-floating .sc-ion-item-ios-s>ion-select{--padding-top:8px;--padding-bottom:8px;--padding-start:0px}/*!@:host(.item-label-fixed) ::slotted(ion-select),\n:host(.item-label-fixed) ::slotted(ion-datetime)*/.sc-ion-item-ios-h.item-label-fixed .sc-ion-item-ios-s>ion-select,.sc-ion-item-ios-h.item-label-fixed .sc-ion-item-ios-s>ion-datetime{--padding-start:0}";
 
-const itemMdCss = "/*!@:host*/.sc-ion-item-md-h{--border-radius:0px;--border-width:0px;--border-style:solid;--padding-top:0px;--padding-bottom:0px;--padding-end:0px;--padding-start:0px;--inner-border-width:0px;--inner-padding-top:0px;--inner-padding-bottom:0px;--inner-padding-start:0px;--inner-padding-end:0px;--inner-box-shadow:none;--show-full-highlight:0;--show-inset-highlight:0;--detail-icon-color:initial;--detail-icon-font-size:20px;--detail-icon-opacity:0.25;--color-activated:var(--color);--color-focused:var(--color);--color-hover:var(--color);--ripple-color:currentColor;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:block;position:relative;align-items:center;justify-content:space-between;outline:none;color:var(--color);font-family:var(--ion-font-family, inherit);text-align:initial;text-decoration:none;overflow:hidden;box-sizing:border-box}/*!@:host(.ion-color) .item-native*/.ion-color.sc-ion-item-md-h .item-native.sc-ion-item-md{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.ion-color) .item-native,\n:host(.ion-color) .item-inner*/.ion-color.sc-ion-item-md-h .item-native.sc-ion-item-md,.ion-color.sc-ion-item-md-h .item-inner.sc-ion-item-md{border-color:var(--ion-color-shade)}/*!@:host(.ion-activated) .item-native*/.ion-activated.sc-ion-item-md-h .item-native.sc-ion-item-md{color:var(--color-activated)}/*!@:host(.ion-activated) .item-native::after*/.ion-activated.sc-ion-item-md-h .item-native.sc-ion-item-md::after{background:var(--background-activated);opacity:var(--background-activated-opacity)}/*!@:host(.ion-color.ion-activated) .item-native*/.ion-color.ion-activated.sc-ion-item-md-h .item-native.sc-ion-item-md{color:var(--ion-color-contrast)}/*!@:host(.ion-focused) .item-native*/.ion-focused.sc-ion-item-md-h .item-native.sc-ion-item-md{color:var(--color-focused)}/*!@:host(.ion-focused) .item-native::after*/.ion-focused.sc-ion-item-md-h .item-native.sc-ion-item-md::after{background:var(--background-focused);opacity:var(--background-focused-opacity)}/*!@:host(.ion-color.ion-focused) .item-native*/.ion-color.ion-focused.sc-ion-item-md-h .item-native.sc-ion-item-md{color:var(--ion-color-contrast)}/*!@:host(.ion-color.ion-focused) .item-native::after*/.ion-color.ion-focused.sc-ion-item-md-h .item-native.sc-ion-item-md::after{background:var(--ion-color-contrast)}@media (any-hover: hover){/*!@:host(.ion-activatable:hover) .item-native*/.ion-activatable.sc-ion-item-md-h:hover .item-native.sc-ion-item-md{color:var(--color-hover)}/*!@:host(.ion-activatable:hover) .item-native::after*/.ion-activatable.sc-ion-item-md-h:hover .item-native.sc-ion-item-md::after{background:var(--background-hover);opacity:var(--background-hover-opacity)}/*!@:host(.ion-color.ion-activatable:hover) .item-native*/.ion-color.ion-activatable.sc-ion-item-md-h:hover .item-native.sc-ion-item-md{color:var(--ion-color-contrast)}/*!@:host(.ion-color.ion-activatable:hover) .item-native::after*/.ion-color.ion-activatable.sc-ion-item-md-h:hover .item-native.sc-ion-item-md::after{background:var(--ion-color-contrast)}}/*!@:host(.item-interactive-disabled:not(.item-multiple-inputs))*/.item-interactive-disabled.sc-ion-item-md-h:not(.item-multiple-inputs){cursor:default;pointer-events:none}/*!@:host(.item-disabled)*/.item-disabled.sc-ion-item-md-h{cursor:default;opacity:0.3;pointer-events:none}/*!@.item-native*/.item-native.sc-ion-item-md{border-radius:var(--border-radius);margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;display:flex;position:relative;align-items:inherit;justify-content:inherit;width:100%;min-height:var(--min-height);transition:var(--transition);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);outline:none;background:var(--background);overflow:inherit;box-sizing:border-box;z-index:1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-native*/.item-native.sc-ion-item-md{padding-left:unset;padding-right:unset;-webkit-padding-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-inline-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.item-native::-moz-focus-inner*/.item-native.sc-ion-item-md::-moz-focus-inner{border:0}/*!@.item-native::after*/.item-native.sc-ion-item-md::after{left:0;right:0;top:0;bottom:0;position:absolute;content:\"\";opacity:0;transition:var(--transition);z-index:-1}/*!@button, a*/button.sc-ion-item-md,a.sc-ion-item-md{cursor:pointer;user-select:none;-webkit-user-drag:none}/*!@.item-inner*/.item-inner.sc-ion-item-md{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:var(--inner-padding-start);padding-right:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end));padding-top:var(--inner-padding-top);padding-bottom:var(--inner-padding-bottom);display:flex;position:relative;flex:1;flex-direction:inherit;align-items:inherit;align-self:stretch;min-height:inherit;border-width:var(--inner-border-width);border-style:var(--border-style);border-color:var(--border-color);box-shadow:var(--inner-box-shadow);overflow:inherit;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-inner*/.item-inner.sc-ion-item-md{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--inner-padding-start);padding-inline-start:var(--inner-padding-start);-webkit-padding-end:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end));padding-inline-end:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end))}}/*!@.item-detail-icon*/.item-detail-icon.sc-ion-item-md{color:var(--detail-icon-color);font-size:var(--detail-icon-font-size);opacity:var(--detail-icon-opacity)}/*!@::slotted(ion-icon)*/.sc-ion-item-md-s>ion-icon{font-size:1.6em}/*!@::slotted(ion-button)*/.sc-ion-item-md-s>ion-button{--margin-top:0;--margin-bottom:0;--margin-start:0;--margin-end:0;z-index:1}/*!@::slotted(ion-label:not([slot=end]))*/.sc-ion-item-md-s>ion-label:not([slot=end]){flex:1}/*!@:host(.item-input)*/.item-input.sc-ion-item-md-h{align-items:center}/*!@.input-wrapper*/.input-wrapper.sc-ion-item-md{display:flex;flex:1;flex-direction:inherit;align-items:inherit;align-self:stretch;text-overflow:ellipsis;overflow:inherit;box-sizing:border-box}/*!@:host(.item-label-stacked),\n:host(.item-label-floating)*/.item-label-stacked.sc-ion-item-md-h,.item-label-floating.sc-ion-item-md-h{align-items:start}/*!@:host(.item-label-stacked) .input-wrapper,\n:host(.item-label-floating) .input-wrapper*/.item-label-stacked.sc-ion-item-md-h .input-wrapper.sc-ion-item-md,.item-label-floating.sc-ion-item-md-h .input-wrapper.sc-ion-item-md{flex:1;flex-direction:column}/*!@.item-highlight,\n.item-inner-highlight*/.item-highlight.sc-ion-item-md,.item-inner-highlight.sc-ion-item-md{left:0;right:0;bottom:0;position:absolute;background:var(--highlight-background);z-index:1}/*!@.item-highlight*/.item-highlight.sc-ion-item-md{height:var(--full-highlight-height)}/*!@.item-inner-highlight*/.item-inner-highlight.sc-ion-item-md{height:var(--inset-highlight-height)}/*!@:host(.item-interactive.item-has-focus),\n:host(.item-interactive.ion-touched.ion-invalid)*/.item-interactive.item-has-focus.sc-ion-item-md-h,.item-interactive.ion-touched.ion-invalid.sc-ion-item-md-h{--full-highlight-height:calc(var(--highlight-height) * var(--show-full-highlight));--inset-highlight-height:calc(var(--highlight-height) * var(--show-inset-highlight))}/*!@:host(.item-interactive.item-has-focus)*/.item-interactive.item-has-focus.sc-ion-item-md-h{--highlight-background:var(--highlight-color-focused)}/*!@:host(.item-interactive.ion-valid)*/.item-interactive.ion-valid.sc-ion-item-md-h{--highlight-background:var(--highlight-color-valid)}/*!@:host(.item-interactive.ion-invalid)*/.item-interactive.ion-invalid.sc-ion-item-md-h{--highlight-background:var(--highlight-color-invalid)}/*!@:host(:not(.item-label)) ::slotted(ion-select)*/.sc-ion-item-md-h:not(.item-label) .sc-ion-item-md-s>ion-select{--padding-start:0;max-width:none}/*!@:host(.item-label-stacked) ::slotted(ion-select),\n:host(.item-label-floating) ::slotted(ion-select)*/.sc-ion-item-md-h.item-label-stacked .sc-ion-item-md-s>ion-select,.sc-ion-item-md-h.item-label-floating .sc-ion-item-md-s>ion-select{--padding-top:8px;--padding-bottom:8px;--padding-start:0;align-self:stretch;width:100%;max-width:100%}/*!@:host(:not(.item-label)) ::slotted(ion-datetime)*/.sc-ion-item-md-h:not(.item-label) .sc-ion-item-md-s>ion-datetime{--padding-start:0}/*!@:host(.item-label-stacked) ::slotted(ion-datetime),\n:host(.item-label-floating) ::slotted(ion-datetime)*/.sc-ion-item-md-h.item-label-stacked .sc-ion-item-md-s>ion-datetime,.sc-ion-item-md-h.item-label-floating .sc-ion-item-md-s>ion-datetime{--padding-start:0;width:100%}/*!@:host(.item-multiple-inputs) ::slotted(ion-checkbox),\n:host(.item-multiple-inputs) ::slotted(ion-datetime),\n:host(.item-multiple-inputs) ::slotted(ion-radio),\n:host(.item-multiple-inputs) ::slotted(ion-select)*/.sc-ion-item-md-h.item-multiple-inputs .sc-ion-item-md-s>ion-checkbox,.sc-ion-item-md-h.item-multiple-inputs .sc-ion-item-md-s>ion-datetime,.sc-ion-item-md-h.item-multiple-inputs .sc-ion-item-md-s>ion-radio,.sc-ion-item-md-h.item-multiple-inputs .sc-ion-item-md-s>ion-select{position:relative}/*!@:host(.item-textarea)*/.item-textarea.sc-ion-item-md-h{align-items:stretch}/*!@::slotted(ion-reorder[slot])*/.sc-ion-item-md-s>ion-reorder[slot]{margin-top:0;margin-bottom:0}/*!@ion-ripple-effect*/ion-ripple-effect.sc-ion-item-md{color:var(--ripple-color)}/*!@:host*/.sc-ion-item-md-h{--min-height:48px;--background:var(--ion-item-background, var(--ion-background-color, #fff));--background-activated:transparent;--background-focused:currentColor;--background-hover:currentColor;--background-activated-opacity:0;--background-focused-opacity:.12;--background-hover-opacity:.04;--border-color:var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));--color:var(--ion-item-color, var(--ion-text-color, #000));--transition:opacity 15ms linear, background-color 15ms linear;--padding-start:16px;--border-color:var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));--inner-padding-end:16px;--inner-border-width:0 0 1px 0;--highlight-height:2px;--highlight-color-focused:var(--ion-color-primary, #3880ff);--highlight-color-valid:var(--ion-color-success, #2dd36f);--highlight-color-invalid:var(--ion-color-danger, #eb445a);font-size:16px;font-weight:normal;text-transform:none}/*!@:host(.ion-color.ion-activated) .item-native::after*/.ion-color.ion-activated.sc-ion-item-md-h .item-native.sc-ion-item-md::after{background:transparent}/*!@:host(.item-interactive)*/.item-interactive.sc-ion-item-md-h{--border-width:0 0 1px 0;--inner-border-width:0;--show-full-highlight:1;--show-inset-highlight:0}/*!@:host(.item-lines-full)*/.item-lines-full.sc-ion-item-md-h{--border-width:0 0 1px 0;--show-full-highlight:1;--show-inset-highlight:0}/*!@:host(.item-lines-inset)*/.item-lines-inset.sc-ion-item-md-h{--inner-border-width:0 0 1px 0;--show-full-highlight:0;--show-inset-highlight:1}/*!@:host(.item-lines-inset),\n:host(.item-lines-none)*/.item-lines-inset.sc-ion-item-md-h,.item-lines-none.sc-ion-item-md-h{--border-width:0;--show-full-highlight:0}/*!@:host(.item-lines-full),\n:host(.item-lines-none)*/.item-lines-full.sc-ion-item-md-h,.item-lines-none.sc-ion-item-md-h{--inner-border-width:0;--show-inset-highlight:0}/*!@:host(.item-multi-line) ::slotted([slot=start]),\n:host(.item-multi-line) ::slotted([slot=end])*/.sc-ion-item-md-h.item-multi-line .sc-ion-item-md-s>[slot=start],.sc-ion-item-md-h.item-multi-line .sc-ion-item-md-s>[slot=end]{margin-top:16px;margin-bottom:16px;align-self:flex-start}/*!@::slotted([slot=start])*/.sc-ion-item-md-s>[slot=start]{margin-right:32px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted([slot=start])*/.sc-ion-item-md-s>[slot=start]{margin-right:unset;-webkit-margin-end:32px;margin-inline-end:32px}}/*!@::slotted([slot=end])*/.sc-ion-item-md-s>[slot=end]{margin-left:32px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted([slot=end])*/.sc-ion-item-md-s>[slot=end]{margin-left:unset;-webkit-margin-start:32px;margin-inline-start:32px}}/*!@::slotted(ion-icon)*/.sc-ion-item-md-s>ion-icon{color:rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.54);font-size:24px}/*!@:host(.ion-color) ::slotted(ion-icon)*/.sc-ion-item-md-h.ion-color .sc-ion-item-md-s>ion-icon{color:var(--ion-color-contrast)}/*!@::slotted(ion-icon[slot])*/.sc-ion-item-md-s>ion-icon[slot]{margin-top:12px;margin-bottom:12px}/*!@::slotted(ion-icon[slot=start])*/.sc-ion-item-md-s>ion-icon[slot=start]{margin-right:32px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=start])*/.sc-ion-item-md-s>ion-icon[slot=start]{margin-right:unset;-webkit-margin-end:32px;margin-inline-end:32px}}/*!@::slotted(ion-icon[slot=end])*/.sc-ion-item-md-s>ion-icon[slot=end]{margin-left:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=end])*/.sc-ion-item-md-s>ion-icon[slot=end]{margin-left:unset;-webkit-margin-start:16px;margin-inline-start:16px}}/*!@::slotted(ion-toggle[slot=start]),\n::slotted(ion-toggle[slot=end])*/.sc-ion-item-md-s>ion-toggle[slot=start],.sc-ion-item-md-s>ion-toggle[slot=end]{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}/*!@::slotted(ion-note)*/.sc-ion-item-md-s>ion-note{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;align-self:flex-start;font-size:11px}/*!@::slotted(ion-note[slot])*/.sc-ion-item-md-s>ion-note[slot]{padding-left:0;padding-right:0;padding-top:18px;padding-bottom:10px}/*!@::slotted(ion-note[slot=start])*/.sc-ion-item-md-s>ion-note[slot=start]{padding-right:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-note[slot=start])*/.sc-ion-item-md-s>ion-note[slot=start]{padding-right:unset;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@::slotted(ion-note[slot=end])*/.sc-ion-item-md-s>ion-note[slot=end]{padding-left:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-note[slot=end])*/.sc-ion-item-md-s>ion-note[slot=end]{padding-left:unset;-webkit-padding-start:16px;padding-inline-start:16px}}/*!@::slotted(ion-avatar)*/.sc-ion-item-md-s>ion-avatar{width:40px;height:40px}/*!@::slotted(ion-thumbnail)*/.sc-ion-item-md-s>ion-thumbnail{width:56px;height:56px}/*!@::slotted(ion-avatar),\n::slotted(ion-thumbnail)*/.sc-ion-item-md-s>ion-avatar,.sc-ion-item-md-s>ion-thumbnail{margin-top:8px;margin-bottom:8px}/*!@::slotted(ion-avatar[slot=start]),\n::slotted(ion-thumbnail[slot=start])*/.sc-ion-item-md-s>ion-avatar[slot=start],.sc-ion-item-md-s>ion-thumbnail[slot=start]{margin-right:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-avatar[slot=start]),\n::slotted(ion-thumbnail[slot=start])*/.sc-ion-item-md-s>ion-avatar[slot=start],.sc-ion-item-md-s>ion-thumbnail[slot=start]{margin-right:unset;-webkit-margin-end:16px;margin-inline-end:16px}}/*!@::slotted(ion-avatar[slot=end]),\n::slotted(ion-thumbnail[slot=end])*/.sc-ion-item-md-s>ion-avatar[slot=end],.sc-ion-item-md-s>ion-thumbnail[slot=end]{margin-left:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-avatar[slot=end]),\n::slotted(ion-thumbnail[slot=end])*/.sc-ion-item-md-s>ion-avatar[slot=end],.sc-ion-item-md-s>ion-thumbnail[slot=end]{margin-left:unset;-webkit-margin-start:16px;margin-inline-start:16px}}/*!@::slotted(ion-label)*/.sc-ion-item-md-s>ion-label{margin-left:0;margin-right:0;margin-top:11px;margin-bottom:10px}/*!@:host(.item-label-stacked) ::slotted([slot=end]),\n:host(.item-label-floating) ::slotted([slot=end])*/.sc-ion-item-md-h.item-label-stacked .sc-ion-item-md-s>[slot=end],.sc-ion-item-md-h.item-label-floating .sc-ion-item-md-s>[slot=end]{margin-top:7px;margin-bottom:7px}/*!@:host(.item-label-fixed) ::slotted(ion-select),\n:host(.item-label-fixed) ::slotted(ion-datetime)*/.sc-ion-item-md-h.item-label-fixed .sc-ion-item-md-s>ion-select,.sc-ion-item-md-h.item-label-fixed .sc-ion-item-md-s>ion-datetime{--padding-start:8px}/*!@:host(.item-toggle) ::slotted(ion-label),\n:host(.item-radio) ::slotted(ion-label)*/.sc-ion-item-md-h.item-toggle .sc-ion-item-md-s>ion-label,.sc-ion-item-md-h.item-radio .sc-ion-item-md-s>ion-label{margin-left:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.item-toggle) ::slotted(ion-label),\n:host(.item-radio) ::slotted(ion-label)*/.sc-ion-item-md-h.item-toggle .sc-ion-item-md-s>ion-label,.sc-ion-item-md-h.item-radio .sc-ion-item-md-s>ion-label{margin-left:unset;-webkit-margin-start:0;margin-inline-start:0}}/*!@::slotted(.button-small)*/.sc-ion-item-md-s>.button-small{--padding-top:0;--padding-bottom:0;--padding-start:.6em;--padding-end:.6em;height:25px;font-size:12px}/*!@:host(.item-label-floating),\n:host(.item-label-stacked)*/.item-label-floating.sc-ion-item-md-h,.item-label-stacked.sc-ion-item-md-h{--min-height:55px}/*!@:host(.item-label-stacked) ::slotted(ion-select),\n:host(.item-label-floating) ::slotted(ion-select)*/.sc-ion-item-md-h.item-label-stacked .sc-ion-item-md-s>ion-select,.sc-ion-item-md-h.item-label-floating .sc-ion-item-md-s>ion-select{--padding-top:8px;--padding-bottom:8px;--padding-start:0}/*!@:host(.item-has-focus:not(.ion-color)) ::slotted(.label-stacked),\n:host(.item-has-focus:not(.ion-color)) ::slotted(.label-floating)*/.sc-ion-item-md-h.item-has-focus:not(.ion-color) .sc-ion-item-md-s>.label-stacked,.sc-ion-item-md-h.item-has-focus:not(.ion-color) .sc-ion-item-md-s>.label-floating{color:var(--ion-color-primary, #3880ff)}/*!@:host(.ion-color)*/.ion-color.sc-ion-item-md-h{--highlight-color-focused:var(--ion-color-contrast)}/*!@:host(.item-label-color)*/.item-label-color.sc-ion-item-md-h{--highlight-color-focused:var(--ion-color-base)}";
+const itemMdCss = "/*!@:host*/.sc-ion-item-md-h{--border-radius:0px;--border-width:0px;--border-style:solid;--padding-top:0px;--padding-bottom:0px;--padding-end:0px;--padding-start:0px;--inner-border-width:0px;--inner-padding-top:0px;--inner-padding-bottom:0px;--inner-padding-start:0px;--inner-padding-end:0px;--inner-box-shadow:none;--show-full-highlight:0;--show-inset-highlight:0;--detail-icon-color:initial;--detail-icon-font-size:20px;--detail-icon-opacity:0.25;--color-activated:var(--color);--color-focused:var(--color);--color-hover:var(--color);--ripple-color:currentColor;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:block;position:relative;align-items:center;justify-content:space-between;outline:none;color:var(--color);font-family:var(--ion-font-family, inherit);text-align:initial;text-decoration:none;overflow:hidden;box-sizing:border-box}/*!@:host(.ion-color:not(.item-fill-solid):not(.item-fill-outline)) .item-native*/.ion-color.sc-ion-item-md-h:not(.item-fill-solid):not(.item-fill-outline) .item-native.sc-ion-item-md{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.ion-color:not(.item-fill-solid):not(.item-fill-outline)) .item-native,\n:host(.ion-color:not(.item-fill-solid):not(.item-fill-outline)) .item-inner*/.ion-color.sc-ion-item-md-h:not(.item-fill-solid):not(.item-fill-outline) .item-native.sc-ion-item-md,.ion-color.sc-ion-item-md-h:not(.item-fill-solid):not(.item-fill-outline) .item-inner.sc-ion-item-md{border-color:var(--ion-color-shade)}/*!@:host(.ion-activated) .item-native*/.ion-activated.sc-ion-item-md-h .item-native.sc-ion-item-md{color:var(--color-activated)}/*!@:host(.ion-activated) .item-native::after*/.ion-activated.sc-ion-item-md-h .item-native.sc-ion-item-md::after{background:var(--background-activated);opacity:var(--background-activated-opacity)}/*!@:host(.ion-color.ion-activated) .item-native*/.ion-color.ion-activated.sc-ion-item-md-h .item-native.sc-ion-item-md{color:var(--ion-color-contrast)}/*!@:host(.ion-focused) .item-native*/.ion-focused.sc-ion-item-md-h .item-native.sc-ion-item-md{color:var(--color-focused)}/*!@:host(.ion-focused) .item-native::after*/.ion-focused.sc-ion-item-md-h .item-native.sc-ion-item-md::after{background:var(--background-focused);opacity:var(--background-focused-opacity)}/*!@:host(.ion-color.ion-focused) .item-native*/.ion-color.ion-focused.sc-ion-item-md-h .item-native.sc-ion-item-md{color:var(--ion-color-contrast)}/*!@:host(.ion-color.ion-focused) .item-native::after*/.ion-color.ion-focused.sc-ion-item-md-h .item-native.sc-ion-item-md::after{background:var(--ion-color-contrast)}@media (any-hover: hover){/*!@:host(.ion-activatable:not(.ion-focused):hover) .item-native*/.ion-activatable.sc-ion-item-md-h:not(.ion-focused):hover .item-native.sc-ion-item-md{color:var(--color-hover)}/*!@:host(.ion-activatable:not(.ion-focused):hover) .item-native::after*/.ion-activatable.sc-ion-item-md-h:not(.ion-focused):hover .item-native.sc-ion-item-md::after{background:var(--background-hover);opacity:var(--background-hover-opacity)}/*!@:host(.ion-color.ion-activatable:not(.ion-focused):hover) .item-native*/.ion-color.ion-activatable.sc-ion-item-md-h:not(.ion-focused):hover .item-native.sc-ion-item-md{color:var(--ion-color-contrast)}/*!@:host(.ion-color.ion-activatable:not(.ion-focused):hover) .item-native::after*/.ion-color.ion-activatable.sc-ion-item-md-h:not(.ion-focused):hover .item-native.sc-ion-item-md::after{background:var(--ion-color-contrast)}}/*!@:host(.item-interactive-disabled:not(.item-multiple-inputs))*/.item-interactive-disabled.sc-ion-item-md-h:not(.item-multiple-inputs){cursor:default;pointer-events:none}/*!@:host(.item-disabled)*/.item-disabled.sc-ion-item-md-h{cursor:default;opacity:0.3;pointer-events:none}/*!@.item-native*/.item-native.sc-ion-item-md{border-radius:var(--border-radius);margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;display:flex;position:relative;align-items:inherit;justify-content:inherit;width:100%;min-height:var(--min-height);transition:var(--transition);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);outline:none;background:var(--background);overflow:inherit;box-sizing:border-box;z-index:1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-native*/.item-native.sc-ion-item-md{padding-left:unset;padding-right:unset;-webkit-padding-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-inline-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.item-native::-moz-focus-inner*/.item-native.sc-ion-item-md::-moz-focus-inner{border:0}/*!@.item-native::after*/.item-native.sc-ion-item-md::after{left:0;right:0;top:0;bottom:0;position:absolute;content:\"\";opacity:0;transition:var(--transition);z-index:-1}/*!@button, a*/button.sc-ion-item-md,a.sc-ion-item-md{cursor:pointer;user-select:none;-webkit-user-drag:none}/*!@.item-inner*/.item-inner.sc-ion-item-md{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:var(--inner-padding-start);padding-right:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end));padding-top:var(--inner-padding-top);padding-bottom:var(--inner-padding-bottom);display:flex;position:relative;flex:1;flex-direction:inherit;align-items:inherit;align-self:stretch;min-height:inherit;border-width:var(--inner-border-width);border-style:var(--border-style);border-color:var(--border-color);box-shadow:var(--inner-box-shadow);overflow:inherit;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-inner*/.item-inner.sc-ion-item-md{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--inner-padding-start);padding-inline-start:var(--inner-padding-start);-webkit-padding-end:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end));padding-inline-end:calc(var(--ion-safe-area-right, 0px) + var(--inner-padding-end))}}/*!@.item-bottom*/.item-bottom.sc-ion-item-md{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-right:var(--inner-padding-end);padding-top:0;padding-bottom:0;display:flex;justify-content:space-between}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-bottom*/.item-bottom.sc-ion-item-md{padding-left:unset;padding-right:unset;-webkit-padding-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));padding-inline-start:calc(var(--padding-start) + var(--ion-safe-area-left, 0px));-webkit-padding-end:var(--inner-padding-end);padding-inline-end:var(--inner-padding-end)}}/*!@.item-detail-icon*/.item-detail-icon.sc-ion-item-md{color:var(--detail-icon-color);font-size:var(--detail-icon-font-size);opacity:var(--detail-icon-opacity)}/*!@::slotted(ion-icon)*/.sc-ion-item-md-s>ion-icon{font-size:1.6em}/*!@::slotted(ion-button)*/.sc-ion-item-md-s>ion-button{--margin-top:0;--margin-bottom:0;--margin-start:0;--margin-end:0;z-index:1}/*!@::slotted(ion-label:not([slot=end]))*/.sc-ion-item-md-s>ion-label:not([slot=end]){flex:1}/*!@:host(.item-input)*/.item-input.sc-ion-item-md-h{align-items:center}/*!@.input-wrapper*/.input-wrapper.sc-ion-item-md{display:flex;flex:1;flex-direction:inherit;align-items:inherit;align-self:stretch;text-overflow:ellipsis;overflow:inherit;box-sizing:border-box}/*!@:host(.item-label-stacked),\n:host(.item-label-floating)*/.item-label-stacked.sc-ion-item-md-h,.item-label-floating.sc-ion-item-md-h{align-items:start}/*!@:host(.item-label-stacked) .input-wrapper,\n:host(.item-label-floating) .input-wrapper*/.item-label-stacked.sc-ion-item-md-h .input-wrapper.sc-ion-item-md,.item-label-floating.sc-ion-item-md-h .input-wrapper.sc-ion-item-md{flex:1;flex-direction:column}/*!@.item-highlight,\n.item-inner-highlight*/.item-highlight.sc-ion-item-md,.item-inner-highlight.sc-ion-item-md{left:0;right:0;top:0;bottom:0;border-radius:inherit;position:absolute;width:100%;height:100%;transform:scaleX(0);transition:transform 200ms, border-bottom-width 200ms;z-index:2;box-sizing:border-box;pointer-events:none}/*!@:host(.item-interactive.item-has-focus) .item-native*/.item-interactive.item-has-focus.sc-ion-item-md-h .item-native.sc-ion-item-md{caret-color:var(--highlight-background)}/*!@:host(.item-interactive.ion-focused),\n:host(.item-interactive.item-has-focus),\n:host(.item-interactive.ion-touched.ion-invalid)*/.item-interactive.ion-focused.sc-ion-item-md-h,.item-interactive.item-has-focus.sc-ion-item-md-h,.item-interactive.ion-touched.ion-invalid.sc-ion-item-md-h{--full-highlight-height:calc(var(--highlight-height) * var(--show-full-highlight));--inset-highlight-height:calc(var(--highlight-height) * var(--show-inset-highlight))}/*!@:host(.item-interactive.ion-focused),\n:host(.item-interactive.item-has-focus)*/.item-interactive.ion-focused.sc-ion-item-md-h,.item-interactive.item-has-focus.sc-ion-item-md-h{--highlight-background:var(--highlight-color-focused)}/*!@:host(.item-interactive.ion-valid)*/.item-interactive.ion-valid.sc-ion-item-md-h{--highlight-background:var(--highlight-color-valid)}/*!@:host(.item-interactive.ion-invalid)*/.item-interactive.ion-invalid.sc-ion-item-md-h{--highlight-background:var(--highlight-color-invalid)}/*!@:host(.item-interactive.ion-invalid) ::slotted([slot=helper])*/.sc-ion-item-md-h.item-interactive.ion-invalid .sc-ion-item-md-s>[slot=helper]{display:none}/*!@::slotted([slot=error])*/.sc-ion-item-md-s>[slot=error]{display:none;color:var(--highlight-color-invalid)}/*!@:host(.item-interactive.ion-invalid) ::slotted([slot=error])*/.sc-ion-item-md-h.item-interactive.ion-invalid .sc-ion-item-md-s>[slot=error]{display:block}/*!@:host(:not(.item-label)) ::slotted(ion-select)*/.sc-ion-item-md-h:not(.item-label) .sc-ion-item-md-s>ion-select{--padding-start:0;max-width:none}/*!@:host(.item-label-stacked) ::slotted(ion-select),\n:host(.item-label-floating) ::slotted(ion-select)*/.sc-ion-item-md-h.item-label-stacked .sc-ion-item-md-s>ion-select,.sc-ion-item-md-h.item-label-floating .sc-ion-item-md-s>ion-select{--padding-top:8px;--padding-bottom:8px;--padding-start:0;align-self:stretch;width:100%;max-width:100%}/*!@:host(:not(.item-label)) ::slotted(ion-datetime)*/.sc-ion-item-md-h:not(.item-label) .sc-ion-item-md-s>ion-datetime{--padding-start:0}/*!@:host(.item-label-stacked) ::slotted(ion-datetime),\n:host(.item-label-floating) ::slotted(ion-datetime)*/.sc-ion-item-md-h.item-label-stacked .sc-ion-item-md-s>ion-datetime,.sc-ion-item-md-h.item-label-floating .sc-ion-item-md-s>ion-datetime{--padding-start:0;width:100%}/*!@:host(.item-multiple-inputs) ::slotted(ion-checkbox),\n:host(.item-multiple-inputs) ::slotted(ion-datetime),\n:host(.item-multiple-inputs) ::slotted(ion-radio),\n:host(.item-multiple-inputs) ::slotted(ion-select)*/.sc-ion-item-md-h.item-multiple-inputs .sc-ion-item-md-s>ion-checkbox,.sc-ion-item-md-h.item-multiple-inputs .sc-ion-item-md-s>ion-datetime,.sc-ion-item-md-h.item-multiple-inputs .sc-ion-item-md-s>ion-radio,.sc-ion-item-md-h.item-multiple-inputs .sc-ion-item-md-s>ion-select{position:relative}/*!@:host(.item-textarea)*/.item-textarea.sc-ion-item-md-h{align-items:stretch}/*!@::slotted(ion-reorder[slot])*/.sc-ion-item-md-s>ion-reorder[slot]{margin-top:0;margin-bottom:0}/*!@ion-ripple-effect*/ion-ripple-effect.sc-ion-item-md{color:var(--ripple-color)}/*!@:host(.item-fill-solid) ::slotted([slot=start]),\n:host(.item-fill-solid) ::slotted([slot=end]),\n:host(.item-fill-outline) ::slotted([slot=start]),\n:host(.item-fill-outline) ::slotted([slot=end])*/.sc-ion-item-md-h.item-fill-solid .sc-ion-item-md-s>[slot=start],.sc-ion-item-md-h.item-fill-solid .sc-ion-item-md-s>[slot=end],.sc-ion-item-md-h.item-fill-outline .sc-ion-item-md-s>[slot=start],.sc-ion-item-md-h.item-fill-outline .sc-ion-item-md-s>[slot=end]{align-self:center}/*!@::slotted([slot=helper]),\n::slotted([slot=error]),\n.item-counter*/.sc-ion-item-md-s>[slot=helper],.sc-ion-item-md-s>[slot=error],.item-counter.sc-ion-item-md{padding-top:5px;font-size:12px;z-index:1}/*!@.item-counter*/.item-counter.sc-ion-item-md{margin-left:auto;padding-inline-start:16px;white-space:nowrap}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.item-counter*/.item-counter.sc-ion-item-md{margin-left:unset;-webkit-margin-start:auto;margin-inline-start:auto}}@media (prefers-reduced-motion: reduce){/*!@.item-highlight,\n.item-inner-highlight*/.item-highlight.sc-ion-item-md,.item-inner-highlight.sc-ion-item-md{transition:none}}/*!@:host*/.sc-ion-item-md-h{--min-height:48px;--background:var(--ion-item-background, var(--ion-background-color, #fff));--background-activated:transparent;--background-focused:currentColor;--background-hover:currentColor;--background-activated-opacity:0;--background-focused-opacity:.12;--background-hover-opacity:.04;--border-color:var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));--color:var(--ion-item-color, var(--ion-text-color, #000));--transition:opacity 15ms linear, background-color 15ms linear;--padding-start:16px;--inner-padding-end:16px;--inner-border-width:0 0 1px 0;--highlight-height:1px;--highlight-color-focused:var(--ion-color-primary, #3880ff);--highlight-color-valid:var(--ion-color-success, #2dd36f);--highlight-color-invalid:var(--ion-color-danger, #eb445a);font-size:16px;font-weight:normal;text-transform:none}/*!@:host(.item-fill-outline)*/.item-fill-outline.sc-ion-item-md-h{--highlight-height:2px}/*!@:host(.item-fill-none.item-interactive.ion-focus) .item-highlight,\n:host(.item-fill-none.item-interactive.item-has-focus) .item-highlight,\n:host(.item-fill-none.item-interactive.ion-touched.ion-invalid) .item-highlight*/.item-fill-none.item-interactive.ion-focus.sc-ion-item-md-h .item-highlight.sc-ion-item-md,.item-fill-none.item-interactive.item-has-focus.sc-ion-item-md-h .item-highlight.sc-ion-item-md,.item-fill-none.item-interactive.ion-touched.ion-invalid.sc-ion-item-md-h .item-highlight.sc-ion-item-md{transform:scaleX(1);border-width:0 0 var(--full-highlight-height) 0;border-style:var(--border-style);border-color:var(--highlight-background)}/*!@:host(.item-fill-none.item-interactive.ion-focus) .item-native,\n:host(.item-fill-none.item-interactive.item-has-focus) .item-native,\n:host(.item-fill-none.item-interactive.ion-touched.ion-invalid) .item-native*/.item-fill-none.item-interactive.ion-focus.sc-ion-item-md-h .item-native.sc-ion-item-md,.item-fill-none.item-interactive.item-has-focus.sc-ion-item-md-h .item-native.sc-ion-item-md,.item-fill-none.item-interactive.ion-touched.ion-invalid.sc-ion-item-md-h .item-native.sc-ion-item-md{border-bottom-color:var(--highlight-background)}/*!@:host(.item-fill-outline.item-interactive.ion-focus) .item-highlight,\n:host(.item-fill-outline.item-interactive.item-has-focus) .item-highlight*/.item-fill-outline.item-interactive.ion-focus.sc-ion-item-md-h .item-highlight.sc-ion-item-md,.item-fill-outline.item-interactive.item-has-focus.sc-ion-item-md-h .item-highlight.sc-ion-item-md{transform:scaleX(1)}/*!@:host(.item-fill-outline.item-interactive.ion-focus) .item-highlight,\n:host(.item-fill-outline.item-interactive.item-has-focus) .item-highlight,\n:host(.item-fill-outline.item-interactive.ion-touched.ion-invalid) .item-highlight*/.item-fill-outline.item-interactive.ion-focus.sc-ion-item-md-h .item-highlight.sc-ion-item-md,.item-fill-outline.item-interactive.item-has-focus.sc-ion-item-md-h .item-highlight.sc-ion-item-md,.item-fill-outline.item-interactive.ion-touched.ion-invalid.sc-ion-item-md-h .item-highlight.sc-ion-item-md{border-width:var(--full-highlight-height);border-style:var(--border-style);border-color:var(--highlight-background)}/*!@:host(.item-fill-outline.item-interactive.ion-touched.ion-invalid) .item-native*/.item-fill-outline.item-interactive.ion-touched.ion-invalid.sc-ion-item-md-h .item-native.sc-ion-item-md{border-color:var(--highlight-background)}/*!@:host(.item-fill-solid.item-interactive.ion-focus) .item-highlight,\n:host(.item-fill-solid.item-interactive.item-has-focus) .item-highlight,\n:host(.item-fill-solid.item-interactive.ion-touched.ion-invalid) .item-highlight*/.item-fill-solid.item-interactive.ion-focus.sc-ion-item-md-h .item-highlight.sc-ion-item-md,.item-fill-solid.item-interactive.item-has-focus.sc-ion-item-md-h .item-highlight.sc-ion-item-md,.item-fill-solid.item-interactive.ion-touched.ion-invalid.sc-ion-item-md-h .item-highlight.sc-ion-item-md{transform:scaleX(1);border-width:0 0 var(--full-highlight-height) 0;border-style:var(--border-style);border-color:var(--highlight-background)}/*!@:host(.item-fill-solid.item-interactive.ion-focus) .item-native,\n:host(.item-fill-solid.item-interactive.item-has-focus) .item-native,\n:host(.item-fill-solid.item-interactive.ion-touched.ion-invalid) .item-native*/.item-fill-solid.item-interactive.ion-focus.sc-ion-item-md-h .item-native.sc-ion-item-md,.item-fill-solid.item-interactive.item-has-focus.sc-ion-item-md-h .item-native.sc-ion-item-md,.item-fill-solid.item-interactive.ion-touched.ion-invalid.sc-ion-item-md-h .item-native.sc-ion-item-md{border-bottom-color:var(--highlight-background)}/*!@:host(.ion-color.ion-activated) .item-native::after*/.ion-color.ion-activated.sc-ion-item-md-h .item-native.sc-ion-item-md::after{background:transparent}/*!@:host(.item-has-focus) .item-native*/.item-has-focus.sc-ion-item-md-h .item-native.sc-ion-item-md{caret-color:var(--highlight-color-focused)}/*!@:host(.item-interactive)*/.item-interactive.sc-ion-item-md-h{--border-width:0 0 1px 0;--inner-border-width:0;--show-full-highlight:1;--show-inset-highlight:0}/*!@:host(.item-lines-full)*/.item-lines-full.sc-ion-item-md-h{--border-width:0 0 1px 0;--show-full-highlight:1;--show-inset-highlight:0}/*!@:host(.item-lines-inset)*/.item-lines-inset.sc-ion-item-md-h{--inner-border-width:0 0 1px 0;--show-full-highlight:0;--show-inset-highlight:1}/*!@:host(.item-lines-inset),\n:host(.item-lines-none)*/.item-lines-inset.sc-ion-item-md-h,.item-lines-none.sc-ion-item-md-h{--border-width:0;--show-full-highlight:0}/*!@:host(.item-lines-full),\n:host(.item-lines-none)*/.item-lines-full.sc-ion-item-md-h,.item-lines-none.sc-ion-item-md-h{--inner-border-width:0;--show-inset-highlight:0}/*!@:host(.item-fill-outline) .item-highlight*/.item-fill-outline.sc-ion-item-md-h .item-highlight.sc-ion-item-md{--position-offset:calc(-1 * var(--border-width));left:var(--position-offset);top:var(--position-offset);width:calc(100% + 2 * var(--border-width));height:calc(100% + 2 * var(--border-width));transition:none}/*!@:host-context([dir=rtl]):host(.item-fill-outline) .item-highlight, :host-context([dir=rtl]).item-fill-outline .item-highlight*/[dir=rtl].sc-ion-item-md-h -no-combinator.item-fill-outline.sc-ion-item-md-h .item-highlight.sc-ion-item-md,[dir=rtl] .sc-ion-item-md-h -no-combinator.item-fill-outline.sc-ion-item-md-h .item-highlight.sc-ion-item-md,[dir=rtl].item-fill-outline.sc-ion-item-md-h .item-highlight.sc-ion-item-md,[dir=rtl] .item-fill-outline.sc-ion-item-md-h .item-highlight.sc-ion-item-md{left:unset;right:unset;right:var(--position-offset)}/*!@:host(.item-fill-outline.ion-focused) .item-native,\n:host(.item-fill-outline.item-has-focus) .item-native*/.item-fill-outline.ion-focused.sc-ion-item-md-h .item-native.sc-ion-item-md,.item-fill-outline.item-has-focus.sc-ion-item-md-h .item-native.sc-ion-item-md{border-color:transparent}/*!@:host(.item-multi-line) ::slotted([slot=start]),\n:host(.item-multi-line) ::slotted([slot=end])*/.sc-ion-item-md-h.item-multi-line .sc-ion-item-md-s>[slot=start],.sc-ion-item-md-h.item-multi-line .sc-ion-item-md-s>[slot=end]{margin-top:16px;margin-bottom:16px;align-self:flex-start}/*!@::slotted([slot=start])*/.sc-ion-item-md-s>[slot=start]{margin-right:32px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted([slot=start])*/.sc-ion-item-md-s>[slot=start]{margin-right:unset;-webkit-margin-end:32px;margin-inline-end:32px}}/*!@::slotted([slot=end])*/.sc-ion-item-md-s>[slot=end]{margin-left:32px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted([slot=end])*/.sc-ion-item-md-s>[slot=end]{margin-left:unset;-webkit-margin-start:32px;margin-inline-start:32px}}/*!@:host(.item-fill-solid) ::slotted([slot=start]),\n:host(.item-fill-solid) ::slotted([slot=end]),\n:host(.item-fill-outline) ::slotted([slot=start]),\n:host(.item-fill-outline) ::slotted([slot=end])*/.sc-ion-item-md-h.item-fill-solid .sc-ion-item-md-s>[slot=start],.sc-ion-item-md-h.item-fill-solid .sc-ion-item-md-s>[slot=end],.sc-ion-item-md-h.item-fill-outline .sc-ion-item-md-s>[slot=start],.sc-ion-item-md-h.item-fill-outline .sc-ion-item-md-s>[slot=end]{align-self:center}/*!@::slotted(ion-icon)*/.sc-ion-item-md-s>ion-icon{color:rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.54);font-size:24px}/*!@:host(.ion-color:not(.item-fill-solid):not(.item-fill-outline)) ::slotted(ion-icon)*/.sc-ion-item-md-h.ion-color:not(.item-fill-solid):not(.item-fill-outline) .sc-ion-item-md-s>ion-icon{color:var(--ion-color-contrast)}/*!@::slotted(ion-icon[slot])*/.sc-ion-item-md-s>ion-icon[slot]{margin-top:12px;margin-bottom:12px}/*!@::slotted(ion-icon[slot=start])*/.sc-ion-item-md-s>ion-icon[slot=start]{margin-right:32px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=start])*/.sc-ion-item-md-s>ion-icon[slot=start]{margin-right:unset;-webkit-margin-end:32px;margin-inline-end:32px}}/*!@::slotted(ion-icon[slot=end])*/.sc-ion-item-md-s>ion-icon[slot=end]{margin-left:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-icon[slot=end])*/.sc-ion-item-md-s>ion-icon[slot=end]{margin-left:unset;-webkit-margin-start:16px;margin-inline-start:16px}}/*!@:host(.item-fill-solid) ::slotted(ion-icon[slot=start]),\n:host(.item-fill-outline) ::slotted(ion-icon[slot=start])*/.sc-ion-item-md-h.item-fill-solid .sc-ion-item-md-s>ion-icon[slot=start],.sc-ion-item-md-h.item-fill-outline .sc-ion-item-md-s>ion-icon[slot=start]{margin-right:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.item-fill-solid) ::slotted(ion-icon[slot=start]),\n:host(.item-fill-outline) ::slotted(ion-icon[slot=start])*/.sc-ion-item-md-h.item-fill-solid .sc-ion-item-md-s>ion-icon[slot=start],.sc-ion-item-md-h.item-fill-outline .sc-ion-item-md-s>ion-icon[slot=start]{margin-right:unset;-webkit-margin-end:8px;margin-inline-end:8px}}/*!@::slotted(ion-toggle[slot=start]),\n::slotted(ion-toggle[slot=end])*/.sc-ion-item-md-s>ion-toggle[slot=start],.sc-ion-item-md-s>ion-toggle[slot=end]{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}/*!@::slotted(ion-note)*/.sc-ion-item-md-s>ion-note{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;align-self:flex-start;font-size:11px}/*!@::slotted(ion-note[slot]:not([slot=helper]):not([slot=error]))*/.sc-ion-item-md-s>ion-note[slot]:not([slot=helper]):not([slot=error]){padding-left:0;padding-right:0;padding-top:18px;padding-bottom:10px}/*!@::slotted(ion-note[slot=start])*/.sc-ion-item-md-s>ion-note[slot=start]{padding-right:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-note[slot=start])*/.sc-ion-item-md-s>ion-note[slot=start]{padding-right:unset;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@::slotted(ion-note[slot=end])*/.sc-ion-item-md-s>ion-note[slot=end]{padding-left:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-note[slot=end])*/.sc-ion-item-md-s>ion-note[slot=end]{padding-left:unset;-webkit-padding-start:16px;padding-inline-start:16px}}/*!@::slotted(ion-avatar)*/.sc-ion-item-md-s>ion-avatar{width:40px;height:40px}/*!@::slotted(ion-thumbnail)*/.sc-ion-item-md-s>ion-thumbnail{width:56px;height:56px}/*!@::slotted(ion-avatar),\n::slotted(ion-thumbnail)*/.sc-ion-item-md-s>ion-avatar,.sc-ion-item-md-s>ion-thumbnail{margin-top:8px;margin-bottom:8px}/*!@::slotted(ion-avatar[slot=start]),\n::slotted(ion-thumbnail[slot=start])*/.sc-ion-item-md-s>ion-avatar[slot=start],.sc-ion-item-md-s>ion-thumbnail[slot=start]{margin-right:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-avatar[slot=start]),\n::slotted(ion-thumbnail[slot=start])*/.sc-ion-item-md-s>ion-avatar[slot=start],.sc-ion-item-md-s>ion-thumbnail[slot=start]{margin-right:unset;-webkit-margin-end:16px;margin-inline-end:16px}}/*!@::slotted(ion-avatar[slot=end]),\n::slotted(ion-thumbnail[slot=end])*/.sc-ion-item-md-s>ion-avatar[slot=end],.sc-ion-item-md-s>ion-thumbnail[slot=end]{margin-left:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(ion-avatar[slot=end]),\n::slotted(ion-thumbnail[slot=end])*/.sc-ion-item-md-s>ion-avatar[slot=end],.sc-ion-item-md-s>ion-thumbnail[slot=end]{margin-left:unset;-webkit-margin-start:16px;margin-inline-start:16px}}/*!@::slotted(ion-label)*/.sc-ion-item-md-s>ion-label{margin-left:0;margin-right:0;margin-top:10px;margin-bottom:10px}/*!@:host(.item-label-stacked) ::slotted([slot=end]),\n:host(.item-label-floating) ::slotted([slot=end])*/.sc-ion-item-md-h.item-label-stacked .sc-ion-item-md-s>[slot=end],.sc-ion-item-md-h.item-label-floating .sc-ion-item-md-s>[slot=end]{margin-top:7px;margin-bottom:7px}/*!@:host(.item-label-fixed) ::slotted(ion-select),\n:host(.item-label-fixed) ::slotted(ion-datetime)*/.sc-ion-item-md-h.item-label-fixed .sc-ion-item-md-s>ion-select,.sc-ion-item-md-h.item-label-fixed .sc-ion-item-md-s>ion-datetime{--padding-start:8px}/*!@:host(.item-toggle) ::slotted(ion-label),\n:host(.item-radio) ::slotted(ion-label)*/.sc-ion-item-md-h.item-toggle .sc-ion-item-md-s>ion-label,.sc-ion-item-md-h.item-radio .sc-ion-item-md-s>ion-label{margin-left:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.item-toggle) ::slotted(ion-label),\n:host(.item-radio) ::slotted(ion-label)*/.sc-ion-item-md-h.item-toggle .sc-ion-item-md-s>ion-label,.sc-ion-item-md-h.item-radio .sc-ion-item-md-s>ion-label{margin-left:unset;-webkit-margin-start:0;margin-inline-start:0}}/*!@::slotted(.button-small)*/.sc-ion-item-md-s>.button-small{--padding-top:0;--padding-bottom:0;--padding-start:.6em;--padding-end:.6em;height:25px;font-size:12px}/*!@:host(.item-label-floating),\n:host(.item-label-stacked)*/.item-label-floating.sc-ion-item-md-h,.item-label-stacked.sc-ion-item-md-h{--min-height:55px}/*!@:host(.item-label-stacked) ::slotted(ion-select),\n:host(.item-label-floating) ::slotted(ion-select)*/.sc-ion-item-md-h.item-label-stacked .sc-ion-item-md-s>ion-select,.sc-ion-item-md-h.item-label-floating .sc-ion-item-md-s>ion-select{--padding-top:8px;--padding-bottom:8px;--padding-start:0}/*!@:host(.ion-focused:not(.ion-color)) ::slotted(.label-stacked),\n:host(.ion-focused:not(.ion-color)) ::slotted(.label-floating),\n:host(.item-has-focus:not(.ion-color)) ::slotted(.label-stacked),\n:host(.item-has-focus:not(.ion-color)) ::slotted(.label-floating)*/.sc-ion-item-md-h.ion-focused:not(.ion-color) .sc-ion-item-md-s>.label-stacked,.sc-ion-item-md-h.ion-focused:not(.ion-color) .sc-ion-item-md-s>.label-floating,.sc-ion-item-md-h.item-has-focus:not(.ion-color) .sc-ion-item-md-s>.label-stacked,.sc-ion-item-md-h.item-has-focus:not(.ion-color) .sc-ion-item-md-s>.label-floating{color:var(--ion-color-primary, #3880ff)}/*!@:host(.ion-color)*/.ion-color.sc-ion-item-md-h{--highlight-color-focused:var(--ion-color-contrast)}/*!@:host(.item-label-color)*/.item-label-color.sc-ion-item-md-h{--highlight-color-focused:var(--ion-color-base)}/*!@:host(.item-fill-solid.ion-color),\n:host(.item-fill-outline.ion-color)*/.item-fill-solid.ion-color.sc-ion-item-md-h,.item-fill-outline.ion-color.sc-ion-item-md-h{--highlight-color-focused:var(--ion-color-base)}/*!@:host(.item-fill-solid)*/.item-fill-solid.sc-ion-item-md-h{--background:var(--ion-color-step-50, #f2f2f2);--background-hover:var(--ion-color-step-100, #e6e6e6);--background-focused:var(--ion-color-step-150, #d9d9d9);--border-width:0 0 1px 0;--inner-border-width:0;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host-context([dir=rtl]):host(.item-fill-solid), :host-context([dir=rtl]).item-fill-solid*/[dir=rtl].sc-ion-item-md-h -no-combinator.item-fill-solid.sc-ion-item-md-h,[dir=rtl] .sc-ion-item-md-h -no-combinator.item-fill-solid.sc-ion-item-md-h,[dir=rtl].item-fill-solid.sc-ion-item-md-h,[dir=rtl] .item-fill-solid.sc-ion-item-md-h{border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host(.item-fill-solid) .item-native*/.item-fill-solid.sc-ion-item-md-h .item-native.sc-ion-item-md{--border-color:var(--ion-color-step-500, gray)}/*!@:host(.item-fill-solid.ion-focused) .item-native,\n:host(.item-fill-solid.item-has-focus) .item-native*/.item-fill-solid.ion-focused.sc-ion-item-md-h .item-native.sc-ion-item-md,.item-fill-solid.item-has-focus.sc-ion-item-md-h .item-native.sc-ion-item-md{--background:var(--background-focused)}/*!@:host(.item-fill-solid.item-shape-round)*/.item-fill-solid.item-shape-round.sc-ion-item-md-h{border-top-left-radius:16px;border-top-right-radius:16px;border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host-context([dir=rtl]):host(.item-fill-solid.item-shape-round), :host-context([dir=rtl]).item-fill-solid.item-shape-round*/[dir=rtl].sc-ion-item-md-h -no-combinator.item-fill-solid.item-shape-round.sc-ion-item-md-h,[dir=rtl] .sc-ion-item-md-h -no-combinator.item-fill-solid.item-shape-round.sc-ion-item-md-h,[dir=rtl].item-fill-solid.item-shape-round.sc-ion-item-md-h,[dir=rtl] .item-fill-solid.item-shape-round.sc-ion-item-md-h{border-top-left-radius:16px;border-top-right-radius:16px;border-bottom-right-radius:0;border-bottom-left-radius:0}@media (any-hover: hover){/*!@:host(.item-fill-solid:hover) .item-native*/.item-fill-solid.sc-ion-item-md-h:hover .item-native.sc-ion-item-md{--background:var(--background-hover);--border-color:var(--ion-color-step-750, #404040)}}/*!@:host(.item-fill-outline)*/.item-fill-outline.sc-ion-item-md-h{--ripple-color:transparent;--background-focused:transparent;--background-hover:transparent;--border-color:var(--ion-color-step-500, gray);--border-width:1px;border:none;overflow:visible}/*!@:host(.item-fill-outline) .item-native*/.item-fill-outline.sc-ion-item-md-h .item-native.sc-ion-item-md{--native-padding-left:16px;border-radius:4px}/*!@:host(.item-fill-outline.item-shape-round) .item-native*/.item-fill-outline.item-shape-round.sc-ion-item-md-h .item-native.sc-ion-item-md{--inner-padding-start:16px;border-radius:28px}/*!@:host(.item-fill-outline.item-shape-round) .item-bottom*/.item-fill-outline.item-shape-round.sc-ion-item-md-h .item-bottom.sc-ion-item-md{padding-left:32px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.item-fill-outline.item-shape-round) .item-bottom*/.item-fill-outline.item-shape-round.sc-ion-item-md-h .item-bottom.sc-ion-item-md{padding-left:unset;-webkit-padding-start:32px;padding-inline-start:32px}}/*!@:host(.item-fill-outline.item-label-floating.ion-focused) .item-native ::slotted(ion-input:not(:first-child)),\n:host(.item-fill-outline.item-label-floating.ion-focused) .item-native ::slotted(ion-textarea:not(:first-child)),\n:host(.item-fill-outline.item-label-floating.item-has-focus) .item-native ::slotted(ion-input:not(:first-child)),\n:host(.item-fill-outline.item-label-floating.item-has-focus) .item-native ::slotted(ion-textarea:not(:first-child)),\n:host(.item-fill-outline.item-label-floating.item-has-value) .item-native ::slotted(ion-input:not(:first-child)),\n:host(.item-fill-outline.item-label-floating.item-has-value) .item-native ::slotted(ion-textarea:not(:first-child))*/.sc-ion-item-md-h.item-fill-outline.item-label-floating.ion-focused .item-native .sc-ion-item-md-s>ion-input:not(:first-child),.sc-ion-item-md-h.item-fill-outline.item-label-floating.ion-focused .item-native .sc-ion-item-md-s>ion-textarea:not(:first-child),.sc-ion-item-md-h.item-fill-outline.item-label-floating.item-has-focus .item-native .sc-ion-item-md-s>ion-input:not(:first-child),.sc-ion-item-md-h.item-fill-outline.item-label-floating.item-has-focus .item-native .sc-ion-item-md-s>ion-textarea:not(:first-child),.sc-ion-item-md-h.item-fill-outline.item-label-floating.item-has-value .item-native .sc-ion-item-md-s>ion-input:not(:first-child),.sc-ion-item-md-h.item-fill-outline.item-label-floating.item-has-value .item-native .sc-ion-item-md-s>ion-textarea:not(:first-child){transform:translateY(-14px)}@media (any-hover: hover){/*!@:host(.item-fill-outline:hover) .item-native*/.item-fill-outline.sc-ion-item-md-h:hover .item-native.sc-ion-item-md{--border-color:var(--ion-color-step-750, #404040)}}/*!@.item-counter*/.item-counter.sc-ion-item-md{color:rgba(0, 0, 0, 0.6);letter-spacing:0.0333333333em}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -27036,6 +29540,8 @@ const itemMdCss = "/*!@:host*/.sc-ion-item-md-h{--border-radius:0px;--border-wid
  * @slot - Content is placed between the named slots if provided without a slot.
  * @slot start - Content is placed to the left of the item text in LTR, and to the right in RTL.
  * @slot end - Content is placed to the right of the item text in LTR, and to the left in RTL.
+ * @slot helper - Content is placed under the item and displayed when no error is detected.
+ * @slot error - Content is placed under the item and displayed when an error is detected.
  *
  * @part native - The native HTML button, anchor or div element that wraps all child elements.
  * @part detail-icon - The chevron icon for the item. Only applies when `detail="true"`.
@@ -27054,11 +29560,15 @@ class Item {
     /**
      * The icon to use when `detail` is set to `true`.
      */
-    this.detailIcon = 'chevron-forward';
+    this.detailIcon = chevronForward;
     /**
      * If `true`, the user cannot interact with the item.
      */
     this.disabled = false;
+    /**
+     * If `true`, a character counter will display the ratio of characters used and the total character limit. Only applies when the `maxlength` property is set on the inner `ion-input` or `ion-textarea`.
+     */
+    this.counter = false;
     /**
      * When using a router, it specifies the transition direction when navigating to
      * another page using `href`.
@@ -27068,6 +29578,11 @@ class Item {
      * The type of the button. Only used when an `onclick` or `button` property is present.
      */
     this.type = 'button';
+  }
+  handleIonChange(ev) {
+    if (this.counter && ev.target === this.getFirstInput()) {
+      this.updateCounterOutput(ev.target);
+    }
   }
   labelColorChanged(ev) {
     const { color } = this;
@@ -27101,6 +29616,12 @@ class Item {
       this.itemStyles.set(tagName, newStyles);
       forceUpdate$1(this);
     }
+  }
+  connectedCallback() {
+    if (this.counter) {
+      this.updateCounterOutput(this.getFirstInput());
+    }
+    this.hasStartEl();
   }
   componentDidUpdate() {
     // Do not use @Listen here to avoid making all items
@@ -27182,7 +29703,7 @@ class Item {
     }
     // Only focus the first input if we clicked on an ion-item
     // and the first input exists
-    if (clickedItem && firstActive) {
+    if (clickedItem && (firstActive || !this.multipleInputs)) {
       input.fireFocusEvents = false;
       input.setBlur();
       input.setFocus();
@@ -27191,8 +29712,21 @@ class Item {
       });
     }
   }
+  updateCounterOutput(inputEl) {
+    var _a, _b;
+    if (this.counter && !this.multipleInputs && (inputEl === null || inputEl === void 0 ? void 0 : inputEl.maxlength) !== undefined) {
+      const length = (_b = (_a = inputEl === null || inputEl === void 0 ? void 0 : inputEl.value) === null || _a === void 0 ? void 0 : _a.toString().length) !== null && _b !== void 0 ? _b : '0';
+      this.counterString = `${length} / ${inputEl.maxlength}`;
+    }
+  }
+  hasStartEl() {
+    const startEl = this.el.querySelector('[slot="start"]');
+    if (startEl !== null) {
+      this.el.classList.add('item-has-start-slot');
+    }
+  }
   render() {
-    const { detail, detailIcon, download, labelColorStyles, lines, disabled, href, rel, target, routerAnimation, routerDirection } = this;
+    const { counterString, detail, detailIcon, download, fill, labelColorStyles, lines, disabled, href, rel, shape, target, routerAnimation, routerDirection } = this;
     const childStyles = {};
     const mode = getIonMode$1(this);
     const clickable = this.isClickable();
@@ -27216,16 +29750,20 @@ class Item {
       Object.assign(childStyles, value);
     });
     const ariaDisabled = (disabled || childStyles['item-interactive-disabled']) ? 'true' : null;
+    const fillValue = fill || 'none';
     return (hAsync(Host, { "aria-disabled": ariaDisabled, class: Object.assign(Object.assign(Object.assign({}, childStyles), labelColorStyles), createColorClasses$1(this.color, {
         'item': true,
         [mode]: true,
         [`item-lines-${lines}`]: lines !== undefined,
+        [`item-fill-${fillValue}`]: true,
+        [`item-shape-${shape}`]: shape !== undefined,
         'item-disabled': disabled,
         'in-list': hostContext('ion-list', this.el),
         'item-multiple-inputs': this.multipleInputs,
         'ion-activatable': canActivate,
-        'ion-focusable': this.focusable
-      })) }, hAsync(TagType, Object.assign({}, attrs, { class: "item-native", part: "native", disabled: disabled }, clickFn), hAsync("slot", { name: "start" }), hAsync("div", { class: "item-inner" }, hAsync("div", { class: "input-wrapper" }, hAsync("slot", null)), hAsync("slot", { name: "end" }), showDetail && hAsync("ion-icon", { icon: detailIcon, lazy: false, class: "item-detail-icon", part: "detail-icon", "aria-hidden": "true" }), hAsync("div", { class: "item-inner-highlight" })), canActivate && mode === 'md' && hAsync("ion-ripple-effect", null)), hAsync("div", { class: "item-highlight" })));
+        'ion-focusable': this.focusable,
+        'item-rtl': document.dir === 'rtl'
+      })) }, hAsync(TagType, Object.assign({}, attrs, { class: "item-native", part: "native", disabled: disabled }, clickFn), hAsync("slot", { name: "start" }), hAsync("div", { class: "item-inner" }, hAsync("div", { class: "input-wrapper" }, hAsync("slot", null)), hAsync("slot", { name: "end" }), showDetail && hAsync("ion-icon", { icon: detailIcon, lazy: false, class: "item-detail-icon", part: "detail-icon", "aria-hidden": "true" }), hAsync("div", { class: "item-inner-highlight" })), canActivate && mode === 'md' && hAsync("ion-ripple-effect", null), hAsync("div", { class: "item-highlight" })), hAsync("div", { class: "item-bottom" }, hAsync("slot", { name: "error" }), hAsync("slot", { name: "helper" }), counterString && hAsync("ion-note", { class: "item-counter" }, counterString))));
   }
   static get delegatesFocus() { return true; }
   get el() { return getElement(this); }
@@ -27243,17 +29781,21 @@ class Item {
       "detailIcon": [1, "detail-icon"],
       "disabled": [4],
       "download": [1],
+      "fill": [1],
+      "shape": [1],
       "href": [1],
       "rel": [1],
       "lines": [1],
+      "counter": [4],
       "routerAnimation": [16],
       "routerDirection": [1, "router-direction"],
       "target": [1],
       "type": [1],
       "multipleInputs": [32],
-      "focusable": [32]
+      "focusable": [32],
+      "counterString": [32]
     },
-    "$listeners$": [[0, "ionColor", "labelColorChanged"], [0, "ionStyle", "itemStyle"]],
+    "$listeners$": [[0, "ionChange", "handleIonChange"], [0, "ionColor", "labelColorChanged"], [0, "ionStyle", "itemStyle"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": [["color", "color"]]
   }; }
@@ -27905,8 +30447,8 @@ createCommonjsModule(function (module, exports) {
  * Copyright (c) 2011-2022 Jos de Jong, http://jsoneditoronline.org
  *
  * @author  Jos de Jong, <wjosdejong@gmail.com>
- * @version 9.7.0
- * @date    2022-01-30
+ * @version 9.7.2
+ * @date    2022-02-09
  */
 !function(e,t){module.exports=t();}(self,function(){return i={897:function(e,t,i){i.d(t,{x:function(){return r}});var c=i(2602),h=i(9791),d=i(7907);function n(e,t){for(var i=0;i<t.length;i++){var n=t[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n);}}var r=function(){function l(t,e){if(!(this instanceof l))throw new TypeError("Cannot call a class as a function");this.dom={};var h=this,i=this.dom,e=(this.anchor=void 0,this.items=t,this.eventListeners={},this.selection=void 0,this.onClose=e?e.close:void 0,this.limitHeight=!!e&&e.limitHeight,document.createElement("div")),n=(e.className="jsoneditor-contextmenu-root",i.root=e,document.createElement("div")),e=(n.className="jsoneditor-contextmenu",i.menu=n,e.appendChild(n),document.createElement("ul")),n=(e.className="jsoneditor-menu",n.appendChild(e),i.list=e,i.items=[],document.createElement("button")),i=(n.type="button",i.focusButton=n,document.createElement("li"));i.style.overflow="hidden",i.style.height="0",i.appendChild(n),e.appendChild(i),function a(l,c,e){e.forEach(function(t){var i,e,n,r,o,s;"separator"===t.type?((o=document.createElement("div")).className="jsoneditor-separator",(e=document.createElement("li")).appendChild(o),l.appendChild(e)):(i={},o=document.createElement("li"),l.appendChild(o),(e=document.createElement("button")).type="button",e.className=t.className,i.button=e,t.title&&(e.title=t.title),t.click&&(e.onclick=function(e){e.preventDefault(),h.hide(),t.click();}),o.appendChild(e),t.submenu?((r=document.createElement("div")).className="jsoneditor-icon",e.appendChild(r),(r=document.createElement("div")).className="jsoneditor-text"+(t.click?"":" jsoneditor-right-margin"),r.appendChild(document.createTextNode(t.text)),e.appendChild(r),(n=t.click?(e.className+=" jsoneditor-default",(r=document.createElement("button")).type="button",(i.buttonExpand=r).className="jsoneditor-expand",(s=document.createElement("div")).className="jsoneditor-expand",r.appendChild(s),o.appendChild(r),t.submenuTitle&&(r.title=t.submenuTitle),r):((s=document.createElement("div")).className="jsoneditor-expand",e.appendChild(s),e)).onclick=function(e){e.preventDefault(),h._onExpandItem(i),n.focus();},i.subItems=r=[],s=document.createElement("ul"),(i.ul=s).className="jsoneditor-menu",s.style.height="0",o.appendChild(s),a(s,r,t.submenu)):((o=document.createElement("div")).className="jsoneditor-icon",e.appendChild(o),(s=document.createElement("div")).className="jsoneditor-text",s.appendChild(document.createTextNode((0, d.Iu)(t.text))),e.appendChild(s)),c.push(i));});}(e,this.dom.items,t),this.maxHeight=0,t.forEach(function(e){e=24*(t.length+(e.submenu?e.submenu.length:0));h.maxHeight=Math.max(h.maxHeight,e);});}var e,t;return e=l,(t=[{key:"_getVisibleButtons",value:function(){var t=[],i=this;return this.dom.items.forEach(function(e){t.push(e.button),e.buttonExpand&&t.push(e.buttonExpand),e.subItems&&e===i.expandedItem&&e.subItems.forEach(function(e){t.push(e.button),e.buttonExpand&&t.push(e.buttonExpand);});}),t}},{key:"show",value:function(e,t,i){this.hide();var n=!0,r=e.parentNode,o=e.getBoundingClientRect(),r=r.getBoundingClientRect(),s=t.getBoundingClientRect(),a=this,t=(this.dom.absoluteAnchor=(0, c.w)(e,t,function(){a.hide();}),o.bottom+this.maxHeight<s.bottom||o.top-this.maxHeight>s.top&&(n=!1),i?0:o.top-r.top);n?(i=e.offsetHeight,this.dom.menu.style.left="0",this.dom.menu.style.top=t+i+"px",this.dom.menu.style.bottom=""):(this.dom.menu.style.left="0",this.dom.menu.style.top="",this.dom.menu.style.bottom="0px"),this.limitHeight&&(r=n?s.bottom-o.bottom-10:o.top-s.top-10,this.dom.list.style.maxHeight=r+"px",this.dom.list.style.overflowY="auto"),this.dom.absoluteAnchor.appendChild(this.dom.root),this.selection=(0, h.getSelection)(),this.anchor=e,setTimeout(function(){a.dom.focusButton.focus();},0),l.visibleMenu&&l.visibleMenu.hide(),l.visibleMenu=this;}},{key:"hide",value:function(){this.dom.absoluteAnchor&&(this.dom.absoluteAnchor.destroy(),delete this.dom.absoluteAnchor),this.dom.root.parentNode&&(this.dom.root.parentNode.removeChild(this.dom.root),this.onClose&&this.onClose()),l.visibleMenu===this&&(l.visibleMenu=void 0);}},{key:"_onExpandItem",value:function(i){var n,r=this,e=i===this.expandedItem,t=this.expandedItem;t&&(t.ul.style.height="0",t.ul.style.padding="",setTimeout(function(){r.expandedItem!==t&&(t.ul.style.display="",h.removeClassName)(t.ul.parentNode,"jsoneditor-selected");},300),this.expandedItem=void 0),e||((n=i.ul).style.display="block",setTimeout(function(){if(r.expandedItem===i){for(var e=0,t=0;t<n.childNodes.length;t++)e+=n.childNodes[t].clientHeight;n.style.height=e+"px",n.style.padding="5px 10px";}},0),(0, h.addClassName)(n.parentNode,"jsoneditor-selected"),this.expandedItem=i);}},{key:"_onKeyDown",value:function(e){var t,i,n,r,o=e.target,s=e.which,a=!1;27===s?(this.selection&&(0, h.setSelection)(this.selection),this.anchor&&this.anchor.focus(),this.hide(),a=!0):9===s?e.shiftKey?0===(i=(t=this._getVisibleButtons()).indexOf(o))&&(t[t.length-1].focus(),a=!0):(i=(t=this._getVisibleButtons()).indexOf(o))===t.length-1&&(t[0].focus(),a=!0):37===s?("jsoneditor-expand"===o.className&&(i=(t=this._getVisibleButtons()).indexOf(o),(n=t[i-1])&&n.focus()),a=!0):38===s?(i=(t=this._getVisibleButtons()).indexOf(o),(n=(n=(n=t[i-1])&&"jsoneditor-expand"===n.className?t[i-2]:n)||t[t.length-1])&&n.focus(),a=!0):39===s?(i=(t=this._getVisibleButtons()).indexOf(o),(r=t[i+1])&&"jsoneditor-expand"===r.className&&r.focus(),a=!0):40===s&&(i=(t=this._getVisibleButtons()).indexOf(o),(r=(r=(r=t[i+1])&&"jsoneditor-expand"===r.className?t[i+2]:r)||t[0])&&(r.focus(),a=!0),a=!0),a&&(e.stopPropagation(),e.preventDefault());}}])&&n(e.prototype,t),Object.defineProperty(e,"prototype",{writable:!1}),l}();r.visibleMenu=void 0;},6436:function(e,t,i){function r(e,t){for(var i=0;i<t.length;i++){var n=t[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n);}}i.d(t,{Q:function(){return n}});var n=function(){function i(e){if(!(this instanceof i))throw new TypeError("Cannot call a class as a function");this.errorTableVisible=e.errorTableVisible,this.onToggleVisibility=e.onToggleVisibility,this.onFocusLine=e.onFocusLine||function(){},this.onChangeHeight=e.onChangeHeight,this.dom={};var e=document.createElement("div"),t=(e.className="jsoneditor-validation-errors-container",this.dom.validationErrorsContainer=e,document.createElement("div")),e=(t.style.display="none",t.className="jsoneditor-additional-errors fadein",t.textContent="Scroll for more ▿",this.dom.additionalErrorsIndication=t,e.appendChild(t),document.createElement("span")),t=(e.className="jsoneditor-validation-error-icon",e.style.display="none",this.dom.validationErrorIcon=e,document.createElement("span"));t.className="jsoneditor-validation-error-count",t.style.display="none",this.dom.validationErrorCount=t,this.dom.parseErrorIndication=document.createElement("span"),this.dom.parseErrorIndication.className="jsoneditor-parse-error-icon",this.dom.parseErrorIndication.style.display="none";}var e,t;return e=i,(t=[{key:"getErrorTable",value:function(){return this.dom.validationErrorsContainer}},{key:"getErrorCounter",value:function(){return this.dom.validationErrorCount}},{key:"getWarningIcon",value:function(){return this.dom.validationErrorIcon}},{key:"getErrorIcon",value:function(){return this.dom.parseErrorIndication}},{key:"toggleTableVisibility",value:function(){this.errorTableVisible=!this.errorTableVisible,this.onToggleVisibility(this.errorTableVisible);}},{key:"setErrors",value:function(e,o){var s,t,a=this,i=(this.dom.validationErrors&&(this.dom.validationErrors.parentNode.removeChild(this.dom.validationErrors),this.dom.validationErrors=null,this.dom.additionalErrorsIndication.style.display="none"),this.errorTableVisible&&0<e.length?((i=document.createElement("div")).className="jsoneditor-validation-errors",(t=document.createElement("table")).className="jsoneditor-text-errors",i.appendChild(t),s=document.createElement("tbody"),t.appendChild(s),e.forEach(function(t){isNaN(t.line)?!t.dataPath||(i=o.find(function(e){return e.path===t.dataPath}))&&(e=i.line+1):e=t.line;var e,i=document.createElement("tr"),n=(i.className=isNaN(e)?"":"jump-to-line","error"===t.type?i.className+=" parse-error":i.className+=" validation-error",document.createElement("td")),r=document.createElement("button"),r=(r.className="jsoneditor-schema-error",n.appendChild(r),i.appendChild(n),document.createElement("td"));r.style="white-space: nowrap;",r.textContent=isNaN(e)?"":"Ln "+e,i.appendChild(r),"string"==typeof t?((n=document.createElement("td")).colSpan=2,(r=document.createElement("pre")).appendChild(document.createTextNode(t)),n.appendChild(r),i.appendChild(n)):((r=document.createElement("td")).appendChild(document.createTextNode(t.dataPath||"")),i.appendChild(r),n=document.createElement("td"),(r=document.createElement("pre")).appendChild(document.createTextNode(t.message.replace(/<br>/gi,"\n"))),n.appendChild(r),i.appendChild(n)),i.onclick=function(){a.onFocusLine(e);},s.appendChild(i);}),this.dom.validationErrors=i,this.dom.validationErrorsContainer.appendChild(i),this.dom.additionalErrorsIndication.title=e.length+" errors total",this.dom.validationErrorsContainer.clientHeight<this.dom.validationErrorsContainer.scrollHeight?(this.dom.additionalErrorsIndication.style.display="block",this.dom.validationErrorsContainer.onscroll=function(){a.dom.additionalErrorsIndication.style.display=0<a.dom.validationErrorsContainer.clientHeight&&0===a.dom.validationErrorsContainer.scrollTop?"block":"none";}):this.dom.validationErrorsContainer.onscroll=void 0,t=this.dom.validationErrorsContainer.clientHeight+(this.dom.statusBar?this.dom.statusBar.clientHeight:0),this.onChangeHeight(t)):this.onChangeHeight(0),e.filter(function(e){return "error"!==e.type}).length);0<i?(this.dom.validationErrorCount.style.display="inline",this.dom.validationErrorCount.innerText=i,this.dom.validationErrorCount.onclick=this.toggleTableVisibility.bind(this),this.dom.validationErrorIcon.style.display="inline",this.dom.validationErrorIcon.title=i+" schema validation error(s) found",this.dom.validationErrorIcon.onclick=this.toggleTableVisibility.bind(this)):(this.dom.validationErrorCount.style.display="none",this.dom.validationErrorIcon.style.display="none"),e.some(function(e){return "error"===e.type})?(t=e[0].line,this.dom.parseErrorIndication.style.display="block",this.dom.parseErrorIndication.title=isNaN(t)?"parse error - check that the json is valid":"parse error on line "+t,this.dom.parseErrorIndication.onclick=this.toggleTableVisibility.bind(this)):this.dom.parseErrorIndication.style.display="none";}}])&&r(e.prototype,t),Object.defineProperty(e,"prototype",{writable:!1}),i}();},2474:function(e,t,i){function r(e,t){for(var i=0;i<t.length;i++){var n=t[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n);}}i.d(t,{R:function(){return n}});var n=function(){function t(e){if(!(this instanceof t))throw new TypeError("Cannot call a class as a function");if(this.target=e.target||null,!this.target)throw new Error('FocusTracker constructor called without a "target" to track.');this.onFocus="function"==typeof e.onFocus?e.onFocus:null,this.onBlur="function"==typeof e.onBlur?e.onBlur:null,this._onClick=this._onEvent.bind(this),this._onKeyUp=function(e){9!==e.which&&9!==e.keyCode||this._onEvent(e);}.bind(this),this.focusFlag=!1,this.firstEventFlag=!0,(this.onFocus||this.onBlur)&&(document.addEventListener("click",this._onClick),document.addEventListener("keyup",this._onKeyUp));}var e,i;return e=t,(i=[{key:"destroy",value:function(){document.removeEventListener("click",this._onClick),document.removeEventListener("keyup",this._onKeyUp),this._onEvent({target:document.body});}},{key:"_onEvent",value:function(e){e=e.target,e=e===this.target||!(!this.target.contains(e)&&!this.target.contains(document.activeElement));e?this.focusFlag||(this.onFocus&&this.onFocus({type:"focus",target:this.target}),this.focusFlag=!0):(this.focusFlag||this.firstEventFlag)&&(this.onBlur&&this.onBlur({type:"blur",target:this.target}),this.focusFlag=!1,this.firstEventFlag&&(this.firstEventFlag=!1));}}])&&r(e.prototype,i),Object.defineProperty(e,"prototype",{writable:!1}),t}();},3161:function(e,h,r){var t=r(8170),i=r(8037),n=r(8038).treeModeMixins,o=r(5956).textModeMixins,d=r(341).previewModeMixins,s=r(9791),u=s.clear,l=s.extend,g=s.getInnerText,p=s.getInternetExplorerVersion,m=s.parse,s=r(2744).tryRequireAjv,f=r(2558).showTransformModal,C=r(6210).showSortModal,a=s();function c(e,t,i){if(!(this instanceof c))throw new Error('JSONEditor constructor called without "new".');var n=p();if(-1!==n&&n<9)throw new Error("Unsupported browser, IE9 or newer required. Please install the newest version of your browser.");t&&(t.error&&(console.warn('Option "error" has been renamed to "onError"'),t.onError=t.error,delete t.error),t.change&&(console.warn('Option "change" has been renamed to "onChange"'),t.onChange=t.change,delete t.change),t.editable&&(console.warn('Option "editable" has been renamed to "onEditable"'),t.onEditable=t.editable,delete t.editable),t.onChangeJSON&&("text"!==t.mode&&"code"!==t.mode&&(!t.modes||-1===t.modes.indexOf("text")&&-1===t.modes.indexOf("code"))||console.warn('Option "onChangeJSON" is not applicable to modes "text" and "code". Use "onChangeText" or "onChange" instead.')),t&&Object.keys(t).forEach(function(e){-1===c.VALID_OPTIONS.indexOf(e)&&console.warn('Unknown option "'+e+'". This option will be ignored');})),arguments.length&&this._create(e,t,i);}"undefined"==typeof Promise&&console.error("Promise undefined. Please load a Promise polyfill in the browser in order to use JSONEditor"),c.modes={},c.prototype.DEBOUNCE_INTERVAL=150,c.VALID_OPTIONS=["ajv","schema","schemaRefs","templates","ace","theme","autocomplete","onChange","onChangeJSON","onChangeText","onEditable","onError","onEvent","onModeChange","onNodeName","onValidate","onCreateMenu","onSelectionChange","onTextSelectionChange","onClassName","onFocus","onBlur","colorPicker","onColorPicker","timestampTag","timestampFormat","escapeUnicode","history","search","mode","modes","name","indentation","sortObjectKeys","navigationBar","statusBar","mainMenuBar","languages","language","enableSort","enableTransform","limitDragging","maxVisibleChilds","onValidationError","modalAnchor","popupAnchor","createQuery","executeQuery","queryDescription"],c.prototype._create=function(e,t,i){this.container=e,this.options=t||{},this.json=i||{};e=this.options.mode||this.options.modes&&this.options.modes[0]||"tree";this.setMode(e);},c.prototype.destroy=function(){},c.prototype.set=function(e){this.json=e;},c.prototype.get=function(){return this.json},c.prototype.setText=function(e){this.json=m(e);},c.prototype.getText=function(){return JSON.stringify(this.json)},c.prototype.setName=function(e){this.options||(this.options={}),this.options.name=e;},c.prototype.getName=function(){return this.options&&this.options.name},c.prototype.setMode=function(e){if(e!==this.options.mode||!this.create){var t=this.container,i=l({},this.options),n=i.mode,r=(i.mode=e,c.modes[e]);if(!r)throw new Error('Unknown mode "'+i.mode+'"');var o="text"===r.data,s=this.getName(),a=this[o?"getText":"get"]();if(this.destroy(),u(this),l(this,r.mixin),this.create(t,i),this.setName(s),this[o?"setText":"set"](a),"function"==typeof r.load)try{r.load.call(this);}catch(e){console.error(e);}if("function"==typeof i.onModeChange&&e!==n)try{i.onModeChange(e,n);}catch(e){console.error(e);}}},c.prototype.getMode=function(){return this.options.mode},c.prototype._onError=function(e){this.options&&"function"==typeof this.options.onError?this.options.onError(e):alert(e.toString());},c.prototype.setSchema=function(e,t){if(e){var i;try{this.options.ajv?i=this.options.ajv:((i=a({allErrors:!0,verbose:!0,schemaId:"auto",$data:!0})).addMetaSchema(r(7171)),i.addMetaSchema(r(6273)));}catch(e){console.warn("Failed to create an instance of Ajv, JSON Schema validation is not available. Please use a JSONEditor bundle including Ajv, or pass an instance of Ajv as via the configuration option `ajv`.");}if(i){if(t){for(var n in t)i.removeSchema(n),t[n]&&i.addSchema(t[n],n);this.options.schemaRefs=t;}this.validateSchema=i.compile(e),this.options.schema=e,this.validate();}this.refresh();}else this.validateSchema=null,this.options.schema=null,this.options.schemaRefs=null,this.validate(),this.refresh();},c.prototype.validate=function(){},c.prototype.refresh=function(){},(c.registerMode=function(e){var t;if(Array.isArray(e))for(r=0;r<e.length;r++)c.registerMode(e[r]);else {if(!("mode"in e))throw new Error('Property "mode" missing');if(!("mixin"in e))throw new Error('Property "mixin" missing');if(!("data"in e))throw new Error('Property "data" missing');var i=e.mode;if(i in c.modes)throw new Error('Mode "'+i+'" already registered');if("function"!=typeof e.mixin.create)throw new Error('Required function "create" missing on mixin');for(var n=["setMode","registerMode","modes"],r=0;r<n.length;r++)if((t=n[r])in e.mixin)throw new Error('Reserved property "'+t+'" not allowed in mixin');c.modes[i]=e;}})(n),c.registerMode(o),c.registerMode(d),c.ace=t,c.Ajv=a,c.VanillaPicker=i,c.showTransformModal=f,c.showSortModal=C,c.getInnerText=g,e.exports=c.default=c;},6617:function(e,t,i){i.d(t,{x:function(){return r}});var u=i(897),g=i(7907);function n(e,t){for(var i=0;i<t.length;i++){var n=t[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n);}}var r=function(){function d(e,t,i,n){if(!(this instanceof d))throw new TypeError("Cannot call a class as a function");for(var r={code:{text:(0, g.Iu)("modeCodeText"),title:(0, g.Iu)("modeCodeTitle"),click:function(){n("code");}},form:{text:(0, g.Iu)("modeFormText"),title:(0, g.Iu)("modeFormTitle"),click:function(){n("form");}},text:{text:(0, g.Iu)("modeTextText"),title:(0, g.Iu)("modeTextTitle"),click:function(){n("text");}},tree:{text:(0, g.Iu)("modeTreeText"),title:(0, g.Iu)("modeTreeTitle"),click:function(){n("tree");}},view:{text:(0, g.Iu)("modeViewText"),title:(0, g.Iu)("modeViewTitle"),click:function(){n("view");}},preview:{text:(0, g.Iu)("modePreviewText"),title:(0, g.Iu)("modePreviewTitle"),click:function(){n("preview");}}},h=[],o=0;o<t.length;o++){var s=t[o],a=r[s];if(!a)throw new Error('Unknown mode "'+s+'"');a.className="jsoneditor-type-modes"+(i===s?" jsoneditor-selected":""),h.push(a);}var l=r[i];if(!l)throw new Error('Unknown mode "'+i+'"');var l=l.text,c=document.createElement("button"),l=(c.type="button",c.className="jsoneditor-modes jsoneditor-separator",c.textContent=l+" ▾",c.title=(0, g.Iu)("modeEditorTitle"),c.onclick=function(){new u.x(h).show(c,e);},document.createElement("div"));l.className="jsoneditor-modes",l.style.position="relative",l.appendChild(c),e.appendChild(l),this.dom={container:e,box:c,frame:l};}var e,t;return e=d,(t=[{key:"focus",value:function(){this.dom.box.focus();}},{key:"destroy",value:function(){this.dom&&this.dom.frame&&this.dom.frame.parentNode&&this.dom.frame.parentNode.removeChild(this.dom.frame),this.dom=null;}}])&&n(e.prototype,t),Object.defineProperty(e,"prototype",{writable:!1}),d}();},8170:function(e,t,i){var n;if(window.ace)n=window.ace;else try{n=i(6225),i(4091),i(3330);var r=i(7923);n.config.setModuleUrl("ace/mode/json_worker",r);}catch(e){}e.exports=n;},4864:function(){window.ace.define("ace/theme/jsoneditor",["require","exports","module","ace/lib/dom"],function(e,t,i){t.isDark=!1,t.cssClass="ace-jsoneditor",t.cssText='.ace-jsoneditor .ace_gutter {\nbackground: #ebebeb;\ncolor: #333\n}\n\n.ace-jsoneditor.ace_editor {\nline-height: 1.3;\nbackground-color: #fff;\n}\n.ace-jsoneditor .ace_print-margin {\nwidth: 1px;\nbackground: #e8e8e8\n}\n.ace-jsoneditor .ace_scroller {\nbackground-color: #FFFFFF\n}\n.ace-jsoneditor .ace_text-layer {\ncolor: gray\n}\n.ace-jsoneditor .ace_variable {\ncolor: #1a1a1a\n}\n.ace-jsoneditor .ace_cursor {\nborder-left: 2px solid #000000\n}\n.ace-jsoneditor .ace_overwrite-cursors .ace_cursor {\nborder-left: 0px;\nborder-bottom: 1px solid #000000\n}\n.ace-jsoneditor .ace_marker-layer .ace_selection {\nbackground: lightgray\n}\n.ace-jsoneditor.ace_multiselect .ace_selection.ace_start {\nbox-shadow: 0 0 3px 0px #FFFFFF;\nborder-radius: 2px\n}\n.ace-jsoneditor .ace_marker-layer .ace_step {\nbackground: rgb(255, 255, 0)\n}\n.ace-jsoneditor .ace_marker-layer .ace_bracket {\nmargin: -1px 0 0 -1px;\nborder: 1px solid #BFBFBF\n}\n.ace-jsoneditor .ace_marker-layer .ace_active-line {\nbackground: #FFFBD1\n}\n.ace-jsoneditor .ace_gutter-active-line {\nbackground-color : #dcdcdc\n}\n.ace-jsoneditor .ace_marker-layer .ace_selected-word {\nborder: 1px solid lightgray\n}\n.ace-jsoneditor .ace_invisible {\ncolor: #BFBFBF\n}\n.ace-jsoneditor .ace_keyword,\n.ace-jsoneditor .ace_meta,\n.ace-jsoneditor .ace_support.ace_constant.ace_property-value {\ncolor: #AF956F\n}\n.ace-jsoneditor .ace_keyword.ace_operator {\ncolor: #484848\n}\n.ace-jsoneditor .ace_keyword.ace_other.ace_unit {\ncolor: #96DC5F\n}\n.ace-jsoneditor .ace_constant.ace_language {\ncolor: darkorange\n}\n.ace-jsoneditor .ace_constant.ace_numeric {\ncolor: red\n}\n.ace-jsoneditor .ace_constant.ace_character.ace_entity {\ncolor: #BF78CC\n}\n.ace-jsoneditor .ace_invalid {\ncolor: #FFFFFF;\nbackground-color: #FF002A;\n}\n.ace-jsoneditor .ace_fold {\nbackground-color: #AF956F;\nborder-color: #000000\n}\n.ace-jsoneditor .ace_storage,\n.ace-jsoneditor .ace_support.ace_class,\n.ace-jsoneditor .ace_support.ace_function,\n.ace-jsoneditor .ace_support.ace_other,\n.ace-jsoneditor .ace_support.ace_type {\ncolor: #C52727\n}\n.ace-jsoneditor .ace_string {\ncolor: green\n}\n.ace-jsoneditor .ace_comment {\ncolor: #BCC8BA\n}\n.ace-jsoneditor .ace_entity.ace_name.ace_tag,\n.ace-jsoneditor .ace_entity.ace_other.ace_attribute-name {\ncolor: #606060\n}\n.ace-jsoneditor .ace_markup.ace_underline {\ntext-decoration: underline\n}\n.ace-jsoneditor .ace_indent-guide {\nbackground: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==") right repeat-y\n}',e("../lib/dom").importCssString(t.cssText,t.cssClass);});},6589:function(e,t){var i=function(){var e,t={trace:function(){},yy:{},symbols_:{error:2,JSONString:3,STRING:4,JSONNumber:5,NUMBER:6,JSONNullLiteral:7,NULL:8,JSONBooleanLiteral:9,TRUE:10,FALSE:11,JSONText:12,JSONValue:13,EOF:14,JSONObject:15,JSONArray:16,"{":17,"}":18,JSONMemberList:19,JSONMember:20,":":21,",":22,"[":23,"]":24,JSONElementList:25,$accept:0,$end:1},terminals_:{2:"error",4:"STRING",6:"NUMBER",8:"NULL",10:"TRUE",11:"FALSE",14:"EOF",17:"{",18:"}",21:":",22:",",23:"[",24:"]"},productions_:[0,[3,1],[5,1],[7,1],[9,1],[9,1],[12,2],[13,1],[13,1],[13,1],[13,1],[13,1],[13,1],[15,2],[15,3],[20,3],[19,1],[19,3],[16,2],[16,3],[25,1],[25,3]],performAction:function(e,t,i,n,r,o,s){var a=o.length-1;switch(r){case 1:this.$=e.replace(/\\(\\|")/g,"$1").replace(/\\n/g,"\n").replace(/\\r/g,"\r").replace(/\\t/g,"\t").replace(/\\v/g,"\v").replace(/\\f/g,"\f").replace(/\\b/g,"\b");break;case 2:this.$=Number(e);break;case 3:this.$=null;break;case 4:this.$=!0;break;case 5:this.$=!1;break;case 6:return this.$=o[a-1];case 13:this.$={};break;case 14:this.$=o[a-1];break;case 15:this.$=[o[a-2],o[a]];break;case 16:this.$={},this.$[o[a][0]]=o[a][1];break;case 17:this.$=o[a-2],o[a-2][o[a][0]]=o[a][1];break;case 18:this.$=[];break;case 19:this.$=o[a-1];break;case 20:this.$=[o[a]];break;case 21:this.$=o[a-2],o[a-2].push(o[a]);}},table:[{3:5,4:[1,12],5:6,6:[1,13],7:3,8:[1,9],9:4,10:[1,10],11:[1,11],12:1,13:2,15:7,16:8,17:[1,14],23:[1,15]},{1:[3]},{14:[1,16]},{14:[2,7],18:[2,7],22:[2,7],24:[2,7]},{14:[2,8],18:[2,8],22:[2,8],24:[2,8]},{14:[2,9],18:[2,9],22:[2,9],24:[2,9]},{14:[2,10],18:[2,10],22:[2,10],24:[2,10]},{14:[2,11],18:[2,11],22:[2,11],24:[2,11]},{14:[2,12],18:[2,12],22:[2,12],24:[2,12]},{14:[2,3],18:[2,3],22:[2,3],24:[2,3]},{14:[2,4],18:[2,4],22:[2,4],24:[2,4]},{14:[2,5],18:[2,5],22:[2,5],24:[2,5]},{14:[2,1],18:[2,1],21:[2,1],22:[2,1],24:[2,1]},{14:[2,2],18:[2,2],22:[2,2],24:[2,2]},{3:20,4:[1,12],18:[1,17],19:18,20:19},{3:5,4:[1,12],5:6,6:[1,13],7:3,8:[1,9],9:4,10:[1,10],11:[1,11],13:23,15:7,16:8,17:[1,14],23:[1,15],24:[1,21],25:22},{1:[2,6]},{14:[2,13],18:[2,13],22:[2,13],24:[2,13]},{18:[1,24],22:[1,25]},{18:[2,16],22:[2,16]},{21:[1,26]},{14:[2,18],18:[2,18],22:[2,18],24:[2,18]},{22:[1,28],24:[1,27]},{22:[2,20],24:[2,20]},{14:[2,14],18:[2,14],22:[2,14],24:[2,14]},{3:20,4:[1,12],20:29},{3:5,4:[1,12],5:6,6:[1,13],7:3,8:[1,9],9:4,10:[1,10],11:[1,11],13:30,15:7,16:8,17:[1,14],23:[1,15]},{14:[2,19],18:[2,19],22:[2,19],24:[2,19]},{3:5,4:[1,12],5:6,6:[1,13],7:3,8:[1,9],9:4,10:[1,10],11:[1,11],13:31,15:7,16:8,17:[1,14],23:[1,15]},{18:[2,17],22:[2,17]},{18:[2,15],22:[2,15]},{22:[2,21],24:[2,21]}],defaultActions:{16:[2,6]},parseError:function(e,t){throw new Error(e)},parse:function(h){var d=this,e=[0],t=[null],i=[],n=this.table,u="",r=0,g=0,o=0,p=(this.lexer.setInput(h),this.lexer.yy=this.yy,this.yy.lexer=this.lexer,void 0===this.lexer.yylloc&&(this.lexer.yylloc={}),this.lexer.yylloc);function m(){var e=d.lexer.lex()||1;return e="number"!=typeof e?d.symbols_[e]||e:e}i.push(p),"function"==typeof this.yy.parseError&&(this.parseError=this.yy.parseError);for(var s,f,a,l,C,c,I,v,A,b={};;){if(a=e[e.length-1],void 0===(l=this.defaultActions[a]||(null==s&&(s=m()),n[a]&&n[a][s]))||!l.length||!l[0]){if(!o){for(C in v=[],n[a])this.terminals_[C]&&2<C&&v.push("'"+this.terminals_[C]+"'");var y="",y=this.lexer.showPosition?"Parse error on line "+(r+1)+":\n"+this.lexer.showPosition()+"\nExpecting "+v.join(", ")+", got '"+this.terminals_[s]+"'":"Parse error on line "+(r+1)+": Unexpected "+(1==s?"end of input":"'"+(this.terminals_[s]||s)+"'");this.parseError(y,{text:this.lexer.match,token:this.terminals_[s]||s,line:this.lexer.yylineno,loc:p,expected:v});}if(3==o){if(1==s)throw new Error(y||"Parsing halted.");g=this.lexer.yyleng,u=this.lexer.yytext,r=this.lexer.yylineno,p=this.lexer.yylloc,s=m();}for(;;){if(2..toString()in n[a])break;if(0==a)throw new Error(y||"Parsing halted.");A=1,e.length=e.length-2*A,t.length=t.length-A,i.length=i.length-A,a=e[e.length-1];}f=s,s=2,l=n[a=e[e.length-1]]&&n[a][2],o=3;}if(l[0]instanceof Array&&1<l.length)throw new Error("Parse Error: multiple actions possible at state: "+a+", token: "+s);switch(l[0]){case 1:e.push(s),t.push(this.lexer.yytext),i.push(this.lexer.yylloc),e.push(l[1]),s=null,f?(s=f,f=null):(g=this.lexer.yyleng,u=this.lexer.yytext,r=this.lexer.yylineno,p=this.lexer.yylloc,0<o&&o--);break;case 2:if(c=this.productions_[l[1]][1],b.$=t[t.length-c],b._$={first_line:i[i.length-(c||1)].first_line,last_line:i[i.length-1].last_line,first_column:i[i.length-(c||1)].first_column,last_column:i[i.length-1].last_column},void 0!==(I=this.performAction.call(b,u,g,r,this.yy,l[1],t,i)))return I;c&&(e=e.slice(0,-1*c*2),t=t.slice(0,-1*c),i=i.slice(0,-1*c)),e.push(this.productions_[l[1]][0]),t.push(b.$),i.push(b._$),I=n[e[e.length-2]][e[e.length-1]],e.push(I);break;case 3:return !0}}return !0}};e={EOF:1,parseError:function(e,t){if(!this.yy.parseError)throw new Error(e);this.yy.parseError(e,t);},setInput:function(e){return this._input=e,this._more=this._less=this.done=!1,this.yylineno=this.yyleng=0,this.yytext=this.matched=this.match="",this.conditionStack=["INITIAL"],this.yylloc={first_line:1,first_column:0,last_line:1,last_column:0},this},input:function(){var e=this._input[0];return this.yytext+=e,this.yyleng++,this.match+=e,this.matched+=e,e.match(/\n/)&&this.yylineno++,this._input=this._input.slice(1),e},unput:function(e){return this._input=e+this._input,this},more:function(){return this._more=!0,this},less:function(e){this._input=this.match.slice(e)+this._input;},pastInput:function(){var e=this.matched.substr(0,this.matched.length-this.match.length);return (20<e.length?"...":"")+e.substr(-20).replace(/\n/g,"")},upcomingInput:function(){var e=this.match;return e.length<20&&(e+=this._input.substr(0,20-e.length)),(e.substr(0,20)+(20<e.length?"...":"")).replace(/\n/g,"")},showPosition:function(){var e=this.pastInput(),t=new Array(e.length+1).join("-");return e+this.upcomingInput()+"\n"+t+"^"},next:function(){if(this.done)return this.EOF;this._input||(this.done=!0),this._more||(this.yytext="",this.match="");for(var e,t,i,n,r=this._currentRules(),o=0;o<r.length&&(!(t=this._input.match(this.rules[r[o]]))||e&&!(t[0].length>e[0].length)||(e=t,i=o,this.options.flex));o++);return e?((n=e[0].match(/\n.*/g))&&(this.yylineno+=n.length),this.yylloc={first_line:this.yylloc.last_line,last_line:this.yylineno+1,first_column:this.yylloc.last_column,last_column:n?n[n.length-1].length-1:this.yylloc.last_column+e[0].length},this.yytext+=e[0],this.match+=e[0],this.yyleng=this.yytext.length,this._more=!1,this._input=this._input.slice(e[0].length),this.matched+=e[0],n=this.performAction.call(this,this.yy,this,r[i],this.conditionStack[this.conditionStack.length-1]),this.done&&this._input&&(this.done=!1),n||void 0):""===this._input?this.EOF:void this.parseError("Lexical error on line "+(this.yylineno+1)+". Unrecognized text.\n"+this.showPosition(),{text:"",token:null,line:this.yylineno})},lex:function(){var e=this.next();return void 0!==e?e:this.lex()},begin:function(e){this.conditionStack.push(e);},popState:function(){return this.conditionStack.pop()},_currentRules:function(){return this.conditions[this.conditionStack[this.conditionStack.length-1]].rules},topState:function(){return this.conditionStack[this.conditionStack.length-2]},pushState:function(e){this.begin(e);},options:{},performAction:function(e,t,i,n){switch(i){case 0:break;case 1:return 6;case 2:return t.yytext=t.yytext.substr(1,t.yyleng-2),4;case 3:return 17;case 4:return 18;case 5:return 23;case 6:return 24;case 7:return 22;case 8:return 21;case 9:return 10;case 10:return 11;case 11:return 8;case 12:return 14;case 13:return "INVALID"}},rules:[/^(?:\s+)/,/^(?:(-?([0-9]|[1-9][0-9]+))(\.[0-9]+)?([eE][-+]?[0-9]+)?\b)/,/^(?:"(?:\\[\\"bfnrt/]|\\u[a-fA-F0-9]{4}|[^\\\0-\x09\x0a-\x1f"])*")/,/^(?:\{)/,/^(?:\})/,/^(?:\[)/,/^(?:\])/,/^(?:,)/,/^(?::)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:null\b)/,/^(?:$)/,/^(?:.)/],conditions:{INITIAL:{rules:[0,1,2,3,4,5,6,7,8,9,10,11,12,13],inclusive:!0}}};return t.lexer=e,t}();t.parser=i,t.parse=i.parse.bind(i);},3879:function(e){function n(){}var s={defaultSelected:!0,width:"auto",disabled:!1,searchable:!0,clearable:!1,sortSelected:!1,allowDeselect:!1,closeOnScroll:!1,nativeDropdown:!1,placeholder:"Select an option...",taggable:!1,tagPlaceholder:"Enter a tag..."},h=(n.prototype={on:function(e,t){this._events=this._events||{},this._events[e]=this._events[e]||[],this._events[e].push(t);},off:function(e,t){this._events=this._events||{},e in this._events!=!1&&this._events[e].splice(this._events[e].indexOf(t),1);},emit:function(e){if(this._events=this._events||{},e in this._events!=!1)for(var t=0;t<this._events[e].length;t++)this._events[e][t].apply(this,Array.prototype.slice.call(arguments,1));}},n.mixin=function(e){for(var t=["on","off","emit"],i=0;i<t.length;i++)"function"==typeof e?e.prototype[t[i]]=n.prototype[t[i]]:e[t[i]]=n.prototype[t[i]];return e},{extend:function(e,t){for(var i in t=t||{},e)e.hasOwnProperty(i)&&(t.hasOwnProperty(i)||(t[i]=e[i]));return t},each:function(e,t,i){if("[object Object]"===Object.prototype.toString.call(e))for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&t.call(i,n,e[n],e);else for(var r=0,o=e.length;r<o;r++)t.call(i,r,e[r],e);},createElement:function(e,t){var i,n,r=document,o=r.createElement(e);if(t&&"[object Object]"===Object.prototype.toString.call(t))for(i in t)i in o?o[i]=t[i]:"html"===i?o.textContent=t[i]:"text"===i?(n=r.createTextNode(t[i]),o.appendChild(n)):o.setAttribute(i,t[i]);return o},hasClass:function(e,t){if(e)return e.classList?e.classList.contains(t):!!e.className&&!!e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"))},addClass:function(e,t){h.hasClass(e,t)||(e.classList?e.classList.add(t):e.className=e.className.trim()+" "+t);},removeClass:function(e,t){h.hasClass(e,t)&&(e.classList?e.classList.remove(t):e.className=e.className.replace(new RegExp("(^|\\s)"+t.split(" ").join("|")+"(\\s|$)","gi")," "));},closest:function(e,t){return e&&e!==document.body&&(t(e)?e:h.closest(e.parentNode,t))},isInt:function(e){return "number"==typeof e&&isFinite(e)&&Math.floor(e)===e},debounce:function(n,r,o){var s;return function(){var e=this,t=arguments,i=o&&!s;clearTimeout(s),s=setTimeout(function(){s=null,o||n.apply(e,t);},r),i&&n.apply(e,t);}},rect:function(e,t){var i=window,e=e.getBoundingClientRect(),n=t?i.pageXOffset:0,t=t?i.pageYOffset:0;return {bottom:e.bottom+t,height:e.height,left:e.left+n,right:e.right+n,top:e.top+t,width:e.width}},includes:function(e,t){return -1<e.indexOf(t)},truncate:function(e){for(;e.firstChild;)e.removeChild(e.firstChild);}});function l(e,t){return e.hasOwnProperty(t)&&(!0===e[t]||e[t].length)}function a(e,t,i){e.parentNode?e.parentNode.parentNode||t.appendChild(e.parentNode):t.appendChild(e),h.removeClass(e,"excluded"),i||(e.textContent=e.textContent+"");}function i(){var i,e;this.items.length&&(i=document.createDocumentFragment(),this.config.pagination?(e=this.pages.slice(0,this.pageIndex),h.each(e,function(e,t){h.each(t,function(e,t){a(t,i,this.customOption);},this);},this)):h.each(this.items,function(e,t){a(t,i,this.customOption);},this),i.childElementCount&&(h.removeClass(this.items[this.navIndex],"active"),this.navIndex=i.querySelector(".selectr-option").idx,h.addClass(this.items[this.navIndex],"active")),this.tree.appendChild(i));}function c(e,t){return t=t||e,t=this.customOption?this.config.renderOption(t):e.textContent,(t=h.createElement("li",{class:"selectr-option",html:t,role:"treeitem","aria-selected":!1})).idx=e.idx,this.items.push(t),e.defaultSelected&&this.defaultSelected.push(e.idx),e.disabled&&(t.disabled=!0,h.addClass(t,"disabled")),t}function r(){var i,e=this.tree,t=e.scrollTop;e.scrollHeight-e.offsetHeight<=t&&this.pageIndex<this.pages.length&&(i=document.createDocumentFragment(),h.each(this.pages[this.pageIndex],function(e,t){a(t,i,this.customOption);},this),e.appendChild(i),this.pageIndex++,this.emit("selectr.paginate",{items:this.items.length,total:this.data.length,page:this.pageIndex,pages:this.pages.length}));}function t(){(this.config.searchable||this.config.taggable)&&(this.input.value=null,this.searching=!1,this.config.searchable&&h.removeClass(this.inputContainer,"active"),h.hasClass(this.container,"notice")&&(h.removeClass(this.container,"notice"),h.addClass(this.container,"open"),this.input.focus()),h.each(this.items,function(e,t){h.removeClass(t,"excluded"),this.customOption||(t.textContent=t.textContent+"");},this));}function o(e,t){if(t=t||{},!e)throw new Error("You must supply either a HTMLSelectElement or a CSS3 selector string.");if("string"==typeof(this.el=e)&&(this.el=document.querySelector(e)),null===this.el)throw new Error("The element you passed to Selectr can not be found.");if("select"!==this.el.nodeName.toLowerCase())throw new Error("The element you passed to Selectr is not a HTMLSelectElement.");this.render(t);}o.prototype.render=function(e){var t;this.rendered||(this.config=h.extend(s,e),this.originalType=this.el.type,this.originalIndex=this.el.tabIndex,this.defaultSelected=[],this.originalOptionCount=this.el.options.length,(this.config.multiple||this.config.taggable)&&(this.el.multiple=!0),this.disabled=l(this.config,"disabled"),this.opened=!1,this.config.taggable&&(this.config.searchable=!1),this.navigating=!1,this.mobileDevice=!1,/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)&&(this.mobileDevice=!0),this.customOption=this.config.hasOwnProperty("renderOption")&&"function"==typeof this.config.renderOption,this.customSelected=this.config.hasOwnProperty("renderSelection")&&"function"==typeof this.config.renderSelection,n.mixin(this),function(){this.requiresPagination=this.config.pagination&&0<this.config.pagination,l(this.config,"width")&&(h.isInt(this.config.width)?this.width=this.config.width+"px":"auto"===this.config.width?this.width="100%":h.includes(this.config.width,"%")&&(this.width=this.config.width)),this.container=h.createElement("div",{class:"selectr-container"}),this.config.customClass&&h.addClass(this.container,this.config.customClass),this.mobileDevice?h.addClass(this.container,"selectr-mobile"):h.addClass(this.container,"selectr-desktop"),this.el.tabIndex=-1,this.config.nativeDropdown||this.mobileDevice?h.addClass(this.el,"selectr-visible"):h.addClass(this.el,"selectr-hidden"),this.selected=h.createElement("div",{class:"selectr-selected",disabled:this.disabled,tabIndex:1,"aria-expanded":!1}),this.label=h.createElement(this.el.multiple?"ul":"span",{class:"selectr-label"});var e,i,n,t,r=h.createElement("div",{class:"selectr-options-container"}),o=(this.tree=h.createElement("ul",{class:"selectr-options",role:"tree","aria-hidden":!0,"aria-expanded":!1}),this.notice=h.createElement("div",{class:"selectr-notice"}),this.el.setAttribute("aria-hidden",!0),this.disabled&&(this.el.disabled=!0),this.el.multiple&&(h.addClass(this.label,"selectr-tags"),h.addClass(this.container,"multiple"),this.tags=[],this.selectedValues=this.getSelectedProperties("value"),this.selectedIndexes=this.getSelectedProperties("idx")),this.selected.appendChild(this.label),this.config.clearable&&(this.selectClear=h.createElement("button",{class:"selectr-clear",type:"button"}),this.container.appendChild(this.selectClear),h.addClass(this.container,"clearable")),this.config.taggable&&(e=h.createElement("li",{class:"input-tag"}),this.input=h.createElement("input",{class:"selectr-tag-input",placeholder:this.config.tagPlaceholder,tagIndex:0,autocomplete:"off",autocorrect:"off",autocapitalize:"off",spellcheck:"false",role:"textbox",type:"search"}),e.appendChild(this.input),this.label.appendChild(e),h.addClass(this.container,"taggable"),this.tagSeperators=[","],this.config.tagSeperators&&(this.tagSeperators=this.tagSeperators.concat(this.config.tagSeperators))),this.config.searchable&&(this.input=h.createElement("input",{class:"selectr-input",tagIndex:-1,autocomplete:"off",autocorrect:"off",autocapitalize:"off",spellcheck:"false",role:"textbox",type:"search"}),this.inputClear=h.createElement("button",{class:"selectr-input-clear",type:"button"}),this.inputContainer=h.createElement("div",{class:"selectr-input-container"}),this.inputContainer.appendChild(this.input),this.inputContainer.appendChild(this.inputClear),r.appendChild(this.inputContainer)),r.appendChild(this.notice),r.appendChild(this.tree),this.items=[],this.options=[],this.el.options.length&&(this.options=[].slice.call(this.el.options)),!1),s=0;this.el.children.length&&h.each(this.el.children,function(e,t){"OPTGROUP"===t.nodeName?(o=h.createElement("ul",{class:"selectr-optgroup",role:"group",html:"<li class='selectr-optgroup--label'>"+t.label+"</li>"}),h.each(t.children,function(e,t){t.idx=s,o.appendChild(c.call(this,t,o)),s++;},this)):(t.idx=s,c.call(this,t),s++);},this),this.config.data&&Array.isArray(this.config.data)&&(i=!(this.data=[]),o=!1,s=0,h.each(this.config.data,function(e,t){l(t,"children")?(i=h.createElement("optgroup",{label:t.text}),o=h.createElement("ul",{class:"selectr-optgroup",role:"group",html:"<li class='selectr-optgroup--label'>"+t.text+"</li>"}),h.each(t.children,function(e,t){(n=new Option(t.text,t.value,!1,t.hasOwnProperty("selected")&&!0===t.selected)).disabled=l(t,"disabled"),this.options.push(n),i.appendChild(n),n.idx=s,o.appendChild(c.call(this,n,t)),this.data[s]=t,s++;},this)):((n=new Option(t.text,t.value,!1,t.hasOwnProperty("selected")&&!0===t.selected)).disabled=l(t,"disabled"),this.options.push(n),n.idx=s,c.call(this,n,t),this.data[s]=t,s++);},this)),this.setSelected(!0);for(var a=this.navIndex=0;a<this.items.length;a++)if(t=this.items[a],!h.hasClass(t,"disabled")){h.addClass(t,"active"),this.navIndex=a;break}this.requiresPagination&&(this.pageIndex=1,this.paginate()),this.container.appendChild(this.selected),this.container.appendChild(r),this.placeEl=h.createElement("div",{class:"selectr-placeholder"}),this.setPlaceholder(),this.selected.appendChild(this.placeEl),this.disabled&&this.disable(),this.el.parentNode.insertBefore(this.container,this.el),this.container.appendChild(this.el);}.call(this),this.bindEvents(),this.update(),this.optsRect=h.rect(this.tree),this.rendered=!0,this.el.multiple||(this.el.selectedIndex=this.selectedIndex),t=this,setTimeout(function(){t.emit("selectr.init");},20));},o.prototype.getSelected=function(){return this.el.querySelectorAll("option:checked")},o.prototype.getSelectedProperties=function(t){var e=this.getSelected();return [].slice.call(e).map(function(e){return e[t]}).filter(function(e){return null!=e})},o.prototype.bindEvents=function(){var n=this;this.events={},this.events.dismiss=function(e){e=e.target;this.container.contains(e)||!this.opened&&!h.hasClass(this.container,"notice")||this.close();}.bind(this),this.events.navigate=function(e){if(e=e||window.event,this.items.length&&this.opened&&h.includes([13,38,40],e.which)){if(e.preventDefault(),13===e.which)return !(this.config.taggable&&0<this.input.value.length)&&this.change(this.navIndex);var t,i=this.items[this.navIndex];switch(e.which){case 38:(t=0)<this.navIndex&&this.navIndex--;break;case 40:this.navIndex<this.items.length-(t=1)&&this.navIndex++;}for(this.navigating=!0;h.hasClass(this.items[this.navIndex],"disabled")||h.hasClass(this.items[this.navIndex],"excluded");)if(t?this.navIndex++:this.navIndex--,this.searching){if(this.navIndex>this.tree.lastElementChild.idx){this.navIndex=this.tree.lastElementChild.idx;break}if(this.navIndex<this.tree.firstElementChild.idx){this.navIndex=this.tree.firstElementChild.idx;break}}e=h.rect(this.items[this.navIndex]);t?(0===this.navIndex?this.tree.scrollTop=0:e.top+e.height>this.optsRect.top+this.optsRect.height&&(this.tree.scrollTop=this.tree.scrollTop+(e.top+e.height-(this.optsRect.top+this.optsRect.height))),this.navIndex===this.tree.childElementCount-1&&this.requiresPagination&&r.call(this)):0===this.navIndex?this.tree.scrollTop=0:e.top-this.optsRect.top<0&&(this.tree.scrollTop=this.tree.scrollTop+(e.top-this.optsRect.top)),i&&h.removeClass(i,"active"),h.addClass(this.items[this.navIndex],"active");}else this.navigating=!1;}.bind(this),this.events.reset=this.reset.bind(this),(this.config.nativeDropdown||this.mobileDevice)&&(this.container.addEventListener("touchstart",function(e){e.changedTouches[0].target===n.el&&n.toggle();}),(this.config.nativeDropdown||this.mobileDevice)&&this.container.addEventListener("click",function(e){e.preventDefault(),e.stopPropagation(),e.target===n.el&&n.toggle();}),this.el.addEventListener("change",function(e){var t;n.el.multiple?(t=n.getSelectedProperties("idx"),t=function(e,t){for(var i,n=[],r=e.slice(0),o=0;o<t.length;o++)-1<(i=r.indexOf(t[o]))?r.splice(i,1):n.push(t[o]);return [n,r]}(n.selectedIndexes,t),h.each(t[0],function(e,t){n.select(t);},n),h.each(t[1],function(e,t){n.deselect(t);},n)):-1<n.el.selectedIndex&&n.select(n.el.selectedIndex);})),this.config.nativeDropdown&&this.container.addEventListener("keydown",function(e){"Enter"===e.key&&n.selected===document.activeElement&&(n.toggle(),setTimeout(function(){n.el.focus();},200));}),this.selected.addEventListener("click",function(e){n.disabled||n.toggle(),e.preventDefault(),e.stopPropagation();}),this.label.addEventListener("click",function(e){h.hasClass(e.target,"selectr-tag-remove")&&n.deselect(e.target.parentNode.idx);}),this.selectClear&&this.selectClear.addEventListener("click",this.clear.bind(this)),this.tree.addEventListener("mousedown",function(e){e.preventDefault();}),this.tree.addEventListener("click",function(e){e.preventDefault(),e.stopPropagation();e=h.closest(e.target,function(e){return e&&h.hasClass(e,"selectr-option")});e&&(h.hasClass(e,"disabled")||(h.hasClass(e,"selected")?(n.el.multiple||!n.el.multiple&&n.config.allowDeselect)&&n.deselect(e.idx):n.select(e.idx),n.opened&&!n.el.multiple&&n.close()));}),this.tree.addEventListener("mouseover",function(e){h.hasClass(e.target,"selectr-option")&&(h.hasClass(e.target,"disabled")||(h.removeClass(n.items[n.navIndex],"active"),h.addClass(e.target,"active"),n.navIndex=[].slice.call(n.items).indexOf(e.target)));}),this.config.searchable&&(this.input.addEventListener("focus",function(e){n.searching=!0;}),this.input.addEventListener("blur",function(e){n.searching=!1;}),this.input.addEventListener("keyup",function(e){n.search(),n.config.taggable||(this.value.length?h.addClass(this.parentNode,"active"):h.removeClass(this.parentNode,"active"));}),this.inputClear.addEventListener("click",function(e){n.input.value=null,t.call(n),n.tree.childElementCount||i.call(n);})),this.config.taggable&&this.input.addEventListener("keyup",function(e){var i;n.search(),n.config.taggable&&this.value.length&&(i=this.value.trim(),13!==e.which&&!h.includes(n.tagSeperators,e.key)||(h.each(n.tagSeperators,function(e,t){i=i.replace(t,"");}),n.add({value:i,text:i,selected:!0},!0)?(n.close(),t.call(n)):(this.value="",n.setMessage("That tag is already in use."))));}),this.update=h.debounce(function(){n.opened&&n.config.closeOnScroll&&n.close(),n.width&&(n.container.style.width=n.width),n.invert();},50),this.requiresPagination&&(this.paginateItems=h.debounce(function(){r.call(this);},50),this.tree.addEventListener("scroll",this.paginateItems.bind(this))),document.addEventListener("click",this.events.dismiss),window.addEventListener("keydown",this.events.navigate),window.addEventListener("resize",this.update),window.addEventListener("scroll",this.update),this.el.form&&this.el.form.addEventListener("reset",this.events.reset);},o.prototype.setSelected=function(e){var i;this.config.data||this.el.multiple||!this.el.options.length||(0===this.el.selectedIndex&&(this.el.options[0].defaultSelected||this.config.defaultSelected||(this.el.selectedIndex=-1)),this.selectedIndex=this.el.selectedIndex,-1<this.selectedIndex&&this.select(this.selectedIndex)),this.config.multiple&&"select-one"===this.originalType&&!this.config.data&&this.el.options[0].selected&&!this.el.options[0].defaultSelected&&(this.el.options[0].selected=!1),h.each(this.options,function(e,t){t.selected&&t.defaultSelected&&this.select(t.idx);},this),this.config.selectedValue&&this.setValue(this.config.selectedValue),this.config.data&&(!this.el.multiple&&this.config.defaultSelected&&this.el.selectedIndex<0&&this.select(0),i=0,h.each(this.config.data,function(e,t){l(t,"children")?h.each(t.children,function(e,t){t.hasOwnProperty("selected")&&!0===t.selected&&this.select(i),i++;},this):(t.hasOwnProperty("selected")&&!0===t.selected&&this.select(i),i++);},this));},o.prototype.destroy=function(){this.rendered&&(this.emit("selectr.destroy"),"select-one"===this.originalType&&(this.el.multiple=!1),this.config.data&&(this.el.textContent=""),h.removeClass(this.el,"selectr-hidden"),this.el.form&&h.off(this.el.form,"reset",this.events.reset),h.off(document,"click",this.events.dismiss),h.off(document,"keydown",this.events.navigate),h.off(window,"resize",this.update),h.off(window,"scroll",this.update),this.container.parentNode.replaceChild(this.el,this.container),this.rendered=!1);},o.prototype.change=function(e){var t=this.items[e],i=this.options[e];i.disabled||(i.selected&&h.hasClass(t,"selected")?this.deselect(e):this.select(e),this.opened&&!this.el.multiple&&this.close());},o.prototype.select=function(n){var e=this.items[n],t=[].slice.call(this.el.options),i=this.options[n];if(this.el.multiple){if(h.includes(this.selectedIndexes,n))return !1;if(this.config.maxSelections&&this.tags.length===this.config.maxSelections)return this.setMessage("A maximum of "+this.config.maxSelections+" items can be selected.",!0),!1;this.selectedValues.push(i.value),this.selectedIndexes.push(n),function(e){var l,c=this,i=document.createDocumentFragment(),t=this.options[e.idx],n=this.data?this.data[e.idx]:t,n=this.customSelected?this.config.renderSelection(n):t.textContent,n=h.createElement("li",{class:"selectr-tag",html:n}),r=h.createElement("button",{class:"selectr-tag-remove",type:"button"});n.appendChild(r),n.idx=e.idx,n.tag=t.value,this.tags.push(n),this.config.sortSelected?(r=this.tags.slice(),l=function(e,n){e.replace(/(\d+)|(\D+)/g,function(e,t,i){n.push([t||1/0,i||""]);});},r.sort(function(e,t){var i,n,r=[],o=[];for(!0===c.config.sortSelected?(i=e.tag,n=t.tag):"text"===c.config.sortSelected&&(i=e.textContent,n=t.textContent),l(i,r),l(n,o);r.length&&o.length;){var s=r.shift(),a=o.shift(),s=s[0]-a[0]||s[1].localeCompare(a[1]);if(s)return s}return r.length-o.length}),h.each(r,function(e,t){i.appendChild(t);}),this.label.textContent=""):i.appendChild(n),this.config.taggable?this.label.insertBefore(i,this.input.parentNode):this.label.appendChild(i);}.call(this,e);}else {var r=this.data?this.data[n]:i;this.label.textContent=this.customSelected?this.config.renderSelection(r):i.textContent,this.selectedValue=i.value,this.selectedIndex=n,h.each(this.options,function(e,t){var i=this.items[e];e!==n&&(i&&h.removeClass(i,"selected"),t.selected=!1,t.removeAttribute("selected"));},this);}h.includes(t,i)||this.el.add(i),e.setAttribute("aria-selected",!0),h.addClass(e,"selected"),h.addClass(this.container,"has-selected"),i.selected=!0,i.setAttribute("selected",""),this.emit("selectr.change",i),this.emit("selectr.select",i);},o.prototype.deselect=function(e,t){var i=this.items[e],n=this.options[e];if(this.el.multiple){var r=this.selectedIndexes.indexOf(e),r=(this.selectedIndexes.splice(r,1),this.selectedValues.indexOf(n.value));this.selectedValues.splice(r,1),function(i){var n=!1;h.each(this.tags,function(e,t){t.idx===i.idx&&(n=t);},this),n&&(this.label.removeChild(n),this.tags.splice(this.tags.indexOf(n),1));}.call(this,i),this.tags.length||h.removeClass(this.container,"has-selected");}else {if(!t&&!this.config.clearable&&!this.config.allowDeselect)return !1;this.label.textContent="",this.selectedValue=null,this.el.selectedIndex=this.selectedIndex=-1,h.removeClass(this.container,"has-selected");}this.items[e].setAttribute("aria-selected",!1),h.removeClass(this.items[e],"selected"),n.selected=!1,n.removeAttribute("selected"),this.emit("selectr.change",null),this.emit("selectr.deselect",n);},o.prototype.setValue=function(i){var n=Array.isArray(i);if(n||(i=i.toString().trim()),!this.el.multiple&&n)return !1;h.each(this.options,function(e,t){(n&&h.includes(i.toString(),t.value)||t.value===i)&&this.change(t.idx);},this);},o.prototype.getValue=function(e,t){var i,n;return this.el.multiple?e?this.selectedIndexes.length&&(n={values:[]},h.each(this.selectedIndexes,function(e,t){t=this.options[t];n.values[e]={value:t.value,text:t.textContent};},this)):n=this.selectedValues.slice():n=e?{value:(i=this.options[this.selectedIndex]).value,text:i.textContent}:this.selectedValue,n=e&&t?JSON.stringify(n):n},o.prototype.add=function(i,n){if(i){if(this.data=this.data||[],this.items=this.items||[],this.options=this.options||[],Array.isArray(i))h.each(i,function(e,t){this.add(t,n);},this);else if("[object Object]"===Object.prototype.toString.call(i)){if(n){var r=!1;if(h.each(this.options,function(e,t){t.value.toLowerCase()===i.value.toLowerCase()&&(r=!0);}),r)return !1}var e=h.createElement("option",i);return this.data.push(i),this.options.push(e),e.idx=0<this.options.length?this.options.length-1:0,c.call(this,e),i.selected&&this.select(e.idx),e}return this.setPlaceholder(),this.config.pagination&&this.paginate(),!0}},o.prototype.remove=function(i){var n,r=[];Array.isArray(i)?h.each(i,function(e,t){h.isInt(t)?r.push(this.getOptionByIndex(t)):"string"==typeof i&&r.push(this.getOptionByValue(t));},this):h.isInt(i)?r.push(this.getOptionByIndex(i)):"string"==typeof i&&r.push(this.getOptionByValue(i)),r.length&&(h.each(r,function(e,t){n=t.idx,this.el.remove(t),this.options.splice(n,1);t=this.items[n].parentNode;t&&t.removeChild(this.items[n]),this.items.splice(n,1),h.each(this.options,function(e,t){t.idx=e,this.items[e].idx=e;},this);},this),this.setPlaceholder(),this.config.pagination&&this.paginate());},o.prototype.removeAll=function(){this.clear(!0),h.each(this.el.options,function(e,t){this.el.remove(t);},this),h.truncate(this.tree),this.items=[],this.options=[],this.data=[],this.navIndex=0,this.requiresPagination&&(this.requiresPagination=!1,this.pageIndex=1,this.pages=[]),this.setPlaceholder();},o.prototype.search=function(o){var s,e,t;this.navigating||(o=o||this.input.value,s=document.createDocumentFragment(),this.removeMessage(),h.truncate(this.tree),1<o.length?(h.each(this.options,function(e,t){var i,n,r=this.items[t.idx];h.includes(t.textContent.toLowerCase(),o.toLowerCase())&&!t.disabled?(a(r,s,this.customOption),h.removeClass(r,"excluded"),this.customOption||(r.textContent="",i=o,t=t.textContent,(n=(i=new RegExp(i,"i").exec(t))?(n=i.index,i=i.index+i[0].length,{before:t.substring(0,n),match:t.substring(n,i),after:t.substring(i)}):null)&&(r.appendChild(document.createTextNode(n.before)),(t=document.createElement("span")).className="selectr-match",t.appendChild(document.createTextNode(n.match)),r.appendChild(t),r.appendChild(document.createTextNode(n.after))))):h.addClass(r,"excluded");},this),s.childElementCount?(e=this.items[this.navIndex],t=s.firstElementChild,h.removeClass(e,"active"),this.navIndex=t.idx,h.addClass(t,"active")):this.config.taggable||this.setMessage("no results.")):i.call(this),this.tree.appendChild(s));},o.prototype.toggle=function(){this.disabled||(this.opened?this.close():this.open());},o.prototype.open=function(){var e=this;return !!this.options.length&&(this.opened||this.emit("selectr.open"),this.opened=!0,this.mobileDevice||this.config.nativeDropdown?(h.addClass(this.container,"native-open"),void(this.config.data&&h.each(this.options,function(e,t){this.el.add(t);},this))):(h.addClass(this.container,"open"),i.call(this),this.invert(),this.tree.scrollTop=0,h.removeClass(this.container,"notice"),this.selected.setAttribute("aria-expanded",!0),this.tree.setAttribute("aria-hidden",!1),this.tree.setAttribute("aria-expanded",!0),void(this.config.searchable&&!this.config.taggable&&setTimeout(function(){e.input.focus(),e.input.tabIndex=0;},10))))},o.prototype.close=function(){var e;this.opened&&this.emit("selectr.close"),this.opened=!1,this.mobileDevice||this.config.nativeDropdown?h.removeClass(this.container,"native-open"):(e=h.hasClass(this.container,"notice"),this.config.searchable&&!e&&(this.input.blur(),this.input.tabIndex=-1,this.searching=!1),e&&(h.removeClass(this.container,"notice"),this.notice.textContent=""),h.removeClass(this.container,"open"),h.removeClass(this.container,"native-open"),this.selected.setAttribute("aria-expanded",!1),this.tree.setAttribute("aria-hidden",!0),this.tree.setAttribute("aria-expanded",!1),h.truncate(this.tree),t.call(this));},o.prototype.enable=function(){this.disabled=!1,this.el.disabled=!1,this.selected.tabIndex=this.originalIndex,this.el.multiple&&h.each(this.tags,function(e,t){t.lastElementChild.tabIndex=0;}),h.removeClass(this.container,"selectr-disabled");},o.prototype.disable=function(e){e||(this.el.disabled=!0),this.selected.tabIndex=-1,this.el.multiple&&h.each(this.tags,function(e,t){t.lastElementChild.tabIndex=-1;}),this.disabled=!0,h.addClass(this.container,"selectr-disabled");},o.prototype.reset=function(){this.disabled||(this.clear(),this.setSelected(!0),h.each(this.defaultSelected,function(e,t){this.select(t);},this),this.emit("selectr.reset"));},o.prototype.clear=function(e){var t;this.el.multiple?this.selectedIndexes.length&&(t=this.selectedIndexes.slice(),h.each(t,function(e,t){this.deselect(t);},this)):-1<this.selectedIndex&&this.deselect(this.selectedIndex,e),this.emit("selectr.clear");},o.prototype.serialise=function(e){var n=[];return h.each(this.options,function(e,t){var i={value:t.value,text:t.textContent};t.selected&&(i.selected=!0),t.disabled&&(i.disabled=!0),n[e]=i;}),e?JSON.stringify(n):n},o.prototype.serialize=function(e){return this.serialise(e)},o.prototype.setPlaceholder=function(e){e=e||this.config.placeholder||this.el.getAttribute("placeholder"),this.options.length||(e="No options available"),this.placeEl.textContent=e;},o.prototype.paginate=function(){var i;if(this.items.length)return (i=this).pages=this.items.map(function(e,t){return t%i.config.pagination==0?i.items.slice(t,t+i.config.pagination):null}).filter(function(e){return e}),this.pages},o.prototype.setMessage=function(e,t){t&&this.close(),h.addClass(this.container,"notice"),this.notice.textContent=e;},o.prototype.removeMessage=function(){h.removeClass(this.container,"notice"),this.notice.textContent="";},o.prototype.invert=function(){var e=h.rect(this.selected),t=this.tree.parentNode.offsetHeight,i=window.innerHeight;e.top+e.height+t>i?(h.addClass(this.container,"inverted"),this.isInverted=!0):(h.removeClass(this.container,"inverted"),this.isInverted=!1),this.optsRect=h.rect(this.tree);},o.prototype.getOptionByIndex=function(e){return this.options[e]},o.prototype.getOptionByValue=function(e){for(var t=!1,i=0,n=this.options.length;i<n;i++)if(this.options[i].value.trim()===e.toString().trim()){t=this.options[i];break}return t},e.exports=o;},4188:function(e,t,i){i.d(t,{qD:function(){return n},EX:function(){return r},WF:function(){return o},oW:function(){return s}});var n=document.body,r=10485760,o=2e4,s=2147483648;},2602:function(e,t,i){i.d(t,{w:function(){return n}});var u=i(9791);function n(i,e,n){var t,c=3<arguments.length&&void 0!==arguments[3]&&arguments[3],r="function"==typeof(s=i).getRootNode?s.getRootNode():window,o={},s=i.getBoundingClientRect(),h=e.getBoundingClientRect(),a=document.createElement("div");function l(){if(a&&a.parentNode){for(var e in a.parentNode.removeChild(a),o)t=e,Object.prototype.hasOwnProperty.call(o,t)&&((t=o[e])&&(0, u.removeEventListener)(r,e,t),delete o[e]);"function"==typeof n&&n(i);}var t;}function d(e){(e=e.target)===a||(0, u.isChildOf)(e,a)||l();}return a.className="jsoneditor-anchor",a.style.position="absolute",a.style.left=s.left-h.left+"px",a.style.top=s.top-h.top+"px",a.style.width=s.width-2+"px",a.style.height=s.height-2+"px",a.style.boxSizing="border-box",e.appendChild(a),o.mousedown=(0, u.addEventListener)(r,"mousedown",d),o.mousewheel=(0, u.addEventListener)(r,"mousewheel",d),c&&(t=null,a.onmouseover=function(){clearTimeout(t),t=null;},a.onmouseout=function(){t=t||setTimeout(l,200);}),a.destroy=l,a}},7923:function(e){
 e.exports="data:application/javascript;base64,Im5vIHVzZSBzdHJpY3QiOwohKGZ1bmN0aW9uKHdpbmRvdykgewppZiAodHlwZW9mIHdpbmRvdy53aW5kb3cgIT0gInVuZGVmaW5lZCIgJiYgd2luZG93LmRvY3VtZW50KQogICAgcmV0dXJuOwppZiAod2luZG93LnJlcXVpcmUgJiYgd2luZG93LmRlZmluZSkKICAgIHJldHVybjsKCmlmICghd2luZG93LmNvbnNvbGUpIHsKICAgIHdpbmRvdy5jb25zb2xlID0gZnVuY3Rpb24oKSB7CiAgICAgICAgdmFyIG1zZ3MgPSBBcnJheS5wcm90b3R5cGUuc2xpY2UuY2FsbChhcmd1bWVudHMsIDApOwogICAgICAgIHBvc3RNZXNzYWdlKHt0eXBlOiAibG9nIiwgZGF0YTogbXNnc30pOwogICAgfTsKICAgIHdpbmRvdy5jb25zb2xlLmVycm9yID0KICAgIHdpbmRvdy5jb25zb2xlLndhcm4gPSAKICAgIHdpbmRvdy5jb25zb2xlLmxvZyA9CiAgICB3aW5kb3cuY29uc29sZS50cmFjZSA9IHdpbmRvdy5jb25zb2xlOwp9CndpbmRvdy53aW5kb3cgPSB3aW5kb3c7CndpbmRvdy5hY2UgPSB3aW5kb3c7Cgp3aW5kb3cub25lcnJvciA9IGZ1bmN0aW9uKG1lc3NhZ2UsIGZpbGUsIGxpbmUsIGNvbCwgZXJyKSB7CiAgICBwb3N0TWVzc2FnZSh7dHlwZTogImVycm9yIiwgZGF0YTogewogICAgICAgIG1lc3NhZ2U6IG1lc3NhZ2UsCiAgICAgICAgZGF0YTogZXJyLmRhdGEsCiAgICAgICAgZmlsZTogZmlsZSwKICAgICAgICBsaW5lOiBsaW5lLCAKICAgICAgICBjb2w6IGNvbCwKICAgICAgICBzdGFjazogZXJyLnN0YWNrCiAgICB9fSk7Cn07Cgp3aW5kb3cubm9ybWFsaXplTW9kdWxlID0gZnVuY3Rpb24ocGFyZW50SWQsIG1vZHVsZU5hbWUpIHsKICAgIC8vIG5vcm1hbGl6ZSBwbHVnaW4gcmVxdWlyZXMKICAgIGlmIChtb2R1bGVOYW1lLmluZGV4T2YoIiEiKSAhPT0gLTEpIHsKICAgICAgICB2YXIgY2h1bmtzID0gbW9kdWxlTmFtZS5zcGxpdCgiISIpOwogICAgICAgIHJldHVybiB3aW5kb3cubm9ybWFsaXplTW9kdWxlKHBhcmVudElkLCBjaHVua3NbMF0pICsgIiEiICsgd2luZG93Lm5vcm1hbGl6ZU1vZHVsZShwYXJlbnRJZCwgY2h1bmtzWzFdKTsKICAgIH0KICAgIC8vIG5vcm1hbGl6ZSByZWxhdGl2ZSByZXF1aXJlcwogICAgaWYgKG1vZHVsZU5hbWUuY2hhckF0KDApID09ICIuIikgewogICAgICAgIHZhciBiYXNlID0gcGFyZW50SWQuc3BsaXQoIi8iKS5zbGljZSgwLCAtMSkuam9pbigiLyIpOwogICAgICAgIG1vZHVsZU5hbWUgPSAoYmFzZSA/IGJhc2UgKyAiLyIgOiAiIikgKyBtb2R1bGVOYW1lOwogICAgICAgIAogICAgICAgIHdoaWxlIChtb2R1bGVOYW1lLmluZGV4T2YoIi4iKSAhPT0gLTEgJiYgcHJldmlvdXMgIT0gbW9kdWxlTmFtZSkgewogICAgICAgICAgICB2YXIgcHJldmlvdXMgPSBtb2R1bGVOYW1lOwogICAgICAgICAgICBtb2R1bGVOYW1lID0gbW9kdWxlTmFtZS5yZXBsYWNlKC9eXC5cLy8sICIiKS5yZXBsYWNlKC9cL1wuXC8vLCAiLyIpLnJlcGxhY2UoL1teXC9dK1wvXC5cLlwvLywgIiIpOwogICAgICAgIH0KICAgIH0KICAgIAogICAgcmV0dXJuIG1vZHVsZU5hbWU7Cn07Cgp3aW5kb3cucmVxdWlyZSA9IGZ1bmN0aW9uIHJlcXVpcmUocGFyZW50SWQsIGlkKSB7CiAgICBpZiAoIWlkKSB7CiAgICAgICAgaWQgPSBwYXJlbnRJZDsKICAgICAgICBwYXJlbnRJZCA9IG51bGw7CiAgICB9CiAgICBpZiAoIWlkLmNoYXJBdCkKICAgICAgICB0aHJvdyBuZXcgRXJyb3IoIndvcmtlci5qcyByZXF1aXJlKCkgYWNjZXB0cyBvbmx5IChwYXJlbnRJZCwgaWQpIGFzIGFyZ3VtZW50cyIpOwoKICAgIGlkID0gd2luZG93Lm5vcm1hbGl6ZU1vZHVsZShwYXJlbnRJZCwgaWQpOwoKICAgIHZhciBtb2R1bGUgPSB3aW5kb3cucmVxdWlyZS5tb2R1bGVzW2lkXTsKICAgIGlmIChtb2R1bGUpIHsKICAgICAgICBpZiAoIW1vZHVsZS5pbml0aWFsaXplZCkgewogICAgICAgICAgICBtb2R1bGUuaW5pdGlhbGl6ZWQgPSB0cnVlOwogICAgICAgICAgICBtb2R1bGUuZXhwb3J0cyA9IG1vZHVsZS5mYWN0b3J5KCkuZXhwb3J0czsKICAgICAgICB9CiAgICAgICAgcmV0dXJuIG1vZHVsZS5leHBvcnRzOwogICAgfQogICAKICAgIGlmICghd2luZG93LnJlcXVpcmUudGxucykKICAgICAgICByZXR1cm4gY29uc29sZS5sb2coInVuYWJsZSB0byBsb2FkICIgKyBpZCk7CiAgICAKICAgIHZhciBwYXRoID0gcmVzb2x2ZU1vZHVsZUlkKGlkLCB3aW5kb3cucmVxdWlyZS50bG5zKTsKICAgIGlmIChwYXRoLnNsaWNlKC0zKSAhPSAiLmpzIikgcGF0aCArPSAiLmpzIjsKICAgIAogICAgd2luZG93LnJlcXVpcmUuaWQgPSBpZDsKICAgIHdpbmRvdy5yZXF1aXJlLm1vZHVsZXNbaWRdID0ge307IC8vIHByZXZlbnQgaW5maW5pdGUgbG9vcCBvbiBicm9rZW4gbW9kdWxlcwogICAgaW1wb3J0U2NyaXB0cyhwYXRoKTsKICAgIHJldHVybiB3aW5kb3cucmVxdWlyZShwYXJlbnRJZCwgaWQpOwp9OwpmdW5jdGlvbiByZXNvbHZlTW9kdWxlSWQoaWQsIHBhdGhzKSB7CiAgICB2YXIgdGVzdFBhdGggPSBpZCwgdGFpbCA9ICIiOwogICAgd2hpbGUgKHRlc3RQYXRoKSB7CiAgICAgICAgdmFyIGFsaWFzID0gcGF0aHNbdGVzdFBhdGhdOwogICAgICAgIGlmICh0eXBlb2YgYWxpYXMgPT0gInN0cmluZyIpIHsKICAgICAgICAgICAgcmV0dXJuIGFsaWFzICsgdGFpbDsKICAgICAgICB9IGVsc2UgaWYgKGFsaWFzKSB7CiAgICAgICAgICAgIHJldHVybiAgYWxpYXMubG9jYXRpb24ucmVwbGFjZSgvXC8qJC8sICIvIikgKyAodGFpbCB8fCBhbGlhcy5tYWluIHx8IGFsaWFzLm5hbWUpOwogICAgICAgIH0gZWxzZSBpZiAoYWxpYXMgPT09IGZhbHNlKSB7CiAgICAgICAgICAgIHJldHVybiAiIjsKICAgICAgICB9CiAgICAgICAgdmFyIGkgPSB0ZXN0UGF0aC5sYXN0SW5kZXhPZigiLyIpOwogICAgICAgIGlmIChpID09PSAtMSkgYnJlYWs7CiAgICAgICAgdGFpbCA9IHRlc3RQYXRoLnN1YnN0cihpKSArIHRhaWw7CiAgICAgICAgdGVzdFBhdGggPSB0ZXN0UGF0aC5zbGljZSgwLCBpKTsKICAgIH0KICAgIHJldHVybiBpZDsKfQp3aW5kb3cucmVxdWlyZS5tb2R1bGVzID0ge307CndpbmRvdy5yZXF1aXJlLnRsbnMgPSB7fTsKCndpbmRvdy5kZWZpbmUgPSBmdW5jdGlvbihpZCwgZGVwcywgZmFjdG9yeSkgewogICAgaWYgKGFyZ3VtZW50cy5sZW5ndGggPT0gMikgewogICAgICAgIGZhY3RvcnkgPSBkZXBzOwogICAgICAgIGlmICh0eXBlb2YgaWQgIT0gInN0cmluZyIpIHsKICAgICAgICAgICAgZGVwcyA9IGlkOwogICAgICAgICAgICBpZCA9IHdpbmRvdy5yZXF1aXJlLmlkOwogICAgICAgIH0KICAgIH0gZWxzZSBpZiAoYXJndW1lbnRzLmxlbmd0aCA9PSAxKSB7CiAgICAgICAgZmFjdG9yeSA9IGlkOwogICAgICAgIGRlcHMgPSBbXTsKICAgICAgICBpZCA9IHdpbmRvdy5yZXF1aXJlLmlkOwogICAgfQogICAgCiAgICBpZiAodHlwZW9mIGZhY3RvcnkgIT0gImZ1bmN0aW9uIikgewogICAgICAgIHdpbmRvdy5yZXF1aXJlLm1vZHVsZXNbaWRdID0gewogICAgICAgICAgICBleHBvcnRzOiBmYWN0b3J5LAogICAgICAgICAgICBpbml0aWFsaXplZDogdHJ1ZQogICAgICAgIH07CiAgICAgICAgcmV0dXJuOwogICAgfQoKICAgIGlmICghZGVwcy5sZW5ndGgpCiAgICAgICAgLy8gSWYgdGhlcmUgaXMgbm8gZGVwZW5kZW5jaWVzLCB3ZSBpbmplY3QgInJlcXVpcmUiLCAiZXhwb3J0cyIgYW5kCiAgICAgICAgLy8gIm1vZHVsZSIgYXMgZGVwZW5kZW5jaWVzLCB0byBwcm92aWRlIENvbW1vbkpTIGNvbXBhdGliaWxpdHkuCiAgICAgICAgZGVwcyA9IFsicmVxdWlyZSIsICJleHBvcnRzIiwgIm1vZHVsZSJdOwoKICAgIHZhciByZXEgPSBmdW5jdGlvbihjaGlsZElkKSB7CiAgICAgICAgcmV0dXJuIHdpbmRvdy5yZXF1aXJlKGlkLCBjaGlsZElkKTsKICAgIH07CgogICAgd2luZG93LnJlcXVpcmUubW9kdWxlc1tpZF0gPSB7CiAgICAgICAgZXhwb3J0czoge30sCiAgICAgICAgZmFjdG9yeTogZnVuY3Rpb24oKSB7CiAgICAgICAgICAgIHZhciBtb2R1bGUgPSB0aGlzOwogICAgICAgICAgICB2YXIgcmV0dXJuRXhwb3J0cyA9IGZhY3RvcnkuYXBwbHkodGhpcywgZGVwcy5zbGljZSgwLCBmYWN0b3J5Lmxlbmd0aCkubWFwKGZ1bmN0aW9uKGRlcCkgewogICAgICAgICAgICAgICAgc3dpdGNoIChkZXApIHsKICAgICAgICAgICAgICAgICAgICAvLyBCZWNhdXNlICJyZXF1aXJlIiwgImV4cG9ydHMiIGFuZCAibW9kdWxlIiBhcmVuJ3QgYWN0dWFsCiAgICAgICAgICAgICAgICAgICAgLy8gZGVwZW5kZW5jaWVzLCB3ZSBtdXN0IGhhbmRsZSB0aGVtIHNlcGVyYXRlbHkuCiAgICAgICAgICAgICAgICAgICAgY2FzZSAicmVxdWlyZSI6IHJldHVybiByZXE7CiAgICAgICAgICAgICAgICAgICAgY2FzZSAiZXhwb3J0cyI6IHJldHVybiBtb2R1bGUuZXhwb3J0czsKICAgICAgICAgICAgICAgICAgICBjYXNlICJtb2R1bGUiOiAgcmV0dXJuIG1vZHVsZTsKICAgICAgICAgICAgICAgICAgICAvLyBCdXQgZm9yIGFsbCBvdGhlciBkZXBlbmRlbmNpZXMsIHdlIGNhbiBqdXN0IGdvIGFoZWFkIGFuZAogICAgICAgICAgICAgICAgICAgIC8vIHJlcXVpcmUgdGhlbS4KICAgICAgICAgICAgICAgICAgICBkZWZhdWx0OiAgICAgICAgcmV0dXJuIHJlcShkZXApOwogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9KSk7CiAgICAgICAgICAgIGlmIChyZXR1cm5FeHBvcnRzKQogICAgICAgICAgICAgICAgbW9kdWxlLmV4cG9ydHMgPSByZXR1cm5FeHBvcnRzOwogICAgICAgICAgICByZXR1cm4gbW9kdWxlOwogICAgICAgIH0KICAgIH07Cn07CndpbmRvdy5kZWZpbmUuYW1kID0ge307CnJlcXVpcmUudGxucyA9IHt9Owp3aW5kb3cuaW5pdEJhc2VVcmxzICA9IGZ1bmN0aW9uIGluaXRCYXNlVXJscyh0b3BMZXZlbE5hbWVzcGFjZXMpIHsKICAgIGZvciAodmFyIGkgaW4gdG9wTGV2ZWxOYW1lc3BhY2VzKQogICAgICAgIHJlcXVpcmUudGxuc1tpXSA9IHRvcExldmVsTmFtZXNwYWNlc1tpXTsKfTsKCndpbmRvdy5pbml0U2VuZGVyID0gZnVuY3Rpb24gaW5pdFNlbmRlcigpIHsKCiAgICB2YXIgRXZlbnRFbWl0dGVyID0gd2luZG93LnJlcXVpcmUoImFjZS9saWIvZXZlbnRfZW1pdHRlciIpLkV2ZW50RW1pdHRlcjsKICAgIHZhciBvb3AgPSB3aW5kb3cucmVxdWlyZSgiYWNlL2xpYi9vb3AiKTsKICAgIAogICAgdmFyIFNlbmRlciA9IGZ1bmN0aW9uKCkge307CiAgICAKICAgIChmdW5jdGlvbigpIHsKICAgICAgICAKICAgICAgICBvb3AuaW1wbGVtZW50KHRoaXMsIEV2ZW50RW1pdHRlcik7CiAgICAgICAgICAgICAgICAKICAgICAgICB0aGlzLmNhbGxiYWNrID0gZnVuY3Rpb24oZGF0YSwgY2FsbGJhY2tJZCkgewogICAgICAgICAgICBwb3N0TWVzc2FnZSh7CiAgICAgICAgICAgICAgICB0eXBlOiAiY2FsbCIsCiAgICAgICAgICAgICAgICBpZDogY2FsbGJhY2tJZCwKICAgICAgICAgICAgICAgIGRhdGE6IGRhdGEKICAgICAgICAgICAgfSk7CiAgICAgICAgfTsKICAgIAogICAgICAgIHRoaXMuZW1pdCA9IGZ1bmN0aW9uKG5hbWUsIGRhdGEpIHsKICAgICAgICAgICAgcG9zdE1lc3NhZ2UoewogICAgICAgICAgICAgICAgdHlwZTogImV2ZW50IiwKICAgICAgICAgICAgICAgIG5hbWU6IG5hbWUsCiAgICAgICAgICAgICAgICBkYXRhOiBkYXRhCiAgICAgICAgICAgIH0pOwogICAgICAgIH07CiAgICAgICAgCiAgICB9KS5jYWxsKFNlbmRlci5wcm90b3R5cGUpOwogICAgCiAgICByZXR1cm4gbmV3IFNlbmRlcigpOwp9OwoKdmFyIG1haW4gPSB3aW5kb3cubWFpbiA9IG51bGw7CnZhciBzZW5kZXIgPSB3aW5kb3cuc2VuZGVyID0gbnVsbDsKCndpbmRvdy5vbm1lc3NhZ2UgPSBmdW5jdGlvbihlKSB7CiAgICB2YXIgbXNnID0gZS5kYXRhOwogICAgaWYgKG1zZy5ldmVudCAmJiBzZW5kZXIpIHsKICAgICAgICBzZW5kZXIuX3NpZ25hbChtc2cuZXZlbnQsIG1zZy5kYXRhKTsKICAgIH0KICAgIGVsc2UgaWYgKG1zZy5jb21tYW5kKSB7CiAgICAgICAgaWYgKG1haW5bbXNnLmNvbW1hbmRdKQogICAgICAgICAgICBtYWluW21zZy5jb21tYW5kXS5hcHBseShtYWluLCBtc2cuYXJncyk7CiAgICAgICAgZWxzZSBpZiAod2luZG93W21zZy5jb21tYW5kXSkKICAgICAgICAgICAgd2luZG93W21zZy5jb21tYW5kXS5hcHBseSh3aW5kb3csIG1zZy5hcmdzKTsKICAgICAgICBlbHNlCiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcigiVW5rbm93biBjb21tYW5kOiIgKyBtc2cuY29tbWFuZCk7CiAgICB9CiAgICBlbHNlIGlmIChtc2cuaW5pdCkgewogICAgICAgIHdpbmRvdy5pbml0QmFzZVVybHMobXNnLnRsbnMpOwogICAgICAgIHNlbmRlciA9IHdpbmRvdy5zZW5kZXIgPSB3aW5kb3cuaW5pdFNlbmRlcigpOwogICAgICAgIHZhciBjbGF6eiA9IHJlcXVpcmUobXNnLm1vZHVsZSlbbXNnLmNsYXNzbmFtZV07CiAgICAgICAgbWFpbiA9IHdpbmRvdy5tYWluID0gbmV3IGNsYXp6KHNlbmRlcik7CiAgICB9Cn07Cn0pKHRoaXMpOwoKYWNlLmRlZmluZSgiYWNlL2xpYi9vb3AiLFtdLCBmdW5jdGlvbihyZXF1aXJlLCBleHBvcnRzLCBtb2R1bGUpIHsKInVzZSBzdHJpY3QiOwoKZXhwb3J0cy5pbmhlcml0cyA9IGZ1bmN0aW9uKGN0b3IsIHN1cGVyQ3RvcikgewogICAgY3Rvci5zdXBlcl8gPSBzdXBlckN0b3I7CiAgICBjdG9yLnByb3RvdHlwZSA9IE9iamVjdC5jcmVhdGUoc3VwZXJDdG9yLnByb3RvdHlwZSwgewogICAgICAgIGNvbnN0cnVjdG9yOiB7CiAgICAgICAgICAgIHZhbHVlOiBjdG9yLAogICAgICAgICAgICBlbnVtZXJhYmxlOiBmYWxzZSwKICAgICAgICAgICAgd3JpdGFibGU6IHRydWUsCiAgICAgICAgICAgIGNvbmZpZ3VyYWJsZTogdHJ1ZQogICAgICAgIH0KICAgIH0pOwp9OwoKZXhwb3J0cy5taXhpbiA9IGZ1bmN0aW9uKG9iaiwgbWl4aW4pIHsKICAgIGZvciAodmFyIGtleSBpbiBtaXhpbikgewogICAgICAgIG9ialtrZXldID0gbWl4aW5ba2V5XTsKICAgIH0KICAgIHJldHVybiBvYmo7Cn07CgpleHBvcnRzLmltcGxlbWVudCA9IGZ1bmN0aW9uKHByb3RvLCBtaXhpbikgewogICAgZXhwb3J0cy5taXhpbihwcm90bywgbWl4aW4pOwp9OwoKfSk7CgphY2UuZGVmaW5lKCJhY2UvcmFuZ2UiLFtdLCBmdW5jdGlvbihyZXF1aXJlLCBleHBvcnRzLCBtb2R1bGUpIHsKInVzZSBzdHJpY3QiOwp2YXIgY29tcGFyZVBvaW50cyA9IGZ1bmN0aW9uKHAxLCBwMikgewogICAgcmV0dXJuIHAxLnJvdyAtIHAyLnJvdyB8fCBwMS5jb2x1bW4gLSBwMi5jb2x1bW47Cn07CnZhciBSYW5nZSA9IGZ1bmN0aW9uKHN0YXJ0Um93LCBzdGFydENvbHVtbiwgZW5kUm93LCBlbmRDb2x1bW4pIHsKICAgIHRoaXMuc3RhcnQgPSB7CiAgICAgICAgcm93OiBzdGFydFJvdywKICAgICAgICBjb2x1bW46IHN0YXJ0Q29sdW1uCiAgICB9OwoKICAgIHRoaXMuZW5kID0gewogICAgICAgIHJvdzogZW5kUm93LAogICAgICAgIGNvbHVtbjogZW5kQ29sdW1uCiAgICB9Owp9OwoKKGZ1bmN0aW9uKCkgewogICAgdGhpcy5pc0VxdWFsID0gZnVuY3Rpb24ocmFuZ2UpIHsKICAgICAgICByZXR1cm4gdGhpcy5zdGFydC5yb3cgPT09IHJhbmdlLnN0YXJ0LnJvdyAmJgogICAgICAgICAgICB0aGlzLmVuZC5yb3cgPT09IHJhbmdlLmVuZC5yb3cgJiYKICAgICAgICAgICAgdGhpcy5zdGFydC5jb2x1bW4gPT09IHJhbmdlLnN0YXJ0LmNvbHVtbiAmJgogICAgICAgICAgICB0aGlzLmVuZC5jb2x1bW4gPT09IHJhbmdlLmVuZC5jb2x1bW47CiAgICB9OwogICAgdGhpcy50b1N0cmluZyA9IGZ1bmN0aW9uKCkgewogICAgICAgIHJldHVybiAoIlJhbmdlOiBbIiArIHRoaXMuc3RhcnQucm93ICsgIi8iICsgdGhpcy5zdGFydC5jb2x1bW4gKwogICAgICAgICAgICAiXSAtPiBbIiArIHRoaXMuZW5kLnJvdyArICIvIiArIHRoaXMuZW5kLmNvbHVtbiArICJdIik7CiAgICB9OwoKICAgIHRoaXMuY29udGFpbnMgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIHJldHVybiB0aGlzLmNvbXBhcmUocm93LCBjb2x1bW4pID09IDA7CiAgICB9OwogICAgdGhpcy5jb21wYXJlUmFuZ2UgPSBmdW5jdGlvbihyYW5nZSkgewogICAgICAgIHZhciBjbXAsCiAgICAgICAgICAgIGVuZCA9IHJhbmdlLmVuZCwKICAgICAgICAgICAgc3RhcnQgPSByYW5nZS5zdGFydDsKCiAgICAgICAgY21wID0gdGhpcy5jb21wYXJlKGVuZC5yb3csIGVuZC5jb2x1bW4pOwogICAgICAgIGlmIChjbXAgPT0gMSkgewogICAgICAgICAgICBjbXAgPSB0aGlzLmNvbXBhcmUoc3RhcnQucm93LCBzdGFydC5jb2x1bW4pOwogICAgICAgICAgICBpZiAoY21wID09IDEpIHsKICAgICAgICAgICAgICAgIHJldHVybiAyOwogICAgICAgICAgICB9IGVsc2UgaWYgKGNtcCA9PSAwKSB7CiAgICAgICAgICAgICAgICByZXR1cm4gMTsKICAgICAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgICAgIHJldHVybiAwOwogICAgICAgICAgICB9CiAgICAgICAgfSBlbHNlIGlmIChjbXAgPT0gLTEpIHsKICAgICAgICAgICAgcmV0dXJuIC0yOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgIGNtcCA9IHRoaXMuY29tcGFyZShzdGFydC5yb3csIHN0YXJ0LmNvbHVtbik7CiAgICAgICAgICAgIGlmIChjbXAgPT0gLTEpIHsKICAgICAgICAgICAgICAgIHJldHVybiAtMTsKICAgICAgICAgICAgfSBlbHNlIGlmIChjbXAgPT0gMSkgewogICAgICAgICAgICAgICAgcmV0dXJuIDQyOwogICAgICAgICAgICB9IGVsc2UgewogICAgICAgICAgICAgICAgcmV0dXJuIDA7CiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9OwogICAgdGhpcy5jb21wYXJlUG9pbnQgPSBmdW5jdGlvbihwKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuY29tcGFyZShwLnJvdywgcC5jb2x1bW4pOwogICAgfTsKICAgIHRoaXMuY29udGFpbnNSYW5nZSA9IGZ1bmN0aW9uKHJhbmdlKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuY29tcGFyZVBvaW50KHJhbmdlLnN0YXJ0KSA9PSAwICYmIHRoaXMuY29tcGFyZVBvaW50KHJhbmdlLmVuZCkgPT0gMDsKICAgIH07CiAgICB0aGlzLmludGVyc2VjdHMgPSBmdW5jdGlvbihyYW5nZSkgewogICAgICAgIHZhciBjbXAgPSB0aGlzLmNvbXBhcmVSYW5nZShyYW5nZSk7CiAgICAgICAgcmV0dXJuIChjbXAgPT0gLTEgfHwgY21wID09IDAgfHwgY21wID09IDEpOwogICAgfTsKICAgIHRoaXMuaXNFbmQgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIHJldHVybiB0aGlzLmVuZC5yb3cgPT0gcm93ICYmIHRoaXMuZW5kLmNvbHVtbiA9PSBjb2x1bW47CiAgICB9OwogICAgdGhpcy5pc1N0YXJ0ID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICByZXR1cm4gdGhpcy5zdGFydC5yb3cgPT0gcm93ICYmIHRoaXMuc3RhcnQuY29sdW1uID09IGNvbHVtbjsKICAgIH07CiAgICB0aGlzLnNldFN0YXJ0ID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICBpZiAodHlwZW9mIHJvdyA9PSAib2JqZWN0IikgewogICAgICAgICAgICB0aGlzLnN0YXJ0LmNvbHVtbiA9IHJvdy5jb2x1bW47CiAgICAgICAgICAgIHRoaXMuc3RhcnQucm93ID0gcm93LnJvdzsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICB0aGlzLnN0YXJ0LnJvdyA9IHJvdzsKICAgICAgICAgICAgdGhpcy5zdGFydC5jb2x1bW4gPSBjb2x1bW47CiAgICAgICAgfQogICAgfTsKICAgIHRoaXMuc2V0RW5kID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICBpZiAodHlwZW9mIHJvdyA9PSAib2JqZWN0IikgewogICAgICAgICAgICB0aGlzLmVuZC5jb2x1bW4gPSByb3cuY29sdW1uOwogICAgICAgICAgICB0aGlzLmVuZC5yb3cgPSByb3cucm93OwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgIHRoaXMuZW5kLnJvdyA9IHJvdzsKICAgICAgICAgICAgdGhpcy5lbmQuY29sdW1uID0gY29sdW1uOwogICAgICAgIH0KICAgIH07CiAgICB0aGlzLmluc2lkZSA9IGZ1bmN0aW9uKHJvdywgY29sdW1uKSB7CiAgICAgICAgaWYgKHRoaXMuY29tcGFyZShyb3csIGNvbHVtbikgPT0gMCkgewogICAgICAgICAgICBpZiAodGhpcy5pc0VuZChyb3csIGNvbHVtbikgfHwgdGhpcy5pc1N0YXJ0KHJvdywgY29sdW1uKSkgewogICAgICAgICAgICAgICAgcmV0dXJuIGZhbHNlOwogICAgICAgICAgICB9IGVsc2UgewogICAgICAgICAgICAgICAgcmV0dXJuIHRydWU7CiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICAgICAgcmV0dXJuIGZhbHNlOwogICAgfTsKICAgIHRoaXMuaW5zaWRlU3RhcnQgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIGlmICh0aGlzLmNvbXBhcmUocm93LCBjb2x1bW4pID09IDApIHsKICAgICAgICAgICAgaWYgKHRoaXMuaXNFbmQocm93LCBjb2x1bW4pKSB7CiAgICAgICAgICAgICAgICByZXR1cm4gZmFsc2U7CiAgICAgICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICByZXR1cm4gdHJ1ZTsKICAgICAgICAgICAgfQogICAgICAgIH0KICAgICAgICByZXR1cm4gZmFsc2U7CiAgICB9OwogICAgdGhpcy5pbnNpZGVFbmQgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIGlmICh0aGlzLmNvbXBhcmUocm93LCBjb2x1bW4pID09IDApIHsKICAgICAgICAgICAgaWYgKHRoaXMuaXNTdGFydChyb3csIGNvbHVtbikpIHsKICAgICAgICAgICAgICAgIHJldHVybiBmYWxzZTsKICAgICAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgICAgIHJldHVybiB0cnVlOwogICAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIHJldHVybiBmYWxzZTsKICAgIH07CiAgICB0aGlzLmNvbXBhcmUgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIGlmICghdGhpcy5pc011bHRpTGluZSgpKSB7CiAgICAgICAgICAgIGlmIChyb3cgPT09IHRoaXMuc3RhcnQucm93KSB7CiAgICAgICAgICAgICAgICByZXR1cm4gY29sdW1uIDwgdGhpcy5zdGFydC5jb2x1bW4gPyAtMSA6IChjb2x1bW4gPiB0aGlzLmVuZC5jb2x1bW4gPyAxIDogMCk7CiAgICAgICAgICAgIH0KICAgICAgICB9CgogICAgICAgIGlmIChyb3cgPCB0aGlzLnN0YXJ0LnJvdykKICAgICAgICAgICAgcmV0dXJuIC0xOwoKICAgICAgICBpZiAocm93ID4gdGhpcy5lbmQucm93KQogICAgICAgICAgICByZXR1cm4gMTsKCiAgICAgICAgaWYgKHRoaXMuc3RhcnQucm93ID09PSByb3cpCiAgICAgICAgICAgIHJldHVybiBjb2x1bW4gPj0gdGhpcy5zdGFydC5jb2x1bW4gPyAwIDogLTE7CgogICAgICAgIGlmICh0aGlzLmVuZC5yb3cgPT09IHJvdykKICAgICAgICAgICAgcmV0dXJuIGNvbHVtbiA8PSB0aGlzLmVuZC5jb2x1bW4gPyAwIDogMTsKCiAgICAgICAgcmV0dXJuIDA7CiAgICB9OwogICAgdGhpcy5jb21wYXJlU3RhcnQgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIGlmICh0aGlzLnN0YXJ0LnJvdyA9PSByb3cgJiYgdGhpcy5zdGFydC5jb2x1bW4gPT0gY29sdW1uKSB7CiAgICAgICAgICAgIHJldHVybiAtMTsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICByZXR1cm4gdGhpcy5jb21wYXJlKHJvdywgY29sdW1uKTsKICAgICAgICB9CiAgICB9OwogICAgdGhpcy5jb21wYXJlRW5kID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICBpZiAodGhpcy5lbmQucm93ID09IHJvdyAmJiB0aGlzLmVuZC5jb2x1bW4gPT0gY29sdW1uKSB7CiAgICAgICAgICAgIHJldHVybiAxOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgIHJldHVybiB0aGlzLmNvbXBhcmUocm93LCBjb2x1bW4pOwogICAgICAgIH0KICAgIH07CiAgICB0aGlzLmNvbXBhcmVJbnNpZGUgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIGlmICh0aGlzLmVuZC5yb3cgPT0gcm93ICYmIHRoaXMuZW5kLmNvbHVtbiA9PSBjb2x1bW4pIHsKICAgICAgICAgICAgcmV0dXJuIDE7CiAgICAgICAgfSBlbHNlIGlmICh0aGlzLnN0YXJ0LnJvdyA9PSByb3cgJiYgdGhpcy5zdGFydC5jb2x1bW4gPT0gY29sdW1uKSB7CiAgICAgICAgICAgIHJldHVybiAtMTsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICByZXR1cm4gdGhpcy5jb21wYXJlKHJvdywgY29sdW1uKTsKICAgICAgICB9CiAgICB9OwogICAgdGhpcy5jbGlwUm93cyA9IGZ1bmN0aW9uKGZpcnN0Um93LCBsYXN0Um93KSB7CiAgICAgICAgaWYgKHRoaXMuZW5kLnJvdyA+IGxhc3RSb3cpCiAgICAgICAgICAgIHZhciBlbmQgPSB7cm93OiBsYXN0Um93ICsgMSwgY29sdW1uOiAwfTsKICAgICAgICBlbHNlIGlmICh0aGlzLmVuZC5yb3cgPCBmaXJzdFJvdykKICAgICAgICAgICAgdmFyIGVuZCA9IHtyb3c6IGZpcnN0Um93LCBjb2x1bW46IDB9OwoKICAgICAgICBpZiAodGhpcy5zdGFydC5yb3cgPiBsYXN0Um93KQogICAgICAgICAgICB2YXIgc3RhcnQgPSB7cm93OiBsYXN0Um93ICsgMSwgY29sdW1uOiAwfTsKICAgICAgICBlbHNlIGlmICh0aGlzLnN0YXJ0LnJvdyA8IGZpcnN0Um93KQogICAgICAgICAgICB2YXIgc3RhcnQgPSB7cm93OiBmaXJzdFJvdywgY29sdW1uOiAwfTsKCiAgICAgICAgcmV0dXJuIFJhbmdlLmZyb21Qb2ludHMoc3RhcnQgfHwgdGhpcy5zdGFydCwgZW5kIHx8IHRoaXMuZW5kKTsKICAgIH07CiAgICB0aGlzLmV4dGVuZCA9IGZ1bmN0aW9uKHJvdywgY29sdW1uKSB7CiAgICAgICAgdmFyIGNtcCA9IHRoaXMuY29tcGFyZShyb3csIGNvbHVtbik7CgogICAgICAgIGlmIChjbXAgPT0gMCkKICAgICAgICAgICAgcmV0dXJuIHRoaXM7CiAgICAgICAgZWxzZSBpZiAoY21wID09IC0xKQogICAgICAgICAgICB2YXIgc3RhcnQgPSB7cm93OiByb3csIGNvbHVtbjogY29sdW1ufTsKICAgICAgICBlbHNlCiAgICAgICAgICAgIHZhciBlbmQgPSB7cm93OiByb3csIGNvbHVtbjogY29sdW1ufTsKCiAgICAgICAgcmV0dXJuIFJhbmdlLmZyb21Qb2ludHMoc3RhcnQgfHwgdGhpcy5zdGFydCwgZW5kIHx8IHRoaXMuZW5kKTsKICAgIH07CgogICAgdGhpcy5pc0VtcHR5ID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuICh0aGlzLnN0YXJ0LnJvdyA9PT0gdGhpcy5lbmQucm93ICYmIHRoaXMuc3RhcnQuY29sdW1uID09PSB0aGlzLmVuZC5jb2x1bW4pOwogICAgfTsKICAgIHRoaXMuaXNNdWx0aUxpbmUgPSBmdW5jdGlvbigpIHsKICAgICAgICByZXR1cm4gKHRoaXMuc3RhcnQucm93ICE9PSB0aGlzLmVuZC5yb3cpOwogICAgfTsKICAgIHRoaXMuY2xvbmUgPSBmdW5jdGlvbigpIHsKICAgICAgICByZXR1cm4gUmFuZ2UuZnJvbVBvaW50cyh0aGlzLnN0YXJ0LCB0aGlzLmVuZCk7CiAgICB9OwogICAgdGhpcy5jb2xsYXBzZVJvd3MgPSBmdW5jdGlvbigpIHsKICAgICAgICBpZiAodGhpcy5lbmQuY29sdW1uID09IDApCiAgICAgICAgICAgIHJldHVybiBuZXcgUmFuZ2UodGhpcy5zdGFydC5yb3csIDAsIE1hdGgubWF4KHRoaXMuc3RhcnQucm93LCB0aGlzLmVuZC5yb3ctMSksIDApOwogICAgICAgIGVsc2UKICAgICAgICAgICAgcmV0dXJuIG5ldyBSYW5nZSh0aGlzLnN0YXJ0LnJvdywgMCwgdGhpcy5lbmQucm93LCAwKTsKICAgIH07CiAgICB0aGlzLnRvU2NyZWVuUmFuZ2UgPSBmdW5jdGlvbihzZXNzaW9uKSB7CiAgICAgICAgdmFyIHNjcmVlblBvc1N0YXJ0ID0gc2Vzc2lvbi5kb2N1bWVudFRvU2NyZWVuUG9zaXRpb24odGhpcy5zdGFydCk7CiAgICAgICAgdmFyIHNjcmVlblBvc0VuZCA9IHNlc3Npb24uZG9jdW1lbnRUb1NjcmVlblBvc2l0aW9uKHRoaXMuZW5kKTsKCiAgICAgICAgcmV0dXJuIG5ldyBSYW5nZSgKICAgICAgICAgICAgc2NyZWVuUG9zU3RhcnQucm93LCBzY3JlZW5Qb3NTdGFydC5jb2x1bW4sCiAgICAgICAgICAgIHNjcmVlblBvc0VuZC5yb3csIHNjcmVlblBvc0VuZC5jb2x1bW4KICAgICAgICApOwogICAgfTsKICAgIHRoaXMubW92ZUJ5ID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICB0aGlzLnN0YXJ0LnJvdyArPSByb3c7CiAgICAgICAgdGhpcy5zdGFydC5jb2x1bW4gKz0gY29sdW1uOwogICAgICAgIHRoaXMuZW5kLnJvdyArPSByb3c7CiAgICAgICAgdGhpcy5lbmQuY29sdW1uICs9IGNvbHVtbjsKICAgIH07Cgp9KS5jYWxsKFJhbmdlLnByb3RvdHlwZSk7ClJhbmdlLmZyb21Qb2ludHMgPSBmdW5jdGlvbihzdGFydCwgZW5kKSB7CiAgICByZXR1cm4gbmV3IFJhbmdlKHN0YXJ0LnJvdywgc3RhcnQuY29sdW1uLCBlbmQucm93LCBlbmQuY29sdW1uKTsKfTsKUmFuZ2UuY29tcGFyZVBvaW50cyA9IGNvbXBhcmVQb2ludHM7CgpSYW5nZS5jb21wYXJlUG9pbnRzID0gZnVuY3Rpb24ocDEsIHAyKSB7CiAgICByZXR1cm4gcDEucm93IC0gcDIucm93IHx8IHAxLmNvbHVtbiAtIHAyLmNvbHVtbjsKfTsKCgpleHBvcnRzLlJhbmdlID0gUmFuZ2U7Cn0pOwoKYWNlLmRlZmluZSgiYWNlL2FwcGx5X2RlbHRhIixbXSwgZnVuY3Rpb24ocmVxdWlyZSwgZXhwb3J0cywgbW9kdWxlKSB7CiJ1c2Ugc3RyaWN0IjsKCmZ1bmN0aW9uIHRocm93RGVsdGFFcnJvcihkZWx0YSwgZXJyb3JUZXh0KXsKICAgIGNvbnNvbGUubG9nKCJJbnZhbGlkIERlbHRhOiIsIGRlbHRhKTsKICAgIHRocm93ICJJbnZhbGlkIERlbHRhOiAiICsgZXJyb3JUZXh0Owp9CgpmdW5jdGlvbiBwb3NpdGlvbkluRG9jdW1lbnQoZG9jTGluZXMsIHBvc2l0aW9uKSB7CiAgICByZXR1cm4gcG9zaXRpb24ucm93ICAgID49IDAgJiYgcG9zaXRpb24ucm93ICAgIDwgIGRvY0xpbmVzLmxlbmd0aCAmJgogICAgICAgICAgIHBvc2l0aW9uLmNvbHVtbiA+PSAwICYmIHBvc2l0aW9uLmNvbHVtbiA8PSBkb2NMaW5lc1twb3NpdGlvbi5yb3ddLmxlbmd0aDsKfQoKZnVuY3Rpb24gdmFsaWRhdGVEZWx0YShkb2NMaW5lcywgZGVsdGEpIHsKICAgIGlmIChkZWx0YS5hY3Rpb24gIT0gImluc2VydCIgJiYgZGVsdGEuYWN0aW9uICE9ICJyZW1vdmUiKQogICAgICAgIHRocm93RGVsdGFFcnJvcihkZWx0YSwgImRlbHRhLmFjdGlvbiBtdXN0IGJlICdpbnNlcnQnIG9yICdyZW1vdmUnIik7CiAgICBpZiAoIShkZWx0YS5saW5lcyBpbnN0YW5jZW9mIEFycmF5KSkKICAgICAgICB0aHJvd0RlbHRhRXJyb3IoZGVsdGEsICJkZWx0YS5saW5lcyBtdXN0IGJlIGFuIEFycmF5Iik7CiAgICBpZiAoIWRlbHRhLnN0YXJ0IHx8ICFkZWx0YS5lbmQpCiAgICAgICB0aHJvd0RlbHRhRXJyb3IoZGVsdGEsICJkZWx0YS5zdGFydC9lbmQgbXVzdCBiZSBhbiBwcmVzZW50Iik7CiAgICB2YXIgc3RhcnQgPSBkZWx0YS5zdGFydDsKICAgIGlmICghcG9zaXRpb25JbkRvY3VtZW50KGRvY0xpbmVzLCBkZWx0YS5zdGFydCkpCiAgICAgICAgdGhyb3dEZWx0YUVycm9yKGRlbHRhLCAiZGVsdGEuc3RhcnQgbXVzdCBiZSBjb250YWluZWQgaW4gZG9jdW1lbnQiKTsKICAgIHZhciBlbmQgPSBkZWx0YS5lbmQ7CiAgICBpZiAoZGVsdGEuYWN0aW9uID09ICJyZW1vdmUiICYmICFwb3NpdGlvbkluRG9jdW1lbnQoZG9jTGluZXMsIGVuZCkpCiAgICAgICAgdGhyb3dEZWx0YUVycm9yKGRlbHRhLCAiZGVsdGEuZW5kIG11c3QgY29udGFpbmVkIGluIGRvY3VtZW50IGZvciAncmVtb3ZlJyBhY3Rpb25zIik7CiAgICB2YXIgbnVtUmFuZ2VSb3dzID0gZW5kLnJvdyAtIHN0YXJ0LnJvdzsKICAgIHZhciBudW1SYW5nZUxhc3RMaW5lQ2hhcnMgPSAoZW5kLmNvbHVtbiAtIChudW1SYW5nZVJvd3MgPT0gMCA/IHN0YXJ0LmNvbHVtbiA6IDApKTsKICAgIGlmIChudW1SYW5nZVJvd3MgIT0gZGVsdGEubGluZXMubGVuZ3RoIC0gMSB8fCBkZWx0YS5saW5lc1tudW1SYW5nZVJvd3NdLmxlbmd0aCAhPSBudW1SYW5nZUxhc3RMaW5lQ2hhcnMpCiAgICAgICAgdGhyb3dEZWx0YUVycm9yKGRlbHRhLCAiZGVsdGEucmFuZ2UgbXVzdCBtYXRjaCBkZWx0YSBsaW5lcyIpOwp9CgpleHBvcnRzLmFwcGx5RGVsdGEgPSBmdW5jdGlvbihkb2NMaW5lcywgZGVsdGEsIGRvTm90VmFsaWRhdGUpIHsKICAgIAogICAgdmFyIHJvdyA9IGRlbHRhLnN0YXJ0LnJvdzsKICAgIHZhciBzdGFydENvbHVtbiA9IGRlbHRhLnN0YXJ0LmNvbHVtbjsKICAgIHZhciBsaW5lID0gZG9jTGluZXNbcm93XSB8fCAiIjsKICAgIHN3aXRjaCAoZGVsdGEuYWN0aW9uKSB7CiAgICAgICAgY2FzZSAiaW5zZXJ0IjoKICAgICAgICAgICAgdmFyIGxpbmVzID0gZGVsdGEubGluZXM7CiAgICAgICAgICAgIGlmIChsaW5lcy5sZW5ndGggPT09IDEpIHsKICAgICAgICAgICAgICAgIGRvY0xpbmVzW3Jvd10gPSBsaW5lLnN1YnN0cmluZygwLCBzdGFydENvbHVtbikgKyBkZWx0YS5saW5lc1swXSArIGxpbmUuc3Vic3RyaW5nKHN0YXJ0Q29sdW1uKTsKICAgICAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgICAgIHZhciBhcmdzID0gW3JvdywgMV0uY29uY2F0KGRlbHRhLmxpbmVzKTsKICAgICAgICAgICAgICAgIGRvY0xpbmVzLnNwbGljZS5hcHBseShkb2NMaW5lcywgYXJncyk7CiAgICAgICAgICAgICAgICBkb2NMaW5lc1tyb3ddID0gbGluZS5zdWJzdHJpbmcoMCwgc3RhcnRDb2x1bW4pICsgZG9jTGluZXNbcm93XTsKICAgICAgICAgICAgICAgIGRvY0xpbmVzW3JvdyArIGRlbHRhLmxpbmVzLmxlbmd0aCAtIDFdICs9IGxpbmUuc3Vic3RyaW5nKHN0YXJ0Q29sdW1uKTsKICAgICAgICAgICAgfQogICAgICAgICAgICBicmVhazsKICAgICAgICBjYXNlICJyZW1vdmUiOgogICAgICAgICAgICB2YXIgZW5kQ29sdW1uID0gZGVsdGEuZW5kLmNvbHVtbjsKICAgICAgICAgICAgdmFyIGVuZFJvdyA9IGRlbHRhLmVuZC5yb3c7CiAgICAgICAgICAgIGlmIChyb3cgPT09IGVuZFJvdykgewogICAgICAgICAgICAgICAgZG9jTGluZXNbcm93XSA9IGxpbmUuc3Vic3RyaW5nKDAsIHN0YXJ0Q29sdW1uKSArIGxpbmUuc3Vic3RyaW5nKGVuZENvbHVtbik7CiAgICAgICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICBkb2NMaW5lcy5zcGxpY2UoCiAgICAgICAgICAgICAgICAgICAgcm93LCBlbmRSb3cgLSByb3cgKyAxLAogICAgICAgICAgICAgICAgICAgIGxpbmUuc3Vic3RyaW5nKDAsIHN0YXJ0Q29sdW1uKSArIGRvY0xpbmVzW2VuZFJvd10uc3Vic3RyaW5nKGVuZENvbHVtbikKICAgICAgICAgICAgICAgICk7CiAgICAgICAgICAgIH0KICAgICAgICAgICAgYnJlYWs7CiAgICB9Cn07Cn0pOwoKYWNlLmRlZmluZSgiYWNlL2xpYi9ldmVudF9lbWl0dGVyIixbXSwgZnVuY3Rpb24ocmVxdWlyZSwgZXhwb3J0cywgbW9kdWxlKSB7CiJ1c2Ugc3RyaWN0IjsKCnZhciBFdmVudEVtaXR0ZXIgPSB7fTsKdmFyIHN0b3BQcm9wYWdhdGlvbiA9IGZ1bmN0aW9uKCkgeyB0aGlzLnByb3BhZ2F0aW9uU3RvcHBlZCA9IHRydWU7IH07CnZhciBwcmV2ZW50RGVmYXVsdCA9IGZ1bmN0aW9uKCkgeyB0aGlzLmRlZmF1bHRQcmV2ZW50ZWQgPSB0cnVlOyB9OwoKRXZlbnRFbWl0dGVyLl9lbWl0ID0KRXZlbnRFbWl0dGVyLl9kaXNwYXRjaEV2ZW50ID0gZnVuY3Rpb24oZXZlbnROYW1lLCBlKSB7CiAgICB0aGlzLl9ldmVudFJlZ2lzdHJ5IHx8ICh0aGlzLl9ldmVudFJlZ2lzdHJ5ID0ge30pOwogICAgdGhpcy5fZGVmYXVsdEhhbmRsZXJzIHx8ICh0aGlzLl9kZWZhdWx0SGFuZGxlcnMgPSB7fSk7CgogICAgdmFyIGxpc3RlbmVycyA9IHRoaXMuX2V2ZW50UmVnaXN0cnlbZXZlbnROYW1lXSB8fCBbXTsKICAgIHZhciBkZWZhdWx0SGFuZGxlciA9IHRoaXMuX2RlZmF1bHRIYW5kbGVyc1tldmVudE5hbWVdOwogICAgaWYgKCFsaXN0ZW5lcnMubGVuZ3RoICYmICFkZWZhdWx0SGFuZGxlcikKICAgICAgICByZXR1cm47CgogICAgaWYgKHR5cGVvZiBlICE9ICJvYmplY3QiIHx8ICFlKQogICAgICAgIGUgPSB7fTsKCiAgICBpZiAoIWUudHlwZSkKICAgICAgICBlLnR5cGUgPSBldmVudE5hbWU7CiAgICBpZiAoIWUuc3RvcFByb3BhZ2F0aW9uKQogICAgICAgIGUuc3RvcFByb3BhZ2F0aW9uID0gc3RvcFByb3BhZ2F0aW9uOwogICAgaWYgKCFlLnByZXZlbnREZWZhdWx0KQogICAgICAgIGUucHJldmVudERlZmF1bHQgPSBwcmV2ZW50RGVmYXVsdDsKCiAgICBsaXN0ZW5lcnMgPSBsaXN0ZW5lcnMuc2xpY2UoKTsKICAgIGZvciAodmFyIGk9MDsgaTxsaXN0ZW5lcnMubGVuZ3RoOyBpKyspIHsKICAgICAgICBsaXN0ZW5lcnNbaV0oZSwgdGhpcyk7CiAgICAgICAgaWYgKGUucHJvcGFnYXRpb25TdG9wcGVkKQogICAgICAgICAgICBicmVhazsKICAgIH0KICAgIAogICAgaWYgKGRlZmF1bHRIYW5kbGVyICYmICFlLmRlZmF1bHRQcmV2ZW50ZWQpCiAgICAgICAgcmV0dXJuIGRlZmF1bHRIYW5kbGVyKGUsIHRoaXMpOwp9OwoKCkV2ZW50RW1pdHRlci5fc2lnbmFsID0gZnVuY3Rpb24oZXZlbnROYW1lLCBlKSB7CiAgICB2YXIgbGlzdGVuZXJzID0gKHRoaXMuX2V2ZW50UmVnaXN0cnkgfHwge30pW2V2ZW50TmFtZV07CiAgICBpZiAoIWxpc3RlbmVycykKICAgICAgICByZXR1cm47CiAgICBsaXN0ZW5lcnMgPSBsaXN0ZW5lcnMuc2xpY2UoKTsKICAgIGZvciAodmFyIGk9MDsgaTxsaXN0ZW5lcnMubGVuZ3RoOyBpKyspCiAgICAgICAgbGlzdGVuZXJzW2ldKGUsIHRoaXMpOwp9OwoKRXZlbnRFbWl0dGVyLm9uY2UgPSBmdW5jdGlvbihldmVudE5hbWUsIGNhbGxiYWNrKSB7CiAgICB2YXIgX3NlbGYgPSB0aGlzOwogICAgdGhpcy5vbihldmVudE5hbWUsIGZ1bmN0aW9uIG5ld0NhbGxiYWNrKCkgewogICAgICAgIF9zZWxmLm9mZihldmVudE5hbWUsIG5ld0NhbGxiYWNrKTsKICAgICAgICBjYWxsYmFjay5hcHBseShudWxsLCBhcmd1bWVudHMpOwogICAgfSk7CiAgICBpZiAoIWNhbGxiYWNrKSB7CiAgICAgICAgcmV0dXJuIG5ldyBQcm9taXNlKGZ1bmN0aW9uKHJlc29sdmUpIHsKICAgICAgICAgICAgY2FsbGJhY2sgPSByZXNvbHZlOwogICAgICAgIH0pOwogICAgfQp9OwoKCkV2ZW50RW1pdHRlci5zZXREZWZhdWx0SGFuZGxlciA9IGZ1bmN0aW9uKGV2ZW50TmFtZSwgY2FsbGJhY2spIHsKICAgIHZhciBoYW5kbGVycyA9IHRoaXMuX2RlZmF1bHRIYW5kbGVyczsKICAgIGlmICghaGFuZGxlcnMpCiAgICAgICAgaGFuZGxlcnMgPSB0aGlzLl9kZWZhdWx0SGFuZGxlcnMgPSB7X2Rpc2FibGVkXzoge319OwogICAgCiAgICBpZiAoaGFuZGxlcnNbZXZlbnROYW1lXSkgewogICAgICAgIHZhciBvbGQgPSBoYW5kbGVyc1tldmVudE5hbWVdOwogICAgICAgIHZhciBkaXNhYmxlZCA9IGhhbmRsZXJzLl9kaXNhYmxlZF9bZXZlbnROYW1lXTsKICAgICAgICBpZiAoIWRpc2FibGVkKQogICAgICAgICAgICBoYW5kbGVycy5fZGlzYWJsZWRfW2V2ZW50TmFtZV0gPSBkaXNhYmxlZCA9IFtdOwogICAgICAgIGRpc2FibGVkLnB1c2gob2xkKTsKICAgICAgICB2YXIgaSA9IGRpc2FibGVkLmluZGV4T2YoY2FsbGJhY2spOwogICAgICAgIGlmIChpICE9IC0xKSAKICAgICAgICAgICAgZGlzYWJsZWQuc3BsaWNlKGksIDEpOwogICAgfQogICAgaGFuZGxlcnNbZXZlbnROYW1lXSA9IGNhbGxiYWNrOwp9OwpFdmVudEVtaXR0ZXIucmVtb3ZlRGVmYXVsdEhhbmRsZXIgPSBmdW5jdGlvbihldmVudE5hbWUsIGNhbGxiYWNrKSB7CiAgICB2YXIgaGFuZGxlcnMgPSB0aGlzLl9kZWZhdWx0SGFuZGxlcnM7CiAgICBpZiAoIWhhbmRsZXJzKQogICAgICAgIHJldHVybjsKICAgIHZhciBkaXNhYmxlZCA9IGhhbmRsZXJzLl9kaXNhYmxlZF9bZXZlbnROYW1lXTsKICAgIAogICAgaWYgKGhhbmRsZXJzW2V2ZW50TmFtZV0gPT0gY2FsbGJhY2spIHsKICAgICAgICBpZiAoZGlzYWJsZWQpCiAgICAgICAgICAgIHRoaXMuc2V0RGVmYXVsdEhhbmRsZXIoZXZlbnROYW1lLCBkaXNhYmxlZC5wb3AoKSk7CiAgICB9IGVsc2UgaWYgKGRpc2FibGVkKSB7CiAgICAgICAgdmFyIGkgPSBkaXNhYmxlZC5pbmRleE9mKGNhbGxiYWNrKTsKICAgICAgICBpZiAoaSAhPSAtMSkKICAgICAgICAgICAgZGlzYWJsZWQuc3BsaWNlKGksIDEpOwogICAgfQp9OwoKRXZlbnRFbWl0dGVyLm9uID0KRXZlbnRFbWl0dGVyLmFkZEV2ZW50TGlzdGVuZXIgPSBmdW5jdGlvbihldmVudE5hbWUsIGNhbGxiYWNrLCBjYXB0dXJpbmcpIHsKICAgIHRoaXMuX2V2ZW50UmVnaXN0cnkgPSB0aGlzLl9ldmVudFJlZ2lzdHJ5IHx8IHt9OwoKICAgIHZhciBsaXN0ZW5lcnMgPSB0aGlzLl9ldmVudFJlZ2lzdHJ5W2V2ZW50TmFtZV07CiAgICBpZiAoIWxpc3RlbmVycykKICAgICAgICBsaXN0ZW5lcnMgPSB0aGlzLl9ldmVudFJlZ2lzdHJ5W2V2ZW50TmFtZV0gPSBbXTsKCiAgICBpZiAobGlzdGVuZXJzLmluZGV4T2YoY2FsbGJhY2spID09IC0xKQogICAgICAgIGxpc3RlbmVyc1tjYXB0dXJpbmcgPyAidW5zaGlmdCIgOiAicHVzaCJdKGNhbGxiYWNrKTsKICAgIHJldHVybiBjYWxsYmFjazsKfTsKCkV2ZW50RW1pdHRlci5vZmYgPQpFdmVudEVtaXR0ZXIucmVtb3ZlTGlzdGVuZXIgPQpFdmVudEVtaXR0ZXIucmVtb3ZlRXZlbnRMaXN0ZW5lciA9IGZ1bmN0aW9uKGV2ZW50TmFtZSwgY2FsbGJhY2spIHsKICAgIHRoaXMuX2V2ZW50UmVnaXN0cnkgPSB0aGlzLl9ldmVudFJlZ2lzdHJ5IHx8IHt9OwoKICAgIHZhciBsaXN0ZW5lcnMgPSB0aGlzLl9ldmVudFJlZ2lzdHJ5W2V2ZW50TmFtZV07CiAgICBpZiAoIWxpc3RlbmVycykKICAgICAgICByZXR1cm47CgogICAgdmFyIGluZGV4ID0gbGlzdGVuZXJzLmluZGV4T2YoY2FsbGJhY2spOwogICAgaWYgKGluZGV4ICE9PSAtMSkKICAgICAgICBsaXN0ZW5lcnMuc3BsaWNlKGluZGV4LCAxKTsKfTsKCkV2ZW50RW1pdHRlci5yZW1vdmVBbGxMaXN0ZW5lcnMgPSBmdW5jdGlvbihldmVudE5hbWUpIHsKICAgIGlmICghZXZlbnROYW1lKSB0aGlzLl9ldmVudFJlZ2lzdHJ5ID0gdGhpcy5fZGVmYXVsdEhhbmRsZXJzID0gdW5kZWZpbmVkOwogICAgaWYgKHRoaXMuX2V2ZW50UmVnaXN0cnkpIHRoaXMuX2V2ZW50UmVnaXN0cnlbZXZlbnROYW1lXSA9IHVuZGVmaW5lZDsKICAgIGlmICh0aGlzLl9kZWZhdWx0SGFuZGxlcnMpIHRoaXMuX2RlZmF1bHRIYW5kbGVyc1tldmVudE5hbWVdID0gdW5kZWZpbmVkOwp9OwoKZXhwb3J0cy5FdmVudEVtaXR0ZXIgPSBFdmVudEVtaXR0ZXI7Cgp9KTsKCmFjZS5kZWZpbmUoImFjZS9hbmNob3IiLFtdLCBmdW5jdGlvbihyZXF1aXJlLCBleHBvcnRzLCBtb2R1bGUpIHsKInVzZSBzdHJpY3QiOwoKdmFyIG9vcCA9IHJlcXVpcmUoIi4vbGliL29vcCIpOwp2YXIgRXZlbnRFbWl0dGVyID0gcmVxdWlyZSgiLi9saWIvZXZlbnRfZW1pdHRlciIpLkV2ZW50RW1pdHRlcjsKCnZhciBBbmNob3IgPSBleHBvcnRzLkFuY2hvciA9IGZ1bmN0aW9uKGRvYywgcm93LCBjb2x1bW4pIHsKICAgIHRoaXMuJG9uQ2hhbmdlID0gdGhpcy5vbkNoYW5nZS5iaW5kKHRoaXMpOwogICAgdGhpcy5hdHRhY2goZG9jKTsKICAgIAogICAgaWYgKHR5cGVvZiBjb2x1bW4gPT0gInVuZGVmaW5lZCIpCiAgICAgICAgdGhpcy5zZXRQb3NpdGlvbihyb3cucm93LCByb3cuY29sdW1uKTsKICAgIGVsc2UKICAgICAgICB0aGlzLnNldFBvc2l0aW9uKHJvdywgY29sdW1uKTsKfTsKCihmdW5jdGlvbigpIHsKCiAgICBvb3AuaW1wbGVtZW50KHRoaXMsIEV2ZW50RW1pdHRlcik7CiAgICB0aGlzLmdldFBvc2l0aW9uID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuJGNsaXBQb3NpdGlvblRvRG9jdW1lbnQodGhpcy5yb3csIHRoaXMuY29sdW1uKTsKICAgIH07CiAgICB0aGlzLmdldERvY3VtZW50ID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuZG9jdW1lbnQ7CiAgICB9OwogICAgdGhpcy4kaW5zZXJ0UmlnaHQgPSBmYWxzZTsKICAgIHRoaXMub25DaGFuZ2UgPSBmdW5jdGlvbihkZWx0YSkgewogICAgICAgIGlmIChkZWx0YS5zdGFydC5yb3cgPT0gZGVsdGEuZW5kLnJvdyAmJiBkZWx0YS5zdGFydC5yb3cgIT0gdGhpcy5yb3cpCiAgICAgICAgICAgIHJldHVybjsKCiAgICAgICAgaWYgKGRlbHRhLnN0YXJ0LnJvdyA+IHRoaXMucm93KQogICAgICAgICAgICByZXR1cm47CiAgICAgICAgICAgIAogICAgICAgIHZhciBwb2ludCA9ICRnZXRUcmFuc2Zvcm1lZFBvaW50KGRlbHRhLCB7cm93OiB0aGlzLnJvdywgY29sdW1uOiB0aGlzLmNvbHVtbn0sIHRoaXMuJGluc2VydFJpZ2h0KTsKICAgICAgICB0aGlzLnNldFBvc2l0aW9uKHBvaW50LnJvdywgcG9pbnQuY29sdW1uLCB0cnVlKTsKICAgIH07CiAgICAKICAgIGZ1bmN0aW9uICRwb2ludHNJbk9yZGVyKHBvaW50MSwgcG9pbnQyLCBlcXVhbFBvaW50c0luT3JkZXIpIHsKICAgICAgICB2YXIgYkNvbElzQWZ0ZXIgPSBlcXVhbFBvaW50c0luT3JkZXIgPyBwb2ludDEuY29sdW1uIDw9IHBvaW50Mi5jb2x1bW4gOiBwb2ludDEuY29sdW1uIDwgcG9pbnQyLmNvbHVtbjsKICAgICAgICByZXR1cm4gKHBvaW50MS5yb3cgPCBwb2ludDIucm93KSB8fCAocG9pbnQxLnJvdyA9PSBwb2ludDIucm93ICYmIGJDb2xJc0FmdGVyKTsKICAgIH0KICAgICAgICAgICAgCiAgICBmdW5jdGlvbiAkZ2V0VHJhbnNmb3JtZWRQb2ludChkZWx0YSwgcG9pbnQsIG1vdmVJZkVxdWFsKSB7CiAgICAgICAgdmFyIGRlbHRhSXNJbnNlcnQgPSBkZWx0YS5hY3Rpb24gPT0gImluc2VydCI7CiAgICAgICAgdmFyIGRlbHRhUm93U2hpZnQgPSAoZGVsdGFJc0luc2VydCA/IDEgOiAtMSkgKiAoZGVsdGEuZW5kLnJvdyAgICAtIGRlbHRhLnN0YXJ0LnJvdyk7CiAgICAgICAgdmFyIGRlbHRhQ29sU2hpZnQgPSAoZGVsdGFJc0luc2VydCA/IDEgOiAtMSkgKiAoZGVsdGEuZW5kLmNvbHVtbiAtIGRlbHRhLnN0YXJ0LmNvbHVtbik7CiAgICAgICAgdmFyIGRlbHRhU3RhcnQgPSBkZWx0YS5zdGFydDsKICAgICAgICB2YXIgZGVsdGFFbmQgPSBkZWx0YUlzSW5zZXJ0ID8gZGVsdGFTdGFydCA6IGRlbHRhLmVuZDsgLy8gQ29sbGFwc2UgaW5zZXJ0IHJhbmdlLgogICAgICAgIGlmICgkcG9pbnRzSW5PcmRlcihwb2ludCwgZGVsdGFTdGFydCwgbW92ZUlmRXF1YWwpKSB7CiAgICAgICAgICAgIHJldHVybiB7CiAgICAgICAgICAgICAgICByb3c6IHBvaW50LnJvdywKICAgICAgICAgICAgICAgIGNvbHVtbjogcG9pbnQuY29sdW1uCiAgICAgICAgICAgIH07CiAgICAgICAgfQogICAgICAgIGlmICgkcG9pbnRzSW5PcmRlcihkZWx0YUVuZCwgcG9pbnQsICFtb3ZlSWZFcXVhbCkpIHsKICAgICAgICAgICAgcmV0dXJuIHsKICAgICAgICAgICAgICAgIHJvdzogcG9pbnQucm93ICsgZGVsdGFSb3dTaGlmdCwKICAgICAgICAgICAgICAgIGNvbHVtbjogcG9pbnQuY29sdW1uICsgKHBvaW50LnJvdyA9PSBkZWx0YUVuZC5yb3cgPyBkZWx0YUNvbFNoaWZ0IDogMCkKICAgICAgICAgICAgfTsKICAgICAgICB9CiAgICAgICAgCiAgICAgICAgcmV0dXJuIHsKICAgICAgICAgICAgcm93OiBkZWx0YVN0YXJ0LnJvdywKICAgICAgICAgICAgY29sdW1uOiBkZWx0YVN0YXJ0LmNvbHVtbgogICAgICAgIH07CiAgICB9CiAgICB0aGlzLnNldFBvc2l0aW9uID0gZnVuY3Rpb24ocm93LCBjb2x1bW4sIG5vQ2xpcCkgewogICAgICAgIHZhciBwb3M7CiAgICAgICAgaWYgKG5vQ2xpcCkgewogICAgICAgICAgICBwb3MgPSB7CiAgICAgICAgICAgICAgICByb3c6IHJvdywKICAgICAgICAgICAgICAgIGNvbHVtbjogY29sdW1uCiAgICAgICAgICAgIH07CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgcG9zID0gdGhpcy4kY2xpcFBvc2l0aW9uVG9Eb2N1bWVudChyb3csIGNvbHVtbik7CiAgICAgICAgfQoKICAgICAgICBpZiAodGhpcy5yb3cgPT0gcG9zLnJvdyAmJiB0aGlzLmNvbHVtbiA9PSBwb3MuY29sdW1uKQogICAgICAgICAgICByZXR1cm47CgogICAgICAgIHZhciBvbGQgPSB7CiAgICAgICAgICAgIHJvdzogdGhpcy5yb3csCiAgICAgICAgICAgIGNvbHVtbjogdGhpcy5jb2x1bW4KICAgICAgICB9OwoKICAgICAgICB0aGlzLnJvdyA9IHBvcy5yb3c7CiAgICAgICAgdGhpcy5jb2x1bW4gPSBwb3MuY29sdW1uOwogICAgICAgIHRoaXMuX3NpZ25hbCgiY2hhbmdlIiwgewogICAgICAgICAgICBvbGQ6IG9sZCwKICAgICAgICAgICAgdmFsdWU6IHBvcwogICAgICAgIH0pOwogICAgfTsKICAgIHRoaXMuZGV0YWNoID0gZnVuY3Rpb24oKSB7CiAgICAgICAgdGhpcy5kb2N1bWVudC5vZmYoImNoYW5nZSIsIHRoaXMuJG9uQ2hhbmdlKTsKICAgIH07CiAgICB0aGlzLmF0dGFjaCA9IGZ1bmN0aW9uKGRvYykgewogICAgICAgIHRoaXMuZG9jdW1lbnQgPSBkb2MgfHwgdGhpcy5kb2N1bWVudDsKICAgICAgICB0aGlzLmRvY3VtZW50Lm9uKCJjaGFuZ2UiLCB0aGlzLiRvbkNoYW5nZSk7CiAgICB9OwogICAgdGhpcy4kY2xpcFBvc2l0aW9uVG9Eb2N1bWVudCA9IGZ1bmN0aW9uKHJvdywgY29sdW1uKSB7CiAgICAgICAgdmFyIHBvcyA9IHt9OwoKICAgICAgICBpZiAocm93ID49IHRoaXMuZG9jdW1lbnQuZ2V0TGVuZ3RoKCkpIHsKICAgICAgICAgICAgcG9zLnJvdyA9IE1hdGgubWF4KDAsIHRoaXMuZG9jdW1lbnQuZ2V0TGVuZ3RoKCkgLSAxKTsKICAgICAgICAgICAgcG9zLmNvbHVtbiA9IHRoaXMuZG9jdW1lbnQuZ2V0TGluZShwb3Mucm93KS5sZW5ndGg7CiAgICAgICAgfQogICAgICAgIGVsc2UgaWYgKHJvdyA8IDApIHsKICAgICAgICAgICAgcG9zLnJvdyA9IDA7CiAgICAgICAgICAgIHBvcy5jb2x1bW4gPSAwOwogICAgICAgIH0KICAgICAgICBlbHNlIHsKICAgICAgICAgICAgcG9zLnJvdyA9IHJvdzsKICAgICAgICAgICAgcG9zLmNvbHVtbiA9IE1hdGgubWluKHRoaXMuZG9jdW1lbnQuZ2V0TGluZShwb3Mucm93KS5sZW5ndGgsIE1hdGgubWF4KDAsIGNvbHVtbikpOwogICAgICAgIH0KCiAgICAgICAgaWYgKGNvbHVtbiA8IDApCiAgICAgICAgICAgIHBvcy5jb2x1bW4gPSAwOwoKICAgICAgICByZXR1cm4gcG9zOwogICAgfTsKCn0pLmNhbGwoQW5jaG9yLnByb3RvdHlwZSk7Cgp9KTsKCmFjZS5kZWZpbmUoImFjZS9kb2N1bWVudCIsW10sIGZ1bmN0aW9uKHJlcXVpcmUsIGV4cG9ydHMsIG1vZHVsZSkgewoidXNlIHN0cmljdCI7Cgp2YXIgb29wID0gcmVxdWlyZSgiLi9saWIvb29wIik7CnZhciBhcHBseURlbHRhID0gcmVxdWlyZSgiLi9hcHBseV9kZWx0YSIpLmFwcGx5RGVsdGE7CnZhciBFdmVudEVtaXR0ZXIgPSByZXF1aXJlKCIuL2xpYi9ldmVudF9lbWl0dGVyIikuRXZlbnRFbWl0dGVyOwp2YXIgUmFuZ2UgPSByZXF1aXJlKCIuL3JhbmdlIikuUmFuZ2U7CnZhciBBbmNob3IgPSByZXF1aXJlKCIuL2FuY2hvciIpLkFuY2hvcjsKCnZhciBEb2N1bWVudCA9IGZ1bmN0aW9uKHRleHRPckxpbmVzKSB7CiAgICB0aGlzLiRsaW5lcyA9IFsiIl07CiAgICBpZiAodGV4dE9yTGluZXMubGVuZ3RoID09PSAwKSB7CiAgICAgICAgdGhpcy4kbGluZXMgPSBbIiJdOwogICAgfSBlbHNlIGlmIChBcnJheS5pc0FycmF5KHRleHRPckxpbmVzKSkgewogICAgICAgIHRoaXMuaW5zZXJ0TWVyZ2VkTGluZXMoe3JvdzogMCwgY29sdW1uOiAwfSwgdGV4dE9yTGluZXMpOwogICAgfSBlbHNlIHsKICAgICAgICB0aGlzLmluc2VydCh7cm93OiAwLCBjb2x1bW46MH0sIHRleHRPckxpbmVzKTsKICAgIH0KfTsKCihmdW5jdGlvbigpIHsKCiAgICBvb3AuaW1wbGVtZW50KHRoaXMsIEV2ZW50RW1pdHRlcik7CiAgICB0aGlzLnNldFZhbHVlID0gZnVuY3Rpb24odGV4dCkgewogICAgICAgIHZhciBsZW4gPSB0aGlzLmdldExlbmd0aCgpIC0gMTsKICAgICAgICB0aGlzLnJlbW92ZShuZXcgUmFuZ2UoMCwgMCwgbGVuLCB0aGlzLmdldExpbmUobGVuKS5sZW5ndGgpKTsKICAgICAgICB0aGlzLmluc2VydCh7cm93OiAwLCBjb2x1bW46IDB9LCB0ZXh0KTsKICAgIH07CiAgICB0aGlzLmdldFZhbHVlID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuZ2V0QWxsTGluZXMoKS5qb2luKHRoaXMuZ2V0TmV3TGluZUNoYXJhY3RlcigpKTsKICAgIH07CiAgICB0aGlzLmNyZWF0ZUFuY2hvciA9IGZ1bmN0aW9uKHJvdywgY29sdW1uKSB7CiAgICAgICAgcmV0dXJuIG5ldyBBbmNob3IodGhpcywgcm93LCBjb2x1bW4pOwogICAgfTsKICAgIGlmICgiYWFhIi5zcGxpdCgvYS8pLmxlbmd0aCA9PT0gMCkgewogICAgICAgIHRoaXMuJHNwbGl0ID0gZnVuY3Rpb24odGV4dCkgewogICAgICAgICAgICByZXR1cm4gdGV4dC5yZXBsYWNlKC9cclxufFxyL2csICJcbiIpLnNwbGl0KCJcbiIpOwogICAgICAgIH07CiAgICB9IGVsc2UgewogICAgICAgIHRoaXMuJHNwbGl0ID0gZnVuY3Rpb24odGV4dCkgewogICAgICAgICAgICByZXR1cm4gdGV4dC5zcGxpdCgvXHJcbnxccnxcbi8pOwogICAgICAgIH07CiAgICB9CgoKICAgIHRoaXMuJGRldGVjdE5ld0xpbmUgPSBmdW5jdGlvbih0ZXh0KSB7CiAgICAgICAgdmFyIG1hdGNoID0gdGV4dC5tYXRjaCgvXi4qPyhcclxufFxyfFxuKS9tKTsKICAgICAgICB0aGlzLiRhdXRvTmV3TGluZSA9IG1hdGNoID8gbWF0Y2hbMV0gOiAiXG4iOwogICAgICAgIHRoaXMuX3NpZ25hbCgiY2hhbmdlTmV3TGluZU1vZGUiKTsKICAgIH07CiAgICB0aGlzLmdldE5ld0xpbmVDaGFyYWN0ZXIgPSBmdW5jdGlvbigpIHsKICAgICAgICBzd2l0Y2ggKHRoaXMuJG5ld0xpbmVNb2RlKSB7CiAgICAgICAgICBjYXNlICJ3aW5kb3dzIjoKICAgICAgICAgICAgcmV0dXJuICJcclxuIjsKICAgICAgICAgIGNhc2UgInVuaXgiOgogICAgICAgICAgICByZXR1cm4gIlxuIjsKICAgICAgICAgIGRlZmF1bHQ6CiAgICAgICAgICAgIHJldHVybiB0aGlzLiRhdXRvTmV3TGluZSB8fCAiXG4iOwogICAgICAgIH0KICAgIH07CgogICAgdGhpcy4kYXV0b05ld0xpbmUgPSAiIjsKICAgIHRoaXMuJG5ld0xpbmVNb2RlID0gImF1dG8iOwogICAgdGhpcy5zZXROZXdMaW5lTW9kZSA9IGZ1bmN0aW9uKG5ld0xpbmVNb2RlKSB7CiAgICAgICAgaWYgKHRoaXMuJG5ld0xpbmVNb2RlID09PSBuZXdMaW5lTW9kZSkKICAgICAgICAgICAgcmV0dXJuOwoKICAgICAgICB0aGlzLiRuZXdMaW5lTW9kZSA9IG5ld0xpbmVNb2RlOwogICAgICAgIHRoaXMuX3NpZ25hbCgiY2hhbmdlTmV3TGluZU1vZGUiKTsKICAgIH07CiAgICB0aGlzLmdldE5ld0xpbmVNb2RlID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuJG5ld0xpbmVNb2RlOwogICAgfTsKICAgIHRoaXMuaXNOZXdMaW5lID0gZnVuY3Rpb24odGV4dCkgewogICAgICAgIHJldHVybiAodGV4dCA9PSAiXHJcbiIgfHwgdGV4dCA9PSAiXHIiIHx8IHRleHQgPT0gIlxuIik7CiAgICB9OwogICAgdGhpcy5nZXRMaW5lID0gZnVuY3Rpb24ocm93KSB7CiAgICAgICAgcmV0dXJuIHRoaXMuJGxpbmVzW3Jvd10gfHwgIiI7CiAgICB9OwogICAgdGhpcy5nZXRMaW5lcyA9IGZ1bmN0aW9uKGZpcnN0Um93LCBsYXN0Um93KSB7CiAgICAgICAgcmV0dXJuIHRoaXMuJGxpbmVzLnNsaWNlKGZpcnN0Um93LCBsYXN0Um93ICsgMSk7CiAgICB9OwogICAgdGhpcy5nZXRBbGxMaW5lcyA9IGZ1bmN0aW9uKCkgewogICAgICAgIHJldHVybiB0aGlzLmdldExpbmVzKDAsIHRoaXMuZ2V0TGVuZ3RoKCkpOwogICAgfTsKICAgIHRoaXMuZ2V0TGVuZ3RoID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuJGxpbmVzLmxlbmd0aDsKICAgIH07CiAgICB0aGlzLmdldFRleHRSYW5nZSA9IGZ1bmN0aW9uKHJhbmdlKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuZ2V0TGluZXNGb3JSYW5nZShyYW5nZSkuam9pbih0aGlzLmdldE5ld0xpbmVDaGFyYWN0ZXIoKSk7CiAgICB9OwogICAgdGhpcy5nZXRMaW5lc0ZvclJhbmdlID0gZnVuY3Rpb24ocmFuZ2UpIHsKICAgICAgICB2YXIgbGluZXM7CiAgICAgICAgaWYgKHJhbmdlLnN0YXJ0LnJvdyA9PT0gcmFuZ2UuZW5kLnJvdykgewogICAgICAgICAgICBsaW5lcyA9IFt0aGlzLmdldExpbmUocmFuZ2Uuc3RhcnQucm93KS5zdWJzdHJpbmcocmFuZ2Uuc3RhcnQuY29sdW1uLCByYW5nZS5lbmQuY29sdW1uKV07CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgbGluZXMgPSB0aGlzLmdldExpbmVzKHJhbmdlLnN0YXJ0LnJvdywgcmFuZ2UuZW5kLnJvdyk7CiAgICAgICAgICAgIGxpbmVzWzBdID0gKGxpbmVzWzBdIHx8ICIiKS5zdWJzdHJpbmcocmFuZ2Uuc3RhcnQuY29sdW1uKTsKICAgICAgICAgICAgdmFyIGwgPSBsaW5lcy5sZW5ndGggLSAxOwogICAgICAgICAgICBpZiAocmFuZ2UuZW5kLnJvdyAtIHJhbmdlLnN0YXJ0LnJvdyA9PSBsKQogICAgICAgICAgICAgICAgbGluZXNbbF0gPSBsaW5lc1tsXS5zdWJzdHJpbmcoMCwgcmFuZ2UuZW5kLmNvbHVtbik7CiAgICAgICAgfQogICAgICAgIHJldHVybiBsaW5lczsKICAgIH07CiAgICB0aGlzLmluc2VydExpbmVzID0gZnVuY3Rpb24ocm93LCBsaW5lcykgewogICAgICAgIGNvbnNvbGUud2FybigiVXNlIG9mIGRvY3VtZW50Lmluc2VydExpbmVzIGlzIGRlcHJlY2F0ZWQuIFVzZSB0aGUgaW5zZXJ0RnVsbExpbmVzIG1ldGhvZCBpbnN0ZWFkLiIpOwogICAgICAgIHJldHVybiB0aGlzLmluc2VydEZ1bGxMaW5lcyhyb3csIGxpbmVzKTsKICAgIH07CiAgICB0aGlzLnJlbW92ZUxpbmVzID0gZnVuY3Rpb24oZmlyc3RSb3csIGxhc3RSb3cpIHsKICAgICAgICBjb25zb2xlLndhcm4oIlVzZSBvZiBkb2N1bWVudC5yZW1vdmVMaW5lcyBpcyBkZXByZWNhdGVkLiBVc2UgdGhlIHJlbW92ZUZ1bGxMaW5lcyBtZXRob2QgaW5zdGVhZC4iKTsKICAgICAgICByZXR1cm4gdGhpcy5yZW1vdmVGdWxsTGluZXMoZmlyc3RSb3csIGxhc3RSb3cpOwogICAgfTsKICAgIHRoaXMuaW5zZXJ0TmV3TGluZSA9IGZ1bmN0aW9uKHBvc2l0aW9uKSB7CiAgICAgICAgY29uc29sZS53YXJuKCJVc2Ugb2YgZG9jdW1lbnQuaW5zZXJ0TmV3TGluZSBpcyBkZXByZWNhdGVkLiBVc2UgaW5zZXJ0TWVyZ2VkTGluZXMocG9zaXRpb24sIFsnJywgJyddKSBpbnN0ZWFkLiIpOwogICAgICAgIHJldHVybiB0aGlzLmluc2VydE1lcmdlZExpbmVzKHBvc2l0aW9uLCBbIiIsICIiXSk7CiAgICB9OwogICAgdGhpcy5pbnNlcnQgPSBmdW5jdGlvbihwb3NpdGlvbiwgdGV4dCkgewogICAgICAgIGlmICh0aGlzLmdldExlbmd0aCgpIDw9IDEpCiAgICAgICAgICAgIHRoaXMuJGRldGVjdE5ld0xpbmUodGV4dCk7CiAgICAgICAgCiAgICAgICAgcmV0dXJuIHRoaXMuaW5zZXJ0TWVyZ2VkTGluZXMocG9zaXRpb24sIHRoaXMuJHNwbGl0KHRleHQpKTsKICAgIH07CiAgICB0aGlzLmluc2VydEluTGluZSA9IGZ1bmN0aW9uKHBvc2l0aW9uLCB0ZXh0KSB7CiAgICAgICAgdmFyIHN0YXJ0ID0gdGhpcy5jbGlwcGVkUG9zKHBvc2l0aW9uLnJvdywgcG9zaXRpb24uY29sdW1uKTsKICAgICAgICB2YXIgZW5kID0gdGhpcy5wb3MocG9zaXRpb24ucm93LCBwb3NpdGlvbi5jb2x1bW4gKyB0ZXh0Lmxlbmd0aCk7CiAgICAgICAgCiAgICAgICAgdGhpcy5hcHBseURlbHRhKHsKICAgICAgICAgICAgc3RhcnQ6IHN0YXJ0LAogICAgICAgICAgICBlbmQ6IGVuZCwKICAgICAgICAgICAgYWN0aW9uOiAiaW5zZXJ0IiwKICAgICAgICAgICAgbGluZXM6IFt0ZXh0XQogICAgICAgIH0sIHRydWUpOwogICAgICAgIAogICAgICAgIHJldHVybiB0aGlzLmNsb25lUG9zKGVuZCk7CiAgICB9OwogICAgCiAgICB0aGlzLmNsaXBwZWRQb3MgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIHZhciBsZW5ndGggPSB0aGlzLmdldExlbmd0aCgpOwogICAgICAgIGlmIChyb3cgPT09IHVuZGVmaW5lZCkgewogICAgICAgICAgICByb3cgPSBsZW5ndGg7CiAgICAgICAgfSBlbHNlIGlmIChyb3cgPCAwKSB7CiAgICAgICAgICAgIHJvdyA9IDA7CiAgICAgICAgfSBlbHNlIGlmIChyb3cgPj0gbGVuZ3RoKSB7CiAgICAgICAgICAgIHJvdyA9IGxlbmd0aCAtIDE7CiAgICAgICAgICAgIGNvbHVtbiA9IHVuZGVmaW5lZDsKICAgICAgICB9CiAgICAgICAgdmFyIGxpbmUgPSB0aGlzLmdldExpbmUocm93KTsKICAgICAgICBpZiAoY29sdW1uID09IHVuZGVmaW5lZCkKICAgICAgICAgICAgY29sdW1uID0gbGluZS5sZW5ndGg7CiAgICAgICAgY29sdW1uID0gTWF0aC5taW4oTWF0aC5tYXgoY29sdW1uLCAwKSwgbGluZS5sZW5ndGgpOwogICAgICAgIHJldHVybiB7cm93OiByb3csIGNvbHVtbjogY29sdW1ufTsKICAgIH07CiAgICAKICAgIHRoaXMuY2xvbmVQb3MgPSBmdW5jdGlvbihwb3MpIHsKICAgICAgICByZXR1cm4ge3JvdzogcG9zLnJvdywgY29sdW1uOiBwb3MuY29sdW1ufTsKICAgIH07CiAgICAKICAgIHRoaXMucG9zID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICByZXR1cm4ge3Jvdzogcm93LCBjb2x1bW46IGNvbHVtbn07CiAgICB9OwogICAgCiAgICB0aGlzLiRjbGlwUG9zaXRpb24gPSBmdW5jdGlvbihwb3NpdGlvbikgewogICAgICAgIHZhciBsZW5ndGggPSB0aGlzLmdldExlbmd0aCgpOwogICAgICAgIGlmIChwb3NpdGlvbi5yb3cgPj0gbGVuZ3RoKSB7CiAgICAgICAgICAgIHBvc2l0aW9uLnJvdyA9IE1hdGgubWF4KDAsIGxlbmd0aCAtIDEpOwogICAgICAgICAgICBwb3NpdGlvbi5jb2x1bW4gPSB0aGlzLmdldExpbmUobGVuZ3RoIC0gMSkubGVuZ3RoOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgIHBvc2l0aW9uLnJvdyA9IE1hdGgubWF4KDAsIHBvc2l0aW9uLnJvdyk7CiAgICAgICAgICAgIHBvc2l0aW9uLmNvbHVtbiA9IE1hdGgubWluKE1hdGgubWF4KHBvc2l0aW9uLmNvbHVtbiwgMCksIHRoaXMuZ2V0TGluZShwb3NpdGlvbi5yb3cpLmxlbmd0aCk7CiAgICAgICAgfQogICAgICAgIHJldHVybiBwb3NpdGlvbjsKICAgIH07CiAgICB0aGlzLmluc2VydEZ1bGxMaW5lcyA9IGZ1bmN0aW9uKHJvdywgbGluZXMpIHsKICAgICAgICByb3cgPSBNYXRoLm1pbihNYXRoLm1heChyb3csIDApLCB0aGlzLmdldExlbmd0aCgpKTsKICAgICAgICB2YXIgY29sdW1uID0gMDsKICAgICAgICBpZiAocm93IDwgdGhpcy5nZXRMZW5ndGgoKSkgewogICAgICAgICAgICBsaW5lcyA9IGxpbmVzLmNvbmNhdChbIiJdKTsKICAgICAgICAgICAgY29sdW1uID0gMDsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICBsaW5lcyA9IFsiIl0uY29uY2F0KGxpbmVzKTsKICAgICAgICAgICAgcm93LS07CiAgICAgICAgICAgIGNvbHVtbiA9IHRoaXMuJGxpbmVzW3Jvd10ubGVuZ3RoOwogICAgICAgIH0KICAgICAgICB0aGlzLmluc2VydE1lcmdlZExpbmVzKHtyb3c6IHJvdywgY29sdW1uOiBjb2x1bW59LCBsaW5lcyk7CiAgICB9OyAgICAKICAgIHRoaXMuaW5zZXJ0TWVyZ2VkTGluZXMgPSBmdW5jdGlvbihwb3NpdGlvbiwgbGluZXMpIHsKICAgICAgICB2YXIgc3RhcnQgPSB0aGlzLmNsaXBwZWRQb3MocG9zaXRpb24ucm93LCBwb3NpdGlvbi5jb2x1bW4pOwogICAgICAgIHZhciBlbmQgPSB7CiAgICAgICAgICAgIHJvdzogc3RhcnQucm93ICsgbGluZXMubGVuZ3RoIC0gMSwKICAgICAgICAgICAgY29sdW1uOiAobGluZXMubGVuZ3RoID09IDEgPyBzdGFydC5jb2x1bW4gOiAwKSArIGxpbmVzW2xpbmVzLmxlbmd0aCAtIDFdLmxlbmd0aAogICAgICAgIH07CiAgICAgICAgCiAgICAgICAgdGhpcy5hcHBseURlbHRhKHsKICAgICAgICAgICAgc3RhcnQ6IHN0YXJ0LAogICAgICAgICAgICBlbmQ6IGVuZCwKICAgICAgICAgICAgYWN0aW9uOiAiaW5zZXJ0IiwKICAgICAgICAgICAgbGluZXM6IGxpbmVzCiAgICAgICAgfSk7CiAgICAgICAgCiAgICAgICAgcmV0dXJuIHRoaXMuY2xvbmVQb3MoZW5kKTsKICAgIH07CiAgICB0aGlzLnJlbW92ZSA9IGZ1bmN0aW9uKHJhbmdlKSB7CiAgICAgICAgdmFyIHN0YXJ0ID0gdGhpcy5jbGlwcGVkUG9zKHJhbmdlLnN0YXJ0LnJvdywgcmFuZ2Uuc3RhcnQuY29sdW1uKTsKICAgICAgICB2YXIgZW5kID0gdGhpcy5jbGlwcGVkUG9zKHJhbmdlLmVuZC5yb3csIHJhbmdlLmVuZC5jb2x1bW4pOwogICAgICAgIHRoaXMuYXBwbHlEZWx0YSh7CiAgICAgICAgICAgIHN0YXJ0OiBzdGFydCwKICAgICAgICAgICAgZW5kOiBlbmQsCiAgICAgICAgICAgIGFjdGlvbjogInJlbW92ZSIsCiAgICAgICAgICAgIGxpbmVzOiB0aGlzLmdldExpbmVzRm9yUmFuZ2Uoe3N0YXJ0OiBzdGFydCwgZW5kOiBlbmR9KQogICAgICAgIH0pOwogICAgICAgIHJldHVybiB0aGlzLmNsb25lUG9zKHN0YXJ0KTsKICAgIH07CiAgICB0aGlzLnJlbW92ZUluTGluZSA9IGZ1bmN0aW9uKHJvdywgc3RhcnRDb2x1bW4sIGVuZENvbHVtbikgewogICAgICAgIHZhciBzdGFydCA9IHRoaXMuY2xpcHBlZFBvcyhyb3csIHN0YXJ0Q29sdW1uKTsKICAgICAgICB2YXIgZW5kID0gdGhpcy5jbGlwcGVkUG9zKHJvdywgZW5kQ29sdW1uKTsKICAgICAgICAKICAgICAgICB0aGlzLmFwcGx5RGVsdGEoewogICAgICAgICAgICBzdGFydDogc3RhcnQsCiAgICAgICAgICAgIGVuZDogZW5kLAogICAgICAgICAgICBhY3Rpb246ICJyZW1vdmUiLAogICAgICAgICAgICBsaW5lczogdGhpcy5nZXRMaW5lc0ZvclJhbmdlKHtzdGFydDogc3RhcnQsIGVuZDogZW5kfSkKICAgICAgICB9LCB0cnVlKTsKICAgICAgICAKICAgICAgICByZXR1cm4gdGhpcy5jbG9uZVBvcyhzdGFydCk7CiAgICB9OwogICAgdGhpcy5yZW1vdmVGdWxsTGluZXMgPSBmdW5jdGlvbihmaXJzdFJvdywgbGFzdFJvdykgewogICAgICAgIGZpcnN0Um93ID0gTWF0aC5taW4oTWF0aC5tYXgoMCwgZmlyc3RSb3cpLCB0aGlzLmdldExlbmd0aCgpIC0gMSk7CiAgICAgICAgbGFzdFJvdyAgPSBNYXRoLm1pbihNYXRoLm1heCgwLCBsYXN0Um93ICksIHRoaXMuZ2V0TGVuZ3RoKCkgLSAxKTsKICAgICAgICB2YXIgZGVsZXRlRmlyc3ROZXdMaW5lID0gbGFzdFJvdyA9PSB0aGlzLmdldExlbmd0aCgpIC0gMSAmJiBmaXJzdFJvdyA+IDA7CiAgICAgICAgdmFyIGRlbGV0ZUxhc3ROZXdMaW5lICA9IGxhc3RSb3cgIDwgdGhpcy5nZXRMZW5ndGgoKSAtIDE7CiAgICAgICAgdmFyIHN0YXJ0Um93ID0gKCBkZWxldGVGaXJzdE5ld0xpbmUgPyBmaXJzdFJvdyAtIDEgICAgICAgICAgICAgICAgICA6IGZpcnN0Um93ICAgICAgICAgICAgICAgICAgICApOwogICAgICAgIHZhciBzdGFydENvbCA9ICggZGVsZXRlRmlyc3ROZXdMaW5lID8gdGhpcy5nZXRMaW5lKHN0YXJ0Um93KS5sZW5ndGggOiAwICAgICAgICAgICAgICAgICAgICAgICAgICAgKTsKICAgICAgICB2YXIgZW5kUm93ICAgPSAoIGRlbGV0ZUxhc3ROZXdMaW5lICA/IGxhc3RSb3cgKyAxICAgICAgICAgICAgICAgICAgIDogbGFzdFJvdyAgICAgICAgICAgICAgICAgICAgICk7CiAgICAgICAgdmFyIGVuZENvbCAgID0gKCBkZWxldGVMYXN0TmV3TGluZSAgPyAwICAgICAgICAgICAgICAgICAgICAgICAgICAgICA6IHRoaXMuZ2V0TGluZShlbmRSb3cpLmxlbmd0aCApOyAKICAgICAgICB2YXIgcmFuZ2UgPSBuZXcgUmFuZ2Uoc3RhcnRSb3csIHN0YXJ0Q29sLCBlbmRSb3csIGVuZENvbCk7CiAgICAgICAgdmFyIGRlbGV0ZWRMaW5lcyA9IHRoaXMuJGxpbmVzLnNsaWNlKGZpcnN0Um93LCBsYXN0Um93ICsgMSk7CiAgICAgICAgCiAgICAgICAgdGhpcy5hcHBseURlbHRhKHsKICAgICAgICAgICAgc3RhcnQ6IHJhbmdlLnN0YXJ0LAogICAgICAgICAgICBlbmQ6IHJhbmdlLmVuZCwKICAgICAgICAgICAgYWN0aW9uOiAicmVtb3ZlIiwKICAgICAgICAgICAgbGluZXM6IHRoaXMuZ2V0TGluZXNGb3JSYW5nZShyYW5nZSkKICAgICAgICB9KTsKICAgICAgICByZXR1cm4gZGVsZXRlZExpbmVzOwogICAgfTsKICAgIHRoaXMucmVtb3ZlTmV3TGluZSA9IGZ1bmN0aW9uKHJvdykgewogICAgICAgIGlmIChyb3cgPCB0aGlzLmdldExlbmd0aCgpIC0gMSAmJiByb3cgPj0gMCkgewogICAgICAgICAgICB0aGlzLmFwcGx5RGVsdGEoewogICAgICAgICAgICAgICAgc3RhcnQ6IHRoaXMucG9zKHJvdywgdGhpcy5nZXRMaW5lKHJvdykubGVuZ3RoKSwKICAgICAgICAgICAgICAgIGVuZDogdGhpcy5wb3Mocm93ICsgMSwgMCksCiAgICAgICAgICAgICAgICBhY3Rpb246ICJyZW1vdmUiLAogICAgICAgICAgICAgICAgbGluZXM6IFsiIiwgIiJdCiAgICAgICAgICAgIH0pOwogICAgICAgIH0KICAgIH07CiAgICB0aGlzLnJlcGxhY2UgPSBmdW5jdGlvbihyYW5nZSwgdGV4dCkgewogICAgICAgIGlmICghKHJhbmdlIGluc3RhbmNlb2YgUmFuZ2UpKQogICAgICAgICAgICByYW5nZSA9IFJhbmdlLmZyb21Qb2ludHMocmFuZ2Uuc3RhcnQsIHJhbmdlLmVuZCk7CiAgICAgICAgaWYgKHRleHQubGVuZ3RoID09PSAwICYmIHJhbmdlLmlzRW1wdHkoKSkKICAgICAgICAgICAgcmV0dXJuIHJhbmdlLnN0YXJ0OwogICAgICAgIGlmICh0ZXh0ID09IHRoaXMuZ2V0VGV4dFJhbmdlKHJhbmdlKSkKICAgICAgICAgICAgcmV0dXJuIHJhbmdlLmVuZDsKCiAgICAgICAgdGhpcy5yZW1vdmUocmFuZ2UpOwogICAgICAgIHZhciBlbmQ7CiAgICAgICAgaWYgKHRleHQpIHsKICAgICAgICAgICAgZW5kID0gdGhpcy5pbnNlcnQocmFuZ2Uuc3RhcnQsIHRleHQpOwogICAgICAgIH0KICAgICAgICBlbHNlIHsKICAgICAgICAgICAgZW5kID0gcmFuZ2Uuc3RhcnQ7CiAgICAgICAgfQogICAgICAgIAogICAgICAgIHJldHVybiBlbmQ7CiAgICB9OwogICAgdGhpcy5hcHBseURlbHRhcyA9IGZ1bmN0aW9uKGRlbHRhcykgewogICAgICAgIGZvciAodmFyIGk9MDsgaTxkZWx0YXMubGVuZ3RoOyBpKyspIHsKICAgICAgICAgICAgdGhpcy5hcHBseURlbHRhKGRlbHRhc1tpXSk7CiAgICAgICAgfQogICAgfTsKICAgIHRoaXMucmV2ZXJ0RGVsdGFzID0gZnVuY3Rpb24oZGVsdGFzKSB7CiAgICAgICAgZm9yICh2YXIgaT1kZWx0YXMubGVuZ3RoLTE7IGk+PTA7IGktLSkgewogICAgICAgICAgICB0aGlzLnJldmVydERlbHRhKGRlbHRhc1tpXSk7CiAgICAgICAgfQogICAgfTsKICAgIHRoaXMuYXBwbHlEZWx0YSA9IGZ1bmN0aW9uKGRlbHRhLCBkb05vdFZhbGlkYXRlKSB7CiAgICAgICAgdmFyIGlzSW5zZXJ0ID0gZGVsdGEuYWN0aW9uID09ICJpbnNlcnQiOwogICAgICAgIGlmIChpc0luc2VydCA/IGRlbHRhLmxpbmVzLmxlbmd0aCA8PSAxICYmICFkZWx0YS5saW5lc1swXQogICAgICAgICAgICA6ICFSYW5nZS5jb21wYXJlUG9pbnRzKGRlbHRhLnN0YXJ0LCBkZWx0YS5lbmQpKSB7CiAgICAgICAgICAgIHJldHVybjsKICAgICAgICB9CiAgICAgICAgCiAgICAgICAgaWYgKGlzSW5zZXJ0ICYmIGRlbHRhLmxpbmVzLmxlbmd0aCA+IDIwMDAwKSB7CiAgICAgICAgICAgIHRoaXMuJHNwbGl0QW5kYXBwbHlMYXJnZURlbHRhKGRlbHRhLCAyMDAwMCk7CiAgICAgICAgfQogICAgICAgIGVsc2UgewogICAgICAgICAgICBhcHBseURlbHRhKHRoaXMuJGxpbmVzLCBkZWx0YSwgZG9Ob3RWYWxpZGF0ZSk7CiAgICAgICAgICAgIHRoaXMuX3NpZ25hbCgiY2hhbmdlIiwgZGVsdGEpOwogICAgICAgIH0KICAgIH07CiAgICAKICAgIHRoaXMuJHNhZmVBcHBseURlbHRhID0gZnVuY3Rpb24oZGVsdGEpIHsKICAgICAgICB2YXIgZG9jTGVuZ3RoID0gdGhpcy4kbGluZXMubGVuZ3RoOwogICAgICAgIGlmICgKICAgICAgICAgICAgZGVsdGEuYWN0aW9uID09ICJyZW1vdmUiICYmIGRlbHRhLnN0YXJ0LnJvdyA8IGRvY0xlbmd0aCAmJiBkZWx0YS5lbmQucm93IDwgZG9jTGVuZ3RoCiAgICAgICAgICAgIHx8IGRlbHRhLmFjdGlvbiA9PSAiaW5zZXJ0IiAmJiBkZWx0YS5zdGFydC5yb3cgPD0gZG9jTGVuZ3RoCiAgICAgICAgKSB7CiAgICAgICAgICAgIHRoaXMuYXBwbHlEZWx0YShkZWx0YSk7CiAgICAgICAgfQogICAgfTsKICAgIAogICAgdGhpcy4kc3BsaXRBbmRhcHBseUxhcmdlRGVsdGEgPSBmdW5jdGlvbihkZWx0YSwgTUFYKSB7CiAgICAgICAgdmFyIGxpbmVzID0gZGVsdGEubGluZXM7CiAgICAgICAgdmFyIGwgPSBsaW5lcy5sZW5ndGggLSBNQVggKyAxOwogICAgICAgIHZhciByb3cgPSBkZWx0YS5zdGFydC5yb3c7IAogICAgICAgIHZhciBjb2x1bW4gPSBkZWx0YS5zdGFydC5jb2x1bW47CiAgICAgICAgZm9yICh2YXIgZnJvbSA9IDAsIHRvID0gMDsgZnJvbSA8IGw7IGZyb20gPSB0bykgewogICAgICAgICAgICB0byArPSBNQVggLSAxOwogICAgICAgICAgICB2YXIgY2h1bmsgPSBsaW5lcy5zbGljZShmcm9tLCB0byk7CiAgICAgICAgICAgIGNodW5rLnB1c2goIiIpOwogICAgICAgICAgICB0aGlzLmFwcGx5RGVsdGEoewogICAgICAgICAgICAgICAgc3RhcnQ6IHRoaXMucG9zKHJvdyArIGZyb20sIGNvbHVtbiksCiAgICAgICAgICAgICAgICBlbmQ6IHRoaXMucG9zKHJvdyArIHRvLCBjb2x1bW4gPSAwKSwKICAgICAgICAgICAgICAgIGFjdGlvbjogZGVsdGEuYWN0aW9uLAogICAgICAgICAgICAgICAgbGluZXM6IGNodW5rCiAgICAgICAgICAgIH0sIHRydWUpOwogICAgICAgIH0KICAgICAgICBkZWx0YS5saW5lcyA9IGxpbmVzLnNsaWNlKGZyb20pOwogICAgICAgIGRlbHRhLnN0YXJ0LnJvdyA9IHJvdyArIGZyb207CiAgICAgICAgZGVsdGEuc3RhcnQuY29sdW1uID0gY29sdW1uOwogICAgICAgIHRoaXMuYXBwbHlEZWx0YShkZWx0YSwgdHJ1ZSk7CiAgICB9OwogICAgdGhpcy5yZXZlcnREZWx0YSA9IGZ1bmN0aW9uKGRlbHRhKSB7CiAgICAgICAgdGhpcy4kc2FmZUFwcGx5RGVsdGEoewogICAgICAgICAgICBzdGFydDogdGhpcy5jbG9uZVBvcyhkZWx0YS5zdGFydCksCiAgICAgICAgICAgIGVuZDogdGhpcy5jbG9uZVBvcyhkZWx0YS5lbmQpLAogICAgICAgICAgICBhY3Rpb246IChkZWx0YS5hY3Rpb24gPT0gImluc2VydCIgPyAicmVtb3ZlIiA6ICJpbnNlcnQiKSwKICAgICAgICAgICAgbGluZXM6IGRlbHRhLmxpbmVzLnNsaWNlKCkKICAgICAgICB9KTsKICAgIH07CiAgICB0aGlzLmluZGV4VG9Qb3NpdGlvbiA9IGZ1bmN0aW9uKGluZGV4LCBzdGFydFJvdykgewogICAgICAgIHZhciBsaW5lcyA9IHRoaXMuJGxpbmVzIHx8IHRoaXMuZ2V0QWxsTGluZXMoKTsKICAgICAgICB2YXIgbmV3bGluZUxlbmd0aCA9IHRoaXMuZ2V0TmV3TGluZUNoYXJhY3RlcigpLmxlbmd0aDsKICAgICAgICBmb3IgKHZhciBpID0gc3RhcnRSb3cgfHwgMCwgbCA9IGxpbmVzLmxlbmd0aDsgaSA8IGw7IGkrKykgewogICAgICAgICAgICBpbmRleCAtPSBsaW5lc1tpXS5sZW5ndGggKyBuZXdsaW5lTGVuZ3RoOwogICAgICAgICAgICBpZiAoaW5kZXggPCAwKQogICAgICAgICAgICAgICAgcmV0dXJuIHtyb3c6IGksIGNvbHVtbjogaW5kZXggKyBsaW5lc1tpXS5sZW5ndGggKyBuZXdsaW5lTGVuZ3RofTsKICAgICAgICB9CiAgICAgICAgcmV0dXJuIHtyb3c6IGwtMSwgY29sdW1uOiBpbmRleCArIGxpbmVzW2wtMV0ubGVuZ3RoICsgbmV3bGluZUxlbmd0aH07CiAgICB9OwogICAgdGhpcy5wb3NpdGlvblRvSW5kZXggPSBmdW5jdGlvbihwb3MsIHN0YXJ0Um93KSB7CiAgICAgICAgdmFyIGxpbmVzID0gdGhpcy4kbGluZXMgfHwgdGhpcy5nZXRBbGxMaW5lcygpOwogICAgICAgIHZhciBuZXdsaW5lTGVuZ3RoID0gdGhpcy5nZXROZXdMaW5lQ2hhcmFjdGVyKCkubGVuZ3RoOwogICAgICAgIHZhciBpbmRleCA9IDA7CiAgICAgICAgdmFyIHJvdyA9IE1hdGgubWluKHBvcy5yb3csIGxpbmVzLmxlbmd0aCk7CiAgICAgICAgZm9yICh2YXIgaSA9IHN0YXJ0Um93IHx8IDA7IGkgPCByb3c7ICsraSkKICAgICAgICAgICAgaW5kZXggKz0gbGluZXNbaV0ubGVuZ3RoICsgbmV3bGluZUxlbmd0aDsKCiAgICAgICAgcmV0dXJuIGluZGV4ICsgcG9zLmNvbHVtbjsKICAgIH07Cgp9KS5jYWxsKERvY3VtZW50LnByb3RvdHlwZSk7CgpleHBvcnRzLkRvY3VtZW50ID0gRG9jdW1lbnQ7Cn0pOwoKYWNlLmRlZmluZSgiYWNlL2xpYi9sYW5nIixbXSwgZnVuY3Rpb24ocmVxdWlyZSwgZXhwb3J0cywgbW9kdWxlKSB7CiJ1c2Ugc3RyaWN0IjsKCmV4cG9ydHMubGFzdCA9IGZ1bmN0aW9uKGEpIHsKICAgIHJldHVybiBhW2EubGVuZ3RoIC0gMV07Cn07CgpleHBvcnRzLnN0cmluZ1JldmVyc2UgPSBmdW5jdGlvbihzdHJpbmcpIHsKICAgIHJldHVybiBzdHJpbmcuc3BsaXQoIiIpLnJldmVyc2UoKS5qb2luKCIiKTsKfTsKCmV4cG9ydHMuc3RyaW5nUmVwZWF0ID0gZnVuY3Rpb24gKHN0cmluZywgY291bnQpIHsKICAgIHZhciByZXN1bHQgPSAnJzsKICAgIHdoaWxlIChjb3VudCA+IDApIHsKICAgICAgICBpZiAoY291bnQgJiAxKQogICAgICAgICAgICByZXN1bHQgKz0gc3RyaW5nOwoKICAgICAgICBpZiAoY291bnQgPj49IDEpCiAgICAgICAgICAgIHN0cmluZyArPSBzdHJpbmc7CiAgICB9CiAgICByZXR1cm4gcmVzdWx0Owp9OwoKdmFyIHRyaW1CZWdpblJlZ2V4cCA9IC9eXHNccyovOwp2YXIgdHJpbUVuZFJlZ2V4cCA9IC9cc1xzKiQvOwoKZXhwb3J0cy5zdHJpbmdUcmltTGVmdCA9IGZ1bmN0aW9uIChzdHJpbmcpIHsKICAgIHJldHVybiBzdHJpbmcucmVwbGFjZSh0cmltQmVnaW5SZWdleHAsICcnKTsKfTsKCmV4cG9ydHMuc3RyaW5nVHJpbVJpZ2h0ID0gZnVuY3Rpb24gKHN0cmluZykgewogICAgcmV0dXJuIHN0cmluZy5yZXBsYWNlKHRyaW1FbmRSZWdleHAsICcnKTsKfTsKCmV4cG9ydHMuY29weU9iamVjdCA9IGZ1bmN0aW9uKG9iaikgewogICAgdmFyIGNvcHkgPSB7fTsKICAgIGZvciAodmFyIGtleSBpbiBvYmopIHsKICAgICAgICBjb3B5W2tleV0gPSBvYmpba2V5XTsKICAgIH0KICAgIHJldHVybiBjb3B5Owp9OwoKZXhwb3J0cy5jb3B5QXJyYXkgPSBmdW5jdGlvbihhcnJheSl7CiAgICB2YXIgY29weSA9IFtdOwogICAgZm9yICh2YXIgaT0wLCBsPWFycmF5Lmxlbmd0aDsgaTxsOyBpKyspIHsKICAgICAgICBpZiAoYXJyYXlbaV0gJiYgdHlwZW9mIGFycmF5W2ldID09ICJvYmplY3QiKQogICAgICAgICAgICBjb3B5W2ldID0gdGhpcy5jb3B5T2JqZWN0KGFycmF5W2ldKTsKICAgICAgICBlbHNlIAogICAgICAgICAgICBjb3B5W2ldID0gYXJyYXlbaV07CiAgICB9CiAgICByZXR1cm4gY29weTsKfTsKCmV4cG9ydHMuZGVlcENvcHkgPSBmdW5jdGlvbiBkZWVwQ29weShvYmopIHsKICAgIGlmICh0eXBlb2Ygb2JqICE9PSAib2JqZWN0IiB8fCAhb2JqKQogICAgICAgIHJldHVybiBvYmo7CiAgICB2YXIgY29weTsKICAgIGlmIChBcnJheS5pc0FycmF5KG9iaikpIHsKICAgICAgICBjb3B5ID0gW107CiAgICAgICAgZm9yICh2YXIga2V5ID0gMDsga2V5IDwgb2JqLmxlbmd0aDsga2V5KyspIHsKICAgICAgICAgICAgY29weVtrZXldID0gZGVlcENvcHkob2JqW2tleV0pOwogICAgICAgIH0KICAgICAgICByZXR1cm4gY29weTsKICAgIH0KICAgIGlmIChPYmplY3QucHJvdG90eXBlLnRvU3RyaW5nLmNhbGwob2JqKSAhPT0gIltvYmplY3QgT2JqZWN0XSIpCiAgICAgICAgcmV0dXJuIG9iajsKICAgIAogICAgY29weSA9IHt9OwogICAgZm9yICh2YXIga2V5IGluIG9iaikKICAgICAgICBjb3B5W2tleV0gPSBkZWVwQ29weShvYmpba2V5XSk7CiAgICByZXR1cm4gY29weTsKfTsKCmV4cG9ydHMuYXJyYXlUb01hcCA9IGZ1bmN0aW9uKGFycikgewogICAgdmFyIG1hcCA9IHt9OwogICAgZm9yICh2YXIgaT0wOyBpPGFyci5sZW5ndGg7IGkrKykgewogICAgICAgIG1hcFthcnJbaV1dID0gMTsKICAgIH0KICAgIHJldHVybiBtYXA7Cgp9OwoKZXhwb3J0cy5jcmVhdGVNYXAgPSBmdW5jdGlvbihwcm9wcykgewogICAgdmFyIG1hcCA9IE9iamVjdC5jcmVhdGUobnVsbCk7CiAgICBmb3IgKHZhciBpIGluIHByb3BzKSB7CiAgICAgICAgbWFwW2ldID0gcHJvcHNbaV07CiAgICB9CiAgICByZXR1cm4gbWFwOwp9OwpleHBvcnRzLmFycmF5UmVtb3ZlID0gZnVuY3Rpb24oYXJyYXksIHZhbHVlKSB7CiAgZm9yICh2YXIgaSA9IDA7IGkgPD0gYXJyYXkubGVuZ3RoOyBpKyspIHsKICAgIGlmICh2YWx1ZSA9PT0gYXJyYXlbaV0pIHsKICAgICAgYXJyYXkuc3BsaWNlKGksIDEpOwogICAgfQogIH0KfTsKCmV4cG9ydHMuZXNjYXBlUmVnRXhwID0gZnVuY3Rpb24oc3RyKSB7CiAgICByZXR1cm4gc3RyLnJlcGxhY2UoLyhbLiorP14ke30oKXxbXF1cL1xcXSkvZywgJ1xcJDEnKTsKfTsKCmV4cG9ydHMuZXNjYXBlSFRNTCA9IGZ1bmN0aW9uKHN0cikgewogICAgcmV0dXJuICgiIiArIHN0cikucmVwbGFjZSgvJi9nLCAiJiMzODsiKS5yZXBsYWNlKC8iL2csICImIzM0OyIpLnJlcGxhY2UoLycvZywgIiYjMzk7IikucmVwbGFjZSgvPC9nLCAiJiM2MDsiKTsKfTsKCmV4cG9ydHMuZ2V0TWF0Y2hPZmZzZXRzID0gZnVuY3Rpb24oc3RyaW5nLCByZWdFeHApIHsKICAgIHZhciBtYXRjaGVzID0gW107CgogICAgc3RyaW5nLnJlcGxhY2UocmVnRXhwLCBmdW5jdGlvbihzdHIpIHsKICAgICAgICBtYXRjaGVzLnB1c2goewogICAgICAgICAgICBvZmZzZXQ6IGFyZ3VtZW50c1thcmd1bWVudHMubGVuZ3RoLTJdLAogICAgICAgICAgICBsZW5ndGg6IHN0ci5sZW5ndGgKICAgICAgICB9KTsKICAgIH0pOwoKICAgIHJldHVybiBtYXRjaGVzOwp9OwpleHBvcnRzLmRlZmVycmVkQ2FsbCA9IGZ1bmN0aW9uKGZjbikgewogICAgdmFyIHRpbWVyID0gbnVsbDsKICAgIHZhciBjYWxsYmFjayA9IGZ1bmN0aW9uKCkgewogICAgICAgIHRpbWVyID0gbnVsbDsKICAgICAgICBmY24oKTsKICAgIH07CgogICAgdmFyIGRlZmVycmVkID0gZnVuY3Rpb24odGltZW91dCkgewogICAgICAgIGRlZmVycmVkLmNhbmNlbCgpOwogICAgICAgIHRpbWVyID0gc2V0VGltZW91dChjYWxsYmFjaywgdGltZW91dCB8fCAwKTsKICAgICAgICByZXR1cm4gZGVmZXJyZWQ7CiAgICB9OwoKICAgIGRlZmVycmVkLnNjaGVkdWxlID0gZGVmZXJyZWQ7CgogICAgZGVmZXJyZWQuY2FsbCA9IGZ1bmN0aW9uKCkgewogICAgICAgIHRoaXMuY2FuY2VsKCk7CiAgICAgICAgZmNuKCk7CiAgICAgICAgcmV0dXJuIGRlZmVycmVkOwogICAgfTsKCiAgICBkZWZlcnJlZC5jYW5jZWwgPSBmdW5jdGlvbigpIHsKICAgICAgICBjbGVhclRpbWVvdXQodGltZXIpOwogICAgICAgIHRpbWVyID0gbnVsbDsKICAgICAgICByZXR1cm4gZGVmZXJyZWQ7CiAgICB9OwogICAgCiAgICBkZWZlcnJlZC5pc1BlbmRpbmcgPSBmdW5jdGlvbigpIHsKICAgICAgICByZXR1cm4gdGltZXI7CiAgICB9OwoKICAgIHJldHVybiBkZWZlcnJlZDsKfTsKCgpleHBvcnRzLmRlbGF5ZWRDYWxsID0gZnVuY3Rpb24oZmNuLCBkZWZhdWx0VGltZW91dCkgewogICAgdmFyIHRpbWVyID0gbnVsbDsKICAgIHZhciBjYWxsYmFjayA9IGZ1bmN0aW9uKCkgewogICAgICAgIHRpbWVyID0gbnVsbDsKICAgICAgICBmY24oKTsKICAgIH07CgogICAgdmFyIF9zZWxmID0gZnVuY3Rpb24odGltZW91dCkgewogICAgICAgIGlmICh0aW1lciA9PSBudWxsKQogICAgICAgICAgICB0aW1lciA9IHNldFRpbWVvdXQoY2FsbGJhY2ssIHRpbWVvdXQgfHwgZGVmYXVsdFRpbWVvdXQpOwogICAgfTsKCiAgICBfc2VsZi5kZWxheSA9IGZ1bmN0aW9uKHRpbWVvdXQpIHsKICAgICAgICB0aW1lciAmJiBjbGVhclRpbWVvdXQodGltZXIpOwogICAgICAgIHRpbWVyID0gc2V0VGltZW91dChjYWxsYmFjaywgdGltZW91dCB8fCBkZWZhdWx0VGltZW91dCk7CiAgICB9OwogICAgX3NlbGYuc2NoZWR1bGUgPSBfc2VsZjsKCiAgICBfc2VsZi5jYWxsID0gZnVuY3Rpb24oKSB7CiAgICAgICAgdGhpcy5jYW5jZWwoKTsKICAgICAgICBmY24oKTsKICAgIH07CgogICAgX3NlbGYuY2FuY2VsID0gZnVuY3Rpb24oKSB7CiAgICAgICAgdGltZXIgJiYgY2xlYXJUaW1lb3V0KHRpbWVyKTsKICAgICAgICB0aW1lciA9IG51bGw7CiAgICB9OwoKICAgIF9zZWxmLmlzUGVuZGluZyA9IGZ1bmN0aW9uKCkgewogICAgICAgIHJldHVybiB0aW1lcjsKICAgIH07CgogICAgcmV0dXJuIF9zZWxmOwp9Owp9KTsKCmFjZS5kZWZpbmUoImFjZS93b3JrZXIvbWlycm9yIixbXSwgZnVuY3Rpb24ocmVxdWlyZSwgZXhwb3J0cywgbW9kdWxlKSB7CiJ1c2Ugc3RyaWN0IjsKCnZhciBSYW5nZSA9IHJlcXVpcmUoIi4uL3JhbmdlIikuUmFuZ2U7CnZhciBEb2N1bWVudCA9IHJlcXVpcmUoIi4uL2RvY3VtZW50IikuRG9jdW1lbnQ7CnZhciBsYW5nID0gcmVxdWlyZSgiLi4vbGliL2xhbmciKTsKICAgIAp2YXIgTWlycm9yID0gZXhwb3J0cy5NaXJyb3IgPSBmdW5jdGlvbihzZW5kZXIpIHsKICAgIHRoaXMuc2VuZGVyID0gc2VuZGVyOwogICAgdmFyIGRvYyA9IHRoaXMuZG9jID0gbmV3IERvY3VtZW50KCIiKTsKICAgIAogICAgdmFyIGRlZmVycmVkVXBkYXRlID0gdGhpcy5kZWZlcnJlZFVwZGF0ZSA9IGxhbmcuZGVsYXllZENhbGwodGhpcy5vblVwZGF0ZS5iaW5kKHRoaXMpKTsKICAgIAogICAgdmFyIF9zZWxmID0gdGhpczsKICAgIHNlbmRlci5vbigiY2hhbmdlIiwgZnVuY3Rpb24oZSkgewogICAgICAgIHZhciBkYXRhID0gZS5kYXRhOwogICAgICAgIGlmIChkYXRhWzBdLnN0YXJ0KSB7CiAgICAgICAgICAgIGRvYy5hcHBseURlbHRhcyhkYXRhKTsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICBmb3IgKHZhciBpID0gMDsgaSA8IGRhdGEubGVuZ3RoOyBpICs9IDIpIHsKICAgICAgICAgICAgICAgIGlmIChBcnJheS5pc0FycmF5KGRhdGFbaSsxXSkpIHsKICAgICAgICAgICAgICAgICAgICB2YXIgZCA9IHthY3Rpb246ICJpbnNlcnQiLCBzdGFydDogZGF0YVtpXSwgbGluZXM6IGRhdGFbaSsxXX07CiAgICAgICAgICAgICAgICB9IGVsc2UgewogICAgICAgICAgICAgICAgICAgIHZhciBkID0ge2FjdGlvbjogInJlbW92ZSIsIHN0YXJ0OiBkYXRhW2ldLCBlbmQ6IGRhdGFbaSsxXX07CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBkb2MuYXBwbHlEZWx0YShkLCB0cnVlKTsKICAgICAgICAgICAgfQogICAgICAgIH0KICAgICAgICBpZiAoX3NlbGYuJHRpbWVvdXQpCiAgICAgICAgICAgIHJldHVybiBkZWZlcnJlZFVwZGF0ZS5zY2hlZHVsZShfc2VsZi4kdGltZW91dCk7CiAgICAgICAgX3NlbGYub25VcGRhdGUoKTsKICAgIH0pOwp9OwoKKGZ1bmN0aW9uKCkgewogICAgCiAgICB0aGlzLiR0aW1lb3V0ID0gNTAwOwogICAgCiAgICB0aGlzLnNldFRpbWVvdXQgPSBmdW5jdGlvbih0aW1lb3V0KSB7CiAgICAgICAgdGhpcy4kdGltZW91dCA9IHRpbWVvdXQ7CiAgICB9OwogICAgCiAgICB0aGlzLnNldFZhbHVlID0gZnVuY3Rpb24odmFsdWUpIHsKICAgICAgICB0aGlzLmRvYy5zZXRWYWx1ZSh2YWx1ZSk7CiAgICAgICAgdGhpcy5kZWZlcnJlZFVwZGF0ZS5zY2hlZHVsZSh0aGlzLiR0aW1lb3V0KTsKICAgIH07CiAgICAKICAgIHRoaXMuZ2V0VmFsdWUgPSBmdW5jdGlvbihjYWxsYmFja0lkKSB7CiAgICAgICAgdGhpcy5zZW5kZXIuY2FsbGJhY2sodGhpcy5kb2MuZ2V0VmFsdWUoKSwgY2FsbGJhY2tJZCk7CiAgICB9OwogICAgCiAgICB0aGlzLm9uVXBkYXRlID0gZnVuY3Rpb24oKSB7CiAgICB9OwogICAgCiAgICB0aGlzLmlzUGVuZGluZyA9IGZ1bmN0aW9uKCkgewogICAgICAgIHJldHVybiB0aGlzLmRlZmVycmVkVXBkYXRlLmlzUGVuZGluZygpOwogICAgfTsKICAgIAp9KS5jYWxsKE1pcnJvci5wcm90b3R5cGUpOwoKfSk7CgphY2UuZGVmaW5lKCJhY2UvbW9kZS9qc29uL2pzb25fcGFyc2UiLFtdLCBmdW5jdGlvbihyZXF1aXJlLCBleHBvcnRzLCBtb2R1bGUpIHsKInVzZSBzdHJpY3QiOwoKICAgIHZhciBhdCwgICAgIC8vIFRoZSBpbmRleCBvZiB0aGUgY3VycmVudCBjaGFyYWN0ZXIKICAgICAgICBjaCwgICAgIC8vIFRoZSBjdXJyZW50IGNoYXJhY3RlcgogICAgICAgIGVzY2FwZWUgPSB7CiAgICAgICAgICAgICciJzogICciJywKICAgICAgICAgICAgJ1xcJzogJ1xcJywKICAgICAgICAgICAgJy8nOiAgJy8nLAogICAgICAgICAgICBiOiAgICAnXGInLAogICAgICAgICAgICBmOiAgICAnXGYnLAogICAgICAgICAgICBuOiAgICAnXG4nLAogICAgICAgICAgICByOiAgICAnXHInLAogICAgICAgICAgICB0OiAgICAnXHQnCiAgICAgICAgfSwKICAgICAgICB0ZXh0LAoKICAgICAgICBlcnJvciA9IGZ1bmN0aW9uIChtKSB7CgogICAgICAgICAgICB0aHJvdyB7CiAgICAgICAgICAgICAgICBuYW1lOiAgICAnU3ludGF4RXJyb3InLAogICAgICAgICAgICAgICAgbWVzc2FnZTogbSwKICAgICAgICAgICAgICAgIGF0OiAgICAgIGF0LAogICAgICAgICAgICAgICAgdGV4dDogICAgdGV4dAogICAgICAgICAgICB9OwogICAgICAgIH0sCgogICAgICAgIG5leHQgPSBmdW5jdGlvbiAoYykgewoKICAgICAgICAgICAgaWYgKGMgJiYgYyAhPT0gY2gpIHsKICAgICAgICAgICAgICAgIGVycm9yKCJFeHBlY3RlZCAnIiArIGMgKyAiJyBpbnN0ZWFkIG9mICciICsgY2ggKyAiJyIpOwogICAgICAgICAgICB9CgogICAgICAgICAgICBjaCA9IHRleHQuY2hhckF0KGF0KTsKICAgICAgICAgICAgYXQgKz0gMTsKICAgICAgICAgICAgcmV0dXJuIGNoOwogICAgICAgIH0sCgogICAgICAgIG51bWJlciA9IGZ1bmN0aW9uICgpIHsKCiAgICAgICAgICAgIHZhciBudW1iZXIsCiAgICAgICAgICAgICAgICBzdHJpbmcgPSAnJzsKCiAgICAgICAgICAgIGlmIChjaCA9PT0gJy0nKSB7CiAgICAgICAgICAgICAgICBzdHJpbmcgPSAnLSc7CiAgICAgICAgICAgICAgICBuZXh0KCctJyk7CiAgICAgICAgICAgIH0KICAgICAgICAgICAgd2hpbGUgKGNoID49ICcwJyAmJiBjaCA8PSAnOScpIHsKICAgICAgICAgICAgICAgIHN0cmluZyArPSBjaDsKICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgfQogICAgICAgICAgICBpZiAoY2ggPT09ICcuJykgewogICAgICAgICAgICAgICAgc3RyaW5nICs9ICcuJzsKICAgICAgICAgICAgICAgIHdoaWxlIChuZXh0KCkgJiYgY2ggPj0gJzAnICYmIGNoIDw9ICc5JykgewogICAgICAgICAgICAgICAgICAgIHN0cmluZyArPSBjaDsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBpZiAoY2ggPT09ICdlJyB8fCBjaCA9PT0gJ0UnKSB7CiAgICAgICAgICAgICAgICBzdHJpbmcgKz0gY2g7CiAgICAgICAgICAgICAgICBuZXh0KCk7CiAgICAgICAgICAgICAgICBpZiAoY2ggPT09ICctJyB8fCBjaCA9PT0gJysnKSB7CiAgICAgICAgICAgICAgICAgICAgc3RyaW5nICs9IGNoOwogICAgICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIHdoaWxlIChjaCA+PSAnMCcgJiYgY2ggPD0gJzknKSB7CiAgICAgICAgICAgICAgICAgICAgc3RyaW5nICs9IGNoOwogICAgICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBudW1iZXIgPSArc3RyaW5nOwogICAgICAgICAgICBpZiAoaXNOYU4obnVtYmVyKSkgewogICAgICAgICAgICAgICAgZXJyb3IoIkJhZCBudW1iZXIiKTsKICAgICAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgICAgIHJldHVybiBudW1iZXI7CiAgICAgICAgICAgIH0KICAgICAgICB9LAoKICAgICAgICBzdHJpbmcgPSBmdW5jdGlvbiAoKSB7CgogICAgICAgICAgICB2YXIgaGV4LAogICAgICAgICAgICAgICAgaSwKICAgICAgICAgICAgICAgIHN0cmluZyA9ICcnLAogICAgICAgICAgICAgICAgdWZmZmY7CgogICAgICAgICAgICBpZiAoY2ggPT09ICciJykgewogICAgICAgICAgICAgICAgd2hpbGUgKG5leHQoKSkgewogICAgICAgICAgICAgICAgICAgIGlmIChjaCA9PT0gJyInKSB7CiAgICAgICAgICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIHN0cmluZzsKICAgICAgICAgICAgICAgICAgICB9IGVsc2UgaWYgKGNoID09PSAnXFwnKSB7CiAgICAgICAgICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgICAgICAgICAgICAgaWYgKGNoID09PSAndScpIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVmZmZmID0gMDsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZvciAoaSA9IDA7IGkgPCA0OyBpICs9IDEpIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBoZXggPSBwYXJzZUludChuZXh0KCksIDE2KTsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpZiAoIWlzRmluaXRlKGhleCkpIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYnJlYWs7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVmZmZmID0gdWZmZmYgKiAxNiArIGhleDsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cmluZyArPSBTdHJpbmcuZnJvbUNoYXJDb2RlKHVmZmZmKTsKICAgICAgICAgICAgICAgICAgICAgICAgfSBlbHNlIGlmICh0eXBlb2YgZXNjYXBlZVtjaF0gPT09ICdzdHJpbmcnKSB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJpbmcgKz0gZXNjYXBlZVtjaF07CiAgICAgICAgICAgICAgICAgICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBicmVhazsKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIH0gZWxzZSBpZiAoY2ggPT0gIlxuIiB8fCBjaCA9PSAiXHIiKSB7CiAgICAgICAgICAgICAgICAgICAgICAgIGJyZWFrOwogICAgICAgICAgICAgICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICAgICAgICAgIHN0cmluZyArPSBjaDsKICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgZXJyb3IoIkJhZCBzdHJpbmciKTsKICAgICAgICB9LAoKICAgICAgICB3aGl0ZSA9IGZ1bmN0aW9uICgpIHsKCiAgICAgICAgICAgIHdoaWxlIChjaCAmJiBjaCA8PSAnICcpIHsKICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgfQogICAgICAgIH0sCgogICAgICAgIHdvcmQgPSBmdW5jdGlvbiAoKSB7CgogICAgICAgICAgICBzd2l0Y2ggKGNoKSB7CiAgICAgICAgICAgIGNhc2UgJ3QnOgogICAgICAgICAgICAgICAgbmV4dCgndCcpOwogICAgICAgICAgICAgICAgbmV4dCgncicpOwogICAgICAgICAgICAgICAgbmV4dCgndScpOwogICAgICAgICAgICAgICAgbmV4dCgnZScpOwogICAgICAgICAgICAgICAgcmV0dXJuIHRydWU7CiAgICAgICAgICAgIGNhc2UgJ2YnOgogICAgICAgICAgICAgICAgbmV4dCgnZicpOwogICAgICAgICAgICAgICAgbmV4dCgnYScpOwogICAgICAgICAgICAgICAgbmV4dCgnbCcpOwogICAgICAgICAgICAgICAgbmV4dCgncycpOwogICAgICAgICAgICAgICAgbmV4dCgnZScpOwogICAgICAgICAgICAgICAgcmV0dXJuIGZhbHNlOwogICAgICAgICAgICBjYXNlICduJzoKICAgICAgICAgICAgICAgIG5leHQoJ24nKTsKICAgICAgICAgICAgICAgIG5leHQoJ3UnKTsKICAgICAgICAgICAgICAgIG5leHQoJ2wnKTsKICAgICAgICAgICAgICAgIG5leHQoJ2wnKTsKICAgICAgICAgICAgICAgIHJldHVybiBudWxsOwogICAgICAgICAgICB9CiAgICAgICAgICAgIGVycm9yKCJVbmV4cGVjdGVkICciICsgY2ggKyAiJyIpOwogICAgICAgIH0sCgogICAgICAgIHZhbHVlLCAgLy8gUGxhY2UgaG9sZGVyIGZvciB0aGUgdmFsdWUgZnVuY3Rpb24uCgogICAgICAgIGFycmF5ID0gZnVuY3Rpb24gKCkgewoKICAgICAgICAgICAgdmFyIGFycmF5ID0gW107CgogICAgICAgICAgICBpZiAoY2ggPT09ICdbJykgewogICAgICAgICAgICAgICAgbmV4dCgnWycpOwogICAgICAgICAgICAgICAgd2hpdGUoKTsKICAgICAgICAgICAgICAgIGlmIChjaCA9PT0gJ10nKSB7CiAgICAgICAgICAgICAgICAgICAgbmV4dCgnXScpOwogICAgICAgICAgICAgICAgICAgIHJldHVybiBhcnJheTsgICAvLyBlbXB0eSBhcnJheQogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgd2hpbGUgKGNoKSB7CiAgICAgICAgICAgICAgICAgICAgYXJyYXkucHVzaCh2YWx1ZSgpKTsKICAgICAgICAgICAgICAgICAgICB3aGl0ZSgpOwogICAgICAgICAgICAgICAgICAgIGlmIChjaCA9PT0gJ10nKSB7CiAgICAgICAgICAgICAgICAgICAgICAgIG5leHQoJ10nKTsKICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIGFycmF5OwogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICBuZXh0KCcsJyk7CiAgICAgICAgICAgICAgICAgICAgd2hpdGUoKTsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBlcnJvcigiQmFkIGFycmF5Iik7CiAgICAgICAgfSwKCiAgICAgICAgb2JqZWN0ID0gZnVuY3Rpb24gKCkgewoKICAgICAgICAgICAgdmFyIGtleSwKICAgICAgICAgICAgICAgIG9iamVjdCA9IHt9OwoKICAgICAgICAgICAgaWYgKGNoID09PSAneycpIHsKICAgICAgICAgICAgICAgIG5leHQoJ3snKTsKICAgICAgICAgICAgICAgIHdoaXRlKCk7CiAgICAgICAgICAgICAgICBpZiAoY2ggPT09ICd9JykgewogICAgICAgICAgICAgICAgICAgIG5leHQoJ30nKTsKICAgICAgICAgICAgICAgICAgICByZXR1cm4gb2JqZWN0OyAgIC8vIGVtcHR5IG9iamVjdAogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgd2hpbGUgKGNoKSB7CiAgICAgICAgICAgICAgICAgICAga2V5ID0gc3RyaW5nKCk7CiAgICAgICAgICAgICAgICAgICAgd2hpdGUoKTsKICAgICAgICAgICAgICAgICAgICBuZXh0KCc6Jyk7CiAgICAgICAgICAgICAgICAgICAgaWYgKE9iamVjdC5oYXNPd25Qcm9wZXJ0eS5jYWxsKG9iamVjdCwga2V5KSkgewogICAgICAgICAgICAgICAgICAgICAgICBlcnJvcignRHVwbGljYXRlIGtleSAiJyArIGtleSArICciJyk7CiAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIG9iamVjdFtrZXldID0gdmFsdWUoKTsKICAgICAgICAgICAgICAgICAgICB3aGl0ZSgpOwogICAgICAgICAgICAgICAgICAgIGlmIChjaCA9PT0gJ30nKSB7CiAgICAgICAgICAgICAgICAgICAgICAgIG5leHQoJ30nKTsKICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIG9iamVjdDsKICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgbmV4dCgnLCcpOwogICAgICAgICAgICAgICAgICAgIHdoaXRlKCk7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgZXJyb3IoIkJhZCBvYmplY3QiKTsKICAgICAgICB9OwoKICAgIHZhbHVlID0gZnVuY3Rpb24gKCkgewoKICAgICAgICB3aGl0ZSgpOwogICAgICAgIHN3aXRjaCAoY2gpIHsKICAgICAgICBjYXNlICd7JzoKICAgICAgICAgICAgcmV0dXJuIG9iamVjdCgpOwogICAgICAgIGNhc2UgJ1snOgogICAgICAgICAgICByZXR1cm4gYXJyYXkoKTsKICAgICAgICBjYXNlICciJzoKICAgICAgICAgICAgcmV0dXJuIHN0cmluZygpOwogICAgICAgIGNhc2UgJy0nOgogICAgICAgICAgICByZXR1cm4gbnVtYmVyKCk7CiAgICAgICAgZGVmYXVsdDoKICAgICAgICAgICAgcmV0dXJuIGNoID49ICcwJyAmJiBjaCA8PSAnOScgPyBudW1iZXIoKSA6IHdvcmQoKTsKICAgICAgICB9CiAgICB9OwoKICAgIHJldHVybiBmdW5jdGlvbiAoc291cmNlLCByZXZpdmVyKSB7CiAgICAgICAgdmFyIHJlc3VsdDsKCiAgICAgICAgdGV4dCA9IHNvdXJjZTsKICAgICAgICBhdCA9IDA7CiAgICAgICAgY2ggPSAnICc7CiAgICAgICAgcmVzdWx0ID0gdmFsdWUoKTsKICAgICAgICB3aGl0ZSgpOwogICAgICAgIGlmIChjaCkgewogICAgICAgICAgICBlcnJvcigiU3ludGF4IGVycm9yIik7CiAgICAgICAgfQoKICAgICAgICByZXR1cm4gdHlwZW9mIHJldml2ZXIgPT09ICdmdW5jdGlvbicgPyBmdW5jdGlvbiB3YWxrKGhvbGRlciwga2V5KSB7CiAgICAgICAgICAgIHZhciBrLCB2LCB2YWx1ZSA9IGhvbGRlcltrZXldOwogICAgICAgICAgICBpZiAodmFsdWUgJiYgdHlwZW9mIHZhbHVlID09PSAnb2JqZWN0JykgewogICAgICAgICAgICAgICAgZm9yIChrIGluIHZhbHVlKSB7CiAgICAgICAgICAgICAgICAgICAgaWYgKE9iamVjdC5oYXNPd25Qcm9wZXJ0eS5jYWxsKHZhbHVlLCBrKSkgewogICAgICAgICAgICAgICAgICAgICAgICB2ID0gd2Fsayh2YWx1ZSwgayk7CiAgICAgICAgICAgICAgICAgICAgICAgIGlmICh2ICE9PSB1bmRlZmluZWQpIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHZhbHVlW2tdID0gdjsKICAgICAgICAgICAgICAgICAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlbGV0ZSB2YWx1ZVtrXTsKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICByZXR1cm4gcmV2aXZlci5jYWxsKGhvbGRlciwga2V5LCB2YWx1ZSk7CiAgICAgICAgfSh7Jyc6IHJlc3VsdH0sICcnKSA6IHJlc3VsdDsKICAgIH07Cn0pOwoKYWNlLmRlZmluZSgiYWNlL21vZGUvanNvbl93b3JrZXIiLFtdLCBmdW5jdGlvbihyZXF1aXJlLCBleHBvcnRzLCBtb2R1bGUpIHsKInVzZSBzdHJpY3QiOwoKdmFyIG9vcCA9IHJlcXVpcmUoIi4uL2xpYi9vb3AiKTsKdmFyIE1pcnJvciA9IHJlcXVpcmUoIi4uL3dvcmtlci9taXJyb3IiKS5NaXJyb3I7CnZhciBwYXJzZSA9IHJlcXVpcmUoIi4vanNvbi9qc29uX3BhcnNlIik7Cgp2YXIgSnNvbldvcmtlciA9IGV4cG9ydHMuSnNvbldvcmtlciA9IGZ1bmN0aW9uKHNlbmRlcikgewogICAgTWlycm9yLmNhbGwodGhpcywgc2VuZGVyKTsKICAgIHRoaXMuc2V0VGltZW91dCgyMDApOwp9OwoKb29wLmluaGVyaXRzKEpzb25Xb3JrZXIsIE1pcnJvcik7CgooZnVuY3Rpb24oKSB7CgogICAgdGhpcy5vblVwZGF0ZSA9IGZ1bmN0aW9uKCkgewogICAgICAgIHZhciB2YWx1ZSA9IHRoaXMuZG9jLmdldFZhbHVlKCk7CiAgICAgICAgdmFyIGVycm9ycyA9IFtdOwogICAgICAgIHRyeSB7CiAgICAgICAgICAgIGlmICh2YWx1ZSkKICAgICAgICAgICAgICAgIHBhcnNlKHZhbHVlKTsKICAgICAgICB9IGNhdGNoIChlKSB7CiAgICAgICAgICAgIHZhciBwb3MgPSB0aGlzLmRvYy5pbmRleFRvUG9zaXRpb24oZS5hdC0xKTsKICAgICAgICAgICAgZXJyb3JzLnB1c2goewogICAgICAgICAgICAgICAgcm93OiBwb3Mucm93LAogICAgICAgICAgICAgICAgY29sdW1uOiBwb3MuY29sdW1uLAogICAgICAgICAgICAgICAgdGV4dDogZS5tZXNzYWdlLAogICAgICAgICAgICAgICAgdHlwZTogImVycm9yIgogICAgICAgICAgICB9KTsKICAgICAgICB9CiAgICAgICAgdGhpcy5zZW5kZXIuZW1pdCgiYW5ub3RhdGUiLCBlcnJvcnMpOwogICAgfTsKCn0pLmNhbGwoSnNvbldvcmtlci5wcm90b3R5cGUpOwoKfSk7Cg==";
@@ -28078,7 +30620,7 @@ class Kanban {
 
 const labelIosCss = ".item.sc-ion-label-ios-h,.item .sc-ion-label-ios-h{--color:initial;display:block;color:var(--color);font-family:var(--ion-font-family, inherit);font-size:inherit;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;box-sizing:border-box}.ion-color.sc-ion-label-ios-h{color:var(--ion-color-base)}.ion-text-wrap.sc-ion-label-ios-h,[text-wrap].sc-ion-label-ios-h{white-space:normal}.item-interactive-disabled.sc-ion-label-ios-h:not(.item-multiple-inputs),.item-interactive-disabled:not(.item-multiple-inputs) .sc-ion-label-ios-h{cursor:default;opacity:0.3;pointer-events:none}.item-input.sc-ion-label-ios-h,.item-input .sc-ion-label-ios-h{flex:initial;max-width:200px;pointer-events:none}.item-textarea.sc-ion-label-ios-h,.item-textarea .sc-ion-label-ios-h{align-self:baseline}.label-fixed.sc-ion-label-ios-h{flex:0 0 100px;width:100px;min-width:100px;max-width:200px}.label-stacked.sc-ion-label-ios-h,.label-floating.sc-ion-label-ios-h{margin-bottom:0;align-self:stretch;width:auto;max-width:100%}.label-no-animate.label-floating.sc-ion-label-ios-h{transition:none}.sc-ion-label-ios-s h1,.sc-ion-label-ios-s h2,.sc-ion-label-ios-s h3,.sc-ion-label-ios-s h4,.sc-ion-label-ios-s h5,.sc-ion-label-ios-s h6{text-overflow:inherit;overflow:inherit}.ion-text-wrap.sc-ion-label-ios-h,[text-wrap].sc-ion-label-ios-h{font-size:14px;line-height:1.5}.label-stacked.sc-ion-label-ios-h{margin-bottom:4px;font-size:14px}.label-floating.sc-ion-label-ios-h{margin-bottom:0;transform:translate3d(0,  29px,  0);transform-origin:left top;transition:transform 150ms ease-in-out}[dir=rtl].sc-ion-label-ios-h -no-combinator.label-floating.sc-ion-label-ios-h,[dir=rtl] .sc-ion-label-ios-h -no-combinator.label-floating.sc-ion-label-ios-h,[dir=rtl].label-floating.sc-ion-label-ios-h,[dir=rtl] .label-floating.sc-ion-label-ios-h{transform-origin:right top}.item-textarea.label-floating.sc-ion-label-ios-h,.item-textarea .label-floating.sc-ion-label-ios-h{transform:translate3d(0,  28px,  0)}.item-has-focus.label-floating.sc-ion-label-ios-h,.item-has-focus .label-floating.sc-ion-label-ios-h,.item-has-placeholder.sc-ion-label-ios-h:not(.item-input).label-floating,.item-has-placeholder:not(.item-input) .label-floating.sc-ion-label-ios-h,.item-has-value.label-floating.sc-ion-label-ios-h,.item-has-value .label-floating.sc-ion-label-ios-h{transform:translate3d(0,  0,  0) scale(0.82)}.sc-ion-label-ios-s h1{margin-left:0;margin-right:0;margin-top:3px;margin-bottom:2px;font-size:22px;font-weight:normal}.sc-ion-label-ios-s h2{margin-left:0;margin-right:0;margin-top:0;margin-bottom:2px;font-size:17px;font-weight:normal}.sc-ion-label-ios-s h3,.sc-ion-label-ios-s h4,.sc-ion-label-ios-s h5,.sc-ion-label-ios-s h6{margin-left:0;margin-right:0;margin-top:0;margin-bottom:3px;font-size:14px;font-weight:normal;line-height:normal}.sc-ion-label-ios-s p{margin-left:0;margin-right:0;margin-top:0;margin-bottom:2px;font-size:14px;line-height:normal;text-overflow:inherit;overflow:inherit}.sc-ion-label-ios-s>p{color:rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.4)}.sc-ion-label-ios-h.in-item-color.sc-ion-label-ios-s>p{color:inherit}.sc-ion-label-ios-s h2:last-child,.sc-ion-label-ios-s h3:last-child,.sc-ion-label-ios-s h4:last-child,.sc-ion-label-ios-s h5:last-child,.sc-ion-label-ios-s h6:last-child,.sc-ion-label-ios-s p:last-child{margin-bottom:0}";
 
-const labelMdCss = ".item.sc-ion-label-md-h,.item .sc-ion-label-md-h{--color:initial;display:block;color:var(--color);font-family:var(--ion-font-family, inherit);font-size:inherit;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;box-sizing:border-box}.ion-color.sc-ion-label-md-h{color:var(--ion-color-base)}.ion-text-wrap.sc-ion-label-md-h,[text-wrap].sc-ion-label-md-h{white-space:normal}.item-interactive-disabled.sc-ion-label-md-h:not(.item-multiple-inputs),.item-interactive-disabled:not(.item-multiple-inputs) .sc-ion-label-md-h{cursor:default;opacity:0.3;pointer-events:none}.item-input.sc-ion-label-md-h,.item-input .sc-ion-label-md-h{flex:initial;max-width:200px;pointer-events:none}.item-textarea.sc-ion-label-md-h,.item-textarea .sc-ion-label-md-h{align-self:baseline}.label-fixed.sc-ion-label-md-h{flex:0 0 100px;width:100px;min-width:100px;max-width:200px}.label-stacked.sc-ion-label-md-h,.label-floating.sc-ion-label-md-h{margin-bottom:0;align-self:stretch;width:auto;max-width:100%}.label-no-animate.label-floating.sc-ion-label-md-h{transition:none}.sc-ion-label-md-s h1,.sc-ion-label-md-s h2,.sc-ion-label-md-s h3,.sc-ion-label-md-s h4,.sc-ion-label-md-s h5,.sc-ion-label-md-s h6{text-overflow:inherit;overflow:inherit}.ion-text-wrap.sc-ion-label-md-h,[text-wrap].sc-ion-label-md-h{line-height:1.5}.label-stacked.sc-ion-label-md-h{transform-origin:left top;transform:translateY(50%) scale(0.75);transition:color 150ms cubic-bezier(0.4, 0, 0.2, 1)}[dir=rtl].sc-ion-label-md-h -no-combinator.label-stacked.sc-ion-label-md-h,[dir=rtl] .sc-ion-label-md-h -no-combinator.label-stacked.sc-ion-label-md-h,[dir=rtl].label-stacked.sc-ion-label-md-h,[dir=rtl] .label-stacked.sc-ion-label-md-h{transform-origin:right top}.label-floating.sc-ion-label-md-h{transform:translateY(96%);transform-origin:left top;transition:color 150ms cubic-bezier(0.4, 0, 0.2, 1), transform 150ms cubic-bezier(0.4, 0, 0.2, 1)}[dir=rtl].sc-ion-label-md-h -no-combinator.label-floating.sc-ion-label-md-h,[dir=rtl] .sc-ion-label-md-h -no-combinator.label-floating.sc-ion-label-md-h,[dir=rtl].label-floating.sc-ion-label-md-h,[dir=rtl] .label-floating.sc-ion-label-md-h{transform-origin:right top}.item-textarea.label-floating.sc-ion-label-md-h,.item-textarea .label-floating.sc-ion-label-md-h{transform:translateY(185%)}.label-stacked.sc-ion-label-md-h,.label-floating.sc-ion-label-md-h{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}.item-has-focus.label-floating.sc-ion-label-md-h,.item-has-focus .label-floating.sc-ion-label-md-h,.item-has-placeholder.sc-ion-label-md-h:not(.item-input).label-floating,.item-has-placeholder:not(.item-input) .label-floating.sc-ion-label-md-h,.item-has-value.label-floating.sc-ion-label-md-h,.item-has-value .label-floating.sc-ion-label-md-h{transform:translateY(50%) scale(0.75)}.item-has-focus.label-stacked.sc-ion-label-md-h:not(.ion-color),.item-has-focus .label-stacked.sc-ion-label-md-h:not(.ion-color),.item-has-focus.label-floating.sc-ion-label-md-h:not(.ion-color),.item-has-focus .label-floating.sc-ion-label-md-h:not(.ion-color){color:var(--ion-color-primary, #3880ff)}.item-has-focus.ion-color.label-stacked.sc-ion-label-md-h:not(.ion-color),.item-has-focus.ion-color .label-stacked.sc-ion-label-md-h:not(.ion-color),.item-has-focus.ion-color.label-floating.sc-ion-label-md-h:not(.ion-color),.item-has-focus.ion-color .label-floating.sc-ion-label-md-h:not(.ion-color){color:var(--ion-color-contrast)}.sc-ion-label-md-s h1{margin-left:0;margin-right:0;margin-top:0;margin-bottom:2px;font-size:24px;font-weight:normal}.sc-ion-label-md-s h2{margin-left:0;margin-right:0;margin-top:2px;margin-bottom:2px;font-size:16px;font-weight:normal}.sc-ion-label-md-s h3,.sc-ion-label-md-s h4,.sc-ion-label-md-s h5,.sc-ion-label-md-s h6{margin-left:0;margin-right:0;margin-top:2px;margin-bottom:2px;font-size:14px;font-weight:normal;line-height:normal}.sc-ion-label-md-s p{margin-left:0;margin-right:0;margin-top:0;margin-bottom:2px;font-size:14px;line-height:20px;text-overflow:inherit;overflow:inherit}.sc-ion-label-md-s>p{color:var(--ion-color-step-600, #666666)}.sc-ion-label-md-h.in-item-color.sc-ion-label-md-s>p{color:inherit}";
+const labelMdCss = ".item.sc-ion-label-md-h,.item .sc-ion-label-md-h{--color:initial;display:block;color:var(--color);font-family:var(--ion-font-family, inherit);font-size:inherit;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;box-sizing:border-box}.ion-color.sc-ion-label-md-h{color:var(--ion-color-base)}.ion-text-wrap.sc-ion-label-md-h,[text-wrap].sc-ion-label-md-h{white-space:normal}.item-interactive-disabled.sc-ion-label-md-h:not(.item-multiple-inputs),.item-interactive-disabled:not(.item-multiple-inputs) .sc-ion-label-md-h{cursor:default;opacity:0.3;pointer-events:none}.item-input.sc-ion-label-md-h,.item-input .sc-ion-label-md-h{flex:initial;max-width:200px;pointer-events:none}.item-textarea.sc-ion-label-md-h,.item-textarea .sc-ion-label-md-h{align-self:baseline}.label-fixed.sc-ion-label-md-h{flex:0 0 100px;width:100px;min-width:100px;max-width:200px}.label-stacked.sc-ion-label-md-h,.label-floating.sc-ion-label-md-h{margin-bottom:0;align-self:stretch;width:auto;max-width:100%}.label-no-animate.label-floating.sc-ion-label-md-h{transition:none}.sc-ion-label-md-s h1,.sc-ion-label-md-s h2,.sc-ion-label-md-s h3,.sc-ion-label-md-s h4,.sc-ion-label-md-s h5,.sc-ion-label-md-s h6{text-overflow:inherit;overflow:inherit}.ion-text-wrap.sc-ion-label-md-h,[text-wrap].sc-ion-label-md-h{line-height:1.5}.label-stacked.sc-ion-label-md-h,.label-floating.sc-ion-label-md-h{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;transform-origin:top left}.label-stacked.label-rtl.sc-ion-label-md-h,.label-floating.label-rtl.sc-ion-label-md-h{transform-origin:top right}.label-stacked.sc-ion-label-md-h{transform:translateY(50%) scale(0.75);transition:color 150ms cubic-bezier(0.4, 0, 0.2, 1)}.label-floating.sc-ion-label-md-h{transform:translateY(96%);transition:color 150ms cubic-bezier(0.4, 0, 0.2, 1), transform 150ms cubic-bezier(0.4, 0, 0.2, 1)}.ion-focused.label-floating.sc-ion-label-md-h,.ion-focused .label-floating.sc-ion-label-md-h,.item-has-focus.label-floating.sc-ion-label-md-h,.item-has-focus .label-floating.sc-ion-label-md-h,.item-has-placeholder.sc-ion-label-md-h:not(.item-input).label-floating,.item-has-placeholder:not(.item-input) .label-floating.sc-ion-label-md-h,.item-has-value.label-floating.sc-ion-label-md-h,.item-has-value .label-floating.sc-ion-label-md-h{transform:translateY(50%) scale(0.75)}.item-fill-outline.ion-focused.label-floating.sc-ion-label-md-h,.item-fill-outline.ion-focused .label-floating.sc-ion-label-md-h,.item-fill-outline.item-has-focus.label-floating.sc-ion-label-md-h,.item-fill-outline.item-has-focus .label-floating.sc-ion-label-md-h,.item-fill-outline.item-has-placeholder.sc-ion-label-md-h:not(.item-input).label-floating,.item-fill-outline.item-has-placeholder:not(.item-input) .label-floating.sc-ion-label-md-h,.item-fill-outline.item-has-value.label-floating.sc-ion-label-md-h,.item-fill-outline.item-has-value .label-floating.sc-ion-label-md-h{transform:translateY(-6px) scale(0.75);position:relative;max-width:min-content;background-color:var(--ion-item-background, var(--ion-background-color, #fff));overflow:visible;z-index:3}.item-fill-outline.ion-focused.label-floating.sc-ion-label-md-h::before,.item-fill-outline.ion-focused .label-floating.sc-ion-label-md-h::before,.item-fill-outline.ion-focused.label-floating.sc-ion-label-md-h::after,.item-fill-outline.ion-focused .label-floating.sc-ion-label-md-h::after,.item-fill-outline.item-has-focus.label-floating.sc-ion-label-md-h::before,.item-fill-outline.item-has-focus .label-floating.sc-ion-label-md-h::before,.item-fill-outline.item-has-focus.label-floating.sc-ion-label-md-h::after,.item-fill-outline.item-has-focus .label-floating.sc-ion-label-md-h::after,.item-fill-outline.item-has-placeholder.sc-ion-label-md-h:not(.item-input).label-floating::before,.item-fill-outline.item-has-placeholder:not(.item-input) .label-floating.sc-ion-label-md-h::before,.item-fill-outline.item-has-placeholder.sc-ion-label-md-h:not(.item-input).label-floating::after,.item-fill-outline.item-has-placeholder:not(.item-input) .label-floating.sc-ion-label-md-h::after,.item-fill-outline.item-has-value.label-floating.sc-ion-label-md-h::before,.item-fill-outline.item-has-value .label-floating.sc-ion-label-md-h::before,.item-fill-outline.item-has-value.label-floating.sc-ion-label-md-h::after,.item-fill-outline.item-has-value .label-floating.sc-ion-label-md-h::after{position:absolute;width:4px;height:100%;background-color:var(--ion-item-background, var(--ion-background-color, #fff));content:\"\"}.item-fill-outline.ion-focused.label-floating.sc-ion-label-md-h::before,.item-fill-outline.ion-focused .label-floating.sc-ion-label-md-h::before,.item-fill-outline.item-has-focus.label-floating.sc-ion-label-md-h::before,.item-fill-outline.item-has-focus .label-floating.sc-ion-label-md-h::before,.item-fill-outline.item-has-placeholder.sc-ion-label-md-h:not(.item-input).label-floating::before,.item-fill-outline.item-has-placeholder:not(.item-input) .label-floating.sc-ion-label-md-h::before,.item-fill-outline.item-has-value.label-floating.sc-ion-label-md-h::before,.item-fill-outline.item-has-value .label-floating.sc-ion-label-md-h::before{left:calc(-1 * 4px)}.item-fill-outline.ion-focused.label-floating.sc-ion-label-md-h::after,.item-fill-outline.ion-focused .label-floating.sc-ion-label-md-h::after,.item-fill-outline.item-has-focus.label-floating.sc-ion-label-md-h::after,.item-fill-outline.item-has-focus .label-floating.sc-ion-label-md-h::after,.item-fill-outline.item-has-placeholder.sc-ion-label-md-h:not(.item-input).label-floating::after,.item-fill-outline.item-has-placeholder:not(.item-input) .label-floating.sc-ion-label-md-h::after,.item-fill-outline.item-has-value.label-floating.sc-ion-label-md-h::after,.item-fill-outline.item-has-value .label-floating.sc-ion-label-md-h::after{right:calc(-1 * 4px)}.item-fill-outline.ion-focused.item-has-start-slot.label-floating.sc-ion-label-md-h,.item-fill-outline.ion-focused.item-has-start-slot .label-floating.sc-ion-label-md-h,.item-fill-outline.item-has-focus.item-has-start-slot.label-floating.sc-ion-label-md-h,.item-fill-outline.item-has-focus.item-has-start-slot .label-floating.sc-ion-label-md-h,.item-fill-outline.item-has-placeholder.sc-ion-label-md-h:not(.item-input).item-has-start-slot.label-floating,.item-fill-outline.item-has-placeholder:not(.item-input).item-has-start-slot .label-floating.sc-ion-label-md-h,.item-fill-outline.item-has-value.item-has-start-slot.label-floating.sc-ion-label-md-h,.item-fill-outline.item-has-value.item-has-start-slot .label-floating.sc-ion-label-md-h{transform:translateX(-32px) translateY(-6px) scale(0.75)}.item-fill-outline.ion-focused.item-has-start-slot.label-floating.label-rtl.sc-ion-label-md-h,.item-fill-outline.ion-focused.item-has-start-slot .label-floating.label-rtl.sc-ion-label-md-h,.item-fill-outline.item-has-focus.item-has-start-slot.label-floating.label-rtl.sc-ion-label-md-h,.item-fill-outline.item-has-focus.item-has-start-slot .label-floating.label-rtl.sc-ion-label-md-h,.item-fill-outline.item-has-placeholder.sc-ion-label-md-h:not(.item-input).item-has-start-slot.label-floating.label-rtl,.item-fill-outline.item-has-placeholder:not(.item-input).item-has-start-slot .label-floating.label-rtl.sc-ion-label-md-h,.item-fill-outline.item-has-value.item-has-start-slot.label-floating.label-rtl.sc-ion-label-md-h,.item-fill-outline.item-has-value.item-has-start-slot .label-floating.label-rtl.sc-ion-label-md-h{transform:translateX(calc(-1 * -32px)) translateY(-6px) scale(0.75)}.ion-focused.label-stacked.sc-ion-label-md-h:not(.ion-color),.ion-focused .label-stacked.sc-ion-label-md-h:not(.ion-color),.ion-focused.label-floating.sc-ion-label-md-h:not(.ion-color),.ion-focused .label-floating.sc-ion-label-md-h:not(.ion-color),.item-has-focus.label-stacked.sc-ion-label-md-h:not(.ion-color),.item-has-focus .label-stacked.sc-ion-label-md-h:not(.ion-color),.item-has-focus.label-floating.sc-ion-label-md-h:not(.ion-color),.item-has-focus .label-floating.sc-ion-label-md-h:not(.ion-color){color:var(--ion-color-primary, #3880ff)}.ion-focused.ion-color.label-stacked.sc-ion-label-md-h:not(.ion-color),.ion-focused.ion-color .label-stacked.sc-ion-label-md-h:not(.ion-color),.ion-focused.ion-color.label-floating.sc-ion-label-md-h:not(.ion-color),.ion-focused.ion-color .label-floating.sc-ion-label-md-h:not(.ion-color),.item-has-focus.ion-color.label-stacked.sc-ion-label-md-h:not(.ion-color),.item-has-focus.ion-color .label-stacked.sc-ion-label-md-h:not(.ion-color),.item-has-focus.ion-color.label-floating.sc-ion-label-md-h:not(.ion-color),.item-has-focus.ion-color .label-floating.sc-ion-label-md-h:not(.ion-color){color:var(--ion-color-contrast)}.item-fill-solid.ion-focused.ion-color.label-stacked.sc-ion-label-md-h:not(.ion-color),.item-fill-solid.ion-focused.ion-color .label-stacked.sc-ion-label-md-h:not(.ion-color),.item-fill-solid.ion-focused.ion-color.label-floating.sc-ion-label-md-h:not(.ion-color),.item-fill-solid.ion-focused.ion-color .label-floating.sc-ion-label-md-h:not(.ion-color),.item-fill-outline.ion-focused.ion-color.label-stacked.sc-ion-label-md-h:not(.ion-color),.item-fill-outline.ion-focused.ion-color .label-stacked.sc-ion-label-md-h:not(.ion-color),.item-fill-outline.ion-focused.ion-color.label-floating.sc-ion-label-md-h:not(.ion-color),.item-fill-outline.ion-focused.ion-color .label-floating.sc-ion-label-md-h:not(.ion-color),.item-fill-solid.item-has-focus.ion-color.label-stacked.sc-ion-label-md-h:not(.ion-color),.item-fill-solid.item-has-focus.ion-color .label-stacked.sc-ion-label-md-h:not(.ion-color),.item-fill-solid.item-has-focus.ion-color.label-floating.sc-ion-label-md-h:not(.ion-color),.item-fill-solid.item-has-focus.ion-color .label-floating.sc-ion-label-md-h:not(.ion-color),.item-fill-outline.item-has-focus.ion-color.label-stacked.sc-ion-label-md-h:not(.ion-color),.item-fill-outline.item-has-focus.ion-color .label-stacked.sc-ion-label-md-h:not(.ion-color),.item-fill-outline.item-has-focus.ion-color.label-floating.sc-ion-label-md-h:not(.ion-color),.item-fill-outline.item-has-focus.ion-color .label-floating.sc-ion-label-md-h:not(.ion-color){color:var(--ion-color-base)}.ion-invalid.ion-touched.label-stacked.sc-ion-label-md-h:not(.ion-color),.ion-invalid.ion-touched .label-stacked.sc-ion-label-md-h:not(.ion-color),.ion-invalid.ion-touched.label-floating.sc-ion-label-md-h:not(.ion-color),.ion-invalid.ion-touched .label-floating.sc-ion-label-md-h:not(.ion-color){color:var(--highlight-color-invalid)}.sc-ion-label-md-s h1{margin-left:0;margin-right:0;margin-top:0;margin-bottom:2px;font-size:24px;font-weight:normal}.sc-ion-label-md-s h2{margin-left:0;margin-right:0;margin-top:2px;margin-bottom:2px;font-size:16px;font-weight:normal}.sc-ion-label-md-s h3,.sc-ion-label-md-s h4,.sc-ion-label-md-s h5,.sc-ion-label-md-s h6{margin-left:0;margin-right:0;margin-top:2px;margin-bottom:2px;font-size:14px;font-weight:normal;line-height:normal}.sc-ion-label-md-s p{margin-left:0;margin-right:0;margin-top:0;margin-bottom:2px;font-size:14px;line-height:20px;text-overflow:inherit;overflow:inherit}.sc-ion-label-md-s>p{color:var(--ion-color-step-600, #666666)}.sc-ion-label-md-h.in-item-color.sc-ion-label-md-s>p{color:inherit}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -28136,7 +30678,8 @@ class Label {
         [mode]: true,
         'in-item-color': hostContext('ion-item.ion-color', this.el),
         [`label-${position}`]: position !== undefined,
-        [`label-no-animate`]: (this.noAnimate)
+        [`label-no-animate`]: (this.noAnimate),
+        'label-rtl': document.dir === 'rtl'
       }) }));
   }
   get el() { return getElement(this); }
@@ -28162,7 +30705,7 @@ class Label {
   }; }
 }
 
-const listIosCss = "ion-list{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;display:block;contain:content;list-style-type:none}ion-list.list-inset{transform:translateZ(0);overflow:hidden}.list-ios{background:var(--ion-item-background, var(--ion-background-color, #fff))}.list-ios.list-inset{margin-left:16px;margin-right:16px;margin-top:16px;margin-bottom:16px;border-radius:4px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.list-ios.list-inset{margin-left:unset;margin-right:unset;-webkit-margin-start:16px;margin-inline-start:16px;-webkit-margin-end:16px;margin-inline-end:16px}}.list-ios.list-inset ion-item{--border-width:0 0 1px 0;--inner-border-width:0}.list-ios.list-inset ion-item:last-child{--border-width:0;--inner-border-width:0}.list-ios.list-inset+ion-list.list-inset{margin-top:0}.list-ios-lines-none .item{--border-width:0;--inner-border-width:0}.list-ios-lines-full .item,.list-ios .item-lines-full{--border-width:0 0 0.55px 0}.list-ios-lines-full .item{--inner-border-width:0}.list-ios-lines-inset .item,.list-ios .item-lines-inset{--inner-border-width:0 0 0.55px 0}.list-ios .item-lines-inset{--border-width:0}.list-ios .item-lines-full{--inner-border-width:0}.list-ios .item-lines-none{--border-width:0;--inner-border-width:0}ion-card .list-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}";
+const listIosCss = "ion-list{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;display:block;contain:content;list-style-type:none}ion-list.list-inset{transform:translateZ(0);overflow:hidden}.list-ios{background:var(--ion-item-background, var(--ion-background-color, #fff))}.list-ios.list-inset{margin-left:16px;margin-right:16px;margin-top:16px;margin-bottom:16px;border-radius:10px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.list-ios.list-inset{margin-left:unset;margin-right:unset;-webkit-margin-start:16px;margin-inline-start:16px;-webkit-margin-end:16px;margin-inline-end:16px}}.list-ios.list-inset ion-item{--border-width:0 0 1px 0;--inner-border-width:0}.list-ios.list-inset ion-item:last-child{--border-width:0;--inner-border-width:0}.list-ios.list-inset+ion-list.list-inset{margin-top:0}.list-ios-lines-none .item{--border-width:0;--inner-border-width:0}.list-ios-lines-full .item,.list-ios .item-lines-full{--border-width:0 0 0.55px 0}.list-ios-lines-full .item{--inner-border-width:0}.list-ios-lines-inset .item,.list-ios .item-lines-inset{--inner-border-width:0 0 0.55px 0}.list-ios .item-lines-inset{--border-width:0}.list-ios .item-lines-full{--inner-border-width:0}.list-ios .item-lines-none{--border-width:0;--inner-border-width:0}ion-card .list-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}";
 
 const listMdCss = "ion-list{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;display:block;contain:content;list-style-type:none}ion-list.list-inset{transform:translateZ(0);overflow:hidden}.list-md{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:0;padding-right:0;padding-top:8px;padding-bottom:8px;background:var(--ion-item-background, var(--ion-background-color, #fff))}.list-md>.input:last-child::after{left:0}[dir=rtl] .list-md>.input:last-child::after,:host-context([dir=rtl]) .list-md>.input:last-child::after{left:unset;right:unset;right:0}.list-md.list-inset{margin-left:16px;margin-right:16px;margin-top:16px;margin-bottom:16px;border-radius:2px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.list-md.list-inset{margin-left:unset;margin-right:unset;-webkit-margin-start:16px;margin-inline-start:16px;-webkit-margin-end:16px;margin-inline-end:16px}}.list-md.list-inset ion-item:first-child{--border-radius:2px 2px 0 0;--border-width:0 0 1px 0}.list-md.list-inset ion-item:last-child{--border-radius:0 0 2px, 2px;--border-width:0}.list-md.list-inset .item-interactive{--padding-start:0;--padding-end:0}.list-md.list-inset+ion-list.list-inset{margin-top:0}.list-md-lines-none .item{--border-width:0;--inner-border-width:0}.list-md-lines-full .item,.list-md .item-lines-full{--border-width:0 0 1px 0}.list-md-lines-full .item{--inner-border-width:0}.list-md-lines-inset .item,.list-md .item-lines-inset{--inner-border-width:0 0 1px 0}.list-md .item-lines-inset{--border-width:0}.list-md .item-lines-full{--inner-border-width:0}.list-md .item-lines-none{--border-width:0;--inner-border-width:0}ion-card .list-md{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}";
 
@@ -28257,6 +30800,9 @@ class ListHeader {
   }; }
 }
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * iOS Loading Enter Animation
  */
@@ -28284,6 +30830,9 @@ const iosEnterAnimation$4 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * iOS Loading Leave Animation
  */
@@ -28307,6 +30856,9 @@ const iosLeaveAnimation$4 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * Md Loading Enter Animation
  */
@@ -28334,6 +30886,9 @@ const mdEnterAnimation$3 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * Md Loading Leave Animation
  */
@@ -28452,7 +31007,7 @@ class Loading {
     const mode = getIonMode$1(this);
     return (hAsync(Host, Object.assign({ tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${40000 + this.overlayIndex}`
-      }, onIonBackdropTap: this.onBackdropTap, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'loading-translucent': this.translucent }) }), hAsync("ion-backdrop", { visible: this.showBackdrop, tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "loading-wrapper ion-overlay-wrapper", role: "dialog" }, spinner && (hAsync("div", { class: "loading-spinner" }, hAsync("ion-spinner", { name: spinner, "aria-hidden": "true" }))), message && hAsync("div", { class: "loading-content", innerHTML: sanitizeDOMString(message) })), hAsync("div", { tabindex: "0" })));
+      }, onIonBackdropTap: this.onBackdropTap, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'overlay-hidden': true, 'loading-translucent': this.translucent }) }), hAsync("ion-backdrop", { visible: this.showBackdrop, tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "loading-wrapper ion-overlay-wrapper", role: "dialog" }, spinner && (hAsync("div", { class: "loading-spinner" }, hAsync("ion-spinner", { name: spinner, "aria-hidden": "true" }))), message && hAsync("div", { class: "loading-content", innerHTML: sanitizeDOMString(message) })), hAsync("div", { tabindex: "0" })));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -32094,6 +34649,11 @@ class Map$1 {
    * @param location The location information for the marker on the map
    */
   async addMarker(location) {
+    var _a;
+    if (!this.google)
+      this.google = ((_a = window === null || window === void 0 ? void 0 : window.google) === null || _a === void 0 ? void 0 : _a.maps)
+        ? window.google
+        : await this.loadGoogleMaps();
     const marker = typeof location === "string" ? JSON.parse(location) : location;
     const mapMarker = new this.google.maps.Marker({
       position: marker.position,
@@ -32205,7 +34765,12 @@ class Map$1 {
    * Create the instance of Google Maps
    * @param position The latitude and longitude to center the map on
    */
-  createMap(position) {
+  async createMap(position) {
+    var _a;
+    if (!this.google)
+      this.google = ((_a = window === null || window === void 0 ? void 0 : window.google) === null || _a === void 0 ? void 0 : _a.maps)
+        ? window.google
+        : await this.loadGoogleMaps();
     this.map = new this.google.maps.Map(this.mapEl.querySelector("#map"), {
       zoom: 9,
       center: {
@@ -32216,10 +34781,9 @@ class Map$1 {
   }
   async loadGoogleMaps(options) {
     const loader = new Loader(this.apiKey, options || {});
-    this.google = await loader.load();
-    return this.google;
+    return loader.load();
   }
-  componentDidLoad() {
+  async componentDidLoad() {
   }
   render() {
     return (hAsync(Host, { class: { "map-is-visible": this.isVisible } }, hAsync("div", { id: "map" })));
@@ -32277,7 +34841,20 @@ class Menu {
     this.isAnimating = false;
     this._isOpen = false;
     this.inheritedAttributes = {};
-    this.handleFocus = (ev) => this.trapKeyboardFocus(ev, document);
+    this.handleFocus = (ev) => {
+      /**
+       * Overlays have their own focus trapping listener
+       * so we do not want the two listeners to conflict
+       * with each other. If the top-most overlay that is
+       * open does not contain this ion-menu, then ion-menu's
+       * focus trapping should not run.
+       */
+      const lastOverlay = getOverlay(document);
+      if (lastOverlay && !lastOverlay.contains(this.el)) {
+        return;
+      }
+      this.trapKeyboardFocus(ev, document);
+    };
     this.isPaneVisible = false;
     this.isEndSide = false;
     /**
@@ -32327,6 +34904,11 @@ class Menu {
     this.updateState();
   }
   async connectedCallback() {
+    // TODO: connectedCallback is fired in CE build
+    // before WC is defined. This needs to be fixed in Stencil.
+    if (typeof customElements !== 'undefined') {
+      await customElements.whenDefined('ion-menu');
+    }
     if (this.type === undefined) {
       this.type = config$1.get('menuType', 'overlay');
     }
@@ -32336,7 +34918,7 @@ class Menu {
     }
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes(this.el, ['aria-label']);
+    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
   }
   async componentDidLoad() {
     this.ionMenuChange.emit({ disabled: this.disabled, open: this._isOpen });
@@ -32788,6 +35370,9 @@ const SHOW_MENU = 'show-menu';
 const SHOW_BACKDROP = 'show-backdrop';
 const MENU_CONTENT_OPEN = 'menu-content-open';
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 // Given a menu, return whether or not the menu toggle should be visible
 const updateVisibility = async (menu) => {
   const menuEl = await menuController.get(menu);
@@ -32826,7 +35411,7 @@ class MenuButton {
     };
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes(this.el, ['aria-label']);
+    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
   }
   componentDidLoad() {
     this.visibilityChanged();
@@ -32837,7 +35422,7 @@ class MenuButton {
   render() {
     const { color, disabled, inheritedAttributes } = this;
     const mode = getIonMode$1(this);
-    const menuIcon = config$1.get('menuIcon', mode === 'ios' ? 'menu-outline' : 'menu-sharp');
+    const menuIcon = config$1.get('menuIcon', mode === 'ios' ? menuOutline : menuSharp);
     const hidden = this.autoHide && !this.visible;
     const attrs = {
       type: this.type
@@ -32878,6 +35463,9 @@ class MenuButton {
 
 const menuToggleCss = "/*!@:host(.menu-toggle-hidden)*/.menu-toggle-hidden.sc-ion-menu-toggle-h{display:none}";
 
+/**
+ * @slot - Content is placed inside the toggle to act as the click target.
+ */
 class MenuToggle {
   constructor(hostRef) {
     registerInstance(this, hostRef);
@@ -32922,11 +35510,14 @@ class MenuToggle {
   }; }
 }
 
-const attachComponent = async (delegate, container, component, cssClasses, componentProps) => {
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const attachComponent = async (delegate, container, component, cssClasses, componentProps, inline) => {
   if (delegate) {
     return delegate.attachViewToDom(container, component, componentProps, cssClasses);
   }
-  if (typeof component !== 'string' && !(component instanceof HTMLElement)) {
+  if (!inline && typeof component !== 'string' && !(component instanceof HTMLElement)) {
     throw new Error('framework delegate is missing');
   }
   const el = (typeof component === 'string')
@@ -32952,7 +35543,87 @@ const detachComponent = (delegate, element) => {
   }
   return Promise.resolve();
 };
+const CoreDelegate = () => {
+  let BaseComponent;
+  let Reference;
+  const attachViewToDom = async (parentElement, userComponent, userComponentProps = {}, cssClasses = []) => {
+    BaseComponent = parentElement;
+    /**
+     * If passing in a component via the `component` props
+     * we need to append it inside of our overlay component.
+     */
+    if (userComponent) {
+      /**
+       * If passing in the tag name, create
+       * the element otherwise just get a reference
+       * to the component.
+       */
+      const el = (typeof userComponent === 'string')
+        ? BaseComponent.ownerDocument && BaseComponent.ownerDocument.createElement(userComponent)
+        : userComponent;
+      /**
+       * Add any css classes passed in
+       * via the cssClasses prop on the overlay.
+       */
+      cssClasses.forEach(c => el.classList.add(c));
+      /**
+       * Add any props passed in
+       * via the componentProps prop on the overlay.
+       */
+      Object.assign(el, userComponentProps);
+      /**
+       * Finally, append the component
+       * inside of the overlay component.
+       */
+      BaseComponent.appendChild(el);
+      await new Promise(resolve => componentOnReady(el, resolve));
+    }
+    else if (BaseComponent.children.length > 0) {
+      // If there is no component, then we need to create a new parent
+      // element to apply the css classes to.
+      const el = BaseComponent.ownerDocument && BaseComponent.ownerDocument.createElement('div');
+      cssClasses.forEach(c => el.classList.add(c));
+      // Move each child from the original template to the new parent element.
+      el.append(...BaseComponent.children);
+      // Append the new parent element to the original parent element.
+      BaseComponent.appendChild(el);
+    }
+    /**
+     * Get the root of the app and
+     * add the overlay there.
+     */
+    const app = document.querySelector('ion-app') || document.body;
+    /**
+     * Create a placeholder comment so that
+     * we can return this component to where
+     * it was previously.
+     */
+    Reference = document.createComment('ionic teleport');
+    BaseComponent.parentNode.insertBefore(Reference, BaseComponent);
+    app.appendChild(BaseComponent);
+    return BaseComponent;
+  };
+  const removeViewFromDom = () => {
+    /**
+     * Return component to where it was previously in the DOM.
+     */
+    if (BaseComponent && Reference) {
+      Reference.parentNode.insertBefore(BaseComponent, Reference);
+      Reference.remove();
+    }
+    return Promise.resolve();
+  };
+  return { attachViewToDom, removeViewFromDom };
+};
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const KEYBOARD_DID_OPEN = 'ionKeyboardDidShow';
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 // Defaults for the card swipe animation
 const SwipeToCloseDefaults = {
   MIN_PRESENTING_SCALE: 0.93,
@@ -33027,22 +35698,133 @@ const computeDuration = (remaining, velocity) => {
   return clamp(400, remaining / Math.abs(velocity * 1.1), 500);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+/**
+ * Use y = mx + b to
+ * figure out the backdrop value
+ * at a particular x coordinate. This
+ * is useful when the backdrop does
+ * not begin to fade in until after
+ * the 0 breakpoint.
+ */
+const getBackdropValueForSheet = (x, backdropBreakpoint) => {
+  /**
+   * We will use these points:
+   * (backdropBreakpoint, 0)
+   * (maxBreakpoint, 1)
+   * We know that at the beginning breakpoint,
+   * the backdrop will be hidden. We also
+   * know that at the maxBreakpoint, the backdrop
+   * must be fully visible. maxBreakpoint should
+   * always be 1 even if the maximum value
+   * of the breakpoints array is not 1 since
+   * the animation runs from a progress of 0
+   * to a progress of 1.
+   * m = (y2 - y1) / (x2 - x1)
+   *
+   * This is simplified from:
+   * m = (1 - 0) / (maxBreakpoint - backdropBreakpoint)
+   */
+  const slope = 1 / (1 - backdropBreakpoint);
+  /**
+   * From here, compute b which is
+   * the backdrop opacity if the offset
+   * is 0. If the backdrop does not
+   * begin to fade in until after the
+   * 0 breakpoint, this b value will be
+   * negative. This is fine as we never pass
+   * b directly into the animation keyframes.
+   * b = y - mx
+   * Use a known point: (backdropBreakpoint, 0)
+   * This is simplified from:
+   * b = 0 - (backdropBreakpoint * slope)
+   */
+  const b = -(backdropBreakpoint * slope);
+  /**
+   * Finally, we can now determine the
+   * backdrop offset given an arbitrary
+   * gesture offset.
+   */
+  return (x * slope) + b;
+};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const createSheetEnterAnimation = (opts) => {
+  const { currentBreakpoint, backdropBreakpoint } = opts;
+  /**
+   * If the backdropBreakpoint is undefined, then the backdrop
+   * should always fade in. If the backdropBreakpoint came before the
+   * current breakpoint, then the backdrop should be fading in.
+   */
+  const shouldShowBackdrop = backdropBreakpoint === undefined || backdropBreakpoint < currentBreakpoint;
+  const initialBackdrop = shouldShowBackdrop ? `calc(var(--backdrop-opacity) * ${currentBreakpoint})` : '0';
+  const backdropAnimation = createAnimation('backdropAnimation')
+    .fromTo('opacity', 0, initialBackdrop);
+  const wrapperAnimation = createAnimation('wrapperAnimation')
+    .keyframes([
+    { offset: 0, opacity: 1, transform: 'translateY(100%)' },
+    { offset: 1, opacity: 1, transform: `translateY(${100 - (currentBreakpoint * 100)}%)` }
+  ]);
+  return { wrapperAnimation, backdropAnimation };
+};
+const createSheetLeaveAnimation = (opts) => {
+  const { currentBreakpoint, backdropBreakpoint } = opts;
+  /**
+   * Backdrop does not always fade in from 0 to 1 if backdropBreakpoint
+   * is defined, so we need to account for that offset by figuring out
+   * what the current backdrop value should be.
+   */
+  const backdropValue = `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(currentBreakpoint, backdropBreakpoint)})`;
+  const defaultBackdrop = [
+    { offset: 0, opacity: backdropValue },
+    { offset: 1, opacity: 0 }
+  ];
+  const customBackdrop = [
+    { offset: 0, opacity: backdropValue },
+    { offset: backdropBreakpoint, opacity: 0 },
+    { offset: 1, opacity: 0 }
+  ];
+  const backdropAnimation = createAnimation('backdropAnimation')
+    .keyframes(backdropBreakpoint !== 0 ? customBackdrop : defaultBackdrop);
+  const wrapperAnimation = createAnimation('wrapperAnimation')
+    .keyframes([
+    { offset: 0, opacity: 1, transform: `translateY(${100 - (currentBreakpoint * 100)}%)` },
+    { offset: 1, opacity: 1, transform: `translateY(100%)` }
+  ]);
+  return { wrapperAnimation, backdropAnimation };
+};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const createEnterAnimation$1 = () => {
+  const backdropAnimation = createAnimation()
+    .fromTo('opacity', 0.01, 'var(--backdrop-opacity)');
+  const wrapperAnimation = createAnimation()
+    .fromTo('transform', 'translateY(100vh)', 'translateY(0vh)');
+  return { backdropAnimation, wrapperAnimation };
+};
 /**
  * iOS Modal Enter Animation for the Card presentation style
  */
-const iosEnterAnimation$3 = (baseEl, presentingEl) => {
-  const backdropAnimation = createAnimation()
-    .addElement(baseEl.querySelector('ion-backdrop'))
-    .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
+const iosEnterAnimation$3 = (baseEl, opts) => {
+  const { presentingEl, currentBreakpoint } = opts;
+  const root = getElementRoot(baseEl);
+  const { wrapperAnimation, backdropAnimation } = currentBreakpoint !== undefined ? createSheetEnterAnimation(opts) : createEnterAnimation$1();
+  backdropAnimation
+    .addElement(root.querySelector('ion-backdrop'))
     .beforeStyles({
     'pointer-events': 'none'
   })
     .afterClearStyles(['pointer-events']);
-  const wrapperAnimation = createAnimation()
-    .addElement(baseEl.querySelectorAll('.modal-wrapper, .modal-shadow'))
-    .beforeStyles({ 'opacity': 1 })
-    .fromTo('transform', 'translateY(100vh)', 'translateY(0vh)');
-  const baseAnimation = createAnimation()
+  wrapperAnimation
+    .addElement(root.querySelectorAll('.modal-wrapper, .modal-shadow'))
+    .beforeStyles({ 'opacity': 1 });
+  const baseAnimation = createAnimation('entering-base')
     .addElement(baseEl)
     .easing('cubic-bezier(0.32,0.72,0,1)')
     .duration(500)
@@ -33050,6 +35832,7 @@ const iosEnterAnimation$3 = (baseEl, presentingEl) => {
   if (presentingEl) {
     const isMobile = window.innerWidth < 768;
     const hasCardModal = (presentingEl.tagName === 'ION-MODAL' && presentingEl.presentingElement !== undefined);
+    const presentingElRoot = getElementRoot(presentingEl);
     const presentingAnimation = createAnimation()
       .beforeStyles({
       'transform': 'translateY(0)',
@@ -33061,7 +35844,7 @@ const iosEnterAnimation$3 = (baseEl, presentingEl) => {
       /**
        * Fallback for browsers that does not support `max()` (ex: Firefox)
        * No need to worry about statusbar padding since engines like Gecko
-       * are not used as the engine for standlone Cordova/Capacitor apps
+       * are not used as the engine for standalone Cordova/Capacitor apps
        */
       const transformOffset = (!CSS.supports('width', 'max(0px, 1px)')) ? '30px' : 'max(30px, var(--ion-safe-area-top))';
       const modalTransform = hasCardModal ? '-10px' : transformOffset;
@@ -33091,7 +35874,7 @@ const iosEnterAnimation$3 = (baseEl, presentingEl) => {
           .afterStyles({
           'transform': finalTransform
         })
-          .addElement(presentingEl.querySelector('.modal-wrapper'))
+          .addElement(presentingElRoot.querySelector('.modal-wrapper'))
           .keyframes([
           { offset: 0, filter: 'contrast(1)', transform: 'translateY(0) scale(1)' },
           { offset: 1, filter: 'contrast(0.85)', transform: finalTransform }
@@ -33100,7 +35883,7 @@ const iosEnterAnimation$3 = (baseEl, presentingEl) => {
           .afterStyles({
           'transform': finalTransform
         })
-          .addElement(presentingEl.querySelector('.modal-shadow'))
+          .addElement(presentingElRoot.querySelector('.modal-shadow'))
           .keyframes([
           { offset: 0, opacity: '1', transform: 'translateY(0) scale(1)' },
           { offset: 1, opacity: '0', transform: finalTransform }
@@ -33115,18 +35898,28 @@ const iosEnterAnimation$3 = (baseEl, presentingEl) => {
   return baseAnimation;
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const createLeaveAnimation$1 = () => {
+  const backdropAnimation = createAnimation()
+    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  const wrapperAnimation = createAnimation()
+    .fromTo('transform', 'translateY(0vh)', 'translateY(100vh)');
+  return { backdropAnimation, wrapperAnimation };
+};
 /**
  * iOS Modal Leave Animation
  */
-const iosLeaveAnimation$3 = (baseEl, presentingEl, duration = 500) => {
-  const backdropAnimation = createAnimation()
-    .addElement(baseEl.querySelector('ion-backdrop'))
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0.0);
-  const wrapperAnimation = createAnimation()
-    .addElement(baseEl.querySelectorAll('.modal-wrapper, .modal-shadow'))
-    .beforeStyles({ 'opacity': 1 })
-    .fromTo('transform', 'translateY(0vh)', 'translateY(100vh)');
-  const baseAnimation = createAnimation()
+const iosLeaveAnimation$3 = (baseEl, opts, duration = 500) => {
+  const { presentingEl, currentBreakpoint } = opts;
+  const root = getElementRoot(baseEl);
+  const { wrapperAnimation, backdropAnimation } = currentBreakpoint !== undefined ? createSheetLeaveAnimation(opts) : createLeaveAnimation$1();
+  backdropAnimation.addElement(root.querySelector('ion-backdrop'));
+  wrapperAnimation
+    .addElement(root.querySelectorAll('.modal-wrapper, .modal-shadow'))
+    .beforeStyles({ 'opacity': 1 });
+  const baseAnimation = createAnimation('leaving-base')
     .addElement(baseEl)
     .easing('cubic-bezier(0.32,0.72,0,1)')
     .duration(duration)
@@ -33134,6 +35927,7 @@ const iosLeaveAnimation$3 = (baseEl, presentingEl, duration = 500) => {
   if (presentingEl) {
     const isMobile = window.innerWidth < 768;
     const hasCardModal = (presentingEl.tagName === 'ION-MODAL' && presentingEl.presentingElement !== undefined);
+    const presentingElRoot = getElementRoot(presentingEl);
     const presentingAnimation = createAnimation()
       .beforeClearStyles(['transform'])
       .afterClearStyles(['transform'])
@@ -33171,7 +35965,7 @@ const iosLeaveAnimation$3 = (baseEl, presentingEl, duration = 500) => {
         const toPresentingScale = (hasCardModal) ? SwipeToCloseDefaults.MIN_PRESENTING_SCALE : 1;
         const finalTransform = `translateY(-10px) scale(${toPresentingScale})`;
         presentingAnimation
-          .addElement(presentingEl.querySelector('.modal-wrapper'))
+          .addElement(presentingElRoot.querySelector('.modal-wrapper'))
           .afterStyles({
           'transform': 'translate3d(0, 0, 0)'
         })
@@ -33180,7 +35974,7 @@ const iosLeaveAnimation$3 = (baseEl, presentingEl, duration = 500) => {
           { offset: 1, filter: 'contrast(1)', transform: 'translateY(0) scale(1)' }
         ]);
         const shadowAnimation = createAnimation()
-          .addElement(presentingEl.querySelector('.modal-shadow'))
+          .addElement(presentingElRoot.querySelector('.modal-shadow'))
           .afterStyles({
           'transform': 'translateY(0) scale(1)'
         })
@@ -33198,63 +35992,267 @@ const iosLeaveAnimation$3 = (baseEl, presentingEl, duration = 500) => {
   return baseAnimation;
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const createEnterAnimation = () => {
+  const backdropAnimation = createAnimation()
+    .fromTo('opacity', 0.01, 'var(--backdrop-opacity)');
+  const wrapperAnimation = createAnimation()
+    .keyframes([
+    { offset: 0, opacity: 0.01, transform: 'translateY(40px)' },
+    { offset: 1, opacity: 1, transform: `translateY(0px)` }
+  ]);
+  return { backdropAnimation, wrapperAnimation };
+};
 /**
  * Md Modal Enter Animation
  */
-const mdEnterAnimation$2 = (baseEl) => {
-  const baseAnimation = createAnimation();
-  const backdropAnimation = createAnimation();
-  const wrapperAnimation = createAnimation();
+const mdEnterAnimation$2 = (baseEl, opts) => {
+  const { currentBreakpoint } = opts;
+  const root = getElementRoot(baseEl);
+  const { wrapperAnimation, backdropAnimation } = currentBreakpoint !== undefined ? createSheetEnterAnimation(opts) : createEnterAnimation();
   backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
-    .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
+    .addElement(root.querySelector('ion-backdrop'))
     .beforeStyles({
     'pointer-events': 'none'
   })
     .afterClearStyles(['pointer-events']);
   wrapperAnimation
-    .addElement(baseEl.querySelector('.modal-wrapper'))
-    .keyframes([
-    { offset: 0, opacity: 0.01, transform: 'translateY(40px)' },
-    { offset: 1, opacity: 1, transform: 'translateY(0px)' }
-  ]);
-  return baseAnimation
+    .addElement(root.querySelector('.modal-wrapper'));
+  return createAnimation()
     .addElement(baseEl)
     .easing('cubic-bezier(0.36,0.66,0.04,1)')
     .duration(280)
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const createLeaveAnimation = () => {
+  const backdropAnimation = createAnimation()
+    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  const wrapperAnimation = createAnimation()
+    .keyframes([
+    { offset: 0, opacity: 0.99, transform: `translateY(0px)` },
+    { offset: 1, opacity: 0, transform: 'translateY(40px)' }
+  ]);
+  return { backdropAnimation, wrapperAnimation };
+};
 /**
  * Md Modal Leave Animation
  */
-const mdLeaveAnimation$2 = (baseEl) => {
-  const baseAnimation = createAnimation();
-  const backdropAnimation = createAnimation();
-  const wrapperAnimation = createAnimation();
-  const wrapperEl = baseEl.querySelector('.modal-wrapper');
-  backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0.0);
-  wrapperAnimation
-    .addElement(wrapperEl)
-    .keyframes([
-    { offset: 0, opacity: 0.99, transform: 'translateY(0px)' },
-    { offset: 1, opacity: 0, transform: 'translateY(40px)' }
-  ]);
-  return baseAnimation
-    .addElement(baseEl)
+const mdLeaveAnimation$2 = (baseEl, opts) => {
+  const { currentBreakpoint } = opts;
+  const root = getElementRoot(baseEl);
+  const { wrapperAnimation, backdropAnimation } = currentBreakpoint !== undefined ? createSheetLeaveAnimation(opts) : createLeaveAnimation();
+  backdropAnimation.addElement(root.querySelector('ion-backdrop'));
+  wrapperAnimation.addElement(root.querySelector('.modal-wrapper'));
+  return createAnimation()
     .easing('cubic-bezier(0.47,0,0.745,0.715)')
     .duration(200)
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
-const modalIosCss = ".sc-ion-modal-ios-h{--width:100%;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--overflow:hidden;--border-radius:0;--border-width:0;--border-style:none;--border-color:transparent;--background:var(--ion-background-color, #fff);--box-shadow:none;--backdrop-opacity:0;left:0;right:0;top:0;bottom:0;display:flex;position:absolute;align-items:center;justify-content:center;outline:none;contain:strict}.overlay-hidden.sc-ion-modal-ios-h{display:none}.modal-wrapper.sc-ion-modal-ios,.modal-shadow.sc-ion-modal-ios{border-radius:var(--border-radius);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow);overflow:var(--overflow);z-index:10}.modal-shadow.sc-ion-modal-ios{position:absolute;background:transparent}@media only screen and (min-width: 768px) and (min-height: 600px){.sc-ion-modal-ios-h{--width:600px;--height:500px;--ion-safe-area-top:0px;--ion-safe-area-bottom:0px;--ion-safe-area-right:0px;--ion-safe-area-left:0px}}@media only screen and (min-width: 768px) and (min-height: 768px){.sc-ion-modal-ios-h{--width:600px;--height:600px}}.sc-ion-modal-ios-h:first-of-type{--backdrop-opacity:var(--ion-backdrop-opacity, 0.4)}@media only screen and (min-width: 768px) and (min-height: 600px){.sc-ion-modal-ios-h{--border-radius:10px}}.modal-wrapper.sc-ion-modal-ios{transform:translate3d(0,  100%,  0)}@media screen and (max-width: 767px){@supports (width: max(0px, 1px)){.modal-card.sc-ion-modal-ios-h{--height:calc(100% - max(30px, var(--ion-safe-area-top)) - 10px)}}@supports not (width: max(0px, 1px)){.modal-card.sc-ion-modal-ios-h{--height:calc(100% - 40px)}}.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:10px;border-top-right-radius:10px;border-bottom-right-radius:0;border-bottom-left-radius:0}[dir=rtl].sc-ion-modal-ios-h -no-combinator.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .sc-ion-modal-ios-h -no-combinator.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl].modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:10px;border-top-right-radius:10px;border-bottom-right-radius:0;border-bottom-left-radius:0}.modal-card.sc-ion-modal-ios-h{--backdrop-opacity:0;--width:100%;align-items:flex-end}.modal-card.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{display:none}.modal-card.sc-ion-modal-ios-h ion-backdrop.sc-ion-modal-ios{pointer-events:none}}@media screen and (min-width: 768px){.modal-card.sc-ion-modal-ios-h{--width:calc(100% - 120px);--height:calc(100% - (120px + var(--ion-safe-area-top) + var(--ion-safe-area-bottom)));--max-width:720px;--max-height:1000px}.modal-card.sc-ion-modal-ios-h{--backdrop-opacity:0;transition:all 0.5s ease-in-out}.modal-card.sc-ion-modal-ios-h:first-of-type{--backdrop-opacity:0.18}.modal-card.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{box-shadow:0px 0px 30px 10px rgba(0, 0, 0, 0.1)}}";
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, backdropBreakpoint, animation, breakpoints = [], onDismiss, onBreakpointChange) => {
+  // Defaults for the sheet swipe animation
+  const defaultBackdrop = [
+    { offset: 0, opacity: 'var(--backdrop-opacity)' },
+    { offset: 1, opacity: 0.01 }
+  ];
+  const customBackdrop = [
+    { offset: 0, opacity: 'var(--backdrop-opacity)' },
+    { offset: 1 - backdropBreakpoint, opacity: 0 },
+    { offset: 1, opacity: 0 }
+  ];
+  const SheetDefaults = {
+    WRAPPER_KEYFRAMES: [
+      { offset: 0, transform: 'translateY(0%)' },
+      { offset: 1, transform: 'translateY(100%)' }
+    ],
+    BACKDROP_KEYFRAMES: (backdropBreakpoint !== 0) ? customBackdrop : defaultBackdrop
+  };
+  const contentEl = baseEl.querySelector('ion-content');
+  const height = wrapperEl.clientHeight;
+  let currentBreakpoint = initialBreakpoint;
+  let offset = 0;
+  const wrapperAnimation = animation.childAnimations.find(ani => ani.id === 'wrapperAnimation');
+  const backdropAnimation = animation.childAnimations.find(ani => ani.id === 'backdropAnimation');
+  const maxBreakpoint = breakpoints[breakpoints.length - 1];
+  /**
+   * After the entering animation completes,
+   * we need to set the animation to go from
+   * offset 0 to offset 1 so that users can
+   * swipe in any direction. We then set the
+   * animation offset to the current breakpoint
+   * so there is no flickering.
+   */
+  if (wrapperAnimation && backdropAnimation) {
+    wrapperAnimation.keyframes([...SheetDefaults.WRAPPER_KEYFRAMES]);
+    backdropAnimation.keyframes([...SheetDefaults.BACKDROP_KEYFRAMES]);
+    animation.progressStart(true, 1 - currentBreakpoint);
+    /**
+     * Backdrop should become enabled
+     * after the backdropBreakpoint value
+     */
+    const backdropEnabled = currentBreakpoint > backdropBreakpoint;
+    backdropEl.style.setProperty('pointer-events', backdropEnabled ? 'auto' : 'none');
+  }
+  if (contentEl && currentBreakpoint !== maxBreakpoint) {
+    contentEl.scrollY = false;
+  }
+  const canStart = (detail) => {
+    /**
+     * If the sheet is fully expanded and
+     * the user is swiping on the content,
+     * the gesture should not start to
+     * allow for scrolling on the content.
+     */
+    const content = detail.event.target.closest('ion-content');
+    if (currentBreakpoint === 1 && content) {
+      return false;
+    }
+    return true;
+  };
+  const onStart = () => {
+    /**
+     * If swiping on the content
+     * we should disable scrolling otherwise
+     * the sheet will expand and the content will scroll.
+     */
+    if (contentEl) {
+      contentEl.scrollY = false;
+    }
+    raf(() => {
+      /**
+       * Dismisses the open keyboard when the sheet drag gesture is started.
+       * Sets the focus onto the modal element.
+       */
+      baseEl.focus();
+    });
+    animation.progressStart(true, 1 - currentBreakpoint);
+  };
+  const onMove = (detail) => {
+    /**
+     * Given the change in gesture position on the Y axis,
+     * compute where the offset of the animation should be
+     * relative to where the user dragged.
+     */
+    const initialStep = 1 - currentBreakpoint;
+    offset = clamp(0.0001, initialStep + (detail.deltaY / height), 0.9999);
+    animation.progressStep(offset);
+  };
+  const onEnd = (detail) => {
+    /**
+     * When the gesture releases, we need to determine
+     * the closest breakpoint to snap to.
+     */
+    const velocity = detail.velocityY;
+    const threshold = (detail.deltaY + velocity * 100) / height;
+    const diff = currentBreakpoint - threshold;
+    const closest = breakpoints.reduce((a, b) => {
+      return Math.abs(b - diff) < Math.abs(a - diff) ? b : a;
+    });
+    const shouldRemainOpen = closest !== 0;
+    currentBreakpoint = 0;
+    /**
+     * Update the animation so that it plays from
+     * the last offset to the closest snap point.
+     */
+    if (wrapperAnimation && backdropAnimation) {
+      wrapperAnimation.keyframes([
+        { offset: 0, transform: `translateY(${offset * 100}%)` },
+        { offset: 1, transform: `translateY(${(1 - closest) * 100}%)` }
+      ]);
+      backdropAnimation.keyframes([
+        { offset: 0, opacity: `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(1 - offset, backdropBreakpoint)})` },
+        { offset: 1, opacity: `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(closest, backdropBreakpoint)})` }
+      ]);
+      animation.progressStep(0);
+    }
+    /**
+     * Gesture should remain disabled until the
+     * snapping animation completes.
+     */
+    gesture.enable(false);
+    animation
+      .onFinish(() => {
+      if (shouldRemainOpen) {
+        /**
+         * Once the snapping animation completes,
+         * we need to reset the animation to go
+         * from 0 to 1 so users can swipe in any direction.
+         * We then set the animation offset to the current
+         * breakpoint so that it starts at the snapped position.
+         */
+        if (wrapperAnimation && backdropAnimation) {
+          raf(() => {
+            wrapperAnimation.keyframes([...SheetDefaults.WRAPPER_KEYFRAMES]);
+            backdropAnimation.keyframes([...SheetDefaults.BACKDROP_KEYFRAMES]);
+            animation.progressStart(true, 1 - closest);
+            currentBreakpoint = closest;
+            onBreakpointChange(currentBreakpoint);
+            /**
+             * If the sheet is fully expanded, we can safely
+             * enable scrolling again.
+             */
+            if (contentEl && currentBreakpoint === breakpoints[breakpoints.length - 1]) {
+              contentEl.scrollY = true;
+            }
+            /**
+             * Backdrop should become enabled
+             * after the backdropBreakpoint value
+             */
+            const backdropEnabled = currentBreakpoint > backdropBreakpoint;
+            backdropEl.style.setProperty('pointer-events', backdropEnabled ? 'auto' : 'none');
+            gesture.enable(true);
+          });
+        }
+        else {
+          gesture.enable(true);
+        }
+      }
+      /**
+       * This must be a one time callback
+       * otherwise a new callback will
+       * be added every time onEnd runs.
+       */
+    }, { oneTimeCallback: true })
+      .progressEnd(1, 0, 500);
+    if (!shouldRemainOpen) {
+      onDismiss();
+    }
+  };
+  const gesture = createGesture({
+    el: wrapperEl,
+    gestureName: 'modalSheet',
+    gesturePriority: 40,
+    direction: 'y',
+    threshold: 10,
+    canStart,
+    onStart,
+    onMove,
+    onEnd
+  });
+  return gesture;
+};
 
-const modalMdCss = ".sc-ion-modal-md-h{--width:100%;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--overflow:hidden;--border-radius:0;--border-width:0;--border-style:none;--border-color:transparent;--background:var(--ion-background-color, #fff);--box-shadow:none;--backdrop-opacity:0;left:0;right:0;top:0;bottom:0;display:flex;position:absolute;align-items:center;justify-content:center;outline:none;contain:strict}.overlay-hidden.sc-ion-modal-md-h{display:none}.modal-wrapper.sc-ion-modal-md,.modal-shadow.sc-ion-modal-md{border-radius:var(--border-radius);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow);overflow:var(--overflow);z-index:10}.modal-shadow.sc-ion-modal-md{position:absolute;background:transparent}@media only screen and (min-width: 768px) and (min-height: 600px){.sc-ion-modal-md-h{--width:600px;--height:500px;--ion-safe-area-top:0px;--ion-safe-area-bottom:0px;--ion-safe-area-right:0px;--ion-safe-area-left:0px}}@media only screen and (min-width: 768px) and (min-height: 768px){.sc-ion-modal-md-h{--width:600px;--height:600px}}.sc-ion-modal-md-h:first-of-type{--backdrop-opacity:var(--ion-backdrop-opacity, 0.32)}@media only screen and (min-width: 768px) and (min-height: 600px){.sc-ion-modal-md-h{--border-radius:2px}.sc-ion-modal-md-h:first-of-type{--box-shadow:0 28px 48px rgba(0, 0, 0, 0.4)}}.modal-wrapper.sc-ion-modal-md{transform:translate3d(0,  40px,  0);opacity:0.01}";
+const modalIosCss = "/*!@:host*/.sc-ion-modal-ios-h{--width:100%;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--overflow:hidden;--border-radius:0;--border-width:0;--border-style:none;--border-color:transparent;--background:var(--ion-background-color, #fff);--box-shadow:none;--backdrop-opacity:0;left:0;right:0;top:0;bottom:0;display:flex;position:absolute;align-items:center;justify-content:center;outline:none;contain:strict}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-modal-ios-h{display:none}/*!@.modal-wrapper,\n.modal-shadow*/.modal-wrapper.sc-ion-modal-ios,.modal-shadow.sc-ion-modal-ios{border-radius:var(--border-radius);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow);overflow:var(--overflow);z-index:10}/*!@.modal-shadow*/.modal-shadow.sc-ion-modal-ios{position:absolute;background:transparent}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-ios-h{--width:600px;--height:500px;--ion-safe-area-top:0px;--ion-safe-area-bottom:0px;--ion-safe-area-right:0px;--ion-safe-area-left:0px}}@media only screen and (min-width: 768px) and (min-height: 768px){/*!@:host*/.sc-ion-modal-ios-h{--width:600px;--height:600px}}/*!@.modal-handle*/.modal-handle.sc-ion-modal-ios{left:0px;right:0px;top:5px;border-radius:8px;margin-left:auto;margin-right:auto;position:absolute;width:36px;height:5px;transform:translateZ(0);background:var(--ion-color-step-350, #c0c0be);z-index:11}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.modal-handle*/.modal-handle.sc-ion-modal-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@:host(.modal-sheet)*/.modal-sheet.sc-ion-modal-ios-h{--height:calc(100% - (var(--ion-safe-area-top) + 10px))}/*!@:host(.modal-sheet) .modal-wrapper,\n:host(.modal-sheet) .modal-shadow*/.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,.modal-sheet.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{position:absolute;bottom:0}/*!@:host*/.sc-ion-modal-ios-h{--backdrop-opacity:var(--ion-backdrop-opacity, 0.4)}/*!@:host(.modal-card),\n:host(.modal-sheet)*/.modal-card.sc-ion-modal-ios-h,.modal-sheet.sc-ion-modal-ios-h{--border-radius:10px}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-ios-h{--border-radius:10px}}/*!@.modal-wrapper*/.modal-wrapper.sc-ion-modal-ios{transform:translate3d(0,  100%,  0)}@media screen and (max-width: 767px){/*!@@supports (width: max(0px, 1px))*/@supports .sc-ion-modal-ios (width.sc-ion-modal-ios: max(0px.sc-ion-modal-ios, 1px)).sc-ion-modal-ios{.sc-ion-modal-ios-h.modal-card{--height:calc(100% - max(30px, var(--ion-safe-area-top)) - 10px)}}/*!@@supports not (width: max(0px, 1px))*/@supports .sc-ion-modal-ios not.sc-ion-modal-ios (width.sc-ion-modal-ios: max(0px.sc-ion-modal-ios, 1px)).sc-ion-modal-ios{.sc-ion-modal-ios-h.modal-card{--height:calc(100% - 40px)}}/*!@:host(.modal-card) .modal-wrapper*/.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host-context([dir=rtl]):host(.modal-card) .modal-wrapper, :host-context([dir=rtl]).modal-card .modal-wrapper*/[dir=rtl].sc-ion-modal-ios-h -no-combinator.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .sc-ion-modal-ios-h -no-combinator.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl].modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host(.modal-card)*/.modal-card.sc-ion-modal-ios-h{--backdrop-opacity:0;--width:100%;align-items:flex-end}/*!@:host(.modal-card) .modal-shadow*/.modal-card.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{display:none}/*!@:host(.modal-card) ion-backdrop*/.modal-card.sc-ion-modal-ios-h ion-backdrop.sc-ion-modal-ios{pointer-events:none}}@media screen and (min-width: 768px){/*!@:host(.modal-card)*/.modal-card.sc-ion-modal-ios-h{--width:calc(100% - 120px);--height:calc(100% - (120px + var(--ion-safe-area-top) + var(--ion-safe-area-bottom)));--max-width:720px;--max-height:1000px;--backdrop-opacity:0;--box-shadow:0px 0px 30px 10px rgba(0, 0, 0, 0.1);transition:all 0.5s ease-in-out}/*!@:host(.modal-card) .modal-wrapper*/.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{box-shadow:none}/*!@:host(.modal-card) .modal-shadow*/.modal-card.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{box-shadow:var(--box-shadow)}}/*!@:host(.modal-sheet) .modal-wrapper*/.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host-context([dir=rtl]):host(.modal-sheet) .modal-wrapper, :host-context([dir=rtl]).modal-sheet .modal-wrapper*/[dir=rtl].sc-ion-modal-ios-h -no-combinator.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .sc-ion-modal-ios-h -no-combinator.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl].modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}";
+
+const modalMdCss = "/*!@:host*/.sc-ion-modal-md-h{--width:100%;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--overflow:hidden;--border-radius:0;--border-width:0;--border-style:none;--border-color:transparent;--background:var(--ion-background-color, #fff);--box-shadow:none;--backdrop-opacity:0;left:0;right:0;top:0;bottom:0;display:flex;position:absolute;align-items:center;justify-content:center;outline:none;contain:strict}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-modal-md-h{display:none}/*!@.modal-wrapper,\n.modal-shadow*/.modal-wrapper.sc-ion-modal-md,.modal-shadow.sc-ion-modal-md{border-radius:var(--border-radius);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow);overflow:var(--overflow);z-index:10}/*!@.modal-shadow*/.modal-shadow.sc-ion-modal-md{position:absolute;background:transparent}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-md-h{--width:600px;--height:500px;--ion-safe-area-top:0px;--ion-safe-area-bottom:0px;--ion-safe-area-right:0px;--ion-safe-area-left:0px}}@media only screen and (min-width: 768px) and (min-height: 768px){/*!@:host*/.sc-ion-modal-md-h{--width:600px;--height:600px}}/*!@.modal-handle*/.modal-handle.sc-ion-modal-md{left:0px;right:0px;top:5px;border-radius:8px;margin-left:auto;margin-right:auto;position:absolute;width:36px;height:5px;transform:translateZ(0);background:var(--ion-color-step-350, #c0c0be);z-index:11}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.modal-handle*/.modal-handle.sc-ion-modal-md{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@:host(.modal-sheet)*/.modal-sheet.sc-ion-modal-md-h{--height:calc(100% - (var(--ion-safe-area-top) + 10px))}/*!@:host(.modal-sheet) .modal-wrapper,\n:host(.modal-sheet) .modal-shadow*/.modal-sheet.sc-ion-modal-md-h .modal-wrapper.sc-ion-modal-md,.modal-sheet.sc-ion-modal-md-h .modal-shadow.sc-ion-modal-md{position:absolute;bottom:0}/*!@:host*/.sc-ion-modal-md-h{--backdrop-opacity:var(--ion-backdrop-opacity, 0.32)}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-md-h{--border-radius:2px;--box-shadow:0 28px 48px rgba(0, 0, 0, 0.4)}}/*!@.modal-wrapper*/.modal-wrapper.sc-ion-modal-md{transform:translate3d(0,  40px,  0);opacity:0.01}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ *
+ * @slot - Content is placed inside of the `.modal-content` element.
+ *
+ * @part backdrop - The `ion-backdrop` element.
+ * @part content - The wrapper element for the default slot.
+ * @part handle - The handle that is displayed at the top of the sheet modal when `handle="true"`.
  */
 class Modal {
   constructor(hostRef) {
@@ -33263,13 +36261,33 @@ class Modal {
     this.willPresent = createEvent(this, "ionModalWillPresent", 7);
     this.willDismiss = createEvent(this, "ionModalWillDismiss", 7);
     this.didDismiss = createEvent(this, "ionModalDidDismiss", 7);
+    this.didPresentShorthand = createEvent(this, "didPresent", 7);
+    this.willPresentShorthand = createEvent(this, "willPresent", 7);
+    this.willDismissShorthand = createEvent(this, "willDismiss", 7);
+    this.didDismissShorthand = createEvent(this, "didDismiss", 7);
+    this.modalIndex = modalIds++;
+    this.coreDelegate = CoreDelegate();
+    this.isSheetModal = false;
+    this.inline = false;
     // Whether or not modal is being dismissed via gesture
     this.gestureAnimationDismissing = false;
     this.presented = false;
+    /** @internal */
+    this.hasController = false;
     /**
      * If `true`, the keyboard will be automatically dismissed when the overlay is presented.
      */
     this.keyboardClose = true;
+    /**
+     * A decimal value between 0 and 1 that indicates the
+     * point after which the backdrop will begin to fade in
+     * when using a sheet modal. Prior to this point, the
+     * backdrop will be hidden and the content underneath
+     * the sheet can be interacted with. This value is exclusive
+     * meaning the backdrop will become active after the value
+     * specified.
+     */
+    this.backdropBreakpoint = 0;
     /**
      * If `true`, the modal will be dismissed when the backdrop is clicked.
      */
@@ -33286,6 +36304,34 @@ class Modal {
      * If `true`, the modal can be swiped to dismiss. Only applies in iOS mode.
      */
     this.swipeToClose = false;
+    /**
+     * If `true`, the modal will open. If `false`, the modal will close.
+     * Use this if you need finer grained control over presentation, otherwise
+     * just use the modalController or the `trigger` property.
+     * Note: `isOpen` will not automatically be set back to `false` when
+     * the modal dismisses. You will need to do that in your code.
+     */
+    this.isOpen = false;
+    this.configureTriggerInteraction = () => {
+      const { trigger, el, destroyTriggerInteraction } = this;
+      if (destroyTriggerInteraction) {
+        destroyTriggerInteraction();
+      }
+      const triggerEl = (trigger !== undefined) ? document.getElementById(trigger) : null;
+      if (!triggerEl) {
+        return;
+      }
+      const configureTriggerInteraction = (trigEl, modalEl) => {
+        const openModal = () => {
+          modalEl.present();
+        };
+        trigEl.addEventListener('click', openModal);
+        return () => {
+          trigEl.removeEventListener('click', openModal);
+        };
+      };
+      this.destroyTriggerInteraction = configureTriggerInteraction(triggerEl, el);
+    };
     this.onBackdropTap = () => {
       this.dismiss(undefined, BACKDROP);
     };
@@ -33307,6 +36353,17 @@ class Modal {
       }
     };
   }
+  onIsOpenChange(newValue, oldValue) {
+    if (newValue === true && oldValue === false) {
+      this.present();
+    }
+    else if (newValue === false && oldValue === true) {
+      this.dismiss();
+    }
+  }
+  onTriggerChange() {
+    this.configureTriggerInteraction();
+  }
   swipeToCloseChanged(enable) {
     if (this.gesture) {
       this.gesture.enable(enable);
@@ -33318,6 +36375,58 @@ class Modal {
   connectedCallback() {
     prepareOverlay(this.el);
   }
+  componentWillLoad() {
+    const { breakpoints, initialBreakpoint } = this;
+    /**
+     * If user has custom ID set then we should
+     * not assign the default incrementing ID.
+     */
+    this.modalId = (this.el.hasAttribute('id')) ? this.el.getAttribute('id') : `ion-modal-${this.modalIndex}`;
+    this.isSheetModal = breakpoints !== undefined && initialBreakpoint !== undefined;
+    if (breakpoints !== undefined && initialBreakpoint !== undefined && !breakpoints.includes(initialBreakpoint)) {
+      console.warn('[Ionic Warning]: Your breakpoints array must include the initialBreakpoint value.');
+    }
+  }
+  componentDidLoad() {
+    /**
+     * If modal was rendered with isOpen="true"
+     * then we should open modal immediately.
+     */
+    if (this.isOpen === true) {
+      raf(() => this.present());
+    }
+    this.configureTriggerInteraction();
+  }
+  /**
+   * Determines whether or not an overlay
+   * is being used inline or via a controller/JS
+   * and returns the correct delegate.
+   * By default, subsequent calls to getDelegate
+   * will use a cached version of the delegate.
+   * This is useful for calling dismiss after
+   * present so that the correct delegate is given.
+   */
+  getDelegate(force = false) {
+    if (this.workingDelegate && !force) {
+      return {
+        delegate: this.workingDelegate,
+        inline: this.inline
+      };
+    }
+    /**
+     * If using overlay inline
+     * we potentially need to use the coreDelegate
+     * so that this works in vanilla JS apps.
+     * If a developer has presented this component
+     * via a controller, then we can assume
+     * the component is already in the
+     * correct place.
+     */
+    const parentEl = this.el.parentNode;
+    const inline = this.inline = parentEl !== null && !this.hasController;
+    const delegate = this.workingDelegate = (inline) ? this.delegate || this.coreDelegate : this.delegate;
+    return { inline, delegate };
+  }
   /**
    * Present the modal overlay after it has been created.
    */
@@ -33325,18 +36434,54 @@ class Modal {
     if (this.presented) {
       return;
     }
-    const container = this.el.querySelector(`.modal-wrapper`);
-    if (!container) {
-      throw new Error('container is undefined');
+    /**
+     * When using an inline modal
+     * and dismissing a modal it is possible to
+     * quickly present the modal while it is
+     * dismissing. We need to await any current
+     * transition to allow the dismiss to finish
+     * before presenting again.
+     */
+    if (this.currentTransition !== undefined) {
+      await this.currentTransition;
     }
-    const componentProps = Object.assign(Object.assign({}, this.componentProps), { modal: this.el });
-    this.usersElement = await attachComponent(this.delegate, container, this.component, ['ion-page'], componentProps);
+    const data = Object.assign(Object.assign({}, this.componentProps), { modal: this.el });
+    const { inline, delegate } = this.getDelegate(true);
+    this.usersElement = await attachComponent(delegate, this.el, this.component, ['ion-page'], data, inline);
     await deepReady(this.usersElement);
     writeTask(() => this.el.classList.add('show-modal'));
-    await present(this, 'modalEnter', iosEnterAnimation$3, mdEnterAnimation$2, this.presentingElement);
-    if (this.swipeToClose) {
+    this.currentTransition = present(this, 'modalEnter', iosEnterAnimation$3, mdEnterAnimation$2, { presentingEl: this.presentingElement, currentBreakpoint: this.initialBreakpoint, backdropBreakpoint: this.backdropBreakpoint });
+    await this.currentTransition;
+    if (this.isSheetModal) {
+      this.initSheetGesture();
+    }
+    else if (this.swipeToClose) {
       this.initSwipeToClose();
     }
+    /* tslint:disable-next-line */
+    if (typeof window !== 'undefined') {
+      this.keyboardOpenCallback = () => {
+        if (this.gesture) {
+          /**
+           * When the native keyboard is opened and the webview
+           * is resized, the gesture implementation will become unresponsive
+           * and enter a free-scroll mode.
+           *
+           * When the keyboard is opened, we disable the gesture for
+           * a single frame and re-enable once the contents have repositioned
+           * from the keyboard placement.
+           */
+          this.gesture.enable(false);
+          raf(() => {
+            if (this.gesture) {
+              this.gesture.enable(true);
+            }
+          });
+        }
+      };
+      window.addEventListener(KEYBOARD_DID_OPEN, this.keyboardOpenCallback);
+    }
+    this.currentTransition = undefined;
   }
   initSwipeToClose() {
     if (getIonMode$1(this) !== 'ios') {
@@ -33346,7 +36491,7 @@ class Modal {
     // should be in the DOM and referenced by now, except
     // for the presenting el
     const animationBuilder = this.leaveAnimation || config$1.get('modalLeave', iosLeaveAnimation$3);
-    const ani = this.animation = animationBuilder(this.el, this.presentingElement);
+    const ani = this.animation = animationBuilder(this.el, { presentingEl: this.presentingElement });
     this.gesture = createSwipeToCloseGesture(this.el, ani, () => {
       /**
        * While the gesture animation is finishing
@@ -33366,6 +36511,37 @@ class Modal {
     });
     this.gesture.enable(true);
   }
+  initSheetGesture() {
+    var _a;
+    const { wrapperEl, initialBreakpoint, backdropBreakpoint } = this;
+    if (!wrapperEl || initialBreakpoint === undefined) {
+      return;
+    }
+    const animationBuilder = this.enterAnimation || config$1.get('modalEnter', iosEnterAnimation$3);
+    const ani = this.animation = animationBuilder(this.el, { presentingEl: this.presentingElement, currentBreakpoint: initialBreakpoint, backdropBreakpoint });
+    ani.progressStart(true, 1);
+    const sortedBreakpoints = ((_a = this.breakpoints) === null || _a === void 0 ? void 0 : _a.sort((a, b) => a - b)) || [];
+    this.gesture = createSheetGesture(this.el, this.backdropEl, wrapperEl, initialBreakpoint, backdropBreakpoint, ani, sortedBreakpoints, () => {
+      /**
+       * While the gesture animation is finishing
+       * it is possible for a user to tap the backdrop.
+       * This would result in the dismiss animation
+       * being played again. Typically this is avoided
+       * by setting `presented = false` on the overlay
+       * component; however, we cannot do that here as
+       * that would prevent the element from being
+       * removed from the DOM.
+       */
+      this.gestureAnimationDismissing = true;
+      this.animation.onFinish(async () => {
+        await this.dismiss(undefined, 'gesture');
+        this.gestureAnimationDismissing = false;
+      });
+    }, (breakpoint) => {
+      this.currentBreakpoint = breakpoint;
+    });
+    this.gesture.enable(true);
+  }
   /**
    * Dismiss the modal overlay after it has been presented.
    *
@@ -33376,15 +36552,36 @@ class Modal {
     if (this.gestureAnimationDismissing && role !== 'gesture') {
       return false;
     }
+    /* tslint:disable-next-line */
+    if (typeof window !== 'undefined' && this.keyboardOpenCallback) {
+      window.removeEventListener(KEYBOARD_DID_OPEN, this.keyboardOpenCallback);
+    }
+    /**
+     * When using an inline modal
+     * and presenting a modal it is possible to
+     * quickly dismiss the modal while it is
+     * presenting. We need to await any current
+     * transition to allow the present to finish
+     * before dismissing again.
+     */
+    if (this.currentTransition !== undefined) {
+      await this.currentTransition;
+    }
     const enteringAnimation = activeAnimations.get(this) || [];
-    const dismissed = await dismiss(this, data, role, 'modalLeave', iosLeaveAnimation$3, mdLeaveAnimation$2, this.presentingElement);
+    this.currentTransition = dismiss(this, data, role, 'modalLeave', iosLeaveAnimation$3, mdLeaveAnimation$2, { presentingEl: this.presentingElement, currentBreakpoint: this.currentBreakpoint || this.initialBreakpoint, backdropBreakpoint: this.backdropBreakpoint });
+    const dismissed = await this.currentTransition;
     if (dismissed) {
-      await detachComponent(this.delegate, this.usersElement);
+      const { delegate } = this.getDelegate();
+      await detachComponent(delegate, this.usersElement);
       if (this.animation) {
         this.animation.destroy();
       }
+      if (this.gesture) {
+        this.gesture.destroy();
+      }
       enteringAnimation.forEach(ani => ani.destroy());
     }
+    this.currentTransition = undefined;
     this.animation = undefined;
     return dismissed;
   }
@@ -33401,14 +36598,19 @@ class Modal {
     return eventMethod(this.el, 'ionModalWillDismiss');
   }
   render() {
-    const { htmlAttributes } = this;
+    const { handle, isSheetModal, presentingElement, htmlAttributes } = this;
+    const showHandle = handle !== false && isSheetModal;
     const mode = getIonMode$1(this);
+    const { modalId } = this;
+    const isCardModal = presentingElement !== undefined && mode === 'ios';
     return (hAsync(Host, Object.assign({ "no-router": true, "aria-modal": "true", tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${20000 + this.overlayIndex}`,
-      }, class: Object.assign({ [mode]: true, [`modal-card`]: this.presentingElement !== undefined && mode === 'ios' }, getClassMap(this.cssClass)), onIonBackdropTap: this.onBackdropTap, onIonDismiss: this.onDismiss, onIonModalDidPresent: this.onLifecycle, onIonModalWillPresent: this.onLifecycle, onIonModalWillDismiss: this.onLifecycle, onIonModalDidDismiss: this.onLifecycle }), hAsync("ion-backdrop", { visible: this.showBackdrop, tappable: this.backdropDismiss }), mode === 'ios' && hAsync("div", { class: "modal-shadow" }), hAsync("div", { tabindex: "0" }), hAsync("div", { role: "dialog", class: "modal-wrapper ion-overlay-wrapper" }), hAsync("div", { tabindex: "0" })));
+      }, class: Object.assign({ [mode]: true, ['modal-default']: !isCardModal && !isSheetModal, [`modal-card`]: isCardModal, [`modal-sheet`]: isSheetModal, 'overlay-hidden': true }, getClassMap(this.cssClass)), id: modalId, onIonBackdropTap: this.onBackdropTap, onIonDismiss: this.onDismiss, onIonModalDidPresent: this.onLifecycle, onIonModalWillPresent: this.onLifecycle, onIonModalWillDismiss: this.onLifecycle, onIonModalDidDismiss: this.onLifecycle }), hAsync("ion-backdrop", { ref: el => this.backdropEl = el, visible: this.showBackdrop, tappable: this.backdropDismiss, part: "backdrop" }), mode === 'ios' && hAsync("div", { class: "modal-shadow" }), hAsync("div", { role: "dialog", class: "modal-wrapper ion-overlay-wrapper", part: "content", ref: el => this.wrapperEl = el }, showHandle && hAsync("div", { class: "modal-handle", part: "handle" }), hAsync("slot", null))));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
+    "isOpen": ["onIsOpenChange"],
+    "trigger": ["onTriggerChange"],
     "swipeToClose": ["swipeToCloseChanged"]
   }; }
   static get style() { return {
@@ -33416,14 +36618,19 @@ class Modal {
     md: modalMdCss
   }; }
   static get cmpMeta() { return {
-    "$flags$": 34,
+    "$flags$": 41,
     "$tagName$": "ion-modal",
     "$members$": {
+      "hasController": [4, "has-controller"],
       "overlayIndex": [2, "overlay-index"],
       "delegate": [16],
       "keyboardClose": [4, "keyboard-close"],
       "enterAnimation": [16],
       "leaveAnimation": [16],
+      "breakpoints": [16],
+      "initialBreakpoint": [2, "initial-breakpoint"],
+      "backdropBreakpoint": [2, "backdrop-breakpoint"],
+      "handle": [4],
       "component": [1],
       "componentProps": [16],
       "cssClass": [1, "css-class"],
@@ -33433,6 +36640,9 @@ class Modal {
       "swipeToClose": [4, "swipe-to-close"],
       "presentingElement": [16],
       "htmlAttributes": [16],
+      "isOpen": [4, "is-open"],
+      "trigger": [1],
+      "presented": [32],
       "present": [64],
       "dismiss": [64],
       "onDidDismiss": [64],
@@ -33449,7 +36659,11 @@ const LIFECYCLE_MAP$1 = {
   'ionModalWillDismiss': 'ionViewWillLeave',
   'ionModalDidDismiss': 'ionViewDidLeave',
 };
+let modalIds = 0;
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const VIEW_STATE_NEW = 1;
 const VIEW_STATE_ATTACHED = 2;
 const VIEW_STATE_DESTROYED = 3;
@@ -34327,6 +37541,9 @@ class Nav {
   }; }
 }
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const navLink = (el, routerDirection, component, componentProps, routerAnimation) => {
   const nav = el.closest('ion-nav');
   if (nav) {
@@ -34670,6 +37887,9 @@ __decorate([
   Debounce(1000)
 ], Pagination$1.prototype, "onQuery", null);
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * iOS Picker Enter Animation
  */
@@ -34694,6 +37914,9 @@ const iosEnterAnimation$2 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * iOS Picker Leave Animation
  */
@@ -34859,7 +38082,7 @@ class Picker {
         zIndex: `${20000 + this.overlayIndex}`
       }, class: Object.assign({ [mode]: true,
         // Used internally for styling
-        [`picker-${mode}`]: true }, getClassMap(this.cssClass)), onIonBackdropTap: this.onBackdropTap, onIonPickerWillDismiss: this.dispatchCancelHandler }), hAsync("ion-backdrop", { visible: this.showBackdrop, tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "picker-wrapper ion-overlay-wrapper", role: "dialog" }, hAsync("div", { class: "picker-toolbar" }, this.buttons.map(b => (hAsync("div", { class: buttonWrapperClass(b) }, hAsync("button", { type: "button", onClick: () => this.buttonClick(b), class: buttonClass$1(b) }, b.text))))), hAsync("div", { class: "picker-columns" }, hAsync("div", { class: "picker-above-highlight" }), this.presented && this.columns.map(c => hAsync("ion-picker-column", { col: c })), hAsync("div", { class: "picker-below-highlight" }))), hAsync("div", { tabindex: "0" })));
+        [`picker-${mode}`]: true, 'overlay-hidden': true }, getClassMap(this.cssClass)), onIonBackdropTap: this.onBackdropTap, onIonPickerWillDismiss: this.dispatchCancelHandler }), hAsync("ion-backdrop", { visible: this.showBackdrop, tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "picker-wrapper ion-overlay-wrapper", role: "dialog" }, hAsync("div", { class: "picker-toolbar" }, this.buttons.map(b => (hAsync("div", { class: buttonWrapperClass(b) }, hAsync("button", { type: "button", onClick: () => this.buttonClick(b), class: buttonClass$1(b) }, b.text))))), hAsync("div", { class: "picker-columns" }, hAsync("div", { class: "picker-above-highlight" }), this.presented && this.columns.map(c => hAsync("ion-picker-column", { col: c })), hAsync("div", { class: "picker-below-highlight" }))), hAsync("div", { tabindex: "0" })));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -35240,243 +38463,1646 @@ const DECELERATION_FRICTION = 0.97;
 const MAX_PICKER_SPEED = 90;
 const TRANSITION_DURATION = 150;
 
+const pickerColumnInternalIosCss = "/*!@:host*/.sc-ion-picker-column-internal-ios-h{padding-left:16px;padding-right:16px;padding-top:0px;padding-bottom:0px;height:200px;outline:none;font-size:22px;scroll-snap-type:y mandatory;overflow-x:hidden;overflow-y:scroll;scrollbar-width:none;text-align:center}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-picker-column-internal-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host::-webkit-scrollbar*/.sc-ion-picker-column-internal-ios-h::-webkit-scrollbar{display:none}/*!@:host .picker-item*/.sc-ion-picker-column-internal-ios-h .picker-item.sc-ion-picker-column-internal-ios{height:34px;line-height:34px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;scroll-snap-align:center}/*!@:host .picker-item-empty*/.sc-ion-picker-column-internal-ios-h .picker-item-empty.sc-ion-picker-column-internal-ios{scroll-snap-align:none}/*!@:host(.picker-column-active) .picker-item.picker-item-active*/.picker-column-active.sc-ion-picker-column-internal-ios-h .picker-item.picker-item-active.sc-ion-picker-column-internal-ios{color:var(--ion-color-base)}@media (any-hover: hover){/*!@:host(:focus)*/.sc-ion-picker-column-internal-ios-h:focus{outline:none;background:rgba(var(--ion-color-base-rgb), 0.2)}}";
+
+const pickerColumnInternalMdCss = "/*!@:host*/.sc-ion-picker-column-internal-md-h{padding-left:16px;padding-right:16px;padding-top:0px;padding-bottom:0px;height:200px;outline:none;font-size:22px;scroll-snap-type:y mandatory;overflow-x:hidden;overflow-y:scroll;scrollbar-width:none;text-align:center}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-picker-column-internal-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host::-webkit-scrollbar*/.sc-ion-picker-column-internal-md-h::-webkit-scrollbar{display:none}/*!@:host .picker-item*/.sc-ion-picker-column-internal-md-h .picker-item.sc-ion-picker-column-internal-md{height:34px;line-height:34px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;scroll-snap-align:center}/*!@:host .picker-item-empty*/.sc-ion-picker-column-internal-md-h .picker-item-empty.sc-ion-picker-column-internal-md{scroll-snap-align:none}/*!@:host(.picker-column-active) .picker-item.picker-item-active*/.picker-column-active.sc-ion-picker-column-internal-md-h .picker-item.picker-item-active.sc-ion-picker-column-internal-md{color:var(--ion-color-base)}@media (any-hover: hover){/*!@:host(:focus)*/.sc-ion-picker-column-internal-md-h:focus{outline:none;background:rgba(var(--ion-color-base-rgb), 0.2)}}/*!@:host .picker-item-active*/.sc-ion-picker-column-internal-md-h .picker-item-active.sc-ion-picker-column-internal-md{color:var(--ion-color-base)}";
+
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ * @internal
+ */
+class PickerColumnInternal {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    this.ionChange = createEvent(this, "ionChange", 7);
+    this.hapticsStarted = false;
+    this.isColumnVisible = false;
+    this.isActive = false;
+    /**
+     * A list of options to be displayed in the picker
+     */
+    this.items = [];
+    /**
+     * The color to use from your application's color palette.
+     * Default options are: `"primary"`, `"secondary"`, `"tertiary"`, `"success"`, `"warning"`, `"danger"`, `"light"`, `"medium"`, and `"dark"`.
+     * For more information on colors, see [theming](/docs/theming/basics).
+     */
+    this.color = 'primary';
+    /**
+     * If `true`, tapping the picker will
+     * reveal a number input keyboard that lets
+     * the user type in values for each picker
+     * column. This is useful when working
+     * with time pickers.
+     *
+     * @internal
+     */
+    this.numericInput = false;
+    this.centerPickerItemInView = (target, smooth = true) => {
+      this.el.scroll({
+        // (Vertical offset from parent) - (three empty picker rows) + (half the height of the target to ensure the scroll triggers)
+        top: target.offsetTop - (3 * target.clientHeight) + (target.clientHeight / 2),
+        left: 0,
+        behavior: smooth ? 'smooth' : undefined
+      });
+    };
+    /**
+     * When ionInputModeChange is emitted, each column
+     * needs to check if it is the one being made available
+     * for text entry.
+     */
+    this.inputModeChange = (ev) => {
+      if (!this.numericInput) {
+        return;
+      }
+      const { useInputMode, inputModeColumn } = ev.detail;
+      /**
+       * If inputModeColumn is undefined then this means
+       * all numericInput columns are being selected.
+       */
+      const isColumnActive = inputModeColumn === undefined || inputModeColumn === this.el;
+      if (!useInputMode || !isColumnActive) {
+        this.isActive = false;
+        return;
+      }
+      this.isActive = true;
+    };
+    /**
+     * When the column scrolls, the component
+     * needs to determine which item is centered
+     * in the view and will emit an ionChange with
+     * the item object.
+     */
+    this.initializeScrollListener = () => {
+      const { el } = this;
+      let timeout;
+      let activeEl = this.activeItem;
+      const scrollCallback = () => {
+        raf(() => {
+          if (timeout) {
+            clearTimeout(timeout);
+            timeout = undefined;
+          }
+          if (!this.hapticsStarted) {
+            hapticSelectionStart();
+            this.hapticsStarted = true;
+          }
+          /**
+           * Select item in the center of the column
+           * which is the month/year that we want to select
+           */
+          const bbox = el.getBoundingClientRect();
+          const centerX = bbox.x + (bbox.width / 2);
+          const centerY = bbox.y + (bbox.height / 2);
+          const activeElement = el.shadowRoot.elementFromPoint(centerX, centerY);
+          if (activeEl !== null) {
+            activeEl.classList.remove(PICKER_COL_ACTIVE);
+          }
+          /**
+           * If we are selecting a new value,
+           * we need to run haptics again.
+           */
+          if (activeElement !== activeEl) {
+            hapticSelectionChanged();
+          }
+          activeEl = activeElement;
+          activeElement.classList.add(PICKER_COL_ACTIVE);
+          timeout = setTimeout(() => {
+            const dataIndex = activeElement.getAttribute('data-index');
+            /**
+             * If no value it is
+             * possible we hit one of the
+             * empty padding columns.
+             */
+            if (dataIndex === null) {
+              return;
+            }
+            const index = parseInt(dataIndex, 10);
+            const selectedItem = this.items[index];
+            if (selectedItem.value !== this.value) {
+              this.value = selectedItem.value;
+              hapticSelectionEnd();
+              this.hapticsStarted = false;
+            }
+          }, 250);
+        });
+      };
+      /**
+       * Wrap this in an raf so that the scroll callback
+       * does not fire when component is initially shown.
+       */
+      raf(() => {
+        el.addEventListener('scroll', scrollCallback);
+        this.destroyScrollListener = () => {
+          el.removeEventListener('scroll', scrollCallback);
+        };
+      });
+    };
+  }
+  valueChange() {
+    if (this.isColumnVisible) {
+      /**
+       * Only scroll the active item into view and emit the value
+       * change, when the picker column is actively visible to the user.
+       */
+      const { items, value } = this;
+      this.scrollActiveItemIntoView();
+      const findItem = items.find(item => item.value === value);
+      if (findItem) {
+        this.ionChange.emit(findItem);
+      }
+    }
+  }
+  /**
+   * Only setup scroll listeners
+   * when the picker is visible, otherwise
+   * the container will have a scroll
+   * height of 0px.
+   */
+  componentWillLoad() {
+    const visibleCallback = (entries) => {
+      var _a;
+      const ev = entries[0];
+      if (ev.isIntersecting) {
+        /**
+         * Because this initial call to scrollActiveItemIntoView has to fire before
+         * the scroll listener is set up, we need to manage the active class manually.
+         */
+        const oldActive = getElementRoot(this.el).querySelector(`.${PICKER_COL_ACTIVE}`);
+        oldActive === null || oldActive === void 0 ? void 0 : oldActive.classList.remove(PICKER_COL_ACTIVE);
+        this.scrollActiveItemIntoView();
+        (_a = this.activeItem) === null || _a === void 0 ? void 0 : _a.classList.add(PICKER_COL_ACTIVE);
+        this.initializeScrollListener();
+        this.isColumnVisible = true;
+      }
+      else {
+        if (this.destroyScrollListener) {
+          this.destroyScrollListener();
+          this.destroyScrollListener = undefined;
+        }
+        this.isColumnVisible = false;
+      }
+    };
+    new IntersectionObserver(visibleCallback, { threshold: 0.01 }).observe(this.el);
+    const parentEl = this.el.closest('ion-picker-internal');
+    if (parentEl !== null) {
+      parentEl.addEventListener('ionInputModeChange', (ev) => this.inputModeChange(ev));
+    }
+  }
+  /** @internal  */
+  async scrollActiveItemIntoView() {
+    const activeEl = this.activeItem;
+    if (activeEl) {
+      this.centerPickerItemInView(activeEl, false);
+    }
+  }
+  get activeItem() {
+    return getElementRoot(this.el).querySelector(`.picker-item[data-value="${this.value}"]`);
+  }
+  render() {
+    const { items, color, isActive, numericInput } = this;
+    const mode = getIonMode$1(this);
+    return (hAsync(Host, { tabindex: 0, class: createColorClasses$1(color, {
+        [mode]: true,
+        ['picker-column-active']: isActive,
+        ['picker-column-numeric-input']: numericInput
+      }) }, hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), items.map((item, index) => {
+      return (hAsync("div", { class: "picker-item", "data-value": item.value, "data-index": index, onClick: (ev) => {
+          this.centerPickerItemInView(ev.target);
+        } }, item.text));
+    }), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0")));
+  }
+  get el() { return getElement(this); }
+  static get watchers() { return {
+    "value": ["valueChange"]
+  }; }
+  static get style() { return {
+    ios: pickerColumnInternalIosCss,
+    md: pickerColumnInternalMdCss
+  }; }
+  static get cmpMeta() { return {
+    "$flags$": 41,
+    "$tagName$": "ion-picker-column-internal",
+    "$members$": {
+      "items": [16],
+      "value": [1032],
+      "color": [513],
+      "numericInput": [4, "numeric-input"],
+      "isActive": [32],
+      "scrollActiveItemIntoView": [64]
+    },
+    "$listeners$": undefined,
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": [["color", "color"]]
+  }; }
+}
+const PICKER_COL_ACTIVE = 'picker-item-active';
+
+const pickerInternalIosCss = "/*!@:host*/.sc-ion-picker-internal-ios-h{display:flex;position:relative;align-items:center;justify-content:center;width:100%;height:200px;direction:ltr;z-index:0}/*!@:host .picker-before,\n:host .picker-after*/.sc-ion-picker-internal-ios-h .picker-before.sc-ion-picker-internal-ios,.sc-ion-picker-internal-ios-h .picker-after.sc-ion-picker-internal-ios{position:absolute;width:100%;z-index:1;pointer-events:none}/*!@:host .picker-before*/.sc-ion-picker-internal-ios-h .picker-before.sc-ion-picker-internal-ios{left:0;top:0;height:83px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-ios-h,[dir=rtl] .sc-ion-picker-internal-ios-h{left:unset;right:unset;right:0}/*!@:host .picker-after*/.sc-ion-picker-internal-ios-h .picker-after.sc-ion-picker-internal-ios{left:0;top:116px;height:84px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-ios-h,[dir=rtl] .sc-ion-picker-internal-ios-h{left:unset;right:unset;right:0}/*!@:host .picker-highlight*/.sc-ion-picker-internal-ios-h .picker-highlight.sc-ion-picker-internal-ios{border-radius:8px;left:0;right:0;top:50%;bottom:0;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;position:absolute;width:calc(100% - 16px);height:34px;transform:translateY(-50%);z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .picker-highlight*/.sc-ion-picker-internal-ios-h .picker-highlight.sc-ion-picker-internal-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@:host input*/.sc-ion-picker-internal-ios-h input.sc-ion-picker-internal-ios{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@:host ::slotted(ion-picker-column-internal:first-of-type)*/.sc-ion-picker-internal-ios-h .sc-ion-picker-internal-ios-s>ion-picker-column-internal:first-of-type{text-align:start}/*!@:host ::slotted(ion-picker-column-internal:last-of-type)*/.sc-ion-picker-internal-ios-h .sc-ion-picker-internal-ios-s>ion-picker-column-internal:last-of-type{text-align:end}/*!@:host .picker-before*/.sc-ion-picker-internal-ios-h .picker-before.sc-ion-picker-internal-ios{background:linear-gradient(to bottom, var(--background, var(--ion-background-color, #fff)) 20%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0.8) 100%)}/*!@:host .picker-after*/.sc-ion-picker-internal-ios-h .picker-after.sc-ion-picker-internal-ios{background:linear-gradient(to top, var(--background, var(--ion-background-color, #fff)) 20%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0.8) 100%)}/*!@:host .picker-highlight*/.sc-ion-picker-internal-ios-h .picker-highlight.sc-ion-picker-internal-ios{background:var(--ion-color-step-150, #eeeeef)}";
+
+const pickerInternalMdCss = "/*!@:host*/.sc-ion-picker-internal-md-h{display:flex;position:relative;align-items:center;justify-content:center;width:100%;height:200px;direction:ltr;z-index:0}/*!@:host .picker-before,\n:host .picker-after*/.sc-ion-picker-internal-md-h .picker-before.sc-ion-picker-internal-md,.sc-ion-picker-internal-md-h .picker-after.sc-ion-picker-internal-md{position:absolute;width:100%;z-index:1;pointer-events:none}/*!@:host .picker-before*/.sc-ion-picker-internal-md-h .picker-before.sc-ion-picker-internal-md{left:0;top:0;height:83px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-md-h,[dir=rtl] .sc-ion-picker-internal-md-h{left:unset;right:unset;right:0}/*!@:host .picker-after*/.sc-ion-picker-internal-md-h .picker-after.sc-ion-picker-internal-md{left:0;top:116px;height:84px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-md-h,[dir=rtl] .sc-ion-picker-internal-md-h{left:unset;right:unset;right:0}/*!@:host .picker-highlight*/.sc-ion-picker-internal-md-h .picker-highlight.sc-ion-picker-internal-md{border-radius:8px;left:0;right:0;top:50%;bottom:0;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;position:absolute;width:calc(100% - 16px);height:34px;transform:translateY(-50%);z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .picker-highlight*/.sc-ion-picker-internal-md-h .picker-highlight.sc-ion-picker-internal-md{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@:host input*/.sc-ion-picker-internal-md-h input.sc-ion-picker-internal-md{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@:host ::slotted(ion-picker-column-internal:first-of-type)*/.sc-ion-picker-internal-md-h .sc-ion-picker-internal-md-s>ion-picker-column-internal:first-of-type{text-align:start}/*!@:host ::slotted(ion-picker-column-internal:last-of-type)*/.sc-ion-picker-internal-md-h .sc-ion-picker-internal-md-s>ion-picker-column-internal:last-of-type{text-align:end}/*!@:host .picker-before*/.sc-ion-picker-internal-md-h .picker-before.sc-ion-picker-internal-md{background:linear-gradient(to bottom, var(--background, var(--ion-background-color, #fff)) 20%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0) 90%)}/*!@:host .picker-after*/.sc-ion-picker-internal-md-h .picker-after.sc-ion-picker-internal-md{background:linear-gradient(to top, var(--background, var(--ion-background-color, #fff)) 30%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0) 90%)}";
+
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ * @internal
+ */
+class PickerInternal {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    this.ionInputModeChange = createEvent(this, "ionInputModeChange", 7);
+    this.useInputMode = false;
+    this.isInHighlightBounds = (ev) => {
+      const { highlightEl } = this;
+      if (!highlightEl) {
+        return false;
+      }
+      const bbox = highlightEl.getBoundingClientRect();
+      /**
+       * Check to see if the user clicked
+       * outside the bounds of the highlight.
+       */
+      const outsideX = ev.clientX < bbox.left || ev.clientX > bbox.right;
+      const outsideY = ev.clientY < bbox.top || ev.clientY > bbox.bottom;
+      if (outsideX || outsideY) {
+        return false;
+      }
+      return true;
+    };
+    /**
+     * If we are no longer focused
+     * on a picker column, then we should
+     * exit input mode. An exception is made
+     * for the input in the picker since having
+     * that focused means we are still in input mode.
+     */
+    this.onFocusOut = (ev) => {
+      const { relatedTarget } = ev;
+      if (!relatedTarget ||
+        relatedTarget.tagName !== 'ION-PICKER-COLUMN-INTERNAL' && relatedTarget !== this.inputEl) {
+        this.exitInputMode();
+      }
+    };
+    /**
+     * When picker columns receive focus
+     * the parent picker needs to determine
+     * whether to enter/exit input mode.
+     */
+    this.onFocusIn = (ev) => {
+      const { target } = ev;
+      /**
+       * Due to browser differences in how/when focus
+       * is dispatched on certain elements, we need to
+       * make sure that this function only ever runs when
+       * focusing a picker column.
+       */
+      if (target.tagName !== 'ION-PICKER-COLUMN-INTERNAL') {
+        return;
+      }
+      /**
+       * If we have actionOnClick
+       * then this means the user focused
+       * a picker column via mouse or
+       * touch (i.e. a PointerEvent). As a result,
+       * we should not enter/exit input mode
+       * until the click event has fired, which happens
+       * after the `focusin` event.
+       *
+       * Otherwise, the user likely focused
+       * the column using their keyboard and
+       * we should enter/exit input mode automatically.
+       */
+      if (!this.actionOnClick) {
+        const columnEl = target;
+        const allowInput = columnEl.numericInput;
+        if (allowInput) {
+          this.enterInputMode(columnEl, false);
+        }
+        else {
+          this.exitInputMode();
+        }
+      }
+    };
+    /**
+     * On click we need to run an actionOnClick
+     * function that has been set in onPointerDown
+     * so that we enter/exit input mode correctly.
+     */
+    this.onClick = () => {
+      const { actionOnClick } = this;
+      if (actionOnClick) {
+        actionOnClick();
+        this.actionOnClick = undefined;
+      }
+    };
+    /**
+     * Clicking a column also focuses the column on
+     * certain browsers, so we use onPointerDown
+     * to tell the onFocusIn function that users
+     * are trying to click the column rather than
+     * focus the column using the keyboard. When the
+     * user completes the click, the onClick function
+     * runs and runs the actionOnClick callback.
+     */
+    this.onPointerDown = (ev) => {
+      const { useInputMode, inputModeColumn, el } = this;
+      if (this.isInHighlightBounds(ev)) {
+        /**
+         * If we were already in
+         * input mode, then we should determine
+         * if we tapped a particular column and
+         * should switch to input mode for
+         * that specific column.
+         */
+        if (useInputMode) {
+          /**
+           * If we tapped a picker column
+           * then we should either switch to input
+           * mode for that column or all columns.
+           * Otherwise we should exit input mode
+           * since we just tapped the highlight and
+           * not a column.
+           */
+          if (ev.target.tagName === 'ION-PICKER-COLUMN-INTERNAL') {
+            /**
+             * If user taps 2 different columns
+             * then we should just switch to input mode
+             * for the new column rather than switching to
+             * input mode for all columns.
+             */
+            if (inputModeColumn && inputModeColumn === ev.target) {
+              this.actionOnClick = () => {
+                this.enterInputMode();
+              };
+            }
+            else {
+              this.actionOnClick = () => {
+                this.enterInputMode(ev.target);
+              };
+            }
+          }
+          else {
+            this.actionOnClick = () => {
+              this.exitInputMode();
+            };
+          }
+          /**
+           * If we were not already in
+           * input mode, then we should
+           * enter input mode for all columns.
+           */
+        }
+        else {
+          /**
+           * If there is only 1 numeric input column
+           * then we should skip multi column input.
+           */
+          const columns = el.querySelectorAll('ion-picker-column-internal.picker-column-numeric-input');
+          const columnEl = (columns.length === 1) ? ev.target : undefined;
+          this.actionOnClick = () => {
+            this.enterInputMode(columnEl);
+          };
+        }
+        return;
+      }
+      this.actionOnClick = () => {
+        this.exitInputMode();
+      };
+    };
+    /**
+     * Enters input mode to allow
+     * for text entry of numeric values.
+     * If on mobile, we focus a hidden input
+     * field so that the on screen keyboard
+     * is brought up. When tabbing using a
+     * keyboard, picker columns receive an outline
+     * to indicate they are focused. As a result,
+     * we should not focus the hidden input as it
+     * would cause the outline to go away, preventing
+     * users from having any visual indication of which
+     * column is focused.
+     */
+    this.enterInputMode = (columnEl, focusInput = true) => {
+      const { inputEl, el } = this;
+      if (!inputEl) {
+        return;
+      }
+      /**
+       * Only active input mode if there is at
+       * least one column that accepts numeric input.
+       */
+      const hasInputColumn = el.querySelector('ion-picker-column-internal.picker-column-numeric-input');
+      if (!hasInputColumn) {
+        return;
+      }
+      /**
+       * If columnEl is undefined then
+       * it is assumed that all numeric pickers
+       * are eligible for text entry.
+       * (i.e. hour and minute columns)
+       */
+      this.useInputMode = true;
+      this.inputModeColumn = columnEl;
+      /**
+       * Users with a keyboard and mouse can
+       * activate input mode where the input is
+       * focused as well as when it is not focused,
+       * so we need to make sure we clean up any
+       * old listeners.
+       */
+      if (focusInput) {
+        if (this.destroyKeypressListener) {
+          this.destroyKeypressListener();
+          this.destroyKeypressListener = undefined;
+        }
+        inputEl.focus();
+      }
+      else {
+        el.addEventListener('keypress', this.onKeyPress);
+        this.destroyKeypressListener = () => {
+          el.removeEventListener('keypress', this.onKeyPress);
+        };
+      }
+      this.emitInputModeChange();
+    };
+    this.exitInputMode = () => {
+      const { inputEl, useInputMode } = this;
+      if (!useInputMode || !inputEl) {
+        return;
+      }
+      this.useInputMode = false;
+      this.inputModeColumn = undefined;
+      inputEl.blur();
+      inputEl.value = '';
+      if (this.destroyKeypressListener) {
+        this.destroyKeypressListener();
+        this.destroyKeypressListener = undefined;
+      }
+      this.emitInputModeChange();
+    };
+    this.onKeyPress = (ev) => {
+      const { inputEl } = this;
+      if (!inputEl) {
+        return;
+      }
+      const parsedValue = parseInt(ev.key, 10);
+      /**
+       * Only numbers should be allowed
+       */
+      if (!Number.isNaN(parsedValue)) {
+        inputEl.value += ev.key;
+        this.onInputChange();
+      }
+    };
+    this.selectSingleColumn = () => {
+      const { inputEl, inputModeColumn, singleColumnSearchTimeout } = this;
+      if (!inputEl || !inputModeColumn) {
+        return;
+      }
+      const values = inputModeColumn.items;
+      /**
+       * If users pause for a bit, the search
+       * value should be reset similar to how a
+       * <select> behaves. So typing "34", waiting,
+       * then typing "5" should select "05".
+       */
+      if (singleColumnSearchTimeout) {
+        clearTimeout(singleColumnSearchTimeout);
+      }
+      this.singleColumnSearchTimeout = setTimeout(() => {
+        inputEl.value = '';
+        this.singleColumnSearchTimeout = undefined;
+      }, 1000);
+      /**
+       * For values that are longer than 2 digits long
+       * we should shift the value over 1 character
+       * to the left. So typing "456" would result in "56".
+       * TODO: If we want to support more than just
+       * time entry, we should update this value to be
+       * the max length of all of the picker items.
+       */
+      if (inputEl.value.length >= 3) {
+        const startIndex = inputEl.value.length - 2;
+        const newString = inputEl.value.substring(startIndex);
+        inputEl.value = newString;
+        this.selectSingleColumn();
+        return;
+      }
+      /**
+       * Checking the value of the input gets priority
+       * first. For example, if the value of the input
+       * is "1" and we entered "2", then the complete value
+       * is "12" and we should select hour 12.
+       *
+       * Regex removes any leading zeros from values like "02".
+       */
+      const findItemFromCompleteValue = values.find(({ text }) => text.replace(/^0+/, '') === inputEl.value);
+      if (findItemFromCompleteValue) {
+        inputModeColumn.value = findItemFromCompleteValue.value;
+        return;
+      }
+      /**
+       * If we typed "56" to get minute 56, then typed "7",
+       * we should select "07" as "567" is not a valid minute.
+       */
+      if (inputEl.value.length === 2) {
+        const changedCharacter = inputEl.value.substring(inputEl.value.length - 1);
+        inputEl.value = changedCharacter;
+        this.selectSingleColumn();
+      }
+    };
+    /**
+     * Searches a list of column items for a particular
+     * value. This is currently used for numeric values.
+     * The zeroBehavior can be set to account for leading
+     * or trailing zeros when looking at the item text.
+     */
+    this.searchColumn = (colEl, value, zeroBehavior = 'start') => {
+      let item;
+      const behavior = zeroBehavior === 'start' ? /^0+/ : /0$/;
+      item = colEl.items.find(({ text }) => text.replace(behavior, '') === value);
+      if (item) {
+        colEl.value = item.value;
+      }
+    };
+    this.selectMultiColumn = () => {
+      const { inputEl, el } = this;
+      if (!inputEl) {
+        return;
+      }
+      const numericPickers = Array.from(el.querySelectorAll('ion-picker-column-internal')).filter(col => col.numericInput);
+      const firstColumn = numericPickers[0];
+      const lastColumn = numericPickers[1];
+      let value = inputEl.value;
+      let minuteValue;
+      switch (value.length) {
+        case 1:
+          this.searchColumn(firstColumn, value);
+          break;
+        case 2:
+          /**
+           * If the first character is `0` or `1` it is
+           * possible that users are trying to type `09`
+           * or `11` into the hour field, so we should look
+           * at that first.
+           */
+          const firstCharacter = inputEl.value.substring(0, 1);
+          value = (firstCharacter === '0' || firstCharacter === '1') ? inputEl.value : firstCharacter;
+          this.searchColumn(firstColumn, value);
+          /**
+           * If only checked the first value,
+           * we can check the second value
+           * for a match in the minutes column
+           */
+          if (value.length === 1) {
+            minuteValue = inputEl.value.substring(inputEl.value.length - 1);
+            this.searchColumn(lastColumn, minuteValue, 'end');
+          }
+          break;
+        case 3:
+          /**
+           * If the first character is `0` or `1` it is
+           * possible that users are trying to type `09`
+           * or `11` into the hour field, so we should look
+           * at that first.
+           */
+          const firstCharacterAgain = inputEl.value.substring(0, 1);
+          value = (firstCharacterAgain === '0' || firstCharacterAgain === '1') ? inputEl.value.substring(0, 2) : firstCharacterAgain;
+          this.searchColumn(firstColumn, value);
+          /**
+           * If only checked the first value,
+           * we can check the second value
+           * for a match in the minutes column
+           */
+          minuteValue = (value.length === 1) ? inputEl.value.substring(1) : inputEl.value.substring(2);
+          this.searchColumn(lastColumn, minuteValue, 'end');
+          break;
+        case 4:
+          /**
+           * If the first character is `0` or `1` it is
+           * possible that users are trying to type `09`
+           * or `11` into the hour field, so we should look
+           * at that first.
+           */
+          const firstCharacterAgainAgain = inputEl.value.substring(0, 1);
+          value = (firstCharacterAgainAgain === '0' || firstCharacterAgainAgain === '1') ? inputEl.value.substring(0, 2) : firstCharacterAgainAgain;
+          this.searchColumn(firstColumn, value);
+          /**
+           * If only checked the first value,
+           * we can check the second value
+           * for a match in the minutes column
+           */
+          const minuteValueAgain = (value.length === 1) ? inputEl.value.substring(1, inputEl.value.length) : inputEl.value.substring(2, inputEl.value.length);
+          this.searchColumn(lastColumn, minuteValueAgain, 'end');
+          break;
+        default:
+          const startIndex = inputEl.value.length - 4;
+          const newString = inputEl.value.substring(startIndex);
+          inputEl.value = newString;
+          this.selectMultiColumn();
+          break;
+      }
+    };
+    /**
+     * Searches the value of the active column
+     * to determine which value users are trying
+     * to select
+     */
+    this.onInputChange = () => {
+      const { useInputMode, inputEl, inputModeColumn } = this;
+      if (!useInputMode || !inputEl) {
+        return;
+      }
+      if (inputModeColumn) {
+        this.selectSingleColumn();
+      }
+      else {
+        this.selectMultiColumn();
+      }
+    };
+    /**
+     * Emit ionInputModeChange. Picker columns
+     * listen for this event to determine whether
+     * or not their column is "active" for text input.
+     */
+    this.emitInputModeChange = () => {
+      const { useInputMode, inputModeColumn } = this;
+      this.ionInputModeChange.emit({
+        useInputMode,
+        inputModeColumn
+      });
+    };
+  }
+  componentWillLoad() {
+    getElementRoot(this.el).addEventListener('focusin', this.onFocusIn);
+    getElementRoot(this.el).addEventListener('focusout', this.onFocusOut);
+  }
+  render() {
+    return (hAsync(Host, { onPointerDown: (ev) => this.onPointerDown(ev), onClick: () => this.onClick() }, hAsync("input", { "aria-hidden": "true", tabindex: -1, inputmode: "numeric", type: "number", ref: el => this.inputEl = el, onInput: () => this.onInputChange(), onBlur: () => this.exitInputMode() }), hAsync("div", { class: "picker-before" }), hAsync("div", { class: "picker-after" }), hAsync("div", { class: "picker-highlight", ref: el => this.highlightEl = el }), hAsync("slot", null)));
+  }
+  get el() { return getElement(this); }
+  static get style() { return {
+    ios: pickerInternalIosCss,
+    md: pickerInternalMdCss
+  }; }
+  static get cmpMeta() { return {
+    "$flags$": 41,
+    "$tagName$": "ion-picker-internal",
+    "$members$": undefined,
+    "$listeners$": undefined,
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": []
+  }; }
+}
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+/**
+ * Returns the dimensions of the popover
+ * arrow on `ios` mode. If arrow is disabled
+ * returns (0, 0).
+ */
+const getArrowDimensions = (arrowEl) => {
+  if (!arrowEl) {
+    return { arrowWidth: 0, arrowHeight: 0 };
+  }
+  const { width, height } = arrowEl.getBoundingClientRect();
+  return { arrowWidth: width, arrowHeight: height };
+};
+/**
+ * Returns the recommended dimensions of the popover
+ * that takes into account whether or not the width
+ * should match the trigger width.
+ */
+const getPopoverDimensions = (size, contentEl, triggerEl) => {
+  const contentDimentions = contentEl.getBoundingClientRect();
+  const contentHeight = contentDimentions.height;
+  let contentWidth = contentDimentions.width;
+  if (size === 'cover' && triggerEl) {
+    const triggerDimensions = triggerEl.getBoundingClientRect();
+    contentWidth = triggerDimensions.width;
+  }
+  return {
+    contentWidth,
+    contentHeight
+  };
+};
+const configureDismissInteraction = (triggerEl, triggerAction, popoverEl, parentPopoverEl) => {
+  let dismissCallbacks = [];
+  const root = getElementRoot(parentPopoverEl);
+  const parentContentEl = root.querySelector('.popover-content');
+  switch (triggerAction) {
+    case 'hover':
+      dismissCallbacks = [
+        {
+          /**
+           * Do not use mouseover here
+           * as this will causes the event to
+           * be dispatched on each underlying
+           * element rather than on the popover
+           * content as a whole.
+           */
+          eventName: 'mouseenter',
+          callback: (ev) => {
+            /**
+             * Do not dismiss the popover is we
+             * are hovering over its trigger.
+             * This would be easier if we used mouseover
+             * but this would cause the event to be dispatched
+             * more often than we would like, potentially
+             * causing performance issues.
+             */
+            const element = document.elementFromPoint(ev.clientX, ev.clientY);
+            if (element === triggerEl) {
+              return;
+            }
+            popoverEl.dismiss(undefined, undefined, false);
+          }
+        }
+      ];
+      break;
+    case 'context-menu':
+    case 'click':
+    default:
+      dismissCallbacks = [
+        {
+          eventName: 'click',
+          callback: (ev) => {
+            /**
+             * Do not dismiss the popover is we
+             * are hovering over its trigger.
+             */
+            const target = ev.target;
+            const closestTrigger = target.closest('[data-ion-popover-trigger]');
+            if (closestTrigger === triggerEl) {
+              /**
+               * stopPropagation here so if the
+               * popover has dismissOnSelect="true"
+               * the popover does not dismiss since
+               * we just clicked a trigger element.
+               */
+              ev.stopPropagation();
+              return;
+            }
+            popoverEl.dismiss(undefined, undefined, false);
+          }
+        }
+      ];
+      break;
+  }
+  dismissCallbacks.forEach(({ eventName, callback }) => parentContentEl.addEventListener(eventName, callback));
+  return () => {
+    dismissCallbacks.forEach(({ eventName, callback }) => parentContentEl.removeEventListener(eventName, callback));
+  };
+};
+/**
+ * Configures the triggerEl to respond
+ * to user interaction based upon the triggerAction
+ * prop that devs have defined.
+ */
+const configureTriggerInteraction = (triggerEl, triggerAction, popoverEl) => {
+  let triggerCallbacks = [];
+  /**
+   * Based upon the kind of trigger interaction
+   * the user wants, we setup the correct event
+   * listeners.
+   */
+  switch (triggerAction) {
+    case 'hover':
+      let hoverTimeout;
+      triggerCallbacks = [
+        {
+          eventName: 'mouseenter',
+          callback: async (ev) => {
+            ev.stopPropagation();
+            if (hoverTimeout) {
+              clearTimeout(hoverTimeout);
+            }
+            /**
+             * Hovering over a trigger should not
+             * immediately open the next popover.
+             */
+            hoverTimeout = setTimeout(() => {
+              raf(() => {
+                popoverEl.presentFromTrigger(ev);
+                hoverTimeout = undefined;
+              });
+            }, 100);
+          }
+        },
+        {
+          eventName: 'mouseleave',
+          callback: (ev) => {
+            if (hoverTimeout) {
+              clearTimeout(hoverTimeout);
+            }
+            /**
+             * If mouse is over another popover
+             * that is not this popover then we should
+             * close this popover.
+             */
+            const target = ev.relatedTarget;
+            if (!target) {
+              return;
+            }
+            if (target.closest('ion-popover') !== popoverEl) {
+              popoverEl.dismiss(undefined, undefined, false);
+            }
+          }
+        },
+        {
+          /**
+           * stopPropagation here prevents the popover
+           * from dismissing when dismiss-on-select="true".
+           */
+          eventName: 'click',
+          callback: (ev) => ev.stopPropagation()
+        },
+        {
+          eventName: 'ionPopoverActivateTrigger',
+          callback: (ev) => popoverEl.presentFromTrigger(ev, true)
+        }
+      ];
+      break;
+    case 'context-menu':
+      triggerCallbacks = [
+        {
+          eventName: 'contextmenu',
+          callback: (ev) => {
+            /**
+             * Prevents the platform context
+             * menu from appearing.
+             */
+            ev.preventDefault();
+            popoverEl.presentFromTrigger(ev);
+          }
+        },
+        {
+          eventName: 'click',
+          callback: (ev) => ev.stopPropagation()
+        },
+        {
+          eventName: 'ionPopoverActivateTrigger',
+          callback: (ev) => popoverEl.presentFromTrigger(ev, true)
+        }
+      ];
+      break;
+    case 'click':
+    default:
+      triggerCallbacks = [
+        {
+          /**
+           * Do not do a stopPropagation() here
+           * because if you had two click triggers
+           * then clicking the first trigger and then
+           * clicking the second trigger would not cause
+           * the first popover to dismiss.
+           */
+          eventName: 'click',
+          callback: (ev) => popoverEl.presentFromTrigger(ev)
+        },
+        {
+          eventName: 'ionPopoverActivateTrigger',
+          callback: (ev) => popoverEl.presentFromTrigger(ev, true)
+        }
+      ];
+      break;
+  }
+  triggerCallbacks.forEach(({ eventName, callback }) => triggerEl.addEventListener(eventName, callback));
+  triggerEl.setAttribute('data-ion-popover-trigger', 'true');
+  return () => {
+    triggerCallbacks.forEach(({ eventName, callback }) => triggerEl.removeEventListener(eventName, callback));
+    triggerEl.removeAttribute('data-ion-popover-trigger');
+  };
+};
+/**
+ * Returns the index of an ion-item in an array of ion-items.
+ */
+const getIndexOfItem = (items, item) => {
+  if (!item || item.tagName !== 'ION-ITEM') {
+    return -1;
+  }
+  return items.findIndex(el => el === item);
+};
+/**
+ * Given an array of elements and a currently focused ion-item
+ * returns the next ion-item relative to the focused one or
+ * undefined.
+ */
+const getNextItem = (items, currentItem) => {
+  const currentItemIndex = getIndexOfItem(items, currentItem);
+  return items[currentItemIndex + 1];
+};
+/**
+ * Given an array of elements and a currently focused ion-item
+ * returns the previous ion-item relative to the focused one or
+ * undefined.
+ */
+const getPrevItem = (items, currentItem) => {
+  const currentItemIndex = getIndexOfItem(items, currentItem);
+  return items[currentItemIndex - 1];
+};
+/** Focus the internal button of the ion-item */
+const focusItem = (item) => {
+  const root = getElementRoot(item);
+  const button = root.querySelector('button');
+  if (button) {
+    raf(() => button.focus());
+  }
+};
+/**
+ * Returns `true` if `el` has been designated
+ * as a trigger element for an ion-popover.
+ */
+const isTriggerElement = (el) => el.hasAttribute('data-ion-popover-trigger');
+const configureKeyboardInteraction = (popoverEl) => {
+  const callback = async (ev) => {
+    const activeElement = document.activeElement;
+    let items = [];
+    /**
+     * Complex selectors with :not() are :not supported
+     * in older versions of Chromium so we need to do a
+     * try/catch here so errors are not thrown.
+     */
+    try {
+      /**
+       * Select all ion-items that are not children of child popovers.
+       * i.e. only select ion-item elements that are part of this popover
+       */
+      items = Array.from(popoverEl.querySelectorAll('ion-item:not(ion-popover ion-popover *):not([disabled])'));
+      /* tslint:disable-next-line */
+    }
+    catch (_a) { }
+    switch (ev.key) {
+      /**
+       * If we are in a child popover
+       * then pressing the left arrow key
+       * should close this popover and move
+       * focus to the popover that presented
+       * this one.
+       */
+      case 'ArrowLeft':
+        const parentPopover = await popoverEl.getParentPopover();
+        if (parentPopover) {
+          popoverEl.dismiss(undefined, undefined, false);
+        }
+        break;
+      /**
+       * ArrowDown should move focus to the next focusable ion-item.
+       */
+      case 'ArrowDown':
+        // Disable movement/scroll with keyboard
+        ev.preventDefault();
+        const nextItem = getNextItem(items, activeElement);
+        // tslint:disable-next-line:strict-type-predicates
+        if (nextItem !== undefined) {
+          focusItem(nextItem);
+        }
+        break;
+      /**
+       * ArrowUp should move focus to the previous focusable ion-item.
+       */
+      case 'ArrowUp':
+        // Disable movement/scroll with keyboard
+        ev.preventDefault();
+        const prevItem = getPrevItem(items, activeElement);
+        // tslint:disable-next-line:strict-type-predicates
+        if (prevItem !== undefined) {
+          focusItem(prevItem);
+        }
+        break;
+      /**
+       * Home should move focus to the first focusable ion-item.
+       */
+      case 'Home':
+        ev.preventDefault();
+        const firstItem = items[0];
+        // tslint:disable-next-line:strict-type-predicates
+        if (firstItem !== undefined) {
+          focusItem(firstItem);
+        }
+        break;
+      /**
+       * End should move focus to the last focusable ion-item.
+       */
+      case 'End':
+        ev.preventDefault();
+        const lastItem = items[items.length - 1];
+        // tslint:disable-next-line:strict-type-predicates
+        if (lastItem !== undefined) {
+          focusItem(lastItem);
+        }
+        break;
+      /**
+       * ArrowRight, Spacebar, or Enter should activate
+       * the currently focused trigger item to open a
+       * popover if the element is a trigger item.
+       */
+      case 'ArrowRight':
+      case ' ':
+      case 'Enter':
+        if (activeElement && isTriggerElement(activeElement)) {
+          const rightEvent = new CustomEvent('ionPopoverActivateTrigger');
+          activeElement.dispatchEvent(rightEvent);
+        }
+        break;
+    }
+  };
+  popoverEl.addEventListener('keydown', callback);
+  return () => popoverEl.removeEventListener('keydown', callback);
+};
+/**
+ * Positions a popover by taking into account
+ * the reference point, preferred side, alignment
+ * and viewport dimensions.
+ */
+const getPopoverPosition = (isRTL, contentWidth, contentHeight, arrowWidth, arrowHeight, reference, side, align, defaultPosition, triggerEl, event) => {
+  var _a;
+  let referenceCoordinates = {
+    top: 0,
+    left: 0,
+    width: 0,
+    height: 0
+  };
+  /**
+   * Calculate position relative to the
+   * x-y coordinates in the event that
+   * was passed in
+   */
+  switch (reference) {
+    case 'event':
+      if (!event) {
+        return defaultPosition;
+      }
+      const mouseEv = event;
+      referenceCoordinates = {
+        top: mouseEv.clientY,
+        left: mouseEv.clientX,
+        width: 1,
+        height: 1
+      };
+      break;
+    /**
+     * Calculate position relative to the bounding
+     * box on either the trigger element
+     * specified via the `trigger` prop or
+     * the target specified on the event
+     * that was passed in.
+     */
+    case 'trigger':
+    default:
+      const customEv = event;
+      /**
+       * ionShadowTarget is used when we need to align the
+       * popover with an element inside of the shadow root
+       * of an Ionic component. Ex: Presenting a popover
+       * by clicking on the collapsed indicator inside
+       * of `ion-breadcrumb` and centering it relative
+       * to the indicator rather than `ion-breadcrumb`
+       * as a whole.
+       */
+      const actualTriggerEl = (triggerEl || ((_a = customEv === null || customEv === void 0 ? void 0 : customEv.detail) === null || _a === void 0 ? void 0 : _a.ionShadowTarget) || (customEv === null || customEv === void 0 ? void 0 : customEv.target));
+      if (!actualTriggerEl) {
+        return defaultPosition;
+      }
+      const triggerBoundingBox = actualTriggerEl.getBoundingClientRect();
+      referenceCoordinates = {
+        top: triggerBoundingBox.top,
+        left: triggerBoundingBox.left,
+        width: triggerBoundingBox.width,
+        height: triggerBoundingBox.height
+      };
+      break;
+  }
+  /**
+   * Get top/left offset that would allow
+   * popover to be positioned on the
+   * preferred side of the reference.
+   */
+  const coordinates = calculatePopoverSide(side, referenceCoordinates, contentWidth, contentHeight, arrowWidth, arrowHeight, isRTL);
+  /**
+   * Get the top/left adjustments that
+   * would allow the popover content
+   * to have the correct alignment.
+   */
+  const alignedCoordinates = calculatePopoverAlign(align, side, referenceCoordinates, contentWidth, contentHeight);
+  const top = coordinates.top + alignedCoordinates.top;
+  const left = coordinates.left + alignedCoordinates.left;
+  const { arrowTop, arrowLeft } = calculateArrowPosition(side, arrowWidth, arrowHeight, top, left, contentWidth, contentHeight, isRTL);
+  const { originX, originY } = calculatePopoverOrigin(side, align, isRTL);
+  return { top, left, referenceCoordinates, arrowTop, arrowLeft, originX, originY };
+};
+/**
+ * Determines the transform-origin
+ * of the popover animation so that it
+ * is in line with what the side and alignment
+ * prop values are. Currently only used
+ * with the MD animation.
+ */
+const calculatePopoverOrigin = (side, align, isRTL) => {
+  switch (side) {
+    case 'top':
+      return { originX: getOriginXAlignment(align), originY: 'bottom' };
+    case 'bottom':
+      return { originX: getOriginXAlignment(align), originY: 'top' };
+    case 'left':
+      return { originX: 'right', originY: getOriginYAlignment(align) };
+    case 'right':
+      return { originX: 'left', originY: getOriginYAlignment(align) };
+    case 'start':
+      return { originX: (isRTL) ? 'left' : 'right', originY: getOriginYAlignment(align) };
+    case 'end':
+      return { originX: (isRTL) ? 'right' : 'left', originY: getOriginYAlignment(align) };
+  }
+};
+const getOriginXAlignment = (align) => {
+  switch (align) {
+    case 'start':
+      return 'left';
+    case 'center':
+      return 'center';
+    case 'end':
+      return 'right';
+  }
+};
+const getOriginYAlignment = (align) => {
+  switch (align) {
+    case 'start':
+      return 'top';
+    case 'center':
+      return 'center';
+    case 'end':
+      return 'bottom';
+  }
+};
+/**
+ * Calculates where the arrow positioning
+ * should be relative to the popover content.
+ */
+const calculateArrowPosition = (side, arrowWidth, arrowHeight, top, left, contentWidth, contentHeight, isRTL) => {
+  /**
+   * Note: When side is left, right, start, or end, the arrow is
+   * been rotated using a `transform`, so to move the arrow up or down
+   * by its dimension, you need to use `arrowWidth`.
+   */
+  const leftPosition = { arrowTop: top + (contentHeight / 2) - (arrowWidth / 2), arrowLeft: left + contentWidth - (arrowWidth / 2) };
+  /**
+   * Move the arrow to the left by arrowWidth and then
+   * again by half of its width because we have rotated
+   * the arrow using a transform.
+   */
+  const rightPosition = { arrowTop: top + (contentHeight / 2) - (arrowWidth / 2), arrowLeft: left - (arrowWidth * 1.5) };
+  switch (side) {
+    case 'top':
+      return { arrowTop: top + contentHeight, arrowLeft: left + (contentWidth / 2) - (arrowWidth / 2) };
+    case 'bottom':
+      return { arrowTop: top - arrowHeight, arrowLeft: left + (contentWidth / 2) - (arrowWidth / 2) };
+    case 'left':
+      return leftPosition;
+    case 'right':
+      return rightPosition;
+    case 'start':
+      return (isRTL) ? rightPosition : leftPosition;
+    case 'end':
+      return (isRTL) ? leftPosition : rightPosition;
+    default:
+      return { arrowTop: 0, arrowLeft: 0 };
+  }
+};
+/**
+ * Calculates the required top/left
+ * values needed to position the popover
+ * content on the side specified in the
+ * `side` prop.
+ */
+const calculatePopoverSide = (side, triggerBoundingBox, contentWidth, contentHeight, arrowWidth, arrowHeight, isRTL) => {
+  const sideLeft = {
+    top: triggerBoundingBox.top,
+    left: triggerBoundingBox.left - contentWidth - arrowWidth
+  };
+  const sideRight = {
+    top: triggerBoundingBox.top,
+    left: triggerBoundingBox.left + triggerBoundingBox.width + arrowWidth
+  };
+  switch (side) {
+    case 'top':
+      return {
+        top: triggerBoundingBox.top - contentHeight - arrowHeight,
+        left: triggerBoundingBox.left
+      };
+    case 'right':
+      return sideRight;
+    case 'bottom':
+      return {
+        top: triggerBoundingBox.top + triggerBoundingBox.height + arrowHeight,
+        left: triggerBoundingBox.left
+      };
+    case 'left':
+      return sideLeft;
+    case 'start':
+      return (isRTL) ? sideRight : sideLeft;
+    case 'end':
+      return (isRTL) ? sideLeft : sideRight;
+  }
+};
+/**
+ * Calculates the required top/left
+ * offset values needed to provide the
+ * correct alignment regardless while taking
+ * into account the side the popover is on.
+ */
+const calculatePopoverAlign = (align, side, triggerBoundingBox, contentWidth, contentHeight) => {
+  switch (align) {
+    case 'center':
+      return calculatePopoverCenterAlign(side, triggerBoundingBox, contentWidth, contentHeight);
+    case 'end':
+      return calculatePopoverEndAlign(side, triggerBoundingBox, contentWidth, contentHeight);
+    case 'start':
+    default:
+      return { top: 0, left: 0 };
+  }
+};
+/**
+ * Calculate the end alignment for
+ * the popover. If side is on the x-axis
+ * then the align values refer to the top
+ * and bottom margins of the content.
+ * If side is on the y-axis then the
+ * align values refer to the left and right
+ * margins of the content.
+ */
+const calculatePopoverEndAlign = (side, triggerBoundingBox, contentWidth, contentHeight) => {
+  switch (side) {
+    case 'start':
+    case 'end':
+    case 'left':
+    case 'right':
+      return {
+        top: -(contentHeight - triggerBoundingBox.height),
+        left: 0
+      };
+    case 'top':
+    case 'bottom':
+    default:
+      return {
+        top: 0,
+        left: -(contentWidth - triggerBoundingBox.width)
+      };
+  }
+};
+/**
+ * Calculate the center alignment for
+ * the popover. If side is on the x-axis
+ * then the align values refer to the top
+ * and bottom margins of the content.
+ * If side is on the y-axis then the
+ * align values refer to the left and right
+ * margins of the content.
+ */
+const calculatePopoverCenterAlign = (side, triggerBoundingBox, contentWidth, contentHeight) => {
+  switch (side) {
+    case 'start':
+    case 'end':
+    case 'left':
+    case 'right':
+      return {
+        top: -((contentHeight / 2) - (triggerBoundingBox.height / 2)),
+        left: 0
+      };
+    case 'top':
+    case 'bottom':
+    default:
+      return {
+        top: 0,
+        left: -((contentWidth / 2) - (triggerBoundingBox.width / 2))
+      };
+  }
+};
+/**
+ * Adjusts popover positioning coordinates
+ * such that popover does not appear offscreen
+ * or overlapping safe area bounds.
+ */
+const calculateWindowAdjustment = (side, coordTop, coordLeft, bodyPadding, bodyWidth, bodyHeight, contentWidth, contentHeight, safeAreaMargin, contentOriginX, contentOriginY, triggerCoordinates, coordArrowTop = 0, coordArrowLeft = 0, arrowHeight = 0) => {
+  let arrowTop = coordArrowTop;
+  const arrowLeft = coordArrowLeft;
+  let left = coordLeft;
+  let top = coordTop;
+  let bottom;
+  let originX = contentOriginX;
+  let originY = contentOriginY;
+  let checkSafeAreaLeft = false;
+  let checkSafeAreaRight = false;
+  const triggerTop = triggerCoordinates ? triggerCoordinates.top + triggerCoordinates.height : bodyHeight / 2 - contentHeight / 2;
+  const triggerHeight = triggerCoordinates ? triggerCoordinates.height : 0;
+  let addPopoverBottomClass = false;
+  /**
+   * Adjust popover so it does not
+   * go off the left of the screen.
+   */
+  if (left < bodyPadding + safeAreaMargin) {
+    left = bodyPadding;
+    checkSafeAreaLeft = true;
+    originX = 'left';
+    /**
+     * Adjust popover so it does not
+     * go off the right of the screen.
+     */
+  }
+  else if (contentWidth + bodyPadding + left + safeAreaMargin > bodyWidth) {
+    checkSafeAreaRight = true;
+    left = bodyWidth - contentWidth - bodyPadding;
+    originX = 'right';
+  }
+  /**
+   * Adjust popover so it does not
+   * go off the top of the screen.
+   * If popover is on the left or the right of
+   * the trigger, then we should not adjust top
+   * margins.
+   */
+  if (triggerTop + triggerHeight + contentHeight > bodyHeight &&
+    (side === 'top' || side === 'bottom')) {
+    if (triggerTop - contentHeight > 0) {
+      top = triggerTop - contentHeight - triggerHeight - (arrowHeight - 1);
+      arrowTop = top + contentHeight;
+      originY = 'bottom';
+      addPopoverBottomClass = true;
+      /**
+       * If not enough room for popover to appear
+       * above trigger, then cut it off.
+       */
+    }
+    else {
+      bottom = bodyPadding;
+    }
+  }
+  return { top, left, bottom, originX, originY, checkSafeAreaLeft, checkSafeAreaRight, arrowTop, arrowLeft, addPopoverBottomClass };
+};
+const shouldShowArrow = (side, didAdjustBounds = false, ev, trigger) => {
+  /**
+   * If no event provided and
+   * we do not have a trigger,
+   * then this popover was likely
+   * presented via the popoverController
+   * or users called `present` manually.
+   * In this case, the arrow should not be
+   * shown as we do not have a reference.
+   */
+  if (!ev && !trigger) {
+    return false;
+  }
+  /**
+   * If popover is on the left or the right
+   * of a trigger, but we needed to adjust the
+   * popover due to screen bounds, then we should
+   * hide the arrow as it will never be pointing
+   * at the trigger.
+   */
+  if (side !== 'top' && side !== 'bottom' && didAdjustBounds) {
+    return false;
+  }
+  return true;
+};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const POPOVER_IOS_BODY_PADDING = 5;
 /**
  * iOS Popover Enter Animation
  */
-const iosEnterAnimation$1 = (baseEl, ev) => {
-  let originY = 'top';
-  let originX = 'left';
-  const contentEl = baseEl.querySelector('.popover-content');
-  const contentDimentions = contentEl.getBoundingClientRect();
-  const contentWidth = contentDimentions.width;
-  const contentHeight = contentDimentions.height;
-  const bodyWidth = baseEl.ownerDocument.defaultView.innerWidth;
-  const bodyHeight = baseEl.ownerDocument.defaultView.innerHeight;
-  // If ev was passed, use that for target element
-  const targetDim = ev && ev.target && ev.target.getBoundingClientRect();
-  const targetTop = targetDim != null && 'top' in targetDim ? targetDim.top : bodyHeight / 2 - contentHeight / 2;
-  const targetLeft = targetDim != null && 'left' in targetDim ? targetDim.left : bodyWidth / 2;
-  const targetWidth = (targetDim && targetDim.width) || 0;
-  const targetHeight = (targetDim && targetDim.height) || 0;
-  const arrowEl = baseEl.querySelector('.popover-arrow');
-  const arrowDim = arrowEl.getBoundingClientRect();
-  const arrowWidth = arrowDim.width;
-  const arrowHeight = arrowDim.height;
-  if (targetDim == null) {
-    arrowEl.style.display = 'none';
-  }
-  const arrowCSS = {
-    top: targetTop + targetHeight,
-    left: targetLeft + targetWidth / 2 - arrowWidth / 2
+const iosEnterAnimation$1 = (baseEl, opts) => {
+  var _a;
+  const { event: ev, size, trigger, reference, side, align } = opts;
+  const doc = baseEl.ownerDocument;
+  const isRTL = doc.dir === 'rtl';
+  const bodyWidth = doc.defaultView.innerWidth;
+  const bodyHeight = doc.defaultView.innerHeight;
+  const root = getElementRoot(baseEl);
+  const contentEl = root.querySelector('.popover-content');
+  const arrowEl = root.querySelector('.popover-arrow');
+  const referenceSizeEl = trigger || ((_a = ev === null || ev === void 0 ? void 0 : ev.detail) === null || _a === void 0 ? void 0 : _a.ionShadowTarget) || (ev === null || ev === void 0 ? void 0 : ev.target);
+  const { contentWidth, contentHeight } = getPopoverDimensions(size, contentEl, referenceSizeEl);
+  const { arrowWidth, arrowHeight } = getArrowDimensions(arrowEl);
+  const defaultPosition = {
+    top: bodyHeight / 2 - contentHeight / 2,
+    left: bodyWidth / 2 - contentWidth / 2,
+    originX: isRTL ? 'right' : 'left',
+    originY: 'top'
   };
-  const popoverCSS = {
-    top: targetTop + targetHeight + (arrowHeight - 1),
-    left: targetLeft + targetWidth / 2 - contentWidth / 2
-  };
-  // If the popover left is less than the padding it is off screen
-  // to the left so adjust it, else if the width of the popover
-  // exceeds the body width it is off screen to the right so adjust
-  //
-  let checkSafeAreaLeft = false;
-  let checkSafeAreaRight = false;
-  // If the popover left is less than the padding it is off screen
-  // to the left so adjust it, else if the width of the popover
-  // exceeds the body width it is off screen to the right so adjust
-  // 25 is a random/arbitrary number. It seems to work fine for ios11
-  // and iPhoneX. Is it perfect? No. Does it work? Yes.
-  if (popoverCSS.left < POPOVER_IOS_BODY_PADDING + 25) {
-    checkSafeAreaLeft = true;
-    popoverCSS.left = POPOVER_IOS_BODY_PADDING;
-  }
-  else if (contentWidth + POPOVER_IOS_BODY_PADDING + popoverCSS.left + 25 > bodyWidth) {
-    // Ok, so we're on the right side of the screen,
-    // but now we need to make sure we're still a bit further right
-    // cus....notchurally... Again, 25 is random. It works tho
-    checkSafeAreaRight = true;
-    popoverCSS.left = bodyWidth - contentWidth - POPOVER_IOS_BODY_PADDING;
-    originX = 'right';
-  }
-  // make it pop up if there's room above
-  if (targetTop + targetHeight + contentHeight > bodyHeight && targetTop - contentHeight > 0) {
-    arrowCSS.top = targetTop - (arrowHeight + 1);
-    popoverCSS.top = targetTop - contentHeight - (arrowHeight - 1);
-    baseEl.className = baseEl.className + ' popover-bottom';
-    originY = 'bottom';
-    // If there isn't room for it to pop up above the target cut it off
-  }
-  else if (targetTop + targetHeight + contentHeight > bodyHeight) {
-    contentEl.style.bottom = POPOVER_IOS_BODY_PADDING + '%';
-  }
-  arrowEl.style.top = arrowCSS.top + 'px';
-  arrowEl.style.left = arrowCSS.left + 'px';
-  contentEl.style.top = popoverCSS.top + 'px';
-  contentEl.style.left = popoverCSS.left + 'px';
-  if (checkSafeAreaLeft) {
-    contentEl.style.left = `calc(${popoverCSS.left}px + var(--ion-safe-area-left, 0px))`;
-  }
-  if (checkSafeAreaRight) {
-    contentEl.style.left = `calc(${popoverCSS.left}px - var(--ion-safe-area-right, 0px))`;
-  }
-  contentEl.style.transformOrigin = originY + ' ' + originX;
+  const results = getPopoverPosition(isRTL, contentWidth, contentHeight, arrowWidth, arrowHeight, reference, side, align, defaultPosition, trigger, ev);
+  const padding = size === 'cover' ? 0 : POPOVER_IOS_BODY_PADDING;
+  const margin = size === 'cover' ? 0 : 25;
+  const { originX, originY, top, left, bottom, checkSafeAreaLeft, checkSafeAreaRight, arrowTop, arrowLeft, addPopoverBottomClass } = calculateWindowAdjustment(side, results.top, results.left, padding, bodyWidth, bodyHeight, contentWidth, contentHeight, margin, results.originX, results.originY, results.referenceCoordinates, results.arrowTop, results.arrowLeft, arrowHeight);
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
   backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
+    .addElement(root.querySelector('ion-backdrop'))
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
     'pointer-events': 'none'
   })
     .afterClearStyles(['pointer-events']);
   wrapperAnimation
-    .addElement(baseEl.querySelector('.popover-wrapper'))
+    .addElement(root.querySelector('.popover-wrapper'))
     .fromTo('opacity', 0.01, 1);
   return baseAnimation
-    .addElement(baseEl)
     .easing('ease')
     .duration(100)
+    .beforeAddWrite(() => {
+    if (size === 'cover') {
+      baseEl.style.setProperty('--width', `${contentWidth}px`);
+    }
+    if (addPopoverBottomClass) {
+      baseEl.classList.add('popover-bottom');
+    }
+    if (bottom !== undefined) {
+      contentEl.style.setProperty('bottom', `${bottom}px`);
+    }
+    const safeAreaLeft = ' + var(--ion-safe-area-left, 0)';
+    const safeAreaRight = ' - var(--ion-safe-area-right, 0)';
+    let leftValue = `${left}px`;
+    if (checkSafeAreaLeft) {
+      leftValue = `${left}px${safeAreaLeft}`;
+    }
+    if (checkSafeAreaRight) {
+      leftValue = `${left}px${safeAreaRight}`;
+    }
+    contentEl.style.setProperty('top', `calc(${top}px + var(--offset-y, 0))`);
+    contentEl.style.setProperty('left', `calc(${leftValue} + var(--offset-x, 0))`);
+    contentEl.style.setProperty('transform-origin', `${originY} ${originX}`);
+    if (arrowEl !== null) {
+      const didAdjustBounds = results.top !== top || results.left !== left;
+      const showArrow = shouldShowArrow(side, didAdjustBounds, ev, trigger);
+      if (showArrow) {
+        arrowEl.style.setProperty('top', `calc(${arrowTop}px + var(--offset-y, 0))`);
+        arrowEl.style.setProperty('left', `calc(${arrowLeft}px + var(--offset-x, 0))`);
+      }
+      else {
+        arrowEl.style.setProperty('display', 'none');
+      }
+    }
+  })
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
-const POPOVER_IOS_BODY_PADDING = 5;
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * iOS Popover Leave Animation
  */
 const iosLeaveAnimation$1 = (baseEl) => {
+  const root = getElementRoot(baseEl);
+  const contentEl = root.querySelector('.popover-content');
+  const arrowEl = root.querySelector('.popover-arrow');
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
   backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
+    .addElement(root.querySelector('ion-backdrop'))
     .fromTo('opacity', 'var(--backdrop-opacity)', 0);
   wrapperAnimation
-    .addElement(baseEl.querySelector('.popover-wrapper'))
+    .addElement(root.querySelector('.popover-wrapper'))
     .fromTo('opacity', 0.99, 0);
   return baseAnimation
-    .addElement(baseEl)
     .easing('ease')
-    .duration(500)
+    .afterAddWrite(() => {
+    baseEl.style.removeProperty('--width');
+    baseEl.classList.remove('popover-bottom');
+    contentEl.style.removeProperty('top');
+    contentEl.style.removeProperty('left');
+    contentEl.style.removeProperty('bottom');
+    contentEl.style.removeProperty('transform-origin');
+    if (arrowEl) {
+      arrowEl.style.removeProperty('top');
+      arrowEl.style.removeProperty('left');
+      arrowEl.style.removeProperty('display');
+    }
+  })
+    .duration(300)
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+const POPOVER_MD_BODY_PADDING = 12;
 /**
  * Md Popover Enter Animation
  */
-const mdEnterAnimation$1 = (baseEl, ev) => {
-  const POPOVER_MD_BODY_PADDING = 12;
+const mdEnterAnimation$1 = (baseEl, opts) => {
+  var _a;
+  const { event: ev, size, trigger, reference, side, align } = opts;
   const doc = baseEl.ownerDocument;
   const isRTL = doc.dir === 'rtl';
-  let originY = 'top';
-  let originX = isRTL ? 'right' : 'left';
-  const contentEl = baseEl.querySelector('.popover-content');
-  const contentDimentions = contentEl.getBoundingClientRect();
-  const contentWidth = contentDimentions.width;
-  const contentHeight = contentDimentions.height;
   const bodyWidth = doc.defaultView.innerWidth;
   const bodyHeight = doc.defaultView.innerHeight;
-  // If ev was passed, use that for target element
-  const targetDim = ev && ev.target && ev.target.getBoundingClientRect();
-  // As per MD spec, by default position the popover below the target (trigger) element
-  const targetTop = targetDim != null && 'bottom' in targetDim
-    ? targetDim.bottom
-    : bodyHeight / 2 - contentHeight / 2;
-  const targetLeft = targetDim != null && 'left' in targetDim
-    ? isRTL
-      ? targetDim.left - contentWidth + targetDim.width
-      : targetDim.left
-    : bodyWidth / 2 - contentWidth / 2;
-  const targetHeight = (targetDim && targetDim.height) || 0;
-  const popoverCSS = {
-    top: targetTop,
-    left: targetLeft
+  const root = getElementRoot(baseEl);
+  const contentEl = root.querySelector('.popover-content');
+  const referenceSizeEl = trigger || ((_a = ev === null || ev === void 0 ? void 0 : ev.detail) === null || _a === void 0 ? void 0 : _a.ionShadowTarget) || (ev === null || ev === void 0 ? void 0 : ev.target);
+  const { contentWidth, contentHeight } = getPopoverDimensions(size, contentEl, referenceSizeEl);
+  const defaultPosition = {
+    top: bodyHeight / 2 - contentHeight / 2,
+    left: bodyWidth / 2 - contentWidth / 2,
+    originX: isRTL ? 'right' : 'left',
+    originY: 'top'
   };
-  // If the popover left is less than the padding it is off screen
-  // to the left so adjust it, else if the width of the popover
-  // exceeds the body width it is off screen to the right so adjust
-  if (popoverCSS.left < POPOVER_MD_BODY_PADDING) {
-    popoverCSS.left = POPOVER_MD_BODY_PADDING;
-    // Same origin in this case for both LTR & RTL
-    // Note: in LTR, originX is already 'left'
-    originX = 'left';
-  }
-  else if (contentWidth + POPOVER_MD_BODY_PADDING + popoverCSS.left >
-    bodyWidth) {
-    popoverCSS.left = bodyWidth - contentWidth - POPOVER_MD_BODY_PADDING;
-    // Same origin in this case for both LTR & RTL
-    // Note: in RTL, originX is already 'right'
-    originX = 'right';
-  }
-  // If the popover when popped down stretches past bottom of screen,
-  // make it pop up if there's room above
-  if (targetTop + targetHeight + contentHeight > bodyHeight &&
-    targetTop - contentHeight > 0) {
-    popoverCSS.top = targetTop - contentHeight - targetHeight;
-    baseEl.className = baseEl.className + ' popover-bottom';
-    originY = 'bottom';
-    // If there isn't room for it to pop up above the target cut it off
-  }
-  else if (targetTop + targetHeight + contentHeight > bodyHeight) {
-    contentEl.style.bottom = POPOVER_MD_BODY_PADDING + 'px';
-  }
+  const results = getPopoverPosition(isRTL, contentWidth, contentHeight, 0, 0, reference, side, align, defaultPosition, trigger, ev);
+  const padding = size === 'cover' ? 0 : POPOVER_MD_BODY_PADDING;
+  const { originX, originY, top, left, bottom } = calculateWindowAdjustment(side, results.top, results.left, padding, bodyWidth, bodyHeight, contentWidth, contentHeight, 0, results.originX, results.originY, results.referenceCoordinates);
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
   const contentAnimation = createAnimation();
   const viewportAnimation = createAnimation();
   backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
+    .addElement(root.querySelector('ion-backdrop'))
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
     'pointer-events': 'none'
   })
     .afterClearStyles(['pointer-events']);
   wrapperAnimation
-    .addElement(baseEl.querySelector('.popover-wrapper'))
+    .addElement(root.querySelector('.popover-wrapper'))
+    .duration(150)
     .fromTo('opacity', 0.01, 1);
   contentAnimation
     .addElement(contentEl)
     .beforeStyles({
-    'top': `${popoverCSS.top}px`,
-    'left': `${popoverCSS.left}px`,
+    'top': `calc(${top}px + var(--offset-y, 0px))`,
+    'left': `calc(${left}px + var(--offset-x, 0px))`,
     'transform-origin': `${originY} ${originX}`
   })
-    .fromTo('transform', 'scale(0.001)', 'scale(1)');
+    .beforeAddWrite(() => {
+    if (bottom !== undefined) {
+      contentEl.style.setProperty('bottom', `${bottom}px`);
+    }
+  })
+    .fromTo('transform', 'scale(0.8)', 'scale(1)');
   viewportAnimation
-    .addElement(baseEl.querySelector('.popover-viewport'))
+    .addElement(root.querySelector('.popover-viewport'))
     .fromTo('opacity', 0.01, 1);
   return baseAnimation
-    .addElement(baseEl)
     .easing('cubic-bezier(0.36,0.66,0.04,1)')
     .duration(300)
+    .beforeAddWrite(() => {
+    if (size === 'cover') {
+      baseEl.style.setProperty('--width', `${contentWidth}px`);
+    }
+    if (originY === 'bottom') {
+      baseEl.classList.add('popover-bottom');
+    }
+  })
     .addAnimation([backdropAnimation, wrapperAnimation, contentAnimation, viewportAnimation]);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * Md Popover Leave Animation
  */
 const mdLeaveAnimation$1 = (baseEl) => {
+  const root = getElementRoot(baseEl);
+  const contentEl = root.querySelector('.popover-content');
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
   backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
+    .addElement(root.querySelector('ion-backdrop'))
     .fromTo('opacity', 'var(--backdrop-opacity)', 0);
   wrapperAnimation
-    .addElement(baseEl.querySelector('.popover-wrapper'))
+    .addElement(root.querySelector('.popover-wrapper'))
     .fromTo('opacity', 0.99, 0);
   return baseAnimation
-    .addElement(baseEl)
     .easing('ease')
-    .duration(500)
+    .afterAddWrite(() => {
+    baseEl.style.removeProperty('--width');
+    baseEl.classList.remove('popover-bottom');
+    contentEl.style.removeProperty('top');
+    contentEl.style.removeProperty('left');
+    contentEl.style.removeProperty('bottom');
+    contentEl.style.removeProperty('transform-origin');
+  })
+    .duration(150)
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
-const popoverIosCss = ".sc-ion-popover-ios-h{--background:var(--ion-background-color, #fff);--min-width:0;--min-height:0;--max-width:auto;--height:auto;left:0;right:0;top:0;bottom:0;display:flex;position:fixed;align-items:center;justify-content:center;outline:none;color:var(--ion-text-color, #000);z-index:1001}.overlay-hidden.sc-ion-popover-ios-h{display:none}.popover-wrapper.sc-ion-popover-ios{opacity:0;z-index:10}.popover-content.sc-ion-popover-ios{display:flex;position:absolute;flex-direction:column;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);box-shadow:var(--box-shadow);overflow:auto;z-index:10}.popover-viewport.sc-ion-popover-ios{--ion-safe-area-top:0px;--ion-safe-area-right:0px;--ion-safe-area-bottom:0px;--ion-safe-area-left:0px;display:flex;flex-direction:column;overflow:hidden}.sc-ion-popover-ios-h{--width:200px;--max-height:90%;--box-shadow:none;--backdrop-opacity:var(--ion-backdrop-opacity, 0.08)}.popover-content.sc-ion-popover-ios{border-radius:10px}.popover-arrow.sc-ion-popover-ios{display:block;position:absolute;width:20px;height:10px;overflow:hidden}.popover-arrow.sc-ion-popover-ios::after{left:3px;top:3px;border-radius:3px;position:absolute;width:14px;height:14px;transform:rotate(45deg);background:var(--background);content:\"\";z-index:10}[dir=rtl].sc-ion-popover-ios .popover-arrow.sc-ion-popover-ios::after,[dir=rtl].sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after,[dir=rtl] .sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{left:unset;right:unset;right:3px}.popover-bottom.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{top:auto;bottom:-10px}.popover-bottom.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{top:-6px}@supports (backdrop-filter: blur(0)){.popover-translucent.sc-ion-popover-ios-h .popover-content.sc-ion-popover-ios,.popover-translucent.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{background:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);backdrop-filter:saturate(180%) blur(20px)}}";
+const popoverIosCss = "/*!@:host*/.sc-ion-popover-ios-h{--background:var(--ion-background-color, #fff);--min-width:0;--min-height:0;--max-width:auto;--height:auto;--offset-x:0px;--offset-y:0px;left:0;right:0;top:0;bottom:0;display:flex;position:fixed;align-items:center;justify-content:center;outline:none;color:var(--ion-text-color, #000);z-index:1001}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-popover-ios-h{display:none}/*!@.popover-wrapper*/.popover-wrapper.sc-ion-popover-ios{opacity:0;z-index:10}/*!@.popover-content*/.popover-content.sc-ion-popover-ios{display:flex;position:absolute;flex-direction:column;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);box-shadow:var(--box-shadow);overflow:auto;z-index:10}/*!@.popover-viewport*/.popover-viewport.sc-ion-popover-ios{--ion-safe-area-top:0px;--ion-safe-area-right:0px;--ion-safe-area-bottom:0px;--ion-safe-area-left:0px;display:flex;flex-direction:column;overflow:hidden}/*!@:host(.popover-nested.popover-side-left)*/.popover-nested.popover-side-left.sc-ion-popover-ios-h{--offset-x:5px}/*!@:host(.popover-nested.popover-side-right)*/.popover-nested.popover-side-right.sc-ion-popover-ios-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-start)*/.popover-nested.popover-side-start.sc-ion-popover-ios-h{--offset-x:5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-start), :host-context([dir=rtl]).popover-nested.popover-side-start*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-ios-h,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-ios-h,[dir=rtl].popover-nested.popover-side-start.sc-ion-popover-ios-h,[dir=rtl] .popover-nested.popover-side-start.sc-ion-popover-ios-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-end)*/.popover-nested.popover-side-end.sc-ion-popover-ios-h{--offset-x:-5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-end), :host-context([dir=rtl]).popover-nested.popover-side-end*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-ios-h,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-ios-h,[dir=rtl].popover-nested.popover-side-end.sc-ion-popover-ios-h,[dir=rtl] .popover-nested.popover-side-end.sc-ion-popover-ios-h{--offset-x:5px}/*!@:host*/.sc-ion-popover-ios-h{--width:200px;--max-height:90%;--box-shadow:none;--backdrop-opacity:var(--ion-backdrop-opacity, 0.08)}/*!@:host(.popover-desktop)*/.popover-desktop.sc-ion-popover-ios-h{--box-shadow:0px 4px 16px 0px rgba(0, 0, 0, 0.12)}/*!@.popover-content*/.popover-content.sc-ion-popover-ios{border-radius:10px}/*!@:host(.popover-desktop) .popover-content*/.popover-desktop.sc-ion-popover-ios-h .popover-content.sc-ion-popover-ios{border:0.5px solid var(--ion-color-step-100, #e6e6e6)}/*!@.popover-arrow*/.popover-arrow.sc-ion-popover-ios{display:block;position:absolute;width:20px;height:10px;overflow:hidden}/*!@.popover-arrow::after*/.popover-arrow.sc-ion-popover-ios::after{left:3px;top:3px;border-radius:3px;position:absolute;width:14px;height:14px;transform:rotate(45deg);background:var(--background);content:\"\";z-index:10}/*!@[dir=rtl] .popover-arrow::after, :host-context([dir=rtl]) .popover-arrow::after*/[dir=rtl].sc-ion-popover-ios .popover-arrow.sc-ion-popover-ios::after,[dir=rtl].sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after,[dir=rtl] .sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{left:unset;right:unset;right:3px}/*!@:host(.popover-bottom) .popover-arrow*/.popover-bottom.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{top:auto;bottom:-10px}/*!@:host(.popover-bottom) .popover-arrow::after*/.popover-bottom.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{top:-6px}/*!@:host(.popover-side-left) .popover-arrow*/.popover-side-left.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(90deg)}/*!@:host(.popover-side-right) .popover-arrow*/.popover-side-right.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(-90deg)}/*!@:host(.popover-side-top) .popover-arrow*/.popover-side-top.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(180deg)}/*!@:host(.popover-side-start) .popover-arrow*/.popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(90deg)}/*!@:host-context([dir=rtl]):host(.popover-side-start) .popover-arrow, :host-context([dir=rtl]).popover-side-start .popover-arrow*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl].popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(-90deg)}/*!@:host(.popover-side-end) .popover-arrow*/.popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(-90deg)}/*!@:host-context([dir=rtl]):host(.popover-side-end) .popover-arrow, :host-context([dir=rtl]).popover-side-end .popover-arrow*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl].popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(90deg)}@supports (backdrop-filter: blur(0)){/*!@:host(.popover-translucent) .popover-content,\n:host(.popover-translucent) .popover-arrow::after*/.popover-translucent.sc-ion-popover-ios-h .popover-content.sc-ion-popover-ios,.popover-translucent.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{background:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);backdrop-filter:saturate(180%) blur(20px)}}";
 
-const popoverMdCss = ".sc-ion-popover-md-h{--background:var(--ion-background-color, #fff);--min-width:0;--min-height:0;--max-width:auto;--height:auto;left:0;right:0;top:0;bottom:0;display:flex;position:fixed;align-items:center;justify-content:center;outline:none;color:var(--ion-text-color, #000);z-index:1001}.overlay-hidden.sc-ion-popover-md-h{display:none}.popover-wrapper.sc-ion-popover-md{opacity:0;z-index:10}.popover-content.sc-ion-popover-md{display:flex;position:absolute;flex-direction:column;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);box-shadow:var(--box-shadow);overflow:auto;z-index:10}.popover-viewport.sc-ion-popover-md{--ion-safe-area-top:0px;--ion-safe-area-right:0px;--ion-safe-area-bottom:0px;--ion-safe-area-left:0px;display:flex;flex-direction:column;overflow:hidden}.sc-ion-popover-md-h{--width:250px;--max-height:90%;--box-shadow:0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);--backdrop-opacity:var(--ion-backdrop-opacity, 0.32)}.popover-content.sc-ion-popover-md{border-radius:4px;transform-origin:left top}[dir=rtl].sc-ion-popover-md .popover-content.sc-ion-popover-md,[dir=rtl].sc-ion-popover-md-h .popover-content.sc-ion-popover-md,[dir=rtl] .sc-ion-popover-md-h .popover-content.sc-ion-popover-md{transform-origin:right top}.popover-viewport.sc-ion-popover-md{transition-delay:100ms}";
+const popoverMdCss = "/*!@:host*/.sc-ion-popover-md-h{--background:var(--ion-background-color, #fff);--min-width:0;--min-height:0;--max-width:auto;--height:auto;--offset-x:0px;--offset-y:0px;left:0;right:0;top:0;bottom:0;display:flex;position:fixed;align-items:center;justify-content:center;outline:none;color:var(--ion-text-color, #000);z-index:1001}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-popover-md-h{display:none}/*!@.popover-wrapper*/.popover-wrapper.sc-ion-popover-md{opacity:0;z-index:10}/*!@.popover-content*/.popover-content.sc-ion-popover-md{display:flex;position:absolute;flex-direction:column;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);box-shadow:var(--box-shadow);overflow:auto;z-index:10}/*!@.popover-viewport*/.popover-viewport.sc-ion-popover-md{--ion-safe-area-top:0px;--ion-safe-area-right:0px;--ion-safe-area-bottom:0px;--ion-safe-area-left:0px;display:flex;flex-direction:column;overflow:hidden}/*!@:host(.popover-nested.popover-side-left)*/.popover-nested.popover-side-left.sc-ion-popover-md-h{--offset-x:5px}/*!@:host(.popover-nested.popover-side-right)*/.popover-nested.popover-side-right.sc-ion-popover-md-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-start)*/.popover-nested.popover-side-start.sc-ion-popover-md-h{--offset-x:5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-start), :host-context([dir=rtl]).popover-nested.popover-side-start*/[dir=rtl].sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-md-h,[dir=rtl] .sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-md-h,[dir=rtl].popover-nested.popover-side-start.sc-ion-popover-md-h,[dir=rtl] .popover-nested.popover-side-start.sc-ion-popover-md-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-end)*/.popover-nested.popover-side-end.sc-ion-popover-md-h{--offset-x:-5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-end), :host-context([dir=rtl]).popover-nested.popover-side-end*/[dir=rtl].sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-md-h,[dir=rtl] .sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-md-h,[dir=rtl].popover-nested.popover-side-end.sc-ion-popover-md-h,[dir=rtl] .popover-nested.popover-side-end.sc-ion-popover-md-h{--offset-x:5px}/*!@:host*/.sc-ion-popover-md-h{--width:250px;--max-height:90%;--box-shadow:0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);--backdrop-opacity:var(--ion-backdrop-opacity, 0.32)}/*!@.popover-content*/.popover-content.sc-ion-popover-md{border-radius:4px;transform-origin:left top}/*!@[dir=rtl] .popover-content, :host-context([dir=rtl]) .popover-content*/[dir=rtl].sc-ion-popover-md .popover-content.sc-ion-popover-md,[dir=rtl].sc-ion-popover-md-h .popover-content.sc-ion-popover-md,[dir=rtl] .sc-ion-popover-md-h .popover-content.sc-ion-popover-md{transform-origin:right top}/*!@.popover-viewport*/.popover-viewport.sc-ion-popover-md{transition-delay:100ms}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ *
+ * @slot - Content is placed inside of the `.popover-content` element.
+ *
+ * @part backdrop - The `ion-backdrop` element.
+ * @part arrow - The arrow that points to the reference element. Only applies on `ios` mode.
+ * @part content - The wrapper element for the default slot.
  */
 class Popover {
   constructor(hostRef) {
@@ -35485,7 +40111,18 @@ class Popover {
     this.willPresent = createEvent(this, "ionPopoverWillPresent", 7);
     this.willDismiss = createEvent(this, "ionPopoverWillDismiss", 7);
     this.didDismiss = createEvent(this, "ionPopoverDidDismiss", 7);
+    this.didPresentShorthand = createEvent(this, "didPresent", 7);
+    this.willPresentShorthand = createEvent(this, "willPresent", 7);
+    this.willDismissShorthand = createEvent(this, "willDismiss", 7);
+    this.didDismissShorthand = createEvent(this, "didDismiss", 7);
+    this.parentPopover = null;
+    this.popoverIndex = popoverIds++;
+    this.coreDelegate = CoreDelegate();
+    this.inline = false;
+    this.focusDescendantOnPresent = false;
     this.presented = false;
+    /** @internal */
+    this.hasController = false;
     /**
      * If `true`, the keyboard will be automatically dismissed when the overlay is presented.
      */
@@ -35508,6 +40145,75 @@ class Popover {
      * If `true`, the popover will animate.
      */
     this.animated = true;
+    /**
+     * Describes what kind of interaction with the trigger that
+     * should cause the popover to open. Does not apply when the `trigger`
+     * property is `undefined`.
+     * If `'click'`, the popover will be presented when the trigger is left clicked.
+     * If `'hover'`, the popover will be presented when a pointer hovers over the trigger.
+     * If `'context-menu'`, the popover will be presented when the trigger is right
+     * clicked on desktop and long pressed on mobile. This will also prevent your
+     * device's normal context menu from appearing.
+     */
+    this.triggerAction = 'click';
+    /**
+     * Describes how to calculate the popover width.
+     * If `'cover'`, the popover width will match the width of the trigger.
+     * If `'auto'`, the popover width will be determined by the content in
+     * the popover.
+     */
+    this.size = 'auto';
+    /**
+     * If `true`, the popover will be automatically
+     * dismissed when the content has been clicked.
+     */
+    this.dismissOnSelect = false;
+    /**
+     * Describes what to position the popover relative to.
+     * If `'trigger'`, the popover will be positioned relative
+     * to the trigger button. If passing in an event, this is
+     * determined via event.target.
+     * If `'event'`, the popover will be positioned relative
+     * to the x/y coordinates of the trigger action. If passing
+     * in an event, this is determined via event.clientX and event.clientY.
+     */
+    this.reference = 'trigger';
+    /**
+     * Describes which side of the `reference` point to position
+     * the popover on. The `'start'` and `'end'` values are RTL-aware,
+     * and the `'left'` and `'right'` values are not.
+     */
+    this.side = 'bottom';
+    /**
+     * Describes how to align the popover content with the `reference` point.
+     */
+    this.alignment = 'start';
+    /**
+     * If `true`, the popover will display an arrow
+     * that points at the `reference` when running in `ios` mode
+     * on mobile. Does not apply in `md` mode or on desktop.
+     */
+    this.arrow = true;
+    /**
+     * If `true`, the popover will open. If `false`, the popover will close.
+     * Use this if you need finer grained control over presentation, otherwise
+     * just use the popoverController or the `trigger` property.
+     * Note: `isOpen` will not automatically be set back to `false` when
+     * the popover dismisses. You will need to do that in your code.
+     */
+    this.isOpen = false;
+    /**
+     * @internal
+     *
+     * If `true` the popover will not register its own keyboard event handlers.
+     * This allows the contents of the popover to handle their own keyboard interactions.
+     *
+     * If `false`, the popover will register its own keyboard event handlers for
+     * navigating `ion-list` items within a popover (up/down/home/end/etc.).
+     * This will also cancel browser keyboard event bindings to prevent scroll
+     * behavior in a popover using a list of items.
+     */
+    this.keyboardEvents = false;
     this.onDismiss = (ev) => {
       ev.stopPropagation();
       ev.preventDefault();
@@ -35528,38 +40234,217 @@ class Popover {
         el.dispatchEvent(event);
       }
     };
+    this.configureTriggerInteraction = () => {
+      const { trigger, triggerAction, el, destroyTriggerInteraction } = this;
+      if (destroyTriggerInteraction) {
+        destroyTriggerInteraction();
+      }
+      const triggerEl = this.triggerEl = (trigger !== undefined) ? document.getElementById(trigger) : null;
+      if (!triggerEl) {
+        return;
+      }
+      this.destroyTriggerInteraction = configureTriggerInteraction(triggerEl, triggerAction, el);
+    };
+    this.configureKeyboardInteraction = () => {
+      const { destroyKeyboardInteraction, el } = this;
+      if (destroyKeyboardInteraction) {
+        destroyKeyboardInteraction();
+      }
+      this.destroyKeyboardInteraction = configureKeyboardInteraction(el);
+    };
+    this.configureDismissInteraction = () => {
+      const { destroyDismissInteraction, parentPopover, triggerAction, triggerEl, el } = this;
+      if (!parentPopover || !triggerEl) {
+        return;
+      }
+      if (destroyDismissInteraction) {
+        destroyDismissInteraction();
+      }
+      this.destroyDismissInteraction = configureDismissInteraction(triggerEl, triggerAction, el, parentPopover);
+    };
+  }
+  onTriggerChange() {
+    this.configureTriggerInteraction();
+  }
+  onIsOpenChange(newValue, oldValue) {
+    if (newValue === true && oldValue === false) {
+      this.present();
+    }
+    else if (newValue === false && oldValue === true) {
+      this.dismiss();
+    }
   }
   connectedCallback() {
     prepareOverlay(this.el);
   }
+  componentWillLoad() {
+    /**
+     * If user has custom ID set then we should
+     * not assign the default incrementing ID.
+     */
+    this.popoverId = (this.el.hasAttribute('id')) ? this.el.getAttribute('id') : `ion-popover-${this.popoverIndex}`;
+    this.parentPopover = this.el.closest(`ion-popover:not(#${this.popoverId})`);
+  }
+  componentDidLoad() {
+    const { parentPopover, isOpen } = this;
+    /**
+     * If popover was rendered with isOpen="true"
+     * then we should open popover immediately.
+     */
+    if (isOpen === true) {
+      raf(() => this.present());
+    }
+    if (parentPopover) {
+      addEventListener$1(parentPopover, 'ionPopoverWillDismiss', () => {
+        this.dismiss(undefined, undefined, false);
+      });
+    }
+    this.configureTriggerInteraction();
+  }
+  /**
+   * When opening a popover from a trigger, we should not be
+   * modifying the `event` prop from inside the component.
+   * Additionally, when pressing the "Right" arrow key, we need
+   * to shift focus to the first descendant in the newly presented
+   * popover.
+   *
+   * @internal
+   */
+  async presentFromTrigger(event, focusDescendant = false) {
+    this.focusDescendantOnPresent = focusDescendant;
+    await this.present(event);
+    this.focusDescendantOnPresent = false;
+  }
+  /**
+   * Determines whether or not an overlay
+   * is being used inline or via a controller/JS
+   * and returns the correct delegate.
+   * By default, subsequent calls to getDelegate
+   * will use a cached version of the delegate.
+   * This is useful for calling dismiss after
+   * present so that the correct delegate is given.
+   */
+  getDelegate(force = false) {
+    if (this.workingDelegate && !force) {
+      return {
+        delegate: this.workingDelegate,
+        inline: this.inline
+      };
+    }
+    /**
+     * If using overlay inline
+     * we potentially need to use the coreDelegate
+     * so that this works in vanilla JS apps.
+     * If a developer has presented this component
+     * via a controller, then we can assume
+     * the component is already in the
+     * correct place.
+     */
+    const parentEl = this.el.parentNode;
+    const inline = this.inline = parentEl !== null && !this.hasController;
+    const delegate = this.workingDelegate = (inline) ? this.delegate || this.coreDelegate : this.delegate;
+    return { inline, delegate };
+  }
   /**
    * Present the popover overlay after it has been created.
+   * Developers can pass a mouse, touch, or pointer event
+   * to position the popover relative to where that event
+   * was dispatched.
    */
-  async present() {
+  async present(event) {
     if (this.presented) {
       return;
     }
-    const container = this.el.querySelector('.popover-content');
-    if (!container) {
-      throw new Error('container is undefined');
+    /**
+     * When using an inline popover
+     * and dismissing a popover it is possible to
+     * quickly present the popover while it is
+     * dismissing. We need to await any current
+     * transition to allow the dismiss to finish
+     * before presenting again.
+     */
+    if (this.currentTransition !== undefined) {
+      await this.currentTransition;
     }
     const data = Object.assign(Object.assign({}, this.componentProps), { popover: this.el });
-    this.usersElement = await attachComponent(this.delegate, container, this.component, ['popover-viewport', this.el['s-sc']], data);
+    const { inline, delegate } = this.getDelegate(true);
+    this.usersElement = await attachComponent(delegate, this.el, this.component, ['popover-viewport'], data, inline);
     await deepReady(this.usersElement);
-    return present(this, 'popoverEnter', iosEnterAnimation$1, mdEnterAnimation$1, this.event);
+    if (!this.keyboardEvents) {
+      this.configureKeyboardInteraction();
+    }
+    this.configureDismissInteraction();
+    this.currentTransition = present(this, 'popoverEnter', iosEnterAnimation$1, mdEnterAnimation$1, {
+      event: event || this.event,
+      size: this.size,
+      trigger: this.triggerEl,
+      reference: this.reference,
+      side: this.side,
+      align: this.alignment
+    });
+    await this.currentTransition;
+    this.currentTransition = undefined;
+    /**
+     * If popover is nested and was
+     * presented using the "Right" arrow key,
+     * we need to move focus to the first
+     * descendant inside of the popover.
+     */
+    if (this.focusDescendantOnPresent) {
+      focusFirstDescendant(this.el, this.el);
+    }
   }
   /**
    * Dismiss the popover overlay after it has been presented.
    *
    * @param data Any data to emit in the dismiss events.
    * @param role The role of the element that is dismissing the popover. For example, 'cancel' or 'backdrop'.
+   * @param dismissParentPopover If `true`, dismissing this popover will also dismiss
+   * a parent popover if this popover is nested. Defaults to `true`.
    */
-  async dismiss(data, role) {
-    const shouldDismiss = await dismiss(this, data, role, 'popoverLeave', iosLeaveAnimation$1, mdLeaveAnimation$1, this.event);
-    if (shouldDismiss) {
-      await detachComponent(this.delegate, this.usersElement);
+  async dismiss(data, role, dismissParentPopover = true) {
+    /**
+     * When using an inline popover
+     * and presenting a popover it is possible to
+     * quickly dismiss the popover while it is
+     * presenting. We need to await any current
+     * transition to allow the present to finish
+     * before dismissing again.
+     */
+    if (this.currentTransition !== undefined) {
+      await this.currentTransition;
     }
+    const { destroyKeyboardInteraction, destroyDismissInteraction } = this;
+    if (dismissParentPopover && this.parentPopover) {
+      this.parentPopover.dismiss(data, role, dismissParentPopover);
+    }
+    this.currentTransition = dismiss(this, data, role, 'popoverLeave', iosLeaveAnimation$1, mdLeaveAnimation$1, this.event);
+    const shouldDismiss = await this.currentTransition;
+    if (shouldDismiss) {
+      if (destroyKeyboardInteraction) {
+        destroyKeyboardInteraction();
+        this.destroyKeyboardInteraction = undefined;
+      }
+      if (destroyDismissInteraction) {
+        destroyDismissInteraction();
+        this.destroyDismissInteraction = undefined;
+      }
+      /**
+       * If using popover inline
+       * we potentially need to use the coreDelegate
+       * so that this works in vanilla JS apps
+       */
+      const { delegate } = this.getDelegate();
+      await detachComponent(delegate, this.usersElement);
+    }
+    this.currentTransition = undefined;
     return shouldDismiss;
+  }
+  /**
+   * @internal
+   */
+  async getParentPopover() {
+    return this.parentPopover;
   }
   /**
    * Returns a promise that resolves when the popover did dismiss.
@@ -35575,20 +40460,28 @@ class Popover {
   }
   render() {
     const mode = getIonMode$1(this);
-    const { onLifecycle, htmlAttributes } = this;
+    const { onLifecycle, popoverId, parentPopover, dismissOnSelect, side, arrow, htmlAttributes } = this;
+    const desktop = isPlatform('desktop');
+    const enableArrow = arrow && !parentPopover && !desktop;
     return (hAsync(Host, Object.assign({ "aria-modal": "true", "no-router": true, tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${20000 + this.overlayIndex}`,
-      }, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'popover-translucent': this.translucent }), onIonPopoverDidPresent: onLifecycle, onIonPopoverWillPresent: onLifecycle, onIonPopoverWillDismiss: onLifecycle, onIonPopoverDidDismiss: onLifecycle, onIonDismiss: this.onDismiss, onIonBackdropTap: this.onBackdropTap }), hAsync("ion-backdrop", { tappable: this.backdropDismiss, visible: this.showBackdrop }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "popover-wrapper ion-overlay-wrapper" }, hAsync("div", { class: "popover-arrow" }), hAsync("div", { class: "popover-content" })), hAsync("div", { tabindex: "0" })));
+      }, id: popoverId, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'popover-translucent': this.translucent, 'overlay-hidden': true, 'popover-desktop': desktop, [`popover-side-${side}`]: true, 'popover-nested': !!parentPopover }), onIonPopoverDidPresent: onLifecycle, onIonPopoverWillPresent: onLifecycle, onIonPopoverWillDismiss: onLifecycle, onIonPopoverDidDismiss: onLifecycle, onIonDismiss: this.onDismiss, onIonBackdropTap: this.onBackdropTap }), !parentPopover && hAsync("ion-backdrop", { tappable: this.backdropDismiss, visible: this.showBackdrop, part: "backdrop" }), hAsync("div", { class: "popover-wrapper ion-overlay-wrapper", onClick: dismissOnSelect ? () => this.dismiss() : undefined }, enableArrow && hAsync("div", { class: "popover-arrow", part: "arrow" }), hAsync("div", { class: "popover-content", part: "content" }, hAsync("slot", null)))));
   }
   get el() { return getElement(this); }
+  static get watchers() { return {
+    "trigger": ["onTriggerChange"],
+    "triggerAction": ["onTriggerChange"],
+    "isOpen": ["onIsOpenChange"]
+  }; }
   static get style() { return {
     ios: popoverIosCss,
     md: popoverMdCss
   }; }
   static get cmpMeta() { return {
-    "$flags$": 34,
+    "$flags$": 41,
     "$tagName$": "ion-popover",
     "$members$": {
+      "hasController": [4, "has-controller"],
       "delegate": [16],
       "overlayIndex": [2, "overlay-index"],
       "enterAnimation": [16],
@@ -35603,8 +40496,21 @@ class Popover {
       "translucent": [4],
       "animated": [4],
       "htmlAttributes": [16],
+      "triggerAction": [1, "trigger-action"],
+      "trigger": [1],
+      "size": [1],
+      "dismissOnSelect": [4, "dismiss-on-select"],
+      "reference": [1],
+      "side": [1],
+      "alignment": [1],
+      "arrow": [4],
+      "isOpen": [4, "is-open"],
+      "keyboardEvents": [4, "keyboard-events"],
+      "presented": [32],
+      "presentFromTrigger": [64],
       "present": [64],
       "dismiss": [64],
+      "getParentPopover": [64],
       "onDidDismiss": [64],
       "onWillDismiss": [64]
     },
@@ -35619,6 +40525,7 @@ const LIFECYCLE_MAP = {
   'ionPopoverWillDismiss': 'ionViewWillLeave',
   'ionPopoverDidDismiss': 'ionViewDidLeave',
 };
+let popoverIds = 0;
 
 const popoverFilterCss = ".fireenjin-popover-filter-wrapper{--min-width:300px}";
 
@@ -35830,6 +40737,9 @@ class Radio {
         this.checked = this.radioGroup.value === this.value;
       }
     };
+    this.onClick = () => {
+      this.checked = this.nativeInput.checked;
+    };
     this.onFocus = () => {
       this.ionFocus.emit();
     };
@@ -35854,7 +40764,7 @@ class Radio {
     const radioGroup = this.radioGroup = this.el.closest('ion-radio-group');
     if (radioGroup) {
       this.updateState();
-      addEventListener(radioGroup, 'ionChange', this.updateState);
+      addEventListener$1(radioGroup, 'ionChange', this.updateState);
     }
   }
   disconnectedCallback() {
@@ -35877,13 +40787,13 @@ class Radio {
     const { inputId, disabled, checked, color, el, buttonTabindex } = this;
     const mode = getIonMode$1(this);
     const { label, labelId, labelText } = getAriaLabel(el, inputId);
-    return (hAsync(Host, { "aria-checked": `${checked}`, "aria-hidden": disabled ? 'true' : null, "aria-labelledby": label ? labelId : null, role: "radio", tabindex: buttonTabindex, onFocus: this.onFocus, onBlur: this.onBlur, class: createColorClasses$1(color, {
+    return (hAsync(Host, { "aria-checked": `${checked}`, "aria-hidden": disabled ? 'true' : null, "aria-labelledby": label ? labelId : null, role: "radio", tabindex: buttonTabindex, onFocus: this.onFocus, onBlur: this.onBlur, onClick: this.onClick, class: createColorClasses$1(color, {
         [mode]: true,
         'in-item': hostContext('ion-item', el),
         'interactive': true,
         'radio-checked': checked,
         'radio-disabled': disabled,
-      }) }, hAsync("div", { class: "radio-icon", part: "container" }, hAsync("div", { class: "radio-inner", part: "mark" }), hAsync("div", { class: "radio-ripple" })), hAsync("label", { htmlFor: inputId }, labelText), hAsync("input", { type: "radio", checked: checked, disabled: disabled, tabindex: "-1", id: inputId })));
+      }) }, hAsync("div", { class: "radio-icon", part: "container" }, hAsync("div", { class: "radio-inner", part: "mark" }), hAsync("div", { class: "radio-ripple" })), hAsync("label", { htmlFor: inputId }, labelText), hAsync("input", { type: "radio", checked: checked, disabled: disabled, tabindex: "-1", id: inputId, ref: nativeEl => this.nativeInput = nativeEl })));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -36197,6 +41107,11 @@ class Range {
      */
     this.pin = false;
     /**
+     * A callback used to format the pin text.
+     * By default the pin text is set to `Math.round(value)`.
+     */
+    this.pinFormatter = (value) => Math.round(value);
+    /**
      * If `true`, the knob snaps to tick marks evenly spaced based
      * on the step property value.
      */
@@ -36309,7 +41224,7 @@ class Range {
      * not assign the default incrementing ID.
      */
     this.rangeId = (this.el.hasAttribute('id')) ? this.el.getAttribute('id') : `ion-r-${rangeIds++}`;
-    this.inheritedAttributes = inheritAttributes(this.el, ['aria-label']);
+    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
   }
   componentDidLoad() {
     this.setupGesture();
@@ -36364,7 +41279,7 @@ class Range {
     const currentX = detail.currentX;
     // figure out which knob they started closer to
     let ratio = clamp(0, (currentX - rect.left) / rect.width, 1);
-    if (document.dir === 'rtl') {
+    if (isRTL(this.el)) {
       ratio = 1 - ratio;
     }
     this.pressedKnob =
@@ -36388,7 +41303,7 @@ class Range {
     // update the knob being interacted with
     const rect = this.rect;
     let ratio = clamp(0, (currentX - rect.left) / rect.width, 1);
-    if (document.dir === 'rtl') {
+    if (isRTL(this.el)) {
       ratio = 1 - ratio;
     }
     if (this.snaps) {
@@ -36454,7 +41369,7 @@ class Range {
     }
   }
   render() {
-    const { min, max, step, el, handleKeyboard, pressedKnob, disabled, pin, ratioLower, ratioUpper, inheritedAttributes, rangeId } = this;
+    const { min, max, step, el, handleKeyboard, pressedKnob, disabled, pin, ratioLower, ratioUpper, inheritedAttributes, rangeId, pinFormatter } = this;
     /**
      * Look for external label, ion-label, or aria-labelledby.
      * If none, see if user placed an aria-label on the host
@@ -36467,10 +41382,9 @@ class Range {
     const mode = getIonMode$1(this);
     const barStart = `${ratioLower * 100}%`;
     const barEnd = `${100 - ratioUpper * 100}%`;
-    const doc = document;
-    const isRTL = doc.dir === 'rtl';
-    const start = isRTL ? 'right' : 'left';
-    const end = isRTL ? 'left' : 'right';
+    const rtl = isRTL(this.el);
+    const start = rtl ? 'right' : 'left';
+    const end = rtl ? 'left' : 'right';
     const tickStyle = (tick) => {
       return {
         [start]: tick[start]
@@ -36502,23 +41416,25 @@ class Range {
       }) }, hAsync("slot", { name: "start" }), hAsync("div", { class: "range-slider", ref: rangeEl => this.rangeSlider = rangeEl }, ticks.map(tick => (hAsync("div", { style: tickStyle(tick), role: "presentation", class: {
         'range-tick': true,
         'range-tick-active': tick.active
-      }, part: tick.active ? 'tick-active' : 'tick' }))), hAsync("div", { class: "range-bar", role: "presentation", part: "bar" }), hAsync("div", { class: "range-bar range-bar-active", role: "presentation", style: barStyle, part: "bar-active" }), renderKnob(isRTL, {
+      }, part: tick.active ? 'tick-active' : 'tick' }))), hAsync("div", { class: "range-bar", role: "presentation", part: "bar" }), hAsync("div", { class: "range-bar range-bar-active", role: "presentation", style: barStyle, part: "bar-active" }), renderKnob(rtl, {
       knob: 'A',
       pressed: pressedKnob === 'A',
       value: this.valA,
       ratio: this.ratioA,
       pin,
+      pinFormatter,
       disabled,
       handleKeyboard,
       min,
       max,
       labelText
-    }), this.dualKnobs && renderKnob(isRTL, {
+    }), this.dualKnobs && renderKnob(rtl, {
       knob: 'B',
       pressed: pressedKnob === 'B',
       value: this.valB,
       ratio: this.ratioB,
       pin,
+      pinFormatter,
       disabled,
       handleKeyboard,
       min,
@@ -36549,6 +41465,7 @@ class Range {
       "min": [2],
       "max": [2],
       "pin": [4],
+      "pinFormatter": [16],
       "snaps": [4],
       "step": [2],
       "ticks": [4],
@@ -36563,8 +41480,8 @@ class Range {
     "$attrsToReflect$": [["color", "color"]]
   }; }
 }
-const renderKnob = (isRTL, { knob, value, ratio, min, max, disabled, pressed, pin, handleKeyboard, labelText }) => {
-  const start = isRTL ? 'right' : 'left';
+const renderKnob = (rtl, { knob, value, ratio, min, max, disabled, pressed, pin, handleKeyboard, labelText, pinFormatter }) => {
+  const start = rtl ? 'right' : 'left';
   const knobStyle = () => {
     const style = {};
     style[start] = `${ratio * 100}%`;
@@ -36589,7 +41506,7 @@ const renderKnob = (isRTL, { knob, value, ratio, min, max, disabled, pressed, pi
       'range-knob-pressed': pressed,
       'range-knob-min': value === min,
       'range-knob-max': value === max
-    }, style: knobStyle(), role: "slider", tabindex: disabled ? -1 : 0, "aria-label": labelText, "aria-valuemin": min, "aria-valuemax": max, "aria-disabled": disabled ? 'true' : null, "aria-valuenow": value }, pin && hAsync("div", { class: "range-pin", role: "presentation", part: "pin" }, Math.round(value)), hAsync("div", { class: "range-knob", role: "presentation", part: "knob" })));
+    }, style: knobStyle(), role: "slider", tabindex: disabled ? -1 : 0, "aria-label": labelText, "aria-valuemin": min, "aria-valuemax": max, "aria-disabled": disabled ? 'true' : null, "aria-valuenow": value }, pin && hAsync("div", { class: "range-pin", role: "presentation", part: "pin" }, pinFormatter(value)), hAsync("div", { class: "range-knob", role: "presentation", part: "knob" })));
 };
 const ratioToValue = (ratio, min, max, step) => {
   let value = (max - min) * ratio;
@@ -36603,6 +41520,9 @@ const valueToRatio = (value, min, max) => {
 };
 let rangeIds = 0;
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const getRefresherAnimationType = (contentEl) => {
   const previousSibling = contentEl.previousElementSibling;
   const hasHeader = previousSibling !== null && previousSibling.tagName === 'ION-HEADER';
@@ -36717,10 +41637,22 @@ const createSnapBackAnimation = (pullingRefresherIcon) => {
 const setSpinnerOpacity = (spinner, opacity) => {
   spinner.style.setProperty('opacity', opacity.toString());
 };
-const handleScrollWhilePulling = (spinner, ticks, opacity, currentTickToShow) => {
+const handleScrollWhilePulling = (ticks, numTicks, pullAmount) => {
+  const max = 1;
   writeTask(() => {
-    setSpinnerOpacity(spinner, opacity);
-    ticks.forEach((el, i) => el.style.setProperty('opacity', (i <= currentTickToShow) ? '0.99' : '0'));
+    ticks.forEach((el, i) => {
+      /**
+       * Compute the opacity of each tick
+       * mark as a percentage of the pullAmount
+       * offset by max / numTicks so
+       * the tick marks are shown staggered.
+       */
+      const min = i * (max / numTicks);
+      const range = max - min;
+      const start = pullAmount - min;
+      const progression = clamp(0, start / range, 1);
+      el.style.setProperty('opacity', progression.toString());
+    });
   });
 };
 const handleScrollWhileRefreshing = (spinner, lastVelocityY) => {
@@ -36730,13 +41662,13 @@ const handleScrollWhileRefreshing = (spinner, lastVelocityY) => {
     spinner.style.setProperty('opacity', '1');
   });
 };
-const translateElement = (el, value) => {
+const translateElement = (el, value, duration = 200) => {
   if (!el) {
     return Promise.resolve();
   }
-  const trans = transitionEndAsync(el, 200);
+  const trans = transitionEndAsync(el, duration);
   writeTask(() => {
-    el.style.setProperty('transition', '0.2s all ease-out');
+    el.style.setProperty('transition', `${duration}ms all ease-out`);
     if (value === undefined) {
       el.style.removeProperty('transform');
     }
@@ -36761,44 +41693,8 @@ const shouldUseNativeRefresher = async (referenceEl, mode) => {
     ((mode === 'ios' && isPlatform('mobile') && referenceEl.style.webkitOverflowScrolling !== undefined) ||
       mode === 'md'));
 };
-const transitionEndAsync = (el, expectedDuration = 0) => {
-  return new Promise(resolve => {
-    transitionEnd$2(el, expectedDuration, resolve);
-  });
-};
-const transitionEnd$2 = (el, expectedDuration = 0, callback) => {
-  let unRegTrans;
-  let animationTimeout;
-  const opts = { passive: true };
-  const ANIMATION_FALLBACK_TIMEOUT = 500;
-  const unregister = () => {
-    if (unRegTrans) {
-      unRegTrans();
-    }
-  };
-  const onTransitionEnd = (ev) => {
-    if (ev === undefined || el === ev.target) {
-      unregister();
-      callback(ev);
-    }
-  };
-  if (el) {
-    el.addEventListener('webkitTransitionEnd', onTransitionEnd, opts);
-    el.addEventListener('transitionend', onTransitionEnd, opts);
-    animationTimeout = setTimeout(onTransitionEnd, expectedDuration + ANIMATION_FALLBACK_TIMEOUT);
-    unRegTrans = () => {
-      if (animationTimeout) {
-        clearTimeout(animationTimeout);
-        animationTimeout = undefined;
-      }
-      el.removeEventListener('webkitTransitionEnd', onTransitionEnd, opts);
-      el.removeEventListener('transitionend', onTransitionEnd, opts);
-    };
-  }
-  return unregister;
-};
 
-const refresherIosCss = "ion-refresher{left:0;top:0;display:none;position:absolute;width:100%;height:60px;pointer-events:none;z-index:-1}[dir=rtl] ion-refresher,:host-context([dir=rtl]) ion-refresher{left:unset;right:unset;right:0}ion-refresher.refresher-active{display:block}ion-refresher-content{display:flex;flex-direction:column;justify-content:center;height:100%}.refresher-pulling,.refresher-refreshing{display:none;width:100%}.refresher-pulling-icon,.refresher-refreshing-icon{transform-origin:center;transition:200ms;font-size:30px;text-align:center}[dir=rtl] .refresher-pulling-icon,:host-context([dir=rtl]) .refresher-pulling-icon,[dir=rtl] .refresher-refreshing-icon,:host-context([dir=rtl]) .refresher-refreshing-icon{transform-origin:calc(100% - center)}.refresher-pulling-text,.refresher-refreshing-text{font-size:16px;text-align:center}ion-refresher-content .arrow-container{display:none}.refresher-pulling ion-refresher-content .refresher-pulling{display:block}.refresher-ready ion-refresher-content .refresher-pulling{display:block}.refresher-ready ion-refresher-content .refresher-pulling-icon{transform:rotate(180deg)}.refresher-refreshing ion-refresher-content .refresher-refreshing{display:block}.refresher-cancelling ion-refresher-content .refresher-pulling{display:block}.refresher-cancelling ion-refresher-content .refresher-pulling-icon{transform:scale(0)}.refresher-completing ion-refresher-content .refresher-refreshing{display:block}.refresher-completing ion-refresher-content .refresher-refreshing-icon{transform:scale(0)}.refresher-native .refresher-pulling-text,.refresher-native .refresher-refreshing-text{display:none}.refresher-ios .refresher-pulling-icon,.refresher-ios .refresher-refreshing-icon{color:var(--ion-text-color, #000)}.refresher-ios .refresher-pulling-text,.refresher-ios .refresher-refreshing-text{color:var(--ion-text-color, #000)}.refresher-ios .refresher-refreshing .spinner-lines-ios line,.refresher-ios .refresher-refreshing .spinner-lines-small-ios line,.refresher-ios .refresher-refreshing .spinner-crescent circle{stroke:var(--ion-text-color, #000)}.refresher-ios .refresher-refreshing .spinner-bubbles circle,.refresher-ios .refresher-refreshing .spinner-circles circle,.refresher-ios .refresher-refreshing .spinner-dots circle{fill:var(--ion-text-color, #000)}ion-refresher.refresher-native{display:block;z-index:1}ion-refresher.refresher-native ion-spinner{margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){ion-refresher.refresher-native ion-spinner{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}.refresher-native .refresher-refreshing ion-spinner{--refreshing-rotation-duration:2s;display:none;animation:var(--refreshing-rotation-duration) ease-out refresher-rotate forwards}.refresher-native .refresher-refreshing{display:none;animation:250ms linear refresher-pop forwards}.refresher-native.refresher-refreshing .refresher-pulling ion-spinner,.refresher-native.refresher-completing .refresher-pulling ion-spinner{display:none}.refresher-native.refresher-refreshing .refresher-refreshing ion-spinner,.refresher-native.refresher-completing .refresher-refreshing ion-spinner{display:block}.refresher-native.refresher-pulling .refresher-pulling ion-spinner{display:block}.refresher-native.refresher-pulling .refresher-refreshing ion-spinner{display:none}@keyframes refresher-pop{0%{transform:scale(1);animation-timing-function:ease-in}50%{transform:scale(1.2);animation-timing-function:ease-out}100%{transform:scale(1)}}@keyframes refresher-rotate{from{transform:rotate(0deg)}to{transform:rotate(180deg)}}";
+const refresherIosCss = "ion-refresher{left:0;top:0;display:none;position:absolute;width:100%;height:60px;pointer-events:none;z-index:-1}[dir=rtl] ion-refresher,:host-context([dir=rtl]) ion-refresher{left:unset;right:unset;right:0}ion-refresher.refresher-active{display:block}ion-refresher-content{display:flex;flex-direction:column;justify-content:center;height:100%}.refresher-pulling,.refresher-refreshing{display:none;width:100%}.refresher-pulling-icon,.refresher-refreshing-icon{transform-origin:center;transition:200ms;font-size:30px;text-align:center}[dir=rtl] .refresher-pulling-icon,:host-context([dir=rtl]) .refresher-pulling-icon,[dir=rtl] .refresher-refreshing-icon,:host-context([dir=rtl]) .refresher-refreshing-icon{transform-origin:calc(100% - center)}.refresher-pulling-text,.refresher-refreshing-text{font-size:16px;text-align:center}ion-refresher-content .arrow-container{display:none}.refresher-pulling ion-refresher-content .refresher-pulling{display:block}.refresher-ready ion-refresher-content .refresher-pulling{display:block}.refresher-ready ion-refresher-content .refresher-pulling-icon{transform:rotate(180deg)}.refresher-refreshing ion-refresher-content .refresher-refreshing{display:block}.refresher-cancelling ion-refresher-content .refresher-pulling{display:block}.refresher-cancelling ion-refresher-content .refresher-pulling-icon{transform:scale(0)}.refresher-completing ion-refresher-content .refresher-refreshing{display:block}.refresher-completing ion-refresher-content .refresher-refreshing-icon{transform:scale(0)}.refresher-native .refresher-pulling-text,.refresher-native .refresher-refreshing-text{display:none}.refresher-ios .refresher-pulling-icon,.refresher-ios .refresher-refreshing-icon{color:var(--ion-text-color, #000)}.refresher-ios .refresher-pulling-text,.refresher-ios .refresher-refreshing-text{color:var(--ion-text-color, #000)}.refresher-ios .refresher-refreshing .spinner-lines-ios line,.refresher-ios .refresher-refreshing .spinner-lines-small-ios line,.refresher-ios .refresher-refreshing .spinner-crescent circle{stroke:var(--ion-text-color, #000)}.refresher-ios .refresher-refreshing .spinner-bubbles circle,.refresher-ios .refresher-refreshing .spinner-circles circle,.refresher-ios .refresher-refreshing .spinner-dots circle{fill:var(--ion-text-color, #000)}ion-refresher.refresher-native{display:block;z-index:1}ion-refresher.refresher-native ion-spinner{margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){ion-refresher.refresher-native ion-spinner{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}.refresher-native .refresher-refreshing ion-spinner{--refreshing-rotation-duration:2s;display:none;animation:var(--refreshing-rotation-duration) ease-out refresher-rotate forwards}.refresher-native .refresher-refreshing{display:none;animation:250ms linear refresher-pop forwards}.refresher-native ion-spinner{width:32px;height:32px;color:var(--ion-color-step-450, #747577)}.refresher-native.refresher-refreshing .refresher-pulling ion-spinner,.refresher-native.refresher-completing .refresher-pulling ion-spinner{display:none}.refresher-native.refresher-refreshing .refresher-refreshing ion-spinner,.refresher-native.refresher-completing .refresher-refreshing ion-spinner{display:block}.refresher-native.refresher-pulling .refresher-pulling ion-spinner{display:block}.refresher-native.refresher-pulling .refresher-refreshing ion-spinner{display:none}.refresher-native.refresher-completing ion-refresher-content .refresher-refreshing-icon{transform:scale(0) rotate(180deg);transition:300ms}@keyframes refresher-pop{0%{transform:scale(1);animation-timing-function:ease-in}50%{transform:scale(1.2);animation-timing-function:ease-out}100%{transform:scale(1)}}@keyframes refresher-rotate{from{transform:rotate(0deg)}to{transform:rotate(180deg)}}";
 
 const refresherMdCss = "ion-refresher{left:0;top:0;display:none;position:absolute;width:100%;height:60px;pointer-events:none;z-index:-1}[dir=rtl] ion-refresher,:host-context([dir=rtl]) ion-refresher{left:unset;right:unset;right:0}ion-refresher.refresher-active{display:block}ion-refresher-content{display:flex;flex-direction:column;justify-content:center;height:100%}.refresher-pulling,.refresher-refreshing{display:none;width:100%}.refresher-pulling-icon,.refresher-refreshing-icon{transform-origin:center;transition:200ms;font-size:30px;text-align:center}[dir=rtl] .refresher-pulling-icon,:host-context([dir=rtl]) .refresher-pulling-icon,[dir=rtl] .refresher-refreshing-icon,:host-context([dir=rtl]) .refresher-refreshing-icon{transform-origin:calc(100% - center)}.refresher-pulling-text,.refresher-refreshing-text{font-size:16px;text-align:center}ion-refresher-content .arrow-container{display:none}.refresher-pulling ion-refresher-content .refresher-pulling{display:block}.refresher-ready ion-refresher-content .refresher-pulling{display:block}.refresher-ready ion-refresher-content .refresher-pulling-icon{transform:rotate(180deg)}.refresher-refreshing ion-refresher-content .refresher-refreshing{display:block}.refresher-cancelling ion-refresher-content .refresher-pulling{display:block}.refresher-cancelling ion-refresher-content .refresher-pulling-icon{transform:scale(0)}.refresher-completing ion-refresher-content .refresher-refreshing{display:block}.refresher-completing ion-refresher-content .refresher-refreshing-icon{transform:scale(0)}.refresher-native .refresher-pulling-text,.refresher-native .refresher-refreshing-text{display:none}.refresher-md .refresher-pulling-icon,.refresher-md .refresher-refreshing-icon{color:var(--ion-text-color, #000)}.refresher-md .refresher-pulling-text,.refresher-md .refresher-refreshing-text{color:var(--ion-text-color, #000)}.refresher-md .refresher-refreshing .spinner-lines-md line,.refresher-md .refresher-refreshing .spinner-lines-small-md line,.refresher-md .refresher-refreshing .spinner-crescent circle{stroke:var(--ion-text-color, #000)}.refresher-md .refresher-refreshing .spinner-bubbles circle,.refresher-md .refresher-refreshing .spinner-circles circle,.refresher-md .refresher-refreshing .spinner-dots circle{fill:var(--ion-text-color, #000)}ion-refresher.refresher-native{display:block;z-index:1}ion-refresher.refresher-native ion-spinner{margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;width:24px;height:24px;color:var(--ion-color-primary, #3880ff)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){ion-refresher.refresher-native ion-spinner{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}ion-refresher.refresher-native .spinner-arrow-container{display:inherit}ion-refresher.refresher-native .arrow-container{display:block;position:absolute;width:24px;height:24px}ion-refresher.refresher-native .arrow-container ion-icon{margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;left:0;right:0;bottom:-4px;position:absolute;color:var(--ion-color-primary, #3880ff);font-size:12px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){ion-refresher.refresher-native .arrow-container ion-icon{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}ion-refresher.refresher-native.refresher-pulling ion-refresher-content .refresher-pulling,ion-refresher.refresher-native.refresher-ready ion-refresher-content .refresher-pulling{display:flex}ion-refresher.refresher-native.refresher-refreshing ion-refresher-content .refresher-refreshing,ion-refresher.refresher-native.refresher-completing ion-refresher-content .refresher-refreshing,ion-refresher.refresher-native.refresher-cancelling ion-refresher-content .refresher-refreshing{display:flex}ion-refresher.refresher-native .refresher-pulling-icon{transform:translateY(calc(-100% - 10px))}ion-refresher.refresher-native .refresher-pulling-icon,ion-refresher.refresher-native .refresher-refreshing-icon{margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;border-radius:100%;padding-left:8px;padding-right:8px;padding-top:8px;padding-bottom:8px;display:flex;border:1px solid var(--ion-color-step-200, #ececec);background:var(--ion-color-step-250, #ffffff);box-shadow:0px 1px 6px rgba(0, 0, 0, 0.1)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){ion-refresher.refresher-native .refresher-pulling-icon,ion-refresher.refresher-native .refresher-refreshing-icon{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){ion-refresher.refresher-native .refresher-pulling-icon,ion-refresher.refresher-native .refresher-refreshing-icon{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}";
 
@@ -36900,7 +41796,7 @@ class Refresher {
   async resetNativeRefresher(el, state) {
     this.state = state;
     if (getIonMode$1(this) === 'ios') {
-      await translateElement(el, undefined);
+      await translateElement(el, undefined, 300);
     }
     else {
       await transitionEndAsync(this.el.querySelector('.refresher-refreshing-icon'), 200);
@@ -36938,7 +41834,6 @@ class Refresher {
             writeTask(() => setSpinnerOpacity(refreshingSpinner, 1 - ratio));
             return;
           }
-          writeTask(() => setSpinnerOpacity(pullingSpinner, 0));
           return;
         }
         if (this.pointerDown) {
@@ -36951,11 +41846,16 @@ class Refresher {
             this.ionPull.emit();
           }
         }
-        // delay showing the next tick marks until user has pulled 30px
-        const opacity = clamp(0, Math.abs(scrollTop) / refresherHeight, 0.99);
-        const pullAmount = this.progress = clamp(0, (Math.abs(scrollTop) - 30) / MAX_PULL, 1);
-        const currentTickToShow = clamp(0, Math.floor(pullAmount * NUM_TICKS), NUM_TICKS - 1);
-        const shouldShowRefreshingSpinner = this.state === 8 /* Refreshing */ || currentTickToShow === NUM_TICKS - 1;
+        /**
+         * We want to delay the start of this gesture by ~30px
+         * when initially pulling down so the refresher does not
+         * overlap with the content. But when letting go of the
+         * gesture before the refresher completes, we want the
+         * refresher tick marks to quickly fade out.
+         */
+        const offset = (this.didStart) ? 30 : 0;
+        const pullAmount = this.progress = clamp(0, (Math.abs(scrollTop) - offset) / MAX_PULL, 1);
+        const shouldShowRefreshingSpinner = this.state === 8 /* Refreshing */ || pullAmount === 1;
         if (shouldShowRefreshingSpinner) {
           if (this.pointerDown) {
             handleScrollWhileRefreshing(refreshingSpinner, this.lastVelocityY);
@@ -36975,7 +41875,7 @@ class Refresher {
         }
         else {
           this.state = 2 /* Pulling */;
-          handleScrollWhilePulling(pullingSpinner, ticks, opacity, currentTickToShow);
+          handleScrollWhilePulling(ticks, NUM_TICKS, pullAmount);
         }
       });
     };
@@ -37412,6 +42312,9 @@ class Refresher {
   }; }
 }
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const spinners = {
   'bubbles': {
     dur: 1000,
@@ -37488,6 +42391,38 @@ const spinners = {
   },
   'lines': {
     dur: 1000,
+    lines: 8,
+    fn: (dur, index, total) => {
+      const transform = `rotate(${(360 / total) * index + (index < (total / 2) ? 180 : -180)}deg)`;
+      const animationDelay = `${(dur * index / total) - dur}ms`;
+      return {
+        y1: 14,
+        y2: 26,
+        style: {
+          'transform': transform,
+          'animation-delay': animationDelay,
+        }
+      };
+    }
+  },
+  'lines-small': {
+    dur: 1000,
+    lines: 8,
+    fn: (dur, index, total) => {
+      const transform = `rotate(${(360 / total) * index + (index < (total / 2) ? 180 : -180)}deg)`;
+      const animationDelay = `${(dur * index / total) - dur}ms`;
+      return {
+        y1: 12,
+        y2: 20,
+        style: {
+          'transform': transform,
+          'animation-delay': animationDelay,
+        }
+      };
+    }
+  },
+  'lines-sharp': {
+    dur: 1000,
     lines: 12,
     fn: (dur, index, total) => {
       const transform = `rotate(${30 * index + (index < 6 ? 180 : -180)}deg)`;
@@ -37502,7 +42437,7 @@ const spinners = {
       };
     }
   },
-  'lines-small': {
+  'lines-sharp-small': {
     dur: 1000,
     lines: 12,
     fn: (dur, index, total) => {
@@ -37528,7 +42463,7 @@ class RefresherContent {
   componentWillLoad() {
     if (this.pullingIcon === undefined) {
       const mode = getIonMode$1(this);
-      const overflowRefresher = this.el.style.webkitOverflowScrolling !== undefined ? 'lines' : 'arrow-down';
+      const overflowRefresher = this.el.style.webkitOverflowScrolling !== undefined ? 'lines' : arrowDown;
       this.pullingIcon = config$1.get('refreshingIcon', mode === 'ios' && isPlatform('mobile') ? config$1.get('spinner', overflowRefresher) : 'circular');
     }
     if (this.refreshingSpinner === undefined) {
@@ -37542,7 +42477,7 @@ class RefresherContent {
     const mode = getIonMode$1(this);
     return (hAsync(Host, { class: mode }, hAsync("div", { class: "refresher-pulling" }, this.pullingIcon && hasSpinner &&
       hAsync("div", { class: "refresher-pulling-icon" }, hAsync("div", { class: "spinner-arrow-container" }, hAsync("ion-spinner", { name: this.pullingIcon, paused: true }), mode === 'md' && this.pullingIcon === 'circular' &&
-        hAsync("div", { class: "arrow-container" }, hAsync("ion-icon", { name: "caret-back-sharp" })))), this.pullingIcon && !hasSpinner &&
+        hAsync("div", { class: "arrow-container" }, hAsync("ion-icon", { icon: caretBackSharp })))), this.pullingIcon && !hasSpinner &&
       hAsync("div", { class: "refresher-pulling-icon" }, hAsync("ion-icon", { icon: this.pullingIcon, lazy: false })), this.pullingText &&
       hAsync("div", { class: "refresher-pulling-text", innerHTML: sanitizeDOMString(this.pullingText) })), hAsync("div", { class: "refresher-refreshing" }, this.refreshingSpinner &&
       hAsync("div", { class: "refresher-refreshing-icon" }, hAsync("ion-spinner", { name: this.refreshingSpinner })), this.refreshingText &&
@@ -37744,8 +42679,8 @@ class Reorder {
   }
   render() {
     const mode = getIonMode$1(this);
-    const reorderIcon = mode === 'ios' ? 'reorder-three-outline' : 'reorder-two-sharp';
-    return (hAsync(Host, { class: mode }, hAsync("slot", null, hAsync("ion-icon", { name: reorderIcon, lazy: false, class: "reorder-icon", part: "icon" }))));
+    const reorderIcon = mode === 'ios' ? reorderThreeOutline : reorderTwoSharp;
+    return (hAsync(Host, { class: mode }, hAsync("slot", null, hAsync("ion-icon", { icon: reorderIcon, lazy: false, class: "reorder-icon", part: "icon" }))));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -37789,6 +42724,7 @@ class ReorderGroup {
   async connectedCallback() {
     const contentEl = this.el.closest('ion-content');
     if (contentEl) {
+      await new Promise(resolve => componentOnReady(contentEl, resolve));
       this.scrollEl = await contentEl.getScrollElement();
     }
     this.gesture = (await Promise.resolve().then(function () { return index$1; })).createGesture({
@@ -38312,11 +43248,17 @@ class RouteRedirect {
   }; }
 }
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const ROUTER_INTENT_NONE = 'root';
 const ROUTER_INTENT_FORWARD = 'forward';
 const ROUTER_INTENT_BACK = 'back';
 
-// Join the non empty segments with "/".
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+/** Join the non empty segments with "/". */
 const generatePath = (segments) => {
   const path = segments
     .filter(s => s.length > 0)
@@ -38333,8 +43275,8 @@ const generateUrl = (segments, useHash, queryString) => {
   }
   return url;
 };
-const writePath = (history, root, useHash, path, direction, state, queryString) => {
-  const url = generateUrl([...parsePath(root).segments, ...path], useHash, queryString);
+const writeSegments = (history, root, useHash, segments, direction, state, queryString) => {
+  const url = generateUrl([...parsePath(root).segments, ...segments], useHash, queryString);
   if (direction === ROUTER_INTENT_FORWARD) {
     history.pushState(state, '', url);
   }
@@ -38342,63 +43284,74 @@ const writePath = (history, root, useHash, path, direction, state, queryString) 
     history.replaceState(state, '', url);
   }
 };
-const chainToPath = (chain) => {
-  const path = [];
+/**
+ * Transforms a chain to a list of segments.
+ *
+ * Notes:
+ * - parameter segments of the form :param are replaced with their value,
+ * - null is returned when a value is missing for any parameter segment.
+ */
+const chainToSegments = (chain) => {
+  const segments = [];
   for (const route of chain) {
-    for (const segment of route.path) {
+    for (const segment of route.segments) {
       if (segment[0] === ':') {
         const param = route.params && route.params[segment.slice(1)];
         if (!param) {
           return null;
         }
-        path.push(param);
+        segments.push(param);
       }
       else if (segment !== '') {
-        path.push(segment);
+        segments.push(segment);
       }
     }
   }
-  return path;
+  return segments;
 };
-// Remove the prefix segments from the path segments.
-//
-// Return:
-// - null when the path segments do not start with the passed prefix,
-// - the path segments after the prefix otherwise.
-const removePrefix = (prefix, path) => {
-  if (prefix.length > path.length) {
+/**
+ * Removes the prefix segments from the path segments.
+ *
+ * Return:
+ * - null when the path segments do not start with the passed prefix,
+ * - the path segments after the prefix otherwise.
+ */
+const removePrefix = (prefix, segments) => {
+  if (prefix.length > segments.length) {
     return null;
   }
   if (prefix.length <= 1 && prefix[0] === '') {
-    return path;
+    return segments;
   }
   for (let i = 0; i < prefix.length; i++) {
-    if (prefix[i] !== path[i]) {
+    if (prefix[i] !== segments[i]) {
       return null;
     }
   }
-  if (path.length === prefix.length) {
+  if (segments.length === prefix.length) {
     return [''];
   }
-  return path.slice(prefix.length);
+  return segments.slice(prefix.length);
 };
-const readPath = (loc, root, useHash) => {
+const readSegments = (loc, root, useHash) => {
   const prefix = parsePath(root).segments;
   const pathname = useHash ? loc.hash.slice(1) : loc.pathname;
-  const path = parsePath(pathname).segments;
-  return removePrefix(prefix, path);
+  const segments = parsePath(pathname).segments;
+  return removePrefix(prefix, segments);
 };
-// Parses the path to:
-// - segments an array of '/' separated parts,
-// - queryString (undefined when no query string).
+/**
+ * Parses the path to:
+ * - segments an array of '/' separated parts,
+ * - queryString (undefined when no query string).
+ */
 const parsePath = (path) => {
   let segments = [''];
   let queryString;
   if (path != null) {
     const qsStart = path.indexOf('?');
     if (qsStart > -1) {
-      queryString = path.substr(qsStart + 1);
-      path = path.substr(0, qsStart);
+      queryString = path.substring(qsStart + 1);
+      path = path.substring(0, qsStart);
     }
     segments = path.split('/')
       .map(s => s.trim())
@@ -38410,13 +43363,16 @@ const parsePath = (path) => {
   return { segments, queryString };
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const printRoutes = (routes) => {
   console.group(`[ion-core] ROUTES[${routes.length}]`);
   for (const chain of routes) {
-    const path = [];
-    chain.forEach(r => path.push(...r.path));
+    const segments = [];
+    chain.forEach(r => segments.push(...r.segments));
     const ids = chain.map(r => r.id);
-    console.debug(`%c ${generatePath(path)}`, 'font-weight: bold; padding-left: 20px', '=>\t', `(${ids.join(', ')})`);
+    console.debug(`%c ${generatePath(segments)}`, 'font-weight: bold; padding-left: 20px', '=>\t', `(${ids.join(', ')})`);
   }
   console.groupEnd();
 };
@@ -38430,6 +43386,17 @@ const printRedirects = (redirects) => {
   console.groupEnd();
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+/**
+ * Activates the passed route chain.
+ *
+ * There must be exactly one outlet per route entry in the chain.
+ *
+ * The methods calls setRouteId on each of the outlet with the corresponding route entry in the chain.
+ * setRouteId will create or select the view in the outlet.
+ */
 const writeNavState = async (root, chain, direction, index, changed = false, animation) => {
   try {
     // find next navigation outlet in the DOM
@@ -38461,23 +43428,21 @@ const writeNavState = async (root, chain, direction, index, changed = false, ani
     return false;
   }
 };
+/**
+ * Recursively walks the outlet in the DOM.
+ *
+ * The function returns a list of RouteID corresponding to each of the outlet and the last outlet without a RouteID.
+ */
 const readNavState = async (root) => {
   const ids = [];
   let outlet;
   let node = root;
-  // tslint:disable-next-line:no-constant-condition
-  while (true) {
-    outlet = searchNavNode(node);
-    if (outlet) {
-      const id = await outlet.getRouteId();
-      if (id) {
-        node = id.element;
-        id.element = undefined;
-        ids.push(id);
-      }
-      else {
-        break;
-      }
+  while (outlet = searchNavNode(node)) {
+    const id = await outlet.getRouteId();
+    if (id) {
+      node = id.element;
+      id.element = undefined;
+      ids.push(id);
     }
     else {
       break;
@@ -38490,32 +43455,38 @@ const waitUntilNavNode = () => {
     return Promise.resolve();
   }
   return new Promise(resolve => {
-    window.addEventListener('ionNavWillLoad', resolve, { once: true });
+    window.addEventListener('ionNavWillLoad', () => resolve(), { once: true });
   });
 };
-const QUERY$1 = ':not([no-router]) ion-nav, :not([no-router]) ion-tabs, :not([no-router]) ion-router-outlet';
+/** Selector for all the outlets supported by the router. */
+const OUTLET_SELECTOR = ':not([no-router]) ion-nav, :not([no-router]) ion-tabs, :not([no-router]) ion-router-outlet';
 const searchNavNode = (root) => {
   if (!root) {
     return undefined;
   }
-  if (root.matches(QUERY$1)) {
+  if (root.matches(OUTLET_SELECTOR)) {
     return root;
   }
-  const outlet = root.querySelector(QUERY$1);
+  const outlet = root.querySelector(OUTLET_SELECTOR);
   return outlet !== null && outlet !== void 0 ? outlet : undefined;
 };
 
-// Returns whether the given redirect matches the given path segments.
-//
-// A redirect matches when the segments of the path and redirect.from are equal.
-// Note that segments are only checked until redirect.from contains a '*' which matches any path segment.
-// The path ['some', 'path', 'to', 'page'] matches both ['some', 'path', 'to', 'page'] and ['some', 'path', '*'].
-const matchesRedirect = (path, redirect) => {
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+/**
+ * Returns whether the given redirect matches the given path segments.
+ *
+ * A redirect matches when the segments of the path and redirect.from are equal.
+ * Note that segments are only checked until redirect.from contains a '*' which matches any path segment.
+ * The path ['some', 'path', 'to', 'page'] matches both ['some', 'path', 'to', 'page'] and ['some', 'path', '*'].
+ */
+const matchesRedirect = (segments, redirect) => {
   const { from, to } = redirect;
   if (to === undefined) {
     return false;
   }
-  if (from.length > path.length) {
+  if (from.length > segments.length) {
     return false;
   }
   for (let i = 0; i < from.length; i++) {
@@ -38523,15 +43494,15 @@ const matchesRedirect = (path, redirect) => {
     if (expected === '*') {
       return true;
     }
-    if (expected !== path[i]) {
+    if (expected !== segments[i]) {
       return false;
     }
   }
-  return from.length === path.length;
+  return from.length === segments.length;
 };
-// Returns the first redirect matching the path segments or undefined when no match found.
-const findRouteRedirect = (path, redirects) => {
-  return redirects.find(redirect => matchesRedirect(path, redirect));
+/** Returns the first redirect matching the path segments or undefined when no match found. */
+const findRouteRedirect = (segments, redirects) => {
+  return redirects.find(redirect => matchesRedirect(segments, redirect));
 };
 const matchesIDs = (ids, chain) => {
   const len = Math.min(ids.length, chain.length);
@@ -38545,33 +43516,30 @@ const matchesIDs = (ids, chain) => {
     }
     if (routeId.params) {
       const routeIdParams = Object.keys(routeId.params);
-      /**
-       * Only compare routes with the chain that have the same number of parameters.
-       */
-      if (routeIdParams.length === routeChain.path.length) {
-        /**
-         * Maps the route's params into a path based on the path variable names,
-         * to compare against the route chain format.
-         *
-         * Before:
-         * ```ts
-         * {
-         *  params: {
-         *    s1: 'a',
-         *    s2: 'b'
-         *  }
-         * }
-         * ```
-         *
-         * After:
-         * ```ts
-         * [':s1',':s2']
-         * ```
-         */
+      // Only compare routes with the chain that have the same number of parameters.
+      if (routeIdParams.length === routeChain.segments.length) {
+        // Maps the route's params into a path based on the path variable names,
+        // to compare against the route chain format.
+        //
+        // Before:
+        // ```ts
+        // {
+        //  params: {
+        //    s1: 'a',
+        //    s2: 'b'
+        //  }
+        // }
+        // ```
+        //
+        // After:
+        // ```ts
+        // [':s1',':s2']
+        // ```
+        //
         const pathWithParams = routeIdParams.map(key => `:${key}`);
         for (let j = 0; j < pathWithParams.length; j++) {
           // Skip results where the path variable is not a match
-          if (pathWithParams[j].toLowerCase() !== routeChain.path[j]) {
+          if (pathWithParams[j].toLowerCase() !== routeChain.segments[j]) {
             break;
           }
           // Weight path matches for the same index higher.
@@ -38584,18 +43552,25 @@ const matchesIDs = (ids, chain) => {
   }
   return score;
 };
-const matchesPath = (inputPath, chain) => {
-  const segments = new RouterSegments(inputPath);
+/**
+ * Matches the segments against the chain.
+ *
+ * Returns:
+ * - null when there is no match,
+ * - a chain with the params properties updated with the parameter segments on match.
+ */
+const matchesSegments = (segments, chain) => {
+  const inputSegments = new RouterSegments(segments);
   let matchesDefault = false;
   let allparams;
   for (let i = 0; i < chain.length; i++) {
-    const path = chain[i].path;
-    if (path[0] === '') {
+    const chainSegments = chain[i].segments;
+    if (chainSegments[0] === '') {
       matchesDefault = true;
     }
     else {
-      for (const segment of path) {
-        const data = segments.next();
+      for (const segment of chainSegments) {
+        const data = inputSegments.next();
         // data param
         if (segment[0] === ':') {
           if (data === '') {
@@ -38613,7 +43588,7 @@ const matchesPath = (inputPath, chain) => {
     }
   }
   const matches = (matchesDefault)
-    ? matchesDefault === (segments.next() === '')
+    ? matchesDefault === (inputSegments.next() === '')
     : true;
   if (!matches) {
     return null;
@@ -38621,7 +43596,7 @@ const matchesPath = (inputPath, chain) => {
   if (allparams) {
     return chain.map((route, i) => ({
       id: route.id,
-      path: route.path,
+      segments: route.segments,
       params: mergeParams(route.params, allparams[i]),
       beforeEnter: route.beforeEnter,
       beforeLeave: route.beforeLeave
@@ -38629,12 +43604,21 @@ const matchesPath = (inputPath, chain) => {
   }
   return chain;
 };
-// Merges the route parameter objects.
-// Returns undefined when both parameters are undefined.
+/**
+ * Merges the route parameter objects.
+ * Returns undefined when both parameters are undefined.
+ */
 const mergeParams = (a, b) => {
   return a || b ? Object.assign(Object.assign({}, a), b) : undefined;
 };
-const routerIDsToChain = (ids, chains) => {
+/**
+ * Finds the best match for the ids in the chains.
+ *
+ * Returns the best match or null when no match is found.
+ * When a chain is returned the parameters are updated from the RouteIDs.
+ * That is they contain both the componentProps of the <ion-route> and the parameter segment.
+ */
+const findChainForIDs = (ids, chains) => {
   let match = null;
   let maxMatches = 0;
   for (const chain of chains) {
@@ -38645,38 +43629,59 @@ const routerIDsToChain = (ids, chains) => {
     }
   }
   if (match) {
-    return match.map((route, i) => ({
-      id: route.id,
-      path: route.path,
-      params: mergeParams(route.params, ids[i] && ids[i].params)
-    }));
+    return match.map((route, i) => {
+      var _a;
+      return ({
+        id: route.id,
+        segments: route.segments,
+        params: mergeParams(route.params, (_a = ids[i]) === null || _a === void 0 ? void 0 : _a.params)
+      });
+    });
   }
   return null;
 };
-const routerPathToChain = (path, chains) => {
+/**
+ * Finds the best match for the segments in the chains.
+ *
+ * Returns the best match or null when no match is found.
+ * When a chain is returned the parameters are updated from the segments.
+ * That is they contain both the componentProps of the <ion-route> and the parameter segments.
+ */
+const findChainForSegments = (segments, chains) => {
   let match = null;
-  let matches = 0;
+  let bestScore = 0;
   for (const chain of chains) {
-    const matchedChain = matchesPath(path, chain);
+    const matchedChain = matchesSegments(segments, chain);
     if (matchedChain !== null) {
       const score = computePriority(matchedChain);
-      if (score > matches) {
-        matches = score;
+      if (score > bestScore) {
+        bestScore = score;
         match = matchedChain;
       }
     }
   }
   return match;
 };
+/**
+ * Computes the priority of a chain.
+ *
+ * Parameter segments are given a lower priority over fixed segments.
+ *
+ * Considering the following 2 chains matching the path /path/to/page:
+ * - /path/to/:where
+ * - /path/to/page
+ *
+ * The second one will be given a higher priority because "page" is a fixed segment (vs ":where", a parameter segment).
+ */
 const computePriority = (chain) => {
   let score = 1;
   let level = 1;
   for (const route of chain) {
-    for (const path of route.path) {
-      if (path[0] === ':') {
+    for (const segment of route.segments) {
+      if (segment[0] === ':') {
         score += Math.pow(1, level);
       }
-      else if (path !== '') {
+      else if (segment !== '') {
         score += Math.pow(2, level);
       }
       level++;
@@ -38685,17 +43690,20 @@ const computePriority = (chain) => {
   return score;
 };
 class RouterSegments {
-  constructor(path) {
-    this.path = path.slice();
+  constructor(segments) {
+    this.segments = segments.slice();
   }
   next() {
-    if (this.path.length > 0) {
-      return this.path.shift();
+    if (this.segments.length > 0) {
+      return this.segments.shift();
     }
     return '';
   }
 }
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const readProp = (el, prop) => {
   if (prop in el) {
     return el[prop];
@@ -38705,6 +43713,11 @@ const readProp = (el, prop) => {
   }
   return null;
 };
+/**
+ * Extracts the redirects (that is <ion-route-redirect> elements inside the root).
+ *
+ * The redirects are returned as a list of RouteRedirect.
+ */
 const readRedirects = (root) => {
   return Array.from(root.children)
     .filter(el => el.tagName === 'ION-ROUTE-REDIRECT')
@@ -38716,16 +43729,26 @@ const readRedirects = (root) => {
     };
   });
 };
+/**
+ * Extracts all the routes (that is <ion-route> elements inside the root).
+ *
+ * The routes are returned as a list of chains - the flattened tree.
+ */
 const readRoutes = (root) => {
   return flattenRouterTree(readRouteNodes(root));
 };
+/**
+ * Reads the route nodes as a tree modeled after the DOM tree of <ion-route> elements.
+ *
+ * Note: routes without a component are ignored together with their children.
+ */
 const readRouteNodes = (node) => {
   return Array.from(node.children)
     .filter(el => el.tagName === 'ION-ROUTE' && el.component)
     .map(el => {
     const component = readProp(el, 'component');
     return {
-      path: parsePath(readProp(el, 'url')).segments,
+      segments: parsePath(readProp(el, 'url')).segments,
       id: component.toLowerCase(),
       params: el.componentProps,
       beforeLeave: el.beforeLeave,
@@ -38734,6 +43757,11 @@ const readRouteNodes = (node) => {
     };
   });
 };
+/**
+ * Flattens a RouterTree in a list of chains.
+ *
+ * Each chain represents a path from the root node to a terminal node.
+ */
 const flattenRouterTree = (nodes) => {
   const chains = [];
   for (const node of nodes) {
@@ -38741,15 +43769,15 @@ const flattenRouterTree = (nodes) => {
   }
   return chains;
 };
+/** Flattens a route node recursively and push each branch to the chains list. */
 const flattenNode = (chain, chains, node) => {
-  chain = chain.slice();
-  chain.push({
-    id: node.id,
-    path: node.path,
-    params: node.params,
-    beforeLeave: node.beforeLeave,
-    beforeEnter: node.beforeEnter
-  });
+  chain = [...chain, {
+      id: node.id,
+      segments: node.segments,
+      params: node.params,
+      beforeLeave: node.beforeLeave,
+      beforeEnter: node.beforeEnter
+    }];
   if (node.children.length === 0) {
     chains.push(chain);
     return;
@@ -38791,12 +43819,12 @@ class Router {
   }
   async componentWillLoad() {
     await waitUntilNavNode();
-    const canProceed = await this.runGuards(this.getPath());
+    const canProceed = await this.runGuards(this.getSegments());
     if (canProceed !== true) {
       if (typeof canProceed === 'object') {
         const { redirect } = canProceed;
         const path = parsePath(redirect);
-        this.setPath(path.segments, ROUTER_INTENT_NONE, path.queryString);
+        this.setSegments(path.segments, ROUTER_INTENT_NONE, path.queryString);
         await this.writeNavStateRoot(path.segments, ROUTER_INTENT_NONE);
       }
     }
@@ -38810,7 +43838,7 @@ class Router {
   }
   async onPopState() {
     const direction = this.historyDirection();
-    let segments = this.getPath();
+    let segments = this.getSegments();
     const canProceed = await this.runGuards(segments);
     if (canProceed !== true) {
       if (typeof canProceed === 'object') {
@@ -38842,16 +43870,20 @@ class Router {
     return true;
   }
   /**
-   * Navigate to the specified URL.
+   * Navigate to the specified path.
    *
-   * @param url The url to navigate to.
+   * @param path The path to navigate to.
    * @param direction The direction of the animation. Defaults to `"forward"`.
    */
-  async push(url, direction = 'forward', animation) {
-    if (url.startsWith('.')) {
-      url = (new URL(url, window.location.href)).pathname;
+  async push(path, direction = 'forward', animation) {
+    var _a;
+    if (path.startsWith('.')) {
+      const currentPath = (_a = this.previousPath) !== null && _a !== void 0 ? _a : '/';
+      // Convert currentPath to an URL by pre-pending a protocol and a host to resolve the relative path.
+      const url = new URL(path, `https://host/${currentPath}`);
+      path = url.pathname + url.search;
     }
-    let parsedPath = parsePath(url);
+    let parsedPath = parsePath(path);
     const canProceed = await this.runGuards(parsedPath.segments);
     if (canProceed !== true) {
       if (typeof canProceed === 'object') {
@@ -38861,12 +43893,10 @@ class Router {
         return false;
       }
     }
-    this.setPath(parsedPath.segments, direction, parsedPath.queryString);
+    this.setSegments(parsedPath.segments, direction, parsedPath.queryString);
     return this.writeNavStateRoot(parsedPath.segments, direction, animation);
   }
-  /**
-   * Go back to previous page in the window.history.
-   */
+  /** Go back to previous page in the window.history. */
   back() {
     window.history.back();
     return Promise.resolve(this.waitPromise);
@@ -38884,30 +43914,30 @@ class Router {
     }
     const { ids, outlet } = await readNavState(window.document.body);
     const routes = readRoutes(this.el);
-    const chain = routerIDsToChain(ids, routes);
+    const chain = findChainForIDs(ids, routes);
     if (!chain) {
       console.warn('[ion-router] no matching URL for ', ids.map(i => i.id));
       return false;
     }
-    const path = chainToPath(chain);
-    if (!path) {
+    const segments = chainToSegments(chain);
+    if (!segments) {
       console.warn('[ion-router] router could not match path because some required param is missing');
       return false;
     }
-    this.setPath(path, direction);
-    await this.safeWriteNavState(outlet, chain, ROUTER_INTENT_NONE, path, null, ids.length);
+    this.setSegments(segments, direction);
+    await this.safeWriteNavState(outlet, chain, ROUTER_INTENT_NONE, segments, null, ids.length);
     return true;
   }
-  // This handler gets called when a `ion-route-redirect` component is added to the DOM or if the from or to property of such node changes.
+  /** This handler gets called when a `ion-route-redirect` component is added to the DOM or if the from or to property of such node changes. */
   onRedirectChanged() {
-    const path = this.getPath();
-    if (path && findRouteRedirect(path, readRedirects(this.el))) {
-      this.writeNavStateRoot(path, ROUTER_INTENT_NONE);
+    const segments = this.getSegments();
+    if (segments && findRouteRedirect(segments, readRedirects(this.el))) {
+      this.writeNavStateRoot(segments, ROUTER_INTENT_NONE);
     }
   }
-  // This handler gets called when a `ion-route` component is added to the DOM or if the from or to property of such node changes.
+  /** This handler gets called when a `ion-route` component is added to the DOM or if the from or to property of such node changes. */
   onRoutesChanged() {
-    return this.writeNavStateRoot(this.getPath(), ROUTER_INTENT_NONE);
+    return this.writeNavStateRoot(this.getSegments(), ROUTER_INTENT_NONE);
   }
   historyDirection() {
     var _a;
@@ -38927,36 +43957,36 @@ class Router {
     }
     return ROUTER_INTENT_NONE;
   }
-  async writeNavStateRoot(path, direction, animation) {
-    if (!path) {
+  async writeNavStateRoot(segments, direction, animation) {
+    if (!segments) {
       console.error('[ion-router] URL is not part of the routing set');
       return false;
     }
     // lookup redirect rule
     const redirects = readRedirects(this.el);
-    const redirect = findRouteRedirect(path, redirects);
+    const redirect = findRouteRedirect(segments, redirects);
     let redirectFrom = null;
     if (redirect) {
-      const { segments, queryString } = redirect.to;
-      this.setPath(segments, direction, queryString);
+      const { segments: toSegments, queryString } = redirect.to;
+      this.setSegments(toSegments, direction, queryString);
       redirectFrom = redirect.from;
-      path = segments;
+      segments = toSegments;
     }
     // lookup route chain
     const routes = readRoutes(this.el);
-    const chain = routerPathToChain(path, routes);
+    const chain = findChainForSegments(segments, routes);
     if (!chain) {
       console.error('[ion-router] the path does not match any route');
       return false;
     }
     // write DOM give
-    return this.safeWriteNavState(document.body, chain, direction, path, redirectFrom, 0, animation);
+    return this.safeWriteNavState(document.body, chain, direction, segments, redirectFrom, 0, animation);
   }
-  async safeWriteNavState(node, chain, direction, path, redirectFrom, index = 0, animation) {
+  async safeWriteNavState(node, chain, direction, segments, redirectFrom, index = 0, animation) {
     const unlock = await this.lock();
     let changed = false;
     try {
-      changed = await this.writeNavState(node, chain, direction, path, redirectFrom, index, animation);
+      changed = await this.writeNavState(node, chain, direction, segments, redirectFrom, index, animation);
     }
     catch (e) {
       console.error(e);
@@ -38973,11 +44003,13 @@ class Router {
     }
     return resolve;
   }
-  // Executes the beforeLeave hook of the source route and the beforeEnter hook of the target route if they exist.
-  //
-  // When the beforeLeave hook does not return true (to allow navigating) then that value is returned early and the beforeEnter is executed.
-  // Otherwise the beforeEnterHook hook of the target route is executed.
-  async runGuards(to = this.getPath(), from) {
+  /**
+   * Executes the beforeLeave hook of the source route and the beforeEnter hook of the target route if they exist.
+   *
+   * When the beforeLeave hook does not return true (to allow navigating) then that value is returned early and the beforeEnter is executed.
+   * Otherwise the beforeEnterHook hook of the target route is executed.
+   */
+  async runGuards(to = this.getSegments(), from) {
     if (from === undefined) {
       from = parsePath(this.previousPath).segments;
     }
@@ -38985,24 +44017,24 @@ class Router {
       return true;
     }
     const routes = readRoutes(this.el);
-    const fromChain = routerPathToChain(from, routes);
+    const fromChain = findChainForSegments(from, routes);
     const beforeLeaveHook = fromChain && fromChain[fromChain.length - 1].beforeLeave;
     const canLeave = beforeLeaveHook ? await beforeLeaveHook() : true;
     if (canLeave === false || typeof canLeave === 'object') {
       return canLeave;
     }
-    const toChain = routerPathToChain(to, routes);
+    const toChain = findChainForSegments(to, routes);
     const beforeEnterHook = toChain && toChain[toChain.length - 1].beforeEnter;
     return beforeEnterHook ? beforeEnterHook() : true;
   }
-  async writeNavState(node, chain, direction, path, redirectFrom, index = 0, animation) {
+  async writeNavState(node, chain, direction, segments, redirectFrom, index = 0, animation) {
     if (this.busy) {
       console.warn('[ion-router] router is busy, transition was cancelled');
       return false;
     }
     this.busy = true;
     // generate route event and emit will change
-    const routeEvent = this.routeChangeEvent(path, redirectFrom);
+    const routeEvent = this.routeChangeEvent(segments, redirectFrom);
     if (routeEvent) {
       this.ionRouteWillChange.emit(routeEvent);
     }
@@ -39014,21 +44046,21 @@ class Router {
     }
     return changed;
   }
-  setPath(path, direction, queryString) {
+  setSegments(segments, direction, queryString) {
     this.state++;
-    writePath(window.history, this.root, this.useHash, path, direction, this.state, queryString);
+    writeSegments(window.history, this.root, this.useHash, segments, direction, this.state, queryString);
   }
-  getPath() {
-    return readPath(window.location, this.root, this.useHash);
+  getSegments() {
+    return readSegments(window.location, this.root, this.useHash);
   }
-  routeChangeEvent(path, redirectFromPath) {
+  routeChangeEvent(toSegments, redirectFromSegments) {
     const from = this.previousPath;
-    const to = generatePath(path);
+    const to = generatePath(toSegments);
     this.previousPath = to;
     if (to === from) {
       return null;
     }
-    const redirectedFrom = redirectFromPath ? generatePath(redirectFromPath) : null;
+    const redirectedFrom = redirectFromSegments ? generatePath(redirectFromSegments) : null;
     return {
       from,
       redirectedFrom,
@@ -39512,9 +44544,9 @@ class Searchbar {
     this.autocorrect = 'off';
     /**
      * Set the cancel button icon. Only applies to `md` mode.
-     * Defaults to `"arrow-back-sharp"`.
+     * Defaults to `arrow-back-sharp`.
      */
-    this.cancelButtonIcon = config$1.get('backButtonIcon', 'arrow-back-sharp');
+    this.cancelButtonIcon = config$1.get('backButtonIcon', arrowBackSharp);
     /**
      * Set the the cancel button text. Only applies to `ios` mode.
      */
@@ -39553,7 +44585,7 @@ class Searchbar {
      * Setting to `"always"` shows the clear button regardless
      * of focus state, but only if the input is not empty.
      */
-    this.showClearButton = 'focus';
+    this.showClearButton = 'always';
     /**
      * If `true`, enable spellcheck on the input.
      */
@@ -39713,7 +44745,7 @@ class Searchbar {
     if (!inputEl) {
       return;
     }
-    const isRTL = document.dir === 'rtl';
+    const rtl = isRTL(this.el);
     const iconEl = (this.el.shadowRoot || this.el).querySelector('.searchbar-search-icon');
     if (this.shouldAlignLeft) {
       inputEl.removeAttribute('style');
@@ -39734,7 +44766,7 @@ class Searchbar {
         // Calculate the icon margin
         const iconLeft = 'calc(50% - ' + ((textWidth / 2) + 30) + 'px)';
         // Set the input padding start and icon margin start
-        if (isRTL) {
+        if (rtl) {
           inputEl.style.paddingRight = inputLeft;
           iconEl.style.marginRight = iconLeft;
         }
@@ -39749,14 +44781,14 @@ class Searchbar {
    * Show the iOS Cancel button on focus, hide it offscreen otherwise
    */
   positionCancelButton() {
-    const isRTL = document.dir === 'rtl';
+    const rtl = isRTL(this.el);
     const cancelButton = (this.el.shadowRoot || this.el).querySelector('.searchbar-cancel-button');
     const shouldShowCancel = this.shouldShowCancelButton();
     if (cancelButton && shouldShowCancel !== this.isCancelVisible) {
       const cancelStyle = cancelButton.style;
       this.isCancelVisible = shouldShowCancel;
       if (shouldShowCancel) {
-        if (isRTL) {
+        if (rtl) {
           cancelStyle.marginLeft = '0';
         }
         else {
@@ -39766,7 +44798,7 @@ class Searchbar {
       else {
         const offset = cancelButton.offsetWidth;
         if (offset > 0) {
-          if (isRTL) {
+          if (rtl) {
             cancelStyle.marginLeft = -offset + 'px';
           }
           else {
@@ -39810,8 +44842,8 @@ class Searchbar {
     const { cancelButtonText } = this;
     const animated = this.animated && config$1.getBoolean('animated', true);
     const mode = getIonMode$1(this);
-    const clearIcon = this.clearIcon || (mode === 'ios' ? 'close-circle' : 'close-sharp');
-    const searchIcon = this.searchIcon || (mode === 'ios' ? 'search-outline' : 'search-sharp');
+    const clearIcon = this.clearIcon || (mode === 'ios' ? closeCircle : closeSharp);
+    const searchIcon = this.searchIcon || (mode === 'ios' ? searchOutline : searchSharp);
     const shouldShowCancelButton = this.shouldShowCancelButton();
     const cancelButton = (this.showCancelButton !== 'never') && (hAsync("button", { "aria-label": cancelButtonText, "aria-hidden": shouldShowCancelButton ? undefined : 'true', type: "button", tabIndex: mode === 'ios' && !shouldShowCancelButton ? -1 : undefined, onMouseDown: this.onCancelSearchbar, onTouchStart: this.onCancelSearchbar, class: "searchbar-cancel-button" }, hAsync("div", { "aria-hidden": "true" }, mode === 'md'
       ? hAsync("ion-icon", { "aria-hidden": "true", mode: mode, icon: this.cancelButtonIcon, lazy: false })
@@ -39900,6 +44932,11 @@ class Segment {
      * If `true`, users will be able to swipe between segment buttons to activate them.
      */
     this.swipeGesture = true;
+    /**
+     * If `true`, navigating to an `ion-segment-button` with the keyboard will focus and select the element.
+     * If `false`, keyboard navigation will only focus the `ion-segment-button` element.
+     */
+    this.selectOnFocus = false;
     this.onClick = (ev) => {
       const current = ev.target;
       const previous = this.checked;
@@ -39920,6 +44957,22 @@ class Segment {
         }
       }
       this.checked = current;
+    };
+    this.getSegmentButton = (selector) => {
+      const buttons = this.getButtons().filter(button => !button.disabled);
+      const currIndex = buttons.findIndex(button => button === document.activeElement);
+      switch (selector) {
+        case 'first':
+          return buttons[0];
+        case 'last':
+          return buttons[buttons.length - 1];
+        case 'next':
+          return buttons[currIndex + 1] || buttons[0];
+        case 'previous':
+          return buttons[currIndex - 1] || buttons[buttons.length - 1];
+        default:
+          return null;
+      }
     };
   }
   colorChanged(value, oldValue) {
@@ -39968,6 +45021,7 @@ class Segment {
   }
   async componentDidLoad() {
     this.setCheckedClasses();
+    this.ensureFocusable();
     this.gesture = (await Promise.resolve().then(function () { return index$1; })).createGesture({
       el: this.el,
       gestureName: 'segment',
@@ -40107,7 +45161,7 @@ class Segment {
     }
   }
   setNextIndex(detail, isEnd = false) {
-    const isRTL = document.dir === 'rtl';
+    const rtl = isRTL(this.el);
     const activated = this.activated;
     const buttons = this.getButtons();
     const index = buttons.findIndex(button => button.value === this.value);
@@ -40127,9 +45181,18 @@ class Segment {
     // can move up and down off of the segment
     const currentX = detail.currentX;
     const previousY = rect.top + (rect.height / 2);
-    const nextEl = document.elementFromPoint(currentX, previousY);
-    const decreaseIndex = isRTL ? currentX > (left + width) : currentX < left;
-    const increaseIndex = isRTL ? currentX < left : currentX > (left + width);
+    /**
+     * Segment can be used inside the shadow dom
+     * so doing document.elementFromPoint would never
+     * return a segment button in that instance.
+     * We use getRootNode to which will return the parent
+     * shadow root if used inside a shadow component and
+     * returns document otherwise.
+     */
+    const root = this.el.getRootNode();
+    const nextEl = root.elementFromPoint(currentX, previousY);
+    const decreaseIndex = rtl ? currentX > (left + width) : currentX < left;
+    const increaseIndex = rtl ? currentX < left : currentX > (left + width);
     // If the indicator is currently activated then we have started the gesture
     // on top of the checked button so we need to slide the indicator
     // by checking the button next to it as we move
@@ -40180,6 +45243,53 @@ class Segment {
       'segment': true
     });
   }
+  onKeyDown(ev) {
+    const rtl = isRTL(this.el);
+    let keyDownSelectsButton = this.selectOnFocus;
+    let current;
+    switch (ev.key) {
+      case 'ArrowRight':
+        ev.preventDefault();
+        current = rtl ? this.getSegmentButton('previous') : this.getSegmentButton('next');
+        break;
+      case 'ArrowLeft':
+        ev.preventDefault();
+        current = rtl ? this.getSegmentButton('next') : this.getSegmentButton('previous');
+        break;
+      case 'Home':
+        ev.preventDefault();
+        current = this.getSegmentButton('first');
+        break;
+      case 'End':
+        ev.preventDefault();
+        current = this.getSegmentButton('last');
+        break;
+      case ' ':
+      case 'Enter':
+        ev.preventDefault();
+        current = document.activeElement;
+        keyDownSelectsButton = true;
+    }
+    if (!current) {
+      return;
+    }
+    if (keyDownSelectsButton) {
+      const previous = this.checked || current;
+      this.checkButton(previous, current);
+    }
+    current.focus();
+  }
+  /* By default, focus is delegated to the selected `ion-segment-button`.
+   * If there is no selected button, focus will instead pass to the first child button.
+  **/
+  ensureFocusable() {
+    var _a;
+    if (this.value !== undefined) {
+      return;
+    }
+    const buttons = this.getButtons();
+    (_a = buttons[0]) === null || _a === void 0 ? void 0 : _a.setAttribute('tabindex', '0');
+  }
   render() {
     const mode = getIonMode$1(this);
     return (hAsync(Host, { role: "tablist", onClick: this.onClick, class: createColorClasses$1(this.color, {
@@ -40211,9 +45321,10 @@ class Segment {
       "scrollable": [4],
       "swipeGesture": [4, "swipe-gesture"],
       "value": [1025],
+      "selectOnFocus": [4, "select-on-focus"],
       "activated": [32]
     },
-    "$listeners$": undefined,
+    "$listeners$": [[0, "keydown", "onKeyDown"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": [["color", "color"]]
   }; }
@@ -40265,8 +45376,8 @@ class SegmentButton {
     const segmentEl = this.segmentEl = this.el.closest('ion-segment');
     if (segmentEl) {
       this.updateState();
-      addEventListener(segmentEl, 'ionSelect', this.updateState);
-      addEventListener(segmentEl, 'ionStyle', this.updateStyle);
+      addEventListener$1(segmentEl, 'ionSelect', this.updateState);
+      addEventListener$1(segmentEl, 'ionStyle', this.updateStyle);
     }
   }
   disconnectedCallback() {
@@ -40284,14 +45395,7 @@ class SegmentButton {
     return !!this.el.querySelector('ion-icon');
   }
   get tabIndex() {
-    if (this.disabled) {
-      return -1;
-    }
-    const hasTabIndex = this.el.hasAttribute('tabindex');
-    if (hasTabIndex) {
-      return this.el.getAttribute('tabindex');
-    }
-    return 0;
+    return this.checked && !this.disabled ? 0 : -1;
   }
   render() {
     const { checked, type, disabled, hasIcon, hasLabel, layout, segmentEl, tabIndex } = this;
@@ -40460,6 +45564,9 @@ class Select$1 {
   }; }
 }
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const watchForOptions = (containerEl, tagName, onChange) => {
   /* tslint:disable-next-line */
   if (typeof MutationObserver === 'undefined') {
@@ -40494,9 +45601,9 @@ const findCheckedOption = (el, tagName) => {
   return options.find((o) => o.value === el.value);
 };
 
-const selectIosCss = "/*!@:host*/.sc-ion-select-ios-h{--placeholder-color:currentColor;--placeholder-opacity:0.33;padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:flex;position:relative;align-items:center;font-family:var(--ion-font-family, inherit);overflow:hidden;z-index:2}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-select-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@:host(.in-item)*/.in-item.sc-ion-select-ios-h{position:static;max-width:45%}/*!@:host(.select-disabled)*/.select-disabled.sc-ion-select-ios-h{opacity:0.4;pointer-events:none}/*!@:host(.ion-focused) button*/.ion-focused.sc-ion-select-ios-h button.sc-ion-select-ios{border:2px solid #5e9ed6}/*!@.select-placeholder*/.select-placeholder.sc-ion-select-ios{color:var(--placeholder-color);opacity:var(--placeholder-opacity)}/*!@label*/label.sc-ion-select-ios{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;appearance:none;outline:none;display:flex;align-items:center;opacity:0}/*!@[dir=rtl] label, :host-context([dir=rtl]) label*/[dir=rtl].sc-ion-select-ios label.sc-ion-select-ios,[dir=rtl].sc-ion-select-ios-h label.sc-ion-select-ios,[dir=rtl] .sc-ion-select-ios-h label.sc-ion-select-ios{left:unset;right:unset;right:0}/*!@label::-moz-focus-inner*/label.sc-ion-select-ios::-moz-focus-inner{border:0}/*!@button*/button.sc-ion-select-ios{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@.select-icon*/.select-icon.sc-ion-select-ios{position:relative;opacity:0.33}/*!@.select-text*/.select-text.sc-ion-select-ios{flex:1;min-width:16px;font-size:inherit;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}/*!@.select-icon-inner*/.select-icon-inner.sc-ion-select-ios{left:5px;top:50%;margin-top:-2px;position:absolute;width:0;height:0;border-top:5px solid;border-right:5px solid transparent;border-left:5px solid transparent;color:currentColor;pointer-events:none}/*!@[dir=rtl] .select-icon-inner, :host-context([dir=rtl]) .select-icon-inner*/[dir=rtl].sc-ion-select-ios .select-icon-inner.sc-ion-select-ios,[dir=rtl].sc-ion-select-ios-h .select-icon-inner.sc-ion-select-ios,[dir=rtl] .sc-ion-select-ios-h .select-icon-inner.sc-ion-select-ios{left:unset;right:unset;right:5px}/*!@:host*/.sc-ion-select-ios-h{--padding-top:10px;--padding-end:10px;--padding-bottom:10px;--padding-start:20px}/*!@.select-icon*/.select-icon.sc-ion-select-ios{width:12px;height:18px}";
+const selectIosCss = "/*!@:host*/.sc-ion-select-ios-h{--placeholder-color:currentColor;--placeholder-opacity:0.33;padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:flex;position:relative;align-items:center;font-family:var(--ion-font-family, inherit);overflow:hidden;z-index:2}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-select-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@:host(.in-item)*/.in-item.sc-ion-select-ios-h{position:static;max-width:45%}/*!@:host(.select-disabled)*/.select-disabled.sc-ion-select-ios-h{opacity:0.4;pointer-events:none}/*!@:host(.ion-focused) button*/.ion-focused.sc-ion-select-ios-h button.sc-ion-select-ios{border:2px solid #5e9ed6}/*!@.select-placeholder*/.select-placeholder.sc-ion-select-ios{color:var(--placeholder-color);opacity:var(--placeholder-opacity)}/*!@label*/label.sc-ion-select-ios{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;appearance:none;outline:none;display:flex;align-items:center;opacity:0}/*!@[dir=rtl] label, :host-context([dir=rtl]) label*/[dir=rtl].sc-ion-select-ios label.sc-ion-select-ios,[dir=rtl].sc-ion-select-ios-h label.sc-ion-select-ios,[dir=rtl] .sc-ion-select-ios-h label.sc-ion-select-ios{left:unset;right:unset;right:0}/*!@label::-moz-focus-inner*/label.sc-ion-select-ios::-moz-focus-inner{border:0}/*!@button*/button.sc-ion-select-ios{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@.select-icon*/.select-icon.sc-ion-select-ios{position:relative}/*!@.select-text*/.select-text.sc-ion-select-ios{flex:1;min-width:16px;font-size:inherit;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}/*!@.select-icon-inner*/.select-icon-inner.sc-ion-select-ios{left:5px;top:50%;margin-top:-2px;position:absolute;width:0;height:0;border-top:5px solid;border-right:5px solid transparent;border-left:5px solid transparent;color:currentColor;pointer-events:none}/*!@[dir=rtl] .select-icon-inner, :host-context([dir=rtl]) .select-icon-inner*/[dir=rtl].sc-ion-select-ios .select-icon-inner.sc-ion-select-ios,[dir=rtl].sc-ion-select-ios-h .select-icon-inner.sc-ion-select-ios,[dir=rtl] .sc-ion-select-ios-h .select-icon-inner.sc-ion-select-ios{left:unset;right:unset;right:5px}/*!@:host*/.sc-ion-select-ios-h{--padding-top:10px;--padding-end:10px;--padding-bottom:10px;--padding-start:20px}/*!@.select-icon*/.select-icon.sc-ion-select-ios{width:12px;height:18px;opacity:0.33}";
 
-const selectMdCss = "/*!@:host*/.sc-ion-select-md-h{--placeholder-color:currentColor;--placeholder-opacity:0.33;padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:flex;position:relative;align-items:center;font-family:var(--ion-font-family, inherit);overflow:hidden;z-index:2}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-select-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@:host(.in-item)*/.in-item.sc-ion-select-md-h{position:static;max-width:45%}/*!@:host(.select-disabled)*/.select-disabled.sc-ion-select-md-h{opacity:0.4;pointer-events:none}/*!@:host(.ion-focused) button*/.ion-focused.sc-ion-select-md-h button.sc-ion-select-md{border:2px solid #5e9ed6}/*!@.select-placeholder*/.select-placeholder.sc-ion-select-md{color:var(--placeholder-color);opacity:var(--placeholder-opacity)}/*!@label*/label.sc-ion-select-md{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;appearance:none;outline:none;display:flex;align-items:center;opacity:0}/*!@[dir=rtl] label, :host-context([dir=rtl]) label*/[dir=rtl].sc-ion-select-md label.sc-ion-select-md,[dir=rtl].sc-ion-select-md-h label.sc-ion-select-md,[dir=rtl] .sc-ion-select-md-h label.sc-ion-select-md{left:unset;right:unset;right:0}/*!@label::-moz-focus-inner*/label.sc-ion-select-md::-moz-focus-inner{border:0}/*!@button*/button.sc-ion-select-md{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@.select-icon*/.select-icon.sc-ion-select-md{position:relative;opacity:0.33}/*!@.select-text*/.select-text.sc-ion-select-md{flex:1;min-width:16px;font-size:inherit;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}/*!@.select-icon-inner*/.select-icon-inner.sc-ion-select-md{left:5px;top:50%;margin-top:-2px;position:absolute;width:0;height:0;border-top:5px solid;border-right:5px solid transparent;border-left:5px solid transparent;color:currentColor;pointer-events:none}/*!@[dir=rtl] .select-icon-inner, :host-context([dir=rtl]) .select-icon-inner*/[dir=rtl].sc-ion-select-md .select-icon-inner.sc-ion-select-md,[dir=rtl].sc-ion-select-md-h .select-icon-inner.sc-ion-select-md,[dir=rtl] .sc-ion-select-md-h .select-icon-inner.sc-ion-select-md{left:unset;right:unset;right:5px}/*!@:host*/.sc-ion-select-md-h{--padding-top:10px;--padding-end:0;--padding-bottom:10px;--padding-start:16px}/*!@.select-icon*/.select-icon.sc-ion-select-md{width:19px;height:19px}/*!@:host-context(.item-label-floating) .select-icon*/.item-label-floating.sc-ion-select-md-h .select-icon.sc-ion-select-md,.item-label-floating .sc-ion-select-md-h .select-icon.sc-ion-select-md{transform:translate3d(0,  -9px,  0)}";
+const selectMdCss = "/*!@:host*/.sc-ion-select-md-h{--placeholder-color:currentColor;--placeholder-opacity:0.33;padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:flex;position:relative;align-items:center;font-family:var(--ion-font-family, inherit);overflow:hidden;z-index:2}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-select-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@:host(.in-item)*/.in-item.sc-ion-select-md-h{position:static;max-width:45%}/*!@:host(.select-disabled)*/.select-disabled.sc-ion-select-md-h{opacity:0.4;pointer-events:none}/*!@:host(.ion-focused) button*/.ion-focused.sc-ion-select-md-h button.sc-ion-select-md{border:2px solid #5e9ed6}/*!@.select-placeholder*/.select-placeholder.sc-ion-select-md{color:var(--placeholder-color);opacity:var(--placeholder-opacity)}/*!@label*/label.sc-ion-select-md{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;appearance:none;outline:none;display:flex;align-items:center;opacity:0}/*!@[dir=rtl] label, :host-context([dir=rtl]) label*/[dir=rtl].sc-ion-select-md label.sc-ion-select-md,[dir=rtl].sc-ion-select-md-h label.sc-ion-select-md,[dir=rtl] .sc-ion-select-md-h label.sc-ion-select-md{left:unset;right:unset;right:0}/*!@label::-moz-focus-inner*/label.sc-ion-select-md::-moz-focus-inner{border:0}/*!@button*/button.sc-ion-select-md{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@.select-icon*/.select-icon.sc-ion-select-md{position:relative}/*!@.select-text*/.select-text.sc-ion-select-md{flex:1;min-width:16px;font-size:inherit;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}/*!@.select-icon-inner*/.select-icon-inner.sc-ion-select-md{left:5px;top:50%;margin-top:-2px;position:absolute;width:0;height:0;border-top:5px solid;border-right:5px solid transparent;border-left:5px solid transparent;color:currentColor;pointer-events:none}/*!@[dir=rtl] .select-icon-inner, :host-context([dir=rtl]) .select-icon-inner*/[dir=rtl].sc-ion-select-md .select-icon-inner.sc-ion-select-md,[dir=rtl].sc-ion-select-md-h .select-icon-inner.sc-ion-select-md,[dir=rtl] .sc-ion-select-md-h .select-icon-inner.sc-ion-select-md{left:unset;right:unset;right:5px}/*!@:host*/.sc-ion-select-md-h{--padding-top:10px;--padding-end:0;--padding-bottom:10px;--padding-start:16px}/*!@.select-icon*/.select-icon.sc-ion-select-md{width:19px;height:19px;transition:transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);opacity:0.55}/*!@:host-context(.item-label-stacked) .select-icon,\n:host-context(.item-label-floating:not(.item-fill-outline)) .select-icon,\n:host-context(.item-label-floating.item-fill-outline)*/.item-label-stacked.sc-ion-select-md-h .select-icon.sc-ion-select-md,.item-label-stacked .sc-ion-select-md-h .select-icon.sc-ion-select-md,.item-label-floating.sc-ion-select-md-h:not(.item-fill-outline) .select-icon.sc-ion-select-md,.item-label-floating:not(.item-fill-outline) .sc-ion-select-md-h .select-icon.sc-ion-select-md,.item-label-floating.item-fill-outline.sc-ion-select-md-h,.item-label-floating.item-fill-outline .sc-ion-select-md-h{transform:translate3d(0,  -9px,  0)}/*!@:host-context(.item-has-focus) .select-icon*/.item-has-focus.sc-ion-select-md-h .select-icon.sc-ion-select-md,.item-has-focus .sc-ion-select-md-h .select-icon.sc-ion-select-md{transform:rotate(180deg)}/*!@:host-context(.item-has-focus.item-label-stacked) .select-icon,\n:host-context(.item-has-focus.item-label-floating:not(.item-fill-outline)) .select-icon*/.item-has-focus.item-label-stacked.sc-ion-select-md-h .select-icon.sc-ion-select-md,.item-has-focus.item-label-stacked .sc-ion-select-md-h .select-icon.sc-ion-select-md,.item-has-focus.item-label-floating.sc-ion-select-md-h:not(.item-fill-outline) .select-icon.sc-ion-select-md,.item-has-focus.item-label-floating:not(.item-fill-outline) .sc-ion-select-md-h .select-icon.sc-ion-select-md{transform:translate3d(0,  -9px,  0) rotate(180deg)}/*!@:host-context(ion-item.ion-focused) .select-icon,\n:host-context(.item-has-focus) .select-icon*/ion-item.ion-focused.sc-ion-select-md-h .select-icon.sc-ion-select-md,ion-item.ion-focused .sc-ion-select-md-h .select-icon.sc-ion-select-md,.item-has-focus.sc-ion-select-md-h .select-icon.sc-ion-select-md,.item-has-focus .sc-ion-select-md-h .select-icon.sc-ion-select-md{color:var(--highlight-color-focused);opacity:1}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -40561,7 +45668,7 @@ class Select {
       this.ionBlur.emit();
     };
   }
-  disabledChanged() {
+  styleChanged() {
     this.emitStyle();
   }
   valueChanged() {
@@ -40606,23 +45713,32 @@ class Select {
       this.setFocus();
     });
     await overlay.present();
+    // focus selected option for popovers
+    if (this.interface === 'popover') {
+      let indexOfSelected = this.childOpts.map(o => o.value).indexOf(this.value);
+      indexOfSelected = indexOfSelected > -1 ? indexOfSelected : 0; // default to first option if nothing selected
+      const selectedEl = overlay.querySelector(`.select-interface-option:nth-child(${indexOfSelected + 1})`);
+      if (selectedEl) {
+        focusElement(selectedEl);
+      }
+    }
     return overlay;
   }
   createOverlay(ev) {
     let selectInterface = this.interface;
-    if ((selectInterface === 'action-sheet' || selectInterface === 'popover') && this.multiple) {
+    if (selectInterface === 'action-sheet' && this.multiple) {
       console.warn(`Select interface cannot be "${selectInterface}" with a multi-value select. Using the "alert" interface instead.`);
       selectInterface = 'alert';
     }
     if (selectInterface === 'popover' && !ev) {
-      console.warn('Select interface cannot be a "popover" without passing an event. Using the "alert" interface instead.');
+      console.warn(`Select interface cannot be a "${selectInterface}" without passing an event. Using the "alert" interface instead.`);
       selectInterface = 'alert';
-    }
-    if (selectInterface === 'popover') {
-      return this.openPopover(ev);
     }
     if (selectInterface === 'action-sheet') {
       return this.openActionSheet();
+    }
+    if (selectInterface === 'popover') {
+      return this.openPopover(ev);
     }
     return this.openAlert();
   }
@@ -40656,7 +45772,7 @@ class Select {
       const copyClasses = Array.from(option.classList).filter(cls => cls !== 'hydrated').join(' ');
       const optClass = `${OPTION_CLASS} ${copyClasses}`;
       return {
-        role: (isOptionSelected(value, selectValue, this.compareWith) ? 'selected' : ''),
+        role: (isOptionSelected(selectValue, value, this.compareWith) ? 'selected' : ''),
         text: option.textContent,
         cssClass: optClass,
         handler: () => {
@@ -40685,7 +45801,7 @@ class Select {
         cssClass: optClass,
         label: option.textContent || '',
         value,
-        checked: isOptionSelected(value, selectValue, this.compareWith),
+        checked: isOptionSelected(selectValue, value, this.compareWith),
         disabled: option.disabled
       };
     });
@@ -40701,11 +45817,13 @@ class Select {
         text: option.textContent || '',
         cssClass: optClass,
         value,
-        checked: isOptionSelected(value, selectValue, this.compareWith),
+        checked: isOptionSelected(selectValue, value, this.compareWith),
         disabled: option.disabled,
-        handler: () => {
-          this.value = value;
-          this.close();
+        handler: (selected) => {
+          this.value = selected;
+          if (!this.multiple) {
+            this.close();
+          }
         }
       };
     });
@@ -40714,11 +45832,28 @@ class Select {
   async openPopover(ev) {
     const interfaceOptions = this.interfaceOptions;
     const mode = getIonMode$1(this);
+    const showBackdrop = mode === 'md' ? false : true;
+    const multiple = this.multiple;
     const value = this.value;
-    const popoverOpts = Object.assign(Object.assign({ mode }, interfaceOptions), { component: 'ion-select-popover', cssClass: ['select-popover', interfaceOptions.cssClass], event: ev, componentProps: {
+    let event = ev;
+    let size = 'auto';
+    const item = this.el.closest('ion-item');
+    // If the select is inside of an item containing a floating
+    // or stacked label then the popover should take up the
+    // full width of the item when it presents
+    if (item && (item.classList.contains('item-label-floating') || item.classList.contains('item-label-stacked'))) {
+      event = Object.assign(Object.assign({}, ev), { detail: {
+          ionShadowTarget: item
+        } });
+      size = 'cover';
+    }
+    const popoverOpts = Object.assign(Object.assign({ mode,
+      event, alignment: 'center', size,
+      showBackdrop }, interfaceOptions), { component: 'ion-select-popover', cssClass: ['select-popover', interfaceOptions.cssClass], componentProps: {
         header: interfaceOptions.header,
         subHeader: interfaceOptions.subHeader,
         message: interfaceOptions.message,
+        multiple,
         value,
         options: this.createPopoverOptions(this.childOpts, value)
       } });
@@ -40788,11 +45923,12 @@ class Select {
   emitStyle() {
     this.ionStyle.emit({
       'interactive': true,
-      'select': true,
-      'has-placeholder': this.placeholder != null,
-      'has-value': this.hasValue(),
       'interactive-disabled': this.disabled,
-      'select-disabled': this.disabled
+      'select': true,
+      'select-disabled': this.disabled,
+      'has-placeholder': this.placeholder !== undefined,
+      'has-value': this.hasValue(),
+      'has-focus': this.isExpanded,
     });
   }
   render() {
@@ -40803,7 +45939,7 @@ class Select {
     const displayValue = this.getText();
     let addPlaceholderClass = false;
     let selectText = displayValue;
-    if (selectText === '' && placeholder != null) {
+    if (selectText === '' && placeholder !== undefined) {
       selectText = placeholder;
       addPlaceholderClass = true;
     }
@@ -40828,8 +45964,9 @@ class Select {
   }
   get el() { return getElement(this); }
   static get watchers() { return {
-    "disabled": ["disabledChanged"],
-    "placeholder": ["disabledChanged"],
+    "disabled": ["styleChanged"],
+    "placeholder": ["styleChanged"],
+    "isExpanded": ["styleChanged"],
     "value": ["valueChanged"]
   }; }
   static get style() { return {
@@ -40951,7 +46088,9 @@ class SelectOption {
 }
 let selectOptionIds = 0;
 
-const selectPopoverCss = ".sc-ion-select-popover-h ion-list.sc-ion-select-popover{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}.sc-ion-select-popover-h ion-list-header.sc-ion-select-popover,.sc-ion-select-popover-h ion-label.sc-ion-select-popover{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}";
+const selectPopoverIosCss = ".sc-ion-select-popover-ios-h ion-list.sc-ion-select-popover-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}ion-list-header.sc-ion-select-popover-ios,ion-label.sc-ion-select-popover-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}";
+
+const selectPopoverMdCss = ".sc-ion-select-popover-md-h ion-list.sc-ion-select-popover-md{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}ion-list-header.sc-ion-select-popover-md,ion-label.sc-ion-select-popover-md{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}ion-list.sc-ion-select-popover-md ion-radio.sc-ion-select-popover-md{opacity:0}ion-item.sc-ion-select-popover-md{--inner-border-width:0}.item-radio-checked.sc-ion-select-popover-md{--background:rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.08);--background-focused:var(--ion-color-primary, #3880ff);--background-focused-opacity:0.2;--background-hover:var(--ion-color-primary, #3880ff);--background-hover-opacity:0.12}.item-checkbox-checked.sc-ion-select-popover-md{--background-activated:var(--ion-item-color, var(--ion-text-color, #000));--background-focused:var(--ion-item-color, var(--ion-text-color, #000));--background-hover:var(--ion-item-color, var(--ion-text-color, #000));--color:var(--ion-color-primary, #3880ff)}";
 
 /**
  * @internal
@@ -40959,29 +46098,92 @@ const selectPopoverCss = ".sc-ion-select-popover-h ion-list.sc-ion-select-popove
 class SelectPopover {
   constructor(hostRef) {
     registerInstance(this, hostRef);
-    /** Array of options for the popover */
+    /**
+     * An array of options for the popover
+     */
     this.options = [];
   }
   onSelect(ev) {
-    const option = this.options.find(o => o.value === ev.target.value);
-    if (option) {
-      safeCall(option.handler);
+    this.setChecked(ev);
+    this.callOptionHandler(ev);
+  }
+  findOptionFromEvent(ev) {
+    const { options } = this;
+    return options.find(o => o.value === ev.target.value);
+  }
+  /**
+   * When an option is selected we need to get the value(s)
+   * of the selected option(s) and return it in the option
+   * handler
+   */
+  callOptionHandler(ev) {
+    const option = this.findOptionFromEvent(ev);
+    const values = this.getValues(ev);
+    if (option && option.handler) {
+      safeCall(option.handler, values);
     }
   }
-  render() {
-    const checkedOption = this.options.find(o => o.checked);
-    const checkedValue = checkedOption ? checkedOption.value : undefined;
-    return (hAsync(Host, { class: getIonMode$1(this) }, hAsync("ion-list", null, this.header !== undefined && hAsync("ion-list-header", null, this.header), (this.subHeader !== undefined || this.message !== undefined) &&
-      hAsync("ion-item", null, hAsync("ion-label", { class: "ion-text-wrap" }, this.subHeader !== undefined && hAsync("h3", null, this.subHeader), this.message !== undefined && hAsync("p", null, this.message))), hAsync("ion-radio-group", { value: checkedValue }, this.options.map(option => hAsync("ion-item", { class: getClassMap(option.cssClass) }, hAsync("ion-label", null, option.text), hAsync("ion-radio", { value: option.value, disabled: option.disabled })))))));
+  /**
+   * This is required when selecting a radio that is already
+   * selected because it will not trigger the ionChange event
+   * but we still want to close the popover
+   */
+  rbClick(ev) {
+    this.callOptionHandler(ev);
   }
-  static get style() { return selectPopoverCss; }
+  setChecked(ev) {
+    const { multiple } = this;
+    const option = this.findOptionFromEvent(ev);
+    // this is a popover with checkboxes (multiple value select)
+    // we need to set the checked value for this option
+    if (multiple && option) {
+      option.checked = ev.detail.checked;
+    }
+  }
+  getValues(ev) {
+    const { multiple, options } = this;
+    if (multiple) {
+      // this is a popover with checkboxes (multiple value select)
+      // return an array of all the checked values
+      return options.filter(o => o.checked).map(o => o.value);
+    }
+    // this is a popover with radio buttons (single value select)
+    // return the value that was clicked, otherwise undefined
+    const option = this.findOptionFromEvent(ev);
+    return option ? option.value : undefined;
+  }
+  renderOptions(options) {
+    const { multiple } = this;
+    switch (multiple) {
+      case true: return this.renderCheckboxOptions(options);
+      default: return this.renderRadioOptions(options);
+    }
+  }
+  renderCheckboxOptions(options) {
+    return (options.map(option => hAsync("ion-item", { class: getClassMap(option.cssClass) }, hAsync("ion-checkbox", { slot: "start", value: option.value, disabled: option.disabled, checked: option.checked }), hAsync("ion-label", null, option.text))));
+  }
+  renderRadioOptions(options) {
+    const checked = options.filter(o => o.checked).map(o => o.value)[0];
+    return (hAsync("ion-radio-group", { value: checked }, options.map(option => hAsync("ion-item", { class: getClassMap(option.cssClass) }, hAsync("ion-label", null, option.text), hAsync("ion-radio", { value: option.value, disabled: option.disabled, onClick: ev => this.rbClick(ev) })))));
+  }
+  render() {
+    const { header, message, options, subHeader } = this;
+    const hasSubHeaderOrMessage = subHeader !== undefined || message !== undefined;
+    return (hAsync(Host, { class: getIonMode$1(this) }, hAsync("ion-list", null, header !== undefined && hAsync("ion-list-header", null, header), hasSubHeaderOrMessage &&
+      hAsync("ion-item", null, hAsync("ion-label", { class: "ion-text-wrap" }, subHeader !== undefined && hAsync("h3", null, subHeader), message !== undefined && hAsync("p", null, message))), this.renderOptions(options))));
+  }
+  static get style() { return {
+    ios: selectPopoverIosCss,
+    md: selectPopoverMdCss
+  }; }
   static get cmpMeta() { return {
-    "$flags$": 2,
+    "$flags$": 34,
     "$tagName$": "ion-select-popover",
     "$members$": {
       "header": [1],
       "subHeader": [1, "sub-header"],
       "message": [1],
+      "multiple": [4],
       "options": [16]
     },
     "$listeners$": [[0, "ionChange", "onSelect"]],
@@ -49790,7 +54992,7 @@ class Slides {
     }
   }
   componentWillLoad() {
-    console.warn(`[Deprecation Warning]: ion-slides has been deprecated and will be removed in Ionic Framework v7.0. We recommend using the framework-specific integrations that Swiper.js provides, allowing for faster bug fixes and an improved developer experience. See https://ionicframework.com/docs/api/slides#migration for more information including migration steps.`);
+    console.warn(`[Deprecation Warning]: ion-slides has been deprecated and will be removed in Ionic Framework v7.0. We recommend using the framework-specific integrations that Swiper.js provides, allowing for faster bug fixes and an improved developer experience. See https://ionicframework.com/docs/api/slides for more information including migration steps.`);
   }
   connectedCallback() {
   }
@@ -50137,7 +55339,7 @@ const waitForSlides = (el) => {
   return Promise.all(Array.from(el.querySelectorAll('ion-slide')).map(s => new Promise(resolve => componentOnReady(s, resolve))));
 };
 
-const spinnerCss = "/*!@:host*/.sc-ion-spinner-h{display:inline-block;position:relative;width:28px;height:28px;color:var(--color);user-select:none}/*!@:host(.ion-color)*/.ion-color.sc-ion-spinner-h{color:var(--ion-color-base)}/*!@svg*/svg.sc-ion-spinner{left:0;top:0;transform-origin:center;position:absolute;width:100%;height:100%;transform:translateZ(0)}/*!@[dir=rtl] svg, :host-context([dir=rtl]) svg*/[dir=rtl].sc-ion-spinner svg.sc-ion-spinner,[dir=rtl].sc-ion-spinner-h svg.sc-ion-spinner,[dir=rtl] .sc-ion-spinner-h svg.sc-ion-spinner{left:unset;right:unset;right:0}/*!@[dir=rtl] svg, :host-context([dir=rtl]) svg*/[dir=rtl].sc-ion-spinner svg.sc-ion-spinner,[dir=rtl].sc-ion-spinner-h svg.sc-ion-spinner,[dir=rtl] .sc-ion-spinner-h svg.sc-ion-spinner{transform-origin:calc(100% - center)}/*!@:host(.spinner-lines) line,\n:host(.spinner-lines-small) line*/.spinner-lines.sc-ion-spinner-h line.sc-ion-spinner,.spinner-lines-small.sc-ion-spinner-h line.sc-ion-spinner{stroke-width:4px;stroke-linecap:round;stroke:currentColor}/*!@:host(.spinner-lines) svg,\n:host(.spinner-lines-small) svg*/.spinner-lines.sc-ion-spinner-h svg.sc-ion-spinner,.spinner-lines-small.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-fade-out 1s linear infinite}/*!@:host(.spinner-bubbles) svg*/.spinner-bubbles.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-scale-out 1s linear infinite;fill:currentColor}/*!@:host(.spinner-circles) svg*/.spinner-circles.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-fade-out 1s linear infinite;fill:currentColor}/*!@:host(.spinner-crescent) circle*/.spinner-crescent.sc-ion-spinner-h circle.sc-ion-spinner{fill:transparent;stroke-width:4px;stroke-dasharray:128px;stroke-dashoffset:82px;stroke:currentColor}/*!@:host(.spinner-crescent) svg*/.spinner-crescent.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-rotate 1s linear infinite}/*!@:host(.spinner-dots) circle*/.spinner-dots.sc-ion-spinner-h circle.sc-ion-spinner{stroke-width:0;fill:currentColor}/*!@:host(.spinner-dots) svg*/.spinner-dots.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-dots 1s linear infinite}/*!@:host(.spinner-circular)*/.spinner-circular.sc-ion-spinner-h{animation:spinner-circular linear infinite}/*!@:host(.spinner-circular) circle*/.spinner-circular.sc-ion-spinner-h circle.sc-ion-spinner{animation:spinner-circular-inner ease-in-out infinite;stroke:currentColor;stroke-dasharray:80px, 200px;stroke-dashoffset:0px;stroke-width:5.6;fill:none}/*!@:host(.spinner-paused),\n:host(.spinner-paused) svg,\n:host(.spinner-paused) circle*/.spinner-paused.sc-ion-spinner-h,.spinner-paused.sc-ion-spinner-h svg.sc-ion-spinner,.spinner-paused.sc-ion-spinner-h circle.sc-ion-spinner{animation-play-state:paused}@keyframes spinner-fade-out{0%{opacity:1}100%{opacity:0}}@keyframes spinner-scale-out{0%{transform:scale(1, 1)}100%{transform:scale(0, 0)}}@keyframes spinner-rotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@keyframes spinner-dots{0%{transform:scale(1, 1);opacity:0.9}50%{transform:scale(0.4, 0.4);opacity:0.3}100%{transform:scale(1, 1);opacity:0.9}}@keyframes spinner-circular{100%{transform:rotate(360deg)}}@keyframes spinner-circular-inner{0%{stroke-dasharray:1px, 200px;stroke-dashoffset:0px}50%{stroke-dasharray:100px, 200px;stroke-dashoffset:-15px}100%{stroke-dasharray:100px, 200px;stroke-dashoffset:-125px}}";
+const spinnerCss = "/*!@:host*/.sc-ion-spinner-h{display:inline-block;position:relative;width:28px;height:28px;color:var(--color);user-select:none}/*!@:host(.ion-color)*/.ion-color.sc-ion-spinner-h{color:var(--ion-color-base)}/*!@svg*/svg.sc-ion-spinner{left:0;top:0;transform-origin:center;position:absolute;width:100%;height:100%;transform:translateZ(0)}/*!@[dir=rtl] svg, :host-context([dir=rtl]) svg*/[dir=rtl].sc-ion-spinner svg.sc-ion-spinner,[dir=rtl].sc-ion-spinner-h svg.sc-ion-spinner,[dir=rtl] .sc-ion-spinner-h svg.sc-ion-spinner{left:unset;right:unset;right:0}/*!@[dir=rtl] svg, :host-context([dir=rtl]) svg*/[dir=rtl].sc-ion-spinner svg.sc-ion-spinner,[dir=rtl].sc-ion-spinner-h svg.sc-ion-spinner,[dir=rtl] .sc-ion-spinner-h svg.sc-ion-spinner{transform-origin:calc(100% - center)}/*!@:host(.spinner-lines) line,\n:host(.spinner-lines-small) line*/.spinner-lines.sc-ion-spinner-h line.sc-ion-spinner,.spinner-lines-small.sc-ion-spinner-h line.sc-ion-spinner{stroke-width:7px}/*!@:host(.spinner-lines-sharp) line,\n:host(.spinner-lines-sharp-small) line*/.spinner-lines-sharp.sc-ion-spinner-h line.sc-ion-spinner,.spinner-lines-sharp-small.sc-ion-spinner-h line.sc-ion-spinner{stroke-width:4px}/*!@:host(.spinner-lines) line,\n:host(.spinner-lines-small) line,\n:host(.spinner-lines-sharp) line,\n:host(.spinner-lines-sharp-small) line*/.spinner-lines.sc-ion-spinner-h line.sc-ion-spinner,.spinner-lines-small.sc-ion-spinner-h line.sc-ion-spinner,.spinner-lines-sharp.sc-ion-spinner-h line.sc-ion-spinner,.spinner-lines-sharp-small.sc-ion-spinner-h line.sc-ion-spinner{stroke-linecap:round;stroke:currentColor}/*!@:host(.spinner-lines) svg,\n:host(.spinner-lines-small) svg,\n:host(.spinner-lines-sharp) svg,\n:host(.spinner-lines-sharp-small) svg*/.spinner-lines.sc-ion-spinner-h svg.sc-ion-spinner,.spinner-lines-small.sc-ion-spinner-h svg.sc-ion-spinner,.spinner-lines-sharp.sc-ion-spinner-h svg.sc-ion-spinner,.spinner-lines-sharp-small.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-fade-out 1s linear infinite}/*!@:host(.spinner-bubbles) svg*/.spinner-bubbles.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-scale-out 1s linear infinite;fill:currentColor}/*!@:host(.spinner-circles) svg*/.spinner-circles.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-fade-out 1s linear infinite;fill:currentColor}/*!@:host(.spinner-crescent) circle*/.spinner-crescent.sc-ion-spinner-h circle.sc-ion-spinner{fill:transparent;stroke-width:4px;stroke-dasharray:128px;stroke-dashoffset:82px;stroke:currentColor}/*!@:host(.spinner-crescent) svg*/.spinner-crescent.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-rotate 1s linear infinite}/*!@:host(.spinner-dots) circle*/.spinner-dots.sc-ion-spinner-h circle.sc-ion-spinner{stroke-width:0;fill:currentColor}/*!@:host(.spinner-dots) svg*/.spinner-dots.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-dots 1s linear infinite}/*!@:host(.spinner-circular) svg*/.spinner-circular.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-circular linear infinite}/*!@:host(.spinner-circular) circle*/.spinner-circular.sc-ion-spinner-h circle.sc-ion-spinner{animation:spinner-circular-inner ease-in-out infinite;stroke:currentColor;stroke-dasharray:80px, 200px;stroke-dashoffset:0px;stroke-width:5.6;fill:none}/*!@:host(.spinner-paused),\n:host(.spinner-paused) svg,\n:host(.spinner-paused) circle*/.spinner-paused.sc-ion-spinner-h,.spinner-paused.sc-ion-spinner-h svg.sc-ion-spinner,.spinner-paused.sc-ion-spinner-h circle.sc-ion-spinner{animation-play-state:paused}@keyframes spinner-fade-out{0%{opacity:1}100%{opacity:0}}@keyframes spinner-scale-out{0%{transform:scale(1, 1)}100%{transform:scale(0, 0)}}@keyframes spinner-rotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@keyframes spinner-dots{0%{transform:scale(1, 1);opacity:0.9}50%{transform:scale(0.4, 0.4);opacity:0.3}100%{transform:scale(1, 1);opacity:0.9}}@keyframes spinner-circular{100%{transform:rotate(360deg)}}@keyframes spinner-circular-inner{0%{stroke-dasharray:1px, 200px;stroke-dashoffset:0px}50%{stroke-dasharray:100px, 200px;stroke-dashoffset:-15px}100%{stroke-dasharray:100px, 200px;stroke-dashoffset:-125px}}";
 
 class Spinner {
   constructor(hostRef) {
@@ -50175,7 +55377,7 @@ class Spinner {
     return (hAsync(Host, { class: createColorClasses$1(self.color, {
         [mode]: true,
         [`spinner-${spinnerName}`]: true,
-        'spinner-paused': !!self.paused || config$1.getBoolean('_testing')
+        'spinner-paused': self.paused || config$1.getBoolean('_testing')
       }), role: "progressbar", style: spinner.elmDuration ? { animationDuration: duration + 'ms' } : {} }, svgs));
   }
   static get style() { return spinnerCss; }
@@ -50237,7 +55439,12 @@ class SplitPane {
     const detail = { visible, isPane: this.isPane.bind(this) };
     this.ionSplitPaneVisible.emit(detail);
   }
-  connectedCallback() {
+  async connectedCallback() {
+    // TODO: connectedCallback is fired in CE build
+    // before WC is defined. This needs to be fixed in Stencil.
+    if (typeof customElements !== 'undefined') {
+      await customElements.whenDefined('ion-split-pane');
+    }
     this.styleChildren();
     this.updateState();
   }
@@ -50449,7 +55656,7 @@ class Tab {
   }; }
 }
 
-const tabBarIosCss = "/*!@:host*/.sc-ion-tab-bar-ios-h{padding-left:var(--ion-safe-area-left);padding-right:var(--ion-safe-area-right);display:flex;align-items:center;justify-content:center;width:auto;padding-bottom:var(--ion-safe-area-bottom, 0);border-top:var(--border);background:var(--background);color:var(--color);text-align:center;contain:strict;user-select:none;z-index:10;box-sizing:content-box !important}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-tab-bar-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-safe-area-left);padding-inline-start:var(--ion-safe-area-left);-webkit-padding-end:var(--ion-safe-area-right);padding-inline-end:var(--ion-safe-area-right)}}/*!@:host(.ion-color) ::slotted(ion-tab-button)*/.sc-ion-tab-bar-ios-h.ion-color .sc-ion-tab-bar-ios-s>ion-tab-button{--background-focused:var(--ion-color-shade);--color-selected:var(--ion-color-contrast)}/*!@:host(.ion-color) ::slotted(.tab-selected)*/.sc-ion-tab-bar-ios-h.ion-color .sc-ion-tab-bar-ios-s>.tab-selected{color:var(--ion-color-contrast)}/*!@:host(.ion-color),\n:host(.ion-color) ::slotted(ion-tab-button)*/.ion-color.sc-ion-tab-bar-ios-h,.sc-ion-tab-bar-ios-h.ion-color .sc-ion-tab-bar-ios-s>ion-tab-button{color:rgba(var(--ion-color-contrast-rgb), 0.7)}/*!@:host(.ion-color),\n:host(.ion-color) ::slotted(ion-tab-button)*/.ion-color.sc-ion-tab-bar-ios-h,.sc-ion-tab-bar-ios-h.ion-color .sc-ion-tab-bar-ios-s>ion-tab-button{background:var(--ion-color-base)}/*!@:host(.ion-color) ::slotted(ion-tab-button.ion-focused),\n:host(.tab-bar-translucent) ::slotted(ion-tab-button.ion-focused)*/.sc-ion-tab-bar-ios-h.ion-color .sc-ion-tab-bar-ios-s>ion-tab-button.ion-focused,.sc-ion-tab-bar-ios-h.tab-bar-translucent .sc-ion-tab-bar-ios-s>ion-tab-button.ion-focused{background:var(--background-focused)}/*!@:host(.tab-bar-translucent) ::slotted(ion-tab-button)*/.sc-ion-tab-bar-ios-h.tab-bar-translucent .sc-ion-tab-bar-ios-s>ion-tab-button{background:transparent}/*!@:host([slot=top])*/[slot=top].sc-ion-tab-bar-ios-h{padding-top:var(--ion-safe-area-top, 0);padding-bottom:0;border-top:0;border-bottom:var(--border)}/*!@:host(.tab-bar-hidden)*/.tab-bar-hidden.sc-ion-tab-bar-ios-h{display:none !important}/*!@:host*/.sc-ion-tab-bar-ios-h{--background:var(--ion-tab-bar-background, var(--ion-background-color, #fff));--background-focused:var(--ion-tab-bar-background-focused, #e0e0e0);--border:0.55px solid var(--ion-tab-bar-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.2))));--color:var(--ion-tab-bar-color, var(--ion-color-step-400, #999999));--color-selected:var(--ion-tab-bar-color-selected, var(--ion-color-primary, #3880ff));height:50px}@supports (backdrop-filter: blur(0)){/*!@:host(.tab-bar-translucent)*/.tab-bar-translucent.sc-ion-tab-bar-ios-h{--background:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);backdrop-filter:saturate(210%) blur(20px)}/*!@:host(.ion-color.tab-bar-translucent)*/.ion-color.tab-bar-translucent.sc-ion-tab-bar-ios-h{background:rgba(var(--ion-color-base-rgb), 0.8)}/*!@:host(.tab-bar-translucent) ::slotted(ion-tab-button.ion-focused)*/.sc-ion-tab-bar-ios-h.tab-bar-translucent .sc-ion-tab-bar-ios-s>ion-tab-button.ion-focused{background:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.6)}}";
+const tabBarIosCss = "/*!@:host*/.sc-ion-tab-bar-ios-h{padding-left:var(--ion-safe-area-left);padding-right:var(--ion-safe-area-right);display:flex;align-items:center;justify-content:center;width:auto;padding-bottom:var(--ion-safe-area-bottom, 0);border-top:var(--border);background:var(--background);color:var(--color);text-align:center;contain:strict;user-select:none;z-index:10;box-sizing:content-box !important}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-tab-bar-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-safe-area-left);padding-inline-start:var(--ion-safe-area-left);-webkit-padding-end:var(--ion-safe-area-right);padding-inline-end:var(--ion-safe-area-right)}}/*!@:host(.ion-color) ::slotted(ion-tab-button)*/.sc-ion-tab-bar-ios-h.ion-color .sc-ion-tab-bar-ios-s>ion-tab-button{--background-focused:var(--ion-color-shade);--color-selected:var(--ion-color-contrast)}/*!@:host(.ion-color) ::slotted(.tab-selected)*/.sc-ion-tab-bar-ios-h.ion-color .sc-ion-tab-bar-ios-s>.tab-selected{color:var(--ion-color-contrast)}/*!@:host(.ion-color),\n:host(.ion-color) ::slotted(ion-tab-button)*/.ion-color.sc-ion-tab-bar-ios-h,.sc-ion-tab-bar-ios-h.ion-color .sc-ion-tab-bar-ios-s>ion-tab-button{color:rgba(var(--ion-color-contrast-rgb), 0.7)}/*!@:host(.ion-color),\n:host(.ion-color) ::slotted(ion-tab-button)*/.ion-color.sc-ion-tab-bar-ios-h,.sc-ion-tab-bar-ios-h.ion-color .sc-ion-tab-bar-ios-s>ion-tab-button{background:var(--ion-color-base)}/*!@:host(.ion-color) ::slotted(ion-tab-button.ion-focused),\n:host(.tab-bar-translucent) ::slotted(ion-tab-button.ion-focused)*/.sc-ion-tab-bar-ios-h.ion-color .sc-ion-tab-bar-ios-s>ion-tab-button.ion-focused,.sc-ion-tab-bar-ios-h.tab-bar-translucent .sc-ion-tab-bar-ios-s>ion-tab-button.ion-focused{background:var(--background-focused)}/*!@:host(.tab-bar-translucent) ::slotted(ion-tab-button)*/.sc-ion-tab-bar-ios-h.tab-bar-translucent .sc-ion-tab-bar-ios-s>ion-tab-button{background:transparent}/*!@:host([slot=top])*/[slot=top].sc-ion-tab-bar-ios-h{padding-top:var(--ion-safe-area-top, 0);padding-bottom:0;border-top:0;border-bottom:var(--border)}/*!@:host(.tab-bar-hidden)*/.tab-bar-hidden.sc-ion-tab-bar-ios-h{display:none !important}/*!@:host*/.sc-ion-tab-bar-ios-h{--background:var(--ion-tab-bar-background, var(--ion-color-step-50, #f7f7f7));--background-focused:var(--ion-tab-bar-background-focused, #e0e0e0);--border:0.55px solid var(--ion-tab-bar-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.2))));--color:var(--ion-tab-bar-color, var(--ion-color-step-400, #999999));--color-selected:var(--ion-tab-bar-color-selected, var(--ion-color-primary, #3880ff));height:50px}@supports (backdrop-filter: blur(0)){/*!@:host(.tab-bar-translucent)*/.tab-bar-translucent.sc-ion-tab-bar-ios-h{--background:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);backdrop-filter:saturate(210%) blur(20px)}/*!@:host(.ion-color.tab-bar-translucent)*/.ion-color.tab-bar-translucent.sc-ion-tab-bar-ios-h{background:rgba(var(--ion-color-base-rgb), 0.8)}/*!@:host(.tab-bar-translucent) ::slotted(ion-tab-button.ion-focused)*/.sc-ion-tab-bar-ios-h.tab-bar-translucent .sc-ion-tab-bar-ios-s>ion-tab-button.ion-focused{background:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.6)}}";
 
 const tabBarMdCss = "/*!@:host*/.sc-ion-tab-bar-md-h{padding-left:var(--ion-safe-area-left);padding-right:var(--ion-safe-area-right);display:flex;align-items:center;justify-content:center;width:auto;padding-bottom:var(--ion-safe-area-bottom, 0);border-top:var(--border);background:var(--background);color:var(--color);text-align:center;contain:strict;user-select:none;z-index:10;box-sizing:content-box !important}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-tab-bar-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-safe-area-left);padding-inline-start:var(--ion-safe-area-left);-webkit-padding-end:var(--ion-safe-area-right);padding-inline-end:var(--ion-safe-area-right)}}/*!@:host(.ion-color) ::slotted(ion-tab-button)*/.sc-ion-tab-bar-md-h.ion-color .sc-ion-tab-bar-md-s>ion-tab-button{--background-focused:var(--ion-color-shade);--color-selected:var(--ion-color-contrast)}/*!@:host(.ion-color) ::slotted(.tab-selected)*/.sc-ion-tab-bar-md-h.ion-color .sc-ion-tab-bar-md-s>.tab-selected{color:var(--ion-color-contrast)}/*!@:host(.ion-color),\n:host(.ion-color) ::slotted(ion-tab-button)*/.ion-color.sc-ion-tab-bar-md-h,.sc-ion-tab-bar-md-h.ion-color .sc-ion-tab-bar-md-s>ion-tab-button{color:rgba(var(--ion-color-contrast-rgb), 0.7)}/*!@:host(.ion-color),\n:host(.ion-color) ::slotted(ion-tab-button)*/.ion-color.sc-ion-tab-bar-md-h,.sc-ion-tab-bar-md-h.ion-color .sc-ion-tab-bar-md-s>ion-tab-button{background:var(--ion-color-base)}/*!@:host(.ion-color) ::slotted(ion-tab-button.ion-focused),\n:host(.tab-bar-translucent) ::slotted(ion-tab-button.ion-focused)*/.sc-ion-tab-bar-md-h.ion-color .sc-ion-tab-bar-md-s>ion-tab-button.ion-focused,.sc-ion-tab-bar-md-h.tab-bar-translucent .sc-ion-tab-bar-md-s>ion-tab-button.ion-focused{background:var(--background-focused)}/*!@:host(.tab-bar-translucent) ::slotted(ion-tab-button)*/.sc-ion-tab-bar-md-h.tab-bar-translucent .sc-ion-tab-bar-md-s>ion-tab-button{background:transparent}/*!@:host([slot=top])*/[slot=top].sc-ion-tab-bar-md-h{padding-top:var(--ion-safe-area-top, 0);padding-bottom:0;border-top:0;border-bottom:var(--border)}/*!@:host(.tab-bar-hidden)*/.tab-bar-hidden.sc-ion-tab-bar-md-h{display:none !important}/*!@:host*/.sc-ion-tab-bar-md-h{--background:var(--ion-tab-bar-background, var(--ion-background-color, #fff));--background-focused:var(--ion-tab-bar-background-focused, #e0e0e0);--border:1px solid var(--ion-tab-bar-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.07))));--color:var(--ion-tab-bar-color, var(--ion-color-step-600, #666666));--color-selected:var(--ion-tab-bar-color-selected, var(--ion-color-primary, #3880ff));height:56px}";
 
@@ -50929,6 +56136,7 @@ class Textarea {
     this.hasFocus = false;
     /**
      * Indicates whether and how the text value should be automatically capitalized as it is entered/edited by the user.
+     * Available options: `"off"`, `"none"`, `"on"`, `"sentences"`, `"words"`, `"characters"`.
      */
     this.autocapitalize = 'none';
     /**
@@ -51022,7 +56230,7 @@ class Textarea {
   disconnectedCallback() {
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes(this.el, ['title']);
+    this.inheritedAttributes = inheritAttributes$1(this.el, ['title']);
   }
   componentDidLoad() {
     raf(() => this.runAutoGrow());
@@ -51070,7 +56278,7 @@ class Textarea {
       'textarea': true,
       'input': true,
       'interactive-disabled': this.disabled,
-      'has-placeholder': this.placeholder != null,
+      'has-placeholder': this.placeholder !== undefined,
       'has-value': this.hasValue(),
       'has-focus': this.hasFocus
     });
@@ -51182,14 +56390,17 @@ class Thumbnail {
   }; }
 }
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * iOS Toast Enter Animation
  */
 const iosEnterAnimation = (baseEl, position) => {
   const baseAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  const hostEl = baseEl.host || baseEl;
-  const wrapperEl = baseEl.querySelector('.toast-wrapper');
+  const root = getElementRoot(baseEl);
+  const wrapperEl = root.querySelector('.toast-wrapper');
   const bottom = `calc(-10px - var(--ion-safe-area-bottom, 0px))`;
   const top = `calc(10px + var(--ion-safe-area-top, 0px))`;
   wrapperAnimation.addElement(wrapperEl);
@@ -51198,7 +56409,7 @@ const iosEnterAnimation = (baseEl, position) => {
       wrapperAnimation.fromTo('transform', 'translateY(-100%)', `translateY(${top})`);
       break;
     case 'middle':
-      const topPosition = Math.floor(hostEl.clientHeight / 2 - wrapperEl.clientHeight / 2);
+      const topPosition = Math.floor(baseEl.clientHeight / 2 - wrapperEl.clientHeight / 2);
       wrapperEl.style.top = `${topPosition}px`;
       wrapperAnimation.fromTo('opacity', 0.01, 1);
       break;
@@ -51207,20 +56418,22 @@ const iosEnterAnimation = (baseEl, position) => {
       break;
   }
   return baseAnimation
-    .addElement(hostEl)
     .easing('cubic-bezier(.155,1.105,.295,1.12)')
     .duration(400)
     .addAnimation(wrapperAnimation);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * iOS Toast Leave Animation
  */
 const iosLeaveAnimation = (baseEl, position) => {
   const baseAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  const hostEl = baseEl.host || baseEl;
-  const wrapperEl = baseEl.querySelector('.toast-wrapper');
+  const root = getElementRoot(baseEl);
+  const wrapperEl = root.querySelector('.toast-wrapper');
   const bottom = `calc(-10px - var(--ion-safe-area-bottom, 0px))`;
   const top = `calc(10px + var(--ion-safe-area-top, 0px))`;
   wrapperAnimation.addElement(wrapperEl);
@@ -51236,20 +56449,22 @@ const iosLeaveAnimation = (baseEl, position) => {
       break;
   }
   return baseAnimation
-    .addElement(hostEl)
     .easing('cubic-bezier(.36,.66,.04,1)')
     .duration(300)
     .addAnimation(wrapperAnimation);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * MD Toast Enter Animation
  */
 const mdEnterAnimation = (baseEl, position) => {
   const baseAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  const hostEl = baseEl.host || baseEl;
-  const wrapperEl = baseEl.querySelector('.toast-wrapper');
+  const root = getElementRoot(baseEl);
+  const wrapperEl = root.querySelector('.toast-wrapper');
   const bottom = `calc(8px + var(--ion-safe-area-bottom, 0px))`;
   const top = `calc(8px + var(--ion-safe-area-top, 0px))`;
   wrapperAnimation.addElement(wrapperEl);
@@ -51259,7 +56474,7 @@ const mdEnterAnimation = (baseEl, position) => {
       wrapperAnimation.fromTo('opacity', 0.01, 1);
       break;
     case 'middle':
-      const topPosition = Math.floor(hostEl.clientHeight / 2 - wrapperEl.clientHeight / 2);
+      const topPosition = Math.floor(baseEl.clientHeight / 2 - wrapperEl.clientHeight / 2);
       wrapperEl.style.top = `${topPosition}px`;
       wrapperAnimation.fromTo('opacity', 0.01, 1);
       break;
@@ -51269,33 +56484,34 @@ const mdEnterAnimation = (baseEl, position) => {
       break;
   }
   return baseAnimation
-    .addElement(hostEl)
     .easing('cubic-bezier(.36,.66,.04,1)')
     .duration(400)
     .addAnimation(wrapperAnimation);
 };
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * md Toast Leave Animation
  */
 const mdLeaveAnimation = (baseEl) => {
   const baseAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  const hostEl = baseEl.host || baseEl;
-  const wrapperEl = baseEl.querySelector('.toast-wrapper');
+  const root = getElementRoot(baseEl);
+  const wrapperEl = root.querySelector('.toast-wrapper');
   wrapperAnimation
     .addElement(wrapperEl)
     .fromTo('opacity', 0.99, 0);
   return baseAnimation
-    .addElement(hostEl)
     .easing('cubic-bezier(.36,.66,.04,1)')
     .duration(300)
     .addAnimation(wrapperAnimation);
 };
 
-const toastIosCss = "/*!@:host*/.sc-ion-toast-ios-h{--border-width:0;--border-style:none;--border-color:initial;--box-shadow:none;--min-width:auto;--width:auto;--min-height:auto;--height:auto;--max-height:auto;--white-space:pre-wrap;left:0;top:0;display:block;position:absolute;width:100%;height:100%;outline:none;color:var(--color);font-family:var(--ion-font-family, inherit);contain:strict;z-index:1001;pointer-events:none}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-toast-ios-h,[dir=rtl] .sc-ion-toast-ios-h{left:unset;right:unset;right:0}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-toast-ios-h{display:none}/*!@:host(.ion-color)*/.ion-color.sc-ion-toast-ios-h{--button-color:inherit;color:var(--ion-color-contrast)}/*!@:host(.ion-color) .toast-button-cancel*/.ion-color.sc-ion-toast-ios-h .toast-button-cancel.sc-ion-toast-ios{color:inherit}/*!@:host(.ion-color) .toast-wrapper*/.ion-color.sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios{background:var(--ion-color-base)}/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-ios{border-radius:var(--border-radius);left:var(--start);right:var(--end);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow)}/*!@[dir=rtl] .toast-wrapper, :host-context([dir=rtl]) .toast-wrapper*/[dir=rtl].sc-ion-toast-ios .toast-wrapper.sc-ion-toast-ios,[dir=rtl].sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios,[dir=rtl] .sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios{left:unset;right:unset;left:var(--end);right:var(--start)}/*!@.toast-container*/.toast-container.sc-ion-toast-ios{display:flex;align-items:center;pointer-events:auto;height:inherit;min-height:inherit;max-height:inherit;contain:content}/*!@.toast-content*/.toast-content.sc-ion-toast-ios{display:flex;flex:1;flex-direction:column;justify-content:center}/*!@.toast-message*/.toast-message.sc-ion-toast-ios{flex:1;white-space:var(--white-space)}/*!@.toast-button-group*/.toast-button-group.sc-ion-toast-ios{display:flex}/*!@.toast-button*/.toast-button.sc-ion-toast-ios{border:0;outline:none;color:var(--button-color);z-index:0}/*!@.toast-icon*/.toast-icon.sc-ion-toast-ios{font-size:1.4em}/*!@.toast-button-inner*/.toast-button-inner.sc-ion-toast-ios{display:flex;align-items:center}@media (any-hover: hover){/*!@.toast-button:hover*/.toast-button.sc-ion-toast-ios:hover{cursor:pointer}}/*!@:host*/.sc-ion-toast-ios-h{--background:var(--ion-color-step-50, #f2f2f2);--border-radius:14px;--button-color:var(--ion-color-primary, #3880ff);--color:var(--ion-color-step-850, #262626);--max-width:700px;--start:10px;--end:10px;font-size:14px}/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-ios{margin-left:auto;margin-right:auto;margin-top:auto;margin-bottom:auto;display:block;position:absolute;z-index:10}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}@supports (backdrop-filter: blur(0)){/*!@:host(.toast-translucent) .toast-wrapper*/.toast-translucent.sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios{background:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);backdrop-filter:saturate(180%) blur(20px)}}/*!@.toast-wrapper.toast-top*/.toast-wrapper.toast-top.sc-ion-toast-ios{transform:translate3d(0,  -100%,  0);top:0}/*!@.toast-wrapper.toast-middle*/.toast-wrapper.toast-middle.sc-ion-toast-ios{opacity:0.01}/*!@.toast-wrapper.toast-bottom*/.toast-wrapper.toast-bottom.sc-ion-toast-ios{transform:translate3d(0,  100%,  0);bottom:0}/*!@.toast-content*/.toast-content.sc-ion-toast-ios{padding-left:15px;padding-right:15px;padding-top:15px;padding-bottom:15px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-content*/.toast-content.sc-ion-toast-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:15px;padding-inline-start:15px;-webkit-padding-end:15px;padding-inline-end:15px}}/*!@.toast-header*/.toast-header.sc-ion-toast-ios{margin-bottom:2px;font-weight:500}/*!@.toast-button*/.toast-button.sc-ion-toast-ios{padding-left:15px;padding-right:15px;padding-top:10px;padding-bottom:10px;height:44px;transition:background-color, opacity 100ms linear;border:0;background-color:transparent;font-family:var(--ion-font-family);font-size:17px;font-weight:500;overflow:hidden}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-button*/.toast-button.sc-ion-toast-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:15px;padding-inline-start:15px;-webkit-padding-end:15px;padding-inline-end:15px}}/*!@.toast-button.ion-activated*/.toast-button.ion-activated.sc-ion-toast-ios{opacity:0.4}@media (any-hover: hover){/*!@.toast-button:hover*/.toast-button.sc-ion-toast-ios:hover{opacity:0.6}}";
+const toastIosCss = "/*!@:host*/.sc-ion-toast-ios-h{--border-width:0;--border-style:none;--border-color:initial;--box-shadow:none;--min-width:auto;--width:auto;--min-height:auto;--height:auto;--max-height:auto;--white-space:normal;left:0;top:0;display:block;position:absolute;width:100%;height:100%;outline:none;color:var(--color);font-family:var(--ion-font-family, inherit);contain:strict;z-index:1001;pointer-events:none}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-toast-ios-h,[dir=rtl] .sc-ion-toast-ios-h{left:unset;right:unset;right:0}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-toast-ios-h{display:none}/*!@:host(.ion-color)*/.ion-color.sc-ion-toast-ios-h{--button-color:inherit;color:var(--ion-color-contrast)}/*!@:host(.ion-color) .toast-button-cancel*/.ion-color.sc-ion-toast-ios-h .toast-button-cancel.sc-ion-toast-ios{color:inherit}/*!@:host(.ion-color) .toast-wrapper*/.ion-color.sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios{background:var(--ion-color-base)}/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-ios{border-radius:var(--border-radius);left:var(--start);right:var(--end);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow)}/*!@[dir=rtl] .toast-wrapper, :host-context([dir=rtl]) .toast-wrapper*/[dir=rtl].sc-ion-toast-ios .toast-wrapper.sc-ion-toast-ios,[dir=rtl].sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios,[dir=rtl] .sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios{left:unset;right:unset;left:var(--end);right:var(--start)}/*!@.toast-container*/.toast-container.sc-ion-toast-ios{display:flex;align-items:center;pointer-events:auto;height:inherit;min-height:inherit;max-height:inherit;contain:content}/*!@.toast-content*/.toast-content.sc-ion-toast-ios{display:flex;flex:1;flex-direction:column;justify-content:center}/*!@.toast-icon*/.toast-icon.sc-ion-toast-ios{margin-left:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-icon*/.toast-icon.sc-ion-toast-ios{margin-left:unset;-webkit-margin-start:16px;margin-inline-start:16px}}/*!@.toast-message*/.toast-message.sc-ion-toast-ios{flex:1;white-space:var(--white-space)}/*!@.toast-button-group*/.toast-button-group.sc-ion-toast-ios{display:flex}/*!@.toast-button*/.toast-button.sc-ion-toast-ios{border:0;outline:none;color:var(--button-color);z-index:0}/*!@.toast-icon,\n.toast-button-icon*/.toast-icon.sc-ion-toast-ios,.toast-button-icon.sc-ion-toast-ios{font-size:1.4em}/*!@.toast-button-inner*/.toast-button-inner.sc-ion-toast-ios{display:flex;align-items:center}@media (any-hover: hover){/*!@.toast-button:hover*/.toast-button.sc-ion-toast-ios:hover{cursor:pointer}}/*!@:host*/.sc-ion-toast-ios-h{--background:var(--ion-color-step-50, #f2f2f2);--border-radius:14px;--button-color:var(--ion-color-primary, #3880ff);--color:var(--ion-color-step-850, #262626);--max-width:700px;--start:10px;--end:10px;font-size:14px}/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-ios{margin-left:auto;margin-right:auto;margin-top:auto;margin-bottom:auto;display:block;position:absolute;z-index:10}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}@supports (backdrop-filter: blur(0)){/*!@:host(.toast-translucent) .toast-wrapper*/.toast-translucent.sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios{background:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);backdrop-filter:saturate(180%) blur(20px)}}/*!@.toast-wrapper.toast-top*/.toast-wrapper.toast-top.sc-ion-toast-ios{transform:translate3d(0,  -100%,  0);top:0}/*!@.toast-wrapper.toast-middle*/.toast-wrapper.toast-middle.sc-ion-toast-ios{opacity:0.01}/*!@.toast-wrapper.toast-bottom*/.toast-wrapper.toast-bottom.sc-ion-toast-ios{transform:translate3d(0,  100%,  0);bottom:0}/*!@.toast-content*/.toast-content.sc-ion-toast-ios{padding-left:15px;padding-right:15px;padding-top:15px;padding-bottom:15px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-content*/.toast-content.sc-ion-toast-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:15px;padding-inline-start:15px;-webkit-padding-end:15px;padding-inline-end:15px}}/*!@.toast-header*/.toast-header.sc-ion-toast-ios{margin-bottom:2px;font-weight:500}/*!@.toast-button*/.toast-button.sc-ion-toast-ios{padding-left:15px;padding-right:15px;padding-top:10px;padding-bottom:10px;height:44px;transition:background-color, opacity 100ms linear;border:0;background-color:transparent;font-family:var(--ion-font-family);font-size:17px;font-weight:500;overflow:hidden}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-button*/.toast-button.sc-ion-toast-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:15px;padding-inline-start:15px;-webkit-padding-end:15px;padding-inline-end:15px}}/*!@.toast-button.ion-activated*/.toast-button.ion-activated.sc-ion-toast-ios{opacity:0.4}@media (any-hover: hover){/*!@.toast-button:hover*/.toast-button.sc-ion-toast-ios:hover{opacity:0.6}}";
 
-const toastMdCss = "/*!@:host*/.sc-ion-toast-md-h{--border-width:0;--border-style:none;--border-color:initial;--box-shadow:none;--min-width:auto;--width:auto;--min-height:auto;--height:auto;--max-height:auto;--white-space:pre-wrap;left:0;top:0;display:block;position:absolute;width:100%;height:100%;outline:none;color:var(--color);font-family:var(--ion-font-family, inherit);contain:strict;z-index:1001;pointer-events:none}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-toast-md-h,[dir=rtl] .sc-ion-toast-md-h{left:unset;right:unset;right:0}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-toast-md-h{display:none}/*!@:host(.ion-color)*/.ion-color.sc-ion-toast-md-h{--button-color:inherit;color:var(--ion-color-contrast)}/*!@:host(.ion-color) .toast-button-cancel*/.ion-color.sc-ion-toast-md-h .toast-button-cancel.sc-ion-toast-md{color:inherit}/*!@:host(.ion-color) .toast-wrapper*/.ion-color.sc-ion-toast-md-h .toast-wrapper.sc-ion-toast-md{background:var(--ion-color-base)}/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-md{border-radius:var(--border-radius);left:var(--start);right:var(--end);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow)}/*!@[dir=rtl] .toast-wrapper, :host-context([dir=rtl]) .toast-wrapper*/[dir=rtl].sc-ion-toast-md .toast-wrapper.sc-ion-toast-md,[dir=rtl].sc-ion-toast-md-h .toast-wrapper.sc-ion-toast-md,[dir=rtl] .sc-ion-toast-md-h .toast-wrapper.sc-ion-toast-md{left:unset;right:unset;left:var(--end);right:var(--start)}/*!@.toast-container*/.toast-container.sc-ion-toast-md{display:flex;align-items:center;pointer-events:auto;height:inherit;min-height:inherit;max-height:inherit;contain:content}/*!@.toast-content*/.toast-content.sc-ion-toast-md{display:flex;flex:1;flex-direction:column;justify-content:center}/*!@.toast-message*/.toast-message.sc-ion-toast-md{flex:1;white-space:var(--white-space)}/*!@.toast-button-group*/.toast-button-group.sc-ion-toast-md{display:flex}/*!@.toast-button*/.toast-button.sc-ion-toast-md{border:0;outline:none;color:var(--button-color);z-index:0}/*!@.toast-icon*/.toast-icon.sc-ion-toast-md{font-size:1.4em}/*!@.toast-button-inner*/.toast-button-inner.sc-ion-toast-md{display:flex;align-items:center}@media (any-hover: hover){/*!@.toast-button:hover*/.toast-button.sc-ion-toast-md:hover{cursor:pointer}}/*!@:host*/.sc-ion-toast-md-h{--background:var(--ion-color-step-800, #333333);--border-radius:4px;--box-shadow:0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);--button-color:var(--ion-color-primary, #3880ff);--color:var(--ion-color-step-50, #f2f2f2);--max-width:700px;--start:8px;--end:8px;font-size:14px}/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-md{margin-left:auto;margin-right:auto;margin-top:auto;margin-bottom:auto;display:block;position:absolute;opacity:0.01;z-index:10}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-md{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@.toast-content*/.toast-content.sc-ion-toast-md{padding-left:16px;padding-right:16px;padding-top:14px;padding-bottom:14px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-content*/.toast-content.sc-ion-toast-md{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@.toast-header*/.toast-header.sc-ion-toast-md{margin-bottom:2px;font-weight:500;line-height:20px}/*!@.toast-message*/.toast-message.sc-ion-toast-md{line-height:20px}/*!@.toast-button-group-start*/.toast-button-group-start.sc-ion-toast-md{margin-left:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-button-group-start*/.toast-button-group-start.sc-ion-toast-md{margin-left:unset;-webkit-margin-start:8px;margin-inline-start:8px}}/*!@.toast-button-group-end*/.toast-button-group-end.sc-ion-toast-md{margin-right:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-button-group-end*/.toast-button-group-end.sc-ion-toast-md{margin-right:unset;-webkit-margin-end:8px;margin-inline-end:8px}}/*!@.toast-button*/.toast-button.sc-ion-toast-md{padding-left:15px;padding-right:15px;padding-top:10px;padding-bottom:10px;position:relative;background-color:transparent;font-family:var(--ion-font-family);font-size:14px;font-weight:500;letter-spacing:0.84px;text-transform:uppercase;overflow:hidden}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-button*/.toast-button.sc-ion-toast-md{padding-left:unset;padding-right:unset;-webkit-padding-start:15px;padding-inline-start:15px;-webkit-padding-end:15px;padding-inline-end:15px}}/*!@.toast-button-cancel*/.toast-button-cancel.sc-ion-toast-md{color:var(--ion-color-step-100, #e6e6e6)}/*!@.toast-button-icon-only*/.toast-button-icon-only.sc-ion-toast-md{border-radius:50%;padding-left:9px;padding-right:9px;padding-top:9px;padding-bottom:9px;width:36px;height:36px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-button-icon-only*/.toast-button-icon-only.sc-ion-toast-md{padding-left:unset;padding-right:unset;-webkit-padding-start:9px;padding-inline-start:9px;-webkit-padding-end:9px;padding-inline-end:9px}}@media (any-hover: hover){/*!@.toast-button:hover*/.toast-button.sc-ion-toast-md:hover{background-color:rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.08)}/*!@.toast-button-cancel:hover*/.toast-button-cancel.sc-ion-toast-md:hover{background-color:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.08)}}";
+const toastMdCss = "/*!@:host*/.sc-ion-toast-md-h{--border-width:0;--border-style:none;--border-color:initial;--box-shadow:none;--min-width:auto;--width:auto;--min-height:auto;--height:auto;--max-height:auto;--white-space:normal;left:0;top:0;display:block;position:absolute;width:100%;height:100%;outline:none;color:var(--color);font-family:var(--ion-font-family, inherit);contain:strict;z-index:1001;pointer-events:none}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-toast-md-h,[dir=rtl] .sc-ion-toast-md-h{left:unset;right:unset;right:0}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-toast-md-h{display:none}/*!@:host(.ion-color)*/.ion-color.sc-ion-toast-md-h{--button-color:inherit;color:var(--ion-color-contrast)}/*!@:host(.ion-color) .toast-button-cancel*/.ion-color.sc-ion-toast-md-h .toast-button-cancel.sc-ion-toast-md{color:inherit}/*!@:host(.ion-color) .toast-wrapper*/.ion-color.sc-ion-toast-md-h .toast-wrapper.sc-ion-toast-md{background:var(--ion-color-base)}/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-md{border-radius:var(--border-radius);left:var(--start);right:var(--end);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow)}/*!@[dir=rtl] .toast-wrapper, :host-context([dir=rtl]) .toast-wrapper*/[dir=rtl].sc-ion-toast-md .toast-wrapper.sc-ion-toast-md,[dir=rtl].sc-ion-toast-md-h .toast-wrapper.sc-ion-toast-md,[dir=rtl] .sc-ion-toast-md-h .toast-wrapper.sc-ion-toast-md{left:unset;right:unset;left:var(--end);right:var(--start)}/*!@.toast-container*/.toast-container.sc-ion-toast-md{display:flex;align-items:center;pointer-events:auto;height:inherit;min-height:inherit;max-height:inherit;contain:content}/*!@.toast-content*/.toast-content.sc-ion-toast-md{display:flex;flex:1;flex-direction:column;justify-content:center}/*!@.toast-icon*/.toast-icon.sc-ion-toast-md{margin-left:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-icon*/.toast-icon.sc-ion-toast-md{margin-left:unset;-webkit-margin-start:16px;margin-inline-start:16px}}/*!@.toast-message*/.toast-message.sc-ion-toast-md{flex:1;white-space:var(--white-space)}/*!@.toast-button-group*/.toast-button-group.sc-ion-toast-md{display:flex}/*!@.toast-button*/.toast-button.sc-ion-toast-md{border:0;outline:none;color:var(--button-color);z-index:0}/*!@.toast-icon,\n.toast-button-icon*/.toast-icon.sc-ion-toast-md,.toast-button-icon.sc-ion-toast-md{font-size:1.4em}/*!@.toast-button-inner*/.toast-button-inner.sc-ion-toast-md{display:flex;align-items:center}@media (any-hover: hover){/*!@.toast-button:hover*/.toast-button.sc-ion-toast-md:hover{cursor:pointer}}/*!@:host*/.sc-ion-toast-md-h{--background:var(--ion-color-step-800, #333333);--border-radius:4px;--box-shadow:0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);--button-color:var(--ion-color-primary, #3880ff);--color:var(--ion-color-step-50, #f2f2f2);--max-width:700px;--start:8px;--end:8px;font-size:14px}/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-md{margin-left:auto;margin-right:auto;margin-top:auto;margin-bottom:auto;display:block;position:absolute;opacity:0.01;z-index:10}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-md{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@.toast-content*/.toast-content.sc-ion-toast-md{padding-left:16px;padding-right:16px;padding-top:14px;padding-bottom:14px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-content*/.toast-content.sc-ion-toast-md{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@.toast-header*/.toast-header.sc-ion-toast-md{margin-bottom:2px;font-weight:500;line-height:20px}/*!@.toast-message*/.toast-message.sc-ion-toast-md{line-height:20px}/*!@.toast-button-group-start*/.toast-button-group-start.sc-ion-toast-md{margin-left:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-button-group-start*/.toast-button-group-start.sc-ion-toast-md{margin-left:unset;-webkit-margin-start:8px;margin-inline-start:8px}}/*!@.toast-button-group-end*/.toast-button-group-end.sc-ion-toast-md{margin-right:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-button-group-end*/.toast-button-group-end.sc-ion-toast-md{margin-right:unset;-webkit-margin-end:8px;margin-inline-end:8px}}/*!@.toast-button*/.toast-button.sc-ion-toast-md{padding-left:15px;padding-right:15px;padding-top:10px;padding-bottom:10px;position:relative;background-color:transparent;font-family:var(--ion-font-family);font-size:14px;font-weight:500;letter-spacing:0.84px;text-transform:uppercase;overflow:hidden}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-button*/.toast-button.sc-ion-toast-md{padding-left:unset;padding-right:unset;-webkit-padding-start:15px;padding-inline-start:15px;-webkit-padding-end:15px;padding-inline-end:15px}}/*!@.toast-button-cancel*/.toast-button-cancel.sc-ion-toast-md{color:var(--ion-color-step-100, #e6e6e6)}/*!@.toast-button-icon-only*/.toast-button-icon-only.sc-ion-toast-md{border-radius:50%;padding-left:9px;padding-right:9px;padding-top:9px;padding-bottom:9px;width:36px;height:36px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-button-icon-only*/.toast-button-icon-only.sc-ion-toast-md{padding-left:unset;padding-right:unset;-webkit-padding-start:9px;padding-inline-start:9px;-webkit-padding-end:9px;padding-inline-end:9px}}@media (any-hover: hover){/*!@.toast-button:hover*/.toast-button.sc-ion-toast-md:hover{background-color:rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.08)}/*!@.toast-button-cancel:hover*/.toast-button-cancel.sc-ion-toast-md:hover{background-color:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.08)}}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -51304,6 +56520,7 @@ const toastMdCss = "/*!@:host*/.sc-ion-toast-md-h{--border-width:0;--border-styl
  * @part container - The element that wraps all child elements.
  * @part header - The header text of the toast.
  * @part message - The body text of the toast.
+ * @part icon - The icon that appears next to the toast content.
  */
 class Toast {
   constructor(hostRef) {
@@ -51345,7 +56562,9 @@ class Toast {
     };
   }
   connectedCallback() {
-    prepareOverlay(this.el);
+    prepareOverlay(this.el, {
+      trapKeyboardFocus: false
+    });
   }
   /**
    * Present the toast overlay after it has been created.
@@ -51431,7 +56650,7 @@ class Toast {
       [`toast-button-group-${side}`]: true
     };
     return (hAsync("div", { class: buttonGroupsClasses }, buttons.map(b => hAsync("button", { type: "button", class: buttonClass(b), tabIndex: 0, onClick: () => this.buttonClick(b), part: "button" }, hAsync("div", { class: "toast-button-inner" }, b.icon &&
-      hAsync("ion-icon", { icon: b.icon, slot: b.text === undefined ? 'icon-only' : undefined, class: "toast-icon" }), b.text), mode === 'md' && hAsync("ion-ripple-effect", { type: b.icon !== undefined && b.text === undefined ? 'unbounded' : 'bounded' })))));
+      hAsync("ion-icon", { icon: b.icon, slot: b.text === undefined ? 'icon-only' : undefined, class: "toast-button-icon" }), b.text), mode === 'md' && hAsync("ion-ripple-effect", { type: b.icon !== undefined && b.text === undefined ? 'unbounded' : 'bounded' })))));
   }
   render() {
     const allButtons = this.getButtons();
@@ -51445,7 +56664,8 @@ class Toast {
     const role = allButtons.length > 0 ? 'dialog' : 'status';
     return (hAsync(Host, Object.assign({ role: role, tabindex: "-1" }, this.htmlAttributes, { style: {
         zIndex: `${60000 + this.overlayIndex}`,
-      }, class: createColorClasses$1(this.color, Object.assign(Object.assign({ [mode]: true }, getClassMap(this.cssClass)), { 'toast-translucent': this.translucent })), onIonToastWillDismiss: this.dispatchCancelHandler }), hAsync("div", { class: wrapperClass }, hAsync("div", { class: "toast-container", part: "container" }, this.renderButtons(startButtons, 'start'), hAsync("div", { class: "toast-content" }, this.header !== undefined &&
+      }, class: createColorClasses$1(this.color, Object.assign(Object.assign({ [mode]: true }, getClassMap(this.cssClass)), { 'overlay-hidden': true, 'toast-translucent': this.translucent })), onIonToastWillDismiss: this.dispatchCancelHandler }), hAsync("div", { class: wrapperClass }, hAsync("div", { class: "toast-container", part: "container" }, this.renderButtons(startButtons, 'start'), this.icon !== undefined &&
+      hAsync("ion-icon", { class: "toast-icon", part: "icon", icon: this.icon, lazy: false, "aria-hidden": "true" }), hAsync("div", { class: "toast-content" }, this.header !== undefined &&
       hAsync("div", { class: "toast-header", part: "header" }, this.header), this.message !== undefined &&
       hAsync("div", { class: "toast-message", part: "message", innerHTML: sanitizeDOMString(this.message) })), this.renderButtons(endButtons, 'end')))));
   }
@@ -51471,6 +56691,7 @@ class Toast {
       "buttons": [16],
       "translucent": [4],
       "animated": [4],
+      "icon": [1],
       "htmlAttributes": [16],
       "present": [64],
       "dismiss": [64],
@@ -51616,7 +56837,7 @@ class Toggle {
     this.setFocus();
   }
   onMove(detail) {
-    if (shouldToggle(document, this.checked, detail.deltaX, -10)) {
+    if (shouldToggle(isRTL(this.el), this.checked, detail.deltaX, -10)) {
       this.checked = !this.checked;
       hapticSelection();
     }
@@ -51675,22 +56896,21 @@ class Toggle {
     "$attrsToReflect$": [["color", "color"]]
   }; }
 }
-const shouldToggle = (doc, checked, deltaX, margin) => {
-  const isRTL = doc.dir === 'rtl';
+const shouldToggle = (rtl, checked, deltaX, margin) => {
   if (checked) {
-    return (!isRTL && (margin > deltaX)) ||
-      (isRTL && (-margin < deltaX));
+    return (!rtl && (margin > deltaX)) ||
+      (rtl && (-margin < deltaX));
   }
   else {
-    return (!isRTL && (-margin < deltaX)) ||
-      (isRTL && (margin > deltaX));
+    return (!rtl && (-margin < deltaX)) ||
+      (rtl && (margin > deltaX));
   }
 };
 let toggleIds = 0;
 
-const toolbarIosCss = "/*!@:host*/.sc-ion-toolbar-ios-h{--border-width:0;--border-style:solid;--opacity:1;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;padding-left:var(--ion-safe-area-left);padding-right:var(--ion-safe-area-right);display:block;position:relative;width:100%;color:var(--color);font-family:var(--ion-font-family, inherit);contain:content;z-index:10;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-toolbar-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-safe-area-left);padding-inline-start:var(--ion-safe-area-left);-webkit-padding-end:var(--ion-safe-area-right);padding-inline-end:var(--ion-safe-area-right)}}/*!@:host(.ion-color)*/.ion-color.sc-ion-toolbar-ios-h{color:var(--ion-color-contrast)}/*!@:host(.ion-color) .toolbar-background*/.ion-color.sc-ion-toolbar-ios-h .toolbar-background.sc-ion-toolbar-ios{background:var(--ion-color-base)}/*!@.toolbar-container*/.toolbar-container.sc-ion-toolbar-ios{padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:flex;position:relative;flex-direction:row;align-items:center;justify-content:space-between;width:100%;min-height:var(--min-height);contain:content;overflow:hidden;z-index:10;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toolbar-container*/.toolbar-container.sc-ion-toolbar-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.toolbar-background*/.toolbar-background.sc-ion-toolbar-ios{left:0;right:0;top:0;bottom:0;position:absolute;transform:translateZ(0);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);contain:strict;opacity:var(--opacity);z-index:-1;pointer-events:none}/*!@::slotted(ion-progress-bar)*/.sc-ion-toolbar-ios-s>ion-progress-bar{left:0;right:0;bottom:0;position:absolute}/*!@:host*/.sc-ion-toolbar-ios-h{--background:var(--ion-toolbar-background, var(--ion-color-step-50, #fff));--color:var(--ion-toolbar-color, var(--ion-text-color, #000));--border-color:var(--ion-toolbar-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.2))));--padding-top:3px;--padding-bottom:3px;--padding-start:4px;--padding-end:4px;--min-height:44px}/*!@.toolbar-content*/.toolbar-content.sc-ion-toolbar-ios{flex:1;order:4;min-width:0}/*!@:host(.toolbar-segment) .toolbar-content*/.toolbar-segment.sc-ion-toolbar-ios-h .toolbar-content.sc-ion-toolbar-ios{display:inline-flex}/*!@:host(.toolbar-searchbar) .toolbar-container*/.toolbar-searchbar.sc-ion-toolbar-ios-h .toolbar-container.sc-ion-toolbar-ios{padding-top:0;padding-bottom:0}/*!@:host(.toolbar-searchbar) ::slotted(*)*/.sc-ion-toolbar-ios-h.toolbar-searchbar .sc-ion-toolbar-ios-s>*{align-self:start}/*!@:host(.toolbar-searchbar) ::slotted(ion-chip)*/.sc-ion-toolbar-ios-h.toolbar-searchbar .sc-ion-toolbar-ios-s>ion-chip{margin-top:3px}/*!@:host(.toolbar-searchbar) ::slotted(ion-back-button)*/.sc-ion-toolbar-ios-h.toolbar-searchbar .sc-ion-toolbar-ios-s>ion-back-button{height:38px}/*!@::slotted(ion-buttons)*/.sc-ion-toolbar-ios-s>ion-buttons{min-height:38px}/*!@::slotted([slot=start])*/.sc-ion-toolbar-ios-s>[slot=start]{order:2}/*!@::slotted([slot=secondary])*/.sc-ion-toolbar-ios-s>[slot=secondary]{order:3}/*!@::slotted([slot=primary])*/.sc-ion-toolbar-ios-s>[slot=primary]{order:5;text-align:end}/*!@::slotted([slot=end])*/.sc-ion-toolbar-ios-s>[slot=end]{order:6;text-align:end}/*!@:host(.toolbar-title-large) .toolbar-container*/.toolbar-title-large.sc-ion-toolbar-ios-h .toolbar-container.sc-ion-toolbar-ios{flex-wrap:wrap;align-items:flex-start}/*!@:host(.toolbar-title-large) .toolbar-content ion-title*/.toolbar-title-large.sc-ion-toolbar-ios-h .toolbar-content.sc-ion-toolbar-ios ion-title.sc-ion-toolbar-ios{flex:1;order:8;min-width:100%}";
+const toolbarIosCss = "/*!@:host*/.sc-ion-toolbar-ios-h{--border-width:0;--border-style:solid;--opacity:1;--opacity-scale:1;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;padding-left:var(--ion-safe-area-left);padding-right:var(--ion-safe-area-right);display:block;position:relative;width:100%;color:var(--color);font-family:var(--ion-font-family, inherit);contain:content;z-index:10;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-toolbar-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-safe-area-left);padding-inline-start:var(--ion-safe-area-left);-webkit-padding-end:var(--ion-safe-area-right);padding-inline-end:var(--ion-safe-area-right)}}/*!@:host(.ion-color)*/.ion-color.sc-ion-toolbar-ios-h{color:var(--ion-color-contrast)}/*!@:host(.ion-color) .toolbar-background*/.ion-color.sc-ion-toolbar-ios-h .toolbar-background.sc-ion-toolbar-ios{background:var(--ion-color-base)}/*!@.toolbar-container*/.toolbar-container.sc-ion-toolbar-ios{padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:flex;position:relative;flex-direction:row;align-items:center;justify-content:space-between;width:100%;min-height:var(--min-height);contain:content;overflow:hidden;z-index:10;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toolbar-container*/.toolbar-container.sc-ion-toolbar-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.toolbar-background*/.toolbar-background.sc-ion-toolbar-ios{left:0;right:0;top:0;bottom:0;position:absolute;transform:translateZ(0);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);contain:strict;opacity:calc(var(--opacity) * var(--opacity-scale));z-index:-1;pointer-events:none}/*!@::slotted(ion-progress-bar)*/.sc-ion-toolbar-ios-s>ion-progress-bar{left:0;right:0;bottom:0;position:absolute}/*!@:host*/.sc-ion-toolbar-ios-h{--background:var(--ion-toolbar-background, var(--ion-color-step-50, #f7f7f7));--color:var(--ion-toolbar-color, var(--ion-text-color, #000));--border-color:var(--ion-toolbar-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.2))));--padding-top:3px;--padding-bottom:3px;--padding-start:4px;--padding-end:4px;--min-height:44px}/*!@.toolbar-content*/.toolbar-content.sc-ion-toolbar-ios{flex:1;order:4;min-width:0}/*!@:host(.toolbar-segment) .toolbar-content*/.toolbar-segment.sc-ion-toolbar-ios-h .toolbar-content.sc-ion-toolbar-ios{display:inline-flex}/*!@:host(.toolbar-searchbar) .toolbar-container*/.toolbar-searchbar.sc-ion-toolbar-ios-h .toolbar-container.sc-ion-toolbar-ios{padding-top:0;padding-bottom:0}/*!@:host(.toolbar-searchbar) ::slotted(*)*/.sc-ion-toolbar-ios-h.toolbar-searchbar .sc-ion-toolbar-ios-s>*{align-self:start}/*!@:host(.toolbar-searchbar) ::slotted(ion-chip)*/.sc-ion-toolbar-ios-h.toolbar-searchbar .sc-ion-toolbar-ios-s>ion-chip{margin-top:3px}/*!@:host(.toolbar-searchbar) ::slotted(ion-back-button)*/.sc-ion-toolbar-ios-h.toolbar-searchbar .sc-ion-toolbar-ios-s>ion-back-button{height:38px}/*!@::slotted(ion-buttons)*/.sc-ion-toolbar-ios-s>ion-buttons{min-height:38px}/*!@::slotted([slot=start])*/.sc-ion-toolbar-ios-s>[slot=start]{order:2}/*!@::slotted([slot=secondary])*/.sc-ion-toolbar-ios-s>[slot=secondary]{order:3}/*!@::slotted([slot=primary])*/.sc-ion-toolbar-ios-s>[slot=primary]{order:5;text-align:end}/*!@::slotted([slot=end])*/.sc-ion-toolbar-ios-s>[slot=end]{order:6;text-align:end}/*!@:host(.toolbar-title-large) .toolbar-container*/.toolbar-title-large.sc-ion-toolbar-ios-h .toolbar-container.sc-ion-toolbar-ios{flex-wrap:wrap;align-items:flex-start}/*!@:host(.toolbar-title-large) .toolbar-content ion-title*/.toolbar-title-large.sc-ion-toolbar-ios-h .toolbar-content.sc-ion-toolbar-ios ion-title.sc-ion-toolbar-ios{flex:1;order:8;min-width:100%}";
 
-const toolbarMdCss = "/*!@:host*/.sc-ion-toolbar-md-h{--border-width:0;--border-style:solid;--opacity:1;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;padding-left:var(--ion-safe-area-left);padding-right:var(--ion-safe-area-right);display:block;position:relative;width:100%;color:var(--color);font-family:var(--ion-font-family, inherit);contain:content;z-index:10;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-toolbar-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-safe-area-left);padding-inline-start:var(--ion-safe-area-left);-webkit-padding-end:var(--ion-safe-area-right);padding-inline-end:var(--ion-safe-area-right)}}/*!@:host(.ion-color)*/.ion-color.sc-ion-toolbar-md-h{color:var(--ion-color-contrast)}/*!@:host(.ion-color) .toolbar-background*/.ion-color.sc-ion-toolbar-md-h .toolbar-background.sc-ion-toolbar-md{background:var(--ion-color-base)}/*!@.toolbar-container*/.toolbar-container.sc-ion-toolbar-md{padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:flex;position:relative;flex-direction:row;align-items:center;justify-content:space-between;width:100%;min-height:var(--min-height);contain:content;overflow:hidden;z-index:10;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toolbar-container*/.toolbar-container.sc-ion-toolbar-md{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.toolbar-background*/.toolbar-background.sc-ion-toolbar-md{left:0;right:0;top:0;bottom:0;position:absolute;transform:translateZ(0);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);contain:strict;opacity:var(--opacity);z-index:-1;pointer-events:none}/*!@::slotted(ion-progress-bar)*/.sc-ion-toolbar-md-s>ion-progress-bar{left:0;right:0;bottom:0;position:absolute}/*!@:host*/.sc-ion-toolbar-md-h{--background:var(--ion-toolbar-background, var(--ion-background-color, #fff));--color:var(--ion-toolbar-color, var(--ion-text-color, #424242));--border-color:var(--ion-toolbar-border-color, var(--ion-border-color, var(--ion-color-step-150, #c1c4cd)));--padding-top:0;--padding-bottom:0;--padding-start:0;--padding-end:0;--min-height:56px}/*!@.toolbar-content*/.toolbar-content.sc-ion-toolbar-md{flex:1;order:3;min-width:0;max-width:100%}/*!@::slotted(ion-segment)*/.sc-ion-toolbar-md-s>ion-segment{min-height:var(--min-height)}/*!@::slotted(.buttons-first-slot)*/.sc-ion-toolbar-md-s>.buttons-first-slot{margin-left:4px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(.buttons-first-slot)*/.sc-ion-toolbar-md-s>.buttons-first-slot{margin-left:unset;-webkit-margin-start:4px;margin-inline-start:4px}}/*!@::slotted(.buttons-last-slot)*/.sc-ion-toolbar-md-s>.buttons-last-slot{margin-right:4px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(.buttons-last-slot)*/.sc-ion-toolbar-md-s>.buttons-last-slot{margin-right:unset;-webkit-margin-end:4px;margin-inline-end:4px}}/*!@::slotted([slot=start])*/.sc-ion-toolbar-md-s>[slot=start]{order:2}/*!@::slotted([slot=secondary])*/.sc-ion-toolbar-md-s>[slot=secondary]{order:4}/*!@::slotted([slot=primary])*/.sc-ion-toolbar-md-s>[slot=primary]{order:5;text-align:end}/*!@::slotted([slot=end])*/.sc-ion-toolbar-md-s>[slot=end]{order:6;text-align:end}";
+const toolbarMdCss = "/*!@:host*/.sc-ion-toolbar-md-h{--border-width:0;--border-style:solid;--opacity:1;--opacity-scale:1;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;padding-left:var(--ion-safe-area-left);padding-right:var(--ion-safe-area-right);display:block;position:relative;width:100%;color:var(--color);font-family:var(--ion-font-family, inherit);contain:content;z-index:10;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-toolbar-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-safe-area-left);padding-inline-start:var(--ion-safe-area-left);-webkit-padding-end:var(--ion-safe-area-right);padding-inline-end:var(--ion-safe-area-right)}}/*!@:host(.ion-color)*/.ion-color.sc-ion-toolbar-md-h{color:var(--ion-color-contrast)}/*!@:host(.ion-color) .toolbar-background*/.ion-color.sc-ion-toolbar-md-h .toolbar-background.sc-ion-toolbar-md{background:var(--ion-color-base)}/*!@.toolbar-container*/.toolbar-container.sc-ion-toolbar-md{padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:flex;position:relative;flex-direction:row;align-items:center;justify-content:space-between;width:100%;min-height:var(--min-height);contain:content;overflow:hidden;z-index:10;box-sizing:border-box}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toolbar-container*/.toolbar-container.sc-ion-toolbar-md{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.toolbar-background*/.toolbar-background.sc-ion-toolbar-md{left:0;right:0;top:0;bottom:0;position:absolute;transform:translateZ(0);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);contain:strict;opacity:calc(var(--opacity) * var(--opacity-scale));z-index:-1;pointer-events:none}/*!@::slotted(ion-progress-bar)*/.sc-ion-toolbar-md-s>ion-progress-bar{left:0;right:0;bottom:0;position:absolute}/*!@:host*/.sc-ion-toolbar-md-h{--background:var(--ion-toolbar-background, var(--ion-background-color, #fff));--color:var(--ion-toolbar-color, var(--ion-text-color, #424242));--border-color:var(--ion-toolbar-border-color, var(--ion-border-color, var(--ion-color-step-150, #c1c4cd)));--padding-top:0;--padding-bottom:0;--padding-start:0;--padding-end:0;--min-height:56px}/*!@.toolbar-content*/.toolbar-content.sc-ion-toolbar-md{flex:1;order:3;min-width:0;max-width:100%}/*!@::slotted(ion-segment)*/.sc-ion-toolbar-md-s>ion-segment{min-height:var(--min-height)}/*!@::slotted(.buttons-first-slot)*/.sc-ion-toolbar-md-s>.buttons-first-slot{margin-left:4px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(.buttons-first-slot)*/.sc-ion-toolbar-md-s>.buttons-first-slot{margin-left:unset;-webkit-margin-start:4px;margin-inline-start:4px}}/*!@::slotted(.buttons-last-slot)*/.sc-ion-toolbar-md-s>.buttons-last-slot{margin-right:4px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@::slotted(.buttons-last-slot)*/.sc-ion-toolbar-md-s>.buttons-last-slot{margin-right:unset;-webkit-margin-end:4px;margin-inline-end:4px}}/*!@::slotted([slot=start])*/.sc-ion-toolbar-md-s>[slot=start]{order:2}/*!@::slotted([slot=secondary])*/.sc-ion-toolbar-md-s>[slot=secondary]{order:4}/*!@::slotted([slot=primary])*/.sc-ion-toolbar-md-s>[slot=primary]{order:5;text-align:end}/*!@::slotted([slot=end])*/.sc-ion-toolbar-md-s>[slot=end]{order:6;text-align:end}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -51826,6 +57046,9 @@ class ToolbarTitle {
   }; }
 }
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const CELL_TYPE_ITEM = 'item';
 const CELL_TYPE_HEADER = 'header';
 const CELL_TYPE_FOOTER = 'footer';
@@ -51833,6 +57056,9 @@ const NODE_CHANGE_NONE = 0;
 const NODE_CHANGE_POSITION = 1;
 const NODE_CHANGE_CELL = 2;
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const MIN_READS = 2;
 const updateVDom = (dom, heightIndex, cells, range) => {
   // reset dom
@@ -52394,6 +57620,8 @@ const VirtualProxy = ({ dom }, children, utils) => {
 };
 
 registerComponents([
+  Accordion,
+  AccordionGroup,
   ActionSheet,
   Alert,
   App,
@@ -52402,6 +57630,8 @@ registerComponents([
   BackButton,
   Backdrop,
   Badge,
+  Breadcrumb,
+  Breadcrumbs,
   Button,
   Buttons,
   Calendar,
@@ -52463,6 +57693,8 @@ registerComponents([
   Pagination$1,
   Picker,
   PickerColumnCmp,
+  PickerColumnInternal,
+  PickerInternal,
   Popover,
   PopoverFilter,
   ProgressBar,
@@ -52518,6 +57750,9 @@ registerComponents([
   VirtualScroll,
 ]);
 
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const createSwipeBackGesture = (el, canStartHandler, onStartHandler, onMoveHandler, onEndHandler) => {
   const win = el.ownerDocument.defaultView;
   const canStart = (detail) => {

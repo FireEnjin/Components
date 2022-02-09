@@ -39,6 +39,7 @@ graph TD;
   fireenjin-share --> ion-icon
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
+  ion-item --> ion-note
   style fireenjin-share fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
