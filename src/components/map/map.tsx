@@ -35,7 +35,7 @@ export class Map implements ComponentInterface {
    * When a marker on the map is clicked
    */
   @Event() fireenjinTrigger: EventEmitter<{
-    trigger: string;
+    name: string;
     payload: {
       marker: google.maps.Marker;
       location: {
@@ -210,7 +210,7 @@ export class Map implements ComponentInterface {
     this.map.setZoom(12);
     this.map.setCenter(marker.getPosition());
     this.fireenjinTrigger.emit({
-      trigger: "markerClick",
+      name: "markerClick",
       payload: {
         marker,
         location,

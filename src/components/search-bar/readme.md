@@ -5,28 +5,39 @@
 
 ## Properties
 
-| Property           | Attribute            | Description | Type                                                                                                                                       | Default     |
-| ------------------ | -------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `beforeGetResults` | `before-get-results` |             | `any`                                                                                                                                      | `undefined` |
-| `disabled`         | `disabled`           |             | `boolean`                                                                                                                                  | `false`     |
-| `displayMode`      | `display-mode`       |             | `"grid" \| "list"`                                                                                                                         | `"grid"`    |
-| `filter`           | --                   |             | `{ label?: string; controls: filterControl[]; }`                                                                                           | `undefined` |
-| `modeToggle`       | `mode-toggle`        |             | `boolean`                                                                                                                                  | `false`     |
-| `paginationEl`     | `pagination-el`      |             | `any`                                                                                                                                      | `undefined` |
-| `showFilter`       | `show-filter`        |             | `boolean`                                                                                                                                  | `true`      |
-| `sort`             | --                   |             | `{ label?: string; value?: string; header?: string; subHeader?: string; message?: string; options: { label: string; value: string; }[]; }` | `undefined` |
+| Property           | Attribute            | Description | Type               | Default     |
+| ------------------ | -------------------- | ----------- | ------------------ | ----------- |
+| `beforeGetResults` | `before-get-results` |             | `any`              | `undefined` |
+| `disabled`         | `disabled`           |             | `boolean`          | `false`     |
+| `displayMode`      | `display-mode`       |             | `"grid" \| "list"` | `"grid"`    |
+| `filters`          | --                   |             | `filterControl[]`  | `undefined` |
+| `modeToggle`       | `mode-toggle`        |             | `boolean`          | `false`     |
+| `paginationEl`     | `pagination-el`      |             | `any`              | `undefined` |
+| `showFilter`       | `show-filter`        |             | `boolean`          | `true`      |
+| `showSort`         | `show-sort`          |             | `boolean`          | `true`      |
+| `sorts`            | --                   |             | `filterControl[]`  | `undefined` |
 
 
 ## Events
 
-| Event              | Description | Type               |
-| ------------------ | ----------- | ------------------ |
-| `fireenjinTrigger` |             | `CustomEvent<any>` |
+| Event              | Description | Type                                 |
+| ------------------ | ----------- | ------------------------------------ |
+| `fireenjinTrigger` |             | `CustomEvent<FireEnjinTriggerInput>` |
 
 
 ## Methods
 
 ### `clearFilter(event: any, clearingControl: filterControl) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `clearSort(event: any, clearingControl: filterControl) => Promise<void>`
 
 
 
@@ -47,6 +58,16 @@ Type: `Promise<void>`
 
 
 ### `updateCurrentFilters() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `updateCurrentSorts() => Promise<void>`
 
 
 

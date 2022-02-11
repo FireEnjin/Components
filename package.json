@@ -31,7 +31,7 @@
     "presets:watch": "fireenjin presets watch"
   },
   "dependencies": {
-    "@fireenjin/sdk": "^1.2.43",
+    "@fireenjin/sdk": "^1.2.45",
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@fireenjin/cli": "^1.0.11",
-    "@fireenjin/docs": "^1.0.7",
+    "@fireenjin/docs": "^1.0.8",
     "@stencil/eslint-plugin": "^0.4.0",
     "@types/cleave.js": "^1.4.6",
     "@types/jest": "^27.4.0",

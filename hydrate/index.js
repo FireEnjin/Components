@@ -34724,7 +34724,7 @@ class Map$1 {
     this.map.setZoom(12);
     this.map.setCenter(marker.getPosition());
     this.fireenjinTrigger.emit({
-      trigger: "markerClick",
+      name: "markerClick",
       payload: {
         marker,
         location,
@@ -44351,7 +44351,7 @@ class Row {
   }; }
 }
 
-const searchBarCss = "fireenjin-search-bar{display:block;border:1px solid rgba(var(--ion-text-color-rgb), 0.6);border-radius:26px;position:relative;padding:5px 0}fireenjin-search-bar .search-bar-wrapper{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-between;align-content:center}fireenjin-search-bar .filter-bar{display:inline-flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;align-content:center;margin:auto 10px auto auto;max-width:100%;padding-bottom:3px}fireenjin-search-bar .filter-bar::-webkit-scrollbar{height:5px}fireenjin-search-bar .filter-bar::-webkit-scrollbar-thumb{background:rgba(var(--ion-text-color-rgb), 0.6);border-radius:2px}fireenjin-search-bar .filter-bar ion-chip{margin:auto 10px;border-color:rgba(var(--ion-text-color-rgb), 0.8);opacity:0.8}fireenjin-search-bar .filter-bar ion-chip:hover{opacity:1}fireenjin-search-bar .filter-bar ion-chip ion-icon{color:var(--ion-text-color);display:inline-block;opacity:0.6;height:20px;width:20px}fireenjin-search-bar .filter-bar ion-chip:last-of-type{margin-right:50px}fireenjin-search-bar .filter-button{order:2;margin:auto 0;position:absolute;right:0px;top:12px}fireenjin-search-bar .filter-button ion-badge{border-radius:100%;font-size:8px;height:12px;width:12px;padding:2px}fireenjin-search-bar ion-searchbar{max-width:250px;padding-top:2px !important;padding-bottom:0px !important;--background:transparent !important;--box-shadow:none !important;--color:var(--ion-text-color) !important}fireenjin-search-bar .searchbar-input{padding-inline-end:65px !important;padding-inline-start:42px !important}fireenjin-search-bar .searchbar-search-icon{left:10px !important}@media only screen and (max-width: 500px){fireenjin-search-bar .filter-button ion-label{display:none}fireenjin-search-bar .search-bar-wrapper{padding-right:0}}";
+const searchBarCss = "fireenjin-search-bar{display:block;border:1px solid rgba(var(--ion-text-color-rgb), 0.6);border-radius:26px;position:relative;padding:5px 0}fireenjin-search-bar .search-bar-wrapper{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-between;align-content:center}fireenjin-search-bar .chip-bowl{display:inline-flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;align-content:center;margin:auto 10px auto auto;max-width:100%;padding-bottom:3px}fireenjin-search-bar .chip-bowl::-webkit-scrollbar{height:5px}fireenjin-search-bar .chip-bowl::-webkit-scrollbar-thumb{background:rgba(var(--ion-text-color-rgb), 0.6);border-radius:2px}fireenjin-search-bar .chip-bowl ion-chip{margin:auto 10px;border-color:rgba(var(--ion-text-color-rgb), 0.8);opacity:0.8}fireenjin-search-bar .chip-bowl ion-chip:hover{opacity:1}fireenjin-search-bar .chip-bowl ion-chip ion-icon{color:var(--ion-text-color);display:inline-block;opacity:0.6;height:20px;width:20px}fireenjin-search-bar .chip-bowl ion-chip:last-of-type{margin-right:50px}fireenjin-search-bar .filter-button{order:2;margin:auto 0;position:absolute;right:0px;top:12px}fireenjin-search-bar .filter-button ion-badge{border-radius:100%;font-size:8px;height:12px;width:12px;padding:2px}fireenjin-search-bar ion-searchbar{max-width:250px;padding-top:2px !important;padding-bottom:0px !important;--background:transparent !important;--box-shadow:none !important;--color:var(--ion-text-color) !important}fireenjin-search-bar .searchbar-input{padding-inline-end:65px !important;padding-inline-start:42px !important}fireenjin-search-bar .searchbar-search-icon{left:10px !important}@media only screen and (max-width: 500px){fireenjin-search-bar .filter-button ion-label{display:none}fireenjin-search-bar .search-bar-wrapper{padding-right:0}}";
 
 class SearchBar {
   constructor(hostRef) {
@@ -44361,22 +44361,23 @@ class SearchBar {
     this.displayMode = "grid";
     this.disabled = false;
     this.showFilter = true;
-    this.selectOptions = {};
+    this.showSort = true;
     this.currentFilters = {};
+    this.currentSorts = {};
   }
   onFilterChange() {
     this.updateCurrentFilters();
   }
   async onTrigger(event) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
-    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.trigger) === "set" && ((_c = (_b = event === null || event === void 0 ? void 0 : event.detail) === null || _b === void 0 ? void 0 : _b.payload) === null || _c === void 0 ? void 0 : _c.name)) {
-      for (const [i, control] of this.filter.controls.entries()) {
+    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.name) === "set" && ((_c = (_b = event === null || event === void 0 ? void 0 : event.detail) === null || _b === void 0 ? void 0 : _b.payload) === null || _c === void 0 ? void 0 : _c.name)) {
+      for (const [i, control] of this.filters.entries()) {
         if (!(control === null || control === void 0 ? void 0 : control.name) || ((_e = (_d = event === null || event === void 0 ? void 0 : event.detail) === null || _d === void 0 ? void 0 : _d.payload) === null || _e === void 0 ? void 0 : _e.name) !== (control === null || control === void 0 ? void 0 : control.name))
           continue;
         const controlData = Object.assign(Object.assign({}, control), { value: ((_g = (_f = event === null || event === void 0 ? void 0 : event.detail) === null || _f === void 0 ? void 0 : _f.payload) === null || _g === void 0 ? void 0 : _g.value) || null });
-        this.filter.controls[i] = controlData;
+        this.filters[i] = controlData;
         this.currentFilters[control.name] = controlData;
-        this.filter = Object.assign({}, this.filter);
+        this.filters = Object.assign({}, this.filters);
         if (this.paginationEl && !((_h = this.paginationEl) === null || _h === void 0 ? void 0 : _h.disableFetch))
           this.paginationEl.fetchData = Object.assign(Object.assign({}, (((_j = this.paginationEl) === null || _j === void 0 ? void 0 : _j.fetchData) || {})), { [control.name]: (_l = (_k = event === null || event === void 0 ? void 0 : event.detail) === null || _k === void 0 ? void 0 : _k.payload) === null || _l === void 0 ? void 0 : _l.value });
       }
@@ -44385,12 +44386,6 @@ class SearchBar {
       await this.paginationEl.clearResults();
       await this.paginationEl.getResults();
     }
-  }
-  onSuccess(event) {
-    var _a;
-    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.name) !== "select")
-      return;
-    this.selectOptions[event.detail.target.name] = event.detail.data.results;
   }
   async onChange(event) {
     var _a, _b, _c;
@@ -44415,16 +44410,16 @@ class SearchBar {
     event.preventDefault();
     event.stopPropagation();
     const fetchData = ((_a = this.paginationEl) === null || _a === void 0 ? void 0 : _a.fetchData) || {};
-    for (const [i, control] of this.filter.controls.entries()) {
+    for (const [i, control] of this.filters.entries()) {
       if (!control.name ||
         !control.value ||
         control.name !== clearingControl.name)
         continue;
-      this.filter.controls[i] = Object.assign(Object.assign({}, control), { value: null });
+      this.filters[i] = Object.assign(Object.assign({}, control), { value: null });
       delete this.currentFilters[clearingControl.name];
       if (fetchData[control.name])
         delete fetchData[control.name];
-      this.filter = Object.assign({}, this.filter);
+      this.filters = [...this.filters];
       if (!((_b = this.paginationEl) === null || _b === void 0 ? void 0 : _b.clearParamData))
         continue;
       await this.paginationEl.clearParamData(control.name);
@@ -44434,8 +44429,40 @@ class SearchBar {
       paramData[filter.name] = filter.value;
     }
     let options = { paramData };
-    if (this.beforeGetResults &&
-      typeof this.beforeGetResults === "function")
+    if (this.beforeGetResults && typeof this.beforeGetResults === "function")
+      options = await this.beforeGetResults(options);
+    if (this.paginationEl && !((_c = this.paginationEl) === null || _c === void 0 ? void 0 : _c.disableFetch))
+      this.paginationEl.fetchData = fetchData;
+    if ((_d = this.paginationEl) === null || _d === void 0 ? void 0 : _d.clearResults)
+      await this.paginationEl.clearResults();
+    if ((_e = this.paginationEl) === null || _e === void 0 ? void 0 : _e.getResults)
+      await this.paginationEl.getResults(options);
+  }
+  async clearSort(event, clearingControl) {
+    var _a, _b, _c, _d, _e;
+    event.preventDefault();
+    event.stopPropagation();
+    const fetchData = ((_a = this.paginationEl) === null || _a === void 0 ? void 0 : _a.fetchData) || {};
+    for (const [i, control] of this.sorts.entries()) {
+      if (!control.name ||
+        !control.value ||
+        control.name !== clearingControl.name)
+        continue;
+      this.sorts[i] = Object.assign(Object.assign({}, control), { value: null });
+      delete this.currentSorts[clearingControl.name];
+      if (fetchData[control.name])
+        delete fetchData[control.name];
+      this.sorts = [...this.sorts];
+      if (!((_b = this.paginationEl) === null || _b === void 0 ? void 0 : _b.clearParamData))
+        continue;
+      await this.paginationEl.clearParamData(control.name);
+    }
+    const paramData = {};
+    for (const sort of Object.values(this.currentSorts)) {
+      paramData[sort.name] = sort.value;
+    }
+    let options = { paramData };
+    if (this.beforeGetResults && typeof this.beforeGetResults === "function")
       options = await this.beforeGetResults(options);
     if (this.paginationEl && !((_c = this.paginationEl) === null || _c === void 0 ? void 0 : _c.disableFetch))
       this.paginationEl.fetchData = fetchData;
@@ -44445,14 +44472,23 @@ class SearchBar {
       await this.paginationEl.getResults(options);
   }
   async updateCurrentFilters() {
-    var _a;
-    if (!((_a = this.filter) === null || _a === void 0 ? void 0 : _a.controls))
+    if (!this.filters)
       return;
-    for (const control of this.filter.controls) {
+    for (const control of this.filters) {
       if (!(control === null || control === void 0 ? void 0 : control.value))
         continue;
       this.currentFilters[control.name] = control;
       this.currentFilters = Object.assign({}, this.currentFilters);
+    }
+  }
+  async updateCurrentSorts() {
+    if (!this.sorts)
+      return;
+    for (const control of this.sorts) {
+      if (!(control === null || control === void 0 ? void 0 : control.value))
+        continue;
+      this.currentSorts[control.name] = control;
+      this.currentSorts = Object.assign({}, this.currentSorts);
     }
   }
   getLabelForValue(control, value) {
@@ -44464,22 +44500,37 @@ class SearchBar {
   }
   getControlLabel(control) {
     const value = (control === null || control === void 0 ? void 0 : control.value) ? control.value : null;
-    let label = value ? Array.isArray(value) ? value.map(val => this.getLabelForValue(control, val)).join(", ") : this.getLabelForValue(control, value) : control.label;
+    let label = value
+      ? Array.isArray(value)
+        ? value.map((val) => this.getLabelForValue(control, val)).join(", ")
+        : this.getLabelForValue(control, value)
+      : control.label;
     return label;
   }
   componentDidLoad() {
     this.updateCurrentFilters();
   }
   render() {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
-    return (hAsync(Host, null, hAsync("div", { class: "search-bar-wrapper" }, hAsync("ion-searchbar", { disabled: this.disabled }), this.showFilter && ((_b = (_a = this.filter) === null || _a === void 0 ? void 0 : _a.controls) === null || _b === void 0 ? void 0 : _b.length) && hAsync("div", { class: "filter-bar" }, ((_d = (_c = this.filter) === null || _c === void 0 ? void 0 : _c.controls) === null || _d === void 0 ? void 0 : _d.length) && ((_e = this.filter) === null || _e === void 0 ? void 0 : _e.controls.map(control => (hAsync("ion-chip", { outline: !Object.keys(this.currentFilters).includes(control === null || control === void 0 ? void 0 : control.name), onClick: (event) => this.fireenjinTrigger.emit({
-        event,
-        trigger: "filter",
-        name: control === null || control === void 0 ? void 0 : control.name,
-        payload: {
-          control
-        }
-      }) }, (control === null || control === void 0 ? void 0 : control.icon) && hAsync("ion-icon", { name: control.icon }), (control === null || control === void 0 ? void 0 : control.label) && hAsync("ion-label", null, this.getControlLabel(control)), Object.keys(this.currentFilters).includes(control === null || control === void 0 ? void 0 : control.name) && hAsync("ion-icon", { name: "close-circle", onClick: (event) => this.clearFilter(event, control) }))))))), ((_g = (_f = this.filter) === null || _f === void 0 ? void 0 : _f.controls) === null || _g === void 0 ? void 0 : _g.length) && hAsync("ion-button", { onClick: () => this.showFilter = !this.showFilter, class: "filter-button", size: "small", fill: "clear", shape: "round", style: { color: "var(--ion-text-color)" } }, hAsync("ion-icon", { name: "funnel", slot: "icon-only" }), ((_h = Object.keys(this.currentFilters)) === null || _h === void 0 ? void 0 : _h.length) && hAsync("ion-badge", { slot: "end" }, this.currentFilters ? Object.keys(this.currentFilters).length : 0))));
+    var _a, _b, _c, _d;
+    return (hAsync(Host, null, hAsync("div", { class: "search-bar-wrapper" }, hAsync("ion-searchbar", { disabled: this.disabled }), hAsync("div", { class: "chip-bowl" }, this.showFilter &&
+      ((_a = this.filters) === null || _a === void 0 ? void 0 : _a.length) &&
+      this.filters.map((control) => (hAsync("ion-chip", { outline: !Object.keys(this.currentFilters).includes(control === null || control === void 0 ? void 0 : control.name), onClick: (event) => this.fireenjinTrigger.emit({
+          event,
+          name: "filter",
+          payload: {
+            control,
+          },
+        }) }, (control === null || control === void 0 ? void 0 : control.icon) && hAsync("ion-icon", { name: control.icon }), (control === null || control === void 0 ? void 0 : control.label) && (hAsync("ion-label", null, this.getControlLabel(control))), Object.keys(this.currentFilters).includes(control === null || control === void 0 ? void 0 : control.name) && (hAsync("ion-icon", { name: "close-circle", onClick: (event) => this.clearFilter(event, control) }))))), this.showSort &&
+      ((_b = this.sorts) === null || _b === void 0 ? void 0 : _b.length) &&
+      this.sorts.map((control) => (hAsync("ion-chip", { outline: !Object.keys(this.currentSorts).includes(control === null || control === void 0 ? void 0 : control.name), onClick: (event) => this.fireenjinTrigger.emit({
+          event,
+          name: "sort",
+          payload: {
+            control,
+          },
+        }) }, (control === null || control === void 0 ? void 0 : control.icon) && hAsync("ion-icon", { name: control.icon }), (control === null || control === void 0 ? void 0 : control.label) && (hAsync("ion-label", null, this.getControlLabel(control))), Object.keys(this.currentSorts).includes(control === null || control === void 0 ? void 0 : control.name) && (hAsync("ion-icon", { name: "close-circle", onClick: (event) => this.clearSort(event, control) }))))))), ((_c = this.filters) === null || _c === void 0 ? void 0 : _c.length) && (hAsync("ion-button", { onClick: () => (this.showFilter = !this.showFilter), class: "filter-button", size: "small", fill: "clear", shape: "round", style: { color: "var(--ion-text-color)" } }, hAsync("ion-icon", { name: "funnel", slot: "icon-only" }), ((_d = Object.keys(this.currentFilters)) === null || _d === void 0 ? void 0 : _d.length) && (hAsync("ion-badge", { slot: "end" }, this.currentFilters
+      ? Object.keys(this.currentFilters).length
+      : 0))))));
   }
   static get watchers() { return {
     "filter": ["onFilterChange"]
@@ -44489,21 +44540,24 @@ class SearchBar {
     "$flags$": 0,
     "$tagName$": "fireenjin-search-bar",
     "$members$": {
-      "sort": [16],
-      "filter": [1040],
+      "sorts": [1040],
+      "filters": [1040],
       "paginationEl": [8, "pagination-el"],
       "modeToggle": [4, "mode-toggle"],
       "displayMode": [1025, "display-mode"],
       "disabled": [4],
       "beforeGetResults": [8, "before-get-results"],
       "showFilter": [1028, "show-filter"],
-      "selectOptions": [32],
+      "showSort": [1028, "show-sort"],
       "currentFilters": [32],
+      "currentSorts": [32],
       "togglePaginationDisplay": [64],
       "clearFilter": [64],
-      "updateCurrentFilters": [64]
+      "clearSort": [64],
+      "updateCurrentFilters": [64],
+      "updateCurrentSorts": [64]
     },
-    "$listeners$": [[16, "fireenjinTrigger", "onTrigger"], [16, "fireenjinSuccess", "onSuccess"], [0, "ionChange", "onChange"]],
+    "$listeners$": [[4, "fireenjinTrigger", "onTrigger"], [0, "ionChange", "onChange"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
