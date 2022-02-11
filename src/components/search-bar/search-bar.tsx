@@ -68,7 +68,23 @@ export class SearchBar implements ComponentInterface {
         };
         this.filters[i] = controlData;
         this.currentFilters[control.name] = controlData;
-        this.filters = { ...this.filters };
+        this.filters = [...this.filters];
+        if (this.paginationEl && !this.paginationEl?.disableFetch)
+          this.paginationEl.fetchData = {
+            ...(this.paginationEl?.fetchData || {}),
+            [control.name]: event?.detail?.payload?.value,
+          };
+      }
+      for (const [i, control] of this.sorts.entries()) {
+        if (!control?.name || event?.detail?.payload?.name !== control?.name)
+          continue;
+        const controlData = {
+          ...control,
+          value: event?.detail?.payload?.value || null,
+        };
+        this.sorts[i] = controlData;
+        this.currentSorts[control.name] = controlData;
+        this.sorts = [...this.sorts];
         if (this.paginationEl && !this.paginationEl?.disableFetch)
           this.paginationEl.fetchData = {
             ...(this.paginationEl?.fetchData || {}),

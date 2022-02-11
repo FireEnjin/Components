@@ -44372,7 +44372,7 @@ class SearchBar {
     this.updateCurrentSorts();
   }
   async onTrigger(event) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w;
     if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.name) === "set" && ((_c = (_b = event === null || event === void 0 ? void 0 : event.detail) === null || _b === void 0 ? void 0 : _b.payload) === null || _c === void 0 ? void 0 : _c.name)) {
       for (const [i, control] of this.filters.entries()) {
         if (!(control === null || control === void 0 ? void 0 : control.name) || ((_e = (_d = event === null || event === void 0 ? void 0 : event.detail) === null || _d === void 0 ? void 0 : _d.payload) === null || _e === void 0 ? void 0 : _e.name) !== (control === null || control === void 0 ? void 0 : control.name))
@@ -44380,11 +44380,21 @@ class SearchBar {
         const controlData = Object.assign(Object.assign({}, control), { value: ((_g = (_f = event === null || event === void 0 ? void 0 : event.detail) === null || _f === void 0 ? void 0 : _f.payload) === null || _g === void 0 ? void 0 : _g.value) || null });
         this.filters[i] = controlData;
         this.currentFilters[control.name] = controlData;
-        this.filters = Object.assign({}, this.filters);
+        this.filters = [...this.filters];
         if (this.paginationEl && !((_h = this.paginationEl) === null || _h === void 0 ? void 0 : _h.disableFetch))
           this.paginationEl.fetchData = Object.assign(Object.assign({}, (((_j = this.paginationEl) === null || _j === void 0 ? void 0 : _j.fetchData) || {})), { [control.name]: (_l = (_k = event === null || event === void 0 ? void 0 : event.detail) === null || _k === void 0 ? void 0 : _k.payload) === null || _l === void 0 ? void 0 : _l.value });
       }
-      if (!((_m = this.paginationEl) === null || _m === void 0 ? void 0 : _m.clearResults) || !((_o = this.paginationEl) === null || _o === void 0 ? void 0 : _o.getResults))
+      for (const [i, control] of this.sorts.entries()) {
+        if (!(control === null || control === void 0 ? void 0 : control.name) || ((_o = (_m = event === null || event === void 0 ? void 0 : event.detail) === null || _m === void 0 ? void 0 : _m.payload) === null || _o === void 0 ? void 0 : _o.name) !== (control === null || control === void 0 ? void 0 : control.name))
+          continue;
+        const controlData = Object.assign(Object.assign({}, control), { value: ((_q = (_p = event === null || event === void 0 ? void 0 : event.detail) === null || _p === void 0 ? void 0 : _p.payload) === null || _q === void 0 ? void 0 : _q.value) || null });
+        this.sorts[i] = controlData;
+        this.currentSorts[control.name] = controlData;
+        this.sorts = [...this.sorts];
+        if (this.paginationEl && !((_r = this.paginationEl) === null || _r === void 0 ? void 0 : _r.disableFetch))
+          this.paginationEl.fetchData = Object.assign(Object.assign({}, (((_s = this.paginationEl) === null || _s === void 0 ? void 0 : _s.fetchData) || {})), { [control.name]: (_u = (_t = event === null || event === void 0 ? void 0 : event.detail) === null || _t === void 0 ? void 0 : _t.payload) === null || _u === void 0 ? void 0 : _u.value });
+      }
+      if (!((_v = this.paginationEl) === null || _v === void 0 ? void 0 : _v.clearResults) || !((_w = this.paginationEl) === null || _w === void 0 ? void 0 : _w.getResults))
         return;
       await this.paginationEl.clearResults();
       await this.paginationEl.getResults();
