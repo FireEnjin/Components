@@ -44368,6 +44368,9 @@ class SearchBar {
   onFilterChange() {
     this.updateCurrentFilters();
   }
+  onSortChange() {
+    this.updateCurrentSorts();
+  }
   async onTrigger(event) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
     if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.name) === "set" && ((_c = (_b = event === null || event === void 0 ? void 0 : event.detail) === null || _b === void 0 ? void 0 : _b.payload) === null || _c === void 0 ? void 0 : _c.name)) {
@@ -44533,7 +44536,8 @@ class SearchBar {
       : 0))))));
   }
   static get watchers() { return {
-    "filter": ["onFilterChange"]
+    "filters": ["onFilterChange"],
+    "sorts": ["onSortChange"]
   }; }
   static get style() { return searchBarCss; }
   static get cmpMeta() { return {

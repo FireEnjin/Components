@@ -46,9 +46,14 @@ export class SearchBar implements ComponentInterface {
     [filterKey: string]: filterControl;
   } = {};
 
-  @Watch("filter")
+  @Watch("filters")
   onFilterChange() {
     this.updateCurrentFilters();
+  }
+
+  @Watch("sorts")
+  onSortChange() {
+    this.updateCurrentSorts();
   }
 
   @Listen("fireenjinTrigger", { target: "document" })
