@@ -44543,21 +44543,27 @@ class SearchBar {
     var _a, _b, _c, _d;
     return (hAsync(Host, null, hAsync("div", { class: "search-bar-wrapper" }, hAsync("ion-searchbar", { disabled: this.disabled }), hAsync("div", { class: "chip-bowl" }, this.showFilter &&
       ((_a = this.filters) === null || _a === void 0 ? void 0 : _a.length) &&
-      this.filters.map((control) => (hAsync("ion-chip", { outline: !Object.keys(this.currentFilters).includes(control === null || control === void 0 ? void 0 : control.name), onClick: (event) => this.fireenjinTrigger.emit({
-          event,
-          name: "filter",
-          payload: {
-            control,
-          },
-        }) }, (control === null || control === void 0 ? void 0 : control.icon) && hAsync("ion-icon", { name: control.icon }), (control === null || control === void 0 ? void 0 : control.label) && (hAsync("ion-label", null, this.getControlLabel(control))), Object.keys(this.currentFilters).includes(control === null || control === void 0 ? void 0 : control.name) && (hAsync("ion-icon", { name: "close-circle", onClick: (event) => this.clearFilter(event, control) }))))), this.showSort &&
+      this.filters.map((control) => {
+        var _a, _b, _c, _d;
+        return (hAsync("ion-chip", { outline: !((_b = (_a = this.currentFilters) === null || _a === void 0 ? void 0 : _a[control === null || control === void 0 ? void 0 : control.name]) === null || _b === void 0 ? void 0 : _b.value), onClick: (event) => this.fireenjinTrigger.emit({
+            event,
+            name: "filter",
+            payload: {
+              control,
+            },
+          }) }, (control === null || control === void 0 ? void 0 : control.icon) && hAsync("ion-icon", { name: control.icon }), (control === null || control === void 0 ? void 0 : control.label) && (hAsync("ion-label", null, this.getControlLabel(control))), ((_d = (_c = this.currentFilters) === null || _c === void 0 ? void 0 : _c[control === null || control === void 0 ? void 0 : control.name]) === null || _d === void 0 ? void 0 : _d.value) && (hAsync("ion-icon", { name: "close-circle", onClick: (event) => this.clearFilter(event, control) }))));
+      }), this.showSort &&
       ((_b = this.sorts) === null || _b === void 0 ? void 0 : _b.length) &&
-      this.sorts.map((control) => (hAsync("ion-chip", { outline: !Object.keys(this.currentSorts).includes(control === null || control === void 0 ? void 0 : control.name), onClick: (event) => this.fireenjinTrigger.emit({
-          event,
-          name: "sort",
-          payload: {
-            control,
-          },
-        }) }, (control === null || control === void 0 ? void 0 : control.icon) && hAsync("ion-icon", { name: control.icon }), (control === null || control === void 0 ? void 0 : control.label) && (hAsync("ion-label", null, this.getControlLabel(control))), Object.keys(this.currentSorts).includes(control === null || control === void 0 ? void 0 : control.name) && (hAsync("ion-icon", { name: "close-circle", onClick: (event) => this.clearSort(event, control) }))))))), ((_c = this.filters) === null || _c === void 0 ? void 0 : _c.length) && (hAsync("ion-button", { onClick: () => (this.showFilter = !this.showFilter), class: "filter-button", size: "small", fill: "clear", shape: "round", style: { color: "var(--ion-text-color)" } }, hAsync("ion-icon", { name: "funnel", slot: "icon-only" }), ((_d = Object.keys(this.currentFilters)) === null || _d === void 0 ? void 0 : _d.length) && (hAsync("ion-badge", { slot: "end" }, this.currentFilters
+      this.sorts.map((control) => {
+        var _a, _b, _c, _d;
+        return (hAsync("ion-chip", { outline: !((_b = (_a = this.currentSorts) === null || _a === void 0 ? void 0 : _a[control === null || control === void 0 ? void 0 : control.name]) === null || _b === void 0 ? void 0 : _b.value), onClick: (event) => this.fireenjinTrigger.emit({
+            event,
+            name: "sort",
+            payload: {
+              control,
+            },
+          }) }, (control === null || control === void 0 ? void 0 : control.icon) && hAsync("ion-icon", { name: control.icon }), (control === null || control === void 0 ? void 0 : control.label) && (hAsync("ion-label", null, this.getControlLabel(control))), ((_d = (_c = this.currentSorts) === null || _c === void 0 ? void 0 : _c[control === null || control === void 0 ? void 0 : control.name]) === null || _d === void 0 ? void 0 : _d.value) && (hAsync("ion-icon", { name: "close-circle", onClick: (event) => this.clearSort(event, control) }))));
+      }))), ((_c = this.filters) === null || _c === void 0 ? void 0 : _c.length) && (hAsync("ion-button", { onClick: () => (this.showFilter = !this.showFilter), class: "filter-button", size: "small", fill: "clear", shape: "round", style: { color: "var(--ion-text-color)" } }, hAsync("ion-icon", { name: "funnel", slot: "icon-only" }), ((_d = Object.keys(this.currentFilters)) === null || _d === void 0 ? void 0 : _d.length) && (hAsync("ion-badge", { slot: "end" }, this.currentFilters
       ? Object.keys(this.currentFilters).length
       : 0))))));
   }

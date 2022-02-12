@@ -258,9 +258,7 @@ export class SearchBar implements ComponentInterface {
               this.filters?.length &&
               this.filters.map((control) => (
                 <ion-chip
-                  outline={
-                    !Object.keys(this.currentFilters).includes(control?.name)
-                  }
+                  outline={!this.currentFilters?.[control?.name]?.value}
                   onClick={(event) =>
                     this.fireenjinTrigger.emit({
                       event,
@@ -275,7 +273,7 @@ export class SearchBar implements ComponentInterface {
                   {control?.label && (
                     <ion-label>{this.getControlLabel(control)}</ion-label>
                   )}
-                  {Object.keys(this.currentFilters).includes(control?.name) && (
+                  {this.currentFilters?.[control?.name]?.value && (
                     <ion-icon
                       name="close-circle"
                       onClick={(event) => this.clearFilter(event, control)}
@@ -287,9 +285,7 @@ export class SearchBar implements ComponentInterface {
               this.sorts?.length &&
               this.sorts.map((control) => (
                 <ion-chip
-                  outline={
-                    !Object.keys(this.currentSorts).includes(control?.name)
-                  }
+                  outline={!this.currentSorts?.[control?.name]?.value}
                   onClick={(event) =>
                     this.fireenjinTrigger.emit({
                       event,
@@ -304,7 +300,7 @@ export class SearchBar implements ComponentInterface {
                   {control?.label && (
                     <ion-label>{this.getControlLabel(control)}</ion-label>
                   )}
-                  {Object.keys(this.currentSorts).includes(control?.name) && (
+                  {this.currentSorts?.[control?.name]?.value && (
                     <ion-icon
                       name="close-circle"
                       onClick={(event) => this.clearSort(event, control)}
