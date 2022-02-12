@@ -44441,6 +44441,14 @@ class SearchBar {
     for (const filter of Object.values(this.currentFilters)) {
       paramData[filter.name] = filter.value;
     }
+    this.fireenjinTrigger.emit({
+      event,
+      name: "set",
+      payload: {
+        name: clearingControl.name,
+        value: null,
+      },
+    });
     let options = { paramData };
     if (this.beforeGetResults && typeof this.beforeGetResults === "function")
       options = await this.beforeGetResults(options);
@@ -44474,6 +44482,14 @@ class SearchBar {
     for (const sort of Object.values(this.currentSorts)) {
       paramData[sort.name] = sort.value;
     }
+    this.fireenjinTrigger.emit({
+      event,
+      name: "set",
+      payload: {
+        name: clearingControl.name,
+        value: null,
+      },
+    });
     let options = { paramData };
     if (this.beforeGetResults && typeof this.beforeGetResults === "function")
       options = await this.beforeGetResults(options);
