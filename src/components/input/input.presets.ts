@@ -1,4 +1,4 @@
-import { OrganismPresets } from "@fireenjin/docs/dist/types/interfaces";
+import { ComponentPresets } from "@fireenjin/docs";
 
 export default {
   default: {
@@ -8,4 +8,4 @@ export default {
       stripeKey: "pk_test_G6ksY0dKXlgogvnitD0Wm1oc",
     },
   },
-} as OrganismPresets;
+} as ComponentPresets;

@@ -1,4 +1,4 @@
-import { OrganismPresets } from "@fireenjin/docs/dist/types/interfaces";
+import { ComponentPresets } from "@fireenjin/docs";
 
 export default {
   default: {
@@ -7,4 +7,4 @@ export default {
       apiKey: "AIzaSyAz5C9TRxQ9bUkTwVaD6Yc-Iisw57UslPM",
     },
   },
-} as OrganismPresets;
+} as ComponentPresets;
