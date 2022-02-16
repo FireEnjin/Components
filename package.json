@@ -31,7 +31,7 @@
     "presets:watch": "fireenjin presets watch"
   },
   "dependencies": {
-    "@fireenjin/sdk": "^1.2.45",
+    "@fireenjin/sdk": "^1.2.46",
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
