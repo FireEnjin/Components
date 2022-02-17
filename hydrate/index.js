@@ -14481,17 +14481,22 @@ class Form {
     let isValid = true;
     const inputEls = [].slice.call(this.formEl.querySelectorAll("[value]"));
     for (const inputEl of inputEls) {
-      if (!(await inputEl.checkValidity(!reportValidity
-        ? {
-          validationClassOptions: {
-            ignoreInvalid: true,
-          },
+      try {
+        if (!(await inputEl.checkValidity(!reportValidity
+          ? {
+            validationClassOptions: {
+              ignoreInvalid: true,
+            },
+          }
+          : null))) {
+          if (isValid && reportValidity) {
+            await inputEl.reportValidity();
+          }
+          isValid = false;
         }
-        : null))) {
-        if (isValid && reportValidity) {
-          await inputEl.reportValidity();
-        }
-        isValid = false;
+      }
+      catch (_a) {
+        console.log(`${inputEl === null || inputEl === void 0 ? void 0 : inputEl.name} input not able to be validated!`);
       }
     }
     return isValid;
