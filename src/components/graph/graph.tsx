@@ -7,6 +7,7 @@ import {
   Method,
   Prop,
   h,
+  Build,
 } from "@stencil/core";
 import {
   Chart,
@@ -205,6 +206,7 @@ export class Graph implements ComponentInterface {
   }
 
   componentDidLoad() {
+    if (!Build?.isBrowser) return;
     Chart.register(
       ArcElement,
       BarController,

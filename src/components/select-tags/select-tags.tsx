@@ -10,6 +10,7 @@ import {
   State,
   Watch,
   h,
+  Build,
 } from "@stencil/core";
 import Choices from "choices.js";
 
@@ -318,6 +319,8 @@ export class SelectTags implements ComponentInterface {
   }
 
   componentDidLoad() {
+    if (!Build?.isBrowser) return;
+
     this.initChoices();
 
     if (this.endpoint) {

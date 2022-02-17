@@ -10,12 +10,12 @@ import {
   State,
   Watch,
   h,
-  Build
+  Build,
 } from "@stencil/core";
 
 @Component({
   tag: "fireenjin-star-rating",
-  styleUrl: "star-rating.css"
+  styleUrl: "star-rating.css",
 })
 export class StarRating implements ComponentInterface {
   @Element() starRatingEl: any;
@@ -39,12 +39,12 @@ export class StarRating implements ComponentInterface {
     this.fireenjinStarRating.emit({
       event,
       name: this.name,
-      value: this.currentRating
+      value: this.currentRating,
     });
   }
 
   @Method({
-    test: 123
+    test: 123,
   })
   async setCurrentRating(rating: any) {
     this.currentRating = parseFloat(rating);
@@ -56,13 +56,12 @@ export class StarRating implements ComponentInterface {
   }
 
   componentDidLoad() {
-    if (Build.isBrowser) {
-      this.currentRating = parseFloat(this.value ? this.value : "0");
-      this.starRatingEl.style.setProperty(
-        "--star-rating-max",
-        `${this.maxRating}`
-      );
-    }
+    if (!Build?.isBrowser) return;
+    this.currentRating = parseFloat(this.value ? this.value : "0");
+    this.starRatingEl.style.setProperty(
+      "--star-rating-max",
+      `${this.maxRating}`
+    );
   }
 
   render() {
@@ -80,10 +79,10 @@ export class StarRating implements ComponentInterface {
               type="radio"
               name={this.name}
               value={this.maxRating - index}
-              onInput={event => this.onInput(event)}
+              onInput={(event) => this.onInput(event)}
             />
             &#9733;
-          </label>
+          </label>,
         ])}
       </div>
     );

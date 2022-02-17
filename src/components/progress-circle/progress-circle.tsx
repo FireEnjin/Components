@@ -3,7 +3,7 @@ import { Component, ComponentInterface, Prop, h } from "@stencil/core";
 @Component({
   tag: "fireenjin-progress-circle",
   styleUrl: "progress-circle.css",
-  shadow: true
+  shadow: true,
 })
 export class ProgressCircle implements ComponentInterface {
   /**
@@ -18,17 +18,6 @@ export class ProgressCircle implements ComponentInterface {
    * The stroke thickness of the progress bar
    */
   @Prop() stroke = 5;
-
-  // componentDidLoad() {
-  //   let i = 0;
-  //   const killInterval = setInterval(() => {
-  //     this.percent = i;
-  //     i++;
-  //     if (i > 100) {
-  //       clearInterval(killInterval);
-  //     }
-  //   }, 600);
-  // }
 
   render() {
     const normalizedRadius = this.radius - this.stroke * 2;
@@ -51,7 +40,7 @@ export class ProgressCircle implements ComponentInterface {
           stroke-dasharray={circumference}
           style={{
             strokeDashoffset: (circumference -
-              (this.percent / 100) * circumference) as any
+              (this.percent / 100) * circumference) as any,
           }}
           stroke-width={this.stroke}
           r={normalizedRadius}
@@ -61,7 +50,7 @@ export class ProgressCircle implements ComponentInterface {
       </svg>,
       <div class="slot-wrapper">
         <slot />
-      </div>
+      </div>,
     ];
   }
 }

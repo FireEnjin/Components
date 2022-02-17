@@ -9978,17 +9978,18 @@ class Avatar$1 {
   constructor(hostRef) {
     registerInstance(this, hostRef);
   }
-  componentDidLoad() {
-    console.log("wewww");
-  }
   render() {
     var _a, _b, _c;
     return (hAsync("div", { class: "avatar-image", style: {
         backgroundImage: !((_a = this.src) === null || _a === void 0 ? void 0 : _a.length) && this.initials
           ? `url('https://avatars.dicebear.com/api/initials/${this.initials}.svg')`
-          : `url('${((_b = this.src) === null || _b === void 0 ? void 0 : _b.length) ? this.src : ((_c = this.fallback) === null || _c === void 0 ? void 0 : _c.length) ? this.fallback : "/assets/images/default-icon.png"}')`,
+          : `url('${((_b = this.src) === null || _b === void 0 ? void 0 : _b.length)
+            ? this.src
+            : ((_c = this.fallback) === null || _c === void 0 ? void 0 : _c.length)
+              ? this.fallback
+              : "/assets/images/default-icon.png"}')`,
         height: this.size ? this.size : "50px",
-        width: this.size ? this.size : "50px"
+        width: this.size ? this.size : "50px",
       } }));
   }
   static get style() { return avatarCss; }
@@ -14557,6 +14558,8 @@ class Form {
     obj[pList[len - 1]] = value;
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
     setTimeout(() => {
       this.componentIsLoaded = true;
     }, 2000);
@@ -24047,6 +24050,8 @@ class Graph {
     }
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
     Chart.register(ArcElement, BarController, BarElement, CategoryScale, PieController, LineController, LineElement, PointElement, LinearScale, plugin_title);
   }
   render() {
@@ -26514,6 +26519,9 @@ Cleave.DefaultProperties = DefaultProperties_1;
 // for angular directive
 ((typeof commonjsGlobal$1 === 'object' && commonjsGlobal$1) ? commonjsGlobal$1 : window)['Cleave'] = Cleave;
 
+// CommonJS
+var Cleave_1 = Cleave;
+
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 function getDefaultExportFromCjs (x) {
@@ -26806,6 +26814,93 @@ class Input$1 {
     }
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
+    setTimeout(() => {
+      this.input = this.inputEl.querySelector("input");
+      this.inputType = this.type
+        ? this.type === "phone"
+          ? "tel"
+          : this.type
+        : "text";
+      if (this.type === "phone") {
+        this.cleave = new Cleave_1(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate$1(this);
+          },
+          phone: true,
+          phoneRegionCode: "US",
+          delimiter: "-",
+        });
+      }
+      else if (this.type === "hour") {
+        this.cleave = new Cleave_1(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate$1(this);
+          },
+          numericOnly: true,
+          delimiter: ".",
+          blocks: [2, 2],
+        });
+      }
+      else if (this.type === "expiration") {
+        this.cleave = new Cleave_1(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate$1(this);
+          },
+          delimiter: "/",
+          numericOnly: true,
+          blocks: [2, 2],
+        });
+      }
+      else if (this.type === "cvc") {
+        this.cleave = new Cleave_1(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate$1(this);
+          },
+          delimiter: "",
+          numericOnly: true,
+          blocks: [4],
+        });
+      }
+      else if (this.type === "ssn") {
+        this.cleave = new Cleave_1(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate$1(this);
+          },
+          delimiter: "",
+          numericOnly: true,
+          blocks: [4],
+        });
+      }
+      else if (this.type === "code") {
+        this.cleave = new Cleave_1(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate$1(this);
+          },
+          delimiter: "",
+          numericOnly: true,
+          blocks: [6],
+        });
+      }
+      else if (this.type === "ein") {
+        this.cleave = new Cleave_1(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate$1(this);
+          },
+          numericOnly: true,
+          blocks: [2, 7],
+          delimiter: "-",
+        });
+      }
+    }, 100);
   }
   togglePassword(event) {
     event.stopPropagation();
@@ -26826,12 +26921,12 @@ class Input$1 {
         ? this.stripeElements.fonts
         : [
           {
-            cssSrc: "https://fonts.googleapis.com/css?family=Open+Sans"
-          }
-        ]
+            cssSrc: "https://fonts.googleapis.com/css?family=Open+Sans",
+          },
+        ],
     });
     const classes = {
-      base: "native-input native-input-md"
+      base: "native-input native-input-md",
     };
     const style = this.stripeElements.style
       ? this.stripeElements.style
@@ -26841,17 +26936,17 @@ class Input$1 {
           fontFamily: '"Open Sans", arial, sans-serif',
           fontSize: "16px",
           "::placeholder": {
-            color: "#999"
-          }
-        }
+            color: "#999",
+          },
+        },
       };
     this.card = elements.create("card", {
       hidePostalCode: true,
       style,
-      classes
+      classes,
     });
     this.card.mount(this.cardNumberEl);
-    this.card.on("blur", event => {
+    this.card.on("blur", (event) => {
       this.itemEl.classList.remove("item-has-focus", "item-input");
       this.ionBlur.emit({
         event,
@@ -26864,10 +26959,10 @@ class Input$1 {
           this.cardValidity.complete &&
           !this.cardValidity.error
           ? true
-          : false
+          : false,
       });
     });
-    this.card.on("change", event => {
+    this.card.on("change", (event) => {
       if (this.required) {
         this.setValidationClass(event);
       }
@@ -26881,12 +26976,12 @@ class Input$1 {
           this.cardValidity.complete &&
           !this.cardValidity.error
           ? true
-          : false
+          : false,
       };
       this.ionChange.emit(eventPayload);
       this.ionInput.emit(eventPayload);
     });
-    this.card.on("focus", event => {
+    this.card.on("focus", (event) => {
       this.itemEl.classList.add("item-has-focus", "item-input");
       this.ionFocus.emit({
         event,
@@ -26896,7 +26991,7 @@ class Input$1 {
           this.cardValidity.complete &&
           !this.cardValidity.error
           ? true
-          : false
+          : false,
       });
     });
   }
@@ -26916,7 +27011,7 @@ class Input$1 {
       setTimeout(() => {
         this.initializeStripeElements();
       }, 200);
-      return hAsync("div", { id: "card-number", ref: el => (this.cardNumberEl = el) });
+      return hAsync("div", { id: "card-number", ref: (el) => (this.cardNumberEl = el) });
     }
     else if (this.type === "expiration") {
       return hAsync("div", { id: "card-expiry" });
@@ -26952,10 +27047,10 @@ class Input$1 {
     }
   }
   render() {
-    return (hAsync("ion-item", { ref: el => (this.itemEl = el), lines: this.lines, class: {
+    return (hAsync("ion-item", { ref: (el) => (this.itemEl = el), lines: this.lines, class: {
         "input-password item-input": this.inputType === "password",
         "input-card": this.inputType === "card",
-        "has-info-bubble": !!this.info
+        "has-info-bubble": !!this.info,
       } }, this.iconLeft && hAsync("ion-icon", { name: this.iconLeft, slot: "start" }), this.label && (hAsync("ion-label", { position: this.labelPosition }, hAsync("span", null, this.label))), this.renderInput(), this.type === "password" && (hAsync("div", { class: "input-icon" }, hAsync("ion-icon", { name: this.passwordVisible ? "eye-off" : "eye", onClick: (event) => this.togglePassword(event) }))), this.iconRight && hAsync("ion-icon", { name: this.iconRight, slot: "start" })));
   }
   get inputEl() { return getElement(this); }
@@ -27436,6 +27531,58 @@ class InputAddress {
     return this.google;
   }
   async componentDidLoad() {
+    var _a;
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
+    const inputEl = await this.autocompleteFieldEl.getInputElement();
+    setTimeout(() => {
+      inputEl.setAttribute("autocomplete", "new-password");
+    }, 200);
+    if (!((_a = window === null || window === void 0 ? void 0 : window.google) === null || _a === void 0 ? void 0 : _a.maps) && this.apiKey)
+      await this.loadGoogleMaps();
+    const autocomplete = new this.google.maps.places.Autocomplete(inputEl, {
+      types: ["address"],
+    });
+    this.google.maps.event.addListener(autocomplete, "place_changed", () => {
+      var _a, _b, _c, _d, _e, _f, _g;
+      this.place = autocomplete.getPlace();
+      if (!this.value) {
+        this.value = {};
+      }
+      this.value.full = this.place.formatted_address;
+      let streetAddress = "";
+      this.value.placeId = (_a = this.place) === null || _a === void 0 ? void 0 : _a.place_id;
+      this.value.lat = (_d = (_c = (_b = this.place) === null || _b === void 0 ? void 0 : _b.geometry) === null || _c === void 0 ? void 0 : _c.location) === null || _d === void 0 ? void 0 : _d.lat();
+      this.value.lng = (_g = (_f = (_e = this.place) === null || _e === void 0 ? void 0 : _e.geometry) === null || _f === void 0 ? void 0 : _f.location) === null || _g === void 0 ? void 0 : _g.lng();
+      this.place.address_components.map((field, index) => {
+        if (field.types.indexOf("street_number") !== -1) {
+          streetAddress = field.long_name;
+        }
+        if (field.types.indexOf("route") !== -1) {
+          streetAddress = streetAddress + " " + field.long_name;
+        }
+        if (field.types.indexOf("locality") !== -1) {
+          this.value.city = field.long_name;
+        }
+        if (field.types.indexOf("postal_code") !== -1) {
+          this.value.zip = field.short_name;
+        }
+        if (field.types.indexOf("administrative_area_level_1") !== -1) {
+          this.value.state = field.short_name;
+        }
+        if (this.place.address_components.length === index + 1) {
+          this.value.street = streetAddress;
+        }
+        if (index === this.place.address_components.length - 1) {
+          setTimeout(() => {
+            this.ionInput.emit({
+              name: this.name,
+              value: this.value,
+            });
+          }, 10);
+        }
+      });
+    });
   }
   toggleManualEntry() {
     this.manualEntry = !this.manualEntry;
@@ -27543,12 +27690,15 @@ class InputAmount {
     return formatter.format(formattedAmount).replace("$", "");
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
+    this.formattedValue = this.formatCurrency(this.value);
   }
   selectPreset(preset) {
     this.formattedValue = this.formatCurrency(typeof preset === "string" ? preset : (preset === null || preset === void 0 ? void 0 : preset.value) ? preset.value : 0);
   }
   render() {
-    return (hAsync("ion-item", { lines: this.lines }, hAsync("ion-icon", { name: "logo-usd", slot: "start" }), this.label && hAsync("ion-label", { position: this.labelPosition }, this.label), this.presets && this.presets.length && (hAsync("div", { class: "presets", slot: "end" }, this.presets.map((preset) => (hAsync("span", { onClick: () => this.selectPreset(preset) }, typeof preset === "string"
+    return (hAsync("ion-item", { lines: this.lines }, hAsync("ion-icon", { name: "logo-usd", slot: "start" }), this.label && (hAsync("ion-label", { position: this.labelPosition }, this.label)), this.presets && this.presets.length && (hAsync("div", { class: "presets", slot: "end" }, this.presets.map((preset) => (hAsync("span", { onClick: () => this.selectPreset(preset) }, typeof preset === "string"
       ? preset
       : (preset === null || preset === void 0 ? void 0 : preset.label)
         ? preset.label
@@ -27841,6 +27991,8 @@ class InputPhoto {
     this.updatePhoto();
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
     this.updatePhoto();
   }
   updatePhoto() {
@@ -29504,13 +29656,17 @@ class InputState {
       WA: "Washington",
       WI: "Wisconsin",
       WV: "West Virginia",
-      WY: "Wyoming"
+      WY: "Wyoming",
     };
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
+    const ionSelectEl = this.stateAutocompleteEl.querySelector("ion-select");
+    ionSelectEl.interfaceOptions = { header: "State" };
   }
   render() {
-    return (hAsync("ion-select", { color: "primary", name: this.name, value: this.value, "ok-text": "Select", "cancel-text": "Cancel", placeholder: this.placeholder }, Object.keys(this.stateList).map(abbrev => (hAsync("ion-select-option", { value: abbrev }, this.stateList[abbrev])))));
+    return (hAsync("ion-select", { color: "primary", name: this.name, value: this.value, "ok-text": "Select", "cancel-text": "Cancel", placeholder: this.placeholder }, Object.keys(this.stateList).map((abbrev) => (hAsync("ion-select-option", { value: abbrev }, this.stateList[abbrev])))));
   }
   get stateAutocompleteEl() { return getElement(this); }
   static get style() { return inputStateCss; }
@@ -30458,6 +30614,8 @@ class JsonViewer {
     window.clearInterval(this.timer);
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
     setTimeout(() => {
       try {
         if (JSON.parse(this.jsonViewerEl.innerText))
@@ -30494,10 +30652,8 @@ class Kanban {
   constructor(hostRef) {
     registerInstance(this, hostRef);
   }
-  componentDidLoad() {
-  }
   render() {
-    return (hAsync(Host, null));
+    return hAsync(Host, null);
   }
   get kanbanEl() { return getElement(this); }
   static get style() { return kanbanCss; }
@@ -34679,6 +34835,8 @@ class Map$1 {
     return loader.load();
   }
   async componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
   }
   render() {
     return (hAsync(Host, { class: { "map-is-visible": this.isVisible } }, hAsync("div", { id: "map" })));
@@ -37705,6 +37863,8 @@ class Pagination$1 {
     });
   }
   componentWillLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
     if (this.collection) {
       this.resultsKey = !this.resultsKey
         ? `${this.collection}.results`
@@ -37720,6 +37880,21 @@ class Pagination$1 {
     }
   }
   componentDidLoad() {
+    var _a, _b;
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
+    if ((_a = window === null || window === void 0 ? void 0 : window.location) === null || _a === void 0 ? void 0 : _a.pathname) {
+      this.initailizedOnPath = window.location.pathname;
+    }
+    if (!this.disableVirtualScroll) {
+      window.dispatchEvent(new window.Event("resize"));
+      this.resizeInterval = setInterval(() => {
+        window.dispatchEvent(new window.Event("resize"));
+      }, 3000);
+    }
+    if (!((_b = this.results) === null || _b === void 0 ? void 0 : _b.length)) {
+      this.getResults();
+    }
   }
   disconnectedCallback() {
   }
@@ -40556,25 +40731,15 @@ class ProgressCircle {
      */
     this.stroke = 5;
   }
-  // componentDidLoad() {
-  //   let i = 0;
-  //   const killInterval = setInterval(() => {
-  //     this.percent = i;
-  //     i++;
-  //     if (i > 100) {
-  //       clearInterval(killInterval);
-  //     }
-  //   }, 600);
-  // }
   render() {
     const normalizedRadius = this.radius - this.stroke * 2;
     const circumference = normalizedRadius * 2 * Math.PI;
     return [
       hAsync("svg", { height: this.radius * 2, width: this.radius * 2 }, hAsync("circle", { id: "track", fill: "transparent", "stroke-dasharray": circumference, "stroke-width": this.stroke, r: normalizedRadius, cx: this.radius, cy: this.radius }), hAsync("circle", { id: "progress", fill: "transparent", "stroke-dasharray": circumference, style: {
           strokeDashoffset: (circumference -
-            (this.percent / 100) * circumference)
+            (this.percent / 100) * circumference),
         }, "stroke-width": this.stroke, r: normalizedRadius, cx: this.radius, cy: this.radius })),
-      hAsync("div", { class: "slot-wrapper" }, hAsync("slot", null))
+      hAsync("div", { class: "slot-wrapper" }, hAsync("slot", null)),
     ];
   }
   static get style() { return progressCircleCss; }
@@ -42462,6 +42627,8 @@ class RenderTemplate {
       });
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
     backoff(10, this.renderTemplate.bind(this));
     this.setPartials(this.partials);
   }
@@ -44434,6 +44601,8 @@ class SearchBar {
     return label;
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
     this.updateCurrentFilters();
   }
   render() {
@@ -53872,6 +54041,8 @@ class SelectTags {
     }
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
     this.initChoices();
     if (this.endpoint) {
       this.getResults();
@@ -54853,6 +55024,8 @@ class Share {
     window.open(popupUrl, "Share", type === "google" ? "height=600,width=400" : "height=400,width=600");
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
   }
   render() {
     return (hAsync("ion-list", null, hAsync("ion-item", { lines: this.lines, class: "share-twitter", onClick: (event) => this.openPopup(event, "twitter") }, hAsync("ion-icon", { slot: "end", name: "logo-twitter" }), "Share on Twitter"), hAsync("ion-item", { lines: this.lines, class: "share-facebook", onClick: (event) => this.openPopup(event, "facebook") }, hAsync("ion-icon", { slot: "end", name: "logo-facebook" }), "Share on Facebook"), hAsync("ion-item", { lines: this.lines, ref: (el) => (this.copyItemEl = el), class: "share-clipboard", "data-clipboard-text": this.url }, hAsync("ion-icon", { slot: "end", name: "clipboard" }), "Copy to Clipboard")));
@@ -55517,7 +55690,7 @@ class StarRating {
     this.fireenjinStarRating.emit({
       event,
       name: this.name,
-      value: this.currentRating
+      value: this.currentRating,
     });
   }
   async setCurrentRating(rating) {
@@ -55527,12 +55700,16 @@ class StarRating {
     this.currentRating = parseFloat(this.value);
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
+    this.currentRating = parseFloat(this.value ? this.value : "0");
+    this.starRatingEl.style.setProperty("--star-rating-max", `${this.maxRating}`);
   }
   render() {
     return (hAsync("div", { class: this.disabled ? "star-rating is-disabled" : "star-rating" }, [...Array(this.maxRating)].map((_radio, index) => [
       hAsync("label", { class: this.currentRating >= this.maxRating - index - 0.5
           ? "star-active"
-          : null }, hAsync("input", { type: "radio", name: this.name, value: this.maxRating - index, onInput: event => this.onInput(event) }), "\u2605")
+          : null }, hAsync("input", { type: "radio", name: this.name, value: this.maxRating - index, onInput: (event) => this.onInput(event) }), "\u2605"),
     ])));
   }
   get starRatingEl() { return getElement(this); }
@@ -55857,6 +56034,18 @@ class Tabs$1 {
     this.tabs = [];
   }
   componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
+    this.tabs = this.setSelectedTab();
+    if (this.hash) {
+      window.onhashchange = () => {
+        const tabs = this.tabsWrapperEl.querySelectorAll("fireenjin-tab");
+        this.tabs = this.setSelectedTab();
+        for (let i = 0; i < tabs.length; ++i) {
+          tabs[i].selected = this.selected === tabs[i].tab;
+        }
+      };
+    }
   }
   setSelectedTab() {
     const tabs = this.tabsWrapperEl.querySelectorAll("fireenjin-tab");

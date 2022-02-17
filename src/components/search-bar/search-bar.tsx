@@ -1,5 +1,6 @@
 import { FireEnjinTriggerInput } from "@fireenjin/sdk";
 import {
+  Build,
   Component,
   ComponentInterface,
   Event,
@@ -245,6 +246,7 @@ export class SearchBar implements ComponentInterface {
   }
 
   componentDidLoad() {
+    if (!Build?.isBrowser) return;
     this.updateCurrentFilters();
   }
 

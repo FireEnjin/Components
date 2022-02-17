@@ -293,6 +293,8 @@ export class Pagination implements ComponentInterface {
   }
 
   componentWillLoad() {
+    if (!Build?.isBrowser) return;
+
     if (this.collection) {
       this.resultsKey = !this.resultsKey
         ? `${this.collection}.results`
@@ -309,19 +311,19 @@ export class Pagination implements ComponentInterface {
   }
 
   componentDidLoad() {
-    if (Build.isBrowser) {
-      if (window?.location?.pathname) {
-        this.initailizedOnPath = window.location.pathname;
-      }
-      if (!this.disableVirtualScroll) {
+    if (!Build?.isBrowser) return;
+
+    if (window?.location?.pathname) {
+      this.initailizedOnPath = window.location.pathname;
+    }
+    if (!this.disableVirtualScroll) {
+      window.dispatchEvent(new window.Event("resize"));
+      this.resizeInterval = setInterval(() => {
         window.dispatchEvent(new window.Event("resize"));
-        this.resizeInterval = setInterval(() => {
-          window.dispatchEvent(new window.Event("resize"));
-        }, 3000);
-      }
-      if (!this.results?.length) {
-        this.getResults();
-      }
+      }, 3000);
+    }
+    if (!this.results?.length) {
+      this.getResults();
     }
   }
 

@@ -80,6 +80,8 @@ export class Share implements ComponentInterface {
   }
 
   componentDidLoad() {
+    if (!Build?.isBrowser) return;
+
     if (Build.isBrowser) {
       new ClipboardJS(this.copyItemEl);
     }

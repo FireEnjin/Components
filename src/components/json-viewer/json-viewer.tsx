@@ -5,6 +5,7 @@ import {
   Prop,
   h,
   Method,
+  Build,
 } from "@stencil/core";
 
 import JSONFormatter from "json-formatter-js";
@@ -50,6 +51,8 @@ export class JsonViewer implements ComponentInterface {
   }
 
   componentDidLoad() {
+    if (!Build?.isBrowser) return;
+
     setTimeout(() => {
       try {
         if (JSON.parse(this.jsonViewerEl.innerText))

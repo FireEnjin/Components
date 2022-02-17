@@ -11,15 +11,15 @@ import {
   Watch,
   h,
   forceUpdate,
-  Build
+  Build,
 } from "@stencil/core";
 import Cleave from "cleave.js";
 import "cleave.js/dist/addons/cleave-phone.us";
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe } from "@stripe/stripe-js";
 
 @Component({
   tag: "fireenjin-input",
-  styleUrl: "input.css"
+  styleUrl: "input.css",
 })
 export class Input implements ComponentInterface {
   itemEl: HTMLIonItemElement;
@@ -100,7 +100,7 @@ export class Input implements ComponentInterface {
     return this.stripe.createToken(this.card, {
       address_country: "US",
       currency: "usd",
-      ...options
+      ...options,
     });
   }
 
@@ -131,8 +131,8 @@ export class Input implements ComponentInterface {
         !this.cardValidity.empty &&
         this.cardValidity.complete &&
         !this.cardValidity.error
-        ? true
-        : false;
+      ? true
+      : false;
   }
 
   @Method()
@@ -195,88 +195,87 @@ export class Input implements ComponentInterface {
   }
 
   componentDidLoad() {
-    if (Build.isBrowser) {
-      setTimeout(() => {
-        this.input = this.inputEl.querySelector("input");
-        this.inputType = this.type
-          ? this.type === "phone"
-            ? "tel"
-            : this.type
-          : "text";
+    if (!Build?.isBrowser) return;
+    setTimeout(() => {
+      this.input = this.inputEl.querySelector("input");
+      this.inputType = this.type
+        ? this.type === "phone"
+          ? "tel"
+          : this.type
+        : "text";
 
-        if (this.type === "phone") {
-          this.cleave = new Cleave(this.input, {
-            onValueChanged: e => {
-              this.value = e.target.value;
-              forceUpdate(this);
-            },
-            phone: true,
-            phoneRegionCode: "US",
-            delimiter: "-"
-          });
-        } else if (this.type === "hour") {
-          this.cleave = new Cleave(this.input, {
-            onValueChanged: e => {
-              this.value = e.target.value;
-              forceUpdate(this);
-            },
-            numericOnly: true,
-            delimiter: ".",
-            blocks: [2, 2]
-          });
-        } else if (this.type === "expiration") {
-          this.cleave = new Cleave(this.input, {
-            onValueChanged: e => {
-              this.value = e.target.value;
-              forceUpdate(this);
-            },
-            delimiter: "/",
-            numericOnly: true,
-            blocks: [2, 2]
-          });
-        } else if (this.type === "cvc") {
-          this.cleave = new Cleave(this.input, {
-            onValueChanged: e => {
-              this.value = e.target.value;
-              forceUpdate(this);
-            },
-            delimiter: "",
-            numericOnly: true,
-            blocks: [4]
-          });
-        } else if (this.type === "ssn") {
-          this.cleave = new Cleave(this.input, {
-            onValueChanged: e => {
-              this.value = e.target.value;
-              forceUpdate(this);
-            },
-            delimiter: "",
-            numericOnly: true,
-            blocks: [4]
-          });
-        } else if (this.type === "code") {
-          this.cleave = new Cleave(this.input, {
-            onValueChanged: e => {
-              this.value = e.target.value;
-              forceUpdate(this);
-            },
-            delimiter: "",
-            numericOnly: true,
-            blocks: [6]
-          });
-        } else if (this.type === "ein") {
-          this.cleave = new Cleave(this.input, {
-            onValueChanged: e => {
-              this.value = e.target.value;
-              forceUpdate(this);
-            },
-            numericOnly: true,
-            blocks: [2, 7],
-            delimiter: "-"
-          });
-        }
-      }, 100);
-    }
+      if (this.type === "phone") {
+        this.cleave = new Cleave(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate(this);
+          },
+          phone: true,
+          phoneRegionCode: "US",
+          delimiter: "-",
+        });
+      } else if (this.type === "hour") {
+        this.cleave = new Cleave(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate(this);
+          },
+          numericOnly: true,
+          delimiter: ".",
+          blocks: [2, 2],
+        });
+      } else if (this.type === "expiration") {
+        this.cleave = new Cleave(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate(this);
+          },
+          delimiter: "/",
+          numericOnly: true,
+          blocks: [2, 2],
+        });
+      } else if (this.type === "cvc") {
+        this.cleave = new Cleave(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate(this);
+          },
+          delimiter: "",
+          numericOnly: true,
+          blocks: [4],
+        });
+      } else if (this.type === "ssn") {
+        this.cleave = new Cleave(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate(this);
+          },
+          delimiter: "",
+          numericOnly: true,
+          blocks: [4],
+        });
+      } else if (this.type === "code") {
+        this.cleave = new Cleave(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate(this);
+          },
+          delimiter: "",
+          numericOnly: true,
+          blocks: [6],
+        });
+      } else if (this.type === "ein") {
+        this.cleave = new Cleave(this.input, {
+          onValueChanged: (e) => {
+            this.value = e.target.value;
+            forceUpdate(this);
+          },
+          numericOnly: true,
+          blocks: [2, 7],
+          delimiter: "-",
+        });
+      }
+    }, 100);
   }
 
   togglePassword(event: UIEvent) {
@@ -299,36 +298,36 @@ export class Input implements ComponentInterface {
       fonts: this.stripeElements.fonts
         ? this.stripeElements.fonts
         : [
-          {
-            cssSrc: "https://fonts.googleapis.com/css?family=Open+Sans"
-          }
-        ]
+            {
+              cssSrc: "https://fonts.googleapis.com/css?family=Open+Sans",
+            },
+          ],
     });
 
     const classes = {
-      base: "native-input native-input-md"
+      base: "native-input native-input-md",
     };
 
     const style = this.stripeElements.style
       ? this.stripeElements.style
       : {
-        base: {
-          color: "#000",
-          fontFamily: '"Open Sans", arial, sans-serif',
-          fontSize: "16px",
-          "::placeholder": {
-            color: "#999"
-          }
-        }
-      };
+          base: {
+            color: "#000",
+            fontFamily: '"Open Sans", arial, sans-serif',
+            fontSize: "16px",
+            "::placeholder": {
+              color: "#999",
+            },
+          },
+        };
 
     this.card = elements.create("card", {
       hidePostalCode: true,
       style,
-      classes
+      classes,
     });
     this.card.mount(this.cardNumberEl);
-    this.card.on("blur", event => {
+    this.card.on("blur", (event) => {
       this.itemEl.classList.remove("item-has-focus", "item-input");
       this.ionBlur.emit({
         event,
@@ -339,14 +338,14 @@ export class Input implements ComponentInterface {
             : null,
         validity:
           this.cardValidity &&
-            !this.cardValidity.empty &&
-            this.cardValidity.complete &&
-            !this.cardValidity.error
+          !this.cardValidity.empty &&
+          this.cardValidity.complete &&
+          !this.cardValidity.error
             ? true
-            : false
+            : false,
       });
     });
-    this.card.on("change", event => {
+    this.card.on("change", (event) => {
       if (this.required) {
         this.setValidationClass(event);
       }
@@ -357,27 +356,27 @@ export class Input implements ComponentInterface {
         value: event.card,
         validity:
           this.cardValidity &&
-            !this.cardValidity.empty &&
-            this.cardValidity.complete &&
-            !this.cardValidity.error
+          !this.cardValidity.empty &&
+          this.cardValidity.complete &&
+          !this.cardValidity.error
             ? true
-            : false
+            : false,
       };
       this.ionChange.emit(eventPayload);
       this.ionInput.emit(eventPayload);
     });
-    this.card.on("focus", event => {
+    this.card.on("focus", (event) => {
       this.itemEl.classList.add("item-has-focus", "item-input");
       this.ionFocus.emit({
         event,
         name: this.name ? this.name : "card",
         validity:
           this.cardValidity &&
-            !this.cardValidity.empty &&
-            this.cardValidity.complete &&
-            !this.cardValidity.error
+          !this.cardValidity.empty &&
+          this.cardValidity.complete &&
+          !this.cardValidity.error
             ? true
-            : false
+            : false,
       });
     });
   }
@@ -400,7 +399,7 @@ export class Input implements ComponentInterface {
         this.initializeStripeElements();
       }, 200);
 
-      return <div id="card-number" ref={el => (this.cardNumberEl = el)} />;
+      return <div id="card-number" ref={(el) => (this.cardNumberEl = el)} />;
     } else if (this.type === "expiration") {
       return <div id="card-expiry" />;
     } else if (this.type === "cvc") {
@@ -412,8 +411,8 @@ export class Input implements ComponentInterface {
           : this.type === "phone" ||
             this.type === "hours" ||
             this.type === "date"
-            ? "tel"
-            : "text";
+          ? "tel"
+          : "text";
 
       return (
         <ion-input
@@ -428,18 +427,18 @@ export class Input implements ComponentInterface {
             this.pattern
               ? this.pattern
               : this.type === "phone"
-                ? "[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                : this.type === "ssn"
-                  ? "[0-9]{4}"
-                  : this.type === "date"
-                    ? "[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}"
-                    : this.type === "code"
-                      ? "[0-9]{6}"
-                      : this.type === "expiration"
-                        ? "[0-9]{2}/[0-9]{2}"
-                        : this.type === "cvc"
-                          ? "[0-9]{3,4}"
-                          : null
+              ? "[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              : this.type === "ssn"
+              ? "[0-9]{4}"
+              : this.type === "date"
+              ? "[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}"
+              : this.type === "code"
+              ? "[0-9]{6}"
+              : this.type === "expiration"
+              ? "[0-9]{2}/[0-9]{2}"
+              : this.type === "cvc"
+              ? "[0-9]{3,4}"
+              : null
           }
           value={
             this.type === "date"
@@ -466,12 +465,12 @@ export class Input implements ComponentInterface {
   render() {
     return (
       <ion-item
-        ref={el => (this.itemEl = el)}
+        ref={(el) => (this.itemEl = el)}
         lines={this.lines}
         class={{
           "input-password item-input": this.inputType === "password",
           "input-card": this.inputType === "card",
-          "has-info-bubble": !!this.info
+          "has-info-bubble": !!this.info,
         }}
       >
         {this.iconLeft && <ion-icon name={this.iconLeft} slot="start" />}

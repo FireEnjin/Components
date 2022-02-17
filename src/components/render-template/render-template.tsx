@@ -44,6 +44,7 @@ export class RenderTemplate implements ComponentInterface {
   }
 
   componentDidLoad() {
+    if (!Build?.isBrowser) return;
     backoff(10, this.renderTemplate.bind(this));
     this.setPartials(this.partials);
   }

@@ -1,8 +1,15 @@
-import { Component, ComponentInterface, Element, Prop, h, Build } from "@stencil/core";
+import {
+  Component,
+  ComponentInterface,
+  Element,
+  Prop,
+  h,
+  Build,
+} from "@stencil/core";
 
 @Component({
   tag: "fireenjin-input-state",
-  styleUrl: "input-state.css"
+  styleUrl: "input-state.css",
 })
 export class InputState implements ComponentInterface {
   @Element() stateAutocompleteEl: HTMLElement;
@@ -66,14 +73,13 @@ export class InputState implements ComponentInterface {
     WA: "Washington",
     WI: "Wisconsin",
     WV: "West Virginia",
-    WY: "Wyoming"
+    WY: "Wyoming",
   };
 
   componentDidLoad() {
-    if (Build.isBrowser) {
-      const ionSelectEl = this.stateAutocompleteEl.querySelector("ion-select");
-      ionSelectEl.interfaceOptions = { header: "State" };
-    }
+    if (!Build?.isBrowser) return;
+    const ionSelectEl = this.stateAutocompleteEl.querySelector("ion-select");
+    ionSelectEl.interfaceOptions = { header: "State" };
   }
 
   render() {
@@ -86,7 +92,7 @@ export class InputState implements ComponentInterface {
         cancel-text="Cancel"
         placeholder={this.placeholder}
       >
-        {Object.keys(this.stateList).map(abbrev => (
+        {Object.keys(this.stateList).map((abbrev) => (
           <ion-select-option value={abbrev}>
             {this.stateList[abbrev]}
           </ion-select-option>

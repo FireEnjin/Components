@@ -11,6 +11,7 @@ import {
   State,
   Watch,
   h,
+  Build,
 } from "@stencil/core";
 import resizeImage from "../../helpers/resizeImage";
 
@@ -97,6 +98,7 @@ export class InputPhoto implements ComponentInterface {
   }
 
   componentDidLoad() {
+    if (!Build?.isBrowser) return;
     this.updatePhoto();
   }
 

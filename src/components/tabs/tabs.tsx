@@ -24,20 +24,17 @@ export class Tabs implements ComponentInterface {
   @State() tabs: any[] = [];
 
   componentDidLoad() {
-    if (Build.isBrowser) {
-      this.tabs = this.setSelectedTab();
+    if (!Build?.isBrowser) return;
+    this.tabs = this.setSelectedTab();
 
-      if (this.hash) {
-        window.onhashchange = () => {
-          const tabs: any = this.tabsWrapperEl.querySelectorAll(
-            "fireenjin-tab"
-          );
-          this.tabs = this.setSelectedTab();
-          for (let i = 0; i < tabs.length; ++i) {
-            tabs[i].selected = this.selected === tabs[i].tab;
-          }
-        };
-      }
+    if (this.hash) {
+      window.onhashchange = () => {
+        const tabs: any = this.tabsWrapperEl.querySelectorAll("fireenjin-tab");
+        this.tabs = this.setSelectedTab();
+        for (let i = 0; i < tabs.length; ++i) {
+          tabs[i].selected = this.selected === tabs[i].tab;
+        }
+      };
     }
   }
 

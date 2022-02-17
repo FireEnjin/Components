@@ -97,9 +97,8 @@ export class InputAmount implements ComponentInterface {
   }
 
   componentDidLoad() {
-    if (Build.isBrowser) {
-      this.formattedValue = this.formatCurrency(this.value);
-    }
+    if (!Build?.isBrowser) return;
+    this.formattedValue = this.formatCurrency(this.value);
   }
 
   selectPreset(preset: { label?: string; value: any } | string) {
@@ -112,7 +111,9 @@ export class InputAmount implements ComponentInterface {
     return (
       <ion-item lines={this.lines}>
         <ion-icon name="logo-usd" slot="start" />
-        {this.label && <ion-label position={this.labelPosition}>{this.label}</ion-label>}
+        {this.label && (
+          <ion-label position={this.labelPosition}>{this.label}</ion-label>
+        )}
         {this.presets && this.presets.length && (
           <div class="presets" slot="end">
             {this.presets.map((preset) => (
@@ -120,10 +121,10 @@ export class InputAmount implements ComponentInterface {
                 {typeof preset === "string"
                   ? preset
                   : preset?.label
-                    ? preset.label
-                    : preset?.value
-                      ? preset.value
-                      : ""}
+                  ? preset.label
+                  : preset?.value
+                  ? preset.value
+                  : ""}
               </span>
             ))}
           </div>

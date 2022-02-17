@@ -9,6 +9,7 @@ import {
   Method,
   Prop,
   h,
+  Build,
 } from "@stencil/core";
 
 @Component({
@@ -357,6 +358,7 @@ export class Form implements ComponentInterface {
   }
 
   componentDidLoad() {
+    if (!Build?.isBrowser) return;
     setTimeout(() => {
       this.componentIsLoaded = true;
     }, 2000);

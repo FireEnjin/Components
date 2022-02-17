@@ -274,6 +274,8 @@ export class Map implements ComponentInterface {
   }
 
   async componentDidLoad() {
+    if (!Build?.isBrowser) return;
+
     if (Build.isBrowser) {
       this.isVisible = this.visible;
       this.google = window?.google?.maps
