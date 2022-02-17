@@ -268,21 +268,25 @@ export class Form implements ComponentInterface {
     let isValid = true;
     const inputEls = [].slice.call(this.formEl.querySelectorAll("[value]"));
     for (const inputEl of inputEls) {
-      if (
-        !(await inputEl.checkValidity(
-          !reportValidity
-            ? {
-                validationClassOptions: {
-                  ignoreInvalid: true,
-                },
-              }
-            : null
-        ))
-      ) {
-        if (isValid && reportValidity) {
-          await inputEl.reportValidity();
+      try {
+        if (
+          !(await inputEl.checkValidity(
+            !reportValidity
+              ? {
+                  validationClassOptions: {
+                    ignoreInvalid: true,
+                  },
+                }
+              : null
+          ))
+        ) {
+          if (isValid && reportValidity) {
+            await inputEl.reportValidity();
+          }
+          isValid = false;
         }
-        isValid = false;
+      } catch {
+        console.log(`${inputEl?.name} input not able to be validated!`);
       }
     }
 
