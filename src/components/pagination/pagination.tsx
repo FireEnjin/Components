@@ -373,7 +373,7 @@ export class Pagination implements ComponentInterface {
             renderItem={this.renderItem}
             ref={(el) => (this.virtualScrollEl = el)}
           >
-            {this.renderResults()}
+            {(this.listEl || this.gridEl) && this.renderResults()}
           </ion-virtual-scroll>
         )}
         <ion-infinite-scroll
