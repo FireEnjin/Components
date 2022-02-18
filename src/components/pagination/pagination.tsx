@@ -346,7 +346,7 @@ export class Pagination implements ComponentInterface {
           )}
         </ion-row>
       </ion-grid>
-    ) : (
+    ) : this.listEl ? (
       <ion-card>
         <ion-list>
           {this.results.map((result) =>
@@ -358,6 +358,8 @@ export class Pagination implements ComponentInterface {
           )}
         </ion-list>
       </ion-card>
+    ) : (
+      this.results.map((result, i) => this.renderItem(result, i))
     );
   }
 
