@@ -21,7 +21,6 @@ import { filterControl } from "../../typings";
 })
 export class SearchBar implements ComponentInterface {
   @Event() fireenjinTrigger: EventEmitter<FireEnjinTriggerInput>;
-  @Prop({ mutable: true }) sorts?: filterControl[];
   @Prop({ mutable: true }) filters?: filterControl[];
   @Prop() paginationEl: any;
   @Prop() modeToggle = false;
@@ -35,26 +34,14 @@ export class SearchBar implements ComponentInterface {
     mutable: true,
   })
   showFilter = true;
-  @Prop({
-    mutable: true,
-  })
-  showSort = true;
 
   @State() currentFilters: {
-    [filterKey: string]: filterControl;
-  } = {};
-  @State() currentSorts: {
     [filterKey: string]: filterControl;
   } = {};
 
   @Watch("filters")
   onFilterChange() {
     this.updateCurrentFilters();
-  }
-
-  @Watch("sorts")
-  onSortChange() {
-    this.updateCurrentSorts();
   }
 
   @Listen("fireenjinTrigger", { target: "document" })
@@ -70,22 +57,6 @@ export class SearchBar implements ComponentInterface {
         this.filters[i] = controlData;
         this.currentFilters[control.name] = controlData;
         this.filters = [...this.filters];
-        if (this.paginationEl && !this.paginationEl?.disableFetch)
-          this.paginationEl.fetchData = {
-            ...(this.paginationEl?.fetchData || {}),
-            [control.name]: event?.detail?.payload?.value,
-          };
-      }
-      for (const [i, control] of this.sorts.entries()) {
-        if (!control?.name || event?.detail?.payload?.name !== control?.name)
-          continue;
-        const controlData = {
-          ...control,
-          value: event?.detail?.payload?.value || null,
-        };
-        this.sorts[i] = controlData;
-        this.currentSorts[control.name] = controlData;
-        this.sorts = [...this.sorts];
         if (this.paginationEl && !this.paginationEl?.disableFetch)
           this.paginationEl.fetchData = {
             ...(this.paginationEl?.fetchData || {}),
@@ -109,7 +80,7 @@ export class SearchBar implements ComponentInterface {
       await this.paginationEl.clearParamData("next");
       await this.paginationEl.clearParamData("back");
       await this.paginationEl.clearParamData("page");
-      this.paginationEl.query = event.detail.value ? event.detail.value : "";
+      this.paginationEl.query = event.detail.value || "";
     }
   }
 
@@ -164,66 +135,12 @@ export class SearchBar implements ComponentInterface {
   }
 
   @Method()
-  async clearSort(event, clearingControl: filterControl) {
-    event.preventDefault();
-    event.stopPropagation();
-    const fetchData = this.paginationEl?.fetchData || {};
-    for (const [i, control] of this.sorts.entries()) {
-      if (
-        !control.name ||
-        !control.value ||
-        control.name !== clearingControl.name
-      )
-        continue;
-      this.sorts[i] = {
-        ...control,
-        value: null,
-      };
-      delete this.currentSorts[clearingControl.name];
-      if (fetchData[control.name]) delete fetchData[control.name];
-      this.sorts = [...this.sorts];
-      if (!this.paginationEl?.clearParamData) continue;
-      await this.paginationEl.clearParamData(control.name);
-    }
-    const paramData = {};
-    for (const sort of Object.values(this.currentSorts)) {
-      paramData[sort.name] = sort.value;
-    }
-    this.fireenjinTrigger.emit({
-      event,
-      name: "set",
-      payload: {
-        name: clearingControl.name,
-        value: null,
-      },
-    });
-    let options = { paramData };
-    if (this.beforeGetResults && typeof this.beforeGetResults === "function")
-      options = await this.beforeGetResults(options);
-    if (this.paginationEl && !this.paginationEl?.disableFetch)
-      this.paginationEl.fetchData = fetchData;
-    if (this.paginationEl?.clearResults) await this.paginationEl.clearResults();
-    if (this.paginationEl?.getResults)
-      await this.paginationEl.getResults(options);
-  }
-
-  @Method()
   async updateCurrentFilters() {
     if (!this.filters) return;
     for (const control of this.filters) {
       if (!control?.value) continue;
       this.currentFilters[control.name] = control;
       this.currentFilters = { ...this.currentFilters };
-    }
-  }
-
-  @Method()
-  async updateCurrentSorts() {
-    if (!this.sorts) return;
-    for (const control of this.sorts) {
-      if (!control?.value) continue;
-      this.currentSorts[control.name] = control;
-      this.currentSorts = { ...this.currentSorts };
     }
   }
 
@@ -279,33 +196,6 @@ export class SearchBar implements ComponentInterface {
                     <ion-icon
                       name="close-circle"
                       onClick={(event) => this.clearFilter(event, control)}
-                    />
-                  )}
-                </ion-chip>
-              ))}
-            {this.showSort &&
-              this.sorts?.length &&
-              this.sorts.map((control) => (
-                <ion-chip
-                  outline={!this.currentSorts?.[control?.name]?.value}
-                  onClick={(event) =>
-                    this.fireenjinTrigger.emit({
-                      event,
-                      name: "sort",
-                      payload: {
-                        control,
-                      },
-                    })
-                  }
-                >
-                  {control?.icon && <ion-icon name={control.icon}></ion-icon>}
-                  {control?.label && (
-                    <ion-label>{this.getControlLabel(control)}</ion-label>
-                  )}
-                  {this.currentSorts?.[control?.name]?.value && (
-                    <ion-icon
-                      name="close-circle"
-                      onClick={(event) => this.clearSort(event, control)}
                     />
                   )}
                 </ion-chip>

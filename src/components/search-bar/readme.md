@@ -14,8 +14,6 @@
 | `modeToggle`       | `mode-toggle`        |             | `boolean`          | `false`     |
 | `paginationEl`     | `pagination-el`      |             | `any`              | `undefined` |
 | `showFilter`       | `show-filter`        |             | `boolean`          | `true`      |
-| `showSort`         | `show-sort`          |             | `boolean`          | `true`      |
-| `sorts`            | --                   |             | `filterControl[]`  | `undefined` |
 
 
 ## Events
@@ -37,16 +35,6 @@ Type: `Promise<void>`
 
 
 
-### `clearSort(event: any, clearingControl: filterControl) => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
 ### `togglePaginationDisplay() => Promise<void>`
 
 
@@ -58,16 +46,6 @@ Type: `Promise<void>`
 
 
 ### `updateCurrentFilters() => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `updateCurrentSorts() => Promise<void>`
 
 
 
