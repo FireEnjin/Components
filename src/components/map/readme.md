@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property  | Attribute | Description                           | Type                                                                                        | Default     |
-| --------- | --------- | ------------------------------------- | ------------------------------------------------------------------------------------------- | ----------- |
-| `apiKey`  | `api-key` | The Google Maps API Key               | `string`                                                                                    | `undefined` |
-| `markers` | --        | A list of markers to put onto the map | `{ position: { lat: number; lng: number; }; name: string; icon: string; payload?: any; }[]` | `[]`        |
-| `options` | `options` | Google Maps options                   | `any`                                                                                       | `{}`        |
-| `visible` | `visible` | Should the map be visible?            | `boolean`                                                                                   | `true`      |
+| Property        | Attribute         | Description                           | Type                                                                                        | Default     |
+| --------------- | ----------------- | ------------------------------------- | ------------------------------------------------------------------------------------------- | ----------- |
+| `googleMapsKey` | `google-maps-key` | The Google Maps API Key               | `string`                                                                                    | `undefined` |
+| `markers`       | --                | A list of markers to put onto the map | `{ position: { lat: number; lng: number; }; name: string; icon: string; payload?: any; }[]` | `[]`        |
+| `options`       | `options`         | Google Maps options                   | `any`                                                                                       | `{}`        |
+| `visible`       | `visible`         | Should the map be visible?            | `boolean`                                                                                   | `true`      |
 
 
 ## Events

@@ -27531,63 +27531,63 @@ class InputAddress {
     }
   }
   async loadGoogleMaps(options) {
-    const loader = new Loader(this.apiKey, Object.assign({ libraries: ["places"] }, options));
-    this.google = await loader.load();
-    return this.google;
+    const loader = new Loader(this.googleMapsKey, Object.assign({ libraries: ["places"] }, options));
+    return loader.load();
   }
   async componentDidLoad() {
     var _a;
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
       return;
+    if (!((_a = window === null || window === void 0 ? void 0 : window.google) === null || _a === void 0 ? void 0 : _a.maps) && !this.googleMapsKey)
+      return;
+    this.google = (window === null || window === void 0 ? void 0 : window.google) || (await this.loadGoogleMaps());
     const inputEl = await this.autocompleteFieldEl.getInputElement();
     setTimeout(() => {
       inputEl.setAttribute("autocomplete", "new-password");
-    }, 200);
-    if (!((_a = window === null || window === void 0 ? void 0 : window.google) === null || _a === void 0 ? void 0 : _a.maps) && this.apiKey)
-      await this.loadGoogleMaps();
-    const autocomplete = new this.google.maps.places.Autocomplete(inputEl, {
-      types: ["address"],
-    });
-    this.google.maps.event.addListener(autocomplete, "place_changed", () => {
-      var _a, _b, _c, _d, _e, _f, _g;
-      this.place = autocomplete.getPlace();
-      if (!this.value) {
-        this.value = {};
-      }
-      this.value.full = this.place.formatted_address;
-      let streetAddress = "";
-      this.value.placeId = (_a = this.place) === null || _a === void 0 ? void 0 : _a.place_id;
-      this.value.lat = (_d = (_c = (_b = this.place) === null || _b === void 0 ? void 0 : _b.geometry) === null || _c === void 0 ? void 0 : _c.location) === null || _d === void 0 ? void 0 : _d.lat();
-      this.value.lng = (_g = (_f = (_e = this.place) === null || _e === void 0 ? void 0 : _e.geometry) === null || _f === void 0 ? void 0 : _f.location) === null || _g === void 0 ? void 0 : _g.lng();
-      this.place.address_components.map((field, index) => {
-        if (field.types.indexOf("street_number") !== -1) {
-          streetAddress = field.long_name;
-        }
-        if (field.types.indexOf("route") !== -1) {
-          streetAddress = streetAddress + " " + field.long_name;
-        }
-        if (field.types.indexOf("locality") !== -1) {
-          this.value.city = field.long_name;
-        }
-        if (field.types.indexOf("postal_code") !== -1) {
-          this.value.zip = field.short_name;
-        }
-        if (field.types.indexOf("administrative_area_level_1") !== -1) {
-          this.value.state = field.short_name;
-        }
-        if (this.place.address_components.length === index + 1) {
-          this.value.street = streetAddress;
-        }
-        if (index === this.place.address_components.length - 1) {
-          setTimeout(() => {
-            this.ionInput.emit({
-              name: this.name,
-              value: this.value,
-            });
-          }, 10);
-        }
+      const autocomplete = new this.google.maps.places.Autocomplete(inputEl, {
+        types: ["address"],
       });
-    });
+      this.google.maps.event.addListener(autocomplete, "place_changed", () => {
+        var _a, _b, _c, _d, _e, _f, _g;
+        this.place = autocomplete.getPlace();
+        if (!this.value) {
+          this.value = {};
+        }
+        this.value.full = this.place.formatted_address;
+        let streetAddress = "";
+        this.value.placeId = (_a = this.place) === null || _a === void 0 ? void 0 : _a.place_id;
+        this.value.lat = (_d = (_c = (_b = this.place) === null || _b === void 0 ? void 0 : _b.geometry) === null || _c === void 0 ? void 0 : _c.location) === null || _d === void 0 ? void 0 : _d.lat();
+        this.value.lng = (_g = (_f = (_e = this.place) === null || _e === void 0 ? void 0 : _e.geometry) === null || _f === void 0 ? void 0 : _f.location) === null || _g === void 0 ? void 0 : _g.lng();
+        this.place.address_components.map((field, index) => {
+          if (field.types.indexOf("street_number") !== -1) {
+            streetAddress = field.long_name;
+          }
+          if (field.types.indexOf("route") !== -1) {
+            streetAddress = streetAddress + " " + field.long_name;
+          }
+          if (field.types.indexOf("locality") !== -1) {
+            this.value.city = field.long_name;
+          }
+          if (field.types.indexOf("postal_code") !== -1) {
+            this.value.zip = field.short_name;
+          }
+          if (field.types.indexOf("administrative_area_level_1") !== -1) {
+            this.value.state = field.short_name;
+          }
+          if (this.place.address_components.length === index + 1) {
+            this.value.street = streetAddress;
+          }
+          if (index === this.place.address_components.length - 1) {
+            setTimeout(() => {
+              this.ionInput.emit({
+                name: this.name,
+                value: this.value,
+              });
+            }, 10);
+          }
+        });
+      });
+    }, 200);
   }
   toggleManualEntry() {
     this.manualEntry = !this.manualEntry;
@@ -27621,13 +27621,12 @@ class InputAddress {
     "$flags$": 0,
     "$tagName$": "fireenjin-input-address",
     "$members$": {
-      "apiKey": [1, "api-key"],
+      "googleMapsKey": [1, "google-maps-key"],
       "placeholder": [1],
       "value": [1032],
       "label": [1],
       "required": [4],
       "name": [1],
-      "googleMapsKey": [1, "google-maps-key"],
       "lines": [1],
       "labelPosition": [1, "label-position"],
       "place": [32],
@@ -34836,12 +34835,26 @@ class Map$1 {
     });
   }
   async loadGoogleMaps(options) {
-    const loader = new Loader(this.apiKey, options || {});
+    const loader = new Loader(this.googleMapsKey, options || {});
     return loader.load();
   }
   async componentDidLoad() {
+    var _a;
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
       return;
+    this.isVisible = this.visible;
+    this.google = ((_a = window === null || window === void 0 ? void 0 : window.google) === null || _a === void 0 ? void 0 : _a.maps)
+      ? window.google
+      : await this.loadGoogleMaps();
+    setTimeout(() => {
+      this.getLocationCoords(async (coords) => {
+        this.position = coords
+          ? coords
+          : { latitude: 38.6270025, longitude: -90.19940419999999 };
+        this.createMap(this.position);
+        await this.setMarkers(this.markers);
+      });
+    }, 100);
   }
   render() {
     return (hAsync(Host, { class: { "map-is-visible": this.isVisible } }, hAsync("div", { id: "map" })));
@@ -34855,7 +34868,7 @@ class Map$1 {
     "$flags$": 0,
     "$tagName$": "fireenjin-map",
     "$members$": {
-      "apiKey": [1, "api-key"],
+      "googleMapsKey": [1, "google-maps-key"],
       "options": [8],
       "visible": [4],
       "markers": [1040],

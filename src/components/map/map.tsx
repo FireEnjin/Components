@@ -53,7 +53,7 @@ export class Map implements ComponentInterface {
   /**
    * The Google Maps API Key
    */
-  @Prop() apiKey: string;
+  @Prop() googleMapsKey: string;
   /**
    * Google Maps options
    */
@@ -269,18 +269,17 @@ export class Map implements ComponentInterface {
   }
 
   async loadGoogleMaps(options?: LoaderOptions) {
-    const loader = new Loader(this.apiKey, options || {});
+    const loader = new Loader(this.googleMapsKey, options || {});
     return loader.load();
   }
 
   async componentDidLoad() {
     if (!Build?.isBrowser) return;
-
-    if (Build.isBrowser) {
-      this.isVisible = this.visible;
-      this.google = window?.google?.maps
-        ? window.google
-        : await this.loadGoogleMaps();
+    this.isVisible = this.visible;
+    this.google = window?.google?.maps
+      ? window.google
+      : await this.loadGoogleMaps();
+    setTimeout(() => {
       this.getLocationCoords(async (coords) => {
         this.position = coords
           ? coords
@@ -289,7 +288,7 @@ export class Map implements ComponentInterface {
         this.createMap(this.position);
         await this.setMarkers(this.markers);
       });
-    }
+    }, 100);
   }
 
   render() {

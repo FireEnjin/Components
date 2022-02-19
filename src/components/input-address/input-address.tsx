@@ -30,7 +30,7 @@ export class InputAddress implements ComponentInterface {
   /**
    * The Google Maps API Key
    */
-  @Prop() apiKey: string;
+  @Prop() googleMapsKey: string;
   /**
    * The placeholder text for the input field
    */
@@ -51,10 +51,6 @@ export class InputAddress implements ComponentInterface {
    * The name attribute of the input
    */
   @Prop() name: string;
-  /**
-   * The Google Maps API Key
-   */
-  @Prop() googleMapsKey: string;
   @Prop() lines: "full" | "inset" | "none";
   @Prop() labelPosition?: "stacked" | "fixed" | "floating";
 
@@ -86,69 +82,69 @@ export class InputAddress implements ComponentInterface {
   }
 
   async loadGoogleMaps(options?: LoaderOptions) {
-    const loader = new Loader(this.apiKey, {
+    const loader = new Loader(this.googleMapsKey, {
       libraries: ["places"],
       ...options,
     });
-    this.google = await loader.load();
 
-    return this.google;
+    return loader.load();
   }
 
   async componentDidLoad() {
     if (!Build?.isBrowser) return;
-
+    if (!window?.google?.maps && !this.googleMapsKey) return;
+    this.google = window?.google || (await this.loadGoogleMaps());
     const inputEl = await this.autocompleteFieldEl.getInputElement();
     setTimeout(() => {
       inputEl.setAttribute("autocomplete", "new-password");
-    }, 200);
-    if (!window?.google?.maps && this.apiKey) await this.loadGoogleMaps();
-    const autocomplete = new this.google.maps.places.Autocomplete(inputEl, {
-      types: ["address"],
-    });
 
-    this.google.maps.event.addListener(autocomplete, "place_changed", () => {
-      this.place = autocomplete.getPlace();
-      if (!this.value) {
-        this.value = {};
-      }
-      this.value.full = this.place.formatted_address;
-
-      let streetAddress = "";
-      this.value.placeId = this.place?.place_id;
-      this.value.lat = this.place?.geometry?.location?.lat();
-      this.value.lng = this.place?.geometry?.location?.lng();
-      this.place.address_components.map((field, index) => {
-        if (field.types.indexOf("street_number") !== -1) {
-          streetAddress = field.long_name;
-        }
-        if (field.types.indexOf("route") !== -1) {
-          streetAddress = streetAddress + " " + field.long_name;
-        }
-        if (field.types.indexOf("locality") !== -1) {
-          this.value.city = field.long_name;
-        }
-        if (field.types.indexOf("postal_code") !== -1) {
-          this.value.zip = field.short_name;
-        }
-        if (field.types.indexOf("administrative_area_level_1") !== -1) {
-          this.value.state = field.short_name;
-        }
-
-        if (this.place.address_components.length === index + 1) {
-          this.value.street = streetAddress;
-        }
-
-        if (index === this.place.address_components.length - 1) {
-          setTimeout(() => {
-            this.ionInput.emit({
-              name: this.name,
-              value: this.value,
-            });
-          }, 10);
-        }
+      const autocomplete = new this.google.maps.places.Autocomplete(inputEl, {
+        types: ["address"],
       });
-    });
+
+      this.google.maps.event.addListener(autocomplete, "place_changed", () => {
+        this.place = autocomplete.getPlace();
+        if (!this.value) {
+          this.value = {};
+        }
+        this.value.full = this.place.formatted_address;
+
+        let streetAddress = "";
+        this.value.placeId = this.place?.place_id;
+        this.value.lat = this.place?.geometry?.location?.lat();
+        this.value.lng = this.place?.geometry?.location?.lng();
+        this.place.address_components.map((field, index) => {
+          if (field.types.indexOf("street_number") !== -1) {
+            streetAddress = field.long_name;
+          }
+          if (field.types.indexOf("route") !== -1) {
+            streetAddress = streetAddress + " " + field.long_name;
+          }
+          if (field.types.indexOf("locality") !== -1) {
+            this.value.city = field.long_name;
+          }
+          if (field.types.indexOf("postal_code") !== -1) {
+            this.value.zip = field.short_name;
+          }
+          if (field.types.indexOf("administrative_area_level_1") !== -1) {
+            this.value.state = field.short_name;
+          }
+
+          if (this.place.address_components.length === index + 1) {
+            this.value.street = streetAddress;
+          }
+
+          if (index === this.place.address_components.length - 1) {
+            setTimeout(() => {
+              this.ionInput.emit({
+                name: this.name,
+                value: this.value,
+              });
+            }, 10);
+          }
+        });
+      });
+    }, 200);
   }
 
   toggleManualEntry() {
