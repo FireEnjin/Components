@@ -56,6 +56,9 @@ graph TD;
   fireenjin-input-state --> ion-select
   fireenjin-input-state --> ion-select-option
   ion-select --> ion-select-popover
+  ion-select --> ion-popover
+  ion-select --> ion-action-sheet
+  ion-select --> ion-alert
   ion-select-popover --> ion-item
   ion-select-popover --> ion-checkbox
   ion-select-popover --> ion-label
@@ -63,6 +66,12 @@ graph TD;
   ion-select-popover --> ion-radio
   ion-select-popover --> ion-list
   ion-select-popover --> ion-list-header
+  ion-popover --> ion-backdrop
+  ion-action-sheet --> ion-backdrop
+  ion-action-sheet --> ion-icon
+  ion-action-sheet --> ion-ripple-effect
+  ion-alert --> ion-ripple-effect
+  ion-alert --> ion-backdrop
   ion-button --> ion-ripple-effect
   style fireenjin-input-address fill:#f9f,stroke:#333,stroke-width:4px
 ```
