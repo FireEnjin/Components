@@ -275,7 +275,7 @@ export class SelectTags implements ComponentInterface {
             },
             item: (classNames, data) => {
               return template(`
-                      <div class="${classNames.item} ${
+                      <ion-chip class="${classNames.item} ${
                 data.highlighted
                   ? classNames.highlightedState
                   : classNames.itemSelectable
@@ -284,18 +284,20 @@ export class SelectTags implements ComponentInterface {
               }" ${data.active ? 'aria-selected="true"' : ""} ${
                 data.disabled ? 'aria-disabled="true"' : ""
               }>
-                        <p class="choice-label-text">${data.label}</p>
+                        <ion-label>${data.label}</ion-label>
                         ${
                           this.multiple
                             ? `<ion-icon name="close-circle" data-button />`
                             : ""
                         }
-                      </div>
+                      </ion-chip>
                     `);
             },
             choice: (classNames, data) => {
               return template(`
-                      <div class="${classNames.item} ${classNames.itemChoice} ${
+                      <ion-item class="${classNames.item} ${
+                classNames.itemChoice
+              } ${
                 data.disabled
                   ? classNames.itemDisabled
                   : classNames.itemSelectable
@@ -306,8 +308,8 @@ export class SelectTags implements ComponentInterface {
               } data-id="${data.id}" data-value="${data.value}" ${
                 data.groupId > 0 ? 'role="treeitem"' : 'role="option"'
               }>
-                        <p class="choice-label-text">${data.label}</p>
-                      </div>
+                        <ion-label>${data.label}</ion-label>
+                      </ion-item>
                     `);
             },
           };
