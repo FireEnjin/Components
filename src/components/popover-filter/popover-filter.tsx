@@ -1,5 +1,5 @@
 import { Component, ComponentInterface, h, Prop } from "@stencil/core";
-import { Control } from "../renderer";
+import { Control } from "../../typings";
 
 @Component({
   tag: "fireenjin-popover-filter",

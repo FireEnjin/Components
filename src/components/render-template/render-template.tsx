@@ -41,18 +41,15 @@ export class RenderTemplate implements ComponentInterface {
           id: this.templateId,
         },
       });
-  }
-
-  componentDidLoad() {
-    if (!Build?.isBrowser) return;
     backoff(10, this.renderTemplate.bind(this));
-    this.setPartials(this.partials);
+    this.setPartials();
   }
 
   @Method()
   async setPartials(partials?: { id: string; html: string }[]) {
-    this.partials = (partials?.length && partials) || [];
-    for (const partial of this.partials) {
+    if (partials?.length && this.partials !== partials)
+      this.partials = partials;
+    for (const partial of this.partials || []) {
       if (!partial.html) continue;
       try {
         (window as any).Handlebars.registerPartial(partial.id, partial.html);
@@ -103,10 +100,10 @@ export class RenderTemplate implements ComponentInterface {
 
   @Watch("partials")
   onPartials() {
-    this.setPartials(this.partials);
+    this.setPartials();
   }
 
   render() {
-    return <div innerHTML={this.html} />;
+    return <div innerHTML={this.html || ""} />;
   }
 }

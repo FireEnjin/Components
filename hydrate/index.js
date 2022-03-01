@@ -42723,16 +42723,13 @@ class RenderTemplate {
           id: this.templateId,
         },
       });
-  }
-  componentDidLoad() {
-    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
-      return;
     backoff(10, this.renderTemplate.bind(this));
-    this.setPartials(this.partials);
+    this.setPartials();
   }
   async setPartials(partials) {
-    this.partials = ((partials === null || partials === void 0 ? void 0 : partials.length) && partials) || [];
-    for (const partial of this.partials) {
+    if ((partials === null || partials === void 0 ? void 0 : partials.length) && this.partials !== partials)
+      this.partials = partials;
+    for (const partial of this.partials || []) {
       if (!partial.html)
         continue;
       try {
@@ -42771,10 +42768,10 @@ class RenderTemplate {
     backoff(10, this.renderTemplate.bind(this));
   }
   onPartials() {
-    this.setPartials(this.partials);
+    this.setPartials();
   }
   render() {
-    return hAsync("div", { innerHTML: this.html });
+    return hAsync("div", { innerHTML: this.html || "" });
   }
   static get watchers() { return {
     "templateId": ["onTemplateId"],
@@ -42795,23 +42792,6 @@ class RenderTemplate {
       "renderTemplate": [64]
     },
     "$listeners$": [[16, "fireenjinSuccess", "onSuccess"]],
-    "$lazyBundleId$": "-",
-    "$attrsToReflect$": []
-  }; }
-}
-
-class Renderer {
-  constructor(hostRef) {
-    registerInstance(this, hostRef);
-  }
-  render() {
-    return (hAsync("ion-content", null, hAsync("fireenjin-pagination", { endpoint: "listUsers", limit: 24, listEl: ({ result }) => hAsync("ion-item", null, result.id) })));
-  }
-  static get cmpMeta() { return {
-    "$flags$": 0,
-    "$tagName$": "fireenjin-renderer",
-    "$members$": undefined,
-    "$listeners$": undefined,
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
@@ -57899,7 +57879,6 @@ registerComponents([
   Refresher,
   RefresherContent,
   RenderTemplate,
-  Renderer,
   Reorder,
   ReorderGroup,
   Resizer,

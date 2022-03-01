@@ -91,10 +91,6 @@ Type: `Promise<void>`
 
 ## Dependencies
 
-### Used by
-
- - [fireenjin-renderer](..)
-
 ### Depends on
 
 - ion-grid
@@ -119,7 +115,6 @@ graph TD;
   fireenjin-pagination --> ion-infinite-scroll-content
   ion-card --> ion-ripple-effect
   ion-infinite-scroll-content --> ion-spinner
-  fireenjin-renderer --> fireenjin-pagination
   style fireenjin-pagination fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
