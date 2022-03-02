@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 /*!
- Stencil Mock Doc v2.14.0 | MIT Licensed | https://stenciljs.com
+ Stencil Mock Doc v2.13.0 | MIT Licensed | https://stenciljs.com
  */
 const CONTENT_REF_ID = 'r';
 const ORG_LOCATION_ID = 'o';
@@ -223,7 +223,7 @@ class MockCustomElementRegistry {
   whenDefined(tagName) {
     tagName = tagName.toLowerCase();
     if (this.__registry != null && this.__registry.has(tagName) === true) {
-      return Promise.resolve(this.__registry.get(tagName).cstr);
+      return Promise.resolve();
     }
     return new Promise((resolve) => {
       if (this.__whenDefined == null) {
@@ -3471,19 +3471,9 @@ class MockPerformance {
   getEntriesByType() {
     return [];
   }
-  // Stencil's implementation of `mark` is non-compliant with the `Performance` interface. Because Stencil will
-  // instantiate an instance of this class and may attempt to assign it to a variable of type `Performance`, the return
-  // type must match the `Performance` interface (rather than typing this function as returning `void` and ignoring the
-  // associated errors returned by the type checker)
-  // @ts-ignore
   mark() {
     //
   }
-  // Stencil's implementation of `measure` is non-compliant with the `Performance` interface. Because Stencil will
-  // instantiate an instance of this class and may attempt to assign it to a variable of type `Performance`, the return
-  // type must match the `Performance` interface (rather than typing this function as returning `void` and ignoring the
-  // associated errors returned by the type checker)
-  // @ts-ignore
   measure() {
     //
   }
@@ -4233,8 +4223,6 @@ function cloneWindow(srcWin, opts = {}) {
   }
   const clonedWin = new MockWindow(false);
   if (!opts.customElementProxy) {
-    // TODO(STENCIL-345) - Evaluate reconciling MockWindow, Window differences
-    // @ts-ignore
     srcWin.customElements = null;
   }
   if (srcWin.document != null) {
@@ -64795,7 +64783,7 @@ function finalizeHydrate(e, t, r, s, n) {
        absFilePath: null,
        lines: []
       };
-      null != t && (null != t.stack ? s.messageText = t.stack.toString() : null != t.message ? s.messageText = t.message.length ? t.message : "UNKNOWN ERROR" : s.messageText = t.toString()), 
+      null != t && (null != t.stack ? s.messageText = t.stack.toString() : null != t.message ? s.messageText = t.message.toString() : s.messageText = t.toString()), 
       null == e || shouldIgnoreError(s.messageText) || e.push(s);
      })(t, e);
     }
