@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, h } from "@stencil/core";
+import { Component, ComponentInterface, Prop, h, Host } from "@stencil/core";
 
 @Component({
   tag: "fireenjin-avatar",
@@ -12,7 +12,7 @@ export class Avatar implements ComponentInterface {
 
   render() {
     return (
-      <div
+      <Host
         class="avatar-image"
         style={{
           backgroundImage:

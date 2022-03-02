@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 /*!
- Stencil Mock Doc v2.13.0 | MIT Licensed | https://stenciljs.com
+ Stencil Mock Doc v2.14.0 | MIT Licensed | https://stenciljs.com
  */
 const CONTENT_REF_ID = 'r';
 const ORG_LOCATION_ID = 'o';
@@ -223,7 +223,7 @@ class MockCustomElementRegistry {
   whenDefined(tagName) {
     tagName = tagName.toLowerCase();
     if (this.__registry != null && this.__registry.has(tagName) === true) {
-      return Promise.resolve();
+      return Promise.resolve(this.__registry.get(tagName).cstr);
     }
     return new Promise((resolve) => {
       if (this.__whenDefined == null) {
@@ -3471,9 +3471,19 @@ class MockPerformance {
   getEntriesByType() {
     return [];
   }
+  // Stencil's implementation of `mark` is non-compliant with the `Performance` interface. Because Stencil will
+  // instantiate an instance of this class and may attempt to assign it to a variable of type `Performance`, the return
+  // type must match the `Performance` interface (rather than typing this function as returning `void` and ignoring the
+  // associated errors returned by the type checker)
+  // @ts-ignore
   mark() {
     //
   }
+  // Stencil's implementation of `measure` is non-compliant with the `Performance` interface. Because Stencil will
+  // instantiate an instance of this class and may attempt to assign it to a variable of type `Performance`, the return
+  // type must match the `Performance` interface (rather than typing this function as returning `void` and ignoring the
+  // associated errors returned by the type checker)
+  // @ts-ignore
   measure() {
     //
   }
@@ -4223,6 +4233,8 @@ function cloneWindow(srcWin, opts = {}) {
   }
   const clonedWin = new MockWindow(false);
   if (!opts.customElementProxy) {
+    // TODO(STENCIL-345) - Evaluate reconciling MockWindow, Window differences
+    // @ts-ignore
     srcWin.customElements = null;
   }
   if (srcWin.document != null) {
@@ -4716,7 +4728,7 @@ function hydrateFactory($stencilWindow, $stencilHydrateOpts, $stencilHydrateResu
 
 
 const NAMESPACE = 'fireenjin';
-const BUILD = /* fireenjin */ { allRenderFn: false, appendChildSlotFix: false, asyncLoading: true, attachStyles: true, cloneNodeFix: false, cmpDidLoad: true, cmpDidRender: false, cmpDidUnload: false, cmpDidUpdate: true, cmpShouldUpdate: false, cmpWillLoad: true, cmpWillRender: true, cmpWillUpdate: false, connectedCallback: true, constructableCSS: false, cssAnnotations: true, cssVarShim: false, devTools: false, disconnectedCallback: true, dynamicImportShim: false, element: false, event: true, hasRenderFn: true, hostListener: true, hostListenerTarget: true, hostListenerTargetBody: true, hostListenerTargetDocument: true, hostListenerTargetParent: false, hostListenerTargetWindow: true, hotModuleReplacement: false, hydrateClientSide: true, hydrateServerSide: true, hydratedAttribute: false, hydratedClass: true, isDebug: false, isDev: false, isTesting: false, lazyLoad: true, lifecycle: true, lifecycleDOMEvents: false, member: true, method: true, mode: true, observeAttribute: true, profile: false, prop: true, propBoolean: true, propMutable: true, propNumber: true, propString: true, reflect: true, safari10: false, scoped: true, scriptDataOpts: false, shadowDelegatesFocus: true, shadowDom: true, shadowDomShim: true, slot: true, slotChildNodesFix: false, slotRelocation: true, state: true, style: true, svg: true, taskQueue: true, updatable: true, vdomAttribute: true, vdomClass: true, vdomFunctional: true, vdomKey: true, vdomListener: true, vdomPropOrAttr: true, vdomRef: true, vdomRender: true, vdomStyle: true, vdomText: true, vdomXlink: true, watchCallback: true };
+const BUILD = /* fireenjin */ { allRenderFn: false, appendChildSlotFix: false, asyncLoading: true, attachStyles: true, cloneNodeFix: false, cmpDidLoad: true, cmpDidRender: true, cmpDidUnload: false, cmpDidUpdate: true, cmpShouldUpdate: false, cmpWillLoad: true, cmpWillRender: true, cmpWillUpdate: false, connectedCallback: true, constructableCSS: false, cssAnnotations: true, cssVarShim: false, devTools: false, disconnectedCallback: true, dynamicImportShim: false, element: false, event: true, hasRenderFn: true, hostListener: true, hostListenerTarget: true, hostListenerTargetBody: true, hostListenerTargetDocument: true, hostListenerTargetParent: false, hostListenerTargetWindow: true, hotModuleReplacement: false, hydrateClientSide: true, hydrateServerSide: true, hydratedAttribute: false, hydratedClass: true, isDebug: false, isDev: false, isTesting: false, lazyLoad: true, lifecycle: true, lifecycleDOMEvents: false, member: true, method: true, mode: true, observeAttribute: true, profile: false, prop: true, propBoolean: true, propMutable: true, propNumber: true, propString: true, reflect: true, safari10: false, scoped: true, scriptDataOpts: false, shadowDelegatesFocus: true, shadowDom: true, shadowDomShim: true, slot: true, slotChildNodesFix: false, slotRelocation: true, state: true, style: true, svg: true, taskQueue: true, updatable: true, vdomAttribute: true, vdomClass: true, vdomFunctional: true, vdomKey: true, vdomListener: true, vdomPropOrAttr: true, vdomRef: true, vdomRender: true, vdomStyle: true, vdomText: true, vdomXlink: true, watchCallback: true };
 
 /*!
  * (C) Ionic http://ionicframework.com - MIT License
@@ -5415,7 +5427,8 @@ const callRender = (e, t, o) => {
  return null;
 }, postUpdateComponent = e => {
  const t = e.$cmpMeta$.$tagName$, o = e.$hostElement$, n = createTime("postUpdate", t), s = e.$lazyInstance$ , l = e.$ancestorComponent$;
- 64 & e.$flags$ ? ((safeCall$1(s, "componentDidUpdate"), 
+ (safeCall$1(s, "componentDidRender"), 
+ BUILD.isDev ), 64 & e.$flags$ ? ((safeCall$1(s, "componentDidUpdate"), 
  BUILD.isDev ), n()) : (e.$flags$ |= 64, addHydratedFlag(o), 
  (safeCall$1(s, "componentDidLoad"), 
  BUILD.isDev ), n(), (e.$onReadyResolve$(o), l || appDidLoad())), e.$onInstanceResolve$(o), (e.$onRenderResolve$ && (e.$onRenderResolve$(), 
@@ -7628,6 +7641,18 @@ const trapKeyboardFocus = (ev, doc) => {
    * itself to ensure the focus trap works.
    */
   if (!lastOverlay || !target) {
+    return;
+  }
+  /**
+   * If the ion-disable-focus-trap class
+   * is present on an overlay, then this component
+   * instance has opted out of focus trapping.
+   * An example of this is when the sheet modal
+   * has a backdrop that is disabled. The content
+   * behind the sheet should be focusable until
+   * the backdrop is enabled.
+   */
+  if (lastOverlay.classList.contains('ion-disable-focus-trap')) {
     return;
   }
   const trapScopedFocus = () => {
@@ -9968,7 +9993,7 @@ class Avatar$1 {
   }
   render() {
     var _a, _b, _c;
-    return (hAsync("div", { class: "avatar-image", style: {
+    return (hAsync(Host, { class: "avatar-image", style: {
         backgroundImage: !((_a = this.src) === null || _a === void 0 ? void 0 : _a.length) && this.initials
           ? `url('https://avatars.dicebear.com/api/initials/${this.initials}.svg')`
           : `url('${((_b = this.src) === null || _b === void 0 ? void 0 : _b.length)
@@ -13516,9 +13541,9 @@ class Datetime {
      * the date that is currently selected, otherwise
      * there can be 1 hr difference when dealing w/ DST
      */
-    const date = new Date(convertDataToISO(this.workingParts));
-    this.workingParts.tzOffset = date.getTimezoneOffset() * -1;
-    this.value = convertDataToISO(this.workingParts);
+    const date = new Date(convertDataToISO(this.activeParts));
+    this.activeParts.tzOffset = date.getTimezoneOffset() * -1;
+    this.value = convertDataToISO(this.activeParts);
     if (closeOverlay) {
       this.closeParentOverlay();
     }
@@ -26708,7 +26733,7 @@ var registerWrapper = function registerWrapper(stripe, startTime) {
 
   stripe._registerWrapper({
     name: 'stripe-js',
-    version: "1.23.0",
+    version: "1.24.0",
     startTime: startTime
   });
 };
@@ -30572,7 +30597,7 @@ class ItemSliding {
         this.state = 2 /* Disabled */;
         this.tmr = undefined;
         if (this.gesture) {
-          this.gesture.enable(true);
+          this.gesture.enable(!this.disabled);
         }
       }, 600);
       openSlidingItem = undefined;
@@ -36230,6 +36255,28 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
   const wrapperAnimation = animation.childAnimations.find(ani => ani.id === 'wrapperAnimation');
   const backdropAnimation = animation.childAnimations.find(ani => ani.id === 'backdropAnimation');
   const maxBreakpoint = breakpoints[breakpoints.length - 1];
+  const enableBackdrop = () => {
+    baseEl.style.setProperty('pointer-events', 'auto');
+    backdropEl.style.setProperty('pointer-events', 'auto');
+    /**
+     * When the backdrop is enabled, elements such
+     * as inputs should not be focusable outside
+     * the sheet.
+     */
+    baseEl.classList.remove('ion-disable-focus-trap');
+  };
+  const disableBackdrop = () => {
+    baseEl.style.setProperty('pointer-events', 'none');
+    backdropEl.style.setProperty('pointer-events', 'none');
+    /**
+     * When the backdrop is enabled, elements such
+     * as inputs should not be focusable outside
+     * the sheet.
+     * Adding this class disables focus trapping
+     * for the sheet temporarily.
+     */
+    baseEl.classList.add('ion-disable-focus-trap');
+  };
   /**
    * After the entering animation completes,
    * we need to set the animation to go from
@@ -36249,9 +36296,13 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
      * ion-backdrop and .modal-wrapper always have pointer-events: auto
      * applied, so the modal content can still be interacted with.
      */
-    const backdropEnabled = currentBreakpoint > backdropBreakpoint;
-    baseEl.style.setProperty('pointer-events', backdropEnabled ? 'auto' : 'none');
-    backdropEl.style.setProperty('pointer-events', backdropEnabled ? 'auto' : 'none');
+    const shouldEnableBackdrop = currentBreakpoint > backdropBreakpoint;
+    if (shouldEnableBackdrop) {
+      enableBackdrop();
+    }
+    else {
+      disableBackdrop();
+    }
   }
   if (contentEl && currentBreakpoint !== maxBreakpoint) {
     contentEl.scrollY = false;
@@ -36358,9 +36409,13 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
              * Backdrop should become enabled
              * after the backdropBreakpoint value
              */
-            const backdropEnabled = currentBreakpoint > backdropBreakpoint;
-            baseEl.style.setProperty('pointer-events', backdropEnabled ? 'auto' : 'none');
-            backdropEl.style.setProperty('pointer-events', backdropEnabled ? 'auto' : 'none');
+            const shouldEnableBackdrop = currentBreakpoint > backdropBreakpoint;
+            if (shouldEnableBackdrop) {
+              enableBackdrop();
+            }
+            else {
+              disableBackdrop();
+            }
             gesture.enable(true);
           });
         }
@@ -36725,6 +36780,7 @@ class Modal {
     if (dismissed) {
       const { delegate } = this.getDelegate();
       await detachComponent(delegate, this.usersElement);
+      writeTask(() => this.el.classList.remove('show-modal'));
       if (this.animation) {
         this.animation.destroy();
       }
@@ -38668,12 +38724,18 @@ class PickerColumnInternal {
      */
     this.numericInput = false;
     this.centerPickerItemInView = (target, smooth = true) => {
-      this.el.scroll({
+      const { el, isColumnVisible } = this;
+      if (isColumnVisible) {
         // (Vertical offset from parent) - (three empty picker rows) + (half the height of the target to ensure the scroll triggers)
-        top: target.offsetTop - (3 * target.clientHeight) + (target.clientHeight / 2),
-        left: 0,
-        behavior: smooth ? 'smooth' : undefined
-      });
+        const top = target.offsetTop - (3 * target.clientHeight) + (target.clientHeight / 2);
+        if (el.scrollTop !== top) {
+          el.scroll({
+            top,
+            left: 0,
+            behavior: smooth ? 'smooth' : undefined
+          });
+        }
+      }
     };
     /**
      * When ionInputModeChange is emitted, each column
@@ -38816,6 +38878,25 @@ class PickerColumnInternal {
     const parentEl = this.el.closest('ion-picker-internal');
     if (parentEl !== null) {
       parentEl.addEventListener('ionInputModeChange', (ev) => this.inputModeChange(ev));
+    }
+  }
+  componentDidRender() {
+    var _a;
+    const { activeItem, items, isColumnVisible, value } = this;
+    if (isColumnVisible) {
+      if (activeItem) {
+        this.scrollActiveItemIntoView();
+      }
+      else if (((_a = items[0]) === null || _a === void 0 ? void 0 : _a.value) !== value) {
+        /**
+         * If the picker column does not have an active item and the current value
+         * does not match the first item in the picker column, that means
+         * the value is out of bounds. In this case, we assign the value to the
+         * first item to match the scroll position of the column.
+         *
+         */
+        this.value = items[0].value;
+      }
     }
   }
   /** @internal  */
@@ -64714,7 +64795,7 @@ function finalizeHydrate(e, t, r, s, n) {
        absFilePath: null,
        lines: []
       };
-      null != t && (null != t.stack ? s.messageText = t.stack.toString() : null != t.message ? s.messageText = t.message.toString() : s.messageText = t.toString()), 
+      null != t && (null != t.stack ? s.messageText = t.stack.toString() : null != t.message ? s.messageText = t.message.length ? t.message : "UNKNOWN ERROR" : s.messageText = t.toString()), 
       null == e || shouldIgnoreError(s.messageText) || e.push(s);
      })(t, e);
     }
