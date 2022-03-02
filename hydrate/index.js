@@ -9981,7 +9981,7 @@ class Avatar$1 {
   }
   render() {
     var _a, _b, _c;
-    return (hAsync(Host, { class: "avatar-image", style: {
+    return (hAsync("div", { class: "avatar-image", style: {
         backgroundImage: !((_a = this.src) === null || _a === void 0 ? void 0 : _a.length) && this.initials
           ? `url('https://avatars.dicebear.com/api/initials/${this.initials}.svg')`
           : `url('${((_b = this.src) === null || _b === void 0 ? void 0 : _b.length)
