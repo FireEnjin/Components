@@ -1,4 +1,4 @@
-import { FireEnjinFetchEvent } from "@fireenjin/sdk";
+import { FireEnjinFetchEvent, FireEnjinTriggerInput } from "@fireenjin/sdk";
 import {
   Component,
   ComponentInterface,
@@ -12,7 +12,6 @@ import {
   h,
   Build,
 } from "@stencil/core";
-import Choices from "choices.js";
 
 @Component({
   tag: "fireenjin-select-tags",
@@ -29,6 +28,7 @@ export class SelectTags implements ComponentInterface {
     value: any;
   }>;
   @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
+  @Event() fireenjinTrigger: EventEmitter<FireEnjinTriggerInput>;
 
   @Prop() disableFetch = false;
   @Prop() name = "tags";
@@ -40,7 +40,7 @@ export class SelectTags implements ComponentInterface {
   @Prop() multiple: boolean;
   @Prop() duplicates = false;
   @Prop() disabled = false;
-  @Prop() allowAdding = false;
+  @Prop() allowAdding: boolean | "custom" = false;
   @Prop() endpoint: string;
   @Prop() resultsKey: string;
   @Prop() limit = 15;
@@ -52,7 +52,7 @@ export class SelectTags implements ComponentInterface {
   @Prop() fetchData?: any;
   @Prop() query?: string;
   @Prop() lines: "full" | "inset" | "none";
-  @Prop() labelPosition?: "stacked" | "fixed" | "floating";
+  @Prop() labelPosition?: "stacked" | "fixed" | "floating" = "stacked";
 
   @State() choices: any;
   @State() hasValue = false;
@@ -153,6 +153,12 @@ export class SelectTags implements ComponentInterface {
     }
   }
 
+  toTitleCase(str) {
+    return str.replace(/\w\S*/g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  }
+
   @Method()
   async setValue(value) {
     try {
@@ -214,6 +220,21 @@ export class SelectTags implements ComponentInterface {
   }
 
   @Method()
+  async addTag() {
+    this.fireenjinTrigger.emit({
+      name: "newTag",
+      payload: {},
+    });
+    if (window?.prompt && this.allowAdding !== "custom") {
+      const value = prompt("Name of the new tag?");
+      this.options = [
+        ...this.options,
+        { label: this.toTitleCase(value), value },
+      ];
+    }
+  }
+
+  @Method()
   async getResults(
     options: {
       page?: number;
@@ -257,73 +278,8 @@ export class SelectTags implements ComponentInterface {
     });
   }
 
-  initChoices() {
-    try {
-      this.choices = new Choices(this.choicesEl, {
-        placeholderValue: this.placeholder,
-        duplicateItemsAllowed: this.duplicates,
-        removeItemButton: this.multiple,
-        callbackOnCreateTemplates: (template) => {
-          return {
-            input: (...args) => {
-              return Object.assign(
-                Choices.defaults.templates.input.call(this, ...args),
-                {
-                  placeholder: this.placeholder + " +",
-                }
-              );
-            },
-            item: (classNames, data) => {
-              return template(`
-                      <ion-chip class="${classNames.item} ${
-                data.highlighted
-                  ? classNames.highlightedState
-                  : classNames.itemSelectable
-              }" data-item data-deletable data-id="${data.id}" data-value="${
-                data.value
-              }" ${data.active ? 'aria-selected="true"' : ""} ${
-                data.disabled ? 'aria-disabled="true"' : ""
-              }>
-                        <ion-label>${data.label}</ion-label>
-                        ${
-                          this.multiple
-                            ? `<ion-icon name="close-circle" data-button />`
-                            : ""
-                        }
-                      </ion-chip>
-                    `);
-            },
-            choice: (classNames, data) => {
-              return template(`
-                      <ion-item class="${classNames.item} ${
-                classNames.itemChoice
-              } ${
-                data.disabled
-                  ? classNames.itemDisabled
-                  : classNames.itemSelectable
-              }" data-choice ${
-                data.disabled
-                  ? 'data-choice-disabled aria-disabled="true"'
-                  : "data-choice-selectable"
-              } data-id="${data.id}" data-value="${data.value}" ${
-                data.groupId > 0 ? 'role="treeitem"' : 'role="option"'
-              }>
-                        <ion-label>${data.label}</ion-label>
-                      </ion-item>
-                    `);
-            },
-          };
-        },
-      } as any);
-    } catch (error) {
-      console.log("Error initializing choices...");
-    }
-  }
-
   componentDidLoad() {
     if (!Build?.isBrowser) return;
-
-    this.initChoices();
 
     if (this.endpoint) {
       this.getResults();
@@ -344,12 +300,12 @@ export class SelectTags implements ComponentInterface {
         {this.label && (
           <ion-label position={this.labelPosition}>{this.label}</ion-label>
         )}
-        <select
+        <ion-select
           title={this.placeholder || this.name}
           disabled={this.disabled}
           multiple={this.multiple}
           name={this.name}
-          required={this.required}
+          value={this.value}
           ref={(el) => (this.choicesEl = el)}
         >
           <slot />
@@ -357,18 +313,22 @@ export class SelectTags implements ComponentInterface {
             <OptionEl placeholder>{this.placeholder}</OptionEl>
           ) : null}
           {this.options.map((option) => (
-            <option
-              selected={
-                this.multiple
-                  ? this.value && this.value.indexOf(option.value) >= 0
-                  : option.value + "" === this.value + ""
-              }
-              value={option.value}
-            >
+            <ion-select-option value={option.value}>
               {option.label}
-            </option>
+            </ion-select-option>
           ))}
-        </select>
+        </ion-select>
+        {this.allowAdding && (
+          <ion-button
+            slot="end"
+            size="large"
+            fill="clear"
+            shape="round"
+            onClick={() => this.addTag()}
+          >
+            <ion-icon slot="icon-only" name="add-circle" />
+          </ion-button>
+        )}
       </ion-item>
     );
   }
