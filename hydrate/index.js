@@ -46432,6 +46432,7 @@ class SelectTags {
     this.page = 0;
     this.results = [];
     this.labelPosition = "stacked";
+    this.addIcon = "add-circle";
     this.hasValue = false;
     this.paramData = {};
   }
@@ -46565,7 +46566,8 @@ class SelectTags {
       payload: {},
     });
     if ((window === null || window === void 0 ? void 0 : window.prompt) && this.allowAdding !== "custom") {
-      const value = prompt("Name of the new tag?");
+      const value = prompt(this.addPrompt ||
+        `What ${this.label || this.name} would you like to add?`);
       this.options = [
         ...this.options,
         { label: this.toTitleCase(value), value },
@@ -46611,7 +46613,7 @@ class SelectTags {
   }
   render() {
     const OptionEl = "option";
-    return (hAsync("ion-item", { ref: (el) => (this.itemEl = el), lines: this.lines }, this.label && (hAsync("ion-label", { position: this.labelPosition }, this.label)), hAsync("ion-select", { title: this.placeholder || this.name, disabled: this.disabled, multiple: this.multiple, name: this.name, value: this.value, ref: (el) => (this.choicesEl = el) }, hAsync("slot", null), !this.multiple && this.placeholder ? (hAsync(OptionEl, { placeholder: true }, this.placeholder)) : null, this.options.map((option) => (hAsync("ion-select-option", { value: option.value }, option.label)))), this.allowAdding && (hAsync("ion-button", { slot: "end", size: "large", fill: "clear", shape: "round", onClick: () => this.addTag() }, hAsync("ion-icon", { slot: "icon-only", name: "add-circle" })))));
+    return (hAsync("ion-item", { ref: (el) => (this.itemEl = el), lines: this.lines }, this.label && (hAsync("ion-label", { position: this.labelPosition }, this.label)), hAsync("ion-select", { title: this.placeholder || this.name, disabled: this.disabled, multiple: this.multiple, name: this.name, value: this.value, ref: (el) => (this.choicesEl = el) }, hAsync("slot", null), !this.multiple && this.placeholder ? (hAsync(OptionEl, { placeholder: true }, this.placeholder)) : null, this.options.map((option) => (hAsync("ion-select-option", { value: option.value }, option.label)))), this.allowAdding && (hAsync("ion-button", { slot: "end", size: "large", fill: "clear", shape: "round", onClick: () => this.addTag() }, hAsync("ion-icon", { slot: "icon-only", name: this.addIcon })))));
   }
   static get watchers() { return {
     "value": ["onValueChange"],
@@ -46645,6 +46647,8 @@ class SelectTags {
       "query": [1],
       "lines": [1],
       "labelPosition": [1, "label-position"],
+      "addPrompt": [1, "add-prompt"],
+      "addIcon": [1, "add-icon"],
       "choices": [32],
       "hasValue": [32],
       "paramData": [32],

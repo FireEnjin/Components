@@ -9,6 +9,8 @@
 
 | Property         | Attribute         | Description | Type                                 | Default         |
 | ---------------- | ----------------- | ----------- | ------------------------------------ | --------------- |
+| `addIcon`        | `add-icon`        |             | `string`                             | `"add-circle"`  |
+| `addPrompt`      | `add-prompt`      |             | `string`                             | `undefined`     |
 | `allowAdding`    | `allow-adding`    |             | `"custom" \| boolean`                | `false`         |
 | `dataPropsMap`   | `data-props-map`  |             | `any`                                | `undefined`     |
 | `disableFetch`   | `disable-fetch`   |             | `boolean`                            | `false`         |
