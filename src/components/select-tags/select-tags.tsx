@@ -53,6 +53,8 @@ export class SelectTags implements ComponentInterface {
   @Prop() query?: string;
   @Prop() lines: "full" | "inset" | "none";
   @Prop() labelPosition?: "stacked" | "fixed" | "floating" = "stacked";
+  @Prop() addPrompt: string;
+  @Prop() addIcon = "add-circle";
 
   @State() choices: any;
   @State() hasValue = false;
@@ -226,7 +228,10 @@ export class SelectTags implements ComponentInterface {
       payload: {},
     });
     if (window?.prompt && this.allowAdding !== "custom") {
-      const value = prompt("Name of the new tag?");
+      const value = prompt(
+        this.addPrompt ||
+          `What ${this.label || this.name} would you like to add?`
+      );
       this.options = [
         ...this.options,
         { label: this.toTitleCase(value), value },
@@ -326,7 +331,7 @@ export class SelectTags implements ComponentInterface {
             shape="round"
             onClick={() => this.addTag()}
           >
-            <ion-icon slot="icon-only" name="add-circle" />
+            <ion-icon slot="icon-only" name={this.addIcon} />
           </ion-button>
         )}
       </ion-item>
