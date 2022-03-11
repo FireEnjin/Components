@@ -11486,7 +11486,24 @@ class Col {
   }; }
 }
 
-const contentCss = "/*!@:host*/.sc-ion-content-h{--background:var(--ion-background-color, #fff);--color:var(--ion-text-color, #000);--padding-top:0px;--padding-bottom:0px;--padding-start:0px;--padding-end:0px;--keyboard-offset:0px;--offset-top:0px;--offset-bottom:0px;--overflow:auto;display:block;position:relative;flex:1;width:100%;height:100%;margin:0 !important;padding:0 !important;font-family:var(--ion-font-family, inherit);contain:size style}/*!@:host(.ion-color) .inner-scroll*/.ion-color.sc-ion-content-h .inner-scroll.sc-ion-content{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.outer-content)*/.outer-content.sc-ion-content-h{--background:var(--ion-color-step-50, #f2f2f2)}/*!@#background-content*/#background-content.sc-ion-content{left:0px;right:0px;top:calc(var(--offset-top) * -1);bottom:calc(var(--offset-bottom) * -1);position:absolute;background:var(--background)}/*!@.inner-scroll*/.inner-scroll.sc-ion-content{left:0px;right:0px;top:calc(var(--offset-top) * -1);bottom:calc(var(--offset-bottom) * -1);padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:calc(var(--padding-top) + var(--offset-top));padding-bottom:calc(var(--padding-bottom) + var(--keyboard-offset) + var(--offset-bottom));position:absolute;color:var(--color);box-sizing:border-box;overflow:hidden;touch-action:manipulation}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.inner-scroll*/.inner-scroll.sc-ion-content{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.scroll-y,\n.scroll-x*/.scroll-y.sc-ion-content,.scroll-x.sc-ion-content{-webkit-overflow-scrolling:touch;z-index:0;will-change:scroll-position}/*!@.scroll-y*/.scroll-y.sc-ion-content{overflow-y:var(--overflow);overscroll-behavior-y:contain}/*!@.scroll-x*/.scroll-x.sc-ion-content{overflow-x:var(--overflow);overscroll-behavior-x:contain}/*!@.overscroll::before,\n.overscroll::after*/.overscroll.sc-ion-content::before,.overscroll.sc-ion-content::after{position:absolute;width:1px;height:1px;content:\"\"}/*!@.overscroll::before*/.overscroll.sc-ion-content::before{bottom:-1px}/*!@.overscroll::after*/.overscroll.sc-ion-content::after{top:-1px}/*!@:host(.content-sizing)*/.content-sizing.sc-ion-content-h{display:flex;flex-direction:column;min-height:0;contain:none}/*!@:host(.content-sizing) .inner-scroll*/.content-sizing.sc-ion-content-h .inner-scroll.sc-ion-content{position:relative;top:0;bottom:0;margin-top:calc(var(--offset-top) * -1);margin-bottom:calc(var(--offset-bottom) * -1)}/*!@.transition-effect*/.transition-effect.sc-ion-content{display:none;position:absolute;left:-100%;width:100%;height:100vh;opacity:0;pointer-events:none}/*!@.transition-cover*/.transition-cover.sc-ion-content{position:absolute;right:0;width:100%;height:100%;background:black;opacity:0.1}/*!@.transition-shadow*/.transition-shadow.sc-ion-content{display:block;position:absolute;right:0;width:10px;height:100%;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAgCAYAAAAIXrg4AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MTE3MDgzRkQ5QTkyMTFFOUEwNzQ5MkJFREE1NUY2MjQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MTE3MDgzRkU5QTkyMTFFOUEwNzQ5MkJFREE1NUY2MjQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxMTcwODNGQjlBOTIxMUU5QTA3NDkyQkVEQTU1RjYyNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxMTcwODNGQzlBOTIxMUU5QTA3NDkyQkVEQTU1RjYyNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmePEuQAAABNSURBVHjaYvz//z8DIxAwMDAwATGMhmFmPDQuOSZks0AMmoJBaQHjkPfB0Lfg/2gQjVow+HPy/yHvg9GiYjQfjMbBqAWjFgy/4hogwADYqwdzxy5BuwAAAABJRU5ErkJggg==);background-repeat:repeat-y;background-size:10px 16px}/*!@::slotted([slot=fixed])*/.sc-ion-content-s>[slot=fixed]{position:absolute;transform:translateZ(0)}";
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+/**
+ * Returns `true` if the document or host element
+ * has a `dir` set to `rtl`. The host value will always
+ * take priority over the root document value.
+ */
+const isRTL = (hostEl) => {
+  if (hostEl) {
+    if (hostEl.dir !== '') {
+      return hostEl.dir.toLowerCase() === 'rtl';
+    }
+  }
+  return (document === null || document === void 0 ? void 0 : document.dir.toLowerCase()) === 'rtl';
+};
+
+const contentCss = "/*!@:host*/.sc-ion-content-h{--background:var(--ion-background-color, #fff);--color:var(--ion-text-color, #000);--padding-top:0px;--padding-bottom:0px;--padding-start:0px;--padding-end:0px;--keyboard-offset:0px;--offset-top:0px;--offset-bottom:0px;--overflow:auto;display:block;position:relative;flex:1;width:100%;height:100%;margin:0 !important;padding:0 !important;font-family:var(--ion-font-family, inherit);contain:size style}/*!@:host(.ion-color) .inner-scroll*/.ion-color.sc-ion-content-h .inner-scroll.sc-ion-content{background:var(--ion-color-base);color:var(--ion-color-contrast)}/*!@:host(.outer-content)*/.outer-content.sc-ion-content-h{--background:var(--ion-color-step-50, #f2f2f2)}/*!@#background-content*/#background-content.sc-ion-content{left:0px;right:0px;top:calc(var(--offset-top) * -1);bottom:calc(var(--offset-bottom) * -1);position:absolute;background:var(--background)}/*!@.inner-scroll*/.inner-scroll.sc-ion-content{left:0px;right:0px;top:calc(var(--offset-top) * -1);bottom:calc(var(--offset-bottom) * -1);padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:calc(var(--padding-top) + var(--offset-top));padding-bottom:calc(var(--padding-bottom) + var(--keyboard-offset) + var(--offset-bottom));position:absolute;color:var(--color);box-sizing:border-box;overflow:hidden;touch-action:manipulation}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.inner-scroll*/.inner-scroll.sc-ion-content{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.scroll-y,\n.scroll-x*/.scroll-y.sc-ion-content,.scroll-x.sc-ion-content{-webkit-overflow-scrolling:touch;z-index:0;will-change:scroll-position}/*!@.scroll-y*/.scroll-y.sc-ion-content{overflow-y:var(--overflow);overscroll-behavior-y:contain}/*!@.scroll-x*/.scroll-x.sc-ion-content{overflow-x:var(--overflow);overscroll-behavior-x:contain}/*!@.overscroll::before,\n.overscroll::after*/.overscroll.sc-ion-content::before,.overscroll.sc-ion-content::after{position:absolute;width:1px;height:1px;content:\"\"}/*!@.overscroll::before*/.overscroll.sc-ion-content::before{bottom:-1px}/*!@.overscroll::after*/.overscroll.sc-ion-content::after{top:-1px}/*!@:host(.content-sizing)*/.content-sizing.sc-ion-content-h{display:flex;flex-direction:column;min-height:0;contain:none}/*!@:host(.content-sizing) .inner-scroll*/.content-sizing.sc-ion-content-h .inner-scroll.sc-ion-content{position:relative;top:0;bottom:0;margin-top:calc(var(--offset-top) * -1);margin-bottom:calc(var(--offset-bottom) * -1)}/*!@.transition-effect*/.transition-effect.sc-ion-content{display:none;position:absolute;width:100%;height:100vh;opacity:0;pointer-events:none}/*!@:host(.content-ltr) .transition-effect*/.content-ltr.sc-ion-content-h .transition-effect.sc-ion-content{left:-100%}/*!@:host(.content-rtl) .transition-effect*/.content-rtl.sc-ion-content-h .transition-effect.sc-ion-content{right:-100%}/*!@.transition-cover*/.transition-cover.sc-ion-content{position:absolute;right:0;width:100%;height:100%;background:black;opacity:0.1}/*!@.transition-shadow*/.transition-shadow.sc-ion-content{display:block;position:absolute;width:10px;height:100%;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAgCAYAAAAIXrg4AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MTE3MDgzRkQ5QTkyMTFFOUEwNzQ5MkJFREE1NUY2MjQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MTE3MDgzRkU5QTkyMTFFOUEwNzQ5MkJFREE1NUY2MjQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxMTcwODNGQjlBOTIxMUU5QTA3NDkyQkVEQTU1RjYyNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxMTcwODNGQzlBOTIxMUU5QTA3NDkyQkVEQTU1RjYyNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmePEuQAAABNSURBVHjaYvz//z8DIxAwMDAwATGMhmFmPDQuOSZks0AMmoJBaQHjkPfB0Lfg/2gQjVow+HPy/yHvg9GiYjQfjMbBqAWjFgy/4hogwADYqwdzxy5BuwAAAABJRU5ErkJggg==);background-repeat:repeat-y;background-size:10px 16px}/*!@:host(.content-ltr) .transition-shadow*/.content-ltr.sc-ion-content-h .transition-shadow.sc-ion-content{right:0}/*!@:host(.content-rtl) .transition-shadow*/.content-rtl.sc-ion-content-h .transition-shadow.sc-ion-content{left:0;transform:scaleX(-1)}/*!@::slotted([slot=fixed])*/.sc-ion-content-s>[slot=fixed]{position:absolute;transform:translateZ(0)}";
 
 /**
  * @slot - Content is placed in the scrollable area if provided without a slot.
@@ -11726,7 +11743,8 @@ class Content {
     }
   }
   render() {
-    const { isMainContent, scrollX, scrollY } = this;
+    const { isMainContent, scrollX, scrollY, el } = this;
+    const rtl = isRTL(el) ? 'rtl' : 'ltr';
     const mode = getIonMode$1(this);
     const forceOverscroll = this.shouldForceOverscroll();
     const transitionShadow = mode === 'ios';
@@ -11736,6 +11754,7 @@ class Content {
         [mode]: true,
         'content-sizing': hostContext('ion-popover', this.el),
         'overscroll': forceOverscroll,
+        [`content-${rtl}`]: true
       }), style: {
         '--offset-top': `${this.cTop}px`,
         '--offset-bottom': `${this.cBottom}px`,
@@ -11744,7 +11763,7 @@ class Content {
         'scroll-x': scrollX,
         'scroll-y': scrollY,
         'overscroll': (scrollX || scrollY) && forceOverscroll
-      }, ref: (el) => this.scrollEl = el, onScroll: (this.scrollEvents) ? (ev) => this.onScroll(ev) : undefined, part: "scroll" }, hAsync("slot", null)), transitionShadow ? (hAsync("div", { class: "transition-effect" }, hAsync("div", { class: "transition-cover" }), hAsync("div", { class: "transition-shadow" }))) : null, hAsync("slot", { name: "fixed" })));
+      }, ref: (scrollEl) => this.scrollEl = scrollEl, onScroll: (this.scrollEvents) ? (ev) => this.onScroll(ev) : undefined, part: "scroll" }, hAsync("slot", null)), transitionShadow ? (hAsync("div", { class: "transition-effect" }, hAsync("div", { class: "transition-cover" }), hAsync("div", { class: "transition-shadow" }))) : null, hAsync("slot", { name: "fixed" })));
   }
   get el() { return getElement(this); }
   static get style() { return contentCss; }
@@ -11882,23 +11901,6 @@ const startFocusVisible = (rootEl) => {
     destroy,
     setFocus
   };
-};
-
-/*!
- * (C) Ionic http://ionicframework.com - MIT License
- */
-/**
- * Returns `true` if the document or host element
- * has a `dir` set to `rtl`. The host value will always
- * take priority over the root document value.
- */
-const isRTL = (hostEl) => {
-  if (hostEl) {
-    if (hostEl.dir !== '') {
-      return hostEl.dir.toLowerCase() === 'rtl';
-    }
-  }
-  return (document === null || document === void 0 ? void 0 : document.dir.toLowerCase()) === 'rtl';
 };
 
 /*!
@@ -38843,6 +38845,7 @@ class PickerColumnInternal {
       var _a;
       const ev = entries[0];
       if (ev.isIntersecting) {
+        this.isColumnVisible = true;
         /**
          * Because this initial call to scrollActiveItemIntoView has to fire before
          * the scroll listener is set up, we need to manage the active class manually.
@@ -38852,14 +38855,13 @@ class PickerColumnInternal {
         this.scrollActiveItemIntoView();
         (_a = this.activeItem) === null || _a === void 0 ? void 0 : _a.classList.add(PICKER_COL_ACTIVE);
         this.initializeScrollListener();
-        this.isColumnVisible = true;
       }
       else {
+        this.isColumnVisible = false;
         if (this.destroyScrollListener) {
           this.destroyScrollListener();
           this.destroyScrollListener = undefined;
         }
-        this.isColumnVisible = false;
       }
     };
     new IntersectionObserver(visibleCallback, { threshold: 0.01 }).observe(this.el);
@@ -50492,23 +50494,43 @@ registerComponents([
  */
 const createSwipeBackGesture = (el, canStartHandler, onStartHandler, onMoveHandler, onEndHandler) => {
   const win = el.ownerDocument.defaultView;
+  const rtl = isRTL(el);
+  /**
+   * Determine if a gesture is near the edge
+   * of the screen. If true, then the swipe
+   * to go back gesture should proceed.
+   */
+  const isAtEdge = (detail) => {
+    const threshold = 50;
+    const { startX } = detail;
+    if (rtl) {
+      return startX >= win.innerWidth - threshold;
+    }
+    return startX <= threshold;
+  };
+  const getDeltaX = (detail) => {
+    return rtl ? -detail.deltaX : detail.deltaX;
+  };
+  const getVelocityX = (detail) => {
+    return rtl ? -detail.velocityX : detail.velocityX;
+  };
   const canStart = (detail) => {
-    return detail.startX <= 50 && canStartHandler();
+    return isAtEdge(detail) && canStartHandler();
   };
   const onMove = (detail) => {
     // set the transition animation's progress
-    const delta = detail.deltaX;
+    const delta = getDeltaX(detail);
     const stepValue = delta / win.innerWidth;
     onMoveHandler(stepValue);
   };
   const onEnd = (detail) => {
     // the swipe back gesture has ended
-    const delta = detail.deltaX;
+    const delta = getDeltaX(detail);
     const width = win.innerWidth;
     const stepValue = delta / width;
-    const velocity = detail.velocityX;
+    const velocity = getVelocityX(detail);
     const z = width / 2.0;
-    const shouldComplete = velocity >= 0 && (velocity > 0.2 || detail.deltaX > z);
+    const shouldComplete = velocity >= 0 && (velocity > 0.2 || delta > z);
     const missing = shouldComplete ? 1 - stepValue : stepValue;
     const missingDistance = missing * width;
     let realDur = 0;
