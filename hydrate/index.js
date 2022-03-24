@@ -50928,13 +50928,14 @@ class RenderTemplate {
     var _a, _b;
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
       return;
-    if (this.templateId)
-      this.getTemplate(this.templateId);
     if (this.helpers && ((_a = Object.keys(this.helpers)) === null || _a === void 0 ? void 0 : _a.length))
       this.setHelpers();
     if ((_b = this.partials) === null || _b === void 0 ? void 0 : _b.length)
       this.setPartials();
-    backoff(10, this.renderTemplate.bind(this));
+    if (this.templateId)
+      this.getTemplate(this.templateId);
+    if (this.template)
+      backoff(10, this.renderTemplate.bind(this));
   }
   getTemplate(id) {
     this.fireenjinFetch.emit({
@@ -51032,14 +51033,11 @@ class RenderTemplate {
   onTemplate() {
     backoff(10, this.renderTemplate.bind(this));
   }
-  onPartials() {
-    this.setPartials();
-  }
   render() {
     return hAsync("div", { innerHTML: this.html || "" });
   }
   static get watchers() { return {
-    "partials": ["setPartials", "onPartials"],
+    "partials": ["setPartials"],
     "helpers": ["setHelpers"],
     "templateId": ["onTemplateId"],
     "data": ["onData"],

@@ -49,10 +49,10 @@ export class RenderTemplate implements ComponentInterface {
 
   async componentWillLoad() {
     if (!Build?.isBrowser) return;
-    if (this.templateId) this.getTemplate(this.templateId);
     if (this.helpers && Object.keys(this.helpers)?.length) this.setHelpers();
     if (this.partials?.length) this.setPartials();
-    backoff(10, this.renderTemplate.bind(this));
+    if (this.templateId) this.getTemplate(this.templateId);
+    if (this.template) backoff(10, this.renderTemplate.bind(this));
   }
 
   getTemplate(id: string) {
@@ -169,11 +169,6 @@ export class RenderTemplate implements ComponentInterface {
   @Watch("template")
   onTemplate() {
     backoff(10, this.renderTemplate.bind(this));
-  }
-
-  @Watch("partials")
-  onPartials() {
-    this.setPartials();
   }
 
   render() {
