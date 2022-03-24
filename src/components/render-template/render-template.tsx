@@ -14,6 +14,7 @@ import {
   Method,
 } from "@stencil/core";
 import Handlebars from "handlebars";
+import * as jsonLogic from "json-logic-js";
 import backoff from "../../helpers/backoff";
 
 @Component({
@@ -41,6 +42,11 @@ export class RenderTemplate implements ComponentInterface {
 
       return formatter.format(amount ? amount : 0);
     },
+    logic: (context, rules, tempData) =>
+      jsonLogic.apply(JSON.parse(rules.replace('"@tempData"', tempData)), {
+        ...context,
+        tempData,
+      }),
   };
 
   @State() html = "";
