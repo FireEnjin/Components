@@ -17,7 +17,8 @@ export default async function backoff(
     if (!fn || typeof fn !== "function")
       reject("Callback function is required!");
     try {
-      resolve(fn());
+      const res = await fn();
+      resolve(res);
     } catch (err) {
       if (retries > 1) {
         await pause(delay);
