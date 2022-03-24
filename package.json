@@ -31,13 +31,13 @@
     "presets:watch": "fireenjin presets watch"
   },
   "dependencies": {
-    "@fireenjin/sdk": "^1.2.49",
+    "@fireenjin/sdk": "^1.2.50",
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
-    "@ionic/core": "^6.0.11",
+    "@ionic/core": "^6.0.13",
     "@stencil/core": "2.13.0",
-    "@stripe/stripe-js": "^1.24.0",
+    "@stripe/stripe-js": "^1.25.0",
     "chart.js": "^3.7.1",
     "cleave.js": "^1.6.0",
     "clipboard": "^2.0.10",

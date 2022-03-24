@@ -12912,6 +12912,8 @@ class Datetime {
     this.ionStyle = createEvent(this, "ionStyle", 7);
     this.inputId = `ion-dt-${datetimeIds++}`;
     this.overlayIsPresenting = false;
+    this.todayParts = parseDate(getToday());
+    this.prevPresentation = null;
     this.showMonthAndYear = false;
     this.activeParts = {
       month: 5,
@@ -12929,7 +12931,6 @@ class Datetime {
       minute: 52,
       ampm: 'pm'
     };
-    this.todayParts = parseDate(getToday());
     this.isPresented = false;
     this.isTimePopoverOpen = false;
     /**
@@ -13038,8 +13039,18 @@ class Datetime {
       }
       this.confirm();
     };
+    /**
+     * Stencil sometimes sets calendarBodyRef to null on rerender, even though
+     * the element is present. Query for it manually as a fallback.
+     *
+     * TODO(FW-901) Remove when issue is resolved: https://github.com/ionic-team/stencil/issues/3253
+     */
+    this.getCalendarBodyEl = () => {
+      var _a;
+      return this.calendarBodyRef || ((_a = this.el.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('.calendar-body'));
+    };
     this.initializeKeyboardListeners = () => {
-      const { calendarBodyRef } = this;
+      const calendarBodyRef = this.getCalendarBodyEl();
       if (!calendarBodyRef) {
         return;
       }
@@ -13079,7 +13090,7 @@ class Datetime {
        * We must use keydown not keyup as we want
        * to prevent scrolling when using the arrow keys.
        */
-      this.calendarBodyRef.addEventListener('keydown', (ev) => {
+      calendarBodyRef.addEventListener('keydown', (ev) => {
         const activeElement = root.activeElement;
         if (!activeElement || !activeElement.classList.contains('calendar-day')) {
           return;
@@ -13192,7 +13203,7 @@ class Datetime {
       };
     };
     this.initializeCalendarIOListeners = () => {
-      const { calendarBodyRef } = this;
+      const calendarBodyRef = this.getCalendarBodyEl();
       if (!calendarBodyRef) {
         return;
       }
@@ -13374,7 +13385,7 @@ class Datetime {
      * listener. This is so that we can re-create the listeners
      * if the datetime has been hidden/presented by a modal or popover.
      */
-    this.destroyListeners = () => {
+    this.destroyInteractionListeners = () => {
       const { destroyCalendarIO, destroyKeyboardMO } = this;
       if (destroyCalendarIO !== undefined) {
         destroyCalendarIO();
@@ -13395,9 +13406,13 @@ class Datetime {
       if (overlay === null) {
         return;
       }
-      overlay.addEventListener('willPresent', () => {
+      const overlayListener = () => {
         this.overlayIsPresenting = true;
-      });
+      };
+      overlay.addEventListener('willPresent', overlayListener);
+      this.destroyOverlayListener = () => {
+        overlay.removeEventListener('willPresent', overlayListener);
+      };
     };
     this.processValue = (value) => {
       const valueToProcess = value || getToday();
@@ -13431,7 +13446,7 @@ class Datetime {
       return this.value != null && this.value !== '';
     };
     this.nextMonth = () => {
-      const { calendarBodyRef } = this;
+      const calendarBodyRef = this.getCalendarBodyEl();
       if (!calendarBodyRef) {
         return;
       }
@@ -13447,7 +13462,7 @@ class Datetime {
       });
     };
     this.prevMonth = () => {
-      const { calendarBodyRef } = this;
+      const calendarBodyRef = this.getCalendarBodyEl();
       if (!calendarBodyRef) {
         return;
       }
@@ -13567,6 +13582,11 @@ class Datetime {
       this.clearFocusVisible = undefined;
     }
   }
+  initializeListeners() {
+    this.initializeCalendarIOListeners();
+    this.initializeKeyboardListeners();
+    this.initializeOverlayListener();
+  }
   componentDidLoad() {
     /**
      * If a scrollable element is hidden using `display: none`,
@@ -13581,9 +13601,7 @@ class Datetime {
       if (!ev.isIntersecting) {
         return;
       }
-      this.initializeCalendarIOListeners();
-      this.initializeKeyboardListeners();
-      this.initializeOverlayListener();
+      this.initializeListeners();
       /**
        * TODO: Datetime needs a frame to ensure that it
        * can properly scroll contents into view. As a result
@@ -13617,7 +13635,7 @@ class Datetime {
       if (ev.isIntersecting) {
         return;
       }
-      this.destroyListeners();
+      this.destroyInteractionListeners();
       writeTask(() => {
         this.el.classList.remove('datetime-ready');
       });
@@ -13636,6 +13654,26 @@ class Datetime {
     const root = getElementRoot(this.el);
     root.addEventListener('ionFocus', (ev) => ev.stopPropagation());
     root.addEventListener('ionBlur', (ev) => ev.stopPropagation());
+  }
+  /**
+   * When the presentation is changed, all calendar content is recreated,
+   * so we need to re-init behavior with the new elements.
+   */
+  componentDidRender() {
+    const { presentation, prevPresentation } = this;
+    if (prevPresentation === null) {
+      this.prevPresentation = presentation;
+      return;
+    }
+    if (presentation === prevPresentation) {
+      return;
+    }
+    this.prevPresentation = presentation;
+    this.destroyInteractionListeners();
+    if (this.destroyOverlayListener !== undefined) {
+      this.destroyOverlayListener();
+    }
+    this.initializeListeners();
   }
   componentWillLoad() {
     this.processMinParts();
@@ -26723,7 +26761,7 @@ var registerWrapper = function registerWrapper(stripe, startTime) {
 
   stripe._registerWrapper({
     name: 'stripe-js',
-    version: "1.24.0",
+    version: "1.25.0",
     startTime: startTime
   });
 };
@@ -38801,7 +38839,7 @@ class PickerColumnInternal {
             const index = parseInt(dataIndex, 10);
             const selectedItem = this.items[index];
             if (selectedItem.value !== this.value) {
-              this.value = selectedItem.value;
+              this.setValue(selectedItem.value);
               hapticSelectionEnd();
               this.hapticsStarted = false;
             }
@@ -38823,15 +38861,10 @@ class PickerColumnInternal {
   valueChange() {
     if (this.isColumnVisible) {
       /**
-       * Only scroll the active item into view and emit the value
-       * change, when the picker column is actively visible to the user.
+       * Only scroll the active item into view when the picker column
+       * is actively visible to the user.
        */
-      const { items, value } = this;
       this.scrollActiveItemIntoView();
-      const findItem = items.find(item => item.value === value);
-      if (findItem) {
-        this.ionChange.emit(findItem);
-      }
     }
   }
   /**
@@ -38885,7 +38918,7 @@ class PickerColumnInternal {
          * first item to match the scroll position of the column.
          *
          */
-        this.value = items[0].value;
+        this.setValue(items[0].value);
       }
     }
   }
@@ -38894,6 +38927,14 @@ class PickerColumnInternal {
     const activeEl = this.activeItem;
     if (activeEl) {
       this.centerPickerItemInView(activeEl, false);
+    }
+  }
+  setValue(value) {
+    const { items } = this;
+    this.value = value;
+    const findItem = items.find(item => item.value === value);
+    if (findItem) {
+      this.ionChange.emit(findItem);
     }
   }
   get activeItem() {
@@ -40331,9 +40372,9 @@ const mdLeaveAnimation$1 = (baseEl) => {
     .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
-const popoverIosCss = "/*!@:host*/.sc-ion-popover-ios-h{--background:var(--ion-background-color, #fff);--min-width:0;--min-height:0;--max-width:auto;--height:auto;--offset-x:0px;--offset-y:0px;left:0;right:0;top:0;bottom:0;display:flex;position:fixed;align-items:center;justify-content:center;outline:none;color:var(--ion-text-color, #000);z-index:1001}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-popover-ios-h{display:none}/*!@.popover-wrapper*/.popover-wrapper.sc-ion-popover-ios{opacity:0;z-index:10}/*!@.popover-content*/.popover-content.sc-ion-popover-ios{display:flex;position:absolute;flex-direction:column;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);box-shadow:var(--box-shadow);overflow:auto;z-index:10}/*!@.popover-viewport*/.popover-viewport.sc-ion-popover-ios{--ion-safe-area-top:0px;--ion-safe-area-right:0px;--ion-safe-area-bottom:0px;--ion-safe-area-left:0px;display:flex;flex-direction:column;overflow:hidden}/*!@:host(.popover-nested.popover-side-left)*/.popover-nested.popover-side-left.sc-ion-popover-ios-h{--offset-x:5px}/*!@:host(.popover-nested.popover-side-right)*/.popover-nested.popover-side-right.sc-ion-popover-ios-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-start)*/.popover-nested.popover-side-start.sc-ion-popover-ios-h{--offset-x:5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-start), :host-context([dir=rtl]).popover-nested.popover-side-start*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-ios-h,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-ios-h,[dir=rtl].popover-nested.popover-side-start.sc-ion-popover-ios-h,[dir=rtl] .popover-nested.popover-side-start.sc-ion-popover-ios-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-end)*/.popover-nested.popover-side-end.sc-ion-popover-ios-h{--offset-x:-5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-end), :host-context([dir=rtl]).popover-nested.popover-side-end*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-ios-h,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-ios-h,[dir=rtl].popover-nested.popover-side-end.sc-ion-popover-ios-h,[dir=rtl] .popover-nested.popover-side-end.sc-ion-popover-ios-h{--offset-x:5px}/*!@:host*/.sc-ion-popover-ios-h{--width:200px;--max-height:90%;--box-shadow:none;--backdrop-opacity:var(--ion-backdrop-opacity, 0.08)}/*!@:host(.popover-desktop)*/.popover-desktop.sc-ion-popover-ios-h{--box-shadow:0px 4px 16px 0px rgba(0, 0, 0, 0.12)}/*!@.popover-content*/.popover-content.sc-ion-popover-ios{border-radius:10px}/*!@:host(.popover-desktop) .popover-content*/.popover-desktop.sc-ion-popover-ios-h .popover-content.sc-ion-popover-ios{border:0.5px solid var(--ion-color-step-100, #e6e6e6)}/*!@.popover-arrow*/.popover-arrow.sc-ion-popover-ios{display:block;position:absolute;width:20px;height:10px;overflow:hidden}/*!@.popover-arrow::after*/.popover-arrow.sc-ion-popover-ios::after{left:3px;top:3px;border-radius:3px;position:absolute;width:14px;height:14px;transform:rotate(45deg);background:var(--background);content:\"\";z-index:10}/*!@[dir=rtl] .popover-arrow::after, :host-context([dir=rtl]) .popover-arrow::after*/[dir=rtl].sc-ion-popover-ios .popover-arrow.sc-ion-popover-ios::after,[dir=rtl].sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after,[dir=rtl] .sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{left:unset;right:unset;right:3px}/*!@:host(.popover-bottom) .popover-arrow*/.popover-bottom.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{top:auto;bottom:-10px}/*!@:host(.popover-bottom) .popover-arrow::after*/.popover-bottom.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{top:-6px}/*!@:host(.popover-side-left) .popover-arrow*/.popover-side-left.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(90deg)}/*!@:host(.popover-side-right) .popover-arrow*/.popover-side-right.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(-90deg)}/*!@:host(.popover-side-top) .popover-arrow*/.popover-side-top.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(180deg)}/*!@:host(.popover-side-start) .popover-arrow*/.popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(90deg)}/*!@:host-context([dir=rtl]):host(.popover-side-start) .popover-arrow, :host-context([dir=rtl]).popover-side-start .popover-arrow*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl].popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(-90deg)}/*!@:host(.popover-side-end) .popover-arrow*/.popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(-90deg)}/*!@:host-context([dir=rtl]):host(.popover-side-end) .popover-arrow, :host-context([dir=rtl]).popover-side-end .popover-arrow*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl].popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(90deg)}@supports (backdrop-filter: blur(0)){/*!@:host(.popover-translucent) .popover-content,\n:host(.popover-translucent) .popover-arrow::after*/.popover-translucent.sc-ion-popover-ios-h .popover-content.sc-ion-popover-ios,.popover-translucent.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{background:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);backdrop-filter:saturate(180%) blur(20px)}}";
+const popoverIosCss = "/*!@:host*/.sc-ion-popover-ios-h{--background:var(--ion-background-color, #fff);--min-width:0;--min-height:0;--max-width:auto;--height:auto;--offset-x:0px;--offset-y:0px;left:0;right:0;top:0;bottom:0;display:flex;position:fixed;align-items:center;justify-content:center;outline:none;color:var(--ion-text-color, #000);z-index:1001}/*!@:host(.popover-nested)*/.popover-nested.sc-ion-popover-ios-h{pointer-events:none}/*!@:host(.popover-nested) .popover-wrapper*/.popover-nested.sc-ion-popover-ios-h .popover-wrapper.sc-ion-popover-ios{pointer-events:auto}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-popover-ios-h{display:none}/*!@.popover-wrapper*/.popover-wrapper.sc-ion-popover-ios{opacity:0;z-index:10}/*!@.popover-content*/.popover-content.sc-ion-popover-ios{display:flex;position:absolute;flex-direction:column;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);box-shadow:var(--box-shadow);overflow:auto;z-index:10}/*!@.popover-viewport*/.popover-viewport.sc-ion-popover-ios{--ion-safe-area-top:0px;--ion-safe-area-right:0px;--ion-safe-area-bottom:0px;--ion-safe-area-left:0px;display:flex;flex-direction:column;overflow:hidden}/*!@:host(.popover-nested.popover-side-left)*/.popover-nested.popover-side-left.sc-ion-popover-ios-h{--offset-x:5px}/*!@:host(.popover-nested.popover-side-right)*/.popover-nested.popover-side-right.sc-ion-popover-ios-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-start)*/.popover-nested.popover-side-start.sc-ion-popover-ios-h{--offset-x:5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-start), :host-context([dir=rtl]).popover-nested.popover-side-start*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-ios-h,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-ios-h,[dir=rtl].popover-nested.popover-side-start.sc-ion-popover-ios-h,[dir=rtl] .popover-nested.popover-side-start.sc-ion-popover-ios-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-end)*/.popover-nested.popover-side-end.sc-ion-popover-ios-h{--offset-x:-5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-end), :host-context([dir=rtl]).popover-nested.popover-side-end*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-ios-h,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-ios-h,[dir=rtl].popover-nested.popover-side-end.sc-ion-popover-ios-h,[dir=rtl] .popover-nested.popover-side-end.sc-ion-popover-ios-h{--offset-x:5px}/*!@:host*/.sc-ion-popover-ios-h{--width:200px;--max-height:90%;--box-shadow:none;--backdrop-opacity:var(--ion-backdrop-opacity, 0.08)}/*!@:host(.popover-desktop)*/.popover-desktop.sc-ion-popover-ios-h{--box-shadow:0px 4px 16px 0px rgba(0, 0, 0, 0.12)}/*!@.popover-content*/.popover-content.sc-ion-popover-ios{border-radius:10px}/*!@:host(.popover-desktop) .popover-content*/.popover-desktop.sc-ion-popover-ios-h .popover-content.sc-ion-popover-ios{border:0.5px solid var(--ion-color-step-100, #e6e6e6)}/*!@.popover-arrow*/.popover-arrow.sc-ion-popover-ios{display:block;position:absolute;width:20px;height:10px;overflow:hidden}/*!@.popover-arrow::after*/.popover-arrow.sc-ion-popover-ios::after{left:3px;top:3px;border-radius:3px;position:absolute;width:14px;height:14px;transform:rotate(45deg);background:var(--background);content:\"\";z-index:10}/*!@[dir=rtl] .popover-arrow::after, :host-context([dir=rtl]) .popover-arrow::after*/[dir=rtl].sc-ion-popover-ios .popover-arrow.sc-ion-popover-ios::after,[dir=rtl].sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after,[dir=rtl] .sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{left:unset;right:unset;right:3px}/*!@:host(.popover-bottom) .popover-arrow*/.popover-bottom.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{top:auto;bottom:-10px}/*!@:host(.popover-bottom) .popover-arrow::after*/.popover-bottom.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{top:-6px}/*!@:host(.popover-side-left) .popover-arrow*/.popover-side-left.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(90deg)}/*!@:host(.popover-side-right) .popover-arrow*/.popover-side-right.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(-90deg)}/*!@:host(.popover-side-top) .popover-arrow*/.popover-side-top.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(180deg)}/*!@:host(.popover-side-start) .popover-arrow*/.popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(90deg)}/*!@:host-context([dir=rtl]):host(.popover-side-start) .popover-arrow, :host-context([dir=rtl]).popover-side-start .popover-arrow*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl].popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .popover-side-start.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(-90deg)}/*!@:host(.popover-side-end) .popover-arrow*/.popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(-90deg)}/*!@:host-context([dir=rtl]):host(.popover-side-end) .popover-arrow, :host-context([dir=rtl]).popover-side-end .popover-arrow*/[dir=rtl].sc-ion-popover-ios-h -no-combinator.popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .sc-ion-popover-ios-h -no-combinator.popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl].popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios,[dir=rtl] .popover-side-end.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios{transform:rotate(90deg)}@supports (backdrop-filter: blur(0)){/*!@:host(.popover-translucent) .popover-content,\n:host(.popover-translucent) .popover-arrow::after*/.popover-translucent.sc-ion-popover-ios-h .popover-content.sc-ion-popover-ios,.popover-translucent.sc-ion-popover-ios-h .popover-arrow.sc-ion-popover-ios::after{background:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);backdrop-filter:saturate(180%) blur(20px)}}";
 
-const popoverMdCss = "/*!@:host*/.sc-ion-popover-md-h{--background:var(--ion-background-color, #fff);--min-width:0;--min-height:0;--max-width:auto;--height:auto;--offset-x:0px;--offset-y:0px;left:0;right:0;top:0;bottom:0;display:flex;position:fixed;align-items:center;justify-content:center;outline:none;color:var(--ion-text-color, #000);z-index:1001}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-popover-md-h{display:none}/*!@.popover-wrapper*/.popover-wrapper.sc-ion-popover-md{opacity:0;z-index:10}/*!@.popover-content*/.popover-content.sc-ion-popover-md{display:flex;position:absolute;flex-direction:column;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);box-shadow:var(--box-shadow);overflow:auto;z-index:10}/*!@.popover-viewport*/.popover-viewport.sc-ion-popover-md{--ion-safe-area-top:0px;--ion-safe-area-right:0px;--ion-safe-area-bottom:0px;--ion-safe-area-left:0px;display:flex;flex-direction:column;overflow:hidden}/*!@:host(.popover-nested.popover-side-left)*/.popover-nested.popover-side-left.sc-ion-popover-md-h{--offset-x:5px}/*!@:host(.popover-nested.popover-side-right)*/.popover-nested.popover-side-right.sc-ion-popover-md-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-start)*/.popover-nested.popover-side-start.sc-ion-popover-md-h{--offset-x:5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-start), :host-context([dir=rtl]).popover-nested.popover-side-start*/[dir=rtl].sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-md-h,[dir=rtl] .sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-md-h,[dir=rtl].popover-nested.popover-side-start.sc-ion-popover-md-h,[dir=rtl] .popover-nested.popover-side-start.sc-ion-popover-md-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-end)*/.popover-nested.popover-side-end.sc-ion-popover-md-h{--offset-x:-5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-end), :host-context([dir=rtl]).popover-nested.popover-side-end*/[dir=rtl].sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-md-h,[dir=rtl] .sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-md-h,[dir=rtl].popover-nested.popover-side-end.sc-ion-popover-md-h,[dir=rtl] .popover-nested.popover-side-end.sc-ion-popover-md-h{--offset-x:5px}/*!@:host*/.sc-ion-popover-md-h{--width:250px;--max-height:90%;--box-shadow:0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);--backdrop-opacity:var(--ion-backdrop-opacity, 0.32)}/*!@.popover-content*/.popover-content.sc-ion-popover-md{border-radius:4px;transform-origin:left top}/*!@[dir=rtl] .popover-content, :host-context([dir=rtl]) .popover-content*/[dir=rtl].sc-ion-popover-md .popover-content.sc-ion-popover-md,[dir=rtl].sc-ion-popover-md-h .popover-content.sc-ion-popover-md,[dir=rtl] .sc-ion-popover-md-h .popover-content.sc-ion-popover-md{transform-origin:right top}/*!@.popover-viewport*/.popover-viewport.sc-ion-popover-md{transition-delay:100ms}";
+const popoverMdCss = "/*!@:host*/.sc-ion-popover-md-h{--background:var(--ion-background-color, #fff);--min-width:0;--min-height:0;--max-width:auto;--height:auto;--offset-x:0px;--offset-y:0px;left:0;right:0;top:0;bottom:0;display:flex;position:fixed;align-items:center;justify-content:center;outline:none;color:var(--ion-text-color, #000);z-index:1001}/*!@:host(.popover-nested)*/.popover-nested.sc-ion-popover-md-h{pointer-events:none}/*!@:host(.popover-nested) .popover-wrapper*/.popover-nested.sc-ion-popover-md-h .popover-wrapper.sc-ion-popover-md{pointer-events:auto}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-popover-md-h{display:none}/*!@.popover-wrapper*/.popover-wrapper.sc-ion-popover-md{opacity:0;z-index:10}/*!@.popover-content*/.popover-content.sc-ion-popover-md{display:flex;position:absolute;flex-direction:column;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);box-shadow:var(--box-shadow);overflow:auto;z-index:10}/*!@.popover-viewport*/.popover-viewport.sc-ion-popover-md{--ion-safe-area-top:0px;--ion-safe-area-right:0px;--ion-safe-area-bottom:0px;--ion-safe-area-left:0px;display:flex;flex-direction:column;overflow:hidden}/*!@:host(.popover-nested.popover-side-left)*/.popover-nested.popover-side-left.sc-ion-popover-md-h{--offset-x:5px}/*!@:host(.popover-nested.popover-side-right)*/.popover-nested.popover-side-right.sc-ion-popover-md-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-start)*/.popover-nested.popover-side-start.sc-ion-popover-md-h{--offset-x:5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-start), :host-context([dir=rtl]).popover-nested.popover-side-start*/[dir=rtl].sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-md-h,[dir=rtl] .sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-start.sc-ion-popover-md-h,[dir=rtl].popover-nested.popover-side-start.sc-ion-popover-md-h,[dir=rtl] .popover-nested.popover-side-start.sc-ion-popover-md-h{--offset-x:-5px}/*!@:host(.popover-nested.popover-side-end)*/.popover-nested.popover-side-end.sc-ion-popover-md-h{--offset-x:-5px}/*!@:host-context([dir=rtl]):host(.popover-nested.popover-side-end), :host-context([dir=rtl]).popover-nested.popover-side-end*/[dir=rtl].sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-md-h,[dir=rtl] .sc-ion-popover-md-h -no-combinator.popover-nested.popover-side-end.sc-ion-popover-md-h,[dir=rtl].popover-nested.popover-side-end.sc-ion-popover-md-h,[dir=rtl] .popover-nested.popover-side-end.sc-ion-popover-md-h{--offset-x:5px}/*!@:host*/.sc-ion-popover-md-h{--width:250px;--max-height:90%;--box-shadow:0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);--backdrop-opacity:var(--ion-backdrop-opacity, 0.32)}/*!@.popover-content*/.popover-content.sc-ion-popover-md{border-radius:4px;transform-origin:left top}/*!@[dir=rtl] .popover-content, :host-context([dir=rtl]) .popover-content*/[dir=rtl].sc-ion-popover-md .popover-content.sc-ion-popover-md,[dir=rtl].sc-ion-popover-md-h .popover-content.sc-ion-popover-md,[dir=rtl] .sc-ion-popover-md-h .popover-content.sc-ion-popover-md{transform-origin:right top}/*!@.popover-viewport*/.popover-viewport.sc-ion-popover-md{transition-delay:100ms}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -47698,7 +47739,7 @@ class Slides {
     this.swiper = new Promise(resolve => { this.readySwiper = resolve; });
     /**
      * Options to pass to the swiper instance.
-     * See http://idangero.us/swiper/api/ for valid options
+     * See https://swiperjs.com/swiper-api for valid options
      */
     this.options = {}; // SwiperOptions;  // TODO
     /**
@@ -47867,7 +47908,7 @@ class Slides {
   /**
    * Get the Swiper instance.
    * Use this to access the full Swiper API.
-   * See https://idangero.us/swiper/api/ for all API options.
+   * See https://swiperjs.com/swiper-api for all API options.
    */
   async getSwiper() {
     return this.swiper;
@@ -49404,7 +49445,7 @@ class Toast {
       [`toast-${this.position}`]: true
     };
     const role = allButtons.length > 0 ? 'dialog' : 'status';
-    return (hAsync(Host, Object.assign({ role: role, tabindex: "-1" }, this.htmlAttributes, { style: {
+    return (hAsync(Host, Object.assign({ "aria-live": "polite", "aria-atomic": "true", role: role, tabindex: "-1" }, this.htmlAttributes, { style: {
         zIndex: `${60000 + this.overlayIndex}`,
       }, class: createColorClasses$1(this.color, Object.assign(Object.assign({ [mode]: true }, getClassMap(this.cssClass)), { 'overlay-hidden': true, 'toast-translucent': this.translucent })), onIonToastWillDismiss: this.dispatchCancelHandler }), hAsync("div", { class: wrapperClass }, hAsync("div", { class: "toast-container", part: "container" }, this.renderButtons(startButtons, 'start'), this.icon !== undefined &&
       hAsync("ion-icon", { class: "toast-icon", part: "icon", icon: this.icon, lazy: false, "aria-hidden": "true" }), hAsync("div", { class: "toast-content" }, this.header !== undefined &&
@@ -50361,6 +50402,42 @@ const VirtualProxy = ({ dom }, children, utils) => {
   });
 };
 
+const flowCss = "";
+
+class flow {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    /**
+     * A list of options for SwiperJS
+     * @link https://swiperjs.com/swiper-api#parameters
+     */
+    this.slidesOptions = { autoHeight: true };
+    this.pager = false;
+    this.scrollbar = false;
+    this.fields = [];
+    this.showControls = false;
+  }
+  render() {
+    return (hAsync("fireenjin-form", { endpoint: this.endpoint, hideControls: !this.showControls, disableLoader: true }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.fields || []).map((field) => (hAsync("ion-slide", null, hAsync("div", null, (field === null || field === void 0 ? void 0 : field.label) || "None")))))));
+  }
+  static get style() { return flowCss; }
+  static get cmpMeta() { return {
+    "$flags$": 0,
+    "$tagName$": "fireenjin-flow",
+    "$members$": {
+      "slidesOptions": [8, "slides-options"],
+      "pager": [4],
+      "scrollbar": [4],
+      "fields": [16],
+      "endpoint": [1],
+      "showControls": [4, "show-controls"]
+    },
+    "$listeners$": undefined,
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": []
+  }; }
+}
+
 registerComponents([
   Accordion,
   AccordionGroup,
@@ -50487,6 +50564,7 @@ registerComponents([
   Toolbar,
   ToolbarTitle,
   VirtualScroll,
+  flow,
 ]);
 
 /*!
