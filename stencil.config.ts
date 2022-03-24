@@ -1,4 +1,5 @@
 import { Config } from "@stencil/core";
+import nodePolyfills from "rollup-plugin-node-polyfills";
 
 const { namespace } = require("./package.json");
 
@@ -6,7 +7,9 @@ export const config: Config = {
   namespace,
   taskQueue: "async",
   plugins: [],
-  rollupPlugins: {},
+  rollupPlugins: {
+    after: [nodePolyfills()],
+  },
   globalStyle: "src/css/global.css",
   globalScript: "src/global.ts",
   sourceMap: true,

@@ -4715,11 +4715,17 @@ function hydrateFactory($stencilWindow, $stencilHydrateOpts, $stencilHydrateResu
   /*hydrateAppClosure start*/
 
 
+var process = require('process');
 var require$$1 = require('fs');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
+var process__default = /*#__PURE__*/_interopDefaultLegacy(process);
 var require$$1__default = /*#__PURE__*/_interopDefaultLegacy(require$$1);
+
+var global$1 = (typeof global !== "undefined" ? global :
+  typeof self !== "undefined" ? self :
+  typeof window !== "undefined" ? window : {});
 
 const NAMESPACE = 'fireenjin';
 const BUILD = /* fireenjin */ { allRenderFn: false, appendChildSlotFix: false, asyncLoading: true, attachStyles: true, cloneNodeFix: false, cmpDidLoad: true, cmpDidRender: true, cmpDidUnload: false, cmpDidUpdate: true, cmpShouldUpdate: false, cmpWillLoad: true, cmpWillRender: true, cmpWillUpdate: false, connectedCallback: true, constructableCSS: false, cssAnnotations: true, cssVarShim: false, devTools: false, disconnectedCallback: true, dynamicImportShim: false, element: false, event: true, hasRenderFn: true, hostListener: true, hostListenerTarget: true, hostListenerTargetBody: true, hostListenerTargetDocument: true, hostListenerTargetParent: false, hostListenerTargetWindow: true, hotModuleReplacement: false, hydrateClientSide: true, hydrateServerSide: true, hydratedAttribute: false, hydratedClass: true, isDebug: false, isDev: false, isTesting: false, lazyLoad: true, lifecycle: true, lifecycleDOMEvents: false, member: true, method: true, mode: true, observeAttribute: true, profile: false, prop: true, propBoolean: true, propMutable: true, propNumber: true, propString: true, reflect: true, safari10: false, scoped: true, scriptDataOpts: false, shadowDelegatesFocus: true, shadowDom: true, shadowDomShim: true, slot: true, slotChildNodesFix: false, slotRelocation: true, state: true, style: true, svg: true, taskQueue: true, updatable: true, vdomAttribute: true, vdomClass: true, vdomFunctional: true, vdomKey: true, vdomListener: true, vdomPropOrAttr: true, vdomRef: true, vdomRender: true, vdomStyle: true, vdomText: true, vdomXlink: true, watchCallback: true };
@@ -4962,7 +4968,7 @@ function forceUpdate() {}
 
 function hydrateApp(e, t, o, n, s) {
  function l() {
-  if (global.clearTimeout(p), i.clear(), r.clear(), !h) {
+  if (global$1.clearTimeout(p), i.clear(), r.clear(), !h) {
    h = !0;
    try {
     t.clientHydrateAnnotations && insertVdomAnnotations(e.document, t.staticComponents), 
@@ -5057,7 +5063,7 @@ function hydrateApp(e, t, o, n, s) {
   }, e.document.createElementNS = function t(o, n) {
    const s = $.call(e.document, o, n);
    return f(s), s;
-  }, p = global.setTimeout((function L() {
+  }, p = global$1.setTimeout((function L() {
    a(`Hydrate exceeded timeout${function e(t) {
     return Array.from(t).map(waitingOnElementMsg);
    }(d)}`);
@@ -5732,7 +5738,7 @@ const cmpModules = new Map, getModule = e => {
   });
  }
 }, win$2 = window, doc$1 = win$2.document, readTask = e => {
- process.nextTick((() => {
+ process__default['default'].nextTick((() => {
   try {
    e();
   } catch (e) {
@@ -5740,7 +5746,7 @@ const cmpModules = new Map, getModule = e => {
   }
  }));
 }, writeTask = e => {
- process.nextTick((() => {
+ process__default['default'].nextTick((() => {
   try {
    e();
   } catch (e) {
@@ -25098,7 +25104,7 @@ class InfiniteScrollContent {
   }; }
 }
 
-var commonjsGlobal$1 = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+var commonjsGlobal$1 = typeof window !== 'undefined' ? window : typeof global$1 !== 'undefined' ? global$1 : typeof self !== 'undefined' ? self : {};
 
 var NumeralFormatter = function (numeralDecimalMark,
                                  numeralIntegerScale,
@@ -33678,7 +33684,7 @@ class LogItem {
 }
 
 function checkReady() {
-    if (typeof process === 'undefined') {
+    if (typeof process__default['default'] === 'undefined') {
         var win_1 = typeof window !== 'undefined' ? window : {};
         var DEVICE_READY_TIMEOUT_1 = 5000;
         // To help developers using cordova, we listen for the device ready event and
@@ -34624,7 +34630,7 @@ function pluginWarn(pluginName, plugin, method) {
  * @param method
  */
 function cordovaWarn(pluginName, method) {
-    if (typeof process === 'undefined') {
+    if (typeof process__default['default'] === 'undefined') {
         if (method) {
             console.warn('Native: tried calling ' +
                 pluginName +
