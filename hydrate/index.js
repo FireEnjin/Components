@@ -26773,7 +26773,7 @@ var registerWrapper = function registerWrapper(stripe, startTime) {
 
   stripe._registerWrapper({
     name: 'stripe-js',
-    version: "1.25.0",
+    version: "1.26.0",
     startTime: startTime
   });
 };
@@ -26836,7 +26836,7 @@ var initStripe = function initStripe(maybeStripe, args, startTime) {
   var stripe = maybeStripe.apply(undefined, args);
   registerWrapper(stripe, startTime);
   return stripe;
-};
+}; // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 
 // own script injection.
 
@@ -51347,7 +51347,8 @@ async function backoff(retries, fn, delay = 500) {
     if (!fn || typeof fn !== "function")
       reject("Callback function is required!");
     try {
-      resolve(fn());
+      const res = await fn();
+      resolve(res);
     }
     catch (err) {
       if (retries > 1) {
