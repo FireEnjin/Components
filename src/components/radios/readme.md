@@ -5,39 +5,39 @@
 
 ## Properties
 
-| Property        | Attribute        | Description | Type                                 | Default     |
-| --------------- | ---------------- | ----------- | ------------------------------------ | ----------- |
-| `label`         | `label`          |             | `string`                             | `undefined` |
-| `labelPosition` | `label-position` |             | `"fixed" \| "floating" \| "stacked"` | `undefined` |
-| `lines`         | `lines`          |             | `"full" \| "inset" \| "none"`        | `"none"`    |
-| `name`          | `name`           |             | `string`                             | `undefined` |
-| `options`       | `options`        |             | `any`                                | `undefined` |
-| `required`      | `required`       |             | `any`                                | `undefined` |
-| `selected`      | `selected`       |             | `number`                             | `0`         |
-| `value`         | `value`          |             | `any`                                | `undefined` |
-
-
-## Events
-
-| Event       | Description | Type               |
-| ----------- | ----------- | ------------------ |
-| `ionChange` |             | `CustomEvent<any>` |
+| Property              | Attribute               | Description | Type                                 | Default     |
+| --------------------- | ----------------------- | ----------- | ------------------------------------ | ----------- |
+| `allowEmptySelection` | `allow-empty-selection` |             | `boolean`                            | `false`     |
+| `disabled`            | `disabled`              |             | `boolean`                            | `false`     |
+| `label`               | `label`                 |             | `string`                             | `undefined` |
+| `labelPosition`       | `label-position`        |             | `"fixed" \| "floating" \| "stacked"` | `undefined` |
+| `lines`               | `lines`                 |             | `"full" \| "inset" \| "none"`        | `"none"`    |
+| `name`                | `name`                  |             | `string`                             | `undefined` |
+| `options`             | --                      |             | `FieldOption[]`                      | `undefined` |
+| `required`            | `required`              |             | `any`                                | `undefined` |
+| `value`               | `value`                 |             | `any`                                | `undefined` |
 
 
 ## Dependencies
 
 ### Depends on
 
+- ion-list
+- ion-radio-group
+- ion-list-header
 - ion-item
 - ion-label
-- ion-icon
+- ion-radio
 
 ### Graph
 ```mermaid
 graph TD;
+  fireenjin-radios --> ion-list
+  fireenjin-radios --> ion-radio-group
+  fireenjin-radios --> ion-list-header
   fireenjin-radios --> ion-item
   fireenjin-radios --> ion-label
-  fireenjin-radios --> ion-icon
+  fireenjin-radios --> ion-radio
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note

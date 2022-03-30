@@ -10,7 +10,7 @@
 | `beforeGetResults` | `before-get-results` |             | `any`              | `undefined` |
 | `disabled`         | `disabled`           |             | `boolean`          | `false`     |
 | `displayMode`      | `display-mode`       |             | `"grid" \| "list"` | `"grid"`    |
-| `filters`          | --                   |             | `filterControl[]`  | `undefined` |
+| `filters`          | --                   |             | `FilterControl[]`  | `undefined` |
 | `modeToggle`       | `mode-toggle`        |             | `boolean`          | `false`     |
 | `paginationEl`     | `pagination-el`      |             | `any`              | `undefined` |
 | `showFilter`       | `show-filter`        |             | `boolean`          | `true`      |
@@ -25,7 +25,7 @@
 
 ## Methods
 
-### `clearFilter(event: any, clearingControl: filterControl) => Promise<void>`
+### `clearFilter(event: any, clearingControl: FilterControl) => Promise<void>`
 
 
 

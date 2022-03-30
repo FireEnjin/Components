@@ -13,7 +13,7 @@ import {
   State,
   Watch,
 } from "@stencil/core";
-import { filterControl } from "../../typings";
+import { FilterControl } from "../../typings";
 
 @Component({
   tag: "fireenjin-search-bar",
@@ -21,7 +21,7 @@ import { filterControl } from "../../typings";
 })
 export class SearchBar implements ComponentInterface {
   @Event() fireenjinTrigger: EventEmitter<FireEnjinTriggerInput>;
-  @Prop({ mutable: true }) filters?: filterControl[];
+  @Prop({ mutable: true }) filters?: FilterControl[];
   @Prop() paginationEl: any;
   @Prop() modeToggle = false;
   @Prop({
@@ -36,7 +36,7 @@ export class SearchBar implements ComponentInterface {
   showFilter = true;
 
   @State() currentFilters: {
-    [filterKey: string]: filterControl;
+    [filterKey: string]: FilterControl;
   } = {};
 
   @Watch("filters")
@@ -91,7 +91,7 @@ export class SearchBar implements ComponentInterface {
   }
 
   @Method()
-  async clearFilter(event, clearingControl: filterControl) {
+  async clearFilter(event, clearingControl: FilterControl) {
     event.preventDefault();
     event.stopPropagation();
     const fetchData = this.paginationEl?.fetchData || {};
@@ -144,14 +144,14 @@ export class SearchBar implements ComponentInterface {
     }
   }
 
-  getLabelForValue(control: filterControl, value: any) {
+  getLabelForValue(control: FilterControl, value: any) {
     for (const option of control?.options || []) {
       if (option?.value !== value) continue;
       return option?.label ? option.label : option.value;
     }
   }
 
-  getControlLabel(control: filterControl) {
+  getControlLabel(control: FilterControl) {
     const value = control?.value ? control.value : null;
     let label = value
       ? Array.isArray(value)

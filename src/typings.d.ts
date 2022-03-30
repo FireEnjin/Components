@@ -1,5 +1,13 @@
 import { SelectCompareFn, SelectInterface } from "@ionic/core";
 
+export type FieldOption = {
+  label?: string;
+  value?: any;
+  disabled?: boolean;
+  payload?: any;
+  slot?: string;
+};
+
 export type Control = {
   name: string;
   icon?: string;
@@ -24,20 +32,12 @@ export type Control = {
   interface?: SelectInterface;
   interfaceOptions?: any;
   compareWith?: string | SelectCompareFn | null;
-  options?: {
-    label: string;
-    value: string;
-  }[];
+  options?: FieldOption[];
 };
 
 export type Field = {
   compareWith?: string | SelectCompareFn | null;
-  options?: {
-    label?: string;
-    value?: any;
-    disabled?: boolean;
-    payload?: any;
-  }[];
+  options?: FieldOption[];
   beforeHTML?: string;
   afterHTML?: string;
   path?: string;
@@ -108,7 +108,7 @@ export type Field = {
   results?: any;
 };
 
-export type filterControl = {
+export type FilterControl = {
   resultsKey?: string;
   name: string;
   icon?: string;
@@ -133,8 +133,5 @@ export type filterControl = {
   interface?: SelectInterface;
   interfaceOptions?: any;
   compareWith?: string | SelectCompareFn | null;
-  options?: {
-    label: string;
-    value: string;
-  }[];
+  options?: FieldOption[];
 };
