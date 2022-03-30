@@ -70,10 +70,10 @@ export type Field = {
   spellCheck?: boolean;
   inputMode?: string;
   stripeElements?: any;
-  lines: "full" | "inset" | "none";
+  lines?: "full" | "inset" | "none";
   labelPosition?: "stacked" | "fixed" | "floating";
   resultsKey?: string;
-  name: string;
+  name?: string;
   icon?: string;
   label?: string;
   value?: any;
