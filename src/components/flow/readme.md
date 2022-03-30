@@ -45,6 +45,16 @@
 
 ## Methods
 
+### `checkFormValidity(reportValidity: boolean) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `getActiveIndex() => Promise<number>`
 
 
@@ -125,6 +135,36 @@ Type: `Promise<void>`
 
 
 
+### `reportFormValidity() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `reset(event?: any) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `setFormData(data: any) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `slideNext(speed?: number, runCallbacks?: boolean) => Promise<void>`
 
 
@@ -166,6 +206,16 @@ Type: `Promise<void>`
 
 
 ### `stopAutoplay() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `submit(event?: any, options?: any) => Promise<void>`
 
 
 

@@ -7,7 +7,7 @@ import { Field } from "../../typings";
 })
 export class flow {
   slidesEl: HTMLIonSlidesElement;
-
+  formEl: HTMLFireenjinFormElement;
   /**
    * The name of the form used for ID and name
    */
@@ -199,6 +199,31 @@ export class flow {
     return this.slidesEl.updateAutoHeight(speed);
   }
 
+  @Method()
+  async reportFormValidity() {
+    this.formEl.reportFormValidity();
+  }
+
+  @Method()
+  async setFormData(data: any) {
+    this.formEl.setFormData(data);
+  }
+
+  @Method()
+  async checkFormValidity(reportValidity: boolean) {
+    this.formEl.checkFormValidity(reportValidity);
+  }
+
+  @Method()
+  async reset(event?: any) {
+    this.formEl.reset(event);
+  }
+
+  @Method()
+  async submit(event?: any, options?: any) {
+    this.formEl.submit(event, options);
+  }
+
   renderField(field?: Field) {
     if (field?.type === "file") {
       return (
@@ -347,6 +372,7 @@ export class flow {
   render() {
     return (
       <fireenjin-form
+        ref={(el) => (this.formEl = el)}
         name={this.name}
         formData={this.formData}
         submitButton={this.submitButton}

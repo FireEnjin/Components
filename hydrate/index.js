@@ -59163,6 +59163,21 @@ class flow {
   async updateAutoHeight(speed) {
     return this.slidesEl.updateAutoHeight(speed);
   }
+  async reportFormValidity() {
+    this.formEl.reportFormValidity();
+  }
+  async setFormData(data) {
+    this.formEl.setFormData(data);
+  }
+  async checkFormValidity(reportValidity) {
+    this.formEl.checkFormValidity(reportValidity);
+  }
+  async reset(event) {
+    this.formEl.reset(event);
+  }
+  async submit(event, options) {
+    this.formEl.submit(event, options);
+  }
   renderField(field) {
     if ((field === null || field === void 0 ? void 0 : field.type) === "file") {
       return (hAsync("fireenjin-input-file", { path: field === null || field === void 0 ? void 0 : field.path, icon: field === null || field === void 0 ? void 0 : field.icon, label: field === null || field === void 0 ? void 0 : field.label, fileName: field === null || field === void 0 ? void 0 : field.fileName, name: field === null || field === void 0 ? void 0 : field.name, accept: field === null || field === void 0 ? void 0 : field.accept, defaultValue: field === null || field === void 0 ? void 0 : field.defaultValue, value: field === null || field === void 0 ? void 0 : field.value, documentId: field === null || field === void 0 ? void 0 : field.documentId, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, uploadData: field === null || field === void 0 ? void 0 : field.uploadData, disabled: !!(field === null || field === void 0 ? void 0 : field.disabled) }));
@@ -59184,7 +59199,7 @@ class flow {
     }
   }
   render() {
-    return (hAsync("fireenjin-form", { name: this.name, formData: this.formData, submitButton: this.submitButton, submitButtonColor: this.submitButtonColor, submitButtonFill: this.submitButtonFill, resetButton: this.resetButton, resetButtonColor: this.resetButtonColor, resetButtonFill: this.resetButtonFill, documentId: this.documentId, endpoint: this.endpoint, hideControls: !this.showControls, excludeData: this.excludeData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: this.disableEnterButton, disableReset: this.disableReset, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => (hAsync("ion-slide", null, hAsync("div", null, (step === null || step === void 0 ? void 0 : step.beforeHTML) && hAsync("div", { innerHTML: step.beforeHTML }), ((step === null || step === void 0 ? void 0 : step.fields) || []).map((field) => [
+    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: this.submitButton, submitButtonColor: this.submitButtonColor, submitButtonFill: this.submitButtonFill, resetButton: this.resetButton, resetButtonColor: this.resetButtonColor, resetButtonFill: this.resetButtonFill, documentId: this.documentId, endpoint: this.endpoint, hideControls: !this.showControls, excludeData: this.excludeData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: this.disableEnterButton, disableReset: this.disableReset, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => (hAsync("ion-slide", null, hAsync("div", null, (step === null || step === void 0 ? void 0 : step.beforeHTML) && hAsync("div", { innerHTML: step.beforeHTML }), ((step === null || step === void 0 ? void 0 : step.fields) || []).map((field) => [
       (field === null || field === void 0 ? void 0 : field.beforeHTML) && hAsync("div", { innerHTML: field.beforeHTML }),
       this.renderField(field),
       (field === null || field === void 0 ? void 0 : field.afterHTML) && hAsync("div", { innerHTML: field.afterHTML }),
@@ -59241,7 +59256,12 @@ class flow {
       "startAutoplay": [64],
       "stopAutoplay": [64],
       "update": [64],
-      "updateAutoHeight": [64]
+      "updateAutoHeight": [64],
+      "reportFormValidity": [64],
+      "setFormData": [64],
+      "checkFormValidity": [64],
+      "reset": [64],
+      "submit": [64]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",
