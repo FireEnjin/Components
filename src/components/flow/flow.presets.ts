@@ -1,5 +1,18 @@
 import { ComponentPresets } from "@fireenjin/docs";
-
+const options = [
+  {
+    label: "Imortant",
+    value: "important",
+  },
+  {
+    label: "Bug",
+    value: "bug",
+  },
+  {
+    label: "Idea",
+    value: "idea",
+  },
+];
 export default {
   default: {
     name: "Default",
@@ -17,6 +30,15 @@ export default {
         },
         {
           label: "Twee",
+          fields: [
+            {
+              name: "test",
+              type: "radios",
+              options,
+              label: "Testing",
+              labelPosition: "stacked",
+            },
+          ],
         },
       ],
     },

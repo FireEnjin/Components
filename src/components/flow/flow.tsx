@@ -307,6 +307,27 @@ export class flow {
           lines={field?.lines}
         />
       );
+    } else if (field?.type === "radios") {
+      return (
+        <fireenjin-radios
+          disabled={!!field?.disabled}
+          name={field?.name}
+          value={field?.value}
+          endpoint={field?.endpoint}
+          orderBy={field?.orderBy}
+          dataPropsMap={field?.dataPropsMap}
+          optionEl={field?.optionEl}
+          limit={field?.limit}
+          params={field?.params}
+          query={field?.query}
+          label={field?.label}
+          options={field?.options}
+          required={!!field?.required}
+          resultsKey={field?.resultsKey}
+          labelPosition={field?.labelPosition}
+          lines={field?.lines}
+        />
+      );
     } else if (field?.type === "search") {
       return (
         <fireenjin-input-search

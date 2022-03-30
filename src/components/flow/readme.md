@@ -254,6 +254,7 @@ Type: `Promise<void>`
 - [fireenjin-input-photo](../input-photo)
 - [fireenjin-input-address](../input-address)
 - [fireenjin-select](../select)
+- [fireenjin-radios](../radios)
 - [fireenjin-input-search](../input-search)
 - [fireenjin-input](../input)
 - [fireenjin-form](../form)
@@ -267,6 +268,7 @@ graph TD;
   fireenjin-flow --> fireenjin-input-photo
   fireenjin-flow --> fireenjin-input-address
   fireenjin-flow --> fireenjin-select
+  fireenjin-flow --> fireenjin-radios
   fireenjin-flow --> fireenjin-input-search
   fireenjin-flow --> fireenjin-input
   fireenjin-flow --> fireenjin-form
@@ -314,6 +316,12 @@ graph TD;
   fireenjin-select --> ion-label
   fireenjin-select --> ion-select
   fireenjin-select --> ion-select-option
+  fireenjin-radios --> ion-list
+  fireenjin-radios --> ion-radio-group
+  fireenjin-radios --> ion-list-header
+  fireenjin-radios --> ion-item
+  fireenjin-radios --> ion-label
+  fireenjin-radios --> ion-radio
   fireenjin-input-search --> ion-item
   fireenjin-input-search --> ion-icon
   fireenjin-input-search --> ion-label
