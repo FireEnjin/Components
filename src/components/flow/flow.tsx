@@ -115,7 +115,9 @@ export class flow {
   @Prop() pager = false;
   @Prop() scrollbar = false;
   @Prop() steps: {
+    beforeHTML?: string;
     fields?: Field[];
+    afterHTML?: string;
   }[] = [];
   @Prop() showControls = false;
   @Prop() googleMapsKey: string;
@@ -303,7 +305,15 @@ export class flow {
         >
           {(this.steps || []).map((step) => (
             <ion-slide>
-              <div>{(step?.fields || []).map(this.renderField.bind(this))}</div>
+              <div>
+                {step?.beforeHTML && <div innerHTML={step.beforeHTML} />}
+                {(step?.fields || []).map((field) => [
+                  field?.beforeHTML && <div innerHTML={field.beforeHTML} />,
+                  this.renderField(field),
+                  field?.afterHTML && <div innerHTML={field.afterHTML} />,
+                ])}
+              </div>
+              {step?.afterHTML && <div innerHTML={step.afterHTML} />}
             </ion-slide>
           ))}
         </ion-slides>

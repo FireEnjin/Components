@@ -38,6 +38,8 @@ export type Field = {
     disabled?: boolean;
     payload?: any;
   }[];
+  beforeHTML?: string;
+  afterHTML?: string;
   path?: string;
   fileName?: string;
   accept?: string;

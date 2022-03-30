@@ -7,40 +7,40 @@
 
 ## Properties
 
-| Property             | Attribute              | Description                                                            | Type                                           | Default                |
-| -------------------- | ---------------------- | ---------------------------------------------------------------------- | ---------------------------------------------- | ---------------------- |
-| `action`             | `action`               | The action to use for the form                                         | `string`                                       | `undefined`            |
-| `beforeSubmit`       | --                     | A method that runs before form submission to allow editing of formData | `(data: any, options?: any) => Promise<any>`   | `undefined`            |
-| `confirmExit`        | `confirm-exit`         | Confirm leaving the page when the form is filled                       | `boolean`                                      | `false`                |
-| `disableEnterButton` | `disable-enter-button` | Should the enter button binding be disabled                            | `boolean`                                      | `false`                |
-| `disableLoader`      | `disable-loader`       | Should the form disable the loader on submit                           | `boolean`                                      | `false`                |
-| `disableReset`       | `disable-reset`        | Should the form disable reset                                          | `boolean`                                      | `false`                |
-| `documentId`         | `document-id`          | The id of the document being edited                                    | `string`                                       | `undefined`            |
-| `endpoint`           | `endpoint`             | The endpoint that form submission should link to                       | `string`                                       | `undefined`            |
-| `excludeData`        | --                     | The data to exclude from the form submit event                         | `string[]`                                     | `[]`                   |
-| `fetch`              | `fetch`                | Emit the fetch event emitted when component loads                      | `boolean \| string`                            | `undefined`            |
-| `fetchDataMap`       | `fetch-data-map`       | The map to bind data from fetch response to form data                  | `any`                                          | `undefined`            |
-| `fetchParams`        | `fetch-params`         | The fetch params                                                       | `any`                                          | `undefined`            |
-| `formData`           | `form-data`            | The data from the form being filled out                                | `any`                                          | `{}`                   |
-| `googleMapsKey`      | `google-maps-key`      |                                                                        | `string`                                       | `undefined`            |
-| `hasChanged`         | `has-changed`          | Has the form fields been changed                                       | `boolean`                                      | `false`                |
-| `hideControls`       | `hide-controls`        | Should the form controls be hidden?                                    | `boolean`                                      | `false`                |
-| `loading`            | `loading`              | Is the component currently loading                                     | `boolean`                                      | `false`                |
-| `method`             | `method`               | The HTTP method to use when submitting the form                        | `string`                                       | `"post"`               |
-| `name`               | `name`                 | The name of the form used for ID and name                              | `string`                                       | `undefined`            |
-| `pager`              | `pager`                |                                                                        | `boolean`                                      | `false`                |
-| `resetButton`        | `reset-button`         | What the reset button says                                             | `string`                                       | `"Cancel"`             |
-| `resetButtonColor`   | `reset-button-color`   | What color the reset button is                                         | `string`                                       | `"dark"`               |
-| `resetButtonFill`    | `reset-button-fill`    | What fill option to use for the reset button                           | `"clear" \| "default" \| "outline" \| "solid"` | `"clear"`              |
-| `scrollbar`          | `scrollbar`            |                                                                        | `boolean`                                      | `false`                |
-| `showControls`       | `show-controls`        |                                                                        | `boolean`                                      | `false`                |
-| `slidesOptions`      | `slides-options`       | A list of options for SwiperJS                                         | `any`                                          | `{ autoHeight: true }` |
-| `steps`              | --                     |                                                                        | `{ fields?: Field[]; }[]`                      | `[]`                   |
-| `stripeElements`     | `stripe-elements`      |                                                                        | `any`                                          | `undefined`            |
-| `stripeKey`          | `stripe-key`           |                                                                        | `string`                                       | `undefined`            |
-| `submitButton`       | `submit-button`        | What the save button says                                              | `string`                                       | `"Save"`               |
-| `submitButtonColor`  | `submit-button-color`  | What color the submit button is                                        | `string`                                       | `"primary"`            |
-| `submitButtonFill`   | `submit-button-fill`   | What fill option to use for the submit button                          | `"clear" \| "default" \| "outline" \| "solid"` | `"solid"`              |
+| Property             | Attribute              | Description                                                            | Type                                                               | Default                |
+| -------------------- | ---------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------- |
+| `action`             | `action`               | The action to use for the form                                         | `string`                                                           | `undefined`            |
+| `beforeSubmit`       | --                     | A method that runs before form submission to allow editing of formData | `(data: any, options?: any) => Promise<any>`                       | `undefined`            |
+| `confirmExit`        | `confirm-exit`         | Confirm leaving the page when the form is filled                       | `boolean`                                                          | `false`                |
+| `disableEnterButton` | `disable-enter-button` | Should the enter button binding be disabled                            | `boolean`                                                          | `false`                |
+| `disableLoader`      | `disable-loader`       | Should the form disable the loader on submit                           | `boolean`                                                          | `false`                |
+| `disableReset`       | `disable-reset`        | Should the form disable reset                                          | `boolean`                                                          | `false`                |
+| `documentId`         | `document-id`          | The id of the document being edited                                    | `string`                                                           | `undefined`            |
+| `endpoint`           | `endpoint`             | The endpoint that form submission should link to                       | `string`                                                           | `undefined`            |
+| `excludeData`        | --                     | The data to exclude from the form submit event                         | `string[]`                                                         | `[]`                   |
+| `fetch`              | `fetch`                | Emit the fetch event emitted when component loads                      | `boolean \| string`                                                | `undefined`            |
+| `fetchDataMap`       | `fetch-data-map`       | The map to bind data from fetch response to form data                  | `any`                                                              | `undefined`            |
+| `fetchParams`        | `fetch-params`         | The fetch params                                                       | `any`                                                              | `undefined`            |
+| `formData`           | `form-data`            | The data from the form being filled out                                | `any`                                                              | `{}`                   |
+| `googleMapsKey`      | `google-maps-key`      |                                                                        | `string`                                                           | `undefined`            |
+| `hasChanged`         | `has-changed`          | Has the form fields been changed                                       | `boolean`                                                          | `false`                |
+| `hideControls`       | `hide-controls`        | Should the form controls be hidden?                                    | `boolean`                                                          | `false`                |
+| `loading`            | `loading`              | Is the component currently loading                                     | `boolean`                                                          | `false`                |
+| `method`             | `method`               | The HTTP method to use when submitting the form                        | `string`                                                           | `"post"`               |
+| `name`               | `name`                 | The name of the form used for ID and name                              | `string`                                                           | `undefined`            |
+| `pager`              | `pager`                |                                                                        | `boolean`                                                          | `false`                |
+| `resetButton`        | `reset-button`         | What the reset button says                                             | `string`                                                           | `"Cancel"`             |
+| `resetButtonColor`   | `reset-button-color`   | What color the reset button is                                         | `string`                                                           | `"dark"`               |
+| `resetButtonFill`    | `reset-button-fill`    | What fill option to use for the reset button                           | `"clear" \| "default" \| "outline" \| "solid"`                     | `"clear"`              |
+| `scrollbar`          | `scrollbar`            |                                                                        | `boolean`                                                          | `false`                |
+| `showControls`       | `show-controls`        |                                                                        | `boolean`                                                          | `false`                |
+| `slidesOptions`      | `slides-options`       | A list of options for SwiperJS                                         | `any`                                                              | `{ autoHeight: true }` |
+| `steps`              | --                     |                                                                        | `{ beforeHTML?: string; fields?: Field[]; afterHTML?: string; }[]` | `[]`                   |
+| `stripeElements`     | `stripe-elements`      |                                                                        | `any`                                                              | `undefined`            |
+| `stripeKey`          | `stripe-key`           |                                                                        | `string`                                                           | `undefined`            |
+| `submitButton`       | `submit-button`        | What the save button says                                              | `string`                                                           | `"Save"`               |
+| `submitButtonColor`  | `submit-button-color`  | What color the submit button is                                        | `string`                                                           | `"primary"`            |
+| `submitButtonFill`   | `submit-button-fill`   | What fill option to use for the submit button                          | `"clear" \| "default" \| "outline" \| "solid"`                     | `"solid"`              |
 
 
 ## Dependencies
