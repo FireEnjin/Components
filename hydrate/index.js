@@ -59118,6 +59118,51 @@ class flow {
     this.steps = [];
     this.showControls = false;
   }
+  async getActiveIndex() {
+    return this.slidesEl.getActiveIndex();
+  }
+  async getSwiper() {
+    return this.slidesEl.getSwiper();
+  }
+  async isBeginning() {
+    return this.slidesEl.isBeginning();
+  }
+  async isEnd() {
+    return this.slidesEl.isEnd();
+  }
+  async length() {
+    return this.slidesEl.length();
+  }
+  async lockSwipeToNext(lock) {
+    return this.slidesEl.lockSwipeToNext(lock);
+  }
+  async lockSwipeToPrev(lock) {
+    return this.slidesEl.lockSwipeToPrev(lock);
+  }
+  async lockSwipes(lock) {
+    return this.slidesEl.lockSwipes(lock);
+  }
+  async slideNext(speed, runCallbacks) {
+    return this.slidesEl.slideNext(speed, runCallbacks);
+  }
+  async slidePrev(speed, runCallbacks) {
+    return this.slidesEl.slidePrev(speed, runCallbacks);
+  }
+  async slideTo(index, speed, runCallbacks) {
+    return this.slidesEl.slideTo(index, speed, runCallbacks);
+  }
+  async startAutoplay() {
+    return this.slidesEl.startAutoplay();
+  }
+  async stopAutoplay() {
+    return this.slidesEl.stopAutoplay();
+  }
+  async update() {
+    return this.slidesEl.update();
+  }
+  async updateAutoHeight(speed) {
+    return this.slidesEl.updateAutoHeight(speed);
+  }
   renderField(field) {
     if ((field === null || field === void 0 ? void 0 : field.type) === "file") {
       return (hAsync("fireenjin-input-file", { path: field === null || field === void 0 ? void 0 : field.path, icon: field === null || field === void 0 ? void 0 : field.icon, label: field === null || field === void 0 ? void 0 : field.label, fileName: field === null || field === void 0 ? void 0 : field.fileName, name: field === null || field === void 0 ? void 0 : field.name, accept: field === null || field === void 0 ? void 0 : field.accept, defaultValue: field === null || field === void 0 ? void 0 : field.defaultValue, value: field === null || field === void 0 ? void 0 : field.value, documentId: field === null || field === void 0 ? void 0 : field.documentId, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, uploadData: field === null || field === void 0 ? void 0 : field.uploadData, disabled: !!(field === null || field === void 0 ? void 0 : field.disabled) }));
@@ -59181,7 +59226,22 @@ class flow {
       "showControls": [4, "show-controls"],
       "googleMapsKey": [1, "google-maps-key"],
       "stripeKey": [1, "stripe-key"],
-      "stripeElements": [8, "stripe-elements"]
+      "stripeElements": [8, "stripe-elements"],
+      "getActiveIndex": [64],
+      "getSwiper": [64],
+      "isBeginning": [64],
+      "isEnd": [64],
+      "length": [64],
+      "lockSwipeToNext": [64],
+      "lockSwipeToPrev": [64],
+      "lockSwipes": [64],
+      "slideNext": [64],
+      "slidePrev": [64],
+      "slideTo": [64],
+      "startAutoplay": [64],
+      "stopAutoplay": [64],
+      "update": [64],
+      "updateAutoHeight": [64]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",

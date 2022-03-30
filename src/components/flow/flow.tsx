@@ -1,4 +1,4 @@
-import { Component, h, Prop } from "@stencil/core";
+import { Component, h, Method, Prop } from "@stencil/core";
 import { Field } from "../../typings";
 
 @Component({
@@ -123,6 +123,81 @@ export class flow {
   @Prop() googleMapsKey: string;
   @Prop() stripeKey: string;
   @Prop() stripeElements: any;
+
+  @Method()
+  async getActiveIndex() {
+    return this.slidesEl.getActiveIndex();
+  }
+
+  @Method()
+  async getSwiper() {
+    return this.slidesEl.getSwiper();
+  }
+
+  @Method()
+  async isBeginning() {
+    return this.slidesEl.isBeginning();
+  }
+
+  @Method()
+  async isEnd() {
+    return this.slidesEl.isEnd();
+  }
+
+  @Method()
+  async length() {
+    return this.slidesEl.length();
+  }
+
+  @Method()
+  async lockSwipeToNext(lock: boolean) {
+    return this.slidesEl.lockSwipeToNext(lock);
+  }
+
+  @Method()
+  async lockSwipeToPrev(lock: boolean) {
+    return this.slidesEl.lockSwipeToPrev(lock);
+  }
+
+  @Method()
+  async lockSwipes(lock: boolean) {
+    return this.slidesEl.lockSwipes(lock);
+  }
+
+  @Method()
+  async slideNext(speed?: number, runCallbacks?: boolean) {
+    return this.slidesEl.slideNext(speed, runCallbacks);
+  }
+
+  @Method()
+  async slidePrev(speed?: number, runCallbacks?: boolean) {
+    return this.slidesEl.slidePrev(speed, runCallbacks);
+  }
+
+  @Method()
+  async slideTo(index: number, speed?: number, runCallbacks?: boolean) {
+    return this.slidesEl.slideTo(index, speed, runCallbacks);
+  }
+
+  @Method()
+  async startAutoplay() {
+    return this.slidesEl.startAutoplay();
+  }
+
+  @Method()
+  async stopAutoplay() {
+    return this.slidesEl.stopAutoplay();
+  }
+
+  @Method()
+  async update() {
+    return this.slidesEl.update();
+  }
+
+  @Method()
+  async updateAutoHeight(speed?: number) {
+    return this.slidesEl.updateAutoHeight(speed);
+  }
 
   renderField(field?: Field) {
     if (field?.type === "file") {
