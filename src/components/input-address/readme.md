@@ -28,6 +28,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [fireenjin-flow](../flow)
+
 ### Depends on
 
 - ion-item
@@ -73,6 +77,7 @@ graph TD;
   ion-alert --> ion-ripple-effect
   ion-alert --> ion-backdrop
   ion-button --> ion-ripple-effect
+  fireenjin-flow --> fireenjin-input-address
   style fireenjin-input-address fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

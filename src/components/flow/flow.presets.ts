@@ -4,9 +4,16 @@ export default {
   default: {
     name: "Default",
     props: {
-      fields: [
+      steps: [
         {
-          label: "WEeee",
+          fields: [
+            {
+              name: "test",
+              label: "Testing",
+              labelPosition: "stacked",
+              placeholder: "wee",
+            },
+          ],
         },
         {
           label: "Twee",

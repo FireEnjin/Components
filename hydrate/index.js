@@ -27882,6 +27882,7 @@ class InputFile {
     this.fireenjinUpload = createEvent(this, "fireenjinUpload", 7);
     this.ionInput = createEvent(this, "ionInput", 7);
     this.type = "file";
+    this.disabled = false;
     /**
      * The endpoint to upload to
      */
@@ -27975,7 +27976,7 @@ class InputFile {
     this.dragOver = false;
   }
   render() {
-    return (hAsync("ion-card", { class: { "drag-over": this.dragOver }, onDragEnter: (event) => this.onDragEnter(event), onDragOver: (event) => this.onDragOver(event), onDrag: (event) => this.onDrag(event), onDrop: (event) => this.onDrop(event), onDragLeave: (event) => this.onDragLeave(event), onClick: () => this.openFile() }, hAsync("ion-item", { lines: "none" }, hAsync("ion-icon", { name: this.icon ? this.icon : "document", slot: "start" }), hAsync("div", null, hAsync("h2", null, this.dragOver
+    return (hAsync("ion-card", { disabled: this.disabled, class: { "drag-over": this.dragOver }, onDragEnter: (event) => this.onDragEnter(event), onDragOver: (event) => this.onDragOver(event), onDrag: (event) => this.onDrag(event), onDrop: (event) => this.onDrop(event), onDragLeave: (event) => this.onDragLeave(event), onClick: () => this.openFile() }, hAsync("ion-item", { lines: "none" }, hAsync("ion-icon", { name: this.icon ? this.icon : "document", slot: "start" }), hAsync("div", null, hAsync("h2", null, this.dragOver
       ? "Drop File Here"
       : this.label
         ? this.label
@@ -27983,7 +27984,7 @@ class InputFile {
       ? this.selectedFile
       : this.defaultValue
         ? this.defaultValue
-        : "Select a letterhead"))), hAsync("input", { type: "file", onChange: (event) => this.selectFile(event), accept: this.accept ? this.accept : null, value: "blah" })));
+        : "Select a letterhead"))), hAsync("input", { disabled: this.disabled, type: "file", onChange: (event) => this.selectFile(event), accept: this.accept ? this.accept : null, value: "blah" })));
   }
   get fileUploaderEl() { return getElement(this); }
   static get watchers() { return {
@@ -28004,6 +28005,7 @@ class InputFile {
       "value": [8],
       "type": [1],
       "documentId": [1, "document-id"],
+      "disabled": [4],
       "endpoint": [1],
       "uploadData": [8, "upload-data"],
       "isLoading": [32],
@@ -59043,29 +59045,139 @@ class flow {
   constructor(hostRef) {
     registerInstance(this, hostRef);
     /**
+     * The data from the form being filled out
+     */
+    this.formData = {};
+    /**
+     * What the save button says
+     */
+    this.submitButton = "Save";
+    /**
+     * What color the submit button is
+     */
+    this.submitButtonColor = "primary";
+    /**
+     * What fill option to use for the submit button
+     */
+    this.submitButtonFill = "solid";
+    /**
+     * What the reset button says
+     */
+    this.resetButton = "Cancel";
+    /**
+     * What color the reset button is
+     */
+    this.resetButtonColor = "dark";
+    /**
+     * What fill option to use for the reset button
+     */
+    this.resetButtonFill = "clear";
+    /**
+     * Should the form controls be hidden?
+     */
+    this.hideControls = false;
+    /**
+     * The data to exclude from the form submit event
+     */
+    this.excludeData = [];
+    /**
+     * Should the form disable the loader on submit
+     */
+    this.disableLoader = false;
+    /**
+     * Is the component currently loading
+     */
+    this.loading = false;
+    /**
+     * Should the enter button binding be disabled
+     */
+    this.disableEnterButton = false;
+    /**
+     * Should the form disable reset
+     */
+    this.disableReset = false;
+    /**
+     * Confirm leaving the page when the form is filled
+     */
+    this.confirmExit = false;
+    /**
+     * Has the form fields been changed
+     */
+    this.hasChanged = false;
+    /**
+     * The HTTP method to use when submitting the form
+     */
+    this.method = "post";
+    /**
      * A list of options for SwiperJS
      * @link https://swiperjs.com/swiper-api#parameters
      */
     this.slidesOptions = { autoHeight: true };
     this.pager = false;
     this.scrollbar = false;
-    this.fields = [];
+    this.steps = [];
     this.showControls = false;
   }
+  renderField(field) {
+    if ((field === null || field === void 0 ? void 0 : field.type) === "file") {
+      return (hAsync("fireenjin-input-file", { path: field === null || field === void 0 ? void 0 : field.path, icon: field === null || field === void 0 ? void 0 : field.icon, label: field === null || field === void 0 ? void 0 : field.label, fileName: field === null || field === void 0 ? void 0 : field.fileName, name: field === null || field === void 0 ? void 0 : field.name, accept: field === null || field === void 0 ? void 0 : field.accept, defaultValue: field === null || field === void 0 ? void 0 : field.defaultValue, value: field === null || field === void 0 ? void 0 : field.value, documentId: field === null || field === void 0 ? void 0 : field.documentId, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, uploadData: field === null || field === void 0 ? void 0 : field.uploadData, disabled: !!(field === null || field === void 0 ? void 0 : field.disabled) }));
+    }
+    else if ((field === null || field === void 0 ? void 0 : field.type) === "photo") {
+      return (hAsync("fireenjin-input-photo", { path: field === null || field === void 0 ? void 0 : field.path, fileName: field === null || field === void 0 ? void 0 : field.fileName, name: field === null || field === void 0 ? void 0 : field.name, value: field === null || field === void 0 ? void 0 : field.value, documentId: field === null || field === void 0 ? void 0 : field.documentId, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), fallback: field === null || field === void 0 ? void 0 : field.fallback, showButton: !!(field === null || field === void 0 ? void 0 : field.showButton), buttonText: field === null || field === void 0 ? void 0 : field.buttonText, initials: field === null || field === void 0 ? void 0 : field.initials, multiple: !!(field === null || field === void 0 ? void 0 : field.multiple), resize: !!(field === null || field === void 0 ? void 0 : field.resize), loading: !!(field === null || field === void 0 ? void 0 : field.loading) }));
+    }
+    else if ((field === null || field === void 0 ? void 0 : field.type) === "address") {
+      return (hAsync("fireenjin-input-address", { googleMapsKey: (field === null || field === void 0 ? void 0 : field.googleMapsKey) || this.googleMapsKey, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, value: field === null || field === void 0 ? void 0 : field.value, label: field === null || field === void 0 ? void 0 : field.label, required: !!(field === null || field === void 0 ? void 0 : field.required), name: field === null || field === void 0 ? void 0 : field.name, lines: field === null || field === void 0 ? void 0 : field.lines, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition }));
+    }
+    else if ((field === null || field === void 0 ? void 0 : field.type) === "select") {
+      return (hAsync("fireenjin-select", { disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), cancelText: field === null || field === void 0 ? void 0 : field.cancelText, okText: field === null || field === void 0 ? void 0 : field.okText, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, name: field === null || field === void 0 ? void 0 : field.name, selectedText: field === null || field === void 0 ? void 0 : field.selectedText, multiple: !!(field === null || field === void 0 ? void 0 : field.multiple), interface: field === null || field === void 0 ? void 0 : field.interface, interfaceOptions: field === null || field === void 0 ? void 0 : field.interfaceOptions, compareWith: field === null || field === void 0 ? void 0 : field.compareWith, value: field === null || field === void 0 ? void 0 : field.value, icon: field === null || field === void 0 ? void 0 : field.icon, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, header: field === null || field === void 0 ? void 0 : field.header, subHeader: field === null || field === void 0 ? void 0 : field.subHeader, message: field === null || field === void 0 ? void 0 : field.message, orderBy: field === null || field === void 0 ? void 0 : field.orderBy, dataPropsMap: field === null || field === void 0 ? void 0 : field.dataPropsMap, optionEl: field === null || field === void 0 ? void 0 : field.optionEl, limit: field === null || field === void 0 ? void 0 : field.limit, params: field === null || field === void 0 ? void 0 : field.params, query: field === null || field === void 0 ? void 0 : field.query, label: field === null || field === void 0 ? void 0 : field.label, options: field === null || field === void 0 ? void 0 : field.options, required: !!(field === null || field === void 0 ? void 0 : field.required), resultsKey: field === null || field === void 0 ? void 0 : field.resultsKey, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition, lines: field === null || field === void 0 ? void 0 : field.lines }));
+    }
+    else if ((field === null || field === void 0 ? void 0 : field.type) === "search") {
+      return (hAsync("fireenjin-input-search", { name: field === null || field === void 0 ? void 0 : field.name, label: field === null || field === void 0 ? void 0 : field.label, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, value: field === null || field === void 0 ? void 0 : field.value, required: !!(field === null || field === void 0 ? void 0 : field.required), autofocus: !!(field === null || field === void 0 ? void 0 : field.autofocus), disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), endpoint: field === null || field === void 0 ? void 0 : field.endpoint, dataPropsMap: field === null || field === void 0 ? void 0 : field.dataPropsMap, template: field === null || field === void 0 ? void 0 : field.template, searchParams: field === null || field === void 0 ? void 0 : field.searchParams, iconEnd: field === null || field === void 0 ? void 0 : field.iconRight, iconStart: field === null || field === void 0 ? void 0 : field.iconLeft, results: field === null || field === void 0 ? void 0 : field.results, resultsKey: field === null || field === void 0 ? void 0 : field.resultsKey, lines: field === null || field === void 0 ? void 0 : field.lines, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition }));
+    }
+    else {
+      return (hAsync("fireenjin-input", { type: (field === null || field === void 0 ? void 0 : field.type) || "text", stripeKey: (field === null || field === void 0 ? void 0 : field.stripeKey) || this.stripeKey, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, label: field === null || field === void 0 ? void 0 : field.label, value: field === null || field === void 0 ? void 0 : field.value, required: !!(field === null || field === void 0 ? void 0 : field.required), name: field === null || field === void 0 ? void 0 : field.name, autocomplete: field === null || field === void 0 ? void 0 : field.autocomplete, autocapitalize: field === null || field === void 0 ? void 0 : field.autocapitalize, autocorrect: field === null || field === void 0 ? void 0 : field.autocorrect, autofocus: field === null || field === void 0 ? void 0 : field.autofocus, minlength: field === null || field === void 0 ? void 0 : field.minlength, maxlength: field === null || field === void 0 ? void 0 : field.maxlength, disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), info: field === null || field === void 0 ? void 0 : field.info, edit: !!(field === null || field === void 0 ? void 0 : field.edit), min: field === null || field === void 0 ? void 0 : field.min, max: field === null || field === void 0 ? void 0 : field.max, iconLeft: field === null || field === void 0 ? void 0 : field.iconLeft, iconRight: field === null || field === void 0 ? void 0 : field.iconRight, silence: field === null || field === void 0 ? void 0 : field.silence, step: field === null || field === void 0 ? void 0 : field.step, actionOptions: field === null || field === void 0 ? void 0 : field.actionOptions, pattern: field === null || field === void 0 ? void 0 : field.pattern, clearInput: field === null || field === void 0 ? void 0 : field.clearInput, multiple: !!(field === null || field === void 0 ? void 0 : field.multiple), readOnly: !!(field === null || field === void 0 ? void 0 : field.readOnly), spellCheck: !!(field === null || field === void 0 ? void 0 : field.spellCheck), inputMode: field === null || field === void 0 ? void 0 : field.inputMode, stripeElements: (field === null || field === void 0 ? void 0 : field.stripeElements) || this.stripeElements, lines: field === null || field === void 0 ? void 0 : field.lines, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition }));
+    }
+  }
   render() {
-    return (hAsync("fireenjin-form", { endpoint: this.endpoint, hideControls: !this.showControls, disableLoader: true }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.fields || []).map((field) => (hAsync("ion-slide", null, hAsync("div", null, (field === null || field === void 0 ? void 0 : field.label) || "None")))))));
+    return (hAsync("fireenjin-form", { name: this.name, formData: this.formData, submitButton: this.submitButton, submitButtonColor: this.submitButtonColor, submitButtonFill: this.submitButtonFill, resetButton: this.resetButton, resetButtonColor: this.resetButtonColor, resetButtonFill: this.resetButtonFill, documentId: this.documentId, endpoint: this.endpoint, hideControls: !this.showControls, excludeData: this.excludeData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: this.disableEnterButton, disableReset: this.disableReset, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => (hAsync("ion-slide", null, hAsync("div", null, ((step === null || step === void 0 ? void 0 : step.fields) || []).map(this.renderField.bind(this)))))))));
   }
   static get style() { return flowCss; }
   static get cmpMeta() { return {
     "$flags$": 0,
     "$tagName$": "fireenjin-flow",
     "$members$": {
+      "name": [1],
+      "formData": [1032, "form-data"],
+      "submitButton": [1, "submit-button"],
+      "submitButtonColor": [1, "submit-button-color"],
+      "submitButtonFill": [1, "submit-button-fill"],
+      "resetButton": [1, "reset-button"],
+      "resetButtonColor": [1, "reset-button-color"],
+      "resetButtonFill": [1, "reset-button-fill"],
+      "hideControls": [4, "hide-controls"],
+      "endpoint": [1],
+      "documentId": [1, "document-id"],
+      "excludeData": [16],
+      "beforeSubmit": [16],
+      "disableLoader": [4, "disable-loader"],
+      "loading": [1028],
+      "disableEnterButton": [4, "disable-enter-button"],
+      "disableReset": [4, "disable-reset"],
+      "confirmExit": [4, "confirm-exit"],
+      "hasChanged": [1028, "has-changed"],
+      "method": [1],
+      "action": [1],
+      "fetch": [8],
+      "fetchParams": [8, "fetch-params"],
+      "fetchDataMap": [8, "fetch-data-map"],
       "slidesOptions": [8, "slides-options"],
       "pager": [4],
       "scrollbar": [4],
-      "fields": [16],
-      "endpoint": [1],
-      "showControls": [4, "show-controls"]
+      "steps": [16],
+      "showControls": [4, "show-controls"],
+      "googleMapsKey": [1, "google-maps-key"],
+      "stripeKey": [1, "stripe-key"],
+      "stripeElements": [8, "stripe-elements"]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",

@@ -5,20 +5,21 @@
 
 ## Properties
 
-| Property       | Attribute       | Description               | Type     | Default     |
-| -------------- | --------------- | ------------------------- | -------- | ----------- |
-| `accept`       | `accept`        |                           | `string` | `undefined` |
-| `defaultValue` | `default-value` |                           | `any`    | `undefined` |
-| `documentId`   | `document-id`   |                           | `string` | `undefined` |
-| `endpoint`     | `endpoint`      | The endpoint to upload to | `string` | `"upload"`  |
-| `fileName`     | `file-name`     |                           | `string` | `undefined` |
-| `icon`         | `icon`          |                           | `string` | `undefined` |
-| `label`        | `label`         |                           | `string` | `undefined` |
-| `name`         | `name`          |                           | `string` | `undefined` |
-| `path`         | `path`          |                           | `string` | `undefined` |
-| `type`         | `type`          |                           | `string` | `"file"`    |
-| `uploadData`   | `upload-data`   |                           | `any`    | `{}`        |
-| `value`        | `value`         |                           | `any`    | `undefined` |
+| Property       | Attribute       | Description               | Type      | Default     |
+| -------------- | --------------- | ------------------------- | --------- | ----------- |
+| `accept`       | `accept`        |                           | `string`  | `undefined` |
+| `defaultValue` | `default-value` |                           | `any`     | `undefined` |
+| `disabled`     | `disabled`      |                           | `boolean` | `false`     |
+| `documentId`   | `document-id`   |                           | `string`  | `undefined` |
+| `endpoint`     | `endpoint`      | The endpoint to upload to | `string`  | `"upload"`  |
+| `fileName`     | `file-name`     |                           | `string`  | `undefined` |
+| `icon`         | `icon`          |                           | `string`  | `undefined` |
+| `label`        | `label`         |                           | `string`  | `undefined` |
+| `name`         | `name`          |                           | `string`  | `undefined` |
+| `path`         | `path`          |                           | `string`  | `undefined` |
+| `type`         | `type`          |                           | `string`  | `"file"`    |
+| `uploadData`   | `upload-data`   |                           | `any`     | `{}`        |
+| `value`        | `value`         |                           | `any`     | `undefined` |
 
 
 ## Events
@@ -44,6 +45,10 @@ Type: `Promise<any>`
 
 ## Dependencies
 
+### Used by
+
+ - [fireenjin-flow](../flow)
+
 ### Depends on
 
 - ion-card
@@ -60,6 +65,7 @@ graph TD;
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
+  fireenjin-flow --> fireenjin-input-file
   style fireenjin-input-file fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

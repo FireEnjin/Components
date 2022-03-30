@@ -47,6 +47,10 @@ Type: `Promise<boolean>`
 
 ## Dependencies
 
+### Used by
+
+ - [fireenjin-flow](../flow)
+
 ### Depends on
 
 - ion-button
@@ -58,6 +62,7 @@ graph TD;
   fireenjin-input-photo --> ion-button
   fireenjin-input-photo --> ion-icon
   ion-button --> ion-ripple-effect
+  fireenjin-flow --> fireenjin-input-photo
   style fireenjin-input-photo fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

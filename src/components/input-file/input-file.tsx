@@ -29,6 +29,7 @@ export class InputFile implements ComponentInterface {
   @Prop() value: any;
   @Prop() type = "file";
   @Prop() documentId: string;
+  @Prop() disabled = false;
   /**
    * The endpoint to upload to
    */
@@ -146,6 +147,7 @@ export class InputFile implements ComponentInterface {
   render() {
     return (
       <ion-card
+        disabled={this.disabled}
         class={{ "drag-over": this.dragOver }}
         onDragEnter={(event) => this.onDragEnter(event)}
         onDragOver={(event) => this.onDragOver(event)}
@@ -174,6 +176,7 @@ export class InputFile implements ComponentInterface {
           </div>
         </ion-item>
         <input
+          disabled={this.disabled}
           type="file"
           onChange={(event) => this.selectFile(event)}
           accept={this.accept ? this.accept : null}
