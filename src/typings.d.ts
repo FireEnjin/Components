@@ -1,4 +1,4 @@
-import { SelectCompareFn, SelectInterface } from "@ionic/core";
+import { Color, SelectCompareFn, SelectInterface } from "@ionic/core";
 
 export type FieldOption = {
   label?: string;
@@ -6,6 +6,7 @@ export type FieldOption = {
   disabled?: boolean;
   payload?: any;
   slot?: string;
+  color?: Color;
 };
 
 export type Control = {

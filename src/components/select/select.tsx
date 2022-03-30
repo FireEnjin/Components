@@ -81,7 +81,7 @@ export class Select implements ComponentInterface {
   @Prop() message?: string;
   @Prop() orderBy?: string;
   @Prop() dataPropsMap?: any;
-  @Prop() optionEl?: (result: any) => HTMLIonSelectOptionElement;
+  @Prop() optionEl?: (result: any) => any;
   @Prop() limit = 15;
   @Prop() params?: any;
   @Prop() query?: string;

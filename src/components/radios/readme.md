@@ -8,14 +8,32 @@
 | Property              | Attribute               | Description | Type                                 | Default     |
 | --------------------- | ----------------------- | ----------- | ------------------------------------ | ----------- |
 | `allowEmptySelection` | `allow-empty-selection` |             | `boolean`                            | `false`     |
+| `color`               | `color`                 |             | `string`                             | `undefined` |
+| `dataPropsMap`        | `data-props-map`        |             | `any`                                | `undefined` |
 | `disabled`            | `disabled`              |             | `boolean`                            | `false`     |
+| `endpoint`            | `endpoint`              |             | `string`                             | `undefined` |
 | `label`               | `label`                 |             | `string`                             | `undefined` |
 | `labelPosition`       | `label-position`        |             | `"fixed" \| "floating" \| "stacked"` | `undefined` |
+| `limit`               | `limit`                 |             | `number`                             | `15`        |
 | `lines`               | `lines`                 |             | `"full" \| "inset" \| "none"`        | `"none"`    |
+| `mode`                | `mode`                  |             | `"ios" \| "md"`                      | `undefined` |
 | `name`                | `name`                  |             | `string`                             | `undefined` |
+| `optionEl`            | --                      |             | `(result: any) => any`               | `undefined` |
 | `options`             | --                      |             | `FieldOption[]`                      | `undefined` |
+| `orderBy`             | `order-by`              |             | `string`                             | `undefined` |
+| `params`              | `params`                |             | `any`                                | `undefined` |
+| `query`               | `query`                 |             | `string`                             | `undefined` |
+| `radioSlot`           | `radio-slot`            |             | `string`                             | `"start"`   |
 | `required`            | `required`              |             | `any`                                | `undefined` |
+| `resultsKey`          | `results-key`           |             | `string`                             | `undefined` |
 | `value`               | `value`                 |             | `any`                                | `undefined` |
+
+
+## Events
+
+| Event            | Description | Type                               |
+| ---------------- | ----------- | ---------------------------------- |
+| `fireenjinFetch` |             | `CustomEvent<FireEnjinFetchEvent>` |
 
 
 ## Dependencies
