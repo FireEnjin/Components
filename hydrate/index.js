@@ -30421,13 +30421,13 @@ class ItemSliding {
     });
   }
   /**
-   * Close the sliding item. Items can also be closed from the [List](../list).
+   * Close the sliding item. Items can also be closed from the [List](./list).
    */
   async close() {
     this.setOpenAmount(0, true);
   }
   /**
-   * Close all of the sliding items in the list. Items can also be closed from the [List](../list).
+   * Close all of the sliding items in the list. Items can also be closed from the [List](./list).
    */
   async closeOpened() {
     if (openSlidingItem !== undefined) {
@@ -54539,9 +54539,9 @@ class Select {
     this.interface = 'alert';
     /**
      * Any additional options that the `alert`, `action-sheet` or `popover` interface
-     * can take. See the [ion-alert docs](../alert), the
-     * [ion-action-sheet docs](../action-sheet) and the
-     * [ion-popover docs](../popover) for the
+     * can take. See the [ion-alert docs](./alert), the
+     * [ion-action-sheet docs](./action-sheet) and the
+     * [ion-popover docs](./popover) for the
      * create options for each interface.
      *
      * Note: `interfaceOptions` will not override `inputs` or `buttons` with the `alert` interface.
@@ -59029,7 +59029,7 @@ const VirtualProxy = ({ dom }, children, utils) => {
   });
 };
 
-const flowCss = "";
+const flowCss = "fireenjin-flow .flow-controls{display:flex;justify-content:space-between}";
 
 class flow {
   constructor(hostRef) {
@@ -59039,29 +59039,32 @@ class flow {
      */
     this.formData = {};
     /**
-     * What the save button says
+     * The next button for the slider
      */
-    this.submitButton = "Save";
+    this.nextButton = {
+      label: "Next",
+      color: "primary",
+      fill: "clear",
+      icon: "chevron-forward-circle-outline",
+    };
     /**
-     * What color the submit button is
+     * The prev button for the slider
      */
-    this.submitButtonColor = "primary";
+    this.prevButton = {
+      label: "Back",
+      color: "medium",
+      fill: "clear",
+      icon: "chevron-back-circle-outline",
+    };
     /**
-     * What fill option to use for the submit button
+     * The save button for the flow
      */
-    this.submitButtonFill = "solid";
-    /**
-     * What the reset button says
-     */
-    this.resetButton = "Cancel";
-    /**
-     * What color the reset button is
-     */
-    this.resetButtonColor = "dark";
-    /**
-     * What fill option to use for the reset button
-     */
-    this.resetButtonFill = "clear";
+    this.saveButton = {
+      label: "Save",
+      fill: "solid",
+      color: "primary",
+      icon: "checkmark-circle-outline",
+    };
     /**
      * Should the form controls be hidden?
      */
@@ -59083,10 +59086,6 @@ class flow {
      */
     this.disableEnterButton = false;
     /**
-     * Should the form disable reset
-     */
-    this.disableReset = false;
-    /**
      * Confirm leaving the page when the form is filled
      */
     this.confirmExit = false;
@@ -59102,11 +59101,33 @@ class flow {
      * A list of options for SwiperJS
      * @link https://swiperjs.com/swiper-api#parameters
      */
-    this.slidesOptions = { autoHeight: true };
+    this.slidesOptions = { autoHeight: true, allowTouchMove: false };
     this.pager = false;
     this.scrollbar = false;
     this.steps = [];
-    this.showControls = false;
+    this.askConfirmation = false;
+  }
+  async onKeydown(event) {
+    if ((event === null || event === void 0 ? void 0 : event.key) !== "Enter" || this.disableEnterButton)
+      return;
+    this.slideNext();
+  }
+  async onSlideChange() {
+    const currentIndex = await this.getActiveIndex();
+    if (currentIndex === this.steps.length) {
+      this.hideControls = true;
+      if (!this.askConfirmation)
+        this.formEl.submit();
+    }
+    else {
+      this.hideControls = false;
+    }
+    if (currentIndex === 0 && this.prevButton) {
+      this.prevButton = Object.assign(Object.assign({}, this.prevButton), { disabled: true });
+    }
+    else {
+      this.prevButton = Object.assign(Object.assign({}, this.prevButton), { disabled: false });
+    }
   }
   async getActiveIndex() {
     return this.slidesEl.getActiveIndex();
@@ -59136,6 +59157,8 @@ class flow {
     return this.slidesEl.slideNext(speed, runCallbacks);
   }
   async slidePrev(speed, runCallbacks) {
+    if (this.hideControls)
+      this.hideControls = false;
     return this.slidesEl.slidePrev(speed, runCallbacks);
   }
   async slideTo(index, speed, runCallbacks) {
@@ -59164,9 +59187,15 @@ class flow {
   }
   async reset(event) {
     this.formEl.reset(event);
+    if (this.prevButton)
+      this.prevButton.disabled = true;
   }
   async submit(event, options) {
     this.formEl.submit(event, options);
+  }
+  componentWillLoad() {
+    if (this.prevButton)
+      this.prevButton.disabled = true;
   }
   renderField(field) {
     if ((field === null || field === void 0 ? void 0 : field.type) === "file") {
@@ -59192,26 +59221,44 @@ class flow {
     }
   }
   render() {
-    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: this.submitButton, submitButtonColor: this.submitButtonColor, submitButtonFill: this.submitButtonFill, resetButton: this.resetButton, resetButtonColor: this.resetButtonColor, resetButtonFill: this.resetButtonFill, documentId: this.documentId, endpoint: this.endpoint, hideControls: !this.showControls, excludeData: this.excludeData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: this.disableEnterButton, disableReset: this.disableReset, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => (hAsync("ion-slide", null, hAsync("div", null, (step === null || step === void 0 ? void 0 : step.beforeHTML) && hAsync("div", { innerHTML: step.beforeHTML }), ((step === null || step === void 0 ? void 0 : step.fields) || []).map((field) => [
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;
+    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: null, resetButton: null, documentId: this.documentId, endpoint: this.endpoint, hideControls: this.hideControls, excludeData: this.excludeData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: true, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => (hAsync("ion-slide", null, hAsync("div", null, (step === null || step === void 0 ? void 0 : step.beforeHTML) && hAsync("div", { innerHTML: step.beforeHTML }), ((step === null || step === void 0 ? void 0 : step.fields) || []).map((field) => [
       (field === null || field === void 0 ? void 0 : field.beforeHTML) && hAsync("div", { innerHTML: field.beforeHTML }),
       this.renderField(field),
       (field === null || field === void 0 ? void 0 : field.afterHTML) && hAsync("div", { innerHTML: field.afterHTML }),
-    ])), (step === null || step === void 0 ? void 0 : step.afterHTML) && hAsync("div", { innerHTML: step.afterHTML })))))));
+    ])), (step === null || step === void 0 ? void 0 : step.afterHTML) && hAsync("div", { innerHTML: step.afterHTML })))), hAsync("ion-slide", null, this.askConfirmation ? (hAsync("div", { class: "flow-confirmation" }, hAsync("slot", { name: "confirmation" }))) : (hAsync("div", { class: "flow-success" }, hAsync("slot", { name: "success" }))))), !this.hideControls && (hAsync("div", { class: "flow-controls control-pager" }, hAsync("ion-button", { expand: (_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.expand, disabled: !!((_b = this.prevButton) === null || _b === void 0 ? void 0 : _b.disabled), color: (_c = this.prevButton) === null || _c === void 0 ? void 0 : _c.color, fill: (_d = this.prevButton) === null || _d === void 0 ? void 0 : _d.fill, onClick: (event) => {
+        var _a;
+        return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
+          ? this.prevButton.onClick(event)
+          : this.slidePrev();
+      } }, ((_e = this.prevButton) === null || _e === void 0 ? void 0 : _e.icon) && (hAsync("ion-icon", { slot: ((_f = this.prevButton) === null || _f === void 0 ? void 0 : _f.iconSlot) || "start", name: this.prevButton.icon })), ((_g = this.prevButton) === null || _g === void 0 ? void 0 : _g.label) && (hAsync("ion-label", null, this.prevButton.label))), hAsync("ion-button", { expand: (_h = this.nextButton) === null || _h === void 0 ? void 0 : _h.expand, disabled: !!((_j = this.nextButton) === null || _j === void 0 ? void 0 : _j.disabled), color: (_k = this.nextButton) === null || _k === void 0 ? void 0 : _k.color, fill: (_l = this.nextButton) === null || _l === void 0 ? void 0 : _l.fill, onClick: (event) => {
+        var _a;
+        return typeof ((_a = this.nextButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
+          ? this.nextButton.onClick(event)
+          : this.slideNext();
+      } }, ((_m = this.nextButton) === null || _m === void 0 ? void 0 : _m.icon) && (hAsync("ion-icon", { slot: ((_o = this.nextButton) === null || _o === void 0 ? void 0 : _o.iconSlot) || "end", name: this.nextButton.icon })), ((_p = this.nextButton) === null || _p === void 0 ? void 0 : _p.label) && (hAsync("ion-label", null, this.nextButton.label))))), this.hideControls && this.askConfirmation && (hAsync("div", { class: "flow-controls control-confirmation" }, hAsync("ion-button", { expand: (_q = this.prevButton) === null || _q === void 0 ? void 0 : _q.expand, disabled: !!((_r = this.prevButton) === null || _r === void 0 ? void 0 : _r.disabled), color: (_s = this.prevButton) === null || _s === void 0 ? void 0 : _s.color, fill: (_t = this.prevButton) === null || _t === void 0 ? void 0 : _t.fill, onClick: (event) => {
+        var _a;
+        return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
+          ? this.prevButton.onClick(event)
+          : this.slidePrev();
+      } }, ((_u = this.prevButton) === null || _u === void 0 ? void 0 : _u.icon) && (hAsync("ion-icon", { slot: ((_v = this.prevButton) === null || _v === void 0 ? void 0 : _v.iconSlot) || "start", name: this.prevButton.icon })), ((_w = this.prevButton) === null || _w === void 0 ? void 0 : _w.label) && (hAsync("ion-label", null, this.prevButton.label))), hAsync("ion-button", { expand: (_x = this.saveButton) === null || _x === void 0 ? void 0 : _x.expand, disabled: !!((_y = this.saveButton) === null || _y === void 0 ? void 0 : _y.disabled), color: (_z = this.saveButton) === null || _z === void 0 ? void 0 : _z.color, fill: (_0 = this.saveButton) === null || _0 === void 0 ? void 0 : _0.fill, onClick: (event) => {
+        var _a;
+        return typeof ((_a = this.saveButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
+          ? this.saveButton.onClick(event)
+          : this.submit();
+      } }, ((_1 = this.saveButton) === null || _1 === void 0 ? void 0 : _1.icon) && (hAsync("ion-icon", { slot: ((_2 = this.saveButton) === null || _2 === void 0 ? void 0 : _2.iconSlot) || "end", name: this.saveButton.icon })), ((_3 = this.saveButton) === null || _3 === void 0 ? void 0 : _3.label) && (hAsync("ion-label", null, this.saveButton.label)))))));
   }
   static get style() { return flowCss; }
   static get cmpMeta() { return {
-    "$flags$": 0,
+    "$flags$": 4,
     "$tagName$": "fireenjin-flow",
     "$members$": {
       "name": [1],
       "formData": [1032, "form-data"],
-      "submitButton": [1, "submit-button"],
-      "submitButtonColor": [1, "submit-button-color"],
-      "submitButtonFill": [1, "submit-button-fill"],
-      "resetButton": [1, "reset-button"],
-      "resetButtonColor": [1, "reset-button-color"],
-      "resetButtonFill": [1, "reset-button-fill"],
-      "hideControls": [4, "hide-controls"],
+      "nextButton": [16],
+      "prevButton": [16],
+      "saveButton": [16],
+      "hideControls": [1028, "hide-controls"],
       "endpoint": [1],
       "documentId": [1, "document-id"],
       "excludeData": [16],
@@ -59219,7 +59266,6 @@ class flow {
       "disableLoader": [4, "disable-loader"],
       "loading": [1028],
       "disableEnterButton": [4, "disable-enter-button"],
-      "disableReset": [4, "disable-reset"],
       "confirmExit": [4, "confirm-exit"],
       "hasChanged": [1028, "has-changed"],
       "method": [1],
@@ -59231,10 +59277,10 @@ class flow {
       "pager": [4],
       "scrollbar": [4],
       "steps": [16],
-      "showControls": [4, "show-controls"],
       "googleMapsKey": [1, "google-maps-key"],
       "stripeKey": [1, "stripe-key"],
       "stripeElements": [8, "stripe-elements"],
+      "askConfirmation": [4, "ask-confirmation"],
       "getActiveIndex": [64],
       "getSwiper": [64],
       "isBeginning": [64],
@@ -59256,7 +59302,7 @@ class flow {
       "reset": [64],
       "submit": [64]
     },
-    "$listeners$": undefined,
+    "$listeners$": [[0, "keydown", "onKeydown"], [0, "ionSlideDidChange", "onSlideChange"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }

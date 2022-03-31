@@ -17,6 +17,7 @@ export default {
   default: {
     name: "Default",
     props: {
+      askConfirmation: true,
       steps: [
         {
           fields: [

@@ -1,4 +1,5 @@
-import { Component, h, Method, Prop } from "@stencil/core";
+import { Color } from "@ionic/core";
+import { Component, h, Listen, Method, Prop } from "@stencil/core";
 import { Field } from "../../typings";
 
 @Component({
@@ -17,33 +18,66 @@ export class flow {
    */
   @Prop({ mutable: true }) formData: any = {};
   /**
-   * What the save button says
+   * The next button for the slider
    */
-  @Prop() submitButton = "Save";
+  @Prop() nextButton: {
+    expand?: string;
+    label?: string;
+    color?: Color;
+    fill?: "clear" | "outline" | "solid" | "default";
+    icon?: string;
+    iconSlot?: string;
+    onClick?: (event) => void;
+    disabled?: boolean;
+    shape?: "round";
+  } = {
+    label: "Next",
+    color: "primary",
+    fill: "clear",
+    icon: "chevron-forward-circle-outline",
+  };
   /**
-   * What color the submit button is
+   * The prev button for the slider
    */
-  @Prop() submitButtonColor = "primary";
+  @Prop() prevButton: {
+    expand?: string;
+    label?: string;
+    color?: Color;
+    fill?: "clear" | "outline" | "solid" | "default";
+    icon?: string;
+    iconSlot?: string;
+    onClick?: (event) => void;
+    disabled?: boolean;
+    shape?: "round";
+  } = {
+    label: "Back",
+    color: "medium",
+    fill: "clear",
+    icon: "chevron-back-circle-outline",
+  };
   /**
-   * What fill option to use for the submit button
+   * The save button for the flow
    */
-  @Prop() submitButtonFill: "clear" | "outline" | "solid" | "default" = "solid";
-  /**
-   * What the reset button says
-   */
-  @Prop() resetButton = "Cancel";
-  /**
-   * What color the reset button is
-   */
-  @Prop() resetButtonColor = "dark";
-  /**
-   * What fill option to use for the reset button
-   */
-  @Prop() resetButtonFill: "clear" | "outline" | "solid" | "default" = "clear";
+  @Prop() saveButton: {
+    expand?: string;
+    label?: string;
+    color?: Color;
+    fill?: "clear" | "outline" | "solid" | "default";
+    icon?: string;
+    iconSlot?: string;
+    onClick?: (event) => void;
+    disabled?: boolean;
+    shape?: "round";
+  } = {
+    label: "Save",
+    fill: "solid",
+    color: "primary",
+    icon: "checkmark-circle-outline",
+  };
   /**
    * Should the form controls be hidden?
    */
-  @Prop() hideControls = false;
+  @Prop({ mutable: true }) hideControls = false;
   /**
    * The endpoint that form submission should link to
    */
@@ -72,10 +106,6 @@ export class flow {
    * Should the enter button binding be disabled
    */
   @Prop() disableEnterButton = false;
-  /**
-   * Should the form disable reset
-   */
-  @Prop() disableReset = false;
   /**
    * Confirm leaving the page when the form is filled
    */
@@ -111,7 +141,7 @@ export class flow {
    * A list of options for SwiperJS
    * @link https://swiperjs.com/swiper-api#parameters
    */
-  @Prop() slidesOptions: any = { autoHeight: true };
+  @Prop() slidesOptions: any = { autoHeight: true, allowTouchMove: false };
   @Prop() pager = false;
   @Prop() scrollbar = false;
   @Prop() steps: {
@@ -119,10 +149,32 @@ export class flow {
     fields?: Field[];
     afterHTML?: string;
   }[] = [];
-  @Prop() showControls = false;
   @Prop() googleMapsKey: string;
   @Prop() stripeKey: string;
   @Prop() stripeElements: any;
+  @Prop() askConfirmation = false;
+
+  @Listen("keydown")
+  async onKeydown(event) {
+    if (event?.key !== "Enter" || this.disableEnterButton) return;
+    this.slideNext();
+  }
+
+  @Listen("ionSlideDidChange")
+  async onSlideChange() {
+    const currentIndex = await this.getActiveIndex();
+    if (currentIndex === this.steps.length) {
+      this.hideControls = true;
+      if (!this.askConfirmation) this.formEl.submit();
+    } else {
+      this.hideControls = false;
+    }
+    if (currentIndex === 0 && this.prevButton) {
+      this.prevButton = { ...this.prevButton, disabled: true };
+    } else {
+      this.prevButton = { ...this.prevButton, disabled: false };
+    }
+  }
 
   @Method()
   async getActiveIndex() {
@@ -171,6 +223,7 @@ export class flow {
 
   @Method()
   async slidePrev(speed?: number, runCallbacks?: boolean) {
+    if (this.hideControls) this.hideControls = false;
     return this.slidesEl.slidePrev(speed, runCallbacks);
   }
 
@@ -217,11 +270,16 @@ export class flow {
   @Method()
   async reset(event?: any) {
     this.formEl.reset(event);
+    if (this.prevButton) this.prevButton.disabled = true;
   }
 
   @Method()
   async submit(event?: any, options?: any) {
     this.formEl.submit(event, options);
+  }
+
+  componentWillLoad() {
+    if (this.prevButton) this.prevButton.disabled = true;
   }
 
   renderField(field?: Field) {
@@ -396,21 +454,16 @@ export class flow {
         ref={(el) => (this.formEl = el)}
         name={this.name}
         formData={this.formData}
-        submitButton={this.submitButton}
-        submitButtonColor={this.submitButtonColor}
-        submitButtonFill={this.submitButtonFill}
-        resetButton={this.resetButton}
-        resetButtonColor={this.resetButtonColor}
-        resetButtonFill={this.resetButtonFill}
+        submitButton={null}
+        resetButton={null}
         documentId={this.documentId}
         endpoint={this.endpoint}
-        hideControls={!this.showControls}
+        hideControls={this.hideControls}
         excludeData={this.excludeData}
         beforeSubmit={this.beforeSubmit}
         disableLoader={this.disableLoader}
         loading={this.loading}
-        disableEnterButton={this.disableEnterButton}
-        disableReset={this.disableReset}
+        disableEnterButton
         confirmExit={this.confirmExit}
         hasChanged={this.hasChanged}
         method={this.method}
@@ -438,7 +491,110 @@ export class flow {
               {step?.afterHTML && <div innerHTML={step.afterHTML} />}
             </ion-slide>
           ))}
+          <ion-slide>
+            {this.askConfirmation ? (
+              <div class="flow-confirmation">
+                <slot name="confirmation" />
+              </div>
+            ) : (
+              <div class="flow-success">
+                <slot name="success" />
+              </div>
+            )}
+          </ion-slide>
         </ion-slides>
+        {!this.hideControls && (
+          <div class="flow-controls control-pager">
+            <ion-button
+              expand={this.prevButton?.expand}
+              disabled={!!this.prevButton?.disabled}
+              color={this.prevButton?.color}
+              fill={this.prevButton?.fill}
+              onClick={(event) =>
+                typeof this.prevButton?.onClick === "function"
+                  ? this.prevButton.onClick(event)
+                  : this.slidePrev()
+              }
+            >
+              {this.prevButton?.icon && (
+                <ion-icon
+                  slot={this.prevButton?.iconSlot || "start"}
+                  name={this.prevButton.icon}
+                />
+              )}
+              {this.prevButton?.label && (
+                <ion-label>{this.prevButton.label}</ion-label>
+              )}
+            </ion-button>
+            <ion-button
+              expand={this.nextButton?.expand}
+              disabled={!!this.nextButton?.disabled}
+              color={this.nextButton?.color}
+              fill={this.nextButton?.fill}
+              onClick={(event) =>
+                typeof this.nextButton?.onClick === "function"
+                  ? this.nextButton.onClick(event)
+                  : this.slideNext()
+              }
+            >
+              {this.nextButton?.icon && (
+                <ion-icon
+                  slot={this.nextButton?.iconSlot || "end"}
+                  name={this.nextButton.icon}
+                />
+              )}
+              {this.nextButton?.label && (
+                <ion-label>{this.nextButton.label}</ion-label>
+              )}
+            </ion-button>
+          </div>
+        )}
+        {this.hideControls && this.askConfirmation && (
+          <div class="flow-controls control-confirmation">
+            <ion-button
+              expand={this.prevButton?.expand}
+              disabled={!!this.prevButton?.disabled}
+              color={this.prevButton?.color}
+              fill={this.prevButton?.fill}
+              onClick={(event) =>
+                typeof this.prevButton?.onClick === "function"
+                  ? this.prevButton.onClick(event)
+                  : this.slidePrev()
+              }
+            >
+              {this.prevButton?.icon && (
+                <ion-icon
+                  slot={this.prevButton?.iconSlot || "start"}
+                  name={this.prevButton.icon}
+                />
+              )}
+              {this.prevButton?.label && (
+                <ion-label>{this.prevButton.label}</ion-label>
+              )}
+            </ion-button>
+            <ion-button
+              expand={this.saveButton?.expand}
+              disabled={!!this.saveButton?.disabled}
+              color={this.saveButton?.color}
+              fill={this.saveButton?.fill}
+              onClick={(event) =>
+                typeof this.saveButton?.onClick === "function"
+                  ? this.saveButton.onClick(event)
+                  : this.submit()
+              }
+            >
+              {this.saveButton?.icon && (
+                <ion-icon
+                  slot={this.saveButton?.iconSlot || "end"}
+                  name={this.saveButton.icon}
+                />
+              )}
+              {this.saveButton?.label && (
+                <ion-label>{this.saveButton.label}</ion-label>
+              )}
+            </ion-button>
+          </div>
+        )}
       </fireenjin-form>
     );
   }
