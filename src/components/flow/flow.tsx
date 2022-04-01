@@ -138,6 +138,10 @@ export class flow {
    */
   @Prop() fetchDataMap: any;
   /**
+   * The result key to use for formData
+   */
+  @Prop() fetchKey?: string;
+  /**
    * A list of options for SwiperJS
    * @link https://swiperjs.com/swiper-api#parameters
    */
@@ -473,6 +477,7 @@ export class flow {
         fetch={this.fetch}
         fetchParams={this.fetchParams}
         fetchDataMap={this.fetchDataMap}
+        fetchKey={this.fetchKey}
       >
         <ion-slides
           ref={(el) => (this.slidesEl = el)}
