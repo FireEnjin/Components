@@ -148,6 +148,8 @@ export class flow {
     beforeHTML?: string;
     fields?: Field[];
     afterHTML?: string;
+    component?: string;
+    componentProps?: any;
   }[] = [];
   @Prop() googleMapsKey: string;
   @Prop() stripeKey: string;
@@ -158,6 +160,12 @@ export class flow {
   async onKeydown(event) {
     if (event?.key !== "Enter" || this.disableEnterButton) return;
     this.slideNext();
+  }
+
+  @Listen("fireenjinSuccess")
+  async onSuccess(event) {
+    if (event?.detail?.name === this.name) {
+    }
   }
 
   @Listen("ionSlideDidChange")
@@ -478,19 +486,25 @@ export class flow {
           options={this.slidesOptions}
           scrollbar={this.scrollbar}
         >
-          {(this.steps || []).map((step) => (
-            <ion-slide>
-              <div>
-                {step?.beforeHTML && <div innerHTML={step.beforeHTML} />}
-                {(step?.fields || []).map((field) => [
-                  field?.beforeHTML && <div innerHTML={field.beforeHTML} />,
-                  this.renderField(field),
-                  field?.afterHTML && <div innerHTML={field.afterHTML} />,
-                ])}
-              </div>
-              {step?.afterHTML && <div innerHTML={step.afterHTML} />}
-            </ion-slide>
-          ))}
+          {(this.steps || []).map((step) => {
+            const StepComponent = step?.component || null;
+            return (
+              <ion-slide>
+                <div>
+                  {step?.beforeHTML && <div innerHTML={step.beforeHTML} />}
+                  {StepComponent && (
+                    <StepComponent {...(step?.componentProps || {})} />
+                  )}
+                  {(step?.fields || []).map((field) => [
+                    field?.beforeHTML && <div innerHTML={field.beforeHTML} />,
+                    this.renderField(field),
+                    field?.afterHTML && <div innerHTML={field.afterHTML} />,
+                  ])}
+                </div>
+                {step?.afterHTML && <div innerHTML={step.afterHTML} />}
+              </ion-slide>
+            );
+          })}
           <ion-slide>
             {this.askConfirmation ? (
               <div class="flow-confirmation">

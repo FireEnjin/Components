@@ -59110,6 +59110,8 @@ class flow {
       return;
     this.slideNext();
   }
+  async onSuccess(event) {
+  }
   async onSlideChange() {
     const currentIndex = await this.getActiveIndex();
     if (currentIndex === this.steps.length) {
@@ -59220,11 +59222,14 @@ class flow {
   }
   render() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;
-    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: null, resetButton: null, documentId: this.documentId, endpoint: this.endpoint, hideControls: this.hideControls, excludeData: this.excludeData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: true, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => (hAsync("ion-slide", null, hAsync("div", null, (step === null || step === void 0 ? void 0 : step.beforeHTML) && hAsync("div", { innerHTML: step.beforeHTML }), ((step === null || step === void 0 ? void 0 : step.fields) || []).map((field) => [
-      (field === null || field === void 0 ? void 0 : field.beforeHTML) && hAsync("div", { innerHTML: field.beforeHTML }),
-      this.renderField(field),
-      (field === null || field === void 0 ? void 0 : field.afterHTML) && hAsync("div", { innerHTML: field.afterHTML }),
-    ])), (step === null || step === void 0 ? void 0 : step.afterHTML) && hAsync("div", { innerHTML: step.afterHTML })))), hAsync("ion-slide", null, this.askConfirmation ? (hAsync("div", { class: "flow-confirmation" }, hAsync("slot", { name: "confirmation" }))) : (hAsync("div", { class: "flow-success" }, hAsync("slot", { name: "success" }))))), !this.hideControls && (hAsync("div", { class: "flow-controls control-pager" }, hAsync("ion-button", { expand: (_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.expand, disabled: !!((_b = this.prevButton) === null || _b === void 0 ? void 0 : _b.disabled), color: (_c = this.prevButton) === null || _c === void 0 ? void 0 : _c.color, fill: (_d = this.prevButton) === null || _d === void 0 ? void 0 : _d.fill, onClick: (event) => {
+    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: null, resetButton: null, documentId: this.documentId, endpoint: this.endpoint, hideControls: this.hideControls, excludeData: this.excludeData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: true, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => {
+      const StepComponent = (step === null || step === void 0 ? void 0 : step.component) || null;
+      return (hAsync("ion-slide", null, hAsync("div", null, (step === null || step === void 0 ? void 0 : step.beforeHTML) && hAsync("div", { innerHTML: step.beforeHTML }), StepComponent && (hAsync(StepComponent, Object.assign({}, ((step === null || step === void 0 ? void 0 : step.componentProps) || {})))), ((step === null || step === void 0 ? void 0 : step.fields) || []).map((field) => [
+        (field === null || field === void 0 ? void 0 : field.beforeHTML) && hAsync("div", { innerHTML: field.beforeHTML }),
+        this.renderField(field),
+        (field === null || field === void 0 ? void 0 : field.afterHTML) && hAsync("div", { innerHTML: field.afterHTML }),
+      ])), (step === null || step === void 0 ? void 0 : step.afterHTML) && hAsync("div", { innerHTML: step.afterHTML })));
+    }), hAsync("ion-slide", null, this.askConfirmation ? (hAsync("div", { class: "flow-confirmation" }, hAsync("slot", { name: "confirmation" }))) : (hAsync("div", { class: "flow-success" }, hAsync("slot", { name: "success" }))))), !this.hideControls && (hAsync("div", { class: "flow-controls control-pager" }, hAsync("ion-button", { expand: (_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.expand, disabled: !!((_b = this.prevButton) === null || _b === void 0 ? void 0 : _b.disabled), color: (_c = this.prevButton) === null || _c === void 0 ? void 0 : _c.color, fill: (_d = this.prevButton) === null || _d === void 0 ? void 0 : _d.fill, onClick: (event) => {
         var _a;
         return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
           ? this.prevButton.onClick(event)
@@ -59295,7 +59300,7 @@ class flow {
       "reset": [64],
       "submit": [64]
     },
-    "$listeners$": [[0, "keydown", "onKeydown"], [0, "ionSlideDidChange", "onSlideChange"]],
+    "$listeners$": [[0, "keydown", "onKeydown"], [0, "fireenjinSuccess", "onSuccess"], [0, "ionSlideDidChange", "onSlideChange"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }

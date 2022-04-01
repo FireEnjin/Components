@@ -21,6 +21,12 @@ export default {
       askConfirmation: true,
       steps: [
         {
+          component: "fireenjin-star-rating",
+          componentProps: {
+            value: 4,
+          },
+        },
+        {
           fields: [
             {
               name: "test",
