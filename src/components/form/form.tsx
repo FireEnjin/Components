@@ -123,6 +123,10 @@ export class Form implements ComponentInterface {
    * The map to bind data from fetch response to form data
    */
   @Prop() fetchDataMap: any;
+  /**
+   * The result key to use for formData
+   */
+  @Prop() fetchKey?: string;
 
   /**
    * Emitted on load with endpoint
@@ -197,16 +201,17 @@ export class Form implements ComponentInterface {
   @Listen("fireenjinSuccess")
   async onSuccess(event) {
     if (
-      (this.fetch || this.fetchDataMap) &&
+      this.fetch &&
+      [this.endpoint, this.fetch].includes(event?.detail?.endpoint) &&
       event?.detail?.event?.type === "fireenjinFetch"
     ) {
-      this.formData = await this.mapFormData(
-        this.fetchDataMap,
-        event.detail?.data ? event.detail.data : {}
+      await this.setFormData(
+        this.fetchKey
+          ? this.fetchKey.split(".").reduce((o, i) => o[i], event.detail.data)
+          : event?.detail?.data
       );
-      await this.setFormData(this.formData);
     }
-    if (this.endpoint === event?.detail?.endpoint) {
+    if ([this.endpoint, this.fetch].includes(event?.detail?.endpoint)) {
       this.loading = false;
     }
   }
@@ -323,7 +328,7 @@ export class Form implements ComponentInterface {
         field.dataset?.fill?.length > 0 ? field.dataset.fill : field.name;
       field.value = this.getByPath(data, dataKey);
     });
-    this.formData = data;
+    this.formData = await this.mapFormData(this.fetchDataMap, data || {});
   }
 
   async mapFormData(dataMap, data) {
@@ -375,6 +380,7 @@ export class Form implements ComponentInterface {
       this.componentIsLoaded = true;
     }, 2000);
     if (this.fetch) {
+      if (!this.disableLoader) this.loading = true;
       this.fireenjinFetch.emit({
         endpoint: typeof this.fetch === "string" ? this.fetch : this.endpoint,
         name: this.name || null,

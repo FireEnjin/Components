@@ -20,6 +20,7 @@
 | `excludeData`        | --                     | The data to exclude from the form submit event                         | `string[]`                                     | `[]`        |
 | `fetch`              | `fetch`                | Emit the fetch event emitted when component loads                      | `boolean \| string`                            | `undefined` |
 | `fetchDataMap`       | `fetch-data-map`       | The map to bind data from fetch response to form data                  | `any`                                          | `undefined` |
+| `fetchKey`           | `fetch-key`            | The result key to use for formData                                     | `string`                                       | `undefined` |
 | `fetchParams`        | `fetch-params`         | The fetch params                                                       | `any`                                          | `undefined` |
 | `formData`           | `form-data`            | The data from the form being filled out                                | `any`                                          | `{}`        |
 | `hasChanged`         | `has-changed`          | Has the form fields been changed                                       | `boolean`                                      | `false`     |

@@ -14532,13 +14532,15 @@ class Form {
     }
   }
   async onSuccess(event) {
-    var _a, _b, _c, _d;
-    if ((this.fetch || this.fetchDataMap) &&
-      ((_b = (_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.event) === null || _b === void 0 ? void 0 : _b.type) === "fireenjinFetch") {
-      this.formData = await this.mapFormData(this.fetchDataMap, ((_c = event.detail) === null || _c === void 0 ? void 0 : _c.data) ? event.detail.data : {});
-      await this.setFormData(this.formData);
+    var _a, _b, _c, _d, _e;
+    if (this.fetch &&
+      [this.endpoint, this.fetch].includes((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.endpoint) &&
+      ((_c = (_b = event === null || event === void 0 ? void 0 : event.detail) === null || _b === void 0 ? void 0 : _b.event) === null || _c === void 0 ? void 0 : _c.type) === "fireenjinFetch") {
+      await this.setFormData(this.fetchKey
+        ? this.fetchKey.split(".").reduce((o, i) => o[i], event.detail.data)
+        : (_d = event === null || event === void 0 ? void 0 : event.detail) === null || _d === void 0 ? void 0 : _d.data);
     }
-    if (this.endpoint === ((_d = event === null || event === void 0 ? void 0 : event.detail) === null || _d === void 0 ? void 0 : _d.endpoint)) {
+    if ([this.endpoint, this.fetch].includes((_e = event === null || event === void 0 ? void 0 : event.detail) === null || _e === void 0 ? void 0 : _e.endpoint)) {
       this.loading = false;
     }
   }
@@ -14637,7 +14639,7 @@ class Form {
       const dataKey = ((_b = (_a = field.dataset) === null || _a === void 0 ? void 0 : _a.fill) === null || _b === void 0 ? void 0 : _b.length) > 0 ? field.dataset.fill : field.name;
       field.value = this.getByPath(data, dataKey);
     });
-    this.formData = data;
+    this.formData = await this.mapFormData(this.fetchDataMap, data || {});
   }
   async mapFormData(dataMap, data) {
     let newData = data ? data : {};
@@ -14687,6 +14689,8 @@ class Form {
       this.componentIsLoaded = true;
     }, 2000);
     if (this.fetch) {
+      if (!this.disableLoader)
+        this.loading = true;
       this.fireenjinFetch.emit({
         endpoint: typeof this.fetch === "string" ? this.fetch : this.endpoint,
         name: this.name || null,
@@ -14732,6 +14736,7 @@ class Form {
       "fetch": [8],
       "fetchParams": [8, "fetch-params"],
       "fetchDataMap": [8, "fetch-data-map"],
+      "fetchKey": [1, "fetch-key"],
       "submit": [64],
       "reset": [64],
       "checkFormValidity": [64],

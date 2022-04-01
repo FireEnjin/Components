@@ -70,6 +70,22 @@
       });
       document.addEventListener("fireenjinSubmit", function (event) {
         console.log(event);
+        setTimeout(() => {
+          document.body.dispatchEvent(
+            new CustomEvent("fireenjinSuccess", {
+              detail: {
+                name: "select",
+                endpoint: "addUser",
+                target: event.target,
+                data: {
+                  addUser: {
+                    id: "test",
+                  },
+                },
+              },
+            })
+          );
+        }, 2000);
       });
       document.addEventListener("fireenjinUpload", function (event) {
         console.log(event);
@@ -148,6 +164,31 @@
               })
             );
           }, 2000);
+        } else if (event?.detail?.endpoint === "findUser") {
+          setTimeout(() => {
+            event.target.dispatchEvent(
+              new CustomEvent("fireenjinSuccess", {
+                detail: {
+                  event,
+                  name: "user",
+                  endpoint: "findUser",
+                  target: event.target,
+                  data: {
+                    user: {
+                      id: "test",
+                      firstName: "Bob",
+                      lastName: "Johnson",
+                      photo:
+                        "https://firebasestorage.googleapis.com/v0/b/ftms-ca85b.appspot.com/o/undefined%2F2021-05-02T10%3A18%3A17.118Z.jpeg?alt=media&token=af30d334-68e6-4cc9-97a6-cedf247125e5",
+                      phone: null,
+                      address: null,
+                      tags: null,
+                    },
+                  },
+                },
+              })
+            );
+          }, 5000);
         }
       });
     </script>
