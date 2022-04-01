@@ -17,6 +17,7 @@ export default {
   default: {
     name: "Default",
     props: {
+      endpoint: "addUser",
       askConfirmation: true,
       steps: [
         {
@@ -33,7 +34,7 @@ export default {
           label: "Twee",
           fields: [
             {
-              name: "test",
+              name: "test2",
               type: "radios",
               options,
               label: "Testing",

@@ -68,6 +68,9 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
       });
+      document.addEventListener("fireenjinSubmit", function (event) {
+        console.log(event);
+      });
       document.addEventListener("fireenjinUpload", function (event) {
         console.log(event);
       });

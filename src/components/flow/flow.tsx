@@ -463,7 +463,7 @@ export class flow {
         beforeSubmit={this.beforeSubmit}
         disableLoader={this.disableLoader}
         loading={this.loading}
-        disableEnterButton
+        disableEnterButton={true}
         confirmExit={this.confirmExit}
         hasChanged={this.hasChanged}
         method={this.method}
@@ -577,11 +577,7 @@ export class flow {
               disabled={!!this.saveButton?.disabled}
               color={this.saveButton?.color}
               fill={this.saveButton?.fill}
-              onClick={(event) =>
-                typeof this.saveButton?.onClick === "function"
-                  ? this.saveButton.onClick(event)
-                  : this.submit()
-              }
+              type="submit"
             >
               {this.saveButton?.icon && (
                 <ion-icon

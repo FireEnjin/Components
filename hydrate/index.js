@@ -14503,6 +14503,11 @@ class Form {
      */
     this.method = "post";
   }
+  handleKeyDown(ev) {
+    if (ev.key === "Enter" && this.disableEnterButton) {
+      ev.preventDefault();
+    }
+  }
   onInput(event) {
     if (event &&
       event.target &&
@@ -14523,13 +14528,6 @@ class Form {
       this.formData[event.target.name] = event.target.value;
       if (this.componentIsLoaded && !this.hasChanged) {
         this.hasChanged = true;
-      }
-    }
-  }
-  async onKeyDown(event) {
-    if (event.key === "Enter" && (await this.checkFormValidity())) {
-      if (this.submitButtonEl && !this.disableEnterButton) {
-        this.submitButtonEl.click();
       }
     }
   }
@@ -14731,7 +14729,7 @@ class Form {
       "reportFormValidity": [64],
       "setFormData": [64]
     },
-    "$listeners$": [[0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onSelect"], [0, "keydown", "onKeyDown"], [0, "fireenjinSuccess", "onSuccess"]],
+    "$listeners$": [[0, "keydown", "handleKeyDown"], [0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onSelect"], [0, "fireenjinSuccess", "onSuccess"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
@@ -59241,12 +59239,7 @@ class flow {
         return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
           ? this.prevButton.onClick(event)
           : this.slidePrev();
-      } }, ((_u = this.prevButton) === null || _u === void 0 ? void 0 : _u.icon) && (hAsync("ion-icon", { slot: ((_v = this.prevButton) === null || _v === void 0 ? void 0 : _v.iconSlot) || "start", name: this.prevButton.icon })), ((_w = this.prevButton) === null || _w === void 0 ? void 0 : _w.label) && (hAsync("ion-label", null, this.prevButton.label))), hAsync("ion-button", { expand: (_x = this.saveButton) === null || _x === void 0 ? void 0 : _x.expand, disabled: !!((_y = this.saveButton) === null || _y === void 0 ? void 0 : _y.disabled), color: (_z = this.saveButton) === null || _z === void 0 ? void 0 : _z.color, fill: (_0 = this.saveButton) === null || _0 === void 0 ? void 0 : _0.fill, onClick: (event) => {
-        var _a;
-        return typeof ((_a = this.saveButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
-          ? this.saveButton.onClick(event)
-          : this.submit();
-      } }, ((_1 = this.saveButton) === null || _1 === void 0 ? void 0 : _1.icon) && (hAsync("ion-icon", { slot: ((_2 = this.saveButton) === null || _2 === void 0 ? void 0 : _2.iconSlot) || "end", name: this.saveButton.icon })), ((_3 = this.saveButton) === null || _3 === void 0 ? void 0 : _3.label) && (hAsync("ion-label", null, this.saveButton.label)))))));
+      } }, ((_u = this.prevButton) === null || _u === void 0 ? void 0 : _u.icon) && (hAsync("ion-icon", { slot: ((_v = this.prevButton) === null || _v === void 0 ? void 0 : _v.iconSlot) || "start", name: this.prevButton.icon })), ((_w = this.prevButton) === null || _w === void 0 ? void 0 : _w.label) && (hAsync("ion-label", null, this.prevButton.label))), hAsync("ion-button", { expand: (_x = this.saveButton) === null || _x === void 0 ? void 0 : _x.expand, disabled: !!((_y = this.saveButton) === null || _y === void 0 ? void 0 : _y.disabled), color: (_z = this.saveButton) === null || _z === void 0 ? void 0 : _z.color, fill: (_0 = this.saveButton) === null || _0 === void 0 ? void 0 : _0.fill, type: "submit" }, ((_1 = this.saveButton) === null || _1 === void 0 ? void 0 : _1.icon) && (hAsync("ion-icon", { slot: ((_2 = this.saveButton) === null || _2 === void 0 ? void 0 : _2.iconSlot) || "end", name: this.saveButton.icon })), ((_3 = this.saveButton) === null || _3 === void 0 ? void 0 : _3.label) && (hAsync("ion-label", null, this.saveButton.label)))))));
   }
   static get style() { return flowCss; }
   static get cmpMeta() { return {

@@ -151,6 +151,13 @@ export class Form implements ComponentInterface {
     name: string;
   }>;
 
+  @Listen("keydown")
+  handleKeyDown(ev: KeyboardEvent) {
+    if (ev.key === "Enter" && this.disableEnterButton) {
+      ev.preventDefault();
+    }
+  }
+
   @Listen("ionInput")
   @Listen("ionChange")
   onInput(event) {
@@ -183,15 +190,6 @@ export class Form implements ComponentInterface {
       this.formData[event.target.name] = event.target.value;
       if (this.componentIsLoaded && !this.hasChanged) {
         this.hasChanged = true;
-      }
-    }
-  }
-
-  @Listen("keydown")
-  async onKeyDown(event: KeyboardEvent) {
-    if (event.key === "Enter" && (await this.checkFormValidity())) {
-      if (this.submitButtonEl && !this.disableEnterButton) {
-        this.submitButtonEl.click();
       }
     }
   }
