@@ -162,12 +162,6 @@ export class flow {
     this.slideNext();
   }
 
-  @Listen("fireenjinSuccess")
-  async onSuccess(event) {
-    if (event?.detail?.name === this.name) {
-    }
-  }
-
   @Listen("ionSlideDidChange")
   async onSlideChange() {
     const currentIndex = await this.getActiveIndex();

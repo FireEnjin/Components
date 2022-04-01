@@ -206,6 +206,16 @@ export class Form implements ComponentInterface {
       );
       await this.setFormData(this.formData);
     }
+    if (this.endpoint === event?.detail?.endpoint) {
+      this.loading = false;
+    }
+  }
+
+  @Listen("fireenjinError")
+  async onError(event) {
+    if (this.endpoint === event?.detail?.endpoint) {
+      this.loading = false;
+    }
   }
 
   /**

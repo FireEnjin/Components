@@ -14532,11 +14532,20 @@ class Form {
     }
   }
   async onSuccess(event) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     if ((this.fetch || this.fetchDataMap) &&
       ((_b = (_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.event) === null || _b === void 0 ? void 0 : _b.type) === "fireenjinFetch") {
       this.formData = await this.mapFormData(this.fetchDataMap, ((_c = event.detail) === null || _c === void 0 ? void 0 : _c.data) ? event.detail.data : {});
       await this.setFormData(this.formData);
+    }
+    if (this.endpoint === ((_d = event === null || event === void 0 ? void 0 : event.detail) === null || _d === void 0 ? void 0 : _d.endpoint)) {
+      this.loading = false;
+    }
+  }
+  async onError(event) {
+    var _a;
+    if (this.endpoint === ((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.endpoint)) {
+      this.loading = false;
     }
   }
   /**
@@ -14729,7 +14738,7 @@ class Form {
       "reportFormValidity": [64],
       "setFormData": [64]
     },
-    "$listeners$": [[0, "keydown", "handleKeyDown"], [0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onSelect"], [0, "fireenjinSuccess", "onSuccess"]],
+    "$listeners$": [[0, "keydown", "handleKeyDown"], [0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onSelect"], [0, "fireenjinSuccess", "onSuccess"], [0, "fireenjinError", "onError"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
@@ -59110,8 +59119,6 @@ class flow {
       return;
     this.slideNext();
   }
-  async onSuccess(event) {
-  }
   async onSlideChange() {
     const currentIndex = await this.getActiveIndex();
     if (currentIndex === this.steps.length) {
@@ -59300,7 +59307,7 @@ class flow {
       "reset": [64],
       "submit": [64]
     },
-    "$listeners$": [[0, "keydown", "onKeydown"], [0, "fireenjinSuccess", "onSuccess"], [0, "ionSlideDidChange", "onSlideChange"]],
+    "$listeners$": [[0, "keydown", "onKeydown"], [0, "ionSlideDidChange", "onSlideChange"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
