@@ -17,11 +17,11 @@
 | `disableReset`       | `disable-reset`        | Should the form disable reset                                          | `boolean`                                      | `false`     |
 | `documentId`         | `document-id`          | The id of the document being edited                                    | `string`                                       | `undefined` |
 | `endpoint`           | `endpoint`             | The endpoint that form submission should link to                       | `string`                                       | `undefined` |
-| `excludeData`        | --                     | The data to exclude from the form submit event                         | `string[]`                                     | `[]`        |
 | `fetch`              | `fetch`                | Emit the fetch event emitted when component loads                      | `boolean \| string`                            | `undefined` |
 | `fetchDataMap`       | `fetch-data-map`       | The map to bind data from fetch response to form data                  | `any`                                          | `undefined` |
 | `fetchKey`           | `fetch-key`            | The result key to use for formData                                     | `string`                                       | `undefined` |
 | `fetchParams`        | `fetch-params`         | The fetch params                                                       | `any`                                          | `undefined` |
+| `filterData`         | `filter-data`          | A comma separated list or array of items to filter out for submission  | `any`                                          | `undefined` |
 | `formData`           | `form-data`            | The data from the form being filled out                                | `any`                                          | `{}`        |
 | `hasChanged`         | `has-changed`          | Has the form fields been changed                                       | `boolean`                                      | `false`     |
 | `hideControls`       | `hide-controls`        | Should the form controls be hidden?                                    | `boolean`                                      | `false`     |

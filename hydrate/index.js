@@ -14471,10 +14471,6 @@ class Form {
      */
     this.hideControls = false;
     /**
-     * The data to exclude from the form submit event
-     */
-    this.excludeData = [];
-    /**
      * Should the form disable the loader on submit
      */
     this.disableLoader = false;
@@ -14508,24 +14504,15 @@ class Form {
       ev.preventDefault();
     }
   }
-  onInput(event) {
+  async onInput(event) {
+    var _a;
     if (event &&
       event.target &&
       event.target.name &&
-      !event.target.name.startsWith("ion-") &&
-      (this.excludeData ? this.excludeData : []).filter((excludedName) => excludedName === event.target.name).length === 0) {
-      this.setByPath(this.formData, event.target.name, event.target.value);
-      if (this.componentIsLoaded && !this.hasChanged) {
-        this.hasChanged = true;
-      }
-    }
-  }
-  onSelect(event) {
-    if (event &&
-      event.target &&
-      event.target.name &&
-      (this.excludeData ? this.excludeData : []).filter((excludedName) => excludedName === event.target.name).length === 0) {
-      this.formData[event.target.name] = event.target.value;
+      !event.target.name.startsWith("ion-")) {
+      this.setByPath(this.formData, event.target.name, ((_a = this.filterData) === null || _a === void 0 ? void 0 : _a.length)
+        ? await this.setFilteredValue(event.target.name, event.target.value)
+        : event.target.value);
       if (this.componentIsLoaded && !this.hasChanged) {
         this.hasChanged = true;
       }
@@ -14557,6 +14544,7 @@ class Form {
   async submit(event, options = {
     manual: false,
   }) {
+    var _a;
     if (event)
       event.preventDefault();
     await this.checkFormValidity();
@@ -14564,11 +14552,12 @@ class Form {
     const data = this.beforeSubmit && typeof this.beforeSubmit === "function"
       ? await this.beforeSubmit(this.formData, options)
       : this.formData;
+    console.log(this.filterData);
     this.fireenjinSubmit.emit({
       event,
       id: this.documentId,
       endpoint: this.endpoint,
-      data,
+      data: ((_a = this.filterData) === null || _a === void 0 ? void 0 : _a.length) ? await this.filterFormData(data) : data,
       name: this.name,
     });
     this.hasChanged = false;
@@ -14641,6 +14630,21 @@ class Form {
     });
     this.formData = await this.mapFormData(this.fetchDataMap, data || {});
   }
+  async setFilteredValue(key, value) {
+    var _a, _b;
+    let newValue = value;
+    for (const filter of typeof this.filterData === "string"
+      ? this.filterData.split(",")
+      : this.filterData) {
+      if (typeof filter !== "function")
+        continue;
+      const filterName = (_b = (_a = Object.getOwnPropertyDescriptors(filter)) === null || _a === void 0 ? void 0 : _a.name) === null || _b === void 0 ? void 0 : _b.value;
+      if (!filterName || filterName !== key)
+        continue;
+      newValue = await filter(value);
+    }
+    return newValue;
+  }
   async mapFormData(dataMap, data) {
     let newData = data ? data : {};
     if (dataMap) {
@@ -14655,6 +14659,31 @@ class Form {
       }
     }
     return newData;
+  }
+  async filterFormData(data) {
+    var _a, _b;
+    let filteredData = {};
+    for (const filter of typeof this.filterData === "string"
+      ? this.filterData.split(",")
+      : this.filterData) {
+      if (typeof filter === "string") {
+        filteredData[filter] = data[filter];
+      }
+      else if (typeof filter === "function") {
+        const key = (_b = (_a = Object.getOwnPropertyDescriptors(filter)) === null || _a === void 0 ? void 0 : _a.name) === null || _b === void 0 ? void 0 : _b.value;
+        filteredData[key] = await filter(data[key]);
+      }
+    }
+    return filteredData;
+  }
+  pick(sourceObject, keys) {
+    const newObject = {};
+    for (const key of keys) {
+      if (!(sourceObject === null || sourceObject === void 0 ? void 0 : sourceObject[key]))
+        continue;
+      newObject[key] = sourceObject[key];
+    }
+    return newObject;
   }
   getByPath(o, s) {
     s = s.replace(/\[(\w+)\]/g, ".$1"); // convert indexes to properties
@@ -14723,7 +14752,6 @@ class Form {
       "hideControls": [4, "hide-controls"],
       "endpoint": [1],
       "documentId": [1, "document-id"],
-      "excludeData": [16],
       "beforeSubmit": [16],
       "disableLoader": [4, "disable-loader"],
       "loading": [1028],
@@ -14737,13 +14765,14 @@ class Form {
       "fetchParams": [8, "fetch-params"],
       "fetchDataMap": [8, "fetch-data-map"],
       "fetchKey": [1, "fetch-key"],
+      "filterData": [8, "filter-data"],
       "submit": [64],
       "reset": [64],
       "checkFormValidity": [64],
       "reportFormValidity": [64],
       "setFormData": [64]
     },
-    "$listeners$": [[0, "keydown", "handleKeyDown"], [0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onSelect"], [0, "fireenjinSuccess", "onSuccess"], [0, "fireenjinError", "onError"]],
+    "$listeners$": [[0, "keydown", "handleKeyDown"], [0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onInput"], [0, "fireenjinSuccess", "onSuccess"], [0, "fireenjinError", "onError"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
@@ -59234,7 +59263,7 @@ class flow {
   }
   render() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;
-    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: null, resetButton: null, documentId: this.documentId, endpoint: this.endpoint, hideControls: this.hideControls, excludeData: this.excludeData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: true, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap, fetchKey: this.fetchKey }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => {
+    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: null, resetButton: null, documentId: this.documentId, endpoint: this.endpoint, hideControls: this.hideControls, filterData: this.filterData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: true, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap, fetchKey: this.fetchKey }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => {
       const StepComponent = (step === null || step === void 0 ? void 0 : step.component) || null;
       return (hAsync("ion-slide", null, hAsync("div", null, (step === null || step === void 0 ? void 0 : step.beforeHTML) && hAsync("div", { innerHTML: step.beforeHTML }), StepComponent && (hAsync(StepComponent, Object.assign({}, ((step === null || step === void 0 ? void 0 : step.componentProps) || {})))), ((step === null || step === void 0 ? void 0 : step.fields) || []).map((field) => [
         (field === null || field === void 0 ? void 0 : field.beforeHTML) && hAsync("div", { innerHTML: field.beforeHTML }),
@@ -59284,6 +59313,7 @@ class flow {
       "fetchParams": [8, "fetch-params"],
       "fetchDataMap": [8, "fetch-data-map"],
       "fetchKey": [1, "fetch-key"],
+      "filterData": [8, "filter-data"],
       "slidesOptions": [8, "slides-options"],
       "pager": [4],
       "scrollbar": [4],

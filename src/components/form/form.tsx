@@ -69,10 +69,6 @@ export class Form implements ComponentInterface {
    */
   @Prop() documentId: string;
   /**
-   * The data to exclude from the form submit event
-   */
-  @Prop() excludeData: string[] = [];
-  /**
    * A method that runs before form submission to allow editing of formData
    */
   @Prop() beforeSubmit: (data: any, options?: any) => Promise<any>;
@@ -127,6 +123,11 @@ export class Form implements ComponentInterface {
    * The result key to use for formData
    */
   @Prop() fetchKey?: string;
+  /**
+   * A comma separated list or array of items to filter out for submission
+   */
+  // @Prop() filterData?: (string | ((value: any) => Promise<any> | any))[];
+  @Prop() filterData?: any;
 
   /**
    * Emitted on load with endpoint
@@ -164,34 +165,21 @@ export class Form implements ComponentInterface {
 
   @Listen("ionInput")
   @Listen("ionChange")
-  onInput(event) {
-    if (
-      event &&
-      event.target &&
-      event.target.name &&
-      !event.target.name.startsWith("ion-") &&
-      (this.excludeData ? this.excludeData : []).filter(
-        (excludedName) => excludedName === event.target.name
-      ).length === 0
-    ) {
-      this.setByPath(this.formData, event.target.name, event.target.value);
-      if (this.componentIsLoaded && !this.hasChanged) {
-        this.hasChanged = true;
-      }
-    }
-  }
-
   @Listen("ionSelect")
-  onSelect(event) {
+  async onInput(event) {
     if (
       event &&
       event.target &&
       event.target.name &&
-      (this.excludeData ? this.excludeData : []).filter(
-        (excludedName) => excludedName === event.target.name
-      ).length === 0
+      !event.target.name.startsWith("ion-")
     ) {
-      this.formData[event.target.name] = event.target.value;
+      this.setByPath(
+        this.formData,
+        event.target.name,
+        this.filterData?.length
+          ? await this.setFilteredValue(event.target.name, event.target.value)
+          : event.target.value
+      );
       if (this.componentIsLoaded && !this.hasChanged) {
         this.hasChanged = true;
       }
@@ -241,11 +229,12 @@ export class Form implements ComponentInterface {
       this.beforeSubmit && typeof this.beforeSubmit === "function"
         ? await this.beforeSubmit(this.formData, options)
         : this.formData;
+    console.log(this.filterData);
     this.fireenjinSubmit.emit({
       event,
       id: this.documentId,
       endpoint: this.endpoint,
-      data,
+      data: this.filterData?.length ? await this.filterFormData(data) : data,
       name: this.name,
     });
     this.hasChanged = false;
@@ -331,6 +320,19 @@ export class Form implements ComponentInterface {
     this.formData = await this.mapFormData(this.fetchDataMap, data || {});
   }
 
+  async setFilteredValue(key: string, value: any) {
+    let newValue = value;
+    for (const filter of typeof this.filterData === "string"
+      ? this.filterData.split(",")
+      : this.filterData) {
+      if (typeof filter !== "function") continue;
+      const filterName = Object.getOwnPropertyDescriptors(filter)?.name?.value;
+      if (!filterName || filterName !== key) continue;
+      newValue = await filter(value);
+    }
+    return newValue;
+  }
+
   async mapFormData(dataMap, data) {
     let newData = data ? data : {};
     if (dataMap) {
@@ -345,6 +347,32 @@ export class Form implements ComponentInterface {
     }
 
     return newData;
+  }
+
+  async filterFormData(data?: any) {
+    let filteredData = {};
+    for (const filter of typeof this.filterData === "string"
+      ? this.filterData.split(",")
+      : this.filterData) {
+      if (typeof filter === "string") {
+        filteredData[filter] = data[filter];
+      } else if (typeof filter === "function") {
+        const key = Object.getOwnPropertyDescriptors(filter)?.name?.value;
+        filteredData[key] = await filter(data[key]);
+      }
+    }
+
+    return filteredData;
+  }
+
+  pick(sourceObject: any, keys: string[]) {
+    const newObject = {};
+    for (const key of keys) {
+      if (!sourceObject?.[key]) continue;
+      newObject[key] = sourceObject[key];
+    }
+
+    return newObject;
   }
 
   getByPath(o, s) {

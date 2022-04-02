@@ -67,6 +67,20 @@
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+        document.body.dispatchEvent(
+          new CustomEvent("fireenjinSuccess", {
+            detail: {
+              name: "select",
+              endpoint: "addUser",
+              target: document,
+              data: {
+                addUser: {
+                  id: "test",
+                },
+              },
+            },
+          })
+        );
       });
       document.addEventListener("fireenjinSubmit", function (event) {
         console.log(event);

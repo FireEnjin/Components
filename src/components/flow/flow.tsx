@@ -142,6 +142,10 @@ export class flow {
    */
   @Prop() fetchKey?: string;
   /**
+   * A comma separated list or array of items to filter out for submission
+   */
+  @Prop() filterData?: any;
+  /**
    * A list of options for SwiperJS
    * @link https://swiperjs.com/swiper-api#parameters
    */
@@ -465,7 +469,7 @@ export class flow {
         documentId={this.documentId}
         endpoint={this.endpoint}
         hideControls={this.hideControls}
-        excludeData={this.excludeData}
+        filterData={this.filterData}
         beforeSubmit={this.beforeSubmit}
         disableLoader={this.disableLoader}
         loading={this.loading}
