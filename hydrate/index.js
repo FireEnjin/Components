@@ -4716,6 +4716,7 @@ function hydrateFactory($stencilWindow, $stencilHydrateOpts, $stencilHydrateResu
 
 
 var process = require('process');
+var logging = require('@utils/logging');
 var require$$1 = require('fs');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -4785,7 +4786,7 @@ const configFromURL = (win) => {
   win.location.search
     .slice(1)
     .split('&')
-    .map(entry => entry.split('='))
+    .map((entry) => entry.split('='))
     .map(([key, value]) => [decodeURIComponent(key), decodeURIComponent(value)])
     .filter(([key]) => startsWith(key, IONIC_PREFIX))
     .map(([key, value]) => [key.slice(IONIC_PREFIX.length), value])
@@ -4819,14 +4820,14 @@ const setupPlatforms = (win = window) => {
   let platforms = win.Ionic.platforms;
   if (platforms == null) {
     platforms = win.Ionic.platforms = detectPlatforms(win);
-    platforms.forEach(p => win.document.documentElement.classList.add(`plt-${p}`));
+    platforms.forEach((p) => win.document.documentElement.classList.add(`plt-${p}`));
   }
   return platforms;
 };
 const detectPlatforms = (win) => {
   const customPlatformMethods = config$1.get('platform');
-  return Object.keys(PLATFORMS_MAP).filter(p => {
-    const customMethod = customPlatformMethods && customPlatformMethods[p];
+  return Object.keys(PLATFORMS_MAP).filter((p) => {
+    const customMethod = customPlatformMethods === null || customPlatformMethods === void 0 ? void 0 : customPlatformMethods[p];
     return typeof customMethod === 'function' ? customMethod(win) : PLATFORMS_MAP[p](win);
   });
 };
@@ -4853,18 +4854,14 @@ const isPhablet = (win) => {
   const height = win.innerHeight;
   const smallest = Math.min(width, height);
   const largest = Math.max(width, height);
-  return (smallest > 390 && smallest < 520) &&
-    (largest > 620 && largest < 800);
+  return smallest > 390 && smallest < 520 && largest > 620 && largest < 800;
 };
 const isTablet = (win) => {
   const width = win.innerWidth;
   const height = win.innerHeight;
   const smallest = Math.min(width, height);
   const largest = Math.max(width, height);
-  return (isIpad(win) ||
-    isAndroidTablet(win) ||
-    ((smallest > 460 && smallest < 820) &&
-      (largest > 780 && largest < 1400)));
+  return isIpad(win) || isAndroidTablet(win) || (smallest > 460 && smallest < 820 && largest > 780 && largest < 1400);
 };
 const isMobile = (win) => matchMedia$1(win, '(any-pointer:coarse)');
 const isDesktop = (win) => !isMobile(win);
@@ -4872,27 +4869,27 @@ const isHybrid = (win) => isCordova(win) || isCapacitorNative(win);
 const isCordova = (win) => !!(win['cordova'] || win['phonegap'] || win['PhoneGap']);
 const isCapacitorNative = (win) => {
   const capacitor = win['Capacitor'];
-  return !!(capacitor && capacitor.isNative);
+  return !!(capacitor === null || capacitor === void 0 ? void 0 : capacitor.isNative);
 };
 const isElectron = (win) => testUserAgent(win, /electron/i);
-const isPWA = (win) => !!((win.matchMedia && win.matchMedia('(display-mode: standalone)').matches) || win.navigator.standalone);
+const isPWA = (win) => { var _a; return !!(((_a = win.matchMedia) === null || _a === void 0 ? void 0 : _a.call(win, '(display-mode: standalone)').matches) || win.navigator.standalone); };
 const testUserAgent = (win, expr) => expr.test(win.navigator.userAgent);
-const matchMedia$1 = (win, query) => win.matchMedia && win.matchMedia(query).matches;
+const matchMedia$1 = (win, query) => { var _a; return (_a = win.matchMedia) === null || _a === void 0 ? void 0 : _a.call(win, query).matches; };
 const PLATFORMS_MAP = {
-  'ipad': isIpad,
-  'iphone': isIphone,
-  'ios': isIOS,
-  'android': isAndroid,
-  'phablet': isPhablet,
-  'tablet': isTablet,
-  'cordova': isCordova,
-  'capacitor': isCapacitorNative,
-  'electron': isElectron,
-  'pwa': isPWA,
-  'mobile': isMobile,
-  'mobileweb': isMobileWeb,
-  'desktop': isDesktop,
-  'hybrid': isHybrid
+  ipad: isIpad,
+  iphone: isIphone,
+  ios: isIOS,
+  android: isAndroid,
+  phablet: isPhablet,
+  tablet: isTablet,
+  cordova: isCordova,
+  capacitor: isCapacitorNative,
+  electron: isElectron,
+  pwa: isPWA,
+  mobile: isMobile,
+  mobileweb: isMobileWeb,
+  desktop: isDesktop,
+  hybrid: isHybrid,
 };
 
 let defaultMode;
@@ -4905,7 +4902,7 @@ const initialize = (userConfig = {}) => {
   }
   const doc = window.document;
   const win = window;
-  const Ionic = win.Ionic = win.Ionic || {};
+  const Ionic = (win.Ionic = win.Ionic || {});
   const platformHelpers = {};
   if (userConfig._ael) {
     platformHelpers.ael = userConfig._ael;
@@ -4930,14 +4927,14 @@ const initialize = (userConfig = {}) => {
   // which could have been set by the user, or by pre-rendering
   // otherwise get the mode via config settings, and fallback to md
   Ionic.config = config$1;
-  Ionic.mode = defaultMode = config$1.get('mode', (doc.documentElement.getAttribute('mode')) || (isPlatform(win, 'ios') ? 'ios' : 'md'));
+  Ionic.mode = defaultMode = config$1.get('mode', doc.documentElement.getAttribute('mode') || (isPlatform(win, 'ios') ? 'ios' : 'md'));
   config$1.set('mode', defaultMode);
   doc.documentElement.setAttribute('mode', defaultMode);
   doc.documentElement.classList.add(defaultMode);
   if (config$1.getBoolean('_testing')) {
     config$1.set('animated', false);
   }
-  const isIonicElement = (elm) => elm.tagName && elm.tagName.startsWith('ION-');
+  const isIonicElement = (elm) => { var _a; return (_a = elm.tagName) === null || _a === void 0 ? void 0 : _a.startsWith('ION-'); };
   const isAllowedIonicModeValue = (elmMode) => ['ios', 'md'].includes(elmMode);
   setMode((elm) => {
     while (elm) {
@@ -5807,7 +5804,7 @@ const searchSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/
  * (C) Ionic http://ionicframework.com - MIT License
  */
 const transitionEndAsync = (el, expectedDuration = 0) => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     transitionEnd$2(el, expectedDuration, resolve);
   });
 };
@@ -5881,7 +5878,7 @@ const componentOnReady = (el, callback) => {
  */
 const inheritAttributes$1 = (el, attributes = []) => {
   const attributeObject = {};
-  attributes.forEach(attr => {
+  attributes.forEach((attr) => {
     if (el.hasAttribute(attr)) {
       const value = el.getAttribute(attr);
       if (value !== null) {
@@ -5893,9 +5890,10 @@ const inheritAttributes$1 = (el, attributes = []) => {
   return attributeObject;
 };
 const addEventListener$1 = (el, eventName, callback, opts) => {
+  var _a;
   if (typeof window !== 'undefined') {
     const win = window;
-    const config = win && win.Ionic && win.Ionic.config;
+    const config = (_a = win === null || win === void 0 ? void 0 : win.Ionic) === null || _a === void 0 ? void 0 : _a.config;
     if (config) {
       const ael = config.get('_ael');
       if (ael) {
@@ -5909,9 +5907,10 @@ const addEventListener$1 = (el, eventName, callback, opts) => {
   return el.addEventListener(eventName, callback, opts);
 };
 const removeEventListener = (el, eventName, callback, opts) => {
+  var _a;
   if (typeof window !== 'undefined') {
     const win = window;
-    const config = win && win.Ionic && win.Ionic.config;
+    const config = (_a = win === null || win === void 0 ? void 0 : win.Ionic) === null || _a === void 0 ? void 0 : _a.config;
     if (config) {
       const rel = config.get('_rel');
       if (rel) {
@@ -5997,12 +5996,8 @@ const getAriaLabel = (componentEl, inputId) => {
   // Grab the id off of the component in case they are using
   // a custom label using the label element
   const componentId = componentEl.id;
-  let labelId = labelledBy !== null && labelledBy.trim() !== ''
-    ? labelledBy
-    : inputId + '-lbl';
-  let label = labelledBy !== null && labelledBy.trim() !== ''
-    ? document.getElementById(labelledBy)
-    : findItemLabel(componentEl);
+  let labelId = labelledBy !== null && labelledBy.trim() !== '' ? labelledBy : inputId + '-lbl';
+  let label = labelledBy !== null && labelledBy.trim() !== '' ? document.getElementById(labelledBy) : findItemLabel(componentEl);
   if (label) {
     if (labelledBy === null) {
       label.id = labelId;
@@ -6059,7 +6054,7 @@ const assert = (actual, reason) => {
   if (!actual) {
     const message = 'ASSERT: ' + reason;
     console.error(message);
-    debugger; // tslint:disable-line
+    debugger; // eslint-disable-line
     throw new Error(message);
   }
 };
@@ -6088,8 +6083,10 @@ const pointerCoord = (ev) => {
 const isEndSide = (side) => {
   const isRTL = document.dir === 'rtl';
   switch (side) {
-    case 'start': return isRTL;
-    case 'end': return !isRTL;
+    case 'start':
+      return isRTL;
+    case 'end':
+      return !isRTL;
     default:
       throw new Error(`"${side}" is not a valid value for [side]. Use "start" or "end" instead.`);
   }
@@ -6098,7 +6095,7 @@ const debounceEvent = (event, wait) => {
   const original = event._original || event;
   return {
     _original: event,
-    emit: debounce$1(original.emit.bind(original), wait)
+    emit: debounce$1(original.emit.bind(original), wait),
   };
 };
 const debounce$1 = (func, wait = 0) => {
@@ -6222,7 +6219,8 @@ class Accordion {
         return;
       }
       // This is not defined in unit tests
-      const ionItem = slot.assignedElements && slot.assignedElements().find(el => el.tagName === 'ION-ITEM');
+      const ionItem = slot.assignedElements &&
+        slot.assignedElements().find((el) => el.tagName === 'ION-ITEM');
       return ionItem;
     };
     this.setAria = (expanded = false) => {
@@ -6358,7 +6356,7 @@ class Accordion {
         return;
       }
       const value = accordionGroup.value;
-      const shouldExpand = (Array.isArray(value)) ? value.includes(accordionValue) : value === accordionValue;
+      const shouldExpand = Array.isArray(value) ? value.includes(accordionValue) : value === accordionValue;
       if (shouldExpand) {
         this.expandAccordion(initialUpdate);
         this.isNext = this.isPrevious = false;
@@ -6373,14 +6371,14 @@ class Accordion {
          * next or previous accordion is selected.
          */
         const nextAccordion = this.getNextSibling();
-        const nextAccordionValue = nextAccordion && nextAccordion.value;
+        const nextAccordionValue = nextAccordion === null || nextAccordion === void 0 ? void 0 : nextAccordion.value;
         if (nextAccordionValue !== undefined) {
-          this.isPrevious = (Array.isArray(value)) ? value.includes(nextAccordionValue) : value === nextAccordionValue;
+          this.isPrevious = Array.isArray(value) ? value.includes(nextAccordionValue) : value === nextAccordionValue;
         }
         const previousAccordion = this.getPreviousSibling();
-        const previousAccordionValue = previousAccordion && previousAccordion.value;
+        const previousAccordionValue = previousAccordion === null || previousAccordion === void 0 ? void 0 : previousAccordion.value;
         if (previousAccordionValue !== undefined) {
-          this.isNext = (Array.isArray(value)) ? value.includes(previousAccordionValue) : value === previousAccordionValue;
+          this.isNext = Array.isArray(value) ? value.includes(previousAccordionValue) : value === previousAccordionValue;
         }
       }
     };
@@ -6406,7 +6404,8 @@ class Accordion {
     };
   }
   connectedCallback() {
-    const accordionGroupEl = this.accordionGroupEl = this.el && this.el.closest('ion-accordion-group');
+    var _a;
+    const accordionGroupEl = (this.accordionGroupEl = (_a = this.el) === null || _a === void 0 ? void 0 : _a.closest('ion-accordion-group'));
     if (accordionGroupEl) {
       this.updateState(true);
       addEventListener$1(accordionGroupEl, 'ionChange', this.updateListener);
@@ -6467,8 +6466,8 @@ class Accordion {
         'accordion-previous': this.isPrevious,
         'accordion-disabled': disabled,
         'accordion-readonly': readonly,
-        'accordion-animated': config$1.getBoolean('animated', true)
-      } }, hAsync("div", { onClick: () => this.toggleExpanded(), id: "header", part: headerPart, "aria-controls": "content", ref: headerEl => this.headerEl = headerEl }, hAsync("slot", { name: "header" })), hAsync("div", { id: "content", part: contentPart, role: "region", "aria-labelledby": "header", ref: contentEl => this.contentEl = contentEl }, hAsync("div", { id: "content-wrapper", ref: contentElWrapper => this.contentElWrapper = contentElWrapper }, hAsync("slot", { name: "content" })))));
+        'accordion-animated': config$1.getBoolean('animated', true),
+      } }, hAsync("div", { onClick: () => this.toggleExpanded(), id: "header", part: headerPart, "aria-controls": "content", ref: (headerEl) => (this.headerEl = headerEl) }, hAsync("slot", { name: "header" })), hAsync("div", { id: "content", part: contentPart, role: "region", "aria-labelledby": "header", ref: (contentEl) => (this.contentEl = contentEl) }, hAsync("div", { id: "content-wrapper", ref: (contentElWrapper) => (this.contentElWrapper = contentElWrapper) }, hAsync("slot", { name: "content" })))));
   }
   static get delegatesFocus() { return true; }
   get el() { return getElement(this); }
@@ -6563,7 +6562,7 @@ class AccordionGroup {
     if (!activeElement) {
       return;
     }
-    const accordionEl = (activeElement.tagName === 'ION-ACCORDION') ? activeElement : activeElement.closest('ion-accordion');
+    const accordionEl = activeElement.tagName === 'ION-ACCORDION' ? activeElement : activeElement.closest('ion-accordion');
     if (!accordionEl) {
       return;
     }
@@ -6573,7 +6572,7 @@ class AccordionGroup {
     }
     // If the active accordion is not in the current array of accordions, do not do anything
     const accordions = await this.getAccordions();
-    const startingIndex = accordions.findIndex(a => a === accordionEl);
+    const startingIndex = accordions.findIndex((a) => a === accordionEl);
     if (startingIndex === -1) {
       return;
     }
@@ -6620,7 +6619,7 @@ class AccordionGroup {
       if (multiple) {
         const groupValue = value || [];
         const processedValue = Array.isArray(groupValue) ? groupValue : [groupValue];
-        const valueExists = processedValue.find(v => v === accordionValue);
+        const valueExists = processedValue.find((v) => v === accordionValue);
         if (valueExists === undefined && accordionValue !== undefined) {
           this.value = [...processedValue, accordionValue];
         }
@@ -6637,7 +6636,7 @@ class AccordionGroup {
       if (multiple) {
         const groupValue = value || [];
         const processedValue = Array.isArray(groupValue) ? groupValue : [groupValue];
-        this.value = processedValue.filter(v => v !== accordionValue);
+        this.value = processedValue.filter((v) => v !== accordionValue);
       }
       else {
         this.value = undefined;
@@ -6646,7 +6645,6 @@ class AccordionGroup {
   }
   findNextAccordion(accordions, startingIndex) {
     const nextAccordion = accordions[startingIndex + 1];
-    // tslint:disable-next-line:strict-type-predicates
     if (nextAccordion === undefined) {
       return accordions[0];
     }
@@ -6654,7 +6652,6 @@ class AccordionGroup {
   }
   findPreviousAccordion(accordions, startingIndex) {
     const prevAccordion = accordions[startingIndex - 1];
-    // tslint:disable-next-line:strict-type-predicates
     if (prevAccordion === undefined) {
       return accordions[accordions.length - 1];
     }
@@ -6673,7 +6670,7 @@ class AccordionGroup {
         [mode]: true,
         'accordion-group-disabled': disabled,
         'accordion-group-readonly': readonly,
-        [`accordion-group-expand-${expand}`]: true
+        [`accordion-group-expand-${expand}`]: true,
       }, role: "presentation" }, hAsync("slot", null)));
   }
   get el() { return getElement(this); }
@@ -6710,8 +6707,9 @@ class AccordionGroup {
  */
 const HapticEngine = {
   getEngine() {
+    var _a;
     const win = window;
-    return (win.TapticEngine) || (win.Capacitor && win.Capacitor.isPluginAvailable('Haptics') && win.Capacitor.Plugins.Haptics);
+    return win.TapticEngine || (((_a = win.Capacitor) === null || _a === void 0 ? void 0 : _a.isPluginAvailable('Haptics')) && win.Capacitor.Plugins.Haptics);
   },
   available() {
     return !!this.getEngine();
@@ -6777,7 +6775,7 @@ const HapticEngine = {
     else {
       engine.gestureSelectionEnd();
     }
-  }
+  },
 };
 /**
  * Trigger a selection changed haptic event. Good for one-time events
@@ -6849,7 +6847,7 @@ class GestureController {
     }
     const requestedStart = this.requestedStart;
     let maxPriority = -10000;
-    requestedStart.forEach(value => {
+    requestedStart.forEach((value) => {
       maxPriority = Math.max(maxPriority, value);
     });
     if (maxPriority === priority) {
@@ -7012,10 +7010,12 @@ const GESTURE_CONTROLLER = new GestureController();
 const addEventListener = (el, eventName, callback, opts) => {
   // use event listener options when supported
   // otherwise it's just a boolean for the "capture" arg
-  const listenerOpts = supportsPassive(el) ? {
-    'capture': !!opts.capture,
-    'passive': !!opts.passive,
-  } : !!opts.capture;
+  const listenerOpts = supportsPassive(el)
+    ? {
+      capture: !!opts.capture,
+      passive: !!opts.passive,
+    }
+    : !!opts.capture;
   let add;
   let remove;
   if (el['__zone_symbol__addEventListener']) {
@@ -7037,9 +7037,11 @@ const supportsPassive = (node) => {
       const opts = Object.defineProperty({}, 'passive', {
         get: () => {
           _sPassive = true;
-        }
+        },
       });
-      node.addEventListener('optsTest', () => { return; }, opts);
+      node.addEventListener('optsTest', () => {
+        return;
+      }, opts);
     }
     catch (e) {
       _sPassive = false;
@@ -7164,7 +7166,7 @@ const createPointerEvents = (el, pointerDown, pointerMove, pointerUp, options) =
   return {
     enable,
     stop,
-    destroy
+    destroy,
   };
 };
 const getDocument = (node) => {
@@ -7194,8 +7196,8 @@ const createPanRecognizer = (direction, thresh, maxAngle) => {
       if (!dirty) {
         return false;
       }
-      const deltaX = (x - startX);
-      const deltaY = (y - startY);
+      const deltaX = x - startX;
+      const deltaY = y - startY;
       const distance = deltaX * deltaX + deltaY * deltaY;
       if (distance < threshold) {
         return false;
@@ -7219,7 +7221,7 @@ const createPanRecognizer = (direction, thresh, maxAngle) => {
     },
     getDirection() {
       return isPan;
-    }
+    },
   };
 };
 
@@ -7254,13 +7256,13 @@ const createGesture = (config) => {
     deltaY: 0,
     currentTime: 0,
     event: undefined,
-    data: undefined
+    data: undefined,
   };
   const pan = createPanRecognizer(finalConfig.direction, finalConfig.threshold, finalConfig.maxAngle);
   const gesture = GESTURE_CONTROLLER.createGesture({
     name: config.gestureName,
     priority: config.gesturePriority,
-    disableScroll: config.disableScroll
+    disableScroll: config.disableScroll,
   });
   const pointerDown = (ev) => {
     const timeStamp = now(ev);
@@ -7344,10 +7346,9 @@ const createGesture = (config) => {
     return true;
   };
   const blurActiveElement = () => {
-    /* tslint:disable-next-line */
     if (typeof document !== 'undefined') {
       const activeElement = document.activeElement;
-      if (activeElement !== null && activeElement.blur) {
+      if (activeElement === null || activeElement === void 0 ? void 0 : activeElement.blur) {
         activeElement.blur();
       }
     }
@@ -7391,7 +7392,7 @@ const createGesture = (config) => {
   };
   const pointerEvents = createPointerEvents(finalConfig.el, pointerDown, pointerMove, pointerUp, {
     capture: false,
-    passive
+    passive,
   });
   const abortGesture = () => {
     reset();
@@ -7413,7 +7414,7 @@ const createGesture = (config) => {
     destroy() {
       gesture.destroy();
       pointerEvents.destroy();
-    }
+    },
   };
 };
 const calcGestureData = (detail, ev) => {
@@ -7426,7 +7427,7 @@ const calcGestureData = (detail, ev) => {
   updateDetail(ev, detail);
   const currentX = detail.currentX;
   const currentY = detail.currentY;
-  const timestamp = detail.currentTime = now(ev);
+  const timestamp = (detail.currentTime = now(ev));
   const timeDelta = timestamp - prevT;
   if (timeDelta > 0 && timeDelta < 100) {
     const velocityX = (currentX - prevX) / timeDelta;
@@ -7520,13 +7521,13 @@ const createButtonActiveGesture = (el, isButton) => {
     el,
     gestureName: 'buttonActiveDrag',
     threshold: 0,
-    onStart: ev => activateButtonAtPoint(ev.currentX, ev.currentY, hapticSelectionStart),
-    onMove: ev => activateButtonAtPoint(ev.currentX, ev.currentY, hapticSelectionChanged),
+    onStart: (ev) => activateButtonAtPoint(ev.currentX, ev.currentY, hapticSelectionStart),
+    onMove: (ev) => activateButtonAtPoint(ev.currentX, ev.currentY, hapticSelectionChanged),
     onEnd: () => {
       clearActiveButton(true);
       hapticSelectionEnd();
       initialTouchedButton = undefined;
-    }
+    },
   });
 };
 
@@ -7551,14 +7552,13 @@ const createController = (tagName) => {
     },
     async getTop() {
       return getOverlay(document, tagName);
-    }
+    },
   };
 };
 const alertController = /*@__PURE__*/ createController('ion-alert');
 const actionSheetController = /*@__PURE__*/ createController('ion-action-sheet');
 const popoverController = /*@__PURE__*/ createController('ion-popover');
 const prepareOverlay = (el) => {
-  /* tslint:disable-next-line */
   if (typeof document !== 'undefined') {
     connectListeners(document);
   }
@@ -7569,7 +7569,6 @@ const prepareOverlay = (el) => {
   }
 };
 const createOverlay = (tagName, opts) => {
-  /* tslint:disable-next-line */
   if (typeof window !== 'undefined' && typeof window.customElements !== 'undefined') {
     return window.customElements.whenDefined(tagName).then(() => {
       const element = document.createElement(tagName);
@@ -7581,7 +7580,7 @@ const createOverlay = (tagName, opts) => {
       Object.assign(element, Object.assign(Object.assign({}, opts), { hasController: true }));
       // append the overlay element to the document body
       getAppRoot(document).appendChild(element);
-      return new Promise(resolve => componentOnReady(element, resolve));
+      return new Promise((resolve) => componentOnReady(element, resolve));
     });
   }
   return Promise.resolve();
@@ -7590,7 +7589,7 @@ const focusableQueryString$1 = '[tabindex]:not([tabindex^="-"]), input:not([type
 const innerFocusableQueryString = 'input:not([type=hidden]), textarea, button, select';
 const focusFirstDescendant = (ref, overlay) => {
   let firstInput = ref.querySelector(focusableQueryString$1);
-  const shadowRoot = firstInput && firstInput.shadowRoot;
+  const shadowRoot = firstInput === null || firstInput === void 0 ? void 0 : firstInput.shadowRoot;
   if (shadowRoot) {
     // If there are no inner focusable elements, just focus the host element.
     firstInput = shadowRoot.querySelector(innerFocusableQueryString) || firstInput;
@@ -7607,7 +7606,7 @@ const isOverlayHidden = (overlay) => overlay.classList.contains('overlay-hidden'
 const focusLastDescendant = (ref, overlay) => {
   const inputs = Array.from(ref.querySelectorAll(focusableQueryString$1));
   let lastInput = inputs.length > 0 ? inputs[inputs.length - 1] : null;
-  const shadowRoot = lastInput && lastInput.shadowRoot;
+  const shadowRoot = lastInput === null || lastInput === void 0 ? void 0 : lastInput.shadowRoot;
   if (shadowRoot) {
     // If there are no inner focusable elements, just focus the host element.
     lastInput = shadowRoot.querySelector(innerFocusableQueryString) || lastInput;
@@ -7779,19 +7778,19 @@ const connectListeners = (doc) => {
       trapKeyboardFocus(ev, doc);
     }, true);
     // handle back-button click
-    doc.addEventListener('ionBackButton', ev => {
+    doc.addEventListener('ionBackButton', (ev) => {
       const lastOverlay = getOverlay(doc);
-      if (lastOverlay && lastOverlay.backdropDismiss) {
+      if (lastOverlay === null || lastOverlay === void 0 ? void 0 : lastOverlay.backdropDismiss) {
         ev.detail.register(OVERLAY_BACK_BUTTON_PRIORITY, () => {
           return lastOverlay.dismiss(undefined, BACKDROP);
         });
       }
     });
     // handle ESC to close overlay
-    doc.addEventListener('keyup', ev => {
+    doc.addEventListener('keyup', (ev) => {
       if (ev.key === 'Escape') {
         const lastOverlay = getOverlay(doc);
-        if (lastOverlay && lastOverlay.backdropDismiss) {
+        if (lastOverlay === null || lastOverlay === void 0 ? void 0 : lastOverlay.backdropDismiss) {
           lastOverlay.dismiss(undefined, BACKDROP);
         }
       }
@@ -7809,8 +7808,7 @@ const getOverlays = (doc, selector) => {
   if (selector === undefined) {
     selector = 'ion-alert,ion-action-sheet,ion-loading,ion-modal,ion-picker,ion-popover,ion-toast';
   }
-  return Array.from(doc.querySelectorAll(selector))
-    .filter(c => c.overlayIndex > 0);
+  return Array.from(doc.querySelectorAll(selector)).filter((c) => c.overlayIndex > 0);
 };
 /**
  * Returns an overlay element
@@ -7820,10 +7818,8 @@ const getOverlays = (doc, selector) => {
  * @returns The overlay element or `undefined` if no overlay element is found.
  */
 const getOverlay = (doc, overlayTag, id) => {
-  const overlays = getOverlays(doc, overlayTag).filter(o => !isOverlayHidden(o));
-  return (id === undefined)
-    ? overlays[overlays.length - 1]
-    : overlays.find(o => o.id === id);
+  const overlays = getOverlays(doc, overlayTag).filter((o) => !isOverlayHidden(o));
+  return id === undefined ? overlays[overlays.length - 1] : overlays.find((o) => o.id === id);
 };
 /**
  * When an overlay is presented, the main
@@ -7871,7 +7867,7 @@ const present = async (overlay, name, iosEnterAnimation, mdEnterAnimation, opts)
   (_a = overlay.willPresentShorthand) === null || _a === void 0 ? void 0 : _a.emit();
   const mode = getIonMode$1(overlay);
   // get the user's animation fn if one was provided
-  const animationBuilder = (overlay.enterAnimation)
+  const animationBuilder = overlay.enterAnimation
     ? overlay.enterAnimation
     : config$1.get(name, mode === 'ios' ? iosEnterAnimation : mdEnterAnimation);
   const completed = await overlayAnimation(overlay, animationBuilder, overlay.el, opts);
@@ -7909,7 +7905,7 @@ const focusPreviousElementOnDismiss = async (overlayEl) => {
   if (!previousElement) {
     return;
   }
-  const shadowRoot = previousElement && previousElement.shadowRoot;
+  const shadowRoot = previousElement === null || previousElement === void 0 ? void 0 : previousElement.shadowRoot;
   if (shadowRoot) {
     // If there are no inner focusable elements, just focus the host element.
     previousElement = shadowRoot.querySelector(innerFocusableQueryString) || previousElement;
@@ -7930,7 +7926,7 @@ const dismiss = async (overlay, data, role, name, iosLeaveAnimation, mdLeaveAnim
     overlay.willDismiss.emit({ data, role });
     (_a = overlay.willDismissShorthand) === null || _a === void 0 ? void 0 : _a.emit({ data, role });
     const mode = getIonMode$1(overlay);
-    const animationBuilder = (overlay.leaveAnimation)
+    const animationBuilder = overlay.leaveAnimation
       ? overlay.leaveAnimation
       : config$1.get(name, mode === 'ios' ? iosLeaveAnimation : mdLeaveAnimation);
     // If dismissed via gesture, no need to play leaving animation again
@@ -7968,7 +7964,7 @@ const overlayAnimation = async (overlay, animationBuilder, baseEl, opts) => {
   if (overlay.keyboardClose) {
     animation.beforeAddWrite(() => {
       const activeElement = baseEl.ownerDocument.activeElement;
-      if (activeElement && activeElement.matches('input,ion-input, ion-textarea')) {
+      if (activeElement === null || activeElement === void 0 ? void 0 : activeElement.matches('input,ion-input, ion-textarea')) {
         activeElement.blur();
       }
     });
@@ -7980,7 +7976,7 @@ const overlayAnimation = async (overlay, animationBuilder, baseEl, opts) => {
 };
 const eventMethod = (element, eventName) => {
   let resolve;
-  const promise = new Promise(r => resolve = r);
+  const promise = new Promise((r) => (resolve = r));
   onceEvent(element, eventName, (event) => {
     resolve(event.detail);
   });
@@ -8030,21 +8026,22 @@ const hostContext = (selector, el) => {
  * Create the mode and color classes for the component based on the classes passed in
  */
 const createColorClasses$1 = (color, cssClassMap) => {
-  return (typeof color === 'string' && color.length > 0) ? Object.assign({ 'ion-color': true, [`ion-color-${color}`]: true }, cssClassMap) : cssClassMap;
+  return typeof color === 'string' && color.length > 0
+    ? Object.assign({ 'ion-color': true, [`ion-color-${color}`]: true }, cssClassMap) : cssClassMap;
 };
 const getClassList = (classes) => {
   if (classes !== undefined) {
     const array = Array.isArray(classes) ? classes : classes.split(' ');
     return array
-      .filter(c => c != null)
-      .map(c => c.trim())
-      .filter(c => c !== '');
+      .filter((c) => c != null)
+      .map((c) => c.trim())
+      .filter((c) => c !== '');
   }
   return [];
 };
 const getClassMap = (classes) => {
   const map = {};
-  getClassList(classes).forEach(c => map[c] = true);
+  getClassList(classes).forEach((c) => (map[c] = true));
   return map;
 };
 const SCHEME = /^[a-z][a-z0-9+\-.]*:/;
@@ -8070,8 +8067,9 @@ let animationPrefix;
  * to be written in camelCase when animating
  */
 const processKeyframes = (keyframes) => {
-  keyframes.forEach(keyframe => {
+  keyframes.forEach((keyframe) => {
     for (const key in keyframe) {
+      // eslint-disable-next-line no-prototype-builtins
       if (keyframe.hasOwnProperty(key)) {
         const value = keyframe[key];
         if (key === 'easing') {
@@ -8098,7 +8096,7 @@ const getAnimationPrefix = (el) => {
   if (animationPrefix === undefined) {
     const supportsUnprefixed = el.style.animationName !== undefined;
     const supportsWebkitPrefix = el.style.webkitAnimationName !== undefined;
-    animationPrefix = (!supportsUnprefixed && supportsWebkitPrefix) ? '-webkit-' : '';
+    animationPrefix = !supportsUnprefixed && supportsWebkitPrefix ? '-webkit-' : '';
   }
   return animationPrefix;
 };
@@ -8135,28 +8133,31 @@ const animationEnd = (el, callback) => {
   return unregister;
 };
 const generateKeyframeRules = (keyframes = []) => {
-  return keyframes.map(keyframe => {
+  return keyframes
+    .map((keyframe) => {
     const offset = keyframe.offset;
     const frameString = [];
     for (const property in keyframe) {
+      // eslint-disable-next-line no-prototype-builtins
       if (keyframe.hasOwnProperty(property) && property !== 'offset') {
         frameString.push(`${property}: ${keyframe[property]};`);
       }
     }
     return `${offset * 100}% { ${frameString.join(' ')} }`;
-  }).join(' ');
+  })
+    .join(' ');
 };
 const keyframeIds = [];
 const generateKeyframeName = (keyframeRules) => {
   let index = keyframeIds.indexOf(keyframeRules);
   if (index < 0) {
-    index = (keyframeIds.push(keyframeRules) - 1);
+    index = keyframeIds.push(keyframeRules) - 1;
   }
   return `ion-animation-${index}`;
 };
 const getStyleContainer = (element) => {
   const rootNode = element.getRootNode();
-  return (rootNode.head || rootNode);
+  return rootNode.head || rootNode;
 };
 const createKeyframeStylesheet = (keyframeName, keyframeRules, element) => {
   const styleContainer = getStyleContainer(element);
@@ -8173,7 +8174,7 @@ const createKeyframeStylesheet = (keyframeName, keyframeRules, element) => {
 };
 const addClassToArray = (classes = [], className) => {
   if (className !== undefined) {
-    const classNameToAppend = (Array.isArray(className)) ? className : [className];
+    const classNameToAppend = Array.isArray(className) ? className : [className];
     return [...classes, ...classNameToAppend];
   }
   return classes;
@@ -8221,14 +8222,16 @@ const createAnimation = (animationId) => {
   const _afterAddReadFunctions = [];
   const _afterAddWriteFunctions = [];
   const webAnimations = [];
-  const supportsAnimationEffect = (typeof AnimationEffect === 'function' || typeof window.AnimationEffect === 'function');
-  const supportsWebAnimations = (typeof Element === 'function') && (typeof Element.prototype.animate === 'function') && supportsAnimationEffect;
+  const supportsAnimationEffect = typeof AnimationEffect === 'function' || typeof window.AnimationEffect === 'function';
+  const supportsWebAnimations = typeof Element === 'function' &&
+    typeof Element.prototype.animate === 'function' &&
+    supportsAnimationEffect;
   const ANIMATION_END_FALLBACK_PADDING_MS = 100;
   const getWebAnimations = () => {
     return webAnimations;
   };
   const destroy = (clearStyleSheets) => {
-    childAnimations.forEach(childAnimation => {
+    childAnimations.forEach((childAnimation) => {
       childAnimation.destroy(clearStyleSheets);
     });
     cleanUp(clearStyleSheets);
@@ -8264,7 +8267,7 @@ const createAnimation = (animationId) => {
     willComplete = true;
   };
   const onFinish = (callback, opts) => {
-    const callbacks = (opts && opts.oneTimeCallback) ? onFinishOneTimeCallbacks : onFinishCallbacks;
+    const callbacks = (opts === null || opts === void 0 ? void 0 : opts.oneTimeCallback) ? onFinishOneTimeCallbacks : onFinishCallbacks;
     callbacks.push({ c: callback, o: opts });
     return ani;
   };
@@ -8280,7 +8283,7 @@ const createAnimation = (animationId) => {
    */
   const cleanUpElements = () => {
     if (supportsWebAnimations) {
-      webAnimations.forEach(animation => {
+      webAnimations.forEach((animation) => {
         animation.cancel();
       });
       webAnimations.length = 0;
@@ -8288,7 +8291,7 @@ const createAnimation = (animationId) => {
     else {
       const elementsArray = elements.slice();
       raf(() => {
-        elementsArray.forEach(element => {
+        elementsArray.forEach((element) => {
           removeStyleProperty(element, 'animation-name');
           removeStyleProperty(element, 'animation-duration');
           removeStyleProperty(element, 'animation-timing-function');
@@ -8306,13 +8309,13 @@ const createAnimation = (animationId) => {
    * from the DOM.
    */
   const cleanUpStyleSheets = () => {
-    stylesheets.forEach(stylesheet => {
+    stylesheets.forEach((stylesheet) => {
       /**
        * When sharing stylesheets, it's possible
        * for another animation to have already
        * cleaned up a particular stylesheet
        */
-      if (stylesheet && stylesheet.parentNode) {
+      if (stylesheet === null || stylesheet === void 0 ? void 0 : stylesheet.parentNode) {
         stylesheet.parentNode.removeChild(stylesheet);
       }
     });
@@ -8533,7 +8536,7 @@ const createAnimation = (animationId) => {
   };
   const updateKeyframes = (keyframeValues) => {
     if (supportsWebAnimations) {
-      getWebAnimations().forEach(animation => {
+      getWebAnimations().forEach((animation) => {
         if (animation.effect.setKeyframes) {
           animation.effect.setKeyframes(keyframeValues);
         }
@@ -8552,18 +8555,19 @@ const createAnimation = (animationId) => {
    */
   const beforeAnimation = () => {
     // Runs all before read callbacks
-    _beforeAddReadFunctions.forEach(callback => callback());
+    _beforeAddReadFunctions.forEach((callback) => callback());
     // Runs all before write callbacks
-    _beforeAddWriteFunctions.forEach(callback => callback());
+    _beforeAddWriteFunctions.forEach((callback) => callback());
     // Updates styles and classes before animation runs
     const addClasses = beforeAddClasses;
     const removeClasses = beforeRemoveClasses;
     const styles = beforeStylesValue;
-    elements.forEach(el => {
+    elements.forEach((el) => {
       const elementClassList = el.classList;
-      addClasses.forEach(c => elementClassList.add(c));
-      removeClasses.forEach(c => elementClassList.remove(c));
+      addClasses.forEach((c) => elementClassList.add(c));
+      removeClasses.forEach((c) => elementClassList.remove(c));
       for (const property in styles) {
+        // eslint-disable-next-line no-prototype-builtins
         if (styles.hasOwnProperty(property)) {
           setStyleProperty(el, property, styles[property]);
         }
@@ -8576,28 +8580,29 @@ const createAnimation = (animationId) => {
   const afterAnimation = () => {
     clearCSSAnimationsTimeout();
     // Runs all after read callbacks
-    _afterAddReadFunctions.forEach(callback => callback());
+    _afterAddReadFunctions.forEach((callback) => callback());
     // Runs all after write callbacks
-    _afterAddWriteFunctions.forEach(callback => callback());
+    _afterAddWriteFunctions.forEach((callback) => callback());
     // Updates styles and classes before animation ends
     const currentStep = willComplete ? 1 : 0;
     const addClasses = afterAddClasses;
     const removeClasses = afterRemoveClasses;
     const styles = afterStylesValue;
-    elements.forEach(el => {
+    elements.forEach((el) => {
       const elementClassList = el.classList;
-      addClasses.forEach(c => elementClassList.add(c));
-      removeClasses.forEach(c => elementClassList.remove(c));
+      addClasses.forEach((c) => elementClassList.add(c));
+      removeClasses.forEach((c) => elementClassList.remove(c));
       for (const property in styles) {
+        // eslint-disable-next-line no-prototype-builtins
         if (styles.hasOwnProperty(property)) {
           setStyleProperty(el, property, styles[property]);
         }
       }
     });
-    onFinishCallbacks.forEach(onFinishCallback => {
+    onFinishCallbacks.forEach((onFinishCallback) => {
       return onFinishCallback.c(currentStep, ani);
     });
-    onFinishOneTimeCallbacks.forEach(onFinishCallback => {
+    onFinishOneTimeCallbacks.forEach((onFinishCallback) => {
       return onFinishCallback.c(currentStep, ani);
     });
     onFinishOneTimeCallbacks.length = 0;
@@ -8622,10 +8627,10 @@ const createAnimation = (animationId) => {
   const initializeCSSAnimation = (toggleAnimationName = true) => {
     cleanUpStyleSheets();
     const processedKeyframes = processKeyframes(_keyframes);
-    elements.forEach(element => {
+    elements.forEach((element) => {
       if (processedKeyframes.length > 0) {
         const keyframeRules = generateKeyframeRules(processedKeyframes);
-        keyframeName = (animationId !== undefined) ? animationId : generateKeyframeName(keyframeRules);
+        keyframeName = animationId !== undefined ? animationId : generateKeyframeName(keyframeRules);
         const stylesheet = createKeyframeStylesheet(keyframeName, keyframeRules, element);
         stylesheets.push(stylesheet);
         setStyleProperty(element, 'animation-duration', `${getDuration()}ms`);
@@ -8633,9 +8638,7 @@ const createAnimation = (animationId) => {
         setStyleProperty(element, 'animation-delay', `${getDelay()}ms`);
         setStyleProperty(element, 'animation-fill-mode', getFill());
         setStyleProperty(element, 'animation-direction', getDirection());
-        const iterationsCount = (getIterations() === Infinity)
-          ? 'infinite'
-          : getIterations().toString();
+        const iterationsCount = getIterations() === Infinity ? 'infinite' : getIterations().toString();
         setStyleProperty(element, 'animation-iteration-count', iterationsCount);
         setStyleProperty(element, 'animation-play-state', 'paused');
         if (toggleAnimationName) {
@@ -8648,7 +8651,7 @@ const createAnimation = (animationId) => {
     });
   };
   const initializeWebAnimation = () => {
-    elements.forEach(element => {
+    elements.forEach((element) => {
       const animation = element.animate(_keyframes, {
         id,
         delay: getDelay(),
@@ -8656,7 +8659,7 @@ const createAnimation = (animationId) => {
         easing: getEasing(),
         iterations: getIterations(),
         fill: getFill(),
-        direction: getDirection()
+        direction: getDirection(),
       });
       animation.pause();
       webAnimations.push(animation);
@@ -8682,14 +8685,14 @@ const createAnimation = (animationId) => {
   const setAnimationStep = (step) => {
     step = Math.min(Math.max(step, 0), 0.9999);
     if (supportsWebAnimations) {
-      webAnimations.forEach(animation => {
-        animation.currentTime = animation.effect.getComputedTiming().delay + (getDuration() * step);
+      webAnimations.forEach((animation) => {
+        animation.currentTime = animation.effect.getComputedTiming().delay + getDuration() * step;
         animation.pause();
       });
     }
     else {
       const animationDuration = `-${getDuration() * step}ms`;
-      elements.forEach(element => {
+      elements.forEach((element) => {
         if (_keyframes.length > 0) {
           setStyleProperty(element, 'animation-delay', animationDuration);
           setStyleProperty(element, 'animation-play-state', 'paused');
@@ -8698,14 +8701,14 @@ const createAnimation = (animationId) => {
     }
   };
   const updateWebAnimation = (step) => {
-    webAnimations.forEach(animation => {
+    webAnimations.forEach((animation) => {
       animation.effect.updateTiming({
         delay: getDelay(),
         duration: getDuration(),
         easing: getEasing(),
         iterations: getIterations(),
         fill: getFill(),
-        direction: getDirection()
+        direction: getDirection(),
       });
     });
     if (step !== undefined) {
@@ -8714,16 +8717,14 @@ const createAnimation = (animationId) => {
   };
   const updateCSSAnimation = (toggleAnimationName = true, step) => {
     raf(() => {
-      elements.forEach(element => {
+      elements.forEach((element) => {
         setStyleProperty(element, 'animation-name', keyframeName || null);
         setStyleProperty(element, 'animation-duration', `${getDuration()}ms`);
         setStyleProperty(element, 'animation-timing-function', getEasing());
-        setStyleProperty(element, 'animation-delay', (step !== undefined) ? `-${step * getDuration()}ms` : `${getDelay()}ms`);
+        setStyleProperty(element, 'animation-delay', step !== undefined ? `-${step * getDuration()}ms` : `${getDelay()}ms`);
         setStyleProperty(element, 'animation-fill-mode', getFill() || null);
         setStyleProperty(element, 'animation-direction', getDirection() || null);
-        const iterationsCount = (getIterations() === Infinity)
-          ? 'infinite'
-          : getIterations().toString();
+        const iterationsCount = getIterations() === Infinity ? 'infinite' : getIterations().toString();
         setStyleProperty(element, 'animation-iteration-count', iterationsCount);
         if (toggleAnimationName) {
           setStyleProperty(element, 'animation-name', `${keyframeName}-alt`);
@@ -8736,7 +8737,7 @@ const createAnimation = (animationId) => {
   };
   const update = (deep = false, toggleAnimationName = true, step) => {
     if (deep) {
-      childAnimations.forEach(animation => {
+      childAnimations.forEach((animation) => {
         animation.update(deep, toggleAnimationName, step);
       });
     }
@@ -8749,7 +8750,7 @@ const createAnimation = (animationId) => {
     return ani;
   };
   const progressStart = (forceLinearEasing = false, step) => {
-    childAnimations.forEach(animation => {
+    childAnimations.forEach((animation) => {
       animation.progressStart(forceLinearEasing, step);
     });
     pauseAnimation();
@@ -8761,7 +8762,7 @@ const createAnimation = (animationId) => {
     return ani;
   };
   const progressStep = (step) => {
-    childAnimations.forEach(animation => {
+    childAnimations.forEach((animation) => {
       animation.progressStep(step);
     });
     setAnimationStep(step);
@@ -8769,17 +8770,16 @@ const createAnimation = (animationId) => {
   };
   const progressEnd = (playTo, step, dur) => {
     shouldForceLinearEasing = false;
-    childAnimations.forEach(animation => {
+    childAnimations.forEach((animation) => {
       animation.progressEnd(playTo, step, dur);
     });
     if (dur !== undefined) {
       forceDurationValue = dur;
     }
     finished = false;
-    // tslint:disable-next-line: strict-boolean-conditions
     willComplete = true;
     if (playTo === 0) {
-      forceDirectionValue = (getDirection() === 'reverse') ? 'normal' : 'reverse';
+      forceDirectionValue = getDirection() === 'reverse' ? 'normal' : 'reverse';
       if (forceDirectionValue === 'reverse') {
         willComplete = false;
       }
@@ -8788,7 +8788,7 @@ const createAnimation = (animationId) => {
         setAnimationStep(1 - step);
       }
       else {
-        forceDelayValue = ((1 - step) * getDuration()) * -1;
+        forceDelayValue = (1 - step) * getDuration() * -1;
         update(false, false);
       }
     }
@@ -8798,7 +8798,7 @@ const createAnimation = (animationId) => {
         setAnimationStep(step);
       }
       else {
-        forceDelayValue = (step * getDuration()) * -1;
+        forceDelayValue = step * getDuration() * -1;
         update(false, false);
       }
     }
@@ -8808,7 +8808,7 @@ const createAnimation = (animationId) => {
         forceDirectionValue = undefined;
         forceDelayValue = undefined;
       }, {
-        oneTimeCallback: true
+        oneTimeCallback: true,
       });
       if (!parentAnimation) {
         play();
@@ -8819,19 +8819,19 @@ const createAnimation = (animationId) => {
   const pauseAnimation = () => {
     if (initialized) {
       if (supportsWebAnimations) {
-        webAnimations.forEach(animation => {
+        webAnimations.forEach((animation) => {
           animation.pause();
         });
       }
       else {
-        elements.forEach(element => {
+        elements.forEach((element) => {
           setStyleProperty(element, 'animation-play-state', 'paused');
         });
       }
     }
   };
   const pause = () => {
-    childAnimations.forEach(animation => {
+    childAnimations.forEach((animation) => {
       animation.pause();
     });
     pauseAnimation();
@@ -8849,7 +8849,7 @@ const createAnimation = (animationId) => {
   const playCSSAnimations = () => {
     clearCSSAnimationsTimeout();
     raf(() => {
-      elements.forEach(element => {
+      elements.forEach((element) => {
         if (_keyframes.length > 0) {
           setStyleProperty(element, 'animation-play-state', 'running');
         }
@@ -8872,7 +8872,7 @@ const createAnimation = (animationId) => {
       const animationIterations = getIterations() || 1;
       // No need to set a timeout when animation has infinite iterations
       if (isFinite(animationIterations)) {
-        cssAnimationsTimerFallback = setTimeout(onAnimationEndFallback, animationDelay + (animationDuration * animationIterations) + ANIMATION_END_FALLBACK_PADDING_MS);
+        cssAnimationsTimerFallback = setTimeout(onAnimationEndFallback, animationDelay + animationDuration * animationIterations + ANIMATION_END_FALLBACK_PADDING_MS);
       }
       animationEnd(elements[0], () => {
         clearCSSAnimationsTimeout();
@@ -8895,14 +8895,14 @@ const createAnimation = (animationId) => {
     }
   };
   const clearCSSAnimationPlayState = () => {
-    elements.forEach(element => {
+    elements.forEach((element) => {
       removeStyleProperty(element, 'animation-duration');
       removeStyleProperty(element, 'animation-delay');
       removeStyleProperty(element, 'animation-play-state');
     });
   };
   const playWebAnimations = () => {
-    webAnimations.forEach(animation => {
+    webAnimations.forEach((animation) => {
       animation.play();
     });
     if (_keyframes.length === 0 || elements.length === 0) {
@@ -8919,10 +8919,10 @@ const createAnimation = (animationId) => {
     }
   };
   const play = (opts) => {
-    return new Promise(resolve => {
-      if (opts && opts.sync) {
+    return new Promise((resolve) => {
+      if (opts === null || opts === void 0 ? void 0 : opts.sync) {
         shouldForceSyncPlayback = true;
-        onFinish(() => shouldForceSyncPlayback = false, { oneTimeCallback: true });
+        onFinish(() => (shouldForceSyncPlayback = false), { oneTimeCallback: true });
       }
       if (!initialized) {
         initializeAnimation();
@@ -8936,7 +8936,7 @@ const createAnimation = (animationId) => {
         shouldCalculateNumAnimations = false;
       }
       onFinish(() => resolve(), { oneTimeCallback: true });
-      childAnimations.forEach(animation => {
+      childAnimations.forEach((animation) => {
         animation.play();
       });
       if (supportsWebAnimations) {
@@ -8948,7 +8948,7 @@ const createAnimation = (animationId) => {
     });
   };
   const stop = () => {
-    childAnimations.forEach(animation => {
+    childAnimations.forEach((animation) => {
       animation.stop();
     });
     if (initialized) {
@@ -8963,10 +8963,7 @@ const createAnimation = (animationId) => {
       firstFrame[property] = value;
     }
     else {
-      _keyframes = [
-        { offset: 0, [property]: value },
-        ..._keyframes
-      ];
+      _keyframes = [{ offset: 0, [property]: value }, ..._keyframes];
     }
     return ani;
   };
@@ -8976,17 +8973,14 @@ const createAnimation = (animationId) => {
       lastFrame[property] = value;
     }
     else {
-      _keyframes = [
-        ..._keyframes,
-        { offset: 1, [property]: value }
-      ];
+      _keyframes = [..._keyframes, { offset: 1, [property]: value }];
     }
     return ani;
   };
   const fromTo = (property, fromValue, toValue) => {
     return from(property, fromValue).to(property, toValue);
   };
-  return ani = {
+  return (ani = {
     parentAnimation,
     elements,
     childAnimations,
@@ -9033,8 +9027,8 @@ const createAnimation = (animationId) => {
     onFinish,
     progressStart,
     progressStep,
-    progressEnd
-  };
+    progressEnd,
+  });
 };
 
 /*!
@@ -9051,7 +9045,7 @@ const iosEnterAnimation$6 = (baseEl) => {
     .addElement(baseEl.querySelector('ion-backdrop'))
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
-    'pointer-events': 'none'
+    'pointer-events': 'none',
   })
     .afterClearStyles(['pointer-events']);
   wrapperAnimation
@@ -9074,9 +9068,7 @@ const iosLeaveAnimation$6 = (baseEl) => {
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  backdropAnimation.addElement(baseEl.querySelector('ion-backdrop')).fromTo('opacity', 'var(--backdrop-opacity)', 0);
   wrapperAnimation
     .addElement(baseEl.querySelector('.action-sheet-wrapper'))
     .fromTo('transform', 'translateY(0%)', 'translateY(100%)');
@@ -9101,7 +9093,7 @@ const mdEnterAnimation$5 = (baseEl) => {
     .addElement(baseEl.querySelector('ion-backdrop'))
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
-    'pointer-events': 'none'
+    'pointer-events': 'none',
   })
     .afterClearStyles(['pointer-events']);
   wrapperAnimation
@@ -9124,9 +9116,7 @@ const mdLeaveAnimation$5 = (baseEl) => {
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  backdropAnimation.addElement(baseEl.querySelector('ion-backdrop')).fromTo('opacity', 'var(--backdrop-opacity)', 0);
   wrapperAnimation
     .addElement(baseEl.querySelector('.action-sheet-wrapper'))
     .fromTo('transform', 'translateY(0%)', 'translateY(100%)');
@@ -9180,7 +9170,7 @@ class ActionSheet {
     this.dispatchCancelHandler = (ev) => {
       const role = ev.detail.role;
       if (isCancel(role)) {
-        const cancelButton = this.getButtons().find(b => b.role === 'cancel');
+        const cancelButton = this.getButtons().find((b) => b.role === 'cancel');
         this.callButtonHandler(cancelButton);
       }
     };
@@ -9243,10 +9233,8 @@ class ActionSheet {
     return true;
   }
   getButtons() {
-    return this.buttons.map(b => {
-      return (typeof b === 'string')
-        ? { text: b }
-        : b;
+    return this.buttons.map((b) => {
+      return typeof b === 'string' ? { text: b } : b;
     });
   }
   disconnectedCallback() {
@@ -9278,17 +9266,14 @@ class ActionSheet {
     const { htmlAttributes } = this;
     const mode = getIonMode$1(this);
     const allButtons = this.getButtons();
-    const cancelButton = allButtons.find(b => b.role === 'cancel');
-    const buttons = allButtons.filter(b => b.role !== 'cancel');
+    const cancelButton = allButtons.find((b) => b.role === 'cancel');
+    const buttons = allButtons.filter((b) => b.role !== 'cancel');
     return (hAsync(Host, Object.assign({ role: "dialog", "aria-modal": "true", tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${20000 + this.overlayIndex}`,
-      }, class: Object.assign(Object.assign({ [mode]: true }, getClassMap(this.cssClass)), { 'overlay-hidden': true, 'action-sheet-translucent': this.translucent }), onIonActionSheetWillDismiss: this.dispatchCancelHandler, onIonBackdropTap: this.onBackdropTap }), hAsync("ion-backdrop", { tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "action-sheet-wrapper ion-overlay-wrapper", role: "dialog", ref: el => this.wrapperEl = el }, hAsync("div", { class: "action-sheet-container" }, hAsync("div", { class: "action-sheet-group", ref: el => this.groupEl = el }, this.header !== undefined &&
-      hAsync("div", { class: {
-          'action-sheet-title': true,
-          'action-sheet-has-sub-title': this.subHeader !== undefined
-        } }, this.header, this.subHeader && hAsync("div", { class: "action-sheet-sub-title" }, this.subHeader)), buttons.map(b => hAsync("button", { type: "button", id: b.id, class: buttonClass$3(b), onClick: () => this.buttonClick(b) }, hAsync("span", { class: "action-sheet-button-inner" }, b.icon && hAsync("ion-icon", { icon: b.icon, lazy: false, class: "action-sheet-icon" }), b.text), mode === 'md' && hAsync("ion-ripple-effect", null)))), cancelButton &&
-      hAsync("div", { class: "action-sheet-group action-sheet-group-cancel" }, hAsync("button", { type: "button", class: buttonClass$3(cancelButton), onClick: () => this.buttonClick(cancelButton) }, hAsync("span", { class: "action-sheet-button-inner" }, cancelButton.icon &&
-        hAsync("ion-icon", { icon: cancelButton.icon, lazy: false, class: "action-sheet-icon" }), cancelButton.text), mode === 'md' && hAsync("ion-ripple-effect", null))))), hAsync("div", { tabindex: "0" })));
+      }, class: Object.assign(Object.assign({ [mode]: true }, getClassMap(this.cssClass)), { 'overlay-hidden': true, 'action-sheet-translucent': this.translucent }), onIonActionSheetWillDismiss: this.dispatchCancelHandler, onIonBackdropTap: this.onBackdropTap }), hAsync("ion-backdrop", { tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "action-sheet-wrapper ion-overlay-wrapper", role: "dialog", ref: (el) => (this.wrapperEl = el) }, hAsync("div", { class: "action-sheet-container" }, hAsync("div", { class: "action-sheet-group", ref: (el) => (this.groupEl = el) }, this.header !== undefined && (hAsync("div", { class: {
+        'action-sheet-title': true,
+        'action-sheet-has-sub-title': this.subHeader !== undefined,
+      } }, this.header, this.subHeader && hAsync("div", { class: "action-sheet-sub-title" }, this.subHeader))), buttons.map((b) => (hAsync("button", { type: "button", id: b.id, class: buttonClass$3(b), onClick: () => this.buttonClick(b) }, hAsync("span", { class: "action-sheet-button-inner" }, b.icon && hAsync("ion-icon", { icon: b.icon, lazy: false, class: "action-sheet-icon" }), b.text), mode === 'md' && hAsync("ion-ripple-effect", null))))), cancelButton && (hAsync("div", { class: "action-sheet-group action-sheet-group-cancel" }, hAsync("button", { type: "button", class: buttonClass$3(cancelButton), onClick: () => this.buttonClick(cancelButton) }, hAsync("span", { class: "action-sheet-button-inner" }, cancelButton.icon && hAsync("ion-icon", { icon: cancelButton.icon, lazy: false, class: "action-sheet-icon" }), cancelButton.text), mode === 'md' && hAsync("ion-ripple-effect", null)))))), hAsync("div", { tabindex: "0" })));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -9353,7 +9338,7 @@ const sanitizeDOMString = (untrustedString) => {
      * Remove any elements
      * that are blocked
      */
-    blockedTags.forEach(blockedTag => {
+    blockedTags.forEach((blockedTag) => {
       const getElementsToRemove = documentFragment.querySelectorAll(blockedTag);
       for (let elementIndex = getElementsToRemove.length - 1; elementIndex >= 0; elementIndex--) {
         const element = getElementsToRemove[elementIndex];
@@ -9369,7 +9354,7 @@ const sanitizeDOMString = (untrustedString) => {
          * as they are left behind
          */
         const childElements = getElementChildren(element);
-        /* tslint:disable-next-line */
+        /* eslint-disable-next-line */
         for (let childIndex = 0; childIndex < childElements.length; childIndex++) {
           sanitizeElement(childElements[childIndex]);
         }
@@ -9381,7 +9366,7 @@ const sanitizeDOMString = (untrustedString) => {
      */
     // IE does not support .children on document fragments, only .childNodes
     const dfChildren = getElementChildren(documentFragment);
-    /* tslint:disable-next-line */
+    /* eslint-disable-next-line */
     for (let childIndex = 0; childIndex < dfChildren.length; childIndex++) {
       sanitizeElement(dfChildren[childIndex]);
     }
@@ -9390,7 +9375,7 @@ const sanitizeDOMString = (untrustedString) => {
     fragmentDiv.appendChild(documentFragment);
     // First child is always the div we did our work in
     const getInnerDiv = fragmentDiv.querySelector('div');
-    return (getInnerDiv !== null) ? getInnerDiv.innerHTML : fragmentDiv.innerHTML;
+    return getInnerDiv !== null ? getInnerDiv.innerHTML : fragmentDiv.innerHTML;
   }
   catch (err) {
     console.error(err);
@@ -9418,7 +9403,7 @@ const sanitizeElement = (element) => {
     // clean up any allowed attribs
     // that attempt to do any JS funny-business
     const attributeValue = attribute.value;
-    /* tslint:disable-next-line */
+    /* eslint-disable-next-line */
     if (attributeValue != null && attributeValue.toLowerCase().includes('javascript:')) {
       element.removeAttribute(attributeName);
     }
@@ -9427,7 +9412,7 @@ const sanitizeElement = (element) => {
    * Sanitize any nested children
    */
   const childElements = getElementChildren(element);
-  /* tslint:disable-next-line */
+  /* eslint-disable-next-line */
   for (let i = 0; i < childElements.length; i++) {
     sanitizeElement(childElements[i]);
   }
@@ -9437,11 +9422,12 @@ const sanitizeElement = (element) => {
  * so we revert to .childNodes instead
  */
 const getElementChildren = (el) => {
-  return (el.children != null) ? el.children : el.childNodes;
+  return el.children != null ? el.children : el.childNodes;
 };
 const isSanitizerEnabled = () => {
+  var _a;
   const win = window;
-  const config = win && win.Ionic && win.Ionic.config;
+  const config = (_a = win === null || win === void 0 ? void 0 : win.Ionic) === null || _a === void 0 ? void 0 : _a.config;
   if (config) {
     if (config.get) {
       return config.get('sanitizerEnabled', true);
@@ -9474,14 +9460,12 @@ const iosEnterAnimation$5 = (baseEl) => {
     .addElement(baseEl.querySelector('ion-backdrop'))
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
-    'pointer-events': 'none'
+    'pointer-events': 'none',
   })
     .afterClearStyles(['pointer-events']);
-  wrapperAnimation
-    .addElement(baseEl.querySelector('.alert-wrapper'))
-    .keyframes([
+  wrapperAnimation.addElement(baseEl.querySelector('.alert-wrapper')).keyframes([
     { offset: 0, opacity: '0.01', transform: 'scale(1.1)' },
-    { offset: 1, opacity: '1', transform: 'scale(1)' }
+    { offset: 1, opacity: '1', transform: 'scale(1)' },
   ]);
   return baseAnimation
     .addElement(baseEl)
@@ -9500,14 +9484,10 @@ const iosLeaveAnimation$5 = (baseEl) => {
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
-  wrapperAnimation
-    .addElement(baseEl.querySelector('.alert-wrapper'))
-    .keyframes([
+  backdropAnimation.addElement(baseEl.querySelector('ion-backdrop')).fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  wrapperAnimation.addElement(baseEl.querySelector('.alert-wrapper')).keyframes([
     { offset: 0, opacity: 0.99, transform: 'scale(1)' },
-    { offset: 1, opacity: 0, transform: 'scale(0.9)' }
+    { offset: 1, opacity: 0, transform: 'scale(0.9)' },
   ]);
   return baseAnimation
     .addElement(baseEl)
@@ -9530,14 +9510,12 @@ const mdEnterAnimation$4 = (baseEl) => {
     .addElement(baseEl.querySelector('ion-backdrop'))
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
-    'pointer-events': 'none'
+    'pointer-events': 'none',
   })
     .afterClearStyles(['pointer-events']);
-  wrapperAnimation
-    .addElement(baseEl.querySelector('.alert-wrapper'))
-    .keyframes([
+  wrapperAnimation.addElement(baseEl.querySelector('.alert-wrapper')).keyframes([
     { offset: 0, opacity: '0.01', transform: 'scale(0.9)' },
-    { offset: 1, opacity: '1', transform: 'scale(1)' }
+    { offset: 1, opacity: '1', transform: 'scale(1)' },
   ]);
   return baseAnimation
     .addElement(baseEl)
@@ -9556,12 +9534,8 @@ const mdLeaveAnimation$4 = (baseEl) => {
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
-  wrapperAnimation
-    .addElement(baseEl.querySelector('.alert-wrapper'))
-    .fromTo('opacity', 0.99, 0);
+  backdropAnimation.addElement(baseEl.querySelector('ion-backdrop')).fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  wrapperAnimation.addElement(baseEl.querySelector('.alert-wrapper')).fromTo('opacity', 0.99, 0);
   return baseAnimation
     .addElement(baseEl)
     .easing('ease-in-out')
@@ -9618,46 +9592,42 @@ class Alert {
     this.dispatchCancelHandler = (ev) => {
       const role = ev.detail.role;
       if (isCancel(role)) {
-        const cancelButton = this.processedButtons.find(b => b.role === 'cancel');
+        const cancelButton = this.processedButtons.find((b) => b.role === 'cancel');
         this.callButtonHandler(cancelButton);
       }
     };
   }
   onKeydown(ev) {
-    const inputTypes = new Set(this.processedInputs.map(i => i.type));
+    const inputTypes = new Set(this.processedInputs.map((i) => i.type));
     // The only inputs we want to navigate between using arrow keys are the radios
     // ignore the keydown event if it is not on a radio button
-    if (!inputTypes.has('radio')
-      || (ev.target && !this.el.contains(ev.target))
-      || ev.target.classList.contains('alert-button')) {
+    if (!inputTypes.has('radio') ||
+      (ev.target && !this.el.contains(ev.target)) ||
+      ev.target.classList.contains('alert-button')) {
       return;
     }
     // Get all radios inside of the radio group and then
     // filter out disabled radios since we need to skip those
     const query = this.el.querySelectorAll('.alert-radio');
-    const radios = Array.from(query).filter(radio => !radio.disabled);
+    const radios = Array.from(query).filter((radio) => !radio.disabled);
     // The focused radio is the one that shares the same id as
     // the event target
-    const index = radios.findIndex(radio => radio.id === ev.target.id);
+    const index = radios.findIndex((radio) => radio.id === ev.target.id);
     // We need to know what the next radio element should
     // be in order to change the focus
     let nextEl;
     // If hitting arrow down or arrow right, move to the next radio
     // If we're on the last radio, move to the first radio
     if (['ArrowDown', 'ArrowRight'].includes(ev.code)) {
-      nextEl = (index === radios.length - 1)
-        ? radios[0]
-        : radios[index + 1];
+      nextEl = index === radios.length - 1 ? radios[0] : radios[index + 1];
     }
     // If hitting arrow up or arrow left, move to the previous radio
     // If we're on the first radio, move to the last radio
     if (['ArrowUp', 'ArrowLeft'].includes(ev.code)) {
-      nextEl = (index === 0)
-        ? radios[radios.length - 1]
-        : radios[index - 1];
+      nextEl = index === 0 ? radios[radios.length - 1] : radios[index - 1];
     }
     if (nextEl && radios.includes(nextEl)) {
-      const nextProcessed = this.processedInputs.find(input => input.id === (nextEl === null || nextEl === void 0 ? void 0 : nextEl.id));
+      const nextProcessed = this.processedInputs.find((input) => input.id === (nextEl === null || nextEl === void 0 ? void 0 : nextEl.id));
       if (nextProcessed) {
         this.rbClick(nextProcessed);
         nextEl.focus();
@@ -9666,10 +9636,8 @@ class Alert {
   }
   buttonsChanged() {
     const buttons = this.buttons;
-    this.processedButtons = buttons.map(btn => {
-      return (typeof btn === 'string')
-        ? { text: btn, role: btn.toLowerCase() === 'cancel' ? 'cancel' : undefined }
-        : btn;
+    this.processedButtons = buttons.map((btn) => {
+      return typeof btn === 'string' ? { text: btn, role: btn.toLowerCase() === 'cancel' ? 'cancel' : undefined } : btn;
     });
   }
   inputsChanged() {
@@ -9678,14 +9646,14 @@ class Alert {
     // If an enabled checked input exists, set it to be the focusable input
     // otherwise we default to focus the first input
     // This will only be used when the input is type radio
-    const first = inputs.find(input => !input.disabled);
-    const checked = inputs.find(input => input.checked && !input.disabled);
+    const first = inputs.find((input) => !input.disabled);
+    const checked = inputs.find((input) => input.checked && !input.disabled);
     const focusable = checked || first;
     // An alert can be created with several different inputs. Radios,
     // checkboxes and inputs are all accepted, but they cannot be mixed.
-    const inputTypes = new Set(inputs.map(i => i.type));
+    const inputTypes = new Set(inputs.map((i) => i.type));
     if (inputTypes.has('checkbox') && inputTypes.has('radio')) {
-      console.warn(`Alert cannot mix input types: ${(Array.from(inputTypes.values()).join('/'))}. Please see alert docs for more info.`);
+      console.warn(`Alert cannot mix input types: ${Array.from(inputTypes.values()).join('/')}. Please see alert docs for more info.`);
     }
     this.inputType = inputTypes.values().next().value;
     this.processedInputs = inputs.map((i, index) => ({
@@ -9702,7 +9670,7 @@ class Alert {
       max: i.max,
       cssClass: i.cssClass || '',
       attributes: i.attributes || {},
-      tabindex: (i.type === 'radio' && i !== focusable) ? -1 : 0
+      tabindex: i.type === 'radio' && i !== focusable ? -1 : 0,
     }));
   }
   connectedCallback() {
@@ -9788,7 +9756,7 @@ class Alert {
     return Promise.resolve(false);
   }
   callButtonHandler(button, data) {
-    if (button && button.handler) {
+    if (button === null || button === void 0 ? void 0 : button.handler) {
       // a handler has been provided, execute it
       // pass the handler the values from the inputs
       const returnData = safeCall(button.handler, data);
@@ -9810,27 +9778,30 @@ class Alert {
     if (this.inputType === 'radio') {
       // this is an alert with radio buttons (single value select)
       // return the one value which is checked, otherwise undefined
-      const checkedInput = this.processedInputs.find(i => !!i.checked);
+      const checkedInput = this.processedInputs.find((i) => !!i.checked);
       return checkedInput ? checkedInput.value : undefined;
     }
     if (this.inputType === 'checkbox') {
       // this is an alert with checkboxes (multiple value select)
       // return an array of all the checked values
-      return this.processedInputs.filter(i => i.checked).map(i => i.value);
+      return this.processedInputs.filter((i) => i.checked).map((i) => i.value);
     }
     // this is an alert with text inputs
     // return an object of all the values with the input name as the key
     const values = {};
-    this.processedInputs.forEach(i => {
+    this.processedInputs.forEach((i) => {
       values[i.name] = i.value || '';
     });
     return values;
   }
   renderAlertInputs() {
     switch (this.inputType) {
-      case 'checkbox': return this.renderCheckbox();
-      case 'radio': return this.renderRadio();
-      default: return this.renderInput();
+      case 'checkbox':
+        return this.renderCheckbox();
+      case 'radio':
+        return this.renderRadio();
+      default:
+        return this.renderInput();
     }
   }
   renderCheckbox() {
@@ -9839,24 +9810,24 @@ class Alert {
     if (inputs.length === 0) {
       return null;
     }
-    return (hAsync("div", { class: "alert-checkbox-group" }, inputs.map(i => (hAsync("button", { type: "button", onClick: () => this.cbClick(i), "aria-checked": `${i.checked}`, id: i.id, disabled: i.disabled, tabIndex: i.tabindex, role: "checkbox", class: Object.assign(Object.assign({}, getClassMap(i.cssClass)), { 'alert-tappable': true, 'alert-checkbox': true, 'alert-checkbox-button': true, 'ion-focusable': true, 'alert-checkbox-button-disabled': i.disabled || false }) }, hAsync("div", { class: "alert-button-inner" }, hAsync("div", { class: "alert-checkbox-icon" }, hAsync("div", { class: "alert-checkbox-inner" })), hAsync("div", { class: "alert-checkbox-label" }, i.label)), mode === 'md' && hAsync("ion-ripple-effect", null))))));
+    return (hAsync("div", { class: "alert-checkbox-group" }, inputs.map((i) => (hAsync("button", { type: "button", onClick: () => this.cbClick(i), "aria-checked": `${i.checked}`, id: i.id, disabled: i.disabled, tabIndex: i.tabindex, role: "checkbox", class: Object.assign(Object.assign({}, getClassMap(i.cssClass)), { 'alert-tappable': true, 'alert-checkbox': true, 'alert-checkbox-button': true, 'ion-focusable': true, 'alert-checkbox-button-disabled': i.disabled || false }) }, hAsync("div", { class: "alert-button-inner" }, hAsync("div", { class: "alert-checkbox-icon" }, hAsync("div", { class: "alert-checkbox-inner" })), hAsync("div", { class: "alert-checkbox-label" }, i.label)), mode === 'md' && hAsync("ion-ripple-effect", null))))));
   }
   renderRadio() {
     const inputs = this.processedInputs;
     if (inputs.length === 0) {
       return null;
     }
-    return (hAsync("div", { class: "alert-radio-group", role: "radiogroup", "aria-activedescendant": this.activeId }, inputs.map(i => (hAsync("button", { type: "button", onClick: () => this.rbClick(i), "aria-checked": `${i.checked}`, disabled: i.disabled, id: i.id, tabIndex: i.tabindex, class: Object.assign(Object.assign({}, getClassMap(i.cssClass)), { 'alert-radio-button': true, 'alert-tappable': true, 'alert-radio': true, 'ion-focusable': true, 'alert-radio-button-disabled': i.disabled || false }), role: "radio" }, hAsync("div", { class: "alert-button-inner" }, hAsync("div", { class: "alert-radio-icon" }, hAsync("div", { class: "alert-radio-inner" })), hAsync("div", { class: "alert-radio-label" }, i.label)))))));
+    return (hAsync("div", { class: "alert-radio-group", role: "radiogroup", "aria-activedescendant": this.activeId }, inputs.map((i) => (hAsync("button", { type: "button", onClick: () => this.rbClick(i), "aria-checked": `${i.checked}`, disabled: i.disabled, id: i.id, tabIndex: i.tabindex, class: Object.assign(Object.assign({}, getClassMap(i.cssClass)), { 'alert-radio-button': true, 'alert-tappable': true, 'alert-radio': true, 'ion-focusable': true, 'alert-radio-button-disabled': i.disabled || false }), role: "radio" }, hAsync("div", { class: "alert-button-inner" }, hAsync("div", { class: "alert-radio-icon" }, hAsync("div", { class: "alert-radio-inner" })), hAsync("div", { class: "alert-radio-label" }, i.label)))))));
   }
   renderInput() {
     const inputs = this.processedInputs;
     if (inputs.length === 0) {
       return null;
     }
-    return (hAsync("div", { class: "alert-input-group" }, inputs.map(i => {
+    return (hAsync("div", { class: "alert-input-group" }, inputs.map((i) => {
       var _a, _b, _c, _d;
       if (i.type === 'textarea') {
-        return (hAsync("div", { class: "alert-input-wrapper" }, hAsync("textarea", Object.assign({ placeholder: i.placeholder, value: i.value, id: i.id, tabIndex: i.tabindex }, i.attributes, { disabled: (_b = (_a = i.attributes) === null || _a === void 0 ? void 0 : _a.disabled) !== null && _b !== void 0 ? _b : i.disabled, class: inputClass(i), onInput: e => {
+        return (hAsync("div", { class: "alert-input-wrapper" }, hAsync("textarea", Object.assign({ placeholder: i.placeholder, value: i.value, id: i.id, tabIndex: i.tabindex }, i.attributes, { disabled: (_b = (_a = i.attributes) === null || _a === void 0 ? void 0 : _a.disabled) !== null && _b !== void 0 ? _b : i.disabled, class: inputClass(i), onInput: (e) => {
             var _a;
             i.value = e.target.value;
             if ((_a = i.attributes) === null || _a === void 0 ? void 0 : _a.onInput) {
@@ -9865,7 +9836,7 @@ class Alert {
           } }))));
       }
       else {
-        return (hAsync("div", { class: "alert-input-wrapper" }, hAsync("input", Object.assign({ placeholder: i.placeholder, type: i.type, min: i.min, max: i.max, value: i.value, id: i.id, tabIndex: i.tabindex }, i.attributes, { disabled: (_d = (_c = i.attributes) === null || _c === void 0 ? void 0 : _c.disabled) !== null && _d !== void 0 ? _d : i.disabled, class: inputClass(i), onInput: e => {
+        return (hAsync("div", { class: "alert-input-wrapper" }, hAsync("input", Object.assign({ placeholder: i.placeholder, type: i.type, min: i.min, max: i.max, value: i.value, id: i.id, tabIndex: i.tabindex }, i.attributes, { disabled: (_d = (_c = i.attributes) === null || _c === void 0 ? void 0 : _c.disabled) !== null && _d !== void 0 ? _d : i.disabled, class: inputClass(i), onInput: (e) => {
             var _a;
             i.value = e.target.value;
             if ((_a = i.attributes) === null || _a === void 0 ? void 0 : _a.onInput) {
@@ -9880,9 +9851,9 @@ class Alert {
     const mode = getIonMode$1(this);
     const alertButtonGroupClass = {
       'alert-button-group': true,
-      'alert-button-group-vertical': buttons.length > 2
+      'alert-button-group-vertical': buttons.length > 2,
     };
-    return (hAsync("div", { class: alertButtonGroupClass }, buttons.map(button => hAsync("button", { type: "button", id: button.id, class: buttonClass$2(button), tabIndex: 0, onClick: () => this.buttonClick(button) }, hAsync("span", { class: "alert-button-inner" }, button.text), mode === 'md' && hAsync("ion-ripple-effect", null)))));
+    return (hAsync("div", { class: alertButtonGroupClass }, buttons.map((button) => (hAsync("button", { type: "button", id: button.id, class: buttonClass$2(button), tabIndex: 0, onClick: () => this.buttonClick(button) }, hAsync("span", { class: "alert-button-inner" }, button.text), mode === 'md' && hAsync("ion-ripple-effect", null))))));
   }
   render() {
     const { overlayIndex, header, subHeader, htmlAttributes } = this;
@@ -9893,7 +9864,7 @@ class Alert {
     const role = this.inputs.length > 0 || this.buttons.length > 0 ? 'alertdialog' : 'alert';
     return (hAsync(Host, Object.assign({ role: role, "aria-modal": "true", tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${20000 + overlayIndex}`,
-      }, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'overlay-hidden': true, 'alert-translucent': this.translucent }), onIonAlertWillDismiss: this.dispatchCancelHandler, onIonBackdropTap: this.onBackdropTap }), hAsync("ion-backdrop", { tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "alert-wrapper ion-overlay-wrapper", ref: el => this.wrapperEl = el }, hAsync("div", { class: "alert-head" }, header && hAsync("h2", { id: hdrId, class: "alert-title" }, header), subHeader && hAsync("h2", { id: subHdrId, class: "alert-sub-title" }, subHeader)), hAsync("div", { id: msgId, class: "alert-message", innerHTML: sanitizeDOMString(this.message) }), this.renderAlertInputs(), this.renderAlertButtons()), hAsync("div", { tabindex: "0" })));
+      }, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'overlay-hidden': true, 'alert-translucent': this.translucent }), onIonAlertWillDismiss: this.dispatchCancelHandler, onIonBackdropTap: this.onBackdropTap }), hAsync("ion-backdrop", { tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "alert-wrapper ion-overlay-wrapper", ref: (el) => (this.wrapperEl = el) }, hAsync("div", { class: "alert-head" }, header && (hAsync("h2", { id: hdrId, class: "alert-title" }, header)), subHeader && (hAsync("h2", { id: subHdrId, class: "alert-sub-title" }, subHeader))), hAsync("div", { id: msgId, class: "alert-message", innerHTML: sanitizeDOMString(this.message) }), this.renderAlertInputs(), this.renderAlertButtons()), hAsync("div", { tabindex: "0" })));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -10072,7 +10043,7 @@ class BackButton {
     this.onClick = async (ev) => {
       const nav = this.el.closest('ion-nav');
       ev.preventDefault();
-      if (nav && await nav.canGoBack()) {
+      if (nav && (await nav.canGoBack())) {
         return nav.pop({ animationBuilder: this.routerAnimation, skipIfBusy: true });
       }
       return openURL(this.defaultHref, ev, 'back', this.routerAnimation);
@@ -10113,21 +10084,21 @@ class BackButton {
     return 'bounded';
   }
   render() {
-    const { color, defaultHref, disabled, type, hasIconOnly, backButtonIcon, backButtonText, icon, inheritedAttributes } = this;
+    const { color, defaultHref, disabled, type, hasIconOnly, backButtonIcon, backButtonText, icon, inheritedAttributes, } = this;
     const showBackButton = defaultHref !== undefined;
     const mode = getIonMode$1(this);
     const ariaLabel = inheritedAttributes['aria-label'] || backButtonText || 'back';
     return (hAsync(Host, { onClick: this.onClick, class: createColorClasses$1(color, {
         [mode]: true,
-        'button': true,
+        button: true,
         'back-button-disabled': disabled,
         'back-button-has-icon-only': hasIconOnly,
         'in-toolbar': hostContext('ion-toolbar', this.el),
         'in-toolbar-color': hostContext('ion-toolbar[color]', this.el),
         'ion-activatable': true,
         'ion-focusable': true,
-        'show-back-button': showBackButton
-      }) }, hAsync("button", { type: type, disabled: disabled, class: "button-native", part: "native", "aria-label": ariaLabel }, hAsync("span", { class: "button-inner" }, backButtonIcon && hAsync("ion-icon", { part: "icon", icon: backButtonIcon, "aria-hidden": "true", lazy: false, "flip-rtl": icon === undefined }), backButtonText && hAsync("span", { part: "text", "aria-hidden": "true", class: "button-text" }, backButtonText)), mode === 'md' && hAsync("ion-ripple-effect", { type: this.rippleType }))));
+        'show-back-button': showBackButton,
+      }) }, hAsync("button", { type: type, disabled: disabled, class: "button-native", part: "native", "aria-label": ariaLabel }, hAsync("span", { class: "button-inner" }, backButtonIcon && (hAsync("ion-icon", { part: "icon", icon: backButtonIcon, "aria-hidden": "true", lazy: false, "flip-rtl": icon === undefined })), backButtonText && (hAsync("span", { part: "text", "aria-hidden": "true", class: "button-text" }, backButtonText))), mode === 'md' && hAsync("ion-ripple-effect", { type: this.rippleType }))));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -10161,7 +10132,7 @@ class Backdrop {
     registerInstance(this, hostRef);
     this.ionBackdropTap = createEvent(this, "ionBackdropTap", 7);
     this.blocker = GESTURE_CONTROLLER.createBlocker({
-      disableScroll: true
+      disableScroll: true,
     });
     /**
      * If `true`, the backdrop will be visible.
@@ -10307,28 +10278,24 @@ class Breadcrumb {
     return this.href !== undefined;
   }
   render() {
-    const { color, active, collapsed, disabled, download, el, inheritedAttributes, last, routerAnimation, routerDirection, separator, showCollapsedIndicator, target } = this;
+    const { color, active, collapsed, disabled, download, el, inheritedAttributes, last, routerAnimation, routerDirection, separator, showCollapsedIndicator, target, } = this;
     const clickable = this.isClickable();
     const TagType = this.href === undefined ? 'span' : 'a';
     // Links can still be tabbed to when set to disabled if they have an href
     // in order to truly disable them we can keep it as an anchor but remove the href
     const href = disabled ? undefined : this.href;
     const mode = getIonMode$1(this);
-    const attrs = (TagType === 'span')
+    const attrs = TagType === 'span'
       ? {}
       : {
         download,
         href,
-        target
+        target,
       };
     // If the breadcrumb is collapsed, check if it contains the collapsed indicator
     // to show the separator as long as it isn't also the last breadcrumb
     // otherwise if not collapsed use the value in separator
-    const showSeparator = last
-      ? false
-      : collapsed
-        ? showCollapsedIndicator && !last ? true : false
-        : separator;
+    const showSeparator = last ? false : collapsed ? (showCollapsedIndicator && !last ? true : false) : separator;
     return (hAsync(Host, { onClick: (ev) => openURL(href, ev, routerDirection, routerAnimation), "aria-disabled": disabled ? 'true' : null, class: createColorClasses$1(color, {
         [mode]: true,
         'breadcrumb-active': active,
@@ -10339,13 +10306,9 @@ class Breadcrumb {
         'in-toolbar-color': hostContext('ion-toolbar[color]', this.el),
         'ion-activatable': clickable,
         'ion-focusable': clickable,
-      }) }, hAsync(TagType, Object.assign({}, attrs, { class: "breadcrumb-native", part: "native", disabled: disabled, onFocus: this.onFocus, onBlur: this.onBlur }, inheritedAttributes), hAsync("slot", { name: "start" }), hAsync("slot", null), hAsync("slot", { name: "end" })), showCollapsedIndicator &&
-      hAsync("button", { part: "collapsed-indicator", onClick: () => this.collapsedIndicatorClick(), ref: collapsedEl => this.collapsedRef = collapsedEl, class: {
-          'breadcrumbs-collapsed-indicator': true,
-        } }, hAsync("ion-icon", { icon: ellipsisHorizontal, lazy: false })), showSeparator &&
-      hAsync("span", { class: "breadcrumb-separator", part: "separator" }, hAsync("slot", { name: "separator" }, mode === 'ios'
-        ? hAsync("ion-icon", { icon: chevronForwardOutline, lazy: false, "flip-rtl": true })
-        : hAsync("span", null, "/")))));
+      }) }, hAsync(TagType, Object.assign({}, attrs, { class: "breadcrumb-native", part: "native", disabled: disabled, onFocus: this.onFocus, onBlur: this.onBlur }, inheritedAttributes), hAsync("slot", { name: "start" }), hAsync("slot", null), hAsync("slot", { name: "end" })), showCollapsedIndicator && (hAsync("button", { part: "collapsed-indicator", onClick: () => this.collapsedIndicatorClick(), ref: (collapsedEl) => (this.collapsedRef = collapsedEl), class: {
+        'breadcrumbs-collapsed-indicator': true,
+      } }, hAsync("ion-icon", { icon: ellipsisHorizontal, lazy: false }))), showSeparator && (hAsync("span", { class: "breadcrumb-separator", part: "separator" }, hAsync("slot", { name: "separator" }, mode === 'ios' ? (hAsync("ion-icon", { icon: chevronForwardOutline, lazy: false, "flip-rtl": true })) : (hAsync("span", null, "/")))))));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -10406,7 +10369,7 @@ class Breadcrumbs {
       const breadcrumbs = this.getBreadcrumbs();
       // Only reset the active breadcrumb if we were the ones to change it
       // otherwise use the one set on the component
-      const activeBreadcrumb = breadcrumbs.find(breadcrumb => breadcrumb.active);
+      const activeBreadcrumb = breadcrumbs.find((breadcrumb) => breadcrumb.active);
       if (activeBreadcrumb && this.activeChanged) {
         activeBreadcrumb.active = false;
       }
@@ -10421,9 +10384,7 @@ class Breadcrumbs {
       // If the number of breadcrumbs exceeds the maximum number of items
       // that should show and the items before / after collapse do not
       // exceed the maximum items then we need to collapse the breadcrumbs
-      const shouldCollapse = maxItems !== undefined
-        && breadcrumbs.length > maxItems
-        && itemsBeforeCollapse + itemsAfterCollapse <= maxItems;
+      const shouldCollapse = maxItems !== undefined && breadcrumbs.length > maxItems && itemsBeforeCollapse + itemsAfterCollapse <= maxItems;
       if (shouldCollapse) {
         // Show the collapsed indicator in the first breadcrumb that collapses
         breadcrumbs.forEach((breadcrumb, index) => {
@@ -10443,7 +10404,7 @@ class Breadcrumbs {
       const { itemsAfterCollapse, itemsBeforeCollapse, maxItems } = this;
       const breadcrumbs = this.getBreadcrumbs();
       // Check if an active breadcrumb exists already
-      const active = breadcrumbs.find(breadcrumb => breadcrumb.active);
+      const active = breadcrumbs.find((breadcrumb) => breadcrumb.active);
       // Set the separator on all but the last breadcrumb
       for (const breadcrumb of breadcrumbs) {
         // The only time the last breadcrumb changes is when
@@ -10456,9 +10417,7 @@ class Breadcrumbs {
         // If the breadcrumb has defined whether or not to show the
         // separator then use that value, otherwise check if it's the
         // last breadcrumb
-        const separator = breadcrumb.separator !== undefined
-          ? breadcrumb.separator
-          : (last ? undefined : true);
+        const separator = breadcrumb.separator !== undefined ? breadcrumb.separator : last ? undefined : true;
         breadcrumb.separator = separator;
         // If there is not an active breadcrumb already
         // set the last one to active
@@ -10474,7 +10433,7 @@ class Breadcrumbs {
   }
   onCollapsedClick(ev) {
     const breadcrumbs = this.getBreadcrumbs();
-    const collapsedBreadcrumbs = breadcrumbs.filter(breadcrumb => breadcrumb.collapsed);
+    const collapsedBreadcrumbs = breadcrumbs.filter((breadcrumb) => breadcrumb.collapsed);
     this.ionCollapsedClick.emit(Object.assign(Object.assign({}, ev.detail), { collapsedBreadcrumbs }));
   }
   maxItemsChanged() {
@@ -10612,16 +10571,16 @@ class Button {
   }
   render() {
     const mode = getIonMode$1(this);
-    const { buttonType, type, disabled, rel, target, size, href, color, expand, hasIconOnly, shape, strong, inheritedAttributes } = this;
+    const { buttonType, type, disabled, rel, target, size, href, color, expand, hasIconOnly, shape, strong, inheritedAttributes, } = this;
     const finalSize = size === undefined && this.inItem ? 'small' : size;
     const TagType = href === undefined ? 'button' : 'a';
-    const attrs = (TagType === 'button')
+    const attrs = TagType === 'button'
       ? { type }
       : {
         download: this.download,
         href,
         rel,
-        target
+        target,
       };
     let fill = this.fill;
     if (fill === undefined) {
@@ -10699,7 +10658,7 @@ class Buttons {
     const mode = getIonMode$1(this);
     return (hAsync(Host, { class: {
         [mode]: true,
-        ['buttons-collapse']: this.collapse
+        ['buttons-collapse']: this.collapse,
       } }));
   }
   static get style() { return {
@@ -10981,24 +10940,22 @@ class Card {
     this.routerDirection = 'forward';
   }
   isClickable() {
-    return (this.href !== undefined || this.button);
+    return this.href !== undefined || this.button;
   }
   renderCard(mode) {
     const clickable = this.isClickable();
     if (!clickable) {
-      return [
-        hAsync("slot", null)
-      ];
+      return [hAsync("slot", null)];
     }
     const { href, routerAnimation, routerDirection } = this;
     const TagType = clickable ? (href === undefined ? 'button' : 'a') : 'div';
-    const attrs = (TagType === 'button')
+    const attrs = TagType === 'button'
       ? { type: this.type }
       : {
         download: this.download,
         href: this.href,
         rel: this.rel,
-        target: this.target
+        target: this.target,
       };
     return (hAsync(TagType, Object.assign({}, attrs, { class: "card-native", part: "native", disabled: this.disabled, onClick: (ev) => openURL(href, ev, routerDirection, routerAnimation) }), hAsync("slot", null), clickable && mode === 'md' && hAsync("ion-ripple-effect", null)));
   }
@@ -11007,7 +10964,7 @@ class Card {
     return (hAsync(Host, { class: createColorClasses$1(this.color, {
         [mode]: true,
         'card-disabled': this.disabled,
-        'ion-activatable': this.isClickable()
+        'ion-activatable': this.isClickable(),
       }) }, this.renderCard(mode)));
   }
   static get style() { return {
@@ -11051,7 +11008,7 @@ class CardContent {
     return (hAsync(Host, { class: {
         [mode]: true,
         // Used internally for styling
-        [`card-content-${mode}`]: true
+        [`card-content-${mode}`]: true,
       } }));
   }
   static get style() { return {
@@ -11090,7 +11047,7 @@ class CardHeader {
     return (hAsync(Host, { class: createColorClasses$1(this.color, {
         'card-header-translucent': this.translucent,
         'ion-inherit-color': true,
-        [mode]: true
+        [mode]: true,
       }) }, hAsync("slot", null)));
   }
   static get style() { return {
@@ -11125,7 +11082,7 @@ class CardSubtitle {
     const mode = getIonMode$1(this);
     return (hAsync(Host, { role: "heading", "aria-level": "3", class: createColorClasses$1(this.color, {
         'ion-inherit-color': true,
-        [mode]: true
+        [mode]: true,
       }) }, hAsync("slot", null)));
   }
   static get style() { return {
@@ -11159,7 +11116,7 @@ class CardTitle {
     const mode = getIonMode$1(this);
     return (hAsync(Host, { role: "heading", "aria-level": "2", class: createColorClasses$1(this.color, {
         'ion-inherit-color': true,
-        [mode]: true
+        [mode]: true,
       }) }, hAsync("slot", null)));
   }
   static get style() { return {
@@ -11239,7 +11196,7 @@ class Checkbox {
   checkedChanged(isChecked) {
     this.ionChange.emit({
       checked: isChecked,
-      value: this.value
+      value: this.value,
     });
     this.emitStyle();
   }
@@ -11261,14 +11218,10 @@ class Checkbox {
     const { color, checked, disabled, el, indeterminate, inputId, name, value } = this;
     const mode = getIonMode$1(this);
     const { label, labelId, labelText } = getAriaLabel(el, inputId);
-    renderHiddenInput(true, el, name, (checked ? value : ''), disabled);
-    let path = indeterminate
-      ? hAsync("path", { d: "M6 12L18 12", part: "mark" })
-      : hAsync("path", { d: "M5.9,12.5l3.8,3.8l8.8-8.8", part: "mark" });
+    renderHiddenInput(true, el, name, checked ? value : '', disabled);
+    let path = indeterminate ? (hAsync("path", { d: "M6 12L18 12", part: "mark" })) : (hAsync("path", { d: "M5.9,12.5l3.8,3.8l8.8-8.8", part: "mark" }));
     if (mode === 'md') {
-      path = indeterminate
-        ? hAsync("path", { d: "M2 12H22", part: "mark" })
-        : hAsync("path", { d: "M1.73,12.91 8.1,19.28 22.79,4.59", part: "mark" });
+      path = indeterminate ? (hAsync("path", { d: "M2 12H22", part: "mark" })) : (hAsync("path", { d: "M1.73,12.91 8.1,19.28 22.79,4.59", part: "mark" }));
     }
     return (hAsync(Host, { onClick: this.onClick, "aria-labelledby": label ? labelId : null, "aria-checked": `${checked}`, "aria-hidden": disabled ? 'true' : null, role: "checkbox", class: createColorClasses$1(color, {
         [mode]: true,
@@ -11276,8 +11229,8 @@ class Checkbox {
         'checkbox-checked': checked,
         'checkbox-disabled': disabled,
         'checkbox-indeterminate': indeterminate,
-        'interactive': true
-      }) }, hAsync("svg", { class: "checkbox-icon", viewBox: "0 0 24 24", part: "container" }, path), hAsync("label", { htmlFor: inputId }, labelText), hAsync("input", { type: "checkbox", "aria-checked": `${checked}`, disabled: disabled, id: inputId, onFocus: () => this.onFocus(), onBlur: () => this.onBlur(), ref: focusEl => this.focusEl = focusEl })));
+        interactive: true,
+      }) }, hAsync("svg", { class: "checkbox-icon", viewBox: "0 0 24 24", part: "container" }, path), hAsync("label", { htmlFor: inputId }, labelText), hAsync("input", { type: "checkbox", "aria-checked": `${checked}`, disabled: disabled, id: inputId, onFocus: () => this.onFocus(), onBlur: () => this.onBlur(), ref: (focusEl) => (this.focusEl = focusEl) })));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -11356,11 +11309,11 @@ class Chip {
  * (C) Ionic http://ionicframework.com - MIT License
  */
 const SIZE_TO_MEDIA = {
-  'xs': '(min-width: 0px)',
-  'sm': '(min-width: 576px)',
-  'md': '(min-width: 768px)',
-  'lg': '(min-width: 992px)',
-  'xl': '(min-width: 1200px)',
+  xs: '(min-width: 0px)',
+  sm: '(min-width: 576px)',
+  md: '(min-width: 768px)',
+  lg: '(min-width: 992px)',
+  xl: '(min-width: 1200px)',
 };
 // Check if the window matches the media query
 // at the breakpoint passed
@@ -11378,7 +11331,8 @@ const matchBreakpoint = (breakpoint) => {
 
 const colCss = "/*!@:host*/.sc-ion-col-h{padding-left:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));padding-right:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));padding-top:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));padding-bottom:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;box-sizing:border-box;position:relative;flex-basis:0;flex-grow:1;width:100%;max-width:100%;min-height:1px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-col-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));padding-inline-start:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));-webkit-padding-end:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px));padding-inline-end:var(--ion-grid-column-padding-xs, var(--ion-grid-column-padding, 5px))}}@media (min-width: 576px){/*!@:host*/.sc-ion-col-h{padding-left:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));padding-right:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));padding-top:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));padding-bottom:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px))}/*!@@supports (margin-inline-start: 0) or (-webkit-margin-start: 0)*/@supports .sc-ion-col (margin-inline-start.sc-ion-col: 0).sc-ion-col or.sc-ion-col (-webkit-margin-start.sc-ion-col: 0).sc-ion-col{.sc-ion-col-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));padding-inline-start:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));-webkit-padding-end:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px));padding-inline-end:var(--ion-grid-column-padding-sm, var(--ion-grid-column-padding, 5px))}}}@media (min-width: 768px){/*!@:host*/.sc-ion-col-h{padding-left:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));padding-right:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));padding-top:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));padding-bottom:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px))}/*!@@supports (margin-inline-start: 0) or (-webkit-margin-start: 0)*/@supports .sc-ion-col (margin-inline-start.sc-ion-col: 0).sc-ion-col or.sc-ion-col (-webkit-margin-start.sc-ion-col: 0).sc-ion-col{.sc-ion-col-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));padding-inline-start:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));-webkit-padding-end:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px));padding-inline-end:var(--ion-grid-column-padding-md, var(--ion-grid-column-padding, 5px))}}}@media (min-width: 992px){/*!@:host*/.sc-ion-col-h{padding-left:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));padding-right:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));padding-top:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));padding-bottom:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px))}/*!@@supports (margin-inline-start: 0) or (-webkit-margin-start: 0)*/@supports .sc-ion-col (margin-inline-start.sc-ion-col: 0).sc-ion-col or.sc-ion-col (-webkit-margin-start.sc-ion-col: 0).sc-ion-col{.sc-ion-col-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));padding-inline-start:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));-webkit-padding-end:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px));padding-inline-end:var(--ion-grid-column-padding-lg, var(--ion-grid-column-padding, 5px))}}}@media (min-width: 1200px){/*!@:host*/.sc-ion-col-h{padding-left:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));padding-right:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));padding-top:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));padding-bottom:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px))}/*!@@supports (margin-inline-start: 0) or (-webkit-margin-start: 0)*/@supports .sc-ion-col (margin-inline-start.sc-ion-col: 0).sc-ion-col or.sc-ion-col (-webkit-margin-start.sc-ion-col: 0).sc-ion-col{.sc-ion-col-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));padding-inline-start:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));-webkit-padding-end:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px));padding-inline-end:var(--ion-grid-column-padding-xl, var(--ion-grid-column-padding, 5px))}}}";
 
-const win$1 = (typeof window !== 'undefined') ? window : undefined;
+const win$1 = typeof window !== 'undefined' ? window : undefined;
+// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
 const SUPPORTS_VARS = win$1 && !!(win$1.CSS && win$1.CSS.supports && win$1.CSS.supports('--a: 0'));
 const BREAKPOINTS = ['', 'xs', 'sm', 'md', 'lg', 'xl'];
 class Col {
@@ -11415,17 +11369,18 @@ class Col {
       return;
     }
     // If the size is set to auto then don't calculate a size
-    const colSize = (columns === 'auto')
+    const colSize = columns === 'auto'
       ? 'auto'
-      // If CSS supports variables we should use the grid columns var
-      : SUPPORTS_VARS ? `calc(calc(${columns} / var(--ion-grid-columns, 12)) * 100%)`
-        // Convert the columns to a percentage by dividing by the total number
-        // of columns (12) and then multiplying by 100
-        : ((columns / 12) * 100) + '%';
+      : // If CSS supports variables we should use the grid columns var
+        SUPPORTS_VARS
+          ? `calc(calc(${columns} / var(--ion-grid-columns, 12)) * 100%)`
+          : // Convert the columns to a percentage by dividing by the total number
+            // of columns (12) and then multiplying by 100
+            (columns / 12) * 100 + '%';
     return {
-      'flex': `0 0 ${colSize}`,
-      'width': `${colSize}`,
-      'max-width': `${colSize}`
+      flex: `0 0 ${colSize}`,
+      width: `${colSize}`,
+      'max-width': `${colSize}`,
     };
   }
   // Called by push, pull, and offset since they use the same calculations
@@ -11437,13 +11392,15 @@ class Col {
     // If the number of columns passed are greater than 0 and less than
     // 12 we can position the column, else default to auto
     const amount = SUPPORTS_VARS
-      // If CSS supports variables we should use the grid columns var
-      ? `calc(calc(${columns} / var(--ion-grid-columns, 12)) * 100%)`
-      // Convert the columns to a percentage by dividing by the total number
-      // of columns (12) and then multiplying by 100
-      : (columns > 0 && columns < 12) ? (columns / 12 * 100) + '%' : 'auto';
+      ? // If CSS supports variables we should use the grid columns var
+        `calc(calc(${columns} / var(--ion-grid-columns, 12)) * 100%)`
+      : // Convert the columns to a percentage by dividing by the total number
+        // of columns (12) and then multiplying by 100
+        columns > 0 && columns < 12
+          ? (columns / 12) * 100 + '%'
+          : 'auto';
     return {
-      [modifier]: amount
+      [modifier]: amount,
     };
   }
   calculateOffset(isRTL) {
@@ -11459,7 +11416,7 @@ class Col {
     const isRTL = document.dir === 'rtl';
     const mode = getIonMode$1(this);
     return (hAsync(Host, { class: {
-        [mode]: true
+        [mode]: true,
       }, style: Object.assign(Object.assign(Object.assign(Object.assign({}, this.calculateOffset(isRTL)), this.calculatePull(isRTL)), this.calculatePush(isRTL)), this.calculateSize()) }, hAsync("slot", null)));
   }
   static get style() { return colCss; }
@@ -11589,9 +11546,7 @@ class Content {
   shouldForceOverscroll() {
     const { forceOverscroll } = this;
     const mode = getIonMode$1(this);
-    return forceOverscroll === undefined
-      ? mode === 'ios' && isPlatform('ios')
-      : forceOverscroll;
+    return forceOverscroll === undefined ? mode === 'ios' && isPlatform('ios') : forceOverscroll;
   }
   resize() {
     if (this.fullscreen) {
@@ -11622,7 +11577,7 @@ class Content {
     }
     if (!this.queued && this.scrollEvents) {
       this.queued = true;
-      readTask(ts => {
+      readTask((ts) => {
         this.queued = false;
         this.detail.event = ev;
         updateScrollDetail(this.detail, this.scrollEl, ts, shouldStart);
@@ -11644,7 +11599,7 @@ class Content {
      * scrollEl won't be defined yet with the custom elements build, so wait for it to load in.
      */
     if (!this.scrollEl) {
-      await new Promise(resolve => componentOnReady(this.el, resolve));
+      await new Promise((resolve) => componentOnReady(this.el, resolve));
     }
     return Promise.resolve(this.scrollEl);
   }
@@ -11697,20 +11652,20 @@ class Content {
     }
     let resolve;
     let startTime = 0;
-    const promise = new Promise(r => resolve = r);
+    const promise = new Promise((r) => (resolve = r));
     const fromY = el.scrollTop;
     const fromX = el.scrollLeft;
     const deltaY = y != null ? y - fromY : 0;
     const deltaX = x != null ? x - fromX : 0;
     // scroll loop
     const step = (timeStamp) => {
-      const linearTime = Math.min(1, ((timeStamp - startTime) / duration)) - 1;
+      const linearTime = Math.min(1, (timeStamp - startTime) / duration) - 1;
       const easedT = Math.pow(linearTime, 3) + 1;
       if (deltaY !== 0) {
-        el.scrollTop = Math.floor((easedT * deltaY) + fromY);
+        el.scrollTop = Math.floor(easedT * deltaY + fromY);
       }
       if (deltaX !== 0) {
-        el.scrollLeft = Math.floor((easedT * deltaX) + fromX);
+        el.scrollLeft = Math.floor(easedT * deltaX + fromX);
       }
       if (easedT < 1) {
         // do not use DomController here
@@ -11723,7 +11678,7 @@ class Content {
       }
     };
     // chill out for a frame first
-    requestAnimationFrame(ts => {
+    requestAnimationFrame((ts) => {
       startTime = ts;
       step(ts);
     });
@@ -11732,7 +11687,7 @@ class Content {
   onScrollStart() {
     this.isScrolling = true;
     this.ionScrollStart.emit({
-      isScrolling: true
+      isScrolling: true,
     });
     if (this.watchDog) {
       clearInterval(this.watchDog);
@@ -11750,7 +11705,7 @@ class Content {
     if (this.isScrolling) {
       this.isScrolling = false;
       this.ionScrollEnd.emit({
-        isScrolling: false
+        isScrolling: false,
       });
     }
   }
@@ -11765,8 +11720,8 @@ class Content {
     return (hAsync(Host, { class: createColorClasses$1(this.color, {
         [mode]: true,
         'content-sizing': hostContext('ion-popover', this.el),
-        'overscroll': forceOverscroll,
-        [`content-${rtl}`]: true
+        overscroll: forceOverscroll,
+        [`content-${rtl}`]: true,
       }), style: {
         '--offset-top': `${this.cTop}px`,
         '--offset-bottom': `${this.cBottom}px`,
@@ -11774,8 +11729,8 @@ class Content {
         'inner-scroll': true,
         'scroll-x': scrollX,
         'scroll-y': scrollY,
-        'overscroll': (scrollX || scrollY) && forceOverscroll
-      }, ref: (scrollEl) => this.scrollEl = scrollEl, onScroll: (this.scrollEvents) ? (ev) => this.onScroll(ev) : undefined, part: "scroll" }, hAsync("slot", null)), transitionShadow ? (hAsync("div", { class: "transition-effect" }, hAsync("div", { class: "transition-cover" }), hAsync("div", { class: "transition-shadow" }))) : null, hAsync("slot", { name: "fixed" })));
+        overscroll: (scrollX || scrollY) && forceOverscroll,
+      }, ref: (scrollEl) => (this.scrollEl = scrollEl), onScroll: this.scrollEvents ? (ev) => this.onScroll(ev) : undefined, part: "scroll" }, hAsync("slot", null)), transitionShadow ? (hAsync("div", { class: "transition-effect" }, hAsync("div", { class: "transition-cover" }), hAsync("div", { class: "transition-shadow" }))) : null, hAsync("slot", { name: "fixed" })));
   }
   get el() { return getElement(this); }
   static get style() { return contentCss; }
@@ -11801,11 +11756,12 @@ class Content {
   }; }
 }
 const getParentElement = (el) => {
+  var _a;
   if (el.parentElement) {
     // normal element with a parent element
     return el.parentElement;
   }
-  if (el.parentNode && el.parentNode.host) {
+  if ((_a = el.parentNode) === null || _a === void 0 ? void 0 : _a.host) {
     // shadow dom's document fragment
     return el.parentNode.host;
   }
@@ -11860,15 +11816,28 @@ const updateScrollDetail = (detail, el, timestamp, shouldStart) => {
  */
 const ION_FOCUSED = 'ion-focused';
 const ION_FOCUSABLE = 'ion-focusable';
-const FOCUS_KEYS = ['Tab', 'ArrowDown', 'Space', 'Escape', ' ', 'Shift', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'Home', 'End'];
+const FOCUS_KEYS = [
+  'Tab',
+  'ArrowDown',
+  'Space',
+  'Escape',
+  ' ',
+  'Shift',
+  'Enter',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowUp',
+  'Home',
+  'End',
+];
 const startFocusVisible = (rootEl) => {
   let currentFocus = [];
   let keyboardMode = true;
-  const ref = (rootEl) ? rootEl.shadowRoot : document;
-  const root = (rootEl) ? rootEl : document.body;
+  const ref = rootEl ? rootEl.shadowRoot : document;
+  const root = rootEl ? rootEl : document.body;
   const setFocus = (elements) => {
-    currentFocus.forEach(el => el.classList.remove(ION_FOCUSED));
-    elements.forEach(el => el.classList.add(ION_FOCUSED));
+    currentFocus.forEach((el) => el.classList.remove(ION_FOCUSED));
+    elements.forEach((el) => el.classList.add(ION_FOCUSED));
     currentFocus = elements;
   };
   const pointerDown = () => {
@@ -11911,7 +11880,7 @@ const startFocusVisible = (rootEl) => {
   };
   return {
     destroy,
-    setFocus
+    setFocus,
   };
 };
 
@@ -11922,25 +11891,27 @@ const startFocusVisible = (rootEl) => {
  * Returns true if the selected day is equal to the reference day
  */
 const isSameDay = (baseParts, compareParts) => {
-  return (baseParts.month === compareParts.month &&
-    baseParts.day === compareParts.day &&
-    baseParts.year === compareParts.year);
+  return (baseParts.month === compareParts.month && baseParts.day === compareParts.day && baseParts.year === compareParts.year);
 };
 /**
  * Returns true is the selected day is before the reference day.
  */
 const isBefore = (baseParts, compareParts) => {
   return (baseParts.year < compareParts.year ||
-    baseParts.year === compareParts.year && baseParts.month < compareParts.month ||
-    baseParts.year === compareParts.year && baseParts.month === compareParts.month && baseParts.day < compareParts.day);
+    (baseParts.year === compareParts.year && baseParts.month < compareParts.month) ||
+    (baseParts.year === compareParts.year &&
+      baseParts.month === compareParts.month &&
+      baseParts.day < compareParts.day));
 };
 /**
  * Returns true is the selected day is after the reference day.
  */
 const isAfter = (baseParts, compareParts) => {
   return (baseParts.year > compareParts.year ||
-    baseParts.year === compareParts.year && baseParts.month > compareParts.month ||
-    baseParts.year === compareParts.year && baseParts.month === compareParts.month && baseParts.day > compareParts.day);
+    (baseParts.year === compareParts.year && baseParts.month > compareParts.month) ||
+    (baseParts.year === compareParts.year &&
+      baseParts.month === compareParts.month &&
+      baseParts.day > compareParts.day));
 };
 
 /*!
@@ -11953,7 +11924,7 @@ const isAfter = (baseParts, compareParts) => {
  * otherwise.
  */
 const isLeapYear = (year) => {
-  return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 };
 const is24Hour = (locale, hourCycle) => {
   /**
@@ -11981,7 +11952,7 @@ const is24Hour = (locale, hourCycle) => {
    */
   const date = new Date('5/18/2021 00:00');
   const parts = formatted.formatToParts(date);
-  const hour = parts.find(p => p.type === 'hour');
+  const hour = parts.find((p) => p.type === 'hour');
   if (!hour) {
     throw new Error('Hour value not found from DateTimeFormat');
   }
@@ -11994,7 +11965,13 @@ const is24Hour = (locale, hourCycle) => {
  * i.e. January = month 1.
  */
 const getNumDaysInMonth = (month, year) => {
-  return (month === 4 || month === 6 || month === 9 || month === 11) ? 30 : (month === 2) ? isLeapYear(year) ? 29 : 28 : 31;
+  return month === 4 || month === 6 || month === 9 || month === 11
+    ? 30
+    : month === 2
+      ? isLeapYear(year)
+        ? 29
+        : 28
+      : 31;
 };
 /**
  * Certain locales display month then year while
@@ -12049,7 +12026,11 @@ const convertDataToISO = (data) => {
           }
           else {
             // YYYY-MM-DDTHH:mm:SS+/-HH:mm
-            rtn += (data.tzOffset > 0 ? '+' : '-') + twoDigit(Math.floor(Math.abs(data.tzOffset / 60))) + ':' + twoDigit(data.tzOffset % 60);
+            rtn +=
+              (data.tzOffset > 0 ? '+' : '-') +
+                twoDigit(Math.floor(Math.abs(data.tzOffset / 60))) +
+                ':' +
+                twoDigit(data.tzOffset % 60);
           }
         }
       }
@@ -12134,7 +12115,7 @@ const subtractDays = (refParts, numDays) => {
   const workingParts = {
     month,
     day,
-    year
+    year,
   };
   workingParts.day = day - numDays;
   /**
@@ -12185,7 +12166,7 @@ const addDays = (refParts, numDays) => {
   const workingParts = {
     month,
     day,
-    year
+    year,
   };
   const daysInMonth = getNumDaysInMonth(month, year);
   workingParts.day = day + numDays;
@@ -12215,10 +12196,10 @@ const getPreviousMonth = (refParts) => {
    * If current month is January, wrap backwards
    *  to December of the previous year.
    */
-  const month = (refParts.month === 1) ? 12 : refParts.month - 1;
-  const year = (refParts.month === 1) ? refParts.year - 1 : refParts.year;
+  const month = refParts.month === 1 ? 12 : refParts.month - 1;
+  const year = refParts.month === 1 ? refParts.year - 1 : refParts.year;
   const numDaysInMonth = getNumDaysInMonth(month, year);
-  const day = (numDaysInMonth < refParts.day) ? numDaysInMonth : refParts.day;
+  const day = numDaysInMonth < refParts.day ? numDaysInMonth : refParts.day;
   return { month, year, day };
 };
 /**
@@ -12229,17 +12210,17 @@ const getNextMonth = (refParts) => {
    * If current month is December, wrap forwards
    *  to January of the next year.
    */
-  const month = (refParts.month === 12) ? 1 : refParts.month + 1;
-  const year = (refParts.month === 12) ? refParts.year + 1 : refParts.year;
+  const month = refParts.month === 12 ? 1 : refParts.month + 1;
+  const year = refParts.month === 12 ? refParts.year + 1 : refParts.year;
   const numDaysInMonth = getNumDaysInMonth(month, year);
-  const day = (numDaysInMonth < refParts.day) ? numDaysInMonth : refParts.day;
+  const day = numDaysInMonth < refParts.day ? numDaysInMonth : refParts.day;
   return { month, year, day };
 };
 const changeYear = (refParts, yearDelta) => {
   const month = refParts.month;
   const year = refParts.year + yearDelta;
   const numDaysInMonth = getNumDaysInMonth(month, year);
-  const day = (numDaysInMonth < refParts.day) ? numDaysInMonth : refParts.day;
+  const day = numDaysInMonth < refParts.day ? numDaysInMonth : refParts.day;
   return { month, year, day };
 };
 /**
@@ -12322,10 +12303,13 @@ const getToday = () => {
    * there was a net change of zero hours from the
    * local date.
    */
-  date.setHours(date.getHours() - (tzOffset / 60));
+  date.setHours(date.getHours() - tzOffset / 60);
   return date.toISOString();
 };
-const minutes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59];
+const minutes = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+  32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
+];
 const hour12 = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 const hour23 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 /**
@@ -12392,10 +12376,7 @@ const getDaysOfMonth = (month, year, firstDayOfWeek) => {
     days.push({ day: i, dayOfWeek: (offset + i) % 7 });
   }
   for (let i = 0; i <= offset; i++) {
-    days = [
-      { day: null, dayOfWeek: null },
-      ...days
-    ];
+    days = [{ day: null, dayOfWeek: null }, ...days];
   }
   return days;
 };
@@ -12411,10 +12392,10 @@ const generateTime = (refParts, hourCycle = 'h12', minParts, maxParts, hourValue
   let isAMAllowed = true;
   let isPMAllowed = true;
   if (hourValues) {
-    processedHours = processedHours.filter(hour => hourValues.includes(hour));
+    processedHours = processedHours.filter((hour) => hourValues.includes(hour));
   }
   if (minuteValues) {
-    processedMinutes = processedMinutes.filter(minute => minuteValues.includes(minute));
+    processedMinutes = processedMinutes.filter((minute) => minuteValues.includes(minute));
   }
   if (minParts) {
     /**
@@ -12429,7 +12410,7 @@ const generateTime = (refParts, hourCycle = 'h12', minParts, maxParts, hourValue
        * all hours/minutes in that case.
        */
       if (minParts.hour !== undefined) {
-        processedHours = processedHours.filter(hour => {
+        processedHours = processedHours.filter((hour) => {
           const convertedHour = refParts.ampm === 'pm' ? (hour + 12) % 24 : hour;
           return (use24Hour ? hour : convertedHour) >= minParts.hour;
         });
@@ -12449,7 +12430,7 @@ const generateTime = (refParts, hourCycle = 'h12', minParts, maxParts, hourValue
             isPastMinHour = true;
           }
         }
-        processedMinutes = processedMinutes.filter(minute => {
+        processedMinutes = processedMinutes.filter((minute) => {
           if (isPastMinHour) {
             return true;
           }
@@ -12480,7 +12461,7 @@ const generateTime = (refParts, hourCycle = 'h12', minParts, maxParts, hourValue
        * all hours/minutes in that case.
        */
       if (maxParts.hour !== undefined) {
-        processedHours = processedHours.filter(hour => {
+        processedHours = processedHours.filter((hour) => {
           const convertedHour = refParts.ampm === 'pm' ? (hour + 12) % 24 : hour;
           return (use24Hour ? hour : convertedHour) <= maxParts.hour;
         });
@@ -12491,7 +12472,7 @@ const generateTime = (refParts, hourCycle = 'h12', minParts, maxParts, hourValue
         // For example if the max hour is 10:30 and the current hour is 10:00,
         // users should be able to select 00-30 minutes.
         // If the current hour is 09:00, users should be able to select 00-60 minutes.
-        processedMinutes = processedMinutes.filter(minute => minute <= maxParts.minute);
+        processedMinutes = processedMinutes.filter((minute) => minute <= maxParts.minute);
       }
       /**
        * If ref day is after minimum
@@ -12508,7 +12489,7 @@ const generateTime = (refParts, hourCycle = 'h12', minParts, maxParts, hourValue
     hours: processedHours,
     minutes: processedMinutes,
     am: isAMAllowed,
-    pm: isPMAllowed
+    pm: isPMAllowed,
   };
 };
 /**
@@ -12519,7 +12500,7 @@ const generateMonths = (refParts) => {
   return [
     getPreviousMonth(refParts),
     { month: refParts.month, year: refParts.year, day: refParts.day },
-    getNextMonth(refParts)
+    getNextMonth(refParts),
   ];
 };
 const getPickerMonths = (locale, refParts, minParts, maxParts, monthValues) => {
@@ -12528,12 +12509,12 @@ const getPickerMonths = (locale, refParts, minParts, maxParts, monthValues) => {
   if (monthValues !== undefined) {
     let processedMonths = monthValues;
     if ((maxParts === null || maxParts === void 0 ? void 0 : maxParts.month) !== undefined) {
-      processedMonths = processedMonths.filter(month => month <= maxParts.month);
+      processedMonths = processedMonths.filter((month) => month <= maxParts.month);
     }
     if ((minParts === null || minParts === void 0 ? void 0 : minParts.month) !== undefined) {
-      processedMonths = processedMonths.filter(month => month >= minParts.month);
+      processedMonths = processedMonths.filter((month) => month >= minParts.month);
     }
-    processedMonths.forEach(processedMonth => {
+    processedMonths.forEach((processedMonth) => {
       const date = new Date(`${processedMonth}/1/${year} GMT+0000`);
       const monthString = new Intl.DateTimeFormat(locale, { month: 'long', timeZone: 'UTC' }).format(date);
       months.push({ text: monthString, value: processedMonth });
@@ -12578,17 +12559,17 @@ const getCalendarYears = (refParts, minParts, maxParts, yearValues) => {
   if (yearValues !== undefined) {
     let processedYears = yearValues;
     if ((maxParts === null || maxParts === void 0 ? void 0 : maxParts.year) !== undefined) {
-      processedYears = processedYears.filter(year => year <= maxParts.year);
+      processedYears = processedYears.filter((year) => year <= maxParts.year);
     }
     if ((minParts === null || minParts === void 0 ? void 0 : minParts.year) !== undefined) {
-      processedYears = processedYears.filter(year => year >= minParts.year);
+      processedYears = processedYears.filter((year) => year >= minParts.year);
     }
     return processedYears;
   }
   else {
     const { year } = refParts;
-    const maxYear = ((maxParts === null || maxParts === void 0 ? void 0 : maxParts.year) || year);
-    const minYear = ((minParts === null || minParts === void 0 ? void 0 : minParts.year) || year - 100);
+    const maxYear = (maxParts === null || maxParts === void 0 ? void 0 : maxParts.year) || year;
+    const minYear = (minParts === null || minParts === void 0 ? void 0 : minParts.year) || year - 100;
     const years = [];
     for (let i = maxYear; i >= minYear; i--) {
       years.push(i);
@@ -12655,12 +12636,17 @@ const generateDayAriaLabel = (locale, today, refParts) => {
    * MM/DD/YYYY will return midnight in the user's timezone.
    */
   const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year} GMT+0000`);
-  const labelString = new Intl.DateTimeFormat(locale, { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(date);
+  const labelString = new Intl.DateTimeFormat(locale, {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(date);
   /**
    * If date is today, prepend "Today" so screen readers indicate
    * that the date is today.
    */
-  return (today) ? `Today, ${labelString}` : labelString;
+  return today ? `Today, ${labelString}` : labelString;
 };
 /**
  * Gets the day of the week, month, and day
@@ -12684,7 +12670,10 @@ const getMonthAndYear = (locale, refParts) => {
 /*!
  * (C) Ionic http://ionicframework.com - MIT License
  */
-const ISO_8601_REGEXP = /^(\d{4}|[+\-]\d{6})(?:-(\d{2})(?:-(\d{2}))?)?(?:T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/;
+const ISO_8601_REGEXP = 
+// eslint-disable-next-line no-useless-escape
+/^(\d{4}|[+\-]\d{6})(?:-(\d{2})(?:-(\d{2}))?)?(?:T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/;
+// eslint-disable-next-line no-useless-escape
 const TIME_REGEXP = /^((\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/;
 /**
  * Use to convert a string of comma separated numbers or
@@ -12703,9 +12692,7 @@ const convertToArrayOfNumbers = (input) => {
   let values;
   if (Array.isArray(processedInput)) {
     // ensure each value is an actual number in the returned array
-    values = processedInput
-      .map((num) => parseInt(num, 10))
-      .filter(isFinite);
+    values = processedInput.map((num) => parseInt(num, 10)).filter(isFinite);
   }
   else {
     values = [processedInput];
@@ -12722,7 +12709,7 @@ const getPartsFromCalendarDay = (el) => {
     month: parseInt(el.getAttribute('data-month'), 10),
     day: parseInt(el.getAttribute('data-day'), 10),
     year: parseInt(el.getAttribute('data-year'), 10),
-    dayOfWeek: parseInt(el.getAttribute('data-day-of-week'), 10)
+    dayOfWeek: parseInt(el.getAttribute('data-day-of-week'), 10),
   };
 };
 /**
@@ -12861,21 +12848,21 @@ const getCalendarDayState = (locale, refParts, activeParts, todayParts, minParts
     isActive,
     isToday,
     ariaSelected: isActive ? 'true' : null,
-    ariaLabel: generateDayAriaLabel(locale, isToday, refParts)
+    ariaLabel: generateDayAriaLabel(locale, isToday, refParts),
   };
 };
 /**
  * Returns `true` if the month is disabled given the
  * current date value and min/max date constraints.
  */
-const isMonthDisabled = (refParts, { minParts, maxParts }) => {
+const isMonthDisabled = (refParts, { minParts, maxParts, }) => {
   // If the year is disabled then the month is disabled.
   if (isYearDisabled(refParts.year, minParts, maxParts)) {
     return true;
   }
   // If the date value is before the min date, then the month is disabled.
   // If the date value is after the max date, then the month is disabled.
-  if (minParts && isBefore(refParts, minParts) || maxParts && isAfter(refParts, maxParts)) {
+  if ((minParts && isBefore(refParts, minParts)) || (maxParts && isAfter(refParts, maxParts))) {
     return true;
   }
   return false;
@@ -12889,7 +12876,7 @@ const isPrevMonthDisabled = (refParts, minParts, maxParts) => {
   const prevMonth = getPreviousMonth(refParts);
   return isMonthDisabled(prevMonth, {
     minParts,
-    maxParts
+    maxParts,
   });
 };
 /**
@@ -12899,7 +12886,7 @@ const isPrevMonthDisabled = (refParts, minParts, maxParts) => {
 const isNextMonthDisabled = (refParts, maxParts) => {
   const nextMonth = getNextMonth(refParts);
   return isMonthDisabled(nextMonth, {
-    maxParts
+    maxParts,
   });
 };
 
@@ -12933,7 +12920,7 @@ class Datetime {
       year: 2021,
       hour: 13,
       minute: 52,
-      ampm: 'pm'
+      ampm: 'pm',
     };
     this.workingParts = {
       month: 5,
@@ -12941,7 +12928,7 @@ class Datetime {
       year: 2021,
       hour: 13,
       minute: 52,
-      ampm: 'pm'
+      ampm: 'pm',
     };
     this.isPresented = false;
     this.isTimePopoverOpen = false;
@@ -13087,8 +13074,7 @@ class Datetime {
          * if not currently focused, we should not re-focus
          * the inner day.
          */
-        if (((_a = record.oldValue) === null || _a === void 0 ? void 0 : _a.includes('ion-focused')) ||
-          !calendarBodyRef.classList.contains('ion-focused')) {
+        if (((_a = record.oldValue) === null || _a === void 0 ? void 0 : _a.includes('ion-focused')) || !calendarBodyRef.classList.contains('ion-focused')) {
           return;
         }
         this.focusWorkingDay(currentMonth);
@@ -13197,7 +13183,7 @@ class Datetime {
         day,
         year,
         hour,
-        minute
+        minute,
       };
     };
     this.processMaxParts = () => {
@@ -13211,7 +13197,7 @@ class Datetime {
         day,
         year,
         hour,
-        minute
+        minute,
       };
     };
     this.initializeCalendarIOListeners = () => {
@@ -13246,14 +13232,14 @@ class Datetime {
        * scrollIntoView() will scroll entire page
        * if element is not in viewport. Use scrollLeft instead.
        */
+      let endIO;
+      let startIO;
       writeTask(() => {
         calendarBodyRef.scrollLeft = startMonth.clientWidth * (isRTL(this.el) ? -1 : 1);
-        let endIO;
-        let startIO;
         const ioCallback = (callbackType, entries) => {
-          const refIO = (callbackType === 'start') ? startIO : endIO;
-          const refMonth = (callbackType === 'start') ? startMonth : endMonth;
-          const refMonthFn = (callbackType === 'start') ? getPreviousMonth : getNextMonth;
+          const refIO = callbackType === 'start' ? startIO : endIO;
+          const refMonth = callbackType === 'start' ? startMonth : endMonth;
+          const refMonthFn = callbackType === 'start' ? getPreviousMonth : getNextMonth;
           /**
            * If the month is not fully in view, do not do anything
            */
@@ -13275,7 +13261,7 @@ class Datetime {
           const { month, year, day } = refMonthFn(this.workingParts);
           if (isMonthDisabled({ month, year, day: null }, {
             minParts: Object.assign(Object.assign({}, this.minParts), { day: null }),
-            maxParts: Object.assign(Object.assign({}, this.maxParts), { day: null })
+            maxParts: Object.assign(Object.assign({}, this.maxParts), { day: null }),
           })) {
             return;
           }
@@ -13339,18 +13325,13 @@ class Datetime {
              * and the correct month is in view,
              * we can resume the IO.
              */
-            // tslint:disable-next-line
             if (refIO === undefined) {
               return;
             }
             refIO.observe(refMonth);
           });
         };
-        const threshold = mode === 'ios' &&
-          // tslint:disable-next-line
-          typeof navigator !== 'undefined' &&
-          navigator.maxTouchPoints > 1 ?
-          [0.7, 1] : 1;
+        const threshold = mode === 'ios' && typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1 ? [0.7, 1] : 1;
         // Intersection observers cannot accurately detect the
         // intersection with a threshold of 1, when the observed
         // element width is a sub-pixel value (i.e. 334.05px).
@@ -13374,16 +13355,16 @@ class Datetime {
          * it applies to active gestures which is not
          * something WebKit does.
          */
-        endIO = new IntersectionObserver(ev => ioCallback('end', ev), {
+        endIO = new IntersectionObserver((ev) => ioCallback('end', ev), {
           threshold,
           root: calendarBodyRef,
-          rootMargin
+          rootMargin,
         });
         endIO.observe(endMonth);
-        startIO = new IntersectionObserver(ev => ioCallback('start', ev), {
+        startIO = new IntersectionObserver((ev) => ioCallback('start', ev), {
           threshold,
           root: calendarBodyRef,
-          rootMargin
+          rootMargin,
         });
         startIO.observe(startMonth);
         this.destroyCalendarIO = () => {
@@ -13436,7 +13417,7 @@ class Datetime {
         hour,
         minute,
         tzOffset,
-        ampm: hour >= 12 ? 'pm' : 'am'
+        ampm: hour >= 12 ? 'pm' : 'am',
       };
       this.activeParts = {
         month,
@@ -13445,7 +13426,7 @@ class Datetime {
         hour,
         minute,
         tzOffset,
-        ampm: hour >= 12 ? 'pm' : 'am'
+        ampm: hour >= 12 ? 'pm' : 'am',
       };
     };
     this.onFocus = () => {
@@ -13470,7 +13451,7 @@ class Datetime {
       calendarBodyRef.scrollTo({
         top: 0,
         left: left * (isRTL(this.el) ? -1 : 1),
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     };
     this.prevMonth = () => {
@@ -13485,7 +13466,7 @@ class Datetime {
       calendarBodyRef.scrollTo({
         top: 0,
         left: 0,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     };
     this.toggleMonthAndYearView = () => {
@@ -13531,16 +13512,22 @@ class Datetime {
        * This allows us to update the current value's date/time display without
        * refocusing or shifting the user's display (leaves the user in place).
        */
-      const { month, day, year, hour, minute } = parseDate(this.value);
-      this.activePartsClone = Object.assign(Object.assign({}, this.activeParts), { month,
-        day,
-        year,
-        hour,
-        minute });
+      const valueDateParts = parseDate(this.value);
+      if (valueDateParts) {
+        const { month, day, year, hour, minute } = valueDateParts;
+        this.activePartsClone = Object.assign(Object.assign({}, this.activeParts), { month,
+          day,
+          year,
+          hour,
+          minute });
+      }
+      else {
+        logging.printIonWarning(`Unable to parse date string: ${this.value}. Please provide a valid ISO 8601 datetime string.`);
+      }
     }
     this.emitStyle();
     this.ionChange.emit({
-      value: this.value
+      value: this.value,
     });
   }
   /**
@@ -13607,7 +13594,6 @@ class Datetime {
      * visible if used inside of a modal or a popover otherwise the scrollable
      * areas will not have the correct values snapped into place.
      */
-    let visibleIO;
     const visibleCallback = (entries) => {
       const ev = entries[0];
       if (!ev.isIntersecting) {
@@ -13626,7 +13612,7 @@ class Datetime {
         this.el.classList.add('datetime-ready');
       });
     };
-    visibleIO = new IntersectionObserver(visibleCallback, { threshold: 0.01 });
+    const visibleIO = new IntersectionObserver(visibleCallback, { threshold: 0.01 });
     /**
      * Use raf to avoid a race condition between the component loading and
      * its display animation starting (such as when shown in a modal). This
@@ -13641,7 +13627,6 @@ class Datetime {
      * the scroll areas have scroll widths/heights of 0px, so any snapping
      * we did originally has been lost.
      */
-    let hiddenIO;
     const hiddenCallback = (entries) => {
       const ev = entries[0];
       if (ev.isIntersecting) {
@@ -13652,7 +13637,7 @@ class Datetime {
         this.el.classList.remove('datetime-ready');
       });
     };
-    hiddenIO = new IntersectionObserver(hiddenCallback, { threshold: 0 });
+    const hiddenIO = new IntersectionObserver(hiddenCallback, { threshold: 0 });
     raf(() => hiddenIO === null || hiddenIO === void 0 ? void 0 : hiddenIO.observe(this.el));
     /**
      * Datetime uses Ionic components that emit
@@ -13700,8 +13685,8 @@ class Datetime {
   }
   emitStyle() {
     this.ionStyle.emit({
-      'interactive': true,
-      'datetime': true,
+      interactive: true,
+      datetime: true,
       'interactive-disabled': this.disabled,
     });
   }
@@ -13724,8 +13709,8 @@ class Datetime {
      */
     return (hAsync("div", { class: "datetime-footer" }, hAsync("div", { class: "datetime-buttons" }, hAsync("div", { class: {
         ['datetime-action-buttons']: true,
-        ['has-clear-button']: this.showClearButton
-      } }, hAsync("slot", { name: "buttons" }, hAsync("ion-buttons", null, showDefaultButtons && hAsync("ion-button", { id: "cancel-button", color: this.color, onClick: () => this.cancel(true) }, this.cancelText), hAsync("div", null, showClearButton && hAsync("ion-button", { id: "clear-button", color: this.color, onClick: () => clearButtonClick() }, this.clearText), showDefaultButtons && hAsync("ion-button", { id: "confirm-button", color: this.color, onClick: () => this.confirm(true) }, this.doneText))))))));
+        ['has-clear-button']: this.showClearButton,
+      } }, hAsync("slot", { name: "buttons" }, hAsync("ion-buttons", null, showDefaultButtons && (hAsync("ion-button", { id: "cancel-button", color: this.color, onClick: () => this.cancel(true) }, this.cancelText)), hAsync("div", null, showClearButton && (hAsync("ion-button", { id: "clear-button", color: this.color, onClick: () => clearButtonClick() }, this.clearText)), showDefaultButtons && (hAsync("ion-button", { id: "confirm-button", color: this.color, onClick: () => this.confirm(true) }, this.doneText)))))))));
   }
   renderYearView() {
     const { presentation, workingParts, locale } = this;
@@ -13733,57 +13718,55 @@ class Datetime {
     const showMonth = presentation !== 'year';
     const showYear = presentation !== 'month';
     const months = getPickerMonths(locale, workingParts, this.minParts, this.maxParts, this.parsedMonthValues);
-    const years = calendarYears.map(year => {
+    const years = calendarYears.map((year) => {
       return {
         text: `${year}`,
-        value: year
+        value: year,
       };
     });
     const showMonthFirst = isMonthFirstLocale(locale);
     const columnOrder = showMonthFirst ? 'month-first' : 'year-first';
     return (hAsync("div", { class: "datetime-year" }, hAsync("div", { class: {
         'datetime-year-body': true,
-        [`order-${columnOrder}`]: true
-      } }, hAsync("ion-picker-internal", null, showMonth &&
-      hAsync("ion-picker-column-internal", { class: "month-column", color: this.color, items: months, value: workingParts.month, onIonChange: (ev) => {
-          // Due to a Safari 14 issue we need to destroy
-          // the intersection observer before we update state
-          // and trigger a re-render.
-          if (this.destroyCalendarIO) {
-            this.destroyCalendarIO();
-          }
-          this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { month: ev.detail.value }));
-          if (presentation === 'month' || presentation === 'month-year') {
-            this.setActiveParts(Object.assign(Object.assign({}, this.activeParts), { month: ev.detail.value }));
-          }
-          // We can re-attach the intersection observer after
-          // the working parts have been updated.
-          this.initializeCalendarIOListeners();
-          ev.stopPropagation();
-        } }), showYear &&
-      hAsync("ion-picker-column-internal", { class: "year-column", color: this.color, items: years, value: workingParts.year, onIonChange: (ev) => {
-          // Due to a Safari 14 issue we need to destroy
-          // the intersection observer before we update state
-          // and trigger a re-render.
-          if (this.destroyCalendarIO) {
-            this.destroyCalendarIO();
-          }
-          this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { year: ev.detail.value }));
-          if (presentation === 'year' || presentation === 'month-year') {
-            this.setActiveParts(Object.assign(Object.assign({}, this.activeParts), { year: ev.detail.value }));
-          }
-          // We can re-attach the intersection observer after
-          // the working parts have been updated.
-          this.initializeCalendarIOListeners();
-          ev.stopPropagation();
-        } })))));
+        [`order-${columnOrder}`]: true,
+      } }, hAsync("ion-picker-internal", null, showMonth && (hAsync("ion-picker-column-internal", { class: "month-column", color: this.color, items: months, value: workingParts.month, onIonChange: (ev) => {
+        // Due to a Safari 14 issue we need to destroy
+        // the intersection observer before we update state
+        // and trigger a re-render.
+        if (this.destroyCalendarIO) {
+          this.destroyCalendarIO();
+        }
+        this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { month: ev.detail.value }));
+        if (presentation === 'month' || presentation === 'month-year') {
+          this.setActiveParts(Object.assign(Object.assign({}, this.activeParts), { month: ev.detail.value }));
+        }
+        // We can re-attach the intersection observer after
+        // the working parts have been updated.
+        this.initializeCalendarIOListeners();
+        ev.stopPropagation();
+      } })), showYear && (hAsync("ion-picker-column-internal", { class: "year-column", color: this.color, items: years, value: workingParts.year, onIonChange: (ev) => {
+        // Due to a Safari 14 issue we need to destroy
+        // the intersection observer before we update state
+        // and trigger a re-render.
+        if (this.destroyCalendarIO) {
+          this.destroyCalendarIO();
+        }
+        this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { year: ev.detail.value }));
+        if (presentation === 'year' || presentation === 'month-year') {
+          this.setActiveParts(Object.assign(Object.assign({}, this.activeParts), { year: ev.detail.value }));
+        }
+        // We can re-attach the intersection observer after
+        // the working parts have been updated.
+        this.initializeCalendarIOListeners();
+        ev.stopPropagation();
+      } }))))));
   }
   renderCalendarHeader(mode) {
     const expandedIcon = mode === 'ios' ? chevronDown : caretUpSharp;
     const collapsedIcon = mode === 'ios' ? chevronForward : caretDownSharp;
     const prevMonthDisabled = isPrevMonthDisabled(this.workingParts, this.minParts, this.maxParts);
     const nextMonthDisabled = isNextMonthDisabled(this.workingParts, this.maxParts);
-    return (hAsync("div", { class: "calendar-header" }, hAsync("div", { class: "calendar-action-buttons" }, hAsync("div", { class: "calendar-month-year" }, hAsync("ion-item", { button: true, detail: false, lines: "none", onClick: () => this.toggleMonthAndYearView() }, hAsync("ion-label", null, getMonthAndYear(this.locale, this.workingParts), " ", hAsync("ion-icon", { icon: this.showMonthAndYear ? expandedIcon : collapsedIcon, lazy: false })))), hAsync("div", { class: "calendar-next-prev" }, hAsync("ion-buttons", null, hAsync("ion-button", { disabled: prevMonthDisabled, onClick: () => this.prevMonth() }, hAsync("ion-icon", { slot: "icon-only", icon: chevronBack, lazy: false, flipRtl: true })), hAsync("ion-button", { disabled: nextMonthDisabled, onClick: () => this.nextMonth() }, hAsync("ion-icon", { slot: "icon-only", icon: chevronForward, lazy: false, flipRtl: true }))))), hAsync("div", { class: "calendar-days-of-week" }, getDaysOfWeek(this.locale, mode, this.firstDayOfWeek % 7).map(d => {
+    return (hAsync("div", { class: "calendar-header" }, hAsync("div", { class: "calendar-action-buttons" }, hAsync("div", { class: "calendar-month-year" }, hAsync("ion-item", { button: true, detail: false, lines: "none", onClick: () => this.toggleMonthAndYearView() }, hAsync("ion-label", null, getMonthAndYear(this.locale, this.workingParts), ' ', hAsync("ion-icon", { icon: this.showMonthAndYear ? expandedIcon : collapsedIcon, lazy: false })))), hAsync("div", { class: "calendar-next-prev" }, hAsync("ion-buttons", null, hAsync("ion-button", { disabled: prevMonthDisabled, onClick: () => this.prevMonth() }, hAsync("ion-icon", { slot: "icon-only", icon: chevronBack, lazy: false, flipRtl: true })), hAsync("ion-button", { disabled: nextMonthDisabled, onClick: () => this.nextMonth() }, hAsync("ion-icon", { slot: "icon-only", icon: chevronForward, lazy: false, flipRtl: true }))))), hAsync("div", { class: "calendar-days-of-week" }, getDaysOfWeek(this.locale, mode, this.firstDayOfWeek % 7).map((d) => {
       return hAsync("div", { class: "day-of-week" }, d);
     }))));
   }
@@ -13794,13 +13777,13 @@ class Datetime {
     const swipeDisabled = isMonthDisabled({
       month,
       year,
-      day: null
+      day: null,
     }, {
       // The day is not used when checking if a month is disabled.
       // Users should be able to access the min or max month, even if the
       // min/max date is out of bounds (e.g. min is set to Feb 15, Feb should not be disabled).
       minParts: Object.assign(Object.assign({}, this.minParts), { day: null }),
-      maxParts: Object.assign(Object.assign({}, this.maxParts), { day: null })
+      maxParts: Object.assign(Object.assign({}, this.maxParts), { day: null }),
     });
     // The working month should never have swipe disabled.
     // Otherwise the CSS scroll snap will not work and the user
@@ -13809,7 +13792,7 @@ class Datetime {
     return (hAsync("div", { class: {
         'calendar-month': true,
         // Prevents scroll snap swipe gestures for months outside of the min/max bounds
-        'calendar-month-disabled': !isWorkingMonth && swipeDisabled
+        'calendar-month-disabled': !isWorkingMonth && swipeDisabled,
       } }, hAsync("div", { class: "calendar-month-grid" }, getDaysOfMonth(month, year, this.firstDayOfWeek % 7).map((dateObject, index) => {
       const { day, dayOfWeek } = dateObject;
       const referenceParts = { month, day, year };
@@ -13818,7 +13801,7 @@ class Datetime {
           'calendar-day-padding': day === null,
           'calendar-day': true,
           'calendar-day-active': isActive,
-          'calendar-day-today': isToday
+          'calendar-day-today': isToday,
         }, "aria-selected": ariaSelected, "aria-label": ariaLabel, onClick: () => {
           if (day === null) {
             return;
@@ -13833,7 +13816,7 @@ class Datetime {
     }))));
   }
   renderCalendarBody() {
-    return (hAsync("div", { class: "calendar-body ion-focusable", ref: el => this.calendarBodyRef = el, tabindex: "0" }, generateMonths(this.workingParts).map(({ month, year }) => {
+    return (hAsync("div", { class: "calendar-body ion-focusable", ref: (el) => (this.calendarBodyRef = el), tabindex: "0" }, generateMonths(this.workingParts).map(({ month, year }) => {
       return this.renderMonth(month, year);
     })));
   }
@@ -13845,7 +13828,7 @@ class Datetime {
     if (!hasSlottedTimeLabel && !this.showDefaultTimeLabel) {
       return;
     }
-    return (hAsync("slot", { name: "time-label" }, "Time"));
+    return hAsync("slot", { name: "time-label" }, "Time");
   }
   renderTimePicker(hoursItems, minutesItems, ampmItems, use24Hour) {
     const { color, activePartsClone, workingParts } = this;
@@ -13857,33 +13840,33 @@ class Datetime {
         this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { minute: ev.detail.value }));
         this.setActiveParts(Object.assign(Object.assign({}, activePartsClone), { minute: ev.detail.value }));
         ev.stopPropagation();
-      } }), !use24Hour && hAsync("ion-picker-column-internal", { color: color, value: activePartsClone.ampm, items: ampmItems, onIonChange: (ev) => {
+      } }), !use24Hour && (hAsync("ion-picker-column-internal", { color: color, value: activePartsClone.ampm, items: ampmItems, onIonChange: (ev) => {
         const hour = calculateHourFromAMPM(workingParts, ev.detail.value);
         this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { ampm: ev.detail.value, hour }));
         this.setActiveParts(Object.assign(Object.assign({}, activePartsClone), { ampm: ev.detail.value, hour }));
         ev.stopPropagation();
-      } })));
+      } }))));
   }
   renderTimeOverlay(hoursItems, minutesItems, ampmItems, use24Hour) {
     return [
       hAsync("div", { class: "time-header" }, this.renderTimeLabel()),
       hAsync("button", { class: {
           'time-body': true,
-          'time-body-active': this.isTimePopoverOpen
+          'time-body-active': this.isTimePopoverOpen,
         }, "aria-expanded": "false", "aria-haspopup": "true", onClick: async (ev) => {
           const { popoverRef } = this;
           if (popoverRef) {
             this.isTimePopoverOpen = true;
             popoverRef.present(new CustomEvent('ionShadowTarget', {
               detail: {
-                ionShadowTarget: ev.target
-              }
+                ionShadowTarget: ev.target,
+              },
             }));
             await popoverRef.onWillDismiss();
             this.isTimePopoverOpen = false;
           }
         } }, getFormattedTime(this.activePartsClone, use24Hour)),
-      hAsync("ion-popover", { alignment: "center", translucent: true, overlayIndex: 1, arrow: false, onWillPresent: ev => {
+      hAsync("ion-popover", { alignment: "center", translucent: true, overlayIndex: 1, arrow: false, onWillPresent: (ev) => {
           /**
            * Intersection Observers do not consistently fire between Blink and Webkit
            * when toggling the visibility of the popover and trying to scroll the picker
@@ -13894,13 +13877,13 @@ class Datetime {
            */
           const cols = ev.target.querySelectorAll('ion-picker-column-internal');
           // TODO (FW-615): Potentially remove this when intersection observers are fixed in picker column
-          cols.forEach(col => col.scrollActiveItemIntoView());
+          cols.forEach((col) => col.scrollActiveItemIntoView());
         }, style: {
-          '--offset-y': '-10px'
+          '--offset-y': '-10px',
         },
         // Allow native browser keyboard events to support up/down/home/end key
         // navigation within the time picker.
-        keyboardEvents: true, ref: el => this.popoverRef = el }, this.renderTimePicker(hoursItems, minutesItems, ampmItems, use24Hour))
+        keyboardEvents: true, ref: (el) => (this.popoverRef = el) }, this.renderTimePicker(hoursItems, minutesItems, ampmItems, use24Hour)),
     ];
   }
   /**
@@ -13915,32 +13898,34 @@ class Datetime {
     const timeOnlyPresentation = presentation === 'time';
     const use24Hour = is24Hour(this.locale, this.hourCycle);
     const { hours, minutes, am, pm } = generateTime(this.workingParts, use24Hour ? 'h23' : 'h12', this.minParts, this.maxParts, this.parsedHourValues, this.parsedMinuteValues);
-    const hoursItems = hours.map(hour => {
+    const hoursItems = hours.map((hour) => {
       return {
         text: getFormattedHour(hour, use24Hour),
-        value: getInternalHourValue(hour, use24Hour, workingParts.ampm)
+        value: getInternalHourValue(hour, use24Hour, workingParts.ampm),
       };
     });
-    const minutesItems = minutes.map(minute => {
+    const minutesItems = minutes.map((minute) => {
       return {
         text: addTimePadding(minute),
-        value: minute
+        value: minute,
       };
     });
     const ampmItems = [];
     if (am) {
       ampmItems.push({
         text: 'AM',
-        value: 'am'
+        value: 'am',
       });
     }
     if (pm) {
       ampmItems.push({
         text: 'PM',
-        value: 'pm'
+        value: 'pm',
       });
     }
-    return (hAsync("div", { class: "datetime-time" }, timeOnlyPresentation ? this.renderTimePicker(hoursItems, minutesItems, ampmItems, use24Hour) : this.renderTimeOverlay(hoursItems, minutesItems, ampmItems, use24Hour)));
+    return (hAsync("div", { class: "datetime-time" }, timeOnlyPresentation
+      ? this.renderTimePicker(hoursItems, minutesItems, ampmItems, use24Hour)
+      : this.renderTimeOverlay(hoursItems, minutesItems, ampmItems, use24Hour)));
   }
   renderCalendarViewHeader(mode) {
     const hasSlottedTitle = this.el.querySelector('[slot="title"]') !== null;
@@ -13958,7 +13943,7 @@ class Datetime {
           this.renderCalendar(mode),
           this.renderYearView(),
           this.renderTime(),
-          this.renderFooter()
+          this.renderFooter(),
         ];
       case 'time-date':
         return [
@@ -13966,26 +13951,20 @@ class Datetime {
           this.renderTime(),
           this.renderCalendar(mode),
           this.renderYearView(),
-          this.renderFooter()
+          this.renderFooter(),
         ];
       case 'time':
-        return [
-          this.renderTime(),
-          this.renderFooter()
-        ];
+        return [this.renderTime(), this.renderFooter()];
       case 'month':
       case 'month-year':
       case 'year':
-        return [
-          this.renderYearView(),
-          this.renderFooter()
-        ];
+        return [this.renderYearView(), this.renderFooter()];
       default:
         return [
           this.renderCalendarViewHeader(mode),
           this.renderCalendar(mode),
           this.renderYearView(),
-          this.renderFooter()
+          this.renderFooter(),
         ];
     }
   }
@@ -14002,7 +13981,7 @@ class Datetime {
         ['datetime-disabled']: disabled,
         'show-month-and-year': shouldShowMonthAndYear,
         [`datetime-presentation-${presentation}`]: true,
-        [`datetime-size-${size}`]: true
+        [`datetime-size-${size}`]: true,
       })) }, this.renderDatetime(mode)));
   }
   get el() { return getElement(this); }
@@ -14085,7 +14064,7 @@ class Fab {
     this.onClick = () => {
       const hasList = !!this.el.querySelector('ion-fab-list');
       const getButton = this.getFab();
-      const isButtonDisabled = getButton && getButton.disabled;
+      const isButtonDisabled = getButton === null || getButton === void 0 ? void 0 : getButton.disabled;
       if (hasList && !isButtonDisabled) {
         this.activated = !this.activated;
       }
@@ -14097,7 +14076,7 @@ class Fab {
     if (fab) {
       fab.activated = activated;
     }
-    Array.from(this.el.querySelectorAll('ion-fab-list')).forEach(list => {
+    Array.from(this.el.querySelectorAll('ion-fab-list')).forEach((list) => {
       list.activated = activated;
     });
   }
@@ -14122,7 +14101,7 @@ class Fab {
         [mode]: true,
         [`fab-horizontal-${horizontal}`]: horizontal !== undefined,
         [`fab-vertical-${vertical}`]: vertical !== undefined,
-        'fab-edge': edge
+        'fab-edge': edge,
       } }, hAsync("slot", null)));
   }
   get el() { return getElement(this); }
@@ -14206,13 +14185,13 @@ class FabButton {
     const inList = hostContext('ion-fab-list', el);
     const mode = getIonMode$1(this);
     const TagType = href === undefined ? 'button' : 'a';
-    const attrs = (TagType === 'button')
+    const attrs = TagType === 'button'
       ? { type: this.type }
       : {
         download: this.download,
         href,
         rel: this.rel,
-        target: this.target
+        target: this.target,
       };
     return (hAsync(Host, { "aria-disabled": disabled ? 'true' : null, class: createColorClasses$1(color, {
         [mode]: true,
@@ -14276,7 +14255,7 @@ class FabList {
     // if showing the fabs add a timeout, else show immediately
     const timeout = activated ? 30 : 0;
     fabs.forEach((fab, i) => {
-      setTimeout(() => fab.show = activated, i * timeout);
+      setTimeout(() => (fab.show = activated), i * timeout);
     });
   }
   render() {
@@ -14284,7 +14263,7 @@ class FabList {
     return (hAsync(Host, { class: {
         [mode]: true,
         'fab-list-active': this.activated,
-        [`fab-list-side-${this.side}`]: true
+        [`fab-list-side-${this.side}`]: true,
       } }, hAsync("slot", null)));
   }
   get el() { return getElement(this); }
@@ -14330,7 +14309,7 @@ const handleFooterFade = (scrollEl, baseEl) => {
      */
     const fadeStart = maxScroll - fadeDuration;
     const distanceToStart = scrollTop - fadeStart;
-    const scale = clamp(0, 1 - (distanceToStart / fadeDuration), 1);
+    const scale = clamp(0, 1 - distanceToStart / fadeDuration, 1);
     writeTask(() => {
       baseEl.style.setProperty('--opacity-scale', scale.toString());
     });
@@ -14366,7 +14345,7 @@ class Footer {
       this.destroyCollapsibleFooter();
       if (hasFade) {
         const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
-        const contentEl = (pageEl) ? pageEl.querySelector('ion-content') : null;
+        const contentEl = pageEl ? pageEl.querySelector('ion-content') : null;
         this.setupFadeFooter(contentEl);
       }
     };
@@ -14375,12 +14354,14 @@ class Footer {
         console.error('ion-footer requires a content to collapse. Make sure there is an ion-content.');
         return;
       }
-      await new Promise(resolve => componentOnReady(contentEl, resolve));
-      const scrollEl = this.scrollEl = await contentEl.getScrollElement();
+      await new Promise((resolve) => componentOnReady(contentEl, resolve));
+      const scrollEl = (this.scrollEl = await contentEl.getScrollElement());
       /**
        * Handle fading of toolbars on scroll
        */
-      this.contentScrollCallback = () => { handleFooterFade(scrollEl, this.el); };
+      this.contentScrollCallback = () => {
+        handleFooterFade(scrollEl, this.el);
+      };
       scrollEl.addEventListener('scroll', this.contentScrollCallback);
       handleFooterFade(scrollEl, this.el);
     };
@@ -14407,8 +14388,7 @@ class Footer {
         [`footer-translucent`]: translucent,
         [`footer-translucent-${mode}`]: translucent,
         [`footer-collapse-${collapse}`]: collapse !== undefined,
-      } }, mode === 'ios' && translucent &&
-      hAsync("div", { class: "footer-background" }), hAsync("slot", null)));
+      } }, mode === 'ios' && translucent && hAsync("div", { class: "footer-background" }), hAsync("slot", null)));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -24250,7 +24230,7 @@ class Grid {
     const mode = getIonMode$1(this);
     return (hAsync(Host, { class: {
         [mode]: true,
-        'grid-fixed': this.fixed
+        'grid-fixed': this.fixed,
       } }, hAsync("slot", null)));
   }
   static get style() { return gridCss; }
@@ -24294,16 +24274,16 @@ const createHeaderIndex = (headerEl) => {
         el: toolbar,
         background: toolbar.shadowRoot.querySelector('.toolbar-background'),
         ionTitleEl,
-        innerTitleEl: (ionTitleEl) ? ionTitleEl.shadowRoot.querySelector('.toolbar-title') : null,
-        ionButtonsEl: Array.from(toolbar.querySelectorAll('ion-buttons')) || []
+        innerTitleEl: ionTitleEl ? ionTitleEl.shadowRoot.querySelector('.toolbar-title') : null,
+        ionButtonsEl: Array.from(toolbar.querySelectorAll('ion-buttons')) || [],
       };
-    }) || []
+    }) || [],
   };
 };
 const handleContentScroll = (scrollEl, scrollHeaderIndex, contentEl) => {
   readTask(() => {
     const scrollTop = scrollEl.scrollTop;
-    const scale = clamp(1, 1 + (-scrollTop / 500), 1.1);
+    const scale = clamp(1, 1 + -scrollTop / 500, 1.1);
     // Native refresher should not cause titles to scale
     const nativeRefresher = contentEl.querySelector('ion-refresher.refresher-native');
     if (nativeRefresher === null) {
@@ -24345,8 +24325,8 @@ const handleToolbarBorderIntersection = (ev, mainHeaderIndex, scrollTop) => {
    * the content is transformed which can cause the intersection observer to erroneously
    * fire here as well.
    */
-  const scale = (ev[0].intersectionRatio > 0.9 || scrollTop <= 0) ? 0 : ((1 - ev[0].intersectionRatio) * 100) / 75;
-  setToolbarBackgroundOpacity(mainHeaderIndex.el, (scale === 1) ? undefined : scale);
+  const scale = ev[0].intersectionRatio > 0.9 || scrollTop <= 0 ? 0 : ((1 - ev[0].intersectionRatio) * 100) / 75;
+  setToolbarBackgroundOpacity(mainHeaderIndex.el, scale === 1 ? undefined : scale);
 };
 /**
  * If toolbars are intersecting, hide the scrollable toolbar content
@@ -24399,13 +24379,13 @@ const setHeaderActive = (headerIndex, active = true) => {
   }
 };
 const scaleLargeTitles = (toolbars = [], scale = 1, transition = false) => {
-  toolbars.forEach(toolbar => {
+  toolbars.forEach((toolbar) => {
     const ionTitle = toolbar.ionTitleEl;
     const titleDiv = toolbar.innerTitleEl;
     if (!ionTitle || ionTitle.size !== 'large') {
       return;
     }
-    titleDiv.style.transition = (transition) ? TRANSITION : '';
+    titleDiv.style.transition = transition ? TRANSITION : '';
     titleDiv.style.transform = `scale3d(${scale}, ${scale}, 1)`;
   });
 };
@@ -24413,7 +24393,7 @@ const handleHeaderFade = (scrollEl, baseEl, condenseHeader) => {
   readTask(() => {
     const scrollTop = scrollEl.scrollTop;
     const baseElHeight = baseEl.clientHeight;
-    const fadeStart = (condenseHeader) ? condenseHeader.clientHeight : 0;
+    const fadeStart = condenseHeader ? condenseHeader.clientHeight : 0;
     /**
      * If we are using fade header with a condense
      * header, then the toolbar backgrounds should
@@ -24426,14 +24406,14 @@ const handleHeaderFade = (scrollEl, baseEl, condenseHeader) => {
      * using just the condense header the content
      * should overflow out of the container.
      */
-    if ((condenseHeader !== null) && (scrollTop < fadeStart)) {
+    if (condenseHeader !== null && scrollTop < fadeStart) {
       baseEl.style.setProperty('--opacity-scale', '0');
       scrollEl.style.setProperty('clip-path', `inset(${baseElHeight}px 0px 0px 0px)`);
       return;
     }
     const distanceToStart = scrollTop - fadeStart;
     const fadeDuration = 10;
-    const scale = clamp(0, (distanceToStart / fadeDuration), 1);
+    const scale = clamp(0, distanceToStart / fadeDuration, 1);
     writeTask(() => {
       scrollEl.style.removeProperty('clip-path');
       baseEl.style.setProperty('--opacity-scale', scale.toString());
@@ -24466,12 +24446,14 @@ class Header {
         console.error('ion-header requires a content to collapse. Make sure there is an ion-content.');
         return;
       }
-      await new Promise(resolve => componentOnReady(contentEl, resolve));
-      const scrollEl = this.scrollEl = await contentEl.getScrollElement();
+      await new Promise((resolve) => componentOnReady(contentEl, resolve));
+      const scrollEl = (this.scrollEl = await contentEl.getScrollElement());
       /**
        * Handle fading of toolbars on scroll
        */
-      this.contentScrollCallback = () => { handleHeaderFade(this.scrollEl, this.el, condenseHeader); };
+      this.contentScrollCallback = () => {
+        handleHeaderFade(this.scrollEl, this.el, condenseHeader);
+      };
       scrollEl.addEventListener('scroll', this.contentScrollCallback);
       handleHeaderFade(this.scrollEl, this.el, condenseHeader);
     };
@@ -24499,7 +24481,7 @@ class Header {
     this.destroyCollapsibleHeader();
     if (hasCondense) {
       const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
-      const contentEl = (pageEl) ? pageEl.querySelector('ion-content') : null;
+      const contentEl = pageEl ? pageEl.querySelector('ion-content') : null;
       // Cloned elements are always needed in iOS transition
       writeTask(() => {
         const title = cloneElement('ion-title');
@@ -24510,8 +24492,10 @@ class Header {
     }
     else if (hasFade) {
       const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
-      const contentEl = (pageEl) ? pageEl.querySelector('ion-content') : null;
-      const condenseHeader = (contentEl) ? contentEl.querySelector('ion-header[collapse="condense"]') : null;
+      const contentEl = pageEl ? pageEl.querySelector('ion-content') : null;
+      const condenseHeader = contentEl
+        ? contentEl.querySelector('ion-header[collapse="condense"]')
+        : null;
       await this.setupFadeHeader(contentEl, condenseHeader);
     }
   }
@@ -24537,7 +24521,7 @@ class Header {
     if (typeof IntersectionObserver === 'undefined') {
       return;
     }
-    await new Promise(resolve => componentOnReady(contentEl, resolve));
+    await new Promise((resolve) => componentOnReady(contentEl, resolve));
     this.scrollEl = await contentEl.getScrollElement();
     const headers = pageEl.querySelectorAll('ion-header');
     this.collapsibleMainHeader = Array.from(headers).find((header) => header.collapse !== 'condense');
@@ -24557,15 +24541,22 @@ class Header {
      * as well as progressively showing/hiding the main header
      * border as the top-most toolbar collapses or expands.
      */
-    const toolbarIntersection = (ev) => { handleToolbarIntersection(ev, mainHeaderIndex, scrollHeaderIndex, this.scrollEl); };
-    this.intersectionObserver = new IntersectionObserver(toolbarIntersection, { root: contentEl, threshold: [0.25, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] });
+    const toolbarIntersection = (ev) => {
+      handleToolbarIntersection(ev, mainHeaderIndex, scrollHeaderIndex, this.scrollEl);
+    };
+    this.intersectionObserver = new IntersectionObserver(toolbarIntersection, {
+      root: contentEl,
+      threshold: [0.25, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+    });
     this.intersectionObserver.observe(scrollHeaderIndex.toolbars[scrollHeaderIndex.toolbars.length - 1].el);
     /**
      * Handle scaling of large iOS titles and
      * showing/hiding border on last toolbar
      * in primary header
      */
-    this.contentScrollCallback = () => { handleContentScroll(this.scrollEl, scrollHeaderIndex, contentEl); };
+    this.contentScrollCallback = () => {
+      handleContentScroll(this.scrollEl, scrollHeaderIndex, contentEl);
+    };
     this.scrollEl.addEventListener('scroll', this.contentScrollCallback);
     writeTask(() => {
       if (this.collapsibleMainHeader !== undefined) {
@@ -24586,8 +24577,7 @@ class Header {
         [`header-translucent`]: this.translucent,
         [`header-collapse-${collapse}`]: true,
         [`header-translucent-${mode}`]: this.translucent,
-      } }, inheritedAttributes), mode === 'ios' && translucent &&
-      hAsync("div", { class: "header-background" }), hAsync("slot", null)));
+      } }, inheritedAttributes), mode === 'ios' && translucent && hAsync("div", { class: "header-background" }), hAsync("slot", null)));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -24822,7 +24812,7 @@ class Img {
       'IntersectionObserverEntry' in window &&
       'isIntersecting' in window.IntersectionObserverEntry.prototype) {
       this.removeIO();
-      this.io = new IntersectionObserver(data => {
+      this.io = new IntersectionObserver((data) => {
         /**
          * On slower devices, it is possible for an intersection observer entry to contain multiple
          * objects in the array. This happens when quickly scrolling an image into view and then out of
@@ -24942,8 +24932,8 @@ class InfiniteScroll {
       const scrollTop = scrollEl.scrollTop;
       const scrollHeight = scrollEl.scrollHeight;
       const height = scrollEl.offsetHeight;
-      const threshold = this.thrPc !== 0 ? (height * this.thrPc) : this.thrPx;
-      const distanceFromInfinite = (this.position === 'bottom')
+      const threshold = this.thrPc !== 0 ? height * this.thrPc : this.thrPx;
+      const distanceFromInfinite = this.position === 'bottom'
         ? scrollHeight - infiniteHeight - scrollTop - threshold - height
         : scrollTop - infiniteHeight - threshold;
       if (distanceFromInfinite < 0) {
@@ -24964,7 +24954,7 @@ class InfiniteScroll {
     const val = this.threshold;
     if (val.lastIndexOf('%') > -1) {
       this.thrPx = 0;
-      this.thrPc = (parseFloat(val) / 100);
+      this.thrPc = parseFloat(val) / 100;
     }
     else {
       this.thrPx = parseFloat(val);
@@ -24985,7 +24975,7 @@ class InfiniteScroll {
       console.error('<ion-infinite-scroll> must be used inside an <ion-content>');
       return;
     }
-    await new Promise(resolve => componentOnReady(contentEl, resolve));
+    await new Promise((resolve) => componentOnReady(contentEl, resolve));
     this.scrollEl = await contentEl.getScrollElement();
     this.thresholdChanged();
     this.disabledChanged();
@@ -25060,10 +25050,7 @@ class InfiniteScroll {
     }
   }
   canStart() {
-    return (!this.disabled &&
-      !this.isBusy &&
-      !!this.scrollEl &&
-      !this.isLoading);
+    return !this.disabled && !this.isBusy && !!this.scrollEl && !this.isLoading;
   }
   enableScrollEvents(shouldListen) {
     if (this.scrollEl) {
@@ -25081,7 +25068,7 @@ class InfiniteScroll {
     return (hAsync(Host, { class: {
         [mode]: true,
         'infinite-scroll-loading': this.isLoading,
-        'infinite-scroll-enabled': !disabled
+        'infinite-scroll-enabled': !disabled,
       } }));
   }
   get el() { return getElement(this); }
@@ -25125,8 +25112,8 @@ class InfiniteScrollContent {
     return (hAsync(Host, { class: {
         [mode]: true,
         // Used internally for styling
-        [`infinite-scroll-content-${mode}`]: true
-      } }, hAsync("div", { class: "infinite-loading" }, this.loadingSpinner && (hAsync("div", { class: "infinite-loading-spinner" }, hAsync("ion-spinner", { name: this.loadingSpinner }))), this.loadingText && (hAsync("div", { class: "infinite-loading-text", innerHTML: sanitizeDOMString(this.loadingText) })))));
+        [`infinite-scroll-content-${mode}`]: true,
+      } }, hAsync("div", { class: "infinite-loading" }, this.loadingSpinner && (hAsync("div", { class: "infinite-loading-spinner" }, hAsync("ion-spinner", { name: this.loadingSpinner }))), this.loadingText && hAsync("div", { class: "infinite-loading-text", innerHTML: sanitizeDOMString(this.loadingText) }))));
   }
   static get style() { return {
     ios: infiniteScrollContentIosCss,
@@ -26814,7 +26801,7 @@ var registerWrapper = function registerWrapper(stripe, startTime) {
 
   stripe._registerWrapper({
     name: 'stripe-js',
-    version: "1.26.0",
+    version: "1.27.0",
     startTime: startTime
   });
 };
@@ -27520,18 +27507,15 @@ class Input {
   }
   shouldClearOnEdit() {
     const { type, clearOnEdit } = this;
-    return (clearOnEdit === undefined)
-      ? type === 'password'
-      : clearOnEdit;
+    return clearOnEdit === undefined ? type === 'password' : clearOnEdit;
   }
   getValue() {
-    return typeof this.value === 'number' ? this.value.toString() :
-      (this.value || '').toString();
+    return typeof this.value === 'number' ? this.value.toString() : (this.value || '').toString();
   }
   emitStyle() {
     this.ionStyle.emit({
-      'interactive': true,
-      'input': true,
+      interactive: true,
+      input: true,
       'has-placeholder': this.placeholder !== undefined,
       'has-value': this.hasValue(),
       'has-focus': this.hasFocus,
@@ -27558,8 +27542,8 @@ class Input {
     return (hAsync(Host, { "aria-disabled": this.disabled ? 'true' : null, class: createColorClasses$1(this.color, {
         [mode]: true,
         'has-value': this.hasValue(),
-        'has-focus': this.hasFocus
-      }) }, hAsync("input", Object.assign({ class: "native-input", ref: input => this.nativeInput = input, "aria-labelledby": label ? labelId : null, disabled: this.disabled, accept: this.accept, autoCapitalize: this.autocapitalize, autoComplete: this.autocomplete, autoCorrect: this.autocorrect, autoFocus: this.autofocus, enterKeyHint: this.enterkeyhint, inputMode: this.inputmode, min: this.min, max: this.max, minLength: this.minlength, maxLength: this.maxlength, multiple: this.multiple, name: this.name, pattern: this.pattern, placeholder: this.placeholder || '', readOnly: this.readonly, required: this.required, spellcheck: this.spellcheck, step: this.step, size: this.size, type: this.type, value: value, onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onKeyDown: this.onKeydown }, this.inheritedAttributes)), (this.clearInput && !this.readonly && !this.disabled) && hAsync("button", { "aria-label": "reset", type: "button", class: "input-clear-icon", onTouchStart: this.clearTextInput, onMouseDown: this.clearTextInput, onKeyDown: this.clearTextOnEnter })));
+        'has-focus': this.hasFocus,
+      }) }, hAsync("input", Object.assign({ class: "native-input", ref: (input) => (this.nativeInput = input), "aria-labelledby": label ? labelId : null, disabled: this.disabled, accept: this.accept, autoCapitalize: this.autocapitalize, autoComplete: this.autocomplete, autoCorrect: this.autocorrect, autoFocus: this.autofocus, enterKeyHint: this.enterkeyhint, inputMode: this.inputmode, min: this.min, max: this.max, minLength: this.minlength, maxLength: this.maxlength, multiple: this.multiple, name: this.name, pattern: this.pattern, placeholder: this.placeholder || '', readOnly: this.readonly, required: this.required, spellcheck: this.spellcheck, step: this.step, size: this.size, type: this.type, value: value, onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onKeyDown: this.onKeydown }, this.inheritedAttributes)), this.clearInput && !this.readonly && !this.disabled && (hAsync("button", { "aria-label": "reset", type: "button", class: "input-clear-icon", onTouchStart: this.clearTextInput, onMouseDown: this.clearTextInput, onKeyDown: this.clearTextOnEnter }))));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -28389,13 +28373,13 @@ const transition$2 = (opts) => {
   return new Promise((resolve, reject) => {
     writeTask(() => {
       beforeTransition(opts);
-      runTransition(opts).then(result => {
+      runTransition(opts).then((result) => {
         if (result.animation) {
           result.animation.destroy();
         }
         afterTransition(opts);
         resolve(result);
-      }, error => {
+      }, (error) => {
         afterTransition(opts);
         reject(error);
       });
@@ -28427,9 +28411,7 @@ const beforeTransition = (opts) => {
 };
 const runTransition = async (opts) => {
   const animationBuilder = await getAnimationBuilder(opts);
-  const ani = (animationBuilder && Build.isBrowser)
-    ? animation(animationBuilder, opts)
-    : noAnimation(opts); // fast path for no animation
+  const ani = animationBuilder && Build.isBrowser ? animation(animationBuilder, opts) : noAnimation(opts); // fast path for no animation
   return ani;
 };
 const afterTransition = (opts) => {
@@ -28449,7 +28431,7 @@ const getAnimationBuilder = async (opts) => {
   if (opts.animationBuilder) {
     return opts.animationBuilder;
   }
-  const getAnimation = (opts.mode === 'ios')
+  const getAnimation = opts.mode === 'ios'
     ? (await iosTransitionAnimation$1()).iosTransitionAnimation
     : (await mdTransitionAnimation$1()).mdTransitionAnimation;
   return getAnimation;
@@ -28467,7 +28449,7 @@ const animation = async (animationBuilder, opts) => {
   }
   return {
     hasCompleted: didComplete,
-    animation: trans
+    animation: trans,
   };
 };
 const noAnimation = async (opts) => {
@@ -28477,18 +28459,14 @@ const noAnimation = async (opts) => {
   fireWillEvents(enteringEl, leavingEl);
   fireDidEvents(enteringEl, leavingEl);
   return {
-    hasCompleted: true
+    hasCompleted: true,
   };
 };
 const waitForReady = async (opts, defaultDeep) => {
   const deep = opts.deepWait !== undefined ? opts.deepWait : defaultDeep;
-  const promises = deep ? [
-    deepReady(opts.enteringEl),
-    deepReady(opts.leavingEl),
-  ] : [
-    shallowReady(opts.enteringEl),
-    shallowReady(opts.leavingEl),
-  ];
+  const promises = deep
+    ? [deepReady(opts.enteringEl), deepReady(opts.leavingEl)]
+    : [shallowReady(opts.enteringEl), shallowReady(opts.leavingEl)];
   await Promise.all(promises);
   await notifyViewReady(opts.viewIsReady, opts.enteringEl);
 };
@@ -28499,7 +28477,7 @@ const notifyViewReady = async (viewIsReady, enteringEl) => {
 };
 const playTransition = (trans, opts) => {
   const progressCallback = opts.progressCallback;
-  const promise = new Promise(resolve => {
+  const promise = new Promise((resolve) => {
     trans.onFinish((currentStep) => resolve(currentStep === 1));
   });
   // cool, let's do this, start the transition
@@ -28537,7 +28515,7 @@ const lifecycle = (el, eventName) => {
 };
 const shallowReady = (el) => {
   if (el) {
-    return new Promise(resolve => componentOnReady(el, resolve));
+    return new Promise((resolve) => componentOnReady(el, resolve));
   }
   return Promise.resolve();
 };
@@ -28558,7 +28536,7 @@ const deepReady = async (el) => {
        * Non-lazy loaded custom elements need to wait
        * one frame for component to be loaded.
        */
-      const waitForCustomElement = new Promise(resolve => raf(resolve));
+      const waitForCustomElement = new Promise((resolve) => raf(resolve));
       await waitForCustomElement;
       return;
     }
@@ -28578,9 +28556,7 @@ const setPageHidden = (el, hidden) => {
 };
 const setZIndex = (enteringEl, leavingEl, direction) => {
   if (enteringEl !== undefined) {
-    enteringEl.style.zIndex = (direction === 'back')
-      ? '99'
-      : '101';
+    enteringEl.style.zIndex = direction === 'back' ? '99' : '101';
   }
   if (leavingEl !== undefined) {
     leavingEl.style.zIndex = '100';
@@ -28609,16 +28585,16 @@ const shadow = (el) => {
   return el.shadowRoot || el;
 };
 const getLargeTitle = (refEl) => {
-  const tabs = (refEl.tagName === 'ION-TABS') ? refEl : refEl.querySelector('ion-tabs');
+  const tabs = refEl.tagName === 'ION-TABS' ? refEl : refEl.querySelector('ion-tabs');
   const query = 'ion-content ion-header:not(.header-collapse-condense-inactive) ion-title.title-large';
   if (tabs != null) {
     const activeTab = tabs.querySelector('ion-tab:not(.tab-hidden), .ion-page:not(.ion-page-hidden)');
-    return (activeTab != null) ? activeTab.querySelector(query) : null;
+    return activeTab != null ? activeTab.querySelector(query) : null;
   }
   return refEl.querySelector(query);
 };
 const getBackButton = (refEl, backDirection) => {
-  const tabs = (refEl.tagName === 'ION-TABS') ? refEl : refEl.querySelector('ion-tabs');
+  const tabs = refEl.tagName === 'ION-TABS' ? refEl : refEl.querySelector('ion-tabs');
   let buttonsList = [];
   if (tabs != null) {
     const activeTab = tabs.querySelector('ion-tab:not(.tab-hidden), .ion-page:not(.ion-page-hidden)');
@@ -28662,36 +28638,44 @@ const createLargeTitleTransition = (rootAnimation, rtl, backDirection, enteringE
   }
   return {
     forward: shouldAnimationForward,
-    backward: shouldAnimationBackward
+    backward: shouldAnimationBackward,
   };
 };
 const animateBackButton = (rootAnimation, rtl, backDirection, backButtonEl, largeTitleBox, backButtonBox) => {
-  const BACK_BUTTON_START_OFFSET = (rtl) ? `calc(100% - ${backButtonBox.right + 4}px)` : `${backButtonBox.left - 4}px`;
-  const START_TEXT_TRANSLATE = (rtl) ? '7px' : '-7px';
-  const END_TEXT_TRANSLATE = (rtl) ? '-4px' : '4px';
-  const ICON_TRANSLATE = (rtl) ? '-4px' : '4px';
-  const TEXT_ORIGIN_X = (rtl) ? 'right' : 'left';
-  const ICON_ORIGIN_X = (rtl) ? 'left' : 'right';
+  const BACK_BUTTON_START_OFFSET = rtl ? `calc(100% - ${backButtonBox.right + 4}px)` : `${backButtonBox.left - 4}px`;
+  const START_TEXT_TRANSLATE = rtl ? '7px' : '-7px';
+  const END_TEXT_TRANSLATE = rtl ? '-4px' : '4px';
+  const ICON_TRANSLATE = rtl ? '-4px' : '4px';
+  const TEXT_ORIGIN_X = rtl ? 'right' : 'left';
+  const ICON_ORIGIN_X = rtl ? 'left' : 'right';
   const FORWARD_TEXT_KEYFRAMES = [
-    { offset: 0, opacity: 0, transform: `translate3d(${START_TEXT_TRANSLATE}, ${largeTitleBox.top - 40}px, 0) scale(2.1)` },
-    { offset: 1, opacity: 1, transform: `translate3d(${END_TEXT_TRANSLATE}, ${backButtonBox.top - 46}px, 0) scale(1)` }
+    {
+      offset: 0,
+      opacity: 0,
+      transform: `translate3d(${START_TEXT_TRANSLATE}, ${largeTitleBox.top - 40}px, 0) scale(2.1)`,
+    },
+    { offset: 1, opacity: 1, transform: `translate3d(${END_TEXT_TRANSLATE}, ${backButtonBox.top - 46}px, 0) scale(1)` },
   ];
   const BACKWARD_TEXT_KEYFRAMES = [
     { offset: 0, opacity: 1, transform: `translate3d(${END_TEXT_TRANSLATE}, ${backButtonBox.top - 46}px, 0) scale(1)` },
     { offset: 0.6, opacity: 0 },
-    { offset: 1, opacity: 0, transform: `translate3d(${START_TEXT_TRANSLATE}, ${largeTitleBox.top - 40}px, 0) scale(2.1)` }
+    {
+      offset: 1,
+      opacity: 0,
+      transform: `translate3d(${START_TEXT_TRANSLATE}, ${largeTitleBox.top - 40}px, 0) scale(2.1)`,
+    },
   ];
-  const TEXT_KEYFRAMES = (backDirection) ? BACKWARD_TEXT_KEYFRAMES : FORWARD_TEXT_KEYFRAMES;
+  const TEXT_KEYFRAMES = backDirection ? BACKWARD_TEXT_KEYFRAMES : FORWARD_TEXT_KEYFRAMES;
   const FORWARD_ICON_KEYFRAMES = [
     { offset: 0, opacity: 0, transform: `translate3d(${ICON_TRANSLATE}, ${backButtonBox.top - 41}px, 0) scale(0.6)` },
-    { offset: 1, opacity: 1, transform: `translate3d(${ICON_TRANSLATE}, ${backButtonBox.top - 46}px, 0) scale(1)` }
+    { offset: 1, opacity: 1, transform: `translate3d(${ICON_TRANSLATE}, ${backButtonBox.top - 46}px, 0) scale(1)` },
   ];
   const BACKWARD_ICON_KEYFRAMES = [
     { offset: 0, opacity: 1, transform: `translate3d(${ICON_TRANSLATE}, ${backButtonBox.top - 46}px, 0) scale(1)` },
     { offset: 0.2, opacity: 0, transform: `translate3d(${ICON_TRANSLATE}, ${backButtonBox.top - 41}px, 0) scale(0.6)` },
-    { offset: 1, opacity: 0, transform: `translate3d(${ICON_TRANSLATE}, ${backButtonBox.top - 41}px, 0) scale(0.6)` }
+    { offset: 1, opacity: 0, transform: `translate3d(${ICON_TRANSLATE}, ${backButtonBox.top - 41}px, 0) scale(0.6)` },
   ];
-  const ICON_KEYFRAMES = (backDirection) ? BACKWARD_ICON_KEYFRAMES : FORWARD_ICON_KEYFRAMES;
+  const ICON_KEYFRAMES = backDirection ? BACKWARD_ICON_KEYFRAMES : FORWARD_ICON_KEYFRAMES;
   const enteringBackButtonTextAnimation = createAnimation();
   const enteringBackButtonIconAnimation = createAnimation();
   const clonedBackButtonEl = getClonedElement('ion-back-button');
@@ -28708,7 +28692,7 @@ const animateBackButton = (rootAnimation, rtl, backDirection, backButtonEl, larg
   enteringBackButtonTextAnimation.addElement(backButtonTextEl);
   enteringBackButtonTextAnimation
     .beforeStyles({
-    'transform-origin': `${TEXT_ORIGIN_X} center`
+    'transform-origin': `${TEXT_ORIGIN_X} center`,
   })
     .beforeAddWrite(() => {
     backButtonEl.style.setProperty('display', 'none');
@@ -28722,26 +28706,26 @@ const animateBackButton = (rootAnimation, rtl, backDirection, backButtonEl, larg
     .keyframes(TEXT_KEYFRAMES);
   enteringBackButtonIconAnimation
     .beforeStyles({
-    'transform-origin': `${ICON_ORIGIN_X} center`
+    'transform-origin': `${ICON_ORIGIN_X} center`,
   })
     .keyframes(ICON_KEYFRAMES);
   rootAnimation.addAnimation([enteringBackButtonTextAnimation, enteringBackButtonIconAnimation]);
 };
 const animateLargeTitle = (rootAnimation, rtl, backDirection, largeTitleEl, largeTitleBox, backButtonBox) => {
-  const TITLE_START_OFFSET = (rtl) ? `calc(100% - ${largeTitleBox.right}px)` : `${largeTitleBox.left}px`;
-  const START_TRANSLATE = (rtl) ? '-18px' : '18px';
-  const ORIGIN_X = (rtl) ? 'right' : 'left';
+  const TITLE_START_OFFSET = rtl ? `calc(100% - ${largeTitleBox.right}px)` : `${largeTitleBox.left}px`;
+  const START_TRANSLATE = rtl ? '-18px' : '18px';
+  const ORIGIN_X = rtl ? 'right' : 'left';
   const BACKWARDS_KEYFRAMES = [
     { offset: 0, opacity: 0, transform: `translate3d(${START_TRANSLATE}, ${backButtonBox.top - 4}px, 0) scale(0.49)` },
     { offset: 0.1, opacity: 0 },
-    { offset: 1, opacity: 1, transform: `translate3d(0, ${largeTitleBox.top - 2}px, 0) scale(1)` }
+    { offset: 1, opacity: 1, transform: `translate3d(0, ${largeTitleBox.top - 2}px, 0) scale(1)` },
   ];
   const FORWARDS_KEYFRAMES = [
     { offset: 0, opacity: 0.99, transform: `translate3d(0, ${largeTitleBox.top - 2}px, 0) scale(1)` },
     { offset: 0.6, opacity: 0 },
-    { offset: 1, opacity: 0, transform: `translate3d(${START_TRANSLATE}, ${backButtonBox.top - 4}px, 0) scale(0.5)` }
+    { offset: 1, opacity: 0, transform: `translate3d(${START_TRANSLATE}, ${backButtonBox.top - 4}px, 0) scale(0.5)` },
   ];
-  const KEYFRAMES = (backDirection) ? BACKWARDS_KEYFRAMES : FORWARDS_KEYFRAMES;
+  const KEYFRAMES = backDirection ? BACKWARDS_KEYFRAMES : FORWARDS_KEYFRAMES;
   const clonedTitleEl = getClonedElement('ion-title');
   const clonedLargeTitleAnimation = createAnimation();
   clonedTitleEl.innerText = largeTitleEl.innerText;
@@ -28751,10 +28735,10 @@ const animateLargeTitle = (rootAnimation, rtl, backDirection, largeTitleEl, larg
   clonedLargeTitleAnimation
     .beforeStyles({
     'transform-origin': `${ORIGIN_X} center`,
-    'height': '46px',
-    'display': '',
-    'position': 'relative',
-    [ORIGIN_X]: TITLE_START_OFFSET
+    height: '46px',
+    display: '',
+    position: 'relative',
+    [ORIGIN_X]: TITLE_START_OFFSET,
   })
     .beforeAddWrite(() => {
     largeTitleEl.style.setProperty('display', 'none');
@@ -28778,7 +28762,7 @@ const iosTransitionAnimation = (navEl, opts) => {
     const OFF_LEFT = isRTL ? '33%' : '-33%';
     const enteringEl = opts.enteringEl;
     const leavingEl = opts.leavingEl;
-    const backDirection = (opts.direction === 'back');
+    const backDirection = opts.direction === 'back';
     const contentEl = enteringEl.querySelector(':scope > ion-content');
     const headerEls = enteringEl.querySelectorAll(':scope > ion-header > *:not(ion-toolbar), :scope > ion-footer > *');
     const enteringToolBarEls = enteringEl.querySelectorAll(':scope > ion-header > ion-toolbar');
@@ -28834,14 +28818,14 @@ const iosTransitionAnimation = (navEl, opts) => {
         enteringTransitionShadow
           .addElement(enteringTransitionShadowEl) // REVIEW
           .beforeClearStyles([OPACITY])
-          .fromTo(OPACITY, 0.03, 0.70);
+          .fromTo(OPACITY, 0.03, 0.7);
         enteringTransitionEffect.addAnimation([enteringTransitionCover, enteringTransitionShadow]);
         enteringContentAnimation.addAnimation([enteringTransitionEffect]);
       }
     }
     const enteringContentHasLargeTitle = enteringEl.querySelector('ion-header.header-collapse-condense');
     const { forward, backward } = createLargeTitleTransition(rootAnimation, isRTL, backDirection, enteringEl, leavingEl);
-    enteringToolBarEls.forEach(enteringToolBarEl => {
+    enteringToolBarEls.forEach((enteringToolBarEl) => {
       const enteringToolBar = createAnimation();
       enteringToolBar.addElement(enteringToolBarEl);
       rootAnimation.addAnimation(enteringToolBar);
@@ -28850,16 +28834,16 @@ const iosTransitionAnimation = (navEl, opts) => {
       const enteringToolBarButtons = createAnimation();
       const buttons = Array.from(enteringToolBarEl.querySelectorAll('ion-buttons,[menuToggle]'));
       const parentHeader = enteringToolBarEl.closest('ion-header');
-      const inactiveHeader = parentHeader && parentHeader.classList.contains('header-collapse-condense-inactive');
+      const inactiveHeader = parentHeader === null || parentHeader === void 0 ? void 0 : parentHeader.classList.contains('header-collapse-condense-inactive');
       let buttonsToAnimate;
       if (backDirection) {
-        buttonsToAnimate = buttons.filter(button => {
+        buttonsToAnimate = buttons.filter((button) => {
           const isCollapseButton = button.classList.contains('buttons-collapse');
           return (isCollapseButton && !inactiveHeader) || !isCollapseButton;
         });
       }
       else {
-        buttonsToAnimate = buttons.filter(button => !button.classList.contains('buttons-collapse'));
+        buttonsToAnimate = buttons.filter((button) => !button.classList.contains('buttons-collapse'));
       }
       enteringToolBarButtons.addElement(buttonsToAnimate);
       const enteringToolBarItems = createAnimation();
@@ -28871,7 +28855,13 @@ const iosTransitionAnimation = (navEl, opts) => {
       if (backButtonEl) {
         enteringBackButton.addElement(backButtonEl);
       }
-      enteringToolBar.addAnimation([enteringTitle, enteringToolBarButtons, enteringToolBarItems, enteringToolBarBg, enteringBackButton]);
+      enteringToolBar.addAnimation([
+        enteringTitle,
+        enteringToolBarButtons,
+        enteringToolBarItems,
+        enteringToolBarBg,
+        enteringBackButton,
+      ]);
       enteringToolBarButtons.fromTo(OPACITY, 0.01, 1);
       enteringToolBarItems.fromTo(OPACITY, 0.01, 1);
       if (backDirection) {
@@ -28898,7 +28888,7 @@ const iosTransitionAnimation = (navEl, opts) => {
           enteringToolBarBg.fromTo(OPACITY, 0.01, 'var(--opacity)');
         }
         else {
-          enteringToolBarBg.fromTo('transform', (isRTL ? 'translateX(-100%)' : 'translateX(100%)'), 'translateX(0px)');
+          enteringToolBarBg.fromTo('transform', isRTL ? 'translateX(-100%)' : 'translateX(100%)', 'translateX(0px)');
         }
         // forward direction, entering page has a back button
         if (!forward) {
@@ -28908,7 +28898,7 @@ const iosTransitionAnimation = (navEl, opts) => {
           const enteringBackBtnText = createAnimation();
           enteringBackBtnText
             .addElement(shadow(backButtonEl).querySelector('.button-text')) // REVIEW
-            .fromTo(`transform`, (isRTL ? 'translateX(-100px)' : 'translateX(100px)'), 'translateX(0px)');
+            .fromTo(`transform`, isRTL ? 'translateX(-100px)' : 'translateX(100px)', 'translateX(0px)');
           enteringToolBar.addAnimation(enteringBackBtnText);
         }
       }
@@ -28931,7 +28921,7 @@ const iosTransitionAnimation = (navEl, opts) => {
         // leaving content, back direction
         leavingContent
           .beforeClearStyles([OPACITY])
-          .fromTo('transform', `translateX(${CENTER})`, (isRTL ? 'translateX(-100%)' : 'translateX(100%)'));
+          .fromTo('transform', `translateX(${CENTER})`, isRTL ? 'translateX(-100%)' : 'translateX(100%)');
         const leavingPage = getIonPageElement(leavingEl);
         rootAnimation.afterAddWrite(() => {
           if (rootAnimation.getDirection() === 'normal') {
@@ -28964,12 +28954,12 @@ const iosTransitionAnimation = (navEl, opts) => {
           leavingTransitionShadow
             .addElement(leavingTransitionShadowEl) // REVIEW
             .beforeClearStyles([OPACITY])
-            .fromTo(OPACITY, 0.70, 0.03);
+            .fromTo(OPACITY, 0.7, 0.03);
           leavingTransitionEffect.addAnimation([leavingTransitionCover, leavingTransitionShadow]);
           leavingContent.addAnimation([leavingTransitionEffect]);
         }
       }
-      leavingToolBarEls.forEach(leavingToolBarEl => {
+      leavingToolBarEls.forEach((leavingToolBarEl) => {
         const leavingToolBar = createAnimation();
         leavingToolBar.addElement(leavingToolBarEl);
         const leavingTitle = createAnimation();
@@ -28977,8 +28967,8 @@ const iosTransitionAnimation = (navEl, opts) => {
         const leavingToolBarButtons = createAnimation();
         const buttons = leavingToolBarEl.querySelectorAll('ion-buttons,[menuToggle]');
         const parentHeader = leavingToolBarEl.closest('ion-header');
-        const inactiveHeader = parentHeader && parentHeader.classList.contains('header-collapse-condense-inactive');
-        const buttonsToAnimate = Array.from(buttons).filter(button => {
+        const inactiveHeader = parentHeader === null || parentHeader === void 0 ? void 0 : parentHeader.classList.contains('header-collapse-condense-inactive');
+        const buttonsToAnimate = Array.from(buttons).filter((button) => {
           const isCollapseButton = button.classList.contains('buttons-collapse');
           return (isCollapseButton && !inactiveHeader) || !isCollapseButton;
         });
@@ -28995,7 +28985,13 @@ const iosTransitionAnimation = (navEl, opts) => {
         if (backButtonEl) {
           leavingBackButton.addElement(backButtonEl);
         }
-        leavingToolBar.addAnimation([leavingTitle, leavingToolBarButtons, leavingToolBarItems, leavingBackButton, leavingToolBarBg]);
+        leavingToolBar.addAnimation([
+          leavingTitle,
+          leavingToolBarButtons,
+          leavingToolBarItems,
+          leavingBackButton,
+          leavingToolBarBg,
+        ]);
         rootAnimation.addAnimation(leavingToolBar);
         // fade out leaving toolbar items
         leavingBackButton.fromTo(OPACITY, 0.99, 0);
@@ -29005,10 +29001,10 @@ const iosTransitionAnimation = (navEl, opts) => {
           if (!inactiveHeader) {
             // leaving toolbar, back direction
             leavingTitle
-              .fromTo('transform', `translateX(${CENTER})`, (isRTL ? 'translateX(-100%)' : 'translateX(100%)'))
+              .fromTo('transform', `translateX(${CENTER})`, isRTL ? 'translateX(-100%)' : 'translateX(100%)')
               .fromTo(OPACITY, 0.99, 0);
           }
-          leavingToolBarItems.fromTo('transform', `translateX(${CENTER})`, (isRTL ? 'translateX(-100%)' : 'translateX(100%)'));
+          leavingToolBarItems.fromTo('transform', `translateX(${CENTER})`, isRTL ? 'translateX(-100%)' : 'translateX(100%)');
           leavingToolBarBg.beforeClearStyles([OPACITY, 'transform']);
           // leaving toolbar, back direction, and there's no entering toolbar
           // should just slide out, no fading out
@@ -29017,7 +29013,7 @@ const iosTransitionAnimation = (navEl, opts) => {
             leavingToolBarBg.fromTo(OPACITY, 'var(--opacity)', 0);
           }
           else {
-            leavingToolBarBg.fromTo('transform', 'translateX(0px)', (isRTL ? 'translateX(-100%)' : 'translateX(100%)'));
+            leavingToolBarBg.fromTo('transform', 'translateX(0px)', isRTL ? 'translateX(-100%)' : 'translateX(100%)');
           }
           if (backButtonEl && !backward) {
             const leavingBackBtnText = createAnimation();
@@ -29063,21 +29059,16 @@ var ios_transition = /*#__PURE__*/Object.freeze({
 const mdTransitionAnimation = (_, opts) => {
   const OFF_BOTTOM = '40px';
   const CENTER = '0px';
-  const backDirection = (opts.direction === 'back');
+  const backDirection = opts.direction === 'back';
   const enteringEl = opts.enteringEl;
   const leavingEl = opts.leavingEl;
   const ionPageElement = getIonPageElement(enteringEl);
   const enteringToolbarEle = ionPageElement.querySelector('ion-toolbar');
   const rootTransition = createAnimation();
-  rootTransition
-    .addElement(ionPageElement)
-    .fill('both')
-    .beforeRemoveClass('ion-page-invisible');
+  rootTransition.addElement(ionPageElement).fill('both').beforeRemoveClass('ion-page-invisible');
   // animate the component itself
   if (backDirection) {
-    rootTransition
-      .duration(opts.duration || 200)
-      .easing('cubic-bezier(0.47,0,0.745,0.715)');
+    rootTransition.duration(opts.duration || 200).easing('cubic-bezier(0.47,0,0.745,0.715)');
   }
   else {
     rootTransition
@@ -29095,13 +29086,11 @@ const mdTransitionAnimation = (_, opts) => {
   // setup leaving view
   if (leavingEl && backDirection) {
     // leaving content
-    rootTransition
-      .duration(opts.duration || 200)
-      .easing('cubic-bezier(0.47,0,0.745,0.715)');
+    rootTransition.duration(opts.duration || 200).easing('cubic-bezier(0.47,0,0.745,0.715)');
     const leavingPage = createAnimation();
     leavingPage
       .addElement(getIonPageElement(leavingEl))
-      .onFinish(currentStep => {
+      .onFinish((currentStep) => {
       if (currentStep === 1 && leavingPage.elements.length > 0) {
         leavingPage.elements[0].style.setProperty('display', 'none');
       }
@@ -29141,7 +29130,7 @@ var md_transition = /*#__PURE__*/Object.freeze({
  * provided progression, this function will return an empty array.
  */
 const getTimeGivenProgression = (p0, p1, p2, p3, progression) => {
-  return solveCubicBezier(p0[1], p1[1], p2[1], p3[1], progression).map(tValue => {
+  return solveCubicBezier(p0[1], p1[1], p2[1], p3[1], progression).map((tValue) => {
     return solveCubicParametricEquation(p0[0], p1[0], p2[0], p3[0], tValue);
   });
 };
@@ -29149,10 +29138,10 @@ const getTimeGivenProgression = (p0, p1, p2, p3, progression) => {
  * Solve a cubic equation in one dimension (time)
  */
 const solveCubicParametricEquation = (p0, p1, p2, p3, t) => {
-  const partA = (3 * p1) * Math.pow(t - 1, 2);
-  const partB = (-3 * p2 * t) + (3 * p2) + (p3 * t);
+  const partA = 3 * p1 * Math.pow(t - 1, 2);
+  const partB = -3 * p2 * t + 3 * p2 + p3 * t;
   const partC = p0 * Math.pow(t - 1, 3);
-  return t * (partA + (t * partB)) - partC;
+  return t * (partA + t * partB) - partC;
 };
 /**
  * Find the `t` value for a cubic bezier using Cardano's formula
@@ -29163,7 +29152,7 @@ const solveCubicBezier = (p0, p1, p2, p3, refPoint) => {
   p2 -= refPoint;
   p3 -= refPoint;
   const roots = solveCubicEquation(p3 - 3 * p2 + 3 * p1 - p0, 3 * p2 - 6 * p1 + 3 * p0, 3 * p1 - 3 * p0, p0);
-  return roots.filter(root => root >= 0 && root <= 1);
+  return roots.filter((root) => root >= 0 && root <= 1);
 };
 const solveQuadraticEquation = (a, b, c) => {
   const discriminant = b * b - 4 * a * c;
@@ -29171,10 +29160,7 @@ const solveQuadraticEquation = (a, b, c) => {
     return [];
   }
   else {
-    return [
-      (-b + Math.sqrt(discriminant)) / (2 * a),
-      (-b - Math.sqrt(discriminant)) / (2 * a)
-    ];
+    return [(-b + Math.sqrt(discriminant)) / (2 * a), (-b - Math.sqrt(discriminant)) / (2 * a)];
   }
 };
 const solveCubicEquation = (a, b, c, d) => {
@@ -29197,7 +29183,9 @@ const solveCubicEquation = (a, b, c, d) => {
     return [Math.pow(q / 2, 1 / 2) - b / 3];
   }
   else if (discriminant > 0) {
-    return [Math.pow(-(q / 2) + Math.sqrt(discriminant), 1 / 3) - Math.pow((q / 2) + Math.sqrt(discriminant), 1 / 3) - b / 3];
+    return [
+      Math.pow(-(q / 2) + Math.sqrt(discriminant), 1 / 3) - Math.pow(q / 2 + Math.sqrt(discriminant), 1 / 3) - b / 3,
+    ];
   }
   const r = Math.sqrt(Math.pow(-(p / 3), 3));
   const phi = Math.acos(-(q / (2 * Math.sqrt(Math.pow(-(p / 3), 3)))));
@@ -29205,7 +29193,7 @@ const solveCubicEquation = (a, b, c, d) => {
   return [
     s * Math.cos(phi / 3) - b / 3,
     s * Math.cos((phi + 2 * Math.PI) / 3) - b / 3,
-    s * Math.cos((phi + 4 * Math.PI) / 3) - b / 3
+    s * Math.cos((phi + 4 * Math.PI) / 3) - b / 3,
   ];
 };
 
@@ -29253,15 +29241,11 @@ const menuOverlayAnimation = (menu) => {
     closedX = -width + 'px';
     openedX = '0px';
   }
-  menuAnimation
-    .addElement(menu.menuInnerEl)
-    .fromTo('transform', `translateX(${closedX})`, `translateX(${openedX})`);
+  menuAnimation.addElement(menu.menuInnerEl).fromTo('transform', `translateX(${closedX})`, `translateX(${openedX})`);
   const mode = getIonMode$1(menu);
   const isIos = mode === 'ios';
   const opacity = isIos ? 0.2 : 0.25;
-  backdropAnimation
-    .addElement(menu.backdropEl)
-    .fromTo('opacity', 0.01, opacity);
+  backdropAnimation.addElement(menu.backdropEl).fromTo('opacity', 0.01, opacity);
   return baseAnimation(isIos).addAnimation([menuAnimation, backdropAnimation]);
 };
 
@@ -29292,9 +29276,7 @@ const menuPushAnimation = (menu) => {
   const contentAnimation = createAnimation()
     .addElement(menu.contentEl)
     .fromTo('transform', 'translateX(0px)', `translateX(${contentOpenedX})`);
-  const backdropAnimation = createAnimation()
-    .addElement(menu.backdropEl)
-    .fromTo('opacity', 0.01, 0.32);
+  const backdropAnimation = createAnimation().addElement(menu.backdropEl).fromTo('opacity', 0.01, 0.32);
   return baseAnimation(mode === 'ios').addAnimation([menuAnimation, contentAnimation, backdropAnimation]);
 };
 
@@ -29308,7 +29290,7 @@ const menuPushAnimation = (menu) => {
  */
 const menuRevealAnimation = (menu) => {
   const mode = getIonMode$1(menu);
-  const openedX = (menu.width * (menu.isEndSide ? -1 : 1)) + 'px';
+  const openedX = menu.width * (menu.isEndSide ? -1 : 1) + 'px';
   const contentOpen = createAnimation()
     .addElement(menu.contentEl) // REVIEW
     .fromTo('transform', 'translateX(0px)', `translateX(${openedX})`);
@@ -29359,7 +29341,8 @@ const createMenuController = () => {
   const isOpen = async (menu) => {
     if (menu != null) {
       const menuEl = await get(menu);
-      return (menuEl !== undefined && menuEl.isOpen());
+      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+      return menuEl !== undefined && menuEl.isOpen();
     }
     else {
       const menuEl = await getOpen();
@@ -29378,21 +29361,21 @@ const createMenuController = () => {
     if (menu === 'start' || menu === 'end') {
       // there could be more than one menu on the same side
       // so first try to get the enabled one
-      const menuRef = find(m => m.side === menu && !m.disabled);
+      const menuRef = find((m) => m.side === menu && !m.disabled);
       if (menuRef) {
         return menuRef;
       }
       // didn't find a menu side that is enabled
       // so try to get the first menu side found
-      return find(m => m.side === menu);
+      return find((m) => m.side === menu);
     }
     else if (menu != null) {
       // the menuId was not left or right
       // so try to get the menu by its "id"
-      return find(m => m.menuId === menu);
+      return find((m) => m.menuId === menu);
     }
     // return the first enabled menu
-    const menuEl = find(m => !m.disabled);
+    const menuEl = find((m) => !m.disabled);
     if (menuEl) {
       return menuEl;
     }
@@ -29443,9 +29426,7 @@ const createMenuController = () => {
     // then find all the other menus on this same side
     // and automatically disable other same side menus
     const side = menu.side;
-    menus
-      .filter(m => m.side === side && m !== menu)
-      .forEach(m => m.disabled = true);
+    menus.filter((m) => m.side === side && m !== menu).forEach((m) => (m.disabled = true));
   };
   const _setOpen = async (menu, shouldOpen, animated) => {
     if (isAnimatingSync()) {
@@ -29468,13 +29449,13 @@ const createMenuController = () => {
     return animation;
   };
   const _getOpenSync = () => {
-    return find(m => m._isOpen);
+    return find((m) => m._isOpen);
   };
   const getMenusSync = () => {
-    return menus.map(menu => menu.el);
+    return menus.map((menu) => menu.el);
   };
   const isAnimatingSync = () => {
-    return menus.some(menu => menu.isAnimating);
+    return menus.some((menu) => menu.isAnimating);
   };
   const find = (predicate) => {
     const instance = menus.find(predicate);
@@ -29484,13 +29465,11 @@ const createMenuController = () => {
     return undefined;
   };
   const waitUntilReady = () => {
-    return Promise.all(Array.from(document.querySelectorAll('ion-menu'))
-      .map(menu => new Promise(resolve => componentOnReady(menu, resolve))));
+    return Promise.all(Array.from(document.querySelectorAll('ion-menu')).map((menu) => new Promise((resolve) => componentOnReady(menu, resolve))));
   };
   registerAnimation('reveal', menuRevealAnimation);
   registerAnimation('push', menuPushAnimation);
   registerAnimation('overlay', menuOverlayAnimation);
-  /* tslint:disable-next-line */
   if (typeof document !== 'undefined') {
     document.addEventListener('ionBackButton', (ev) => {
       const openMenu = _getOpenSync();
@@ -29935,7 +29914,7 @@ class Item {
     const newStyles = {};
     const childStyles = this.itemStyles.get(tagName) || {};
     let hasStyleChange = false;
-    Object.keys(updatedStyles).forEach(key => {
+    Object.keys(updatedStyles).forEach((key) => {
       if (updatedStyles[key]) {
         const itemKey = `item-${key}`;
         if (!childStyles[itemKey]) {
@@ -29995,9 +29974,10 @@ class Item {
     const clickables = this.el.querySelectorAll('ion-anchor, ion-button, a, button');
     // Check for multiple inputs to change the position of the input cover to relative
     // for all of the covered inputs above
-    this.multipleInputs = covers.length + inputs.length > 1
-      || covers.length + clickables.length > 1
-      || covers.length > 0 && this.isClickable();
+    this.multipleInputs =
+      covers.length + inputs.length > 1 ||
+        covers.length + clickables.length > 1 ||
+        (covers.length > 0 && this.isClickable());
   }
   // If the item contains an input including a checkbox, datetime, select, or radio
   // then the item will have a clickable input cover that covers the item
@@ -30010,14 +29990,14 @@ class Item {
   // If the item has an href or button property it will render a native
   // anchor or button that is clickable
   isClickable() {
-    return (this.href !== undefined || this.button);
+    return this.href !== undefined || this.button;
   }
   canActivate() {
-    return (this.isClickable() || this.hasCover());
+    return this.isClickable() || this.hasCover();
   }
   isFocusable() {
     const focusableChild = this.el.querySelector('.ion-focusable');
-    return (this.canActivate() || focusableChild !== null);
+    return this.canActivate() || focusableChild !== null;
   }
   getFirstInput() {
     const inputs = this.el.querySelectorAll('ion-input, ion-textarea');
@@ -30061,33 +30041,37 @@ class Item {
     }
   }
   render() {
-    const { counterString, detail, detailIcon, download, fill, labelColorStyles, lines, disabled, href, rel, shape, target, routerAnimation, routerDirection } = this;
+    const { counterString, detail, detailIcon, download, fill, labelColorStyles, lines, disabled, href, rel, shape, target, routerAnimation, routerDirection, } = this;
     const childStyles = {};
     const mode = getIonMode$1(this);
     const clickable = this.isClickable();
     const canActivate = this.canActivate();
     const TagType = clickable ? (href === undefined ? 'button' : 'a') : 'div';
-    const attrs = (TagType === 'button')
+    const attrs = TagType === 'button'
       ? { type: this.type }
       : {
         download,
         href,
         rel,
-        target
+        target,
       };
     // Only set onClick if the item is clickable to prevent screen
     // readers from reading all items as clickable
-    const clickFn = clickable ? {
-      onClick: (ev) => { openURL(href, ev, routerDirection, routerAnimation); }
-    } : {};
+    const clickFn = clickable
+      ? {
+        onClick: (ev) => {
+          openURL(href, ev, routerDirection, routerAnimation);
+        },
+      }
+      : {};
     const showDetail = detail !== undefined ? detail : mode === 'ios' && clickable;
-    this.itemStyles.forEach(value => {
+    this.itemStyles.forEach((value) => {
       Object.assign(childStyles, value);
     });
-    const ariaDisabled = (disabled || childStyles['item-interactive-disabled']) ? 'true' : null;
+    const ariaDisabled = disabled || childStyles['item-interactive-disabled'] ? 'true' : null;
     const fillValue = fill || 'none';
     return (hAsync(Host, { "aria-disabled": ariaDisabled, class: Object.assign(Object.assign(Object.assign({}, childStyles), labelColorStyles), createColorClasses$1(this.color, {
-        'item': true,
+        item: true,
         [mode]: true,
         [`item-lines-${lines}`]: lines !== undefined,
         [`item-fill-${fillValue}`]: true,
@@ -30097,8 +30081,8 @@ class Item {
         'item-multiple-inputs': this.multipleInputs,
         'ion-activatable': canActivate,
         'ion-focusable': this.focusable,
-        'item-rtl': document.dir === 'rtl'
-      })) }, hAsync(TagType, Object.assign({}, attrs, { class: "item-native", part: "native", disabled: disabled }, clickFn), hAsync("slot", { name: "start" }), hAsync("div", { class: "item-inner" }, hAsync("div", { class: "input-wrapper" }, hAsync("slot", null)), hAsync("slot", { name: "end" }), showDetail && hAsync("ion-icon", { icon: detailIcon, lazy: false, class: "item-detail-icon", part: "detail-icon", "aria-hidden": "true", "flip-rtl": detailIcon === chevronForward }), hAsync("div", { class: "item-inner-highlight" })), canActivate && mode === 'md' && hAsync("ion-ripple-effect", null), hAsync("div", { class: "item-highlight" })), hAsync("div", { class: "item-bottom" }, hAsync("slot", { name: "error" }), hAsync("slot", { name: "helper" }), counterString && hAsync("ion-note", { class: "item-counter" }, counterString))));
+        'item-rtl': document.dir === 'rtl',
+      })) }, hAsync(TagType, Object.assign({}, attrs, { class: "item-native", part: "native", disabled: disabled }, clickFn), hAsync("slot", { name: "start" }), hAsync("div", { class: "item-inner" }, hAsync("div", { class: "input-wrapper" }, hAsync("slot", null)), hAsync("slot", { name: "end" }), showDetail && (hAsync("ion-icon", { icon: detailIcon, lazy: false, class: "item-detail-icon", part: "detail-icon", "aria-hidden": "true", "flip-rtl": detailIcon === chevronForward })), hAsync("div", { class: "item-inner-highlight" })), canActivate && mode === 'md' && hAsync("ion-ripple-effect", null), hAsync("div", { class: "item-highlight" })), hAsync("div", { class: "item-bottom" }, hAsync("slot", { name: "error" }), hAsync("slot", { name: "helper" }), counterString && hAsync("ion-note", { class: "item-counter" }, counterString))));
   }
   static get delegatesFocus() { return true; }
   get el() { return getElement(this); }
@@ -30164,7 +30148,7 @@ class ItemDivider {
     return (hAsync(Host, { class: createColorClasses$1(this.color, {
         [mode]: true,
         'item-divider-sticky': this.sticky,
-        'item': true,
+        item: true,
       }) }, hAsync("slot", { name: "start" }), hAsync("div", { class: "item-divider-inner" }, hAsync("div", { class: "item-divider-wrapper" }, hAsync("slot", null)), hAsync("slot", { name: "end" }))));
   }
   get el() { return getElement(this); }
@@ -30199,7 +30183,7 @@ class ItemGroup {
         [mode]: true,
         // Used internally for styling
         [`item-group-${mode}`]: true,
-        'item': true
+        item: true,
       } }));
   }
   static get style() { return {
@@ -30258,18 +30242,18 @@ class ItemOption {
     const { disabled, expandable, href } = this;
     const TagType = href === undefined ? 'button' : 'a';
     const mode = getIonMode$1(this);
-    const attrs = (TagType === 'button')
+    const attrs = TagType === 'button'
       ? { type: this.type }
       : {
         download: this.download,
         href: this.href,
-        target: this.target
+        target: this.target,
       };
     return (hAsync(Host, { onClick: this.onClick, class: createColorClasses$1(this.color, {
         [mode]: true,
         'item-option-disabled': disabled,
         'item-option-expandable': expandable,
-        'ion-activatable': true
+        'ion-activatable': true,
       }) }, hAsync(TagType, Object.assign({}, attrs, { class: "button-native", part: "native", disabled: disabled }), hAsync("span", { class: "button-inner" }, hAsync("slot", { name: "top" }), hAsync("div", { class: "horizontal-wrapper" }, hAsync("slot", { name: "start" }), hAsync("slot", { name: "icon-only" }), hAsync("slot", null), hAsync("slot", { name: "end" })), hAsync("slot", { name: "bottom" })), mode === 'md' && hAsync("ion-ripple-effect", null))));
   }
   get el() { return getElement(this); }
@@ -30313,7 +30297,7 @@ class ItemOptions {
   /** @internal */
   async fireSwipeEvent() {
     this.ionSwipe.emit({
-      side: this.side
+      side: this.side,
     });
   }
   render() {
@@ -30324,7 +30308,7 @@ class ItemOptions {
         // Used internally for styling
         [`item-options-${mode}`]: true,
         'item-options-start': !isEnd,
-        'item-options-end': isEnd
+        'item-options-end': isEnd,
       } }));
   }
   get el() { return getElement(this); }
@@ -30383,10 +30367,10 @@ class ItemSliding {
       gestureName: 'item-swipe',
       gesturePriority: 100,
       threshold: 5,
-      canStart: ev => this.canStart(ev),
+      canStart: (ev) => this.canStart(ev),
       onStart: () => this.onStart(),
-      onMove: ev => this.onMove(ev),
-      onEnd: ev => this.onEnd(ev),
+      onMove: (ev) => this.onMove(ev),
+      onEnd: (ev) => this.onEnd(ev),
     });
     this.disabledChanged();
   }
@@ -30435,7 +30419,7 @@ class ItemSliding {
      * so we know which direction to move the options
      */
     if (side === undefined) {
-      side = (optionsToOpen === this.leftOptions) ? 'start' : 'end';
+      side = optionsToOpen === this.leftOptions ? 'start' : 'end';
     }
     // In RTL we want to switch the sides
     side = isEndSide(side) ? 'end' : 'start';
@@ -30455,10 +30439,10 @@ class ItemSliding {
     this.state = 4 /* Enabled */;
     requestAnimationFrame(() => {
       this.calculateOptsWidth();
-      const width = (side === 'end') ? this.optsWidthRightSide : -this.optsWidthLeftSide;
+      const width = side === 'end' ? this.optsWidthRightSide : -this.optsWidthLeftSide;
       openSlidingItem = this.el;
       this.setOpenAmount(width, false);
-      this.state = (side === 'end') ? 8 /* End */ : 16 /* Start */;
+      this.state = side === 'end' ? 8 /* End */ : 16 /* Start */;
     });
   }
   /**
@@ -30507,7 +30491,7 @@ class ItemSliding {
        * util here since we need to wait for all of these items
        * to be ready before we set `this.sides` and `this.optsDirty`.
        */
-      const option = (item.componentOnReady !== undefined) ? await item.componentOnReady() : item;
+      const option = item.componentOnReady !== undefined ? await item.componentOnReady() : item;
       const side = isEndSide(option.side) ? 'end' : 'start';
       if (side === 'start') {
         this.leftOptions = option;
@@ -30528,7 +30512,7 @@ class ItemSliding {
      * back will still work.
      */
     const rtl = document.dir === 'rtl';
-    const atEdge = (rtl) ? (window.innerWidth - gesture.startX) < 15 : gesture.startX < 15;
+    const atEdge = rtl ? window.innerWidth - gesture.startX < 15 : gesture.startX < 15;
     if (atEdge) {
       return false;
     }
@@ -30586,8 +30570,10 @@ class ItemSliding {
       case 1 /* Start */:
         openAmount = Math.min(0, openAmount);
         break;
-      case 3 /* Both */: break;
-      case 0 /* None */: return;
+      case 3 /* Both */:
+        break;
+      case 0 /* None */:
+        return;
       default:
         console.warn('invalid ItemSideFlags value', this.sides);
         break;
@@ -30607,12 +30593,10 @@ class ItemSliding {
     // Restore ion-content scrollY to initial value when gesture ends
     this.restoreContentScrollY();
     const velocity = gesture.velocityX;
-    let restingPoint = (this.openAmount > 0)
-      ? this.optsWidthRightSide
-      : -this.optsWidthLeftSide;
+    let restingPoint = this.openAmount > 0 ? this.optsWidthRightSide : -this.optsWidthLeftSide;
     // Check if the drag didn't clear the buttons mid-point
     // and we aren't moving fast enough to swipe open
-    const isResetDirection = (this.openAmount > 0) === !(velocity < 0);
+    const isResetDirection = this.openAmount > 0 === !(velocity < 0);
     const isMovingFast = Math.abs(velocity) > 0.3;
     const isOnCloseZone = Math.abs(this.openAmount) < Math.abs(restingPoint / 2);
     if (swipeShouldReset(isResetDirection, isMovingFast, isOnCloseZone)) {
@@ -30656,14 +30640,16 @@ class ItemSliding {
       style.transition = '';
     }
     if (openAmount > 0) {
-      this.state = (openAmount >= (this.optsWidthRightSide + SWIPE_MARGIN))
-        ? 8 /* End */ | 32 /* SwipeEnd */
-        : 8 /* End */;
+      this.state =
+        openAmount >= this.optsWidthRightSide + SWIPE_MARGIN
+          ? 8 /* End */ | 32 /* SwipeEnd */
+          : 8 /* End */;
     }
     else if (openAmount < 0) {
-      this.state = (openAmount <= (-this.optsWidthLeftSide - SWIPE_MARGIN))
-        ? 16 /* Start */ | 64 /* SwipeStart */
-        : 16 /* Start */;
+      this.state =
+        openAmount <= -this.optsWidthLeftSide - SWIPE_MARGIN
+          ? 16 /* Start */ | 64 /* SwipeStart */
+          : 16 /* Start */;
     }
     else {
       /**
@@ -30690,7 +30676,7 @@ class ItemSliding {
     style.transform = `translate3d(${-openAmount}px,0,0)`;
     this.ionDrag.emit({
       amount: openAmount,
-      ratio: this.getSlidingRatioSync()
+      ratio: this.getSlidingRatioSync(),
     });
   }
   getSlidingRatioSync() {
@@ -30708,11 +30694,11 @@ class ItemSliding {
     const mode = getIonMode$1(this);
     return (hAsync(Host, { class: {
         [mode]: true,
-        'item-sliding-active-slide': (this.state !== 2 /* Disabled */),
+        'item-sliding-active-slide': this.state !== 2 /* Disabled */,
         'item-sliding-active-options-end': (this.state & 8 /* End */) !== 0,
         'item-sliding-active-options-start': (this.state & 16 /* Start */) !== 0,
         'item-sliding-active-swipe-end': (this.state & 32 /* SwipeEnd */) !== 0,
-        'item-sliding-active-swipe-start': (this.state & 64 /* SwipeStart */) !== 0
+        'item-sliding-active-swipe-start': (this.state & 64 /* SwipeStart */) !== 0,
       } }));
   }
   get el() { return getElement(this); }
@@ -30867,7 +30853,7 @@ class Label {
   }
   componentWillLoad() {
     this.inRange = !!this.el.closest('ion-range');
-    this.noAnimate = (this.position === 'floating');
+    this.noAnimate = this.position === 'floating';
     this.emitStyle();
     this.emitColor();
   }
@@ -30888,7 +30874,7 @@ class Label {
     const { color } = this;
     this.ionColor.emit({
       'item-label-color': color !== undefined,
-      [`ion-color-${color}`]: color !== undefined
+      [`ion-color-${color}`]: color !== undefined,
     });
   }
   emitStyle() {
@@ -30898,8 +30884,8 @@ class Label {
     // is a direct child of the item
     if (!inRange) {
       this.ionStyle.emit({
-        'label': true,
-        [`label-${position}`]: position !== undefined
+        label: true,
+        [`label-${position}`]: position !== undefined,
       });
     }
   }
@@ -30910,8 +30896,8 @@ class Label {
         [mode]: true,
         'in-item-color': hostContext('ion-item.ion-color', this.el),
         [`label-${position}`]: position !== undefined,
-        [`label-no-animate`]: (this.noAnimate),
-        'label-rtl': document.dir === 'rtl'
+        [`label-no-animate`]: this.noAnimate,
+        'label-rtl': document.dir === 'rtl',
       }) }));
   }
   get el() { return getElement(this); }
@@ -30960,7 +30946,7 @@ class List {
    */
   async closeSlidingItems() {
     const item = this.el.querySelector('ion-item-sliding');
-    if (item && item.closeOpened) {
+    if (item === null || item === void 0 ? void 0 : item.closeOpened) {
       return item.closeOpened();
     }
     return false;
@@ -30974,7 +30960,7 @@ class List {
         [`list-${mode}`]: true,
         'list-inset': inset,
         [`list-lines-${lines}`]: lines !== undefined,
-        [`list-${mode}-lines-${lines}`]: lines !== undefined
+        [`list-${mode}-lines-${lines}`]: lines !== undefined,
       } }));
   }
   get el() { return getElement(this); }
@@ -31046,14 +31032,12 @@ const iosEnterAnimation$4 = (baseEl) => {
     .addElement(baseEl.querySelector('ion-backdrop'))
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
-    'pointer-events': 'none'
+    'pointer-events': 'none',
   })
     .afterClearStyles(['pointer-events']);
-  wrapperAnimation
-    .addElement(baseEl.querySelector('.loading-wrapper'))
-    .keyframes([
+  wrapperAnimation.addElement(baseEl.querySelector('.loading-wrapper')).keyframes([
     { offset: 0, opacity: 0.01, transform: 'scale(1.1)' },
-    { offset: 1, opacity: 1, transform: 'scale(1)' }
+    { offset: 1, opacity: 1, transform: 'scale(1)' },
   ]);
   return baseAnimation
     .addElement(baseEl)
@@ -31072,14 +31056,10 @@ const iosLeaveAnimation$4 = (baseEl) => {
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
-  wrapperAnimation
-    .addElement(baseEl.querySelector('.loading-wrapper'))
-    .keyframes([
+  backdropAnimation.addElement(baseEl.querySelector('ion-backdrop')).fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  wrapperAnimation.addElement(baseEl.querySelector('.loading-wrapper')).keyframes([
     { offset: 0, opacity: 0.99, transform: 'scale(1)' },
-    { offset: 1, opacity: 0, transform: 'scale(0.9)' }
+    { offset: 1, opacity: 0, transform: 'scale(0.9)' },
   ]);
   return baseAnimation
     .addElement(baseEl)
@@ -31102,14 +31082,12 @@ const mdEnterAnimation$3 = (baseEl) => {
     .addElement(baseEl.querySelector('ion-backdrop'))
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
-    'pointer-events': 'none'
+    'pointer-events': 'none',
   })
     .afterClearStyles(['pointer-events']);
-  wrapperAnimation
-    .addElement(baseEl.querySelector('.loading-wrapper'))
-    .keyframes([
+  wrapperAnimation.addElement(baseEl.querySelector('.loading-wrapper')).keyframes([
     { offset: 0, opacity: 0.01, transform: 'scale(1.1)' },
-    { offset: 1, opacity: 1, transform: 'scale(1)' }
+    { offset: 1, opacity: 1, transform: 'scale(1)' },
   ]);
   return baseAnimation
     .addElement(baseEl)
@@ -31128,14 +31106,10 @@ const mdLeaveAnimation$3 = (baseEl) => {
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  backdropAnimation
-    .addElement(baseEl.querySelector('ion-backdrop'))
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
-  wrapperAnimation
-    .addElement(baseEl.querySelector('.loading-wrapper'))
-    .keyframes([
+  backdropAnimation.addElement(baseEl.querySelector('ion-backdrop')).fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  wrapperAnimation.addElement(baseEl.querySelector('.loading-wrapper')).keyframes([
     { offset: 0, opacity: 0.99, transform: 'scale(1)' },
-    { offset: 1, opacity: 0, transform: 'scale(0.9)' }
+    { offset: 1, opacity: 0, transform: 'scale(0.9)' },
   ]);
   return baseAnimation
     .addElement(baseEl)
@@ -31238,7 +31212,7 @@ class Loading {
     const { message, spinner, htmlAttributes } = this;
     const mode = getIonMode$1(this);
     return (hAsync(Host, Object.assign({ tabindex: "-1" }, htmlAttributes, { style: {
-        zIndex: `${40000 + this.overlayIndex}`
+        zIndex: `${40000 + this.overlayIndex}`,
       }, onIonBackdropTap: this.onBackdropTap, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'overlay-hidden': true, 'loading-translucent': this.translucent }) }), hAsync("ion-backdrop", { visible: this.showBackdrop, tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "loading-wrapper ion-overlay-wrapper", role: "dialog" }, spinner && (hAsync("div", { class: "loading-spinner" }, hAsync("ion-spinner", { name: spinner, "aria-hidden": "true" }))), message && hAsync("div", { class: "loading-content", innerHTML: sanitizeDOMString(message) })), hAsync("div", { tabindex: "0" })));
   }
   get el() { return getElement(this); }
@@ -35142,7 +35116,7 @@ class Menu {
     this.updateState();
     this.ionMenuChange.emit({
       disabled: this.disabled,
-      open: this._isOpen
+      open: this._isOpen,
     });
   }
   sideChanged() {
@@ -35191,9 +35165,7 @@ class Menu {
   }
   onBackdropClick(ev) {
     if (this._isOpen && this.lastOnEnd < ev.timeStamp - 100) {
-      const shouldClose = (ev.composedPath)
-        ? !ev.composedPath().includes(this.menuInnerEl)
-        : false;
+      const shouldClose = ev.composedPath ? !ev.composedPath().includes(this.menuInnerEl) : false;
       if (shouldClose) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -35342,8 +35314,8 @@ class Menu {
     const easing = mode === 'ios' ? iosEasing : mdEasing;
     const easingReverse = mode === 'ios' ? iosEasingReverse : mdEasingReverse;
     const ani = this.animation
-      .direction((isReversed) ? 'reverse' : 'normal')
-      .easing((isReversed) ? easingReverse : easing)
+      .direction(isReversed ? 'reverse' : 'normal')
+      .easing(isReversed ? easingReverse : easing)
       .onFinish(() => {
       if (ani.getDirection() === 'reverse') {
         ani.direction('normal');
@@ -35387,7 +35359,7 @@ class Menu {
       return;
     }
     // the cloned animation should not use an easing curve during seek
-    this.animation.progressStart(true, (this._isOpen) ? 1 : 0);
+    this.animation.progressStart(true, this._isOpen ? 1 : 0);
   }
   onMove(detail) {
     if (!this.isAnimating || !this.animation) {
@@ -35396,7 +35368,7 @@ class Menu {
     }
     const delta = computeDelta(detail.deltaX, this._isOpen, this.isEndSide);
     const stepValue = delta / this.width;
-    this.animation.progressStep((this._isOpen) ? 1 - stepValue : stepValue);
+    this.animation.progressStep(this._isOpen ? 1 - stepValue : stepValue);
   }
   onEnd(detail) {
     if (!this.isAnimating || !this.animation) {
@@ -35413,22 +35385,26 @@ class Menu {
     const shouldCompleteRight = velocity >= 0 && (velocity > 0.2 || detail.deltaX > z);
     const shouldCompleteLeft = velocity <= 0 && (velocity < -0.2 || detail.deltaX < -z);
     const shouldComplete = isOpen
-      ? isEndSide ? shouldCompleteRight : shouldCompleteLeft
-      : isEndSide ? shouldCompleteLeft : shouldCompleteRight;
+      ? isEndSide
+        ? shouldCompleteRight
+        : shouldCompleteLeft
+      : isEndSide
+        ? shouldCompleteLeft
+        : shouldCompleteRight;
     let shouldOpen = !isOpen && shouldComplete;
     if (isOpen && !shouldComplete) {
       shouldOpen = true;
     }
     this.lastOnEnd = detail.currentTime;
     // Account for rounding errors in JS
-    let newStepValue = (shouldComplete) ? 0.001 : -0.001;
+    let newStepValue = shouldComplete ? 0.001 : -0.001;
     /**
      * TODO: stepValue can sometimes return a negative
      * value, but you can't have a negative time value
      * for the cubic bezier curve (at least with web animations)
      * Not sure if the negative step value is an error or not
      */
-    const adjustedStepValue = (stepValue < 0) ? 0.01 : stepValue;
+    const adjustedStepValue = stepValue < 0 ? 0.01 : stepValue;
     /**
      * Animation will be reversed here, so need to
      * reverse the easing curve as well
@@ -35437,12 +35413,13 @@ class Menu {
      * to the new easing curve, as `stepValue` is going to be given
      * in terms of a linear curve.
      */
-    newStepValue += getTimeGivenProgression([0, 0], [0.4, 0], [0.6, 1], [1, 1], clamp(0, adjustedStepValue, 0.9999))[0] || 0;
-    const playTo = (this._isOpen) ? !shouldComplete : shouldComplete;
+    newStepValue +=
+      getTimeGivenProgression([0, 0], [0.4, 0], [0.6, 1], [1, 1], clamp(0, adjustedStepValue, 0.9999))[0] || 0;
+    const playTo = this._isOpen ? !shouldComplete : shouldComplete;
     this.animation
       .easing('cubic-bezier(0.4, 0.0, 0.6, 1)')
       .onFinish(() => this.afterAnimation(shouldOpen), { oneTimeCallback: true })
-      .progressEnd((playTo) ? 1 : 0, (this._isOpen) ? 1 - newStepValue : newStepValue, 300);
+      .progressEnd(playTo ? 1 : 0, this._isOpen ? 1 - newStepValue : newStepValue, 300);
   }
   beforeAnimation(shouldOpen) {
     assert(!this.isAnimating, '_before() should not be called while animating');
@@ -35564,8 +35541,8 @@ class Menu {
         'menu-enabled': !disabled,
         'menu-side-end': isEndSide,
         'menu-side-start': !isEndSide,
-        'menu-pane-visible': isPaneVisible
-      } }, hAsync("div", { class: "menu-inner", part: "container", ref: el => this.menuInnerEl = el }, hAsync("slot", null)), hAsync("ion-backdrop", { ref: el => this.backdropEl = el, class: "menu-backdrop", tappable: false, stopPropagation: false, part: "backdrop" })));
+        'menu-pane-visible': isPaneVisible,
+      } }, hAsync("div", { class: "menu-inner", part: "container", ref: (el) => (this.menuInnerEl = el) }, hAsync("slot", null)), hAsync("ion-backdrop", { ref: (el) => (this.backdropEl = el), class: "menu-backdrop", tappable: false, stopPropagation: false, part: "backdrop" })));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -35624,7 +35601,7 @@ const MENU_CONTENT_OPEN = 'menu-content-open';
 // Given a menu, return whether or not the menu toggle should be visible
 const updateVisibility = async (menu) => {
   const menuEl = await menuController.get(menu);
-  return !!(menuEl && await menuEl.isActive());
+  return !!(menuEl && (await menuEl.isActive()));
 };
 
 const menuButtonIosCss = "/*!@:host*/.sc-ion-menu-button-ios-h{--background:transparent;--color-focused:currentColor;--border-radius:initial;--padding-top:0;--padding-bottom:0;color:var(--color);text-align:center;text-decoration:none;text-overflow:ellipsis;text-transform:none;white-space:nowrap;font-kerning:none}/*!@.button-native*/.button-native.sc-ion-menu-button-ios{border-radius:var(--border-radius);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:flex;position:relative;flex-flow:row nowrap;flex-shrink:0;align-items:center;justify-content:center;width:100%;height:100%;border:0;outline:none;background:var(--background);line-height:1;cursor:pointer;overflow:hidden;user-select:none;z-index:0;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.button-native*/.button-native.sc-ion-menu-button-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}/*!@.button-inner*/.button-inner.sc-ion-menu-button-ios{display:flex;position:relative;flex-flow:row nowrap;flex-shrink:0;align-items:center;justify-content:center;width:100%;height:100%;z-index:1}/*!@ion-icon*/ion-icon.sc-ion-menu-button-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;pointer-events:none}/*!@:host(.menu-button-hidden)*/.menu-button-hidden.sc-ion-menu-button-ios-h{display:none}/*!@:host(.menu-button-disabled)*/.menu-button-disabled.sc-ion-menu-button-ios-h{cursor:default;opacity:0.5;pointer-events:none}/*!@:host(.ion-focused) .button-native*/.ion-focused.sc-ion-menu-button-ios-h .button-native.sc-ion-menu-button-ios{color:var(--color-focused)}/*!@:host(.ion-focused) .button-native::after*/.ion-focused.sc-ion-menu-button-ios-h .button-native.sc-ion-menu-button-ios::after{background:var(--background-focused);opacity:var(--background-focused-opacity)}/*!@.button-native::after*/.button-native.sc-ion-menu-button-ios::after{left:0;right:0;top:0;bottom:0;position:absolute;content:\"\";opacity:0}@media (any-hover: hover){/*!@:host(:hover) .button-native*/.sc-ion-menu-button-ios-h:hover .button-native.sc-ion-menu-button-ios{color:var(--color-hover)}/*!@:host(:hover) .button-native::after*/.sc-ion-menu-button-ios-h:hover .button-native.sc-ion-menu-button-ios::after{background:var(--background-hover);opacity:var(--background-hover-opacity, 0)}}/*!@:host(.ion-color) .button-native*/.ion-color.sc-ion-menu-button-ios-h .button-native.sc-ion-menu-button-ios{color:var(--ion-color-base)}/*!@:host(.in-toolbar:not(.in-toolbar-color))*/.in-toolbar.sc-ion-menu-button-ios-h:not(.in-toolbar-color){color:var(--ion-toolbar-color, var(--color))}/*!@:host*/.sc-ion-menu-button-ios-h{--background-focused:currentColor;--background-focused-opacity:.1;--border-radius:4px;--color:var(--ion-color-primary, #3880ff);--padding-start:5px;--padding-end:5px;height:32px;font-size:31px}/*!@:host(.ion-activated)*/.ion-activated.sc-ion-menu-button-ios-h{opacity:0.4}@media (any-hover: hover){/*!@:host(:hover)*/.sc-ion-menu-button-ios-h:hover{opacity:0.6}}";
@@ -35673,18 +35650,18 @@ class MenuButton {
     const menuIcon = config$1.get('menuIcon', mode === 'ios' ? menuOutline : menuSharp);
     const hidden = this.autoHide && !this.visible;
     const attrs = {
-      type: this.type
+      type: this.type,
     };
     const ariaLabel = inheritedAttributes['aria-label'] || 'menu';
     return (hAsync(Host, { onClick: this.onClick, "aria-disabled": disabled ? 'true' : null, "aria-hidden": hidden ? 'true' : null, class: createColorClasses$1(color, {
         [mode]: true,
-        'button': true,
+        button: true,
         'menu-button-hidden': hidden,
         'menu-button-disabled': disabled,
         'in-toolbar': hostContext('ion-toolbar', this.el),
         'in-toolbar-color': hostContext('ion-toolbar[color]', this.el),
         'ion-activatable': true,
-        'ion-focusable': true
+        'ion-focusable': true,
       }) }, hAsync("button", Object.assign({}, attrs, { disabled: disabled, class: "button-native", part: "native", "aria-label": ariaLabel }), hAsync("span", { class: "button-inner" }, hAsync("slot", null, hAsync("ion-icon", { part: "icon", icon: menuIcon, mode: mode, lazy: false, "aria-hidden": "true" }))), mode === 'md' && hAsync("ion-ripple-effect", { type: "unbounded" }))));
   }
   get el() { return getElement(this); }
@@ -35762,23 +35739,22 @@ class MenuToggle {
  * (C) Ionic http://ionicframework.com - MIT License
  */
 const attachComponent = async (delegate, container, component, cssClasses, componentProps, inline) => {
+  var _a;
   if (delegate) {
     return delegate.attachViewToDom(container, component, componentProps, cssClasses);
   }
   if (!inline && typeof component !== 'string' && !(component instanceof HTMLElement)) {
     throw new Error('framework delegate is missing');
   }
-  const el = (typeof component === 'string')
-    ? container.ownerDocument && container.ownerDocument.createElement(component)
-    : component;
+  const el = typeof component === 'string' ? (_a = container.ownerDocument) === null || _a === void 0 ? void 0 : _a.createElement(component) : component;
   if (cssClasses) {
-    cssClasses.forEach(c => el.classList.add(c));
+    cssClasses.forEach((c) => el.classList.add(c));
   }
   if (componentProps) {
     Object.assign(el, componentProps);
   }
   container.appendChild(el);
-  await new Promise(resolve => componentOnReady(el, resolve));
+  await new Promise((resolve) => componentOnReady(el, resolve));
   return el;
 };
 const detachComponent = (delegate, element) => {
@@ -35795,6 +35771,7 @@ const CoreDelegate = () => {
   let BaseComponent;
   let Reference;
   const attachViewToDom = async (parentElement, userComponent, userComponentProps = {}, cssClasses = []) => {
+    var _a, _b;
     BaseComponent = parentElement;
     /**
      * If passing in a component via the `component` props
@@ -35806,14 +35783,12 @@ const CoreDelegate = () => {
        * the element otherwise just get a reference
        * to the component.
        */
-      const el = (typeof userComponent === 'string')
-        ? BaseComponent.ownerDocument && BaseComponent.ownerDocument.createElement(userComponent)
-        : userComponent;
+      const el = typeof userComponent === 'string' ? (_a = BaseComponent.ownerDocument) === null || _a === void 0 ? void 0 : _a.createElement(userComponent) : userComponent;
       /**
        * Add any css classes passed in
        * via the cssClasses prop on the overlay.
        */
-      cssClasses.forEach(c => el.classList.add(c));
+      cssClasses.forEach((c) => el.classList.add(c));
       /**
        * Add any props passed in
        * via the componentProps prop on the overlay.
@@ -35824,13 +35799,13 @@ const CoreDelegate = () => {
        * inside of the overlay component.
        */
       BaseComponent.appendChild(el);
-      await new Promise(resolve => componentOnReady(el, resolve));
+      await new Promise((resolve) => componentOnReady(el, resolve));
     }
     else if (BaseComponent.children.length > 0) {
       // If there is no component, then we need to create a new parent
       // element to apply the css classes to.
-      const el = BaseComponent.ownerDocument && BaseComponent.ownerDocument.createElement('div');
-      cssClasses.forEach(c => el.classList.add(c));
+      const el = (_b = BaseComponent.ownerDocument) === null || _b === void 0 ? void 0 : _b.createElement('div');
+      cssClasses.forEach((c) => el.classList.add(c));
       // Move each child from the original template to the new parent element.
       el.append(...BaseComponent.children);
       // Append the new parent element to the original parent element.
@@ -35881,8 +35856,7 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
   let isOpen = false;
   const canStart = (detail) => {
     const target = detail.event.target;
-    if (target === null ||
-      !target.closest) {
+    if (target === null || !target.closest) {
       return true;
     }
     const contentOrFooter = target.closest('ion-content, ion-footer');
@@ -35895,7 +35869,7 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
     return false;
   };
   const onStart = () => {
-    animation.progressStart(true, (isOpen) ? 1 : 0);
+    animation.progressStart(true, isOpen ? 1 : 0);
   };
   const onMove = (detail) => {
     const step = clamp(0.0001, detail.deltaY / height, 0.9999);
@@ -35906,7 +35880,7 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
     const step = clamp(0.0001, detail.deltaY / height, 0.9999);
     const threshold = (detail.deltaY + velocity * 1000) / height;
     const shouldComplete = threshold >= 0.5;
-    let newStepValue = (shouldComplete) ? -0.001 : 0.001;
+    let newStepValue = shouldComplete ? -0.001 : 0.001;
     if (!shouldComplete) {
       animation.easing('cubic-bezier(1, 0, 0.68, 0.28)');
       newStepValue += getTimeGivenProgression([0, 0], [1, 0], [0.68, 0.28], [1, 1], step)[0];
@@ -35915,7 +35889,9 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
       animation.easing('cubic-bezier(0.32, 0.72, 0, 1)');
       newStepValue += getTimeGivenProgression([0, 0], [0.32, 0.72], [0, 1], [1, 1], step)[0];
     }
-    const duration = (shouldComplete) ? computeDuration(step * height, velocity) : computeDuration((1 - step) * height, velocity);
+    const duration = shouldComplete
+      ? computeDuration(step * height, velocity)
+      : computeDuration((1 - step) * height, velocity);
     isOpen = shouldComplete;
     gesture.enable(false);
     animation
@@ -35924,7 +35900,7 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
         gesture.enable(true);
       }
     })
-      .progressEnd((shouldComplete) ? 1 : 0, newStepValue, duration);
+      .progressEnd(shouldComplete ? 1 : 0, newStepValue, duration);
     if (shouldComplete) {
       onDismiss();
     }
@@ -35938,7 +35914,7 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
     canStart,
     onStart,
     onMove,
-    onEnd
+    onEnd,
   });
   return gesture;
 };
@@ -35995,7 +35971,7 @@ const getBackdropValueForSheet = (x, backdropBreakpoint) => {
    * backdrop offset given an arbitrary
    * gesture offset.
    */
-  return (x * slope) + b;
+  return x * slope + b;
 };
 
 /*!
@@ -36010,19 +35986,17 @@ const createSheetEnterAnimation = (opts) => {
    */
   const shouldShowBackdrop = backdropBreakpoint === undefined || backdropBreakpoint < currentBreakpoint;
   const initialBackdrop = shouldShowBackdrop ? `calc(var(--backdrop-opacity) * ${currentBreakpoint})` : '0';
-  const backdropAnimation = createAnimation('backdropAnimation')
-    .fromTo('opacity', 0, initialBackdrop);
+  const backdropAnimation = createAnimation('backdropAnimation').fromTo('opacity', 0, initialBackdrop);
   if (shouldShowBackdrop) {
     backdropAnimation
       .beforeStyles({
-      'pointer-events': 'none'
+      'pointer-events': 'none',
     })
       .afterClearStyles(['pointer-events']);
   }
-  const wrapperAnimation = createAnimation('wrapperAnimation')
-    .keyframes([
+  const wrapperAnimation = createAnimation('wrapperAnimation').keyframes([
     { offset: 0, opacity: 1, transform: 'translateY(100%)' },
-    { offset: 1, opacity: 1, transform: `translateY(${100 - (currentBreakpoint * 100)}%)` }
+    { offset: 1, opacity: 1, transform: `translateY(${100 - currentBreakpoint * 100}%)` },
   ]);
   return { wrapperAnimation, backdropAnimation };
 };
@@ -36036,19 +36010,17 @@ const createSheetLeaveAnimation = (opts) => {
   const backdropValue = `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(currentBreakpoint, backdropBreakpoint)})`;
   const defaultBackdrop = [
     { offset: 0, opacity: backdropValue },
-    { offset: 1, opacity: 0 }
+    { offset: 1, opacity: 0 },
   ];
   const customBackdrop = [
     { offset: 0, opacity: backdropValue },
     { offset: backdropBreakpoint, opacity: 0 },
-    { offset: 1, opacity: 0 }
+    { offset: 1, opacity: 0 },
   ];
-  const backdropAnimation = createAnimation('backdropAnimation')
-    .keyframes(backdropBreakpoint !== 0 ? customBackdrop : defaultBackdrop);
-  const wrapperAnimation = createAnimation('wrapperAnimation')
-    .keyframes([
-    { offset: 0, opacity: 1, transform: `translateY(${100 - (currentBreakpoint * 100)}%)` },
-    { offset: 1, opacity: 1, transform: `translateY(100%)` }
+  const backdropAnimation = createAnimation('backdropAnimation').keyframes(backdropBreakpoint !== 0 ? customBackdrop : defaultBackdrop);
+  const wrapperAnimation = createAnimation('wrapperAnimation').keyframes([
+    { offset: 0, opacity: 1, transform: `translateY(${100 - currentBreakpoint * 100}%)` },
+    { offset: 1, opacity: 1, transform: `translateY(100%)` },
   ]);
   return { wrapperAnimation, backdropAnimation };
 };
@@ -36060,11 +36032,10 @@ const createEnterAnimation$1 = () => {
   const backdropAnimation = createAnimation()
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
-    'pointer-events': 'none'
+    'pointer-events': 'none',
   })
     .afterClearStyles(['pointer-events']);
-  const wrapperAnimation = createAnimation()
-    .fromTo('transform', 'translateY(100vh)', 'translateY(0vh)');
+  const wrapperAnimation = createAnimation().fromTo('transform', 'translateY(100vh)', 'translateY(0vh)');
   return { backdropAnimation, wrapperAnimation };
 };
 /**
@@ -36074,11 +36045,8 @@ const iosEnterAnimation$3 = (baseEl, opts) => {
   const { presentingEl, currentBreakpoint } = opts;
   const root = getElementRoot(baseEl);
   const { wrapperAnimation, backdropAnimation } = currentBreakpoint !== undefined ? createSheetEnterAnimation(opts) : createEnterAnimation$1();
-  backdropAnimation
-    .addElement(root.querySelector('ion-backdrop'));
-  wrapperAnimation
-    .addElement(root.querySelectorAll('.modal-wrapper, .modal-shadow'))
-    .beforeStyles({ 'opacity': 1 });
+  backdropAnimation.addElement(root.querySelector('ion-backdrop'));
+  wrapperAnimation.addElement(root.querySelectorAll('.modal-wrapper, .modal-shadow')).beforeStyles({ opacity: 1 });
   const baseAnimation = createAnimation('entering-base')
     .addElement(baseEl)
     .easing('cubic-bezier(0.32,0.72,0,1)')
@@ -36086,13 +36054,12 @@ const iosEnterAnimation$3 = (baseEl, opts) => {
     .addAnimation(wrapperAnimation);
   if (presentingEl) {
     const isMobile = window.innerWidth < 768;
-    const hasCardModal = (presentingEl.tagName === 'ION-MODAL' && presentingEl.presentingElement !== undefined);
+    const hasCardModal = presentingEl.tagName === 'ION-MODAL' && presentingEl.presentingElement !== undefined;
     const presentingElRoot = getElementRoot(presentingEl);
-    const presentingAnimation = createAnimation()
-      .beforeStyles({
-      'transform': 'translateY(0)',
+    const presentingAnimation = createAnimation().beforeStyles({
+      transform: 'translateY(0)',
       'transform-origin': 'top center',
-      'overflow': 'hidden'
+      overflow: 'hidden',
     });
     const bodyEl = document.body;
     if (isMobile) {
@@ -36101,19 +36068,19 @@ const iosEnterAnimation$3 = (baseEl, opts) => {
        * No need to worry about statusbar padding since engines like Gecko
        * are not used as the engine for standalone Cordova/Capacitor apps
        */
-      const transformOffset = (!CSS.supports('width', 'max(0px, 1px)')) ? '30px' : 'max(30px, var(--ion-safe-area-top))';
+      const transformOffset = !CSS.supports('width', 'max(0px, 1px)') ? '30px' : 'max(30px, var(--ion-safe-area-top))';
       const modalTransform = hasCardModal ? '-10px' : transformOffset;
       const toPresentingScale = SwipeToCloseDefaults.MIN_PRESENTING_SCALE;
       const finalTransform = `translateY(${modalTransform}) scale(${toPresentingScale})`;
       presentingAnimation
         .afterStyles({
-        'transform': finalTransform
+        transform: finalTransform,
       })
         .beforeAddWrite(() => bodyEl.style.setProperty('background-color', 'black'))
         .addElement(presentingEl)
         .keyframes([
         { offset: 0, filter: 'contrast(1)', transform: 'translateY(0px) scale(1)', borderRadius: '0px' },
-        { offset: 1, filter: 'contrast(0.85)', transform: finalTransform, borderRadius: '10px 10px 0 0' }
+        { offset: 1, filter: 'contrast(0.85)', transform: finalTransform, borderRadius: '10px 10px 0 0' },
       ]);
       baseAnimation.addAnimation(presentingAnimation);
     }
@@ -36123,25 +36090,25 @@ const iosEnterAnimation$3 = (baseEl, opts) => {
         wrapperAnimation.fromTo('opacity', '0', '1');
       }
       else {
-        const toPresentingScale = (hasCardModal) ? SwipeToCloseDefaults.MIN_PRESENTING_SCALE : 1;
+        const toPresentingScale = hasCardModal ? SwipeToCloseDefaults.MIN_PRESENTING_SCALE : 1;
         const finalTransform = `translateY(-10px) scale(${toPresentingScale})`;
         presentingAnimation
           .afterStyles({
-          'transform': finalTransform
+          transform: finalTransform,
         })
           .addElement(presentingElRoot.querySelector('.modal-wrapper'))
           .keyframes([
           { offset: 0, filter: 'contrast(1)', transform: 'translateY(0) scale(1)' },
-          { offset: 1, filter: 'contrast(0.85)', transform: finalTransform }
+          { offset: 1, filter: 'contrast(0.85)', transform: finalTransform },
         ]);
         const shadowAnimation = createAnimation()
           .afterStyles({
-          'transform': finalTransform
+          transform: finalTransform,
         })
           .addElement(presentingElRoot.querySelector('.modal-shadow'))
           .keyframes([
           { offset: 0, opacity: '1', transform: 'translateY(0) scale(1)' },
-          { offset: 1, opacity: '0', transform: finalTransform }
+          { offset: 1, opacity: '0', transform: finalTransform },
         ]);
         baseAnimation.addAnimation([presentingAnimation, shadowAnimation]);
       }
@@ -36157,10 +36124,8 @@ const iosEnterAnimation$3 = (baseEl, opts) => {
  * (C) Ionic http://ionicframework.com - MIT License
  */
 const createLeaveAnimation$1 = () => {
-  const backdropAnimation = createAnimation()
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
-  const wrapperAnimation = createAnimation()
-    .fromTo('transform', 'translateY(0vh)', 'translateY(100vh)');
+  const backdropAnimation = createAnimation().fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  const wrapperAnimation = createAnimation().fromTo('transform', 'translateY(0vh)', 'translateY(100vh)');
   return { backdropAnimation, wrapperAnimation };
 };
 /**
@@ -36171,9 +36136,7 @@ const iosLeaveAnimation$3 = (baseEl, opts, duration = 500) => {
   const root = getElementRoot(baseEl);
   const { wrapperAnimation, backdropAnimation } = currentBreakpoint !== undefined ? createSheetLeaveAnimation(opts) : createLeaveAnimation$1();
   backdropAnimation.addElement(root.querySelector('ion-backdrop'));
-  wrapperAnimation
-    .addElement(root.querySelectorAll('.modal-wrapper, .modal-shadow'))
-    .beforeStyles({ 'opacity': 1 });
+  wrapperAnimation.addElement(root.querySelectorAll('.modal-wrapper, .modal-shadow')).beforeStyles({ opacity: 1 });
   const baseAnimation = createAnimation('leaving-base')
     .addElement(baseEl)
     .easing('cubic-bezier(0.32,0.72,0,1)')
@@ -36181,33 +36144,31 @@ const iosLeaveAnimation$3 = (baseEl, opts, duration = 500) => {
     .addAnimation(wrapperAnimation);
   if (presentingEl) {
     const isMobile = window.innerWidth < 768;
-    const hasCardModal = (presentingEl.tagName === 'ION-MODAL' && presentingEl.presentingElement !== undefined);
+    const hasCardModal = presentingEl.tagName === 'ION-MODAL' && presentingEl.presentingElement !== undefined;
     const presentingElRoot = getElementRoot(presentingEl);
     const presentingAnimation = createAnimation()
       .beforeClearStyles(['transform'])
       .afterClearStyles(['transform'])
-      .onFinish(currentStep => {
+      .onFinish((currentStep) => {
       // only reset background color if this is the last card-style modal
       if (currentStep !== 1) {
         return;
       }
       presentingEl.style.setProperty('overflow', '');
-      const numModals = Array.from(bodyEl.querySelectorAll('ion-modal')).filter(m => m.presentingElement !== undefined).length;
+      const numModals = Array.from(bodyEl.querySelectorAll('ion-modal')).filter((m) => m.presentingElement !== undefined).length;
       if (numModals <= 1) {
         bodyEl.style.setProperty('background-color', '');
       }
     });
     const bodyEl = document.body;
     if (isMobile) {
-      const transformOffset = (!CSS.supports('width', 'max(0px, 1px)')) ? '30px' : 'max(30px, var(--ion-safe-area-top))';
+      const transformOffset = !CSS.supports('width', 'max(0px, 1px)') ? '30px' : 'max(30px, var(--ion-safe-area-top))';
       const modalTransform = hasCardModal ? '-10px' : transformOffset;
       const toPresentingScale = SwipeToCloseDefaults.MIN_PRESENTING_SCALE;
       const finalTransform = `translateY(${modalTransform}) scale(${toPresentingScale})`;
-      presentingAnimation
-        .addElement(presentingEl)
-        .keyframes([
+      presentingAnimation.addElement(presentingEl).keyframes([
         { offset: 0, filter: 'contrast(0.85)', transform: finalTransform, borderRadius: '10px 10px 0 0' },
-        { offset: 1, filter: 'contrast(1)', transform: 'translateY(0px) scale(1)', borderRadius: '0px' }
+        { offset: 1, filter: 'contrast(1)', transform: 'translateY(0px) scale(1)', borderRadius: '0px' },
       ]);
       baseAnimation.addAnimation(presentingAnimation);
     }
@@ -36217,25 +36178,25 @@ const iosLeaveAnimation$3 = (baseEl, opts, duration = 500) => {
         wrapperAnimation.fromTo('opacity', '1', '0');
       }
       else {
-        const toPresentingScale = (hasCardModal) ? SwipeToCloseDefaults.MIN_PRESENTING_SCALE : 1;
+        const toPresentingScale = hasCardModal ? SwipeToCloseDefaults.MIN_PRESENTING_SCALE : 1;
         const finalTransform = `translateY(-10px) scale(${toPresentingScale})`;
         presentingAnimation
           .addElement(presentingElRoot.querySelector('.modal-wrapper'))
           .afterStyles({
-          'transform': 'translate3d(0, 0, 0)'
+          transform: 'translate3d(0, 0, 0)',
         })
           .keyframes([
           { offset: 0, filter: 'contrast(0.85)', transform: finalTransform },
-          { offset: 1, filter: 'contrast(1)', transform: 'translateY(0) scale(1)' }
+          { offset: 1, filter: 'contrast(1)', transform: 'translateY(0) scale(1)' },
         ]);
         const shadowAnimation = createAnimation()
           .addElement(presentingElRoot.querySelector('.modal-shadow'))
           .afterStyles({
-          'transform': 'translateY(0) scale(1)'
+          transform: 'translateY(0) scale(1)',
         })
           .keyframes([
           { offset: 0, opacity: '0', transform: finalTransform },
-          { offset: 1, opacity: '1', transform: 'translateY(0) scale(1)' }
+          { offset: 1, opacity: '1', transform: 'translateY(0) scale(1)' },
         ]);
         baseAnimation.addAnimation([presentingAnimation, shadowAnimation]);
       }
@@ -36254,13 +36215,12 @@ const createEnterAnimation = () => {
   const backdropAnimation = createAnimation()
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
-    'pointer-events': 'none'
+    'pointer-events': 'none',
   })
     .afterClearStyles(['pointer-events']);
-  const wrapperAnimation = createAnimation()
-    .keyframes([
+  const wrapperAnimation = createAnimation().keyframes([
     { offset: 0, opacity: 0.01, transform: 'translateY(40px)' },
-    { offset: 1, opacity: 1, transform: `translateY(0px)` }
+    { offset: 1, opacity: 1, transform: `translateY(0px)` },
   ]);
   return { backdropAnimation, wrapperAnimation };
 };
@@ -36271,10 +36231,8 @@ const mdEnterAnimation$2 = (baseEl, opts) => {
   const { currentBreakpoint } = opts;
   const root = getElementRoot(baseEl);
   const { wrapperAnimation, backdropAnimation } = currentBreakpoint !== undefined ? createSheetEnterAnimation(opts) : createEnterAnimation();
-  backdropAnimation
-    .addElement(root.querySelector('ion-backdrop'));
-  wrapperAnimation
-    .addElement(root.querySelector('.modal-wrapper'));
+  backdropAnimation.addElement(root.querySelector('ion-backdrop'));
+  wrapperAnimation.addElement(root.querySelector('.modal-wrapper'));
   return createAnimation()
     .addElement(baseEl)
     .easing('cubic-bezier(0.36,0.66,0.04,1)')
@@ -36286,12 +36244,10 @@ const mdEnterAnimation$2 = (baseEl, opts) => {
  * (C) Ionic http://ionicframework.com - MIT License
  */
 const createLeaveAnimation = () => {
-  const backdropAnimation = createAnimation()
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
-  const wrapperAnimation = createAnimation()
-    .keyframes([
+  const backdropAnimation = createAnimation().fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  const wrapperAnimation = createAnimation().keyframes([
     { offset: 0, opacity: 0.99, transform: `translateY(0px)` },
-    { offset: 1, opacity: 0, transform: 'translateY(40px)' }
+    { offset: 1, opacity: 0, transform: 'translateY(40px)' },
   ]);
   return { backdropAnimation, wrapperAnimation };
 };
@@ -36317,26 +36273,26 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
   // Defaults for the sheet swipe animation
   const defaultBackdrop = [
     { offset: 0, opacity: 'var(--backdrop-opacity)' },
-    { offset: 1, opacity: 0.01 }
+    { offset: 1, opacity: 0.01 },
   ];
   const customBackdrop = [
     { offset: 0, opacity: 'var(--backdrop-opacity)' },
     { offset: 1 - backdropBreakpoint, opacity: 0 },
-    { offset: 1, opacity: 0 }
+    { offset: 1, opacity: 0 },
   ];
   const SheetDefaults = {
     WRAPPER_KEYFRAMES: [
       { offset: 0, transform: 'translateY(0%)' },
-      { offset: 1, transform: 'translateY(100%)' }
+      { offset: 1, transform: 'translateY(100%)' },
     ],
-    BACKDROP_KEYFRAMES: (backdropBreakpoint !== 0) ? customBackdrop : defaultBackdrop
+    BACKDROP_KEYFRAMES: backdropBreakpoint !== 0 ? customBackdrop : defaultBackdrop,
   };
   const contentEl = baseEl.querySelector('ion-content');
   const height = wrapperEl.clientHeight;
   let currentBreakpoint = initialBreakpoint;
   let offset = 0;
-  const wrapperAnimation = animation.childAnimations.find(ani => ani.id === 'wrapperAnimation');
-  const backdropAnimation = animation.childAnimations.find(ani => ani.id === 'backdropAnimation');
+  const wrapperAnimation = animation.childAnimations.find((ani) => ani.id === 'wrapperAnimation');
+  const backdropAnimation = animation.childAnimations.find((ani) => ani.id === 'backdropAnimation');
   const maxBreakpoint = breakpoints[breakpoints.length - 1];
   const enableBackdrop = () => {
     baseEl.style.setProperty('pointer-events', 'auto');
@@ -36428,7 +36384,7 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
      * relative to where the user dragged.
      */
     const initialStep = 1 - currentBreakpoint;
-    offset = clamp(0.0001, initialStep + (detail.deltaY / height), 0.9999);
+    offset = clamp(0.0001, initialStep + detail.deltaY / height, 0.9999);
     animation.progressStep(offset);
   };
   const onEnd = (detail) => {
@@ -36451,11 +36407,17 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
     if (wrapperAnimation && backdropAnimation) {
       wrapperAnimation.keyframes([
         { offset: 0, transform: `translateY(${offset * 100}%)` },
-        { offset: 1, transform: `translateY(${(1 - closest) * 100}%)` }
+        { offset: 1, transform: `translateY(${(1 - closest) * 100}%)` },
       ]);
       backdropAnimation.keyframes([
-        { offset: 0, opacity: `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(1 - offset, backdropBreakpoint)})` },
-        { offset: 1, opacity: `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(closest, backdropBreakpoint)})` }
+        {
+          offset: 0,
+          opacity: `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(1 - offset, backdropBreakpoint)})`,
+        },
+        {
+          offset: 1,
+          opacity: `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(closest, backdropBreakpoint)})`,
+        },
       ]);
       animation.progressStep(0);
     }
@@ -36526,7 +36488,7 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
     canStart,
     onStart,
     onMove,
-    onEnd
+    onEnd,
   });
   return gesture;
 };
@@ -36607,7 +36569,7 @@ class Modal {
       if (destroyTriggerInteraction) {
         destroyTriggerInteraction();
       }
-      const triggerEl = (trigger !== undefined) ? document.getElementById(trigger) : null;
+      const triggerEl = trigger !== undefined ? document.getElementById(trigger) : null;
       if (!triggerEl) {
         return;
       }
@@ -36637,7 +36599,7 @@ class Modal {
         const ev = new CustomEvent(name, {
           bubbles: false,
           cancelable: false,
-          detail: modalEvent.detail
+          detail: modalEvent.detail,
         });
         el.dispatchEvent(ev);
       }
@@ -36671,7 +36633,7 @@ class Modal {
      * If user has custom ID set then we should
      * not assign the default incrementing ID.
      */
-    this.modalId = (this.el.hasAttribute('id')) ? this.el.getAttribute('id') : `ion-modal-${this.modalIndex}`;
+    this.modalId = this.el.hasAttribute('id') ? this.el.getAttribute('id') : `ion-modal-${this.modalIndex}`;
     this.isSheetModal = breakpoints !== undefined && initialBreakpoint !== undefined;
     if (breakpoints !== undefined && initialBreakpoint !== undefined && !breakpoints.includes(initialBreakpoint)) {
       console.warn('[Ionic Warning]: Your breakpoints array must include the initialBreakpoint value.');
@@ -36700,7 +36662,7 @@ class Modal {
     if (this.workingDelegate && !force) {
       return {
         delegate: this.workingDelegate,
-        inline: this.inline
+        inline: this.inline,
       };
     }
     /**
@@ -36713,8 +36675,8 @@ class Modal {
      * correct place.
      */
     const parentEl = this.el.parentNode;
-    const inline = this.inline = parentEl !== null && !this.hasController;
-    const delegate = this.workingDelegate = (inline) ? this.delegate || this.coreDelegate : this.delegate;
+    const inline = (this.inline = parentEl !== null && !this.hasController);
+    const delegate = (this.workingDelegate = inline ? this.delegate || this.coreDelegate : this.delegate);
     return { inline, delegate };
   }
   /**
@@ -36740,7 +36702,11 @@ class Modal {
     this.usersElement = await attachComponent(delegate, this.el, this.component, ['ion-page'], data, inline);
     await deepReady(this.usersElement);
     writeTask(() => this.el.classList.add('show-modal'));
-    this.currentTransition = present(this, 'modalEnter', iosEnterAnimation$3, mdEnterAnimation$2, { presentingEl: this.presentingElement, currentBreakpoint: this.initialBreakpoint, backdropBreakpoint: this.backdropBreakpoint });
+    this.currentTransition = present(this, 'modalEnter', iosEnterAnimation$3, mdEnterAnimation$2, {
+      presentingEl: this.presentingElement,
+      currentBreakpoint: this.initialBreakpoint,
+      backdropBreakpoint: this.backdropBreakpoint,
+    });
     await this.currentTransition;
     if (this.isSheetModal) {
       this.initSheetGesture();
@@ -36748,7 +36714,6 @@ class Modal {
     else if (this.swipeToClose) {
       this.initSwipeToClose();
     }
-    /* tslint:disable-next-line */
     if (typeof window !== 'undefined') {
       this.keyboardOpenCallback = () => {
         if (this.gesture) {
@@ -36781,7 +36746,7 @@ class Modal {
     // should be in the DOM and referenced by now, except
     // for the presenting el
     const animationBuilder = this.leaveAnimation || config$1.get('modalLeave', iosLeaveAnimation$3);
-    const ani = this.animation = animationBuilder(this.el, { presentingEl: this.presentingElement });
+    const ani = (this.animation = animationBuilder(this.el, { presentingEl: this.presentingElement }));
     this.gesture = createSwipeToCloseGesture(this.el, ani, () => {
       /**
        * While the gesture animation is finishing
@@ -36808,7 +36773,11 @@ class Modal {
       return;
     }
     const animationBuilder = this.enterAnimation || config$1.get('modalEnter', iosEnterAnimation$3);
-    const ani = this.animation = animationBuilder(this.el, { presentingEl: this.presentingElement, currentBreakpoint: initialBreakpoint, backdropBreakpoint });
+    const ani = (this.animation = animationBuilder(this.el, {
+      presentingEl: this.presentingElement,
+      currentBreakpoint: initialBreakpoint,
+      backdropBreakpoint,
+    }));
     ani.progressStart(true, 1);
     const sortedBreakpoints = ((_a = this.breakpoints) === null || _a === void 0 ? void 0 : _a.sort((a, b) => a - b)) || [];
     this.gesture = createSheetGesture(this.el, this.backdropEl, wrapperEl, initialBreakpoint, backdropBreakpoint, ani, sortedBreakpoints, () => {
@@ -36842,7 +36811,6 @@ class Modal {
     if (this.gestureAnimationDismissing && role !== 'gesture') {
       return false;
     }
-    /* tslint:disable-next-line */
     if (typeof window !== 'undefined' && this.keyboardOpenCallback) {
       window.removeEventListener(KEYBOARD_DID_OPEN, this.keyboardOpenCallback);
     }
@@ -36858,7 +36826,11 @@ class Modal {
       await this.currentTransition;
     }
     const enteringAnimation = activeAnimations.get(this) || [];
-    this.currentTransition = dismiss(this, data, role, 'modalLeave', iosLeaveAnimation$3, mdLeaveAnimation$2, { presentingEl: this.presentingElement, currentBreakpoint: this.currentBreakpoint || this.initialBreakpoint, backdropBreakpoint: this.backdropBreakpoint });
+    this.currentTransition = dismiss(this, data, role, 'modalLeave', iosLeaveAnimation$3, mdLeaveAnimation$2, {
+      presentingEl: this.presentingElement,
+      currentBreakpoint: this.currentBreakpoint || this.initialBreakpoint,
+      backdropBreakpoint: this.backdropBreakpoint,
+    });
     const dismissed = await this.currentTransition;
     if (dismissed) {
       const { delegate } = this.getDelegate();
@@ -36870,7 +36842,7 @@ class Modal {
       if (this.gesture) {
         this.gesture.destroy();
       }
-      enteringAnimation.forEach(ani => ani.destroy());
+      enteringAnimation.forEach((ani) => ani.destroy());
     }
     this.currentTransition = undefined;
     this.animation = undefined;
@@ -36896,7 +36868,7 @@ class Modal {
     const isCardModal = presentingElement !== undefined && mode === 'ios';
     return (hAsync(Host, Object.assign({ "no-router": true, "aria-modal": "true", tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${20000 + this.overlayIndex}`,
-      }, class: Object.assign({ [mode]: true, ['modal-default']: !isCardModal && !isSheetModal, [`modal-card`]: isCardModal, [`modal-sheet`]: isSheetModal, 'overlay-hidden': true }, getClassMap(this.cssClass)), id: modalId, onIonBackdropTap: this.onBackdropTap, onIonDismiss: this.onDismiss, onIonModalDidPresent: this.onLifecycle, onIonModalWillPresent: this.onLifecycle, onIonModalWillDismiss: this.onLifecycle, onIonModalDidDismiss: this.onLifecycle }), hAsync("ion-backdrop", { ref: el => this.backdropEl = el, visible: this.showBackdrop, tappable: this.backdropDismiss, part: "backdrop" }), mode === 'ios' && hAsync("div", { class: "modal-shadow" }), hAsync("div", { role: "dialog", class: "modal-wrapper ion-overlay-wrapper", part: "content", ref: el => this.wrapperEl = el }, showHandle && hAsync("div", { class: "modal-handle", part: "handle" }), hAsync("slot", null))));
+      }, class: Object.assign({ [mode]: true, ['modal-default']: !isCardModal && !isSheetModal, [`modal-card`]: isCardModal, [`modal-sheet`]: isSheetModal, 'overlay-hidden': true }, getClassMap(this.cssClass)), id: modalId, onIonBackdropTap: this.onBackdropTap, onIonDismiss: this.onDismiss, onIonModalDidPresent: this.onLifecycle, onIonModalWillPresent: this.onLifecycle, onIonModalWillDismiss: this.onLifecycle, onIonModalDidDismiss: this.onLifecycle }), hAsync("ion-backdrop", { ref: (el) => (this.backdropEl = el), visible: this.showBackdrop, tappable: this.backdropDismiss, part: "backdrop" }), mode === 'ios' && hAsync("div", { class: "modal-shadow" }), hAsync("div", { role: "dialog", class: "modal-wrapper ion-overlay-wrapper", part: "content", ref: (el) => (this.wrapperEl = el) }, showHandle && hAsync("div", { class: "modal-handle", part: "handle" }), hAsync("slot", null))));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -36945,10 +36917,10 @@ class Modal {
   }; }
 }
 const LIFECYCLE_MAP$1 = {
-  'ionModalDidPresent': 'ionViewDidEnter',
-  'ionModalWillPresent': 'ionViewWillEnter',
-  'ionModalWillDismiss': 'ionViewWillLeave',
-  'ionModalDidDismiss': 'ionViewDidLeave',
+  ionModalDidPresent: 'ionViewDidEnter',
+  ionModalWillPresent: 'ionViewWillEnter',
+  ionModalWillDismiss: 'ionViewWillLeave',
+  ionModalDidDismiss: 'ionViewDidLeave',
 };
 let modalIds = 0;
 
@@ -37008,7 +36980,8 @@ const convertToView = (page, params) => {
   return new ViewController(page, params);
 };
 const convertToViews = (pages) => {
-  return pages.map(page => {
+  return pages
+    .map((page) => {
     if (page instanceof ViewController) {
       return page;
     }
@@ -37020,10 +36993,11 @@ const convertToViews = (pages) => {
        * `NavComponentWithProps`. Previously `pages` was
        * of type `any[]` so TypeScript did not catch this.
        */
-      return convertToView(page.component, (page.componentProps === null) ? undefined : page.componentProps);
+      return convertToView(page.component, page.componentProps === null ? undefined : page.componentProps);
     }
     return convertToView(page, undefined);
-  }).filter(v => v !== null);
+  })
+    .filter((v) => v !== null);
 };
 
 const navCss = "/*!@:host*/.sc-ion-nav-h{left:0;right:0;top:0;bottom:0;position:absolute;contain:layout size style;overflow:hidden;z-index:0}";
@@ -37124,7 +37098,7 @@ class Nav {
     return this.queueTrns({
       insertStart: insertIndex,
       insertViews: insertComponents,
-      opts
+      opts,
     }, done);
   }
   /**
@@ -37148,7 +37122,7 @@ class Nav {
     const ti = {
       removeStart: -1,
       removeCount: -1,
-      opts
+      opts,
     };
     if (typeof indexOrViewCtrl === 'object' && indexOrViewCtrl.component) {
       ti.removeView = indexOrViewCtrl;
@@ -37180,7 +37154,7 @@ class Nav {
     return this.queueTrns({
       removeStart: startIndex,
       removeCount,
-      opts
+      opts,
     }, done);
   }
   /**
@@ -37215,7 +37189,7 @@ class Nav {
       insertViews: views,
       removeStart: 0,
       removeCount: -1,
-      opts
+      opts,
     }, done);
   }
   /**
@@ -37234,34 +37208,34 @@ class Nav {
     if (matches(active, id, params)) {
       return Promise.resolve({
         changed: false,
-        element: active.element
+        element: active.element,
       });
     }
     let resolve;
-    const promise = new Promise(r => (resolve = r));
+    const promise = new Promise((r) => (resolve = r));
     let finish;
     const commonOpts = {
       updateURL: false,
-      viewIsReady: enteringEl => {
+      viewIsReady: (enteringEl) => {
         let mark;
-        const p = new Promise(r => (mark = r));
+        const p = new Promise((r) => (mark = r));
         resolve({
           changed: true,
           element: enteringEl,
           markVisible: async () => {
             mark();
             await finish;
-          }
+          },
         });
         return p;
-      }
+      },
     };
     if (direction === 'root') {
       finish = this.setRoot(id, params, commonOpts);
     }
     else {
       // Look for a view matching the target in the view stack.
-      const viewController = this.views.find(v => matches(v, id, params));
+      const viewController = this.views.find((v) => matches(v, id, params));
       if (viewController) {
         finish = this.popTo(viewController, Object.assign(Object.assign({}, commonOpts), { direction: 'back', animationBuilder: animation }));
       }
@@ -37285,7 +37259,7 @@ class Nav {
       return {
         id: active.element.tagName,
         params: active.params,
-        element: active.element
+        element: active.element,
       };
     }
     return undefined;
@@ -37477,7 +37451,7 @@ class Nav {
         // resolve immediately because there's no animation that's happening
         result = {
           hasCompleted: true,
-          requiresTransition: false
+          requiresTransition: false,
         };
       }
       this.success(result, ti);
@@ -37511,8 +37485,7 @@ class Nav {
       if (ti.removeCount < 0) {
         ti.removeCount = viewsLength - ti.removeStart;
       }
-      ti.leavingRequiresTransition =
-        ti.removeCount > 0 && ti.removeStart + ti.removeCount === viewsLength;
+      ti.leavingRequiresTransition = ti.removeCount > 0 && ti.removeStart + ti.removeCount === viewsLength;
     }
     if (ti.insertViews) {
       // allow -1 to be passed in to auto push it on the end
@@ -37644,9 +37617,7 @@ class Nav {
     // we should animate (duration > 0) if the pushed page is not the first one (startup)
     // or if it is a portal (modal, actionsheet, etc.)
     const opts = ti.opts;
-    const progressCallback = opts.progressAnimation
-      ? (ani) => this.sbAni = ani
-      : undefined;
+    const progressCallback = opts.progressAnimation ? (ani) => (this.sbAni = ani) : undefined;
     const mode = getIonMode$1(this);
     const enteringEl = enteringView.element;
     const leavingEl = leavingView && leavingView.element;
@@ -37665,7 +37636,7 @@ class Nav {
       requiresTransition: true,
       enteringView,
       leavingView,
-      direction: opts.direction
+      direction: opts.direction,
     };
   }
   /**
@@ -37772,7 +37743,7 @@ class Nav {
         this.animationEnabled = true;
       }, { oneTimeCallback: true });
       // Account for rounding errors in JS
-      let newStepValue = (shouldComplete) ? -0.001 : 0.001;
+      let newStepValue = shouldComplete ? -0.001 : 0.001;
       /**
        * Animation will be reversed here, so need to
        * reverse the easing curve as well
@@ -37792,7 +37763,7 @@ class Nav {
     }
   }
   render() {
-    return (hAsync("slot", null));
+    return hAsync("slot", null);
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -37867,7 +37838,7 @@ class NavLink {
     };
   }
   render() {
-    return (hAsync(Host, { onClick: this.onClick }));
+    return hAsync(Host, { onClick: this.onClick });
   }
   get el() { return getElement(this); }
   static get cmpMeta() { return {
@@ -38209,7 +38180,7 @@ const iosEnterAnimation$2 = (baseEl) => {
     .addElement(baseEl.querySelector('ion-backdrop'))
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
-    'pointer-events': 'none'
+    'pointer-events': 'none',
   })
     .afterClearStyles(['pointer-events']);
   wrapperAnimation
@@ -38294,7 +38265,7 @@ class Picker {
     this.dispatchCancelHandler = (ev) => {
       const role = ev.detail.role;
       if (isCancel(role)) {
-        const cancelButton = this.buttons.find(b => b.role === 'cancel');
+        const cancelButton = this.buttons.find((b) => b.role === 'cancel');
         this.callButtonHandler(cancelButton);
       }
     };
@@ -38344,7 +38315,7 @@ class Picker {
    * @param name The name of the column.
    */
   getColumn(name) {
-    return Promise.resolve(this.columns.find(column => column.name === name));
+    return Promise.resolve(this.columns.find((column) => column.name === name));
   }
   async buttonClick(button) {
     const role = button.role;
@@ -38372,13 +38343,11 @@ class Picker {
   getSelected() {
     const selected = {};
     this.columns.forEach((col, index) => {
-      const selectedColumn = col.selectedIndex !== undefined
-        ? col.options[col.selectedIndex]
-        : undefined;
+      const selectedColumn = col.selectedIndex !== undefined ? col.options[col.selectedIndex] : undefined;
       selected[col.name] = {
         text: selectedColumn ? selectedColumn.text : undefined,
         value: selectedColumn ? selectedColumn.value : undefined,
-        columnIndex: index
+        columnIndex: index,
       };
     });
     return selected;
@@ -38387,10 +38356,10 @@ class Picker {
     const { htmlAttributes } = this;
     const mode = getIonMode$1(this);
     return (hAsync(Host, Object.assign({ "aria-modal": "true", tabindex: "-1" }, htmlAttributes, { style: {
-        zIndex: `${20000 + this.overlayIndex}`
+        zIndex: `${20000 + this.overlayIndex}`,
       }, class: Object.assign({ [mode]: true,
         // Used internally for styling
-        [`picker-${mode}`]: true, 'overlay-hidden': true }, getClassMap(this.cssClass)), onIonBackdropTap: this.onBackdropTap, onIonPickerWillDismiss: this.dispatchCancelHandler }), hAsync("ion-backdrop", { visible: this.showBackdrop, tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "picker-wrapper ion-overlay-wrapper", role: "dialog" }, hAsync("div", { class: "picker-toolbar" }, this.buttons.map(b => (hAsync("div", { class: buttonWrapperClass(b) }, hAsync("button", { type: "button", onClick: () => this.buttonClick(b), class: buttonClass$1(b) }, b.text))))), hAsync("div", { class: "picker-columns" }, hAsync("div", { class: "picker-above-highlight" }), this.presented && this.columns.map(c => hAsync("ion-picker-column", { col: c })), hAsync("div", { class: "picker-below-highlight" }))), hAsync("div", { tabindex: "0" })));
+        [`picker-${mode}`]: true, 'overlay-hidden': true }, getClassMap(this.cssClass)), onIonBackdropTap: this.onBackdropTap, onIonPickerWillDismiss: this.dispatchCancelHandler }), hAsync("ion-backdrop", { visible: this.showBackdrop, tappable: this.backdropDismiss }), hAsync("div", { tabindex: "0" }), hAsync("div", { class: "picker-wrapper ion-overlay-wrapper", role: "dialog" }, hAsync("div", { class: "picker-toolbar" }, this.buttons.map((b) => (hAsync("div", { class: buttonWrapperClass(b) }, hAsync("button", { type: "button", onClick: () => this.buttonClick(b), class: buttonClass$1(b) }, b.text))))), hAsync("div", { class: "picker-columns" }, hAsync("div", { class: "picker-above-highlight" }), this.presented && this.columns.map((c) => hAsync("ion-picker-column", { col: c })), hAsync("div", { class: "picker-below-highlight" }))), hAsync("div", { tabindex: "0" })));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -38428,7 +38397,7 @@ class Picker {
 const buttonWrapperClass = (button) => {
   return {
     [`picker-toolbar-${button.role}`]: button.role !== undefined,
-    'picker-toolbar-button': true
+    'picker-toolbar-button': true,
   };
 };
 const buttonClass$1 = (button) => {
@@ -38472,9 +38441,9 @@ class PickerColumnCmp {
       gesturePriority: 100,
       threshold: 0,
       passive: false,
-      onStart: ev => this.onStart(ev),
-      onMove: ev => this.onMove(ev),
-      onEnd: ev => this.onEnd(ev),
+      onStart: (ev) => this.onStart(ev),
+      onMove: (ev) => this.onMove(ev),
+      onEnd: (ev) => this.onEnd(ev),
     });
     this.gesture.enable();
     this.tmrId = setTimeout(() => {
@@ -38487,7 +38456,7 @@ class PickerColumnCmp {
     if (colEl) {
       // DOM READ
       // We perfom a DOM read over a rendered item, this needs to happen after the first render
-      this.optHeight = (colEl.firstElementChild ? colEl.firstElementChild.clientHeight : 0);
+      this.optHeight = colEl.firstElementChild ? colEl.firstElementChild.clientHeight : 0;
     }
     this.refresh();
   }
@@ -38505,7 +38474,7 @@ class PickerColumnCmp {
   setSelected(selectedIndex, duration) {
     // if there is a selected index, then figure out it's y position
     // if there isn't a selected index, then just use the top y position
-    const y = (selectedIndex > -1) ? -(selectedIndex * this.optHeight) : 0;
+    const y = selectedIndex > -1 ? -(selectedIndex * this.optHeight) : 0;
     this.velocity = 0;
     // set what y position we're at
     cancelAnimationFrame(this.rafId);
@@ -38520,14 +38489,14 @@ class PickerColumnCmp {
     let translateY = 0;
     let translateZ = 0;
     const { col, rotateFactor } = this;
-    const selectedIndex = col.selectedIndex = this.indexForY(-y);
-    const durationStr = (duration === 0) ? '' : duration + 'ms';
+    const selectedIndex = (col.selectedIndex = this.indexForY(-y));
+    const durationStr = duration === 0 ? '' : duration + 'ms';
     const scaleStr = `scale(${this.scaleFactor})`;
     const children = this.optsEl.children;
     for (let i = 0; i < children.length; i++) {
       const button = children[i];
       const opt = col.options[i];
-      const optOffset = (i * this.optHeight) + y;
+      const optOffset = i * this.optHeight + y;
       let transform = '';
       if (rotateFactor !== 0) {
         const rotateX = optOffset * rotateFactor;
@@ -38561,8 +38530,8 @@ class PickerColumnCmp {
       // Update transform
       if (transform !== opt.transform) {
         opt.transform = transform;
-        button.style.transform = transform;
       }
+      button.style.transform = transform;
       // Update selected item
       if (selected !== opt.selected) {
         opt.selected = selected;
@@ -38589,9 +38558,7 @@ class PickerColumnCmp {
       // still decelerating
       this.velocity *= DECELERATION_FRICTION;
       // do not let it go slower than a velocity of 1
-      this.velocity = (this.velocity > 0)
-        ? Math.max(this.velocity, 1)
-        : Math.min(this.velocity, -1);
+      this.velocity = this.velocity > 0 ? Math.max(this.velocity, 1) : Math.min(this.velocity, -1);
       let y = this.y + this.velocity;
       if (y > this.minY) {
         // whoops, it's trying to scroll up farther than the options we have!
@@ -38604,7 +38571,7 @@ class PickerColumnCmp {
         this.velocity = 0;
       }
       this.update(y, 0, true);
-      const notLockedIn = (Math.round(y) % this.optHeight !== 0) || (Math.abs(this.velocity) > 1);
+      const notLockedIn = Math.round(y) % this.optHeight !== 0 || Math.abs(this.velocity) > 1;
       if (notLockedIn) {
         // isn't locked in yet, keep decelerating until it is
         this.rafId = requestAnimationFrame(() => this.decelerate());
@@ -38619,7 +38586,7 @@ class PickerColumnCmp {
       // needs to still get locked into a position so options line up
       const currentPos = Math.abs(this.y % this.optHeight);
       // create a velocity in the direction it needs to scroll
-      this.velocity = (currentPos > (this.optHeight / 2) ? 1 : -1);
+      this.velocity = currentPos > this.optHeight / 2 ? 1 : -1;
       this.decelerate();
     }
   }
@@ -38639,7 +38606,7 @@ class PickerColumnCmp {
     // reset everything
     cancelAnimationFrame(this.rafId);
     const options = this.col.options;
-    let minY = (options.length - 1);
+    let minY = options.length - 1;
     let maxY = 0;
     for (let i = 0; i < options.length; i++) {
       if (!options[i].disabled) {
@@ -38688,7 +38655,7 @@ class PickerColumnCmp {
     this.velocity = clamp(-MAX_PICKER_SPEED, detail.velocityY * 23, MAX_PICKER_SPEED);
     if (this.velocity === 0 && detail.deltaY === 0) {
       const opt = detail.event.target.closest('.picker-opt');
-      if (opt && opt.hasAttribute('opt-index')) {
+      if (opt === null || opt === void 0 ? void 0 : opt.hasAttribute('opt-index')) {
         this.setSelected(parseInt(opt.getAttribute('opt-index'), 10), TRANSITION_DURATION);
       }
     }
@@ -38729,7 +38696,7 @@ class PickerColumnCmp {
     }
     const selectedIndex = clamp(min, this.col.selectedIndex || 0, max);
     if (this.col.prevSelected !== selectedIndex || forceRefresh) {
-      const y = (selectedIndex * this.optHeight) * -1;
+      const y = selectedIndex * this.optHeight * -1;
       this.velocity = 0;
       this.update(y, TRANSITION_DURATION, true);
     }
@@ -38742,10 +38709,10 @@ class PickerColumnCmp {
         [mode]: true,
         'picker-col': true,
         'picker-opts-left': this.col.align === 'left',
-        'picker-opts-right': this.col.align === 'right'
+        'picker-opts-right': this.col.align === 'right',
       }, style: {
-        'max-width': this.col.columnWidth
-      } }, col.prefix && (hAsync("div", { class: "picker-prefix", style: { width: col.prefixWidth } }, col.prefix)), hAsync("div", { class: "picker-opts", style: { maxWidth: col.optionsWidth }, ref: el => this.optsEl = el }, col.options.map((o, index) => hAsync(Button, { type: "button", class: { 'picker-opt': true, 'picker-opt-disabled': !!o.disabled }, "opt-index": index }, o.text))), col.suffix && (hAsync("div", { class: "picker-suffix", style: { width: col.suffixWidth } }, col.suffix))));
+        'max-width': this.col.columnWidth,
+      } }, col.prefix && (hAsync("div", { class: "picker-prefix", style: { width: col.prefixWidth } }, col.prefix)), hAsync("div", { class: "picker-opts", style: { maxWidth: col.optionsWidth }, ref: (el) => (this.optsEl = el) }, col.options.map((o, index) => (hAsync(Button, { type: "button", class: { 'picker-opt': true, 'picker-opt-disabled': !!o.disabled }, "opt-index": index }, o.text)))), col.suffix && (hAsync("div", { class: "picker-suffix", style: { width: col.suffixWidth } }, col.suffix))));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -38810,12 +38777,12 @@ class PickerColumnInternal {
       const { el, isColumnVisible } = this;
       if (isColumnVisible) {
         // (Vertical offset from parent) - (three empty picker rows) + (half the height of the target to ensure the scroll triggers)
-        const top = target.offsetTop - (3 * target.clientHeight) + (target.clientHeight / 2);
+        const top = target.offsetTop - 3 * target.clientHeight + target.clientHeight / 2;
         if (el.scrollTop !== top) {
           el.scroll({
             top,
             left: 0,
-            behavior: smooth ? 'smooth' : undefined
+            behavior: smooth ? 'smooth' : undefined,
           });
         }
       }
@@ -38866,8 +38833,8 @@ class PickerColumnInternal {
            * which is the month/year that we want to select
            */
           const bbox = el.getBoundingClientRect();
-          const centerX = bbox.x + (bbox.width / 2);
-          const centerY = bbox.y + (bbox.height / 2);
+          const centerX = bbox.x + bbox.width / 2;
+          const centerY = bbox.y + bbox.height / 2;
           const activeElement = el.shadowRoot.elementFromPoint(centerX, centerY);
           if (activeEl !== null) {
             activeEl.classList.remove(PICKER_COL_ACTIVE);
@@ -38987,7 +38954,7 @@ class PickerColumnInternal {
   setValue(value) {
     const { items } = this;
     this.value = value;
-    const findItem = items.find(item => item.value === value);
+    const findItem = items.find((item) => item.value === value);
     if (findItem) {
       this.ionChange.emit(findItem);
     }
@@ -39001,7 +38968,7 @@ class PickerColumnInternal {
     return (hAsync(Host, { tabindex: 0, class: createColorClasses$1(color, {
         [mode]: true,
         ['picker-column-active']: isActive,
-        ['picker-column-numeric-input']: numericInput
+        ['picker-column-numeric-input']: numericInput,
       }) }, hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), items.map((item, index) => {
       return (hAsync("div", { class: "picker-item", "data-value": item.value, "data-index": index, onClick: (ev) => {
           this.centerPickerItemInView(ev.target);
@@ -39073,8 +39040,7 @@ class PickerInternal {
      */
     this.onFocusOut = (ev) => {
       const { relatedTarget } = ev;
-      if (!relatedTarget ||
-        relatedTarget.tagName !== 'ION-PICKER-COLUMN-INTERNAL' && relatedTarget !== this.inputEl) {
+      if (!relatedTarget || (relatedTarget.tagName !== 'ION-PICKER-COLUMN-INTERNAL' && relatedTarget !== this.inputEl)) {
         this.exitInputMode();
       }
     };
@@ -39193,7 +39159,7 @@ class PickerInternal {
            * then we should skip multi column input.
            */
           const columns = el.querySelectorAll('ion-picker-column-internal.picker-column-numeric-input');
-          const columnEl = (columns.length === 1) ? ev.target : undefined;
+          const columnEl = columns.length === 1 ? ev.target : undefined;
           this.actionOnClick = () => {
             this.enterInputMode(columnEl);
           };
@@ -39353,9 +39319,8 @@ class PickerInternal {
      * or trailing zeros when looking at the item text.
      */
     this.searchColumn = (colEl, value, zeroBehavior = 'start') => {
-      let item;
       const behavior = zeroBehavior === 'start' ? /^0+/ : /0$/;
-      item = colEl.items.find(({ text }) => text.replace(behavior, '') === value);
+      const item = colEl.items.find(({ text }) => text.replace(behavior, '') === value);
       if (item) {
         colEl.value = item.value;
       }
@@ -39365,7 +39330,7 @@ class PickerInternal {
       if (!inputEl) {
         return;
       }
-      const numericPickers = Array.from(el.querySelectorAll('ion-picker-column-internal')).filter(col => col.numericInput);
+      const numericPickers = Array.from(el.querySelectorAll('ion-picker-column-internal')).filter((col) => col.numericInput);
       const firstColumn = numericPickers[0];
       const lastColumn = numericPickers[1];
       let value = inputEl.value;
@@ -39382,7 +39347,7 @@ class PickerInternal {
            * at that first.
            */
           const firstCharacter = inputEl.value.substring(0, 1);
-          value = (firstCharacter === '0' || firstCharacter === '1') ? inputEl.value : firstCharacter;
+          value = firstCharacter === '0' || firstCharacter === '1' ? inputEl.value : firstCharacter;
           this.searchColumn(firstColumn, value);
           /**
            * If only checked the first value,
@@ -39402,14 +39367,17 @@ class PickerInternal {
            * at that first.
            */
           const firstCharacterAgain = inputEl.value.substring(0, 1);
-          value = (firstCharacterAgain === '0' || firstCharacterAgain === '1') ? inputEl.value.substring(0, 2) : firstCharacterAgain;
+          value =
+            firstCharacterAgain === '0' || firstCharacterAgain === '1'
+              ? inputEl.value.substring(0, 2)
+              : firstCharacterAgain;
           this.searchColumn(firstColumn, value);
           /**
            * If only checked the first value,
            * we can check the second value
            * for a match in the minutes column
            */
-          minuteValue = (value.length === 1) ? inputEl.value.substring(1) : inputEl.value.substring(2);
+          minuteValue = value.length === 1 ? inputEl.value.substring(1) : inputEl.value.substring(2);
           this.searchColumn(lastColumn, minuteValue, 'end');
           break;
         case 4:
@@ -39420,14 +39388,19 @@ class PickerInternal {
            * at that first.
            */
           const firstCharacterAgainAgain = inputEl.value.substring(0, 1);
-          value = (firstCharacterAgainAgain === '0' || firstCharacterAgainAgain === '1') ? inputEl.value.substring(0, 2) : firstCharacterAgainAgain;
+          value =
+            firstCharacterAgainAgain === '0' || firstCharacterAgainAgain === '1'
+              ? inputEl.value.substring(0, 2)
+              : firstCharacterAgainAgain;
           this.searchColumn(firstColumn, value);
           /**
            * If only checked the first value,
            * we can check the second value
            * for a match in the minutes column
            */
-          const minuteValueAgain = (value.length === 1) ? inputEl.value.substring(1, inputEl.value.length) : inputEl.value.substring(2, inputEl.value.length);
+          const minuteValueAgain = value.length === 1
+            ? inputEl.value.substring(1, inputEl.value.length)
+            : inputEl.value.substring(2, inputEl.value.length);
           this.searchColumn(lastColumn, minuteValueAgain, 'end');
           break;
         default:
@@ -39464,7 +39437,7 @@ class PickerInternal {
       const { useInputMode, inputModeColumn } = this;
       this.ionInputModeChange.emit({
         useInputMode,
-        inputModeColumn
+        inputModeColumn,
       });
     };
   }
@@ -39473,7 +39446,7 @@ class PickerInternal {
     getElementRoot(this.el).addEventListener('focusout', this.onFocusOut);
   }
   render() {
-    return (hAsync(Host, { onPointerDown: (ev) => this.onPointerDown(ev), onClick: () => this.onClick() }, hAsync("input", { "aria-hidden": "true", tabindex: -1, inputmode: "numeric", type: "number", ref: el => this.inputEl = el, onInput: () => this.onInputChange(), onBlur: () => this.exitInputMode() }), hAsync("div", { class: "picker-before" }), hAsync("div", { class: "picker-after" }), hAsync("div", { class: "picker-highlight", ref: el => this.highlightEl = el }), hAsync("slot", null)));
+    return (hAsync(Host, { onPointerDown: (ev) => this.onPointerDown(ev), onClick: () => this.onClick() }, hAsync("input", { "aria-hidden": "true", tabindex: -1, inputmode: "numeric", type: "number", ref: (el) => (this.inputEl = el), onInput: () => this.onInputChange(), onBlur: () => this.exitInputMode() }), hAsync("div", { class: "picker-before" }), hAsync("div", { class: "picker-after" }), hAsync("div", { class: "picker-highlight", ref: (el) => (this.highlightEl = el) }), hAsync("slot", null)));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -39520,7 +39493,7 @@ const getPopoverDimensions = (size, contentEl, triggerEl) => {
   }
   return {
     contentWidth,
-    contentHeight
+    contentHeight,
   };
 };
 const configureDismissInteraction = (triggerEl, triggerAction, popoverEl, parentPopoverEl) => {
@@ -39553,8 +39526,8 @@ const configureDismissInteraction = (triggerEl, triggerAction, popoverEl, parent
               return;
             }
             popoverEl.dismiss(undefined, undefined, false);
-          }
-        }
+          },
+        },
       ];
       break;
     case 'context-menu':
@@ -39581,8 +39554,8 @@ const configureDismissInteraction = (triggerEl, triggerAction, popoverEl, parent
               return;
             }
             popoverEl.dismiss(undefined, undefined, false);
-          }
-        }
+          },
+        },
       ];
       break;
   }
@@ -39624,7 +39597,7 @@ const configureTriggerInteraction = (triggerEl, triggerAction, popoverEl) => {
                 hoverTimeout = undefined;
               });
             }, 100);
-          }
+          },
         },
         {
           eventName: 'mouseleave',
@@ -39644,7 +39617,7 @@ const configureTriggerInteraction = (triggerEl, triggerAction, popoverEl) => {
             if (target.closest('ion-popover') !== popoverEl) {
               popoverEl.dismiss(undefined, undefined, false);
             }
-          }
+          },
         },
         {
           /**
@@ -39652,12 +39625,12 @@ const configureTriggerInteraction = (triggerEl, triggerAction, popoverEl) => {
            * from dismissing when dismiss-on-select="true".
            */
           eventName: 'click',
-          callback: (ev) => ev.stopPropagation()
+          callback: (ev) => ev.stopPropagation(),
         },
         {
           eventName: 'ionPopoverActivateTrigger',
-          callback: (ev) => popoverEl.presentFromTrigger(ev, true)
-        }
+          callback: (ev) => popoverEl.presentFromTrigger(ev, true),
+        },
       ];
       break;
     case 'context-menu':
@@ -39671,16 +39644,16 @@ const configureTriggerInteraction = (triggerEl, triggerAction, popoverEl) => {
              */
             ev.preventDefault();
             popoverEl.presentFromTrigger(ev);
-          }
+          },
         },
         {
           eventName: 'click',
-          callback: (ev) => ev.stopPropagation()
+          callback: (ev) => ev.stopPropagation(),
         },
         {
           eventName: 'ionPopoverActivateTrigger',
-          callback: (ev) => popoverEl.presentFromTrigger(ev, true)
-        }
+          callback: (ev) => popoverEl.presentFromTrigger(ev, true),
+        },
       ];
       break;
     case 'click':
@@ -39695,12 +39668,12 @@ const configureTriggerInteraction = (triggerEl, triggerAction, popoverEl) => {
            * the first popover to dismiss.
            */
           eventName: 'click',
-          callback: (ev) => popoverEl.presentFromTrigger(ev)
+          callback: (ev) => popoverEl.presentFromTrigger(ev),
         },
         {
           eventName: 'ionPopoverActivateTrigger',
-          callback: (ev) => popoverEl.presentFromTrigger(ev, true)
-        }
+          callback: (ev) => popoverEl.presentFromTrigger(ev, true),
+        },
       ];
       break;
   }
@@ -39718,7 +39691,7 @@ const getIndexOfItem = (items, item) => {
   if (!item || item.tagName !== 'ION-ITEM') {
     return -1;
   }
-  return items.findIndex(el => el === item);
+  return items.findIndex((el) => el === item);
 };
 /**
  * Given an array of elements and a currently focused ion-item
@@ -39766,7 +39739,7 @@ const configureKeyboardInteraction = (popoverEl) => {
        * i.e. only select ion-item elements that are part of this popover
        */
       items = Array.from(popoverEl.querySelectorAll('ion-item:not(ion-popover ion-popover *):not([disabled])'));
-      /* tslint:disable-next-line */
+      /* eslint-disable-next-line */
     }
     catch (_a) { }
     switch (ev.key) {
@@ -39790,7 +39763,6 @@ const configureKeyboardInteraction = (popoverEl) => {
         // Disable movement/scroll with keyboard
         ev.preventDefault();
         const nextItem = getNextItem(items, activeElement);
-        // tslint:disable-next-line:strict-type-predicates
         if (nextItem !== undefined) {
           focusItem(nextItem);
         }
@@ -39802,7 +39774,6 @@ const configureKeyboardInteraction = (popoverEl) => {
         // Disable movement/scroll with keyboard
         ev.preventDefault();
         const prevItem = getPrevItem(items, activeElement);
-        // tslint:disable-next-line:strict-type-predicates
         if (prevItem !== undefined) {
           focusItem(prevItem);
         }
@@ -39813,7 +39784,6 @@ const configureKeyboardInteraction = (popoverEl) => {
       case 'Home':
         ev.preventDefault();
         const firstItem = items[0];
-        // tslint:disable-next-line:strict-type-predicates
         if (firstItem !== undefined) {
           focusItem(firstItem);
         }
@@ -39824,7 +39794,6 @@ const configureKeyboardInteraction = (popoverEl) => {
       case 'End':
         ev.preventDefault();
         const lastItem = items[items.length - 1];
-        // tslint:disable-next-line:strict-type-predicates
         if (lastItem !== undefined) {
           focusItem(lastItem);
         }
@@ -39858,7 +39827,7 @@ const getPopoverPosition = (isRTL, contentWidth, contentHeight, arrowWidth, arro
     top: 0,
     left: 0,
     width: 0,
-    height: 0
+    height: 0,
   };
   /**
    * Calculate position relative to the
@@ -39875,7 +39844,7 @@ const getPopoverPosition = (isRTL, contentWidth, contentHeight, arrowWidth, arro
         top: mouseEv.clientY,
         left: mouseEv.clientX,
         width: 1,
-        height: 1
+        height: 1,
       };
       break;
     /**
@@ -39897,7 +39866,9 @@ const getPopoverPosition = (isRTL, contentWidth, contentHeight, arrowWidth, arro
        * to the indicator rather than `ion-breadcrumb`
        * as a whole.
        */
-      const actualTriggerEl = (triggerEl || ((_a = customEv === null || customEv === void 0 ? void 0 : customEv.detail) === null || _a === void 0 ? void 0 : _a.ionShadowTarget) || (customEv === null || customEv === void 0 ? void 0 : customEv.target));
+      const actualTriggerEl = (triggerEl ||
+        ((_a = customEv === null || customEv === void 0 ? void 0 : customEv.detail) === null || _a === void 0 ? void 0 : _a.ionShadowTarget) ||
+        (customEv === null || customEv === void 0 ? void 0 : customEv.target));
       if (!actualTriggerEl) {
         return defaultPosition;
       }
@@ -39906,7 +39877,7 @@ const getPopoverPosition = (isRTL, contentWidth, contentHeight, arrowWidth, arro
         top: triggerBoundingBox.top,
         left: triggerBoundingBox.left,
         width: triggerBoundingBox.width,
-        height: triggerBoundingBox.height
+        height: triggerBoundingBox.height,
       };
       break;
   }
@@ -39946,9 +39917,9 @@ const calculatePopoverOrigin = (side, align, isRTL) => {
     case 'right':
       return { originX: 'left', originY: getOriginYAlignment(align) };
     case 'start':
-      return { originX: (isRTL) ? 'left' : 'right', originY: getOriginYAlignment(align) };
+      return { originX: isRTL ? 'left' : 'right', originY: getOriginYAlignment(align) };
     case 'end':
-      return { originX: (isRTL) ? 'right' : 'left', originY: getOriginYAlignment(align) };
+      return { originX: isRTL ? 'right' : 'left', originY: getOriginYAlignment(align) };
   }
 };
 const getOriginXAlignment = (align) => {
@@ -39981,26 +39952,29 @@ const calculateArrowPosition = (side, arrowWidth, arrowHeight, top, left, conten
    * been rotated using a `transform`, so to move the arrow up or down
    * by its dimension, you need to use `arrowWidth`.
    */
-  const leftPosition = { arrowTop: top + (contentHeight / 2) - (arrowWidth / 2), arrowLeft: left + contentWidth - (arrowWidth / 2) };
+  const leftPosition = {
+    arrowTop: top + contentHeight / 2 - arrowWidth / 2,
+    arrowLeft: left + contentWidth - arrowWidth / 2,
+  };
   /**
    * Move the arrow to the left by arrowWidth and then
    * again by half of its width because we have rotated
    * the arrow using a transform.
    */
-  const rightPosition = { arrowTop: top + (contentHeight / 2) - (arrowWidth / 2), arrowLeft: left - (arrowWidth * 1.5) };
+  const rightPosition = { arrowTop: top + contentHeight / 2 - arrowWidth / 2, arrowLeft: left - arrowWidth * 1.5 };
   switch (side) {
     case 'top':
-      return { arrowTop: top + contentHeight, arrowLeft: left + (contentWidth / 2) - (arrowWidth / 2) };
+      return { arrowTop: top + contentHeight, arrowLeft: left + contentWidth / 2 - arrowWidth / 2 };
     case 'bottom':
-      return { arrowTop: top - arrowHeight, arrowLeft: left + (contentWidth / 2) - (arrowWidth / 2) };
+      return { arrowTop: top - arrowHeight, arrowLeft: left + contentWidth / 2 - arrowWidth / 2 };
     case 'left':
       return leftPosition;
     case 'right':
       return rightPosition;
     case 'start':
-      return (isRTL) ? rightPosition : leftPosition;
+      return isRTL ? rightPosition : leftPosition;
     case 'end':
-      return (isRTL) ? leftPosition : rightPosition;
+      return isRTL ? leftPosition : rightPosition;
     default:
       return { arrowTop: 0, arrowLeft: 0 };
   }
@@ -40014,31 +39988,31 @@ const calculateArrowPosition = (side, arrowWidth, arrowHeight, top, left, conten
 const calculatePopoverSide = (side, triggerBoundingBox, contentWidth, contentHeight, arrowWidth, arrowHeight, isRTL) => {
   const sideLeft = {
     top: triggerBoundingBox.top,
-    left: triggerBoundingBox.left - contentWidth - arrowWidth
+    left: triggerBoundingBox.left - contentWidth - arrowWidth,
   };
   const sideRight = {
     top: triggerBoundingBox.top,
-    left: triggerBoundingBox.left + triggerBoundingBox.width + arrowWidth
+    left: triggerBoundingBox.left + triggerBoundingBox.width + arrowWidth,
   };
   switch (side) {
     case 'top':
       return {
         top: triggerBoundingBox.top - contentHeight - arrowHeight,
-        left: triggerBoundingBox.left
+        left: triggerBoundingBox.left,
       };
     case 'right':
       return sideRight;
     case 'bottom':
       return {
         top: triggerBoundingBox.top + triggerBoundingBox.height + arrowHeight,
-        left: triggerBoundingBox.left
+        left: triggerBoundingBox.left,
       };
     case 'left':
       return sideLeft;
     case 'start':
-      return (isRTL) ? sideRight : sideLeft;
+      return isRTL ? sideRight : sideLeft;
     case 'end':
-      return (isRTL) ? sideLeft : sideRight;
+      return isRTL ? sideLeft : sideRight;
   }
 };
 /**
@@ -40075,14 +40049,14 @@ const calculatePopoverEndAlign = (side, triggerBoundingBox, contentWidth, conten
     case 'right':
       return {
         top: -(contentHeight - triggerBoundingBox.height),
-        left: 0
+        left: 0,
       };
     case 'top':
     case 'bottom':
     default:
       return {
         top: 0,
-        left: -(contentWidth - triggerBoundingBox.width)
+        left: -(contentWidth - triggerBoundingBox.width),
       };
   }
 };
@@ -40102,15 +40076,15 @@ const calculatePopoverCenterAlign = (side, triggerBoundingBox, contentWidth, con
     case 'left':
     case 'right':
       return {
-        top: -((contentHeight / 2) - (triggerBoundingBox.height / 2)),
-        left: 0
+        top: -(contentHeight / 2 - triggerBoundingBox.height / 2),
+        left: 0,
       };
     case 'top':
     case 'bottom':
     default:
       return {
         top: 0,
-        left: -((contentWidth / 2) - (triggerBoundingBox.width / 2))
+        left: -(contentWidth / 2 - triggerBoundingBox.width / 2),
       };
   }
 };
@@ -40129,7 +40103,9 @@ const calculateWindowAdjustment = (side, coordTop, coordLeft, bodyPadding, bodyW
   let originY = contentOriginY;
   let checkSafeAreaLeft = false;
   let checkSafeAreaRight = false;
-  const triggerTop = triggerCoordinates ? triggerCoordinates.top + triggerCoordinates.height : bodyHeight / 2 - contentHeight / 2;
+  const triggerTop = triggerCoordinates
+    ? triggerCoordinates.top + triggerCoordinates.height
+    : bodyHeight / 2 - contentHeight / 2;
   const triggerHeight = triggerCoordinates ? triggerCoordinates.height : 0;
   let addPopoverBottomClass = false;
   /**
@@ -40157,8 +40133,7 @@ const calculateWindowAdjustment = (side, coordTop, coordLeft, bodyPadding, bodyW
    * the trigger, then we should not adjust top
    * margins.
    */
-  if (triggerTop + triggerHeight + contentHeight > bodyHeight &&
-    (side === 'top' || side === 'bottom')) {
+  if (triggerTop + triggerHeight + contentHeight > bodyHeight && (side === 'top' || side === 'bottom')) {
     if (triggerTop - contentHeight > 0) {
       top = triggerTop - contentHeight - triggerHeight - (arrowHeight - 1);
       arrowTop = top + contentHeight;
@@ -40173,7 +40148,18 @@ const calculateWindowAdjustment = (side, coordTop, coordLeft, bodyPadding, bodyW
       bottom = bodyPadding;
     }
   }
-  return { top, left, bottom, originX, originY, checkSafeAreaLeft, checkSafeAreaRight, arrowTop, arrowLeft, addPopoverBottomClass };
+  return {
+    top,
+    left,
+    bottom,
+    originX,
+    originY,
+    checkSafeAreaLeft,
+    checkSafeAreaRight,
+    arrowTop,
+    arrowLeft,
+    addPopoverBottomClass,
+  };
 };
 const shouldShowArrow = (side, didAdjustBounds = false, ev, trigger) => {
   /**
@@ -40225,12 +40211,12 @@ const iosEnterAnimation$1 = (baseEl, opts) => {
     top: bodyHeight / 2 - contentHeight / 2,
     left: bodyWidth / 2 - contentWidth / 2,
     originX: isRTL ? 'right' : 'left',
-    originY: 'top'
+    originY: 'top',
   };
   const results = getPopoverPosition(isRTL, contentWidth, contentHeight, arrowWidth, arrowHeight, reference, side, align, defaultPosition, trigger, ev);
   const padding = size === 'cover' ? 0 : POPOVER_IOS_BODY_PADDING;
   const margin = size === 'cover' ? 0 : 25;
-  const { originX, originY, top, left, bottom, checkSafeAreaLeft, checkSafeAreaRight, arrowTop, arrowLeft, addPopoverBottomClass } = calculateWindowAdjustment(side, results.top, results.left, padding, bodyWidth, bodyHeight, contentWidth, contentHeight, margin, results.originX, results.originY, results.referenceCoordinates, results.arrowTop, results.arrowLeft, arrowHeight);
+  const { originX, originY, top, left, bottom, checkSafeAreaLeft, checkSafeAreaRight, arrowTop, arrowLeft, addPopoverBottomClass, } = calculateWindowAdjustment(side, results.top, results.left, padding, bodyWidth, bodyHeight, contentWidth, contentHeight, margin, results.originX, results.originY, results.referenceCoordinates, results.arrowTop, results.arrowLeft, arrowHeight);
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
@@ -40238,12 +40224,10 @@ const iosEnterAnimation$1 = (baseEl, opts) => {
     .addElement(root.querySelector('ion-backdrop'))
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
-    'pointer-events': 'none'
+    'pointer-events': 'none',
   })
     .afterClearStyles(['pointer-events']);
-  wrapperAnimation
-    .addElement(root.querySelector('.popover-wrapper'))
-    .fromTo('opacity', 0.01, 1);
+  wrapperAnimation.addElement(root.querySelector('.popover-wrapper')).fromTo('opacity', 0.01, 1);
   return baseAnimation
     .easing('ease')
     .duration(100)
@@ -40297,12 +40281,8 @@ const iosLeaveAnimation$1 = (baseEl) => {
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  backdropAnimation
-    .addElement(root.querySelector('ion-backdrop'))
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
-  wrapperAnimation
-    .addElement(root.querySelector('.popover-wrapper'))
-    .fromTo('opacity', 0.99, 0);
+  backdropAnimation.addElement(root.querySelector('ion-backdrop')).fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  wrapperAnimation.addElement(root.querySelector('.popover-wrapper')).fromTo('opacity', 0.99, 0);
   return baseAnimation
     .easing('ease')
     .afterAddWrite(() => {
@@ -40344,7 +40324,7 @@ const mdEnterAnimation$1 = (baseEl, opts) => {
     top: bodyHeight / 2 - contentHeight / 2,
     left: bodyWidth / 2 - contentWidth / 2,
     originX: isRTL ? 'right' : 'left',
-    originY: 'top'
+    originY: 'top',
   };
   const results = getPopoverPosition(isRTL, contentWidth, contentHeight, 0, 0, reference, side, align, defaultPosition, trigger, ev);
   const padding = size === 'cover' ? 0 : POPOVER_MD_BODY_PADDING;
@@ -40358,19 +40338,16 @@ const mdEnterAnimation$1 = (baseEl, opts) => {
     .addElement(root.querySelector('ion-backdrop'))
     .fromTo('opacity', 0.01, 'var(--backdrop-opacity)')
     .beforeStyles({
-    'pointer-events': 'none'
+    'pointer-events': 'none',
   })
     .afterClearStyles(['pointer-events']);
-  wrapperAnimation
-    .addElement(root.querySelector('.popover-wrapper'))
-    .duration(150)
-    .fromTo('opacity', 0.01, 1);
+  wrapperAnimation.addElement(root.querySelector('.popover-wrapper')).duration(150).fromTo('opacity', 0.01, 1);
   contentAnimation
     .addElement(contentEl)
     .beforeStyles({
-    'top': `calc(${top}px + var(--offset-y, 0px))`,
-    'left': `calc(${left}px + var(--offset-x, 0px))`,
-    'transform-origin': `${originY} ${originX}`
+    top: `calc(${top}px + var(--offset-y, 0px))`,
+    left: `calc(${left}px + var(--offset-x, 0px))`,
+    'transform-origin': `${originY} ${originX}`,
   })
     .beforeAddWrite(() => {
     if (bottom !== undefined) {
@@ -40378,9 +40355,7 @@ const mdEnterAnimation$1 = (baseEl, opts) => {
     }
   })
     .fromTo('transform', 'scale(0.8)', 'scale(1)');
-  viewportAnimation
-    .addElement(root.querySelector('.popover-viewport'))
-    .fromTo('opacity', 0.01, 1);
+  viewportAnimation.addElement(root.querySelector('.popover-viewport')).fromTo('opacity', 0.01, 1);
   return baseAnimation
     .easing('cubic-bezier(0.36,0.66,0.04,1)')
     .duration(300)
@@ -40407,12 +40382,8 @@ const mdLeaveAnimation$1 = (baseEl) => {
   const baseAnimation = createAnimation();
   const backdropAnimation = createAnimation();
   const wrapperAnimation = createAnimation();
-  backdropAnimation
-    .addElement(root.querySelector('ion-backdrop'))
-    .fromTo('opacity', 'var(--backdrop-opacity)', 0);
-  wrapperAnimation
-    .addElement(root.querySelector('.popover-wrapper'))
-    .fromTo('opacity', 0.99, 0);
+  backdropAnimation.addElement(root.querySelector('ion-backdrop')).fromTo('opacity', 'var(--backdrop-opacity)', 0);
+  wrapperAnimation.addElement(root.querySelector('.popover-wrapper')).fromTo('opacity', 0.99, 0);
   return baseAnimation
     .easing('ease')
     .afterAddWrite(() => {
@@ -40521,9 +40492,8 @@ class Popover {
      */
     this.side = 'bottom';
     /**
-     * If `true`, the popover will display an arrow
-     * that points at the `reference` when running in `ios` mode
-     * on mobile. Does not apply in `md` mode or on desktop.
+     * If `true`, the popover will display an arrow that points at the
+     * `reference` when running in `ios` mode. Does not apply in `md` mode.
      */
     this.arrow = true;
     /**
@@ -40561,7 +40531,7 @@ class Popover {
         const event = new CustomEvent(name, {
           bubbles: false,
           cancelable: false,
-          detail: modalEvent.detail
+          detail: modalEvent.detail,
         });
         el.dispatchEvent(event);
       }
@@ -40571,7 +40541,7 @@ class Popover {
       if (destroyTriggerInteraction) {
         destroyTriggerInteraction();
       }
-      const triggerEl = this.triggerEl = (trigger !== undefined) ? document.getElementById(trigger) : null;
+      const triggerEl = (this.triggerEl = trigger !== undefined ? document.getElementById(trigger) : null);
       if (!triggerEl) {
         return;
       }
@@ -40614,7 +40584,7 @@ class Popover {
      * If user has custom ID set then we should
      * not assign the default incrementing ID.
      */
-    this.popoverId = (this.el.hasAttribute('id')) ? this.el.getAttribute('id') : `ion-popover-${this.popoverIndex}`;
+    this.popoverId = this.el.hasAttribute('id') ? this.el.getAttribute('id') : `ion-popover-${this.popoverIndex}`;
     this.parentPopover = this.el.closest(`ion-popover:not(#${this.popoverId})`);
     if (this.alignment === undefined) {
       this.alignment = getIonMode$1(this) === 'ios' ? 'center' : 'start';
@@ -40663,7 +40633,7 @@ class Popover {
     if (this.workingDelegate && !force) {
       return {
         delegate: this.workingDelegate,
-        inline: this.inline
+        inline: this.inline,
       };
     }
     /**
@@ -40676,8 +40646,8 @@ class Popover {
      * correct place.
      */
     const parentEl = this.el.parentNode;
-    const inline = this.inline = parentEl !== null && !this.hasController;
-    const delegate = this.workingDelegate = (inline) ? this.delegate || this.coreDelegate : this.delegate;
+    const inline = (this.inline = parentEl !== null && !this.hasController);
+    const delegate = (this.workingDelegate = inline ? this.delegate || this.coreDelegate : this.delegate);
     return { inline, delegate };
   }
   /**
@@ -40715,7 +40685,7 @@ class Popover {
       trigger: this.triggerEl,
       reference: this.reference,
       side: this.side,
-      align: this.alignment
+      align: this.alignment,
     });
     await this.currentTransition;
     this.currentTransition = undefined;
@@ -40797,7 +40767,7 @@ class Popover {
     const mode = getIonMode$1(this);
     const { onLifecycle, popoverId, parentPopover, dismissOnSelect, side, arrow, htmlAttributes } = this;
     const desktop = isPlatform('desktop');
-    const enableArrow = arrow && !parentPopover && !desktop;
+    const enableArrow = arrow && !parentPopover;
     return (hAsync(Host, Object.assign({ "aria-modal": "true", "no-router": true, tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${20000 + this.overlayIndex}`,
       }, id: popoverId, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'popover-translucent': this.translucent, 'overlay-hidden': true, 'popover-desktop': desktop, [`popover-side-${side}`]: true, 'popover-nested': !!parentPopover }), onIonPopoverDidPresent: onLifecycle, onIonPopoverWillPresent: onLifecycle, onIonPopoverWillDismiss: onLifecycle, onIonPopoverDidDismiss: onLifecycle, onIonDismiss: this.onDismiss, onIonBackdropTap: this.onBackdropTap }), !parentPopover && hAsync("ion-backdrop", { tappable: this.backdropDismiss, visible: this.showBackdrop, part: "backdrop" }), hAsync("div", { class: "popover-wrapper ion-overlay-wrapper", onClick: dismissOnSelect ? () => this.dismiss() : undefined }, enableArrow && hAsync("div", { class: "popover-arrow", part: "arrow" }), hAsync("div", { class: "popover-content", part: "content" }, hAsync("slot", null)))));
@@ -40855,10 +40825,10 @@ class Popover {
   }; }
 }
 const LIFECYCLE_MAP = {
-  'ionPopoverDidPresent': 'ionViewDidEnter',
-  'ionPopoverWillPresent': 'ionViewWillEnter',
-  'ionPopoverWillDismiss': 'ionViewWillLeave',
-  'ionPopoverDidDismiss': 'ionViewDidLeave',
+  ionPopoverDidPresent: 'ionViewDidEnter',
+  ionPopoverWillPresent: 'ionViewWillEnter',
+  ionPopoverWillDismiss: 'ionViewWillLeave',
+  ionPopoverDidDismiss: 'ionViewDidLeave',
 };
 let popoverIds = 0;
 
@@ -40934,10 +40904,8 @@ class ProgressBar {
         [mode]: true,
         [`progress-bar-${type}`]: true,
         'progress-paused': paused,
-        'progress-bar-reversed': document.dir === 'rtl' ? !reversed : reversed
-      }) }, type === 'indeterminate'
-      ? renderIndeterminate()
-      : renderProgress(value, buffer)));
+        'progress-bar-reversed': document.dir === 'rtl' ? !reversed : reversed,
+      }) }, type === 'indeterminate' ? renderIndeterminate() : renderProgress(value, buffer)));
   }
   static get style() { return {
     ios: progressBarIosCss,
@@ -41086,7 +41054,7 @@ class Radio {
     if (this.value === undefined) {
       this.value = this.inputId;
     }
-    const radioGroup = this.radioGroup = this.el.closest('ion-radio-group');
+    const radioGroup = (this.radioGroup = this.el.closest('ion-radio-group'));
     if (radioGroup) {
       this.updateState();
       addEventListener$1(radioGroup, 'ionChange', this.updateState);
@@ -41115,10 +41083,10 @@ class Radio {
     return (hAsync(Host, { "aria-checked": `${checked}`, "aria-hidden": disabled ? 'true' : null, "aria-labelledby": label ? labelId : null, role: "radio", tabindex: buttonTabindex, onFocus: this.onFocus, onBlur: this.onBlur, onClick: this.onClick, class: createColorClasses$1(color, {
         [mode]: true,
         'in-item': hostContext('ion-item', el),
-        'interactive': true,
+        interactive: true,
         'radio-checked': checked,
         'radio-disabled': disabled,
-      }) }, hAsync("div", { class: "radio-icon", part: "container" }, hAsync("div", { class: "radio-inner", part: "mark" }), hAsync("div", { class: "radio-ripple" })), hAsync("label", { htmlFor: inputId }, labelText), hAsync("input", { type: "radio", checked: checked, disabled: disabled, tabindex: "-1", id: inputId, ref: nativeEl => this.nativeInput = nativeEl })));
+      }) }, hAsync("div", { class: "radio-icon", part: "container" }, hAsync("div", { class: "radio-inner", part: "mark" }), hAsync("div", { class: "radio-ripple" })), hAsync("label", { htmlFor: inputId }, labelText), hAsync("input", { type: "radio", checked: checked, disabled: disabled, tabindex: "-1", id: inputId, ref: (nativeEl) => (this.nativeInput = nativeEl) })));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -41167,8 +41135,8 @@ class RadioGroup {
     this.setRadioTabindex = (value) => {
       const radios = this.getRadios();
       // Get the first radio that is not disabled and the checked one
-      const first = radios.find(radio => !radio.disabled);
-      const checked = radios.find(radio => (radio.value === value && !radio.disabled));
+      const first = radios.find((radio) => !radio.disabled);
+      const checked = radios.find((radio) => radio.value === value && !radio.disabled);
       if (!first && !checked) {
         return;
       }
@@ -41207,7 +41175,7 @@ class RadioGroup {
     // this is used to set aria-labelledby
     const header = this.el.querySelector('ion-list-header') || this.el.querySelector('ion-item-divider');
     if (header) {
-      const label = this.label = header.querySelector('ion-label');
+      const label = (this.label = header.querySelector('ion-label'));
       if (label) {
         this.labelId = label.id = this.name + '-lbl';
       }
@@ -41223,25 +41191,21 @@ class RadioGroup {
     }
     // Get all radios inside of the radio group and then
     // filter out disabled radios since we need to skip those
-    const radios = this.getRadios().filter(radio => !radio.disabled);
+    const radios = this.getRadios().filter((radio) => !radio.disabled);
     // Only move the radio if the current focus is in the radio group
     if (ev.target && radios.includes(ev.target)) {
-      const index = radios.findIndex(radio => radio === ev.target);
+      const index = radios.findIndex((radio) => radio === ev.target);
       const current = radios[index];
       let next;
       // If hitting arrow down or arrow right, move to the next radio
       // If we're on the last radio, move to the first radio
       if (['ArrowDown', 'ArrowRight'].includes(ev.code)) {
-        next = (index === radios.length - 1)
-          ? radios[0]
-          : radios[index + 1];
+        next = index === radios.length - 1 ? radios[0] : radios[index + 1];
       }
       // If hitting arrow up or arrow left, move to the previous radio
       // If we're on the first radio, move to the last radio
       if (['ArrowUp', 'ArrowLeft'].includes(ev.code)) {
-        next = (index === 0)
-          ? radios[radios.length - 1]
-          : radios[index - 1];
+        next = index === 0 ? radios[radios.length - 1] : radios[index - 1];
       }
       if (next && radios.includes(next)) {
         next.setFocus(ev);
@@ -41252,9 +41216,7 @@ class RadioGroup {
       // Update the radio group value when a user presses the
       // space bar on top of a selected radio
       if (['Space'].includes(ev.code)) {
-        this.value = (this.allowEmptySelection && this.value !== undefined)
-          ? undefined
-          : current.value;
+        this.value = this.allowEmptySelection && this.value !== undefined ? undefined : current.value;
         // Prevent browsers from jumping
         // to the bottom of the screen
         ev.preventDefault();
@@ -41264,7 +41226,7 @@ class RadioGroup {
   render() {
     const { label, labelId } = this;
     const mode = getIonMode$1(this);
-    return (hAsync(Host, { role: "radiogroup", "aria-labelledby": label ? labelId : null, onClick: this.onClick, class: mode }));
+    return hAsync(Host, { role: "radiogroup", "aria-labelledby": label ? labelId : null, onClick: this.onClick, class: mode });
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -41455,7 +41417,7 @@ class Range {
       if (this.dualKnobs) {
         return {
           lower: this.clampBounds(value.lower),
-          upper: this.clampBounds(value.upper)
+          upper: this.clampBounds(value.upper),
         };
       }
       else {
@@ -41470,9 +41432,9 @@ class Range {
           gestureName: 'range',
           gesturePriority: 100,
           threshold: 0,
-          onStart: ev => this.onStart(ev),
-          onMove: ev => this.onMove(ev),
-          onEnd: ev => this.onEnd(ev),
+          onStart: (ev) => this.onStart(ev),
+          onMove: (ev) => this.onMove(ev),
+          onEnd: (ev) => this.onEnd(ev),
         });
         this.gesture.enable(!this.disabled);
       }
@@ -41538,7 +41500,7 @@ class Range {
      * If user has custom ID set then we should
      * not assign the default incrementing ID.
      */
-    this.rangeId = (this.el.hasAttribute('id')) ? this.el.getAttribute('id') : `ion-r-${rangeIds++}`;
+    this.rangeId = this.el.hasAttribute('id') ? this.el.getAttribute('id') : `ion-r-${rangeIds++}`;
     this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
   }
   componentDidLoad() {
@@ -41573,7 +41535,7 @@ class Range {
       }
       return {
         lower: 0,
-        upper: value
+        upper: value,
       };
     }
     else {
@@ -41585,23 +41547,19 @@ class Range {
   }
   emitStyle() {
     this.ionStyle.emit({
-      'interactive': true,
-      'interactive-disabled': this.disabled
+      interactive: true,
+      'interactive-disabled': this.disabled,
     });
   }
   onStart(detail) {
-    const rect = this.rect = this.rangeSlider.getBoundingClientRect();
+    const rect = (this.rect = this.rangeSlider.getBoundingClientRect());
     const currentX = detail.currentX;
     // figure out which knob they started closer to
     let ratio = clamp(0, (currentX - rect.left) / rect.width, 1);
     if (isRTL(this.el)) {
       ratio = 1 - ratio;
     }
-    this.pressedKnob =
-      !this.dualKnobs ||
-        Math.abs(this.ratioA - ratio) < Math.abs(this.ratioB - ratio)
-        ? 'A'
-        : 'B';
+    this.pressedKnob = !this.dualKnobs || Math.abs(this.ratioA - ratio) < Math.abs(this.ratioB - ratio) ? 'A' : 'B';
     this.setFocus(this.pressedKnob);
     // update the active knob's position
     this.update(currentX);
@@ -41671,7 +41629,7 @@ class Range {
       ? valA
       : {
         lower: Math.min(valA, valB),
-        upper: Math.max(valA, valB)
+        upper: Math.max(valA, valB),
       };
     this.noUpdate = false;
   }
@@ -41684,7 +41642,7 @@ class Range {
     }
   }
   render() {
-    const { min, max, step, el, handleKeyboard, pressedKnob, disabled, pin, ratioLower, ratioUpper, inheritedAttributes, rangeId, pinFormatter } = this;
+    const { min, max, step, el, handleKeyboard, pressedKnob, disabled, pin, ratioLower, ratioUpper, inheritedAttributes, rangeId, pinFormatter, } = this;
     /**
      * Look for external label, ion-label, or aria-labelledby.
      * If none, see if user placed an aria-label on the host
@@ -41702,12 +41660,12 @@ class Range {
     const end = rtl ? 'left' : 'right';
     const tickStyle = (tick) => {
       return {
-        [start]: tick[start]
+        [start]: tick[start],
       };
     };
     const barStyle = {
       [start]: barStart,
-      [end]: barEnd
+      [end]: barEnd,
     };
     const ticks = [];
     if (this.snaps && this.ticks) {
@@ -41727,10 +41685,10 @@ class Range {
         'in-item': hostContext('ion-item', el),
         'range-disabled': disabled,
         'range-pressed': pressedKnob !== undefined,
-        'range-has-pin': pin
-      }) }, hAsync("slot", { name: "start" }), hAsync("div", { class: "range-slider", ref: rangeEl => this.rangeSlider = rangeEl }, ticks.map(tick => (hAsync("div", { style: tickStyle(tick), role: "presentation", class: {
+        'range-has-pin': pin,
+      }) }, hAsync("slot", { name: "start" }), hAsync("div", { class: "range-slider", ref: (rangeEl) => (this.rangeSlider = rangeEl) }, ticks.map((tick) => (hAsync("div", { style: tickStyle(tick), role: "presentation", class: {
         'range-tick': true,
-        'range-tick-active': tick.active
+        'range-tick-active': tick.active,
       }, part: tick.active ? 'tick-active' : 'tick' }))), hAsync("div", { class: "range-bar", role: "presentation", part: "bar" }), hAsync("div", { class: "range-bar range-bar-active", role: "presentation", style: barStyle, part: "bar-active" }), renderKnob(rtl, {
       knob: 'A',
       pressed: pressedKnob === 'A',
@@ -41742,20 +41700,21 @@ class Range {
       handleKeyboard,
       min,
       max,
-      labelText
-    }), this.dualKnobs && renderKnob(rtl, {
-      knob: 'B',
-      pressed: pressedKnob === 'B',
-      value: this.valB,
-      ratio: this.ratioB,
-      pin,
-      pinFormatter,
-      disabled,
-      handleKeyboard,
-      min,
-      max,
-      labelText
-    })), hAsync("slot", { name: "end" })));
+      labelText,
+    }), this.dualKnobs &&
+      renderKnob(rtl, {
+        knob: 'B',
+        pressed: pressedKnob === 'B',
+        value: this.valB,
+        ratio: this.ratioB,
+        pin,
+        pinFormatter,
+        disabled,
+        handleKeyboard,
+        min,
+        max,
+        labelText,
+      })), hAsync("slot", { name: "end" })));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -41820,8 +41779,8 @@ const renderKnob = (rtl, { knob, value, ratio, min, max, disabled, pressed, pin,
       'range-knob-b': knob === 'B',
       'range-knob-pressed': pressed,
       'range-knob-min': value === min,
-      'range-knob-max': value === max
-    }, style: knobStyle(), role: "slider", tabindex: disabled ? -1 : 0, "aria-label": labelText, "aria-valuemin": min, "aria-valuemax": max, "aria-disabled": disabled ? 'true' : null, "aria-valuenow": value }, pin && hAsync("div", { class: "range-pin", role: "presentation", part: "pin" }, pinFormatter(value)), hAsync("div", { class: "range-knob", role: "presentation", part: "knob" })));
+      'range-knob-max': value === max,
+    }, style: knobStyle(), role: "slider", tabindex: disabled ? -1 : 0, "aria-label": labelText, "aria-valuemin": min, "aria-valuemax": max, "aria-disabled": disabled ? 'true' : null, "aria-valuenow": value }, pin && (hAsync("div", { class: "range-pin", role: "presentation", part: "pin" }, pinFormatter(value))), hAsync("div", { class: "range-knob", role: "presentation", part: "knob" })));
 };
 const ratioToValue = (ratio, min, max, step) => {
   let value = (max - min) * ratio;
@@ -41844,38 +41803,38 @@ const getRefresherAnimationType = (contentEl) => {
   return hasHeader ? 'translate' : 'scale';
 };
 const createPullingAnimation = (type, pullingSpinner, refresherEl) => {
-  return type === 'scale' ? createScaleAnimation(pullingSpinner, refresherEl) : createTranslateAnimation(pullingSpinner, refresherEl);
+  return type === 'scale'
+    ? createScaleAnimation(pullingSpinner, refresherEl)
+    : createTranslateAnimation(pullingSpinner, refresherEl);
 };
 const createBaseAnimation = (pullingRefresherIcon) => {
   const spinner = pullingRefresherIcon.querySelector('ion-spinner');
   const circle = spinner.shadowRoot.querySelector('circle');
   const spinnerArrowContainer = pullingRefresherIcon.querySelector('.spinner-arrow-container');
   const arrowContainer = pullingRefresherIcon.querySelector('.arrow-container');
-  const arrow = (arrowContainer) ? arrowContainer.querySelector('ion-icon') : null;
-  const baseAnimation = createAnimation()
-    .duration(1000)
-    .easing('ease-out');
+  const arrow = arrowContainer ? arrowContainer.querySelector('ion-icon') : null;
+  const baseAnimation = createAnimation().duration(1000).easing('ease-out');
   const spinnerArrowContainerAnimation = createAnimation()
     .addElement(spinnerArrowContainer)
     .keyframes([
     { offset: 0, opacity: '0.3' },
     { offset: 0.45, opacity: '0.3' },
     { offset: 0.55, opacity: '1' },
-    { offset: 1, opacity: '1' }
+    { offset: 1, opacity: '1' },
   ]);
   const circleInnerAnimation = createAnimation()
     .addElement(circle)
     .keyframes([
     { offset: 0, strokeDasharray: '1px, 200px' },
-    { offset: 0.20, strokeDasharray: '1px, 200px' },
+    { offset: 0.2, strokeDasharray: '1px, 200px' },
     { offset: 0.55, strokeDasharray: '100px, 200px' },
-    { offset: 1, strokeDasharray: '100px, 200px' }
+    { offset: 1, strokeDasharray: '100px, 200px' },
   ]);
   const circleOuterAnimation = createAnimation()
     .addElement(spinner)
     .keyframes([
     { offset: 0, transform: 'rotate(-90deg)' },
-    { offset: 1, transform: 'rotate(210deg)' }
+    { offset: 1, transform: 'rotate(210deg)' },
   ]);
   /**
    * Only add arrow animation if present
@@ -41887,17 +41846,17 @@ const createBaseAnimation = (pullingRefresherIcon) => {
       .addElement(arrowContainer)
       .keyframes([
       { offset: 0, transform: 'rotate(0deg)' },
-      { offset: 0.30, transform: 'rotate(0deg)' },
+      { offset: 0.3, transform: 'rotate(0deg)' },
       { offset: 0.55, transform: 'rotate(280deg)' },
-      { offset: 1, transform: 'rotate(400deg)' }
+      { offset: 1, transform: 'rotate(400deg)' },
     ]);
     const arrowAnimation = createAnimation()
       .addElement(arrow)
       .keyframes([
       { offset: 0, transform: 'translateX(2px) scale(0)' },
-      { offset: 0.30, transform: 'translateX(2px) scale(0)' },
+      { offset: 0.3, transform: 'translateX(2px) scale(0)' },
       { offset: 0.55, transform: 'translateX(-1.5px) scale(1)' },
-      { offset: 1, transform: 'translateX(-1.5px) scale(1)' }
+      { offset: 1, transform: 'translateX(-1.5px) scale(1)' },
     ]);
     baseAnimation.addAnimation([arrowContainerAnimation, arrowAnimation]);
   }
@@ -41918,7 +41877,7 @@ const createScaleAnimation = (pullingRefresherIcon, refresherEl) => {
     .addElement(pullingRefresherIcon)
     .keyframes([
     { offset: 0, transform: `scale(0) translateY(-${height}px)` },
-    { offset: 1, transform: 'scale(1) translateY(100px)' }
+    { offset: 1, transform: 'scale(1) translateY(100px)' },
   ]);
   return createBaseAnimation(pullingRefresherIcon).addAnimation([spinnerAnimation]);
 };
@@ -41937,7 +41896,7 @@ const createTranslateAnimation = (pullingRefresherIcon, refresherEl) => {
     .addElement(pullingRefresherIcon)
     .keyframes([
     { offset: 0, transform: `translateY(-${height}px)` },
-    { offset: 1, transform: 'translateY(100px)' }
+    { offset: 1, transform: 'translateY(100px)' },
   ]);
   return createBaseAnimation(pullingRefresherIcon).addAnimation([spinnerAnimation]);
 };
@@ -41973,7 +41932,7 @@ const handleScrollWhilePulling = (ticks, numTicks, pullAmount) => {
 const handleScrollWhileRefreshing = (spinner, lastVelocityY) => {
   writeTask(() => {
     // If user pulls down quickly, the spinner should spin faster
-    spinner.style.setProperty('--refreshing-rotation-duration', (lastVelocityY >= 1.0) ? '0.5s' : '2s');
+    spinner.style.setProperty('--refreshing-rotation-duration', lastVelocityY >= 1.0 ? '0.5s' : '2s');
     spinner.style.setProperty('opacity', '1');
   });
 };
@@ -42000,7 +41959,7 @@ const shouldUseNativeRefresher = async (referenceEl, mode) => {
   if (!refresherContent) {
     return Promise.resolve(false);
   }
-  await new Promise(resolve => componentOnReady(refresherContent, resolve));
+  await new Promise((resolve) => componentOnReady(refresherContent, resolve));
   const pullingSpinner = referenceEl.querySelector('ion-refresher-content .refresher-pulling ion-spinner');
   const refreshingSpinner = referenceEl.querySelector('ion-refresher-content .refresher-refreshing ion-spinner');
   return (pullingSpinner !== null &&
@@ -42119,7 +42078,7 @@ class Refresher {
     this.didRefresh = false;
     this.needsCompletion = false;
     this.pointerDown = false;
-    this.animations.forEach(ani => ani.destroy());
+    this.animations.forEach((ani) => ani.destroy());
     this.animations = [];
     this.progress = 0;
     this.state = 1 /* Inactive */;
@@ -42129,7 +42088,7 @@ class Refresher {
     const ticks = pullingSpinner.shadowRoot.querySelectorAll('svg');
     let MAX_PULL = this.scrollEl.clientHeight * 0.16;
     const NUM_TICKS = ticks.length;
-    writeTask(() => ticks.forEach(el => el.style.setProperty('animation', 'none')));
+    writeTask(() => ticks.forEach((el) => el.style.setProperty('animation', 'none')));
     this.scrollListenerCallback = () => {
       // If pointer is not on screen or refresher is not active, ignore scroll
       if (!this.pointerDown && this.state === 1 /* Inactive */) {
@@ -42168,8 +42127,8 @@ class Refresher {
          * gesture before the refresher completes, we want the
          * refresher tick marks to quickly fade out.
          */
-        const offset = (this.didStart) ? 30 : 0;
-        const pullAmount = this.progress = clamp(0, (Math.abs(scrollTop) - offset) / MAX_PULL, 1);
+        const offset = this.didStart ? 30 : 0;
+        const pullAmount = (this.progress = clamp(0, (Math.abs(scrollTop) - offset) / MAX_PULL, 1));
         const shouldShowRefreshingSpinner = this.state === 8 /* Refreshing */ || pullAmount === 1;
         if (shouldShowRefreshingSpinner) {
           if (this.pointerDown) {
@@ -42218,7 +42177,7 @@ class Refresher {
           MAX_PULL = this.scrollEl.clientHeight * 0.16;
         }
       },
-      onMove: ev => {
+      onMove: (ev) => {
         this.lastVelocityY = ev.velocityY;
       },
       onEnd: () => {
@@ -42253,7 +42212,9 @@ class Refresher {
       gesturePriority: 31,
       direction: 'y',
       threshold: 5,
-      canStart: () => this.state !== 8 /* Refreshing */ && this.state !== 32 /* Completing */ && this.scrollEl.scrollTop === 0,
+      canStart: () => this.state !== 8 /* Refreshing */ &&
+        this.state !== 32 /* Completing */ &&
+        this.scrollEl.scrollTop === 0,
       onStart: (ev) => {
         ev.data = { animation: undefined, didStart: false, cancelled: false };
       },
@@ -42286,10 +42247,8 @@ class Refresher {
         writeTask(() => this.scrollEl.style.removeProperty('--overflow'));
         if (this.progress <= 0.4) {
           this.gesture.enable(false);
-          ev.data.animation
-            .progressEnd(0, this.progress, 500)
-            .onFinish(() => {
-            this.animations.forEach(ani => ani.destroy());
+          ev.data.animation.progressEnd(0, this.progress, 500).onFinish(() => {
+            this.animations.forEach((ani) => ani.destroy());
             this.animations = [];
             this.gesture.enable(true);
             this.state = 1 /* Inactive */;
@@ -42300,13 +42259,13 @@ class Refresher {
         const snapBackAnimation = createSnapBackAnimation(pullingRefresherIcon);
         this.animations.push(snapBackAnimation);
         writeTask(async () => {
-          pullingRefresherIcon.style.setProperty('--ion-pulling-refresher-translate', `${(progress * 100)}px`);
+          pullingRefresherIcon.style.setProperty('--ion-pulling-refresher-translate', `${progress * 100}px`);
           ev.data.animation.progressEnd();
           await snapBackAnimation.play();
           this.beginRefresh();
           ev.data.animation.destroy();
         });
-      }
+      },
     });
     this.disabledChanged();
   }
@@ -42345,7 +42304,7 @@ class Refresher {
       console.error('<ion-refresher> must be used inside an <ion-content>');
       return;
     }
-    await new Promise(resolve => componentOnReady(contentEl, resolve));
+    await new Promise((resolve) => componentOnReady(contentEl, resolve));
     this.scrollEl = await contentEl.getScrollElement();
     this.backgroundContentEl = getElementRoot(contentEl).querySelector('#background-content');
     if (await shouldUseNativeRefresher(this.el, getIonMode$1(this))) {
@@ -42361,7 +42320,7 @@ class Refresher {
         passive: false,
         canStart: () => this.canStart(),
         onStart: () => this.onStart(),
-        onMove: ev => this.onMove(ev),
+        onMove: (ev) => this.onMove(ev),
         onEnd: () => this.onEnd(),
       });
       this.disabledChanged();
@@ -42458,7 +42417,7 @@ class Refresher {
     if ((this.state & 56 /* _BUSY_ */) !== 0) {
       return;
     }
-    const pullFactor = (Number.isNaN(this.pullFactor) || this.pullFactor < 0) ? 1 : this.pullFactor;
+    const pullFactor = Number.isNaN(this.pullFactor) || this.pullFactor < 0 ? 1 : this.pullFactor;
     const deltaY = detail.deltaY * pullFactor;
     // don't bother if they're scrolling up
     // and have not already started dragging
@@ -42549,7 +42508,7 @@ class Refresher {
     // emit "refresh" because it was pulled down far enough
     // and they let go to begin refreshing
     this.ionRefresh.emit({
-      complete: this.complete.bind(this)
+      complete: this.complete.bind(this),
     });
   }
   close(state, delay) {
@@ -42570,15 +42529,15 @@ class Refresher {
     if (this.nativeRefresher) {
       return;
     }
-    this.appliedStyles = (y > 0);
+    this.appliedStyles = y > 0;
     writeTask(() => {
       if (this.scrollEl && this.backgroundContentEl) {
         const scrollStyle = this.scrollEl.style;
         const backgroundStyle = this.backgroundContentEl.style;
-        scrollStyle.transform = backgroundStyle.transform = ((y > 0) ? `translateY(${y}px) translateZ(0px)` : '');
+        scrollStyle.transform = backgroundStyle.transform = y > 0 ? `translateY(${y}px) translateZ(0px)` : '';
         scrollStyle.transitionDuration = backgroundStyle.transitionDuration = duration;
         scrollStyle.transitionDelay = backgroundStyle.transitionDelay = delay;
-        scrollStyle.overflow = (overflowVisible ? 'hidden' : '');
+        scrollStyle.overflow = overflowVisible ? 'hidden' : '';
       }
     });
   }
@@ -42631,40 +42590,40 @@ class Refresher {
  * (C) Ionic http://ionicframework.com - MIT License
  */
 const spinners = {
-  'bubbles': {
+  bubbles: {
     dur: 1000,
     circles: 9,
     fn: (dur, index, total) => {
-      const animationDelay = `${(dur * index / total) - dur}ms`;
-      const angle = 2 * Math.PI * index / total;
+      const animationDelay = `${(dur * index) / total - dur}ms`;
+      const angle = (2 * Math.PI * index) / total;
       return {
         r: 5,
         style: {
-          'top': `${9 * Math.sin(angle)}px`,
-          'left': `${9 * Math.cos(angle)}px`,
+          top: `${9 * Math.sin(angle)}px`,
+          left: `${9 * Math.cos(angle)}px`,
           'animation-delay': animationDelay,
-        }
+        },
       };
-    }
+    },
   },
-  'circles': {
+  circles: {
     dur: 1000,
     circles: 8,
     fn: (dur, index, total) => {
       const step = index / total;
-      const animationDelay = `${(dur * step) - dur}ms`;
+      const animationDelay = `${dur * step - dur}ms`;
       const angle = 2 * Math.PI * step;
       return {
         r: 5,
         style: {
-          'top': `${9 * Math.sin(angle)}px`,
-          'left': `${9 * Math.cos(angle)}px`,
+          top: `${9 * Math.sin(angle)}px`,
+          left: `${9 * Math.cos(angle)}px`,
           'animation-delay': animationDelay,
-        }
+        },
       };
-    }
+    },
   },
-  'circular': {
+  circular: {
     dur: 1400,
     elmDuration: true,
     circles: 1,
@@ -42676,21 +42635,21 @@ const spinners = {
         fill: 'none',
         viewBox: '24 24 48 48',
         transform: 'translate(0,0)',
-        style: {}
+        style: {},
       };
-    }
+    },
   },
-  'crescent': {
+  crescent: {
     dur: 750,
     circles: 1,
     fn: () => {
       return {
         r: 26,
-        style: {}
+        style: {},
       };
-    }
+    },
   },
-  'dots': {
+  dots: {
     dur: 750,
     circles: 3,
     fn: (_, index) => {
@@ -42698,76 +42657,76 @@ const spinners = {
       return {
         r: 6,
         style: {
-          'left': `${9 - (9 * index)}px`,
+          left: `${9 - 9 * index}px`,
           'animation-delay': animationDelay,
-        }
+        },
       };
-    }
+    },
   },
-  'lines': {
+  lines: {
     dur: 1000,
     lines: 8,
     fn: (dur, index, total) => {
-      const transform = `rotate(${(360 / total) * index + (index < (total / 2) ? 180 : -180)}deg)`;
-      const animationDelay = `${(dur * index / total) - dur}ms`;
+      const transform = `rotate(${(360 / total) * index + (index < total / 2 ? 180 : -180)}deg)`;
+      const animationDelay = `${(dur * index) / total - dur}ms`;
       return {
         y1: 14,
         y2: 26,
         style: {
-          'transform': transform,
+          transform: transform,
           'animation-delay': animationDelay,
-        }
+        },
       };
-    }
+    },
   },
   'lines-small': {
     dur: 1000,
     lines: 8,
     fn: (dur, index, total) => {
-      const transform = `rotate(${(360 / total) * index + (index < (total / 2) ? 180 : -180)}deg)`;
-      const animationDelay = `${(dur * index / total) - dur}ms`;
+      const transform = `rotate(${(360 / total) * index + (index < total / 2 ? 180 : -180)}deg)`;
+      const animationDelay = `${(dur * index) / total - dur}ms`;
       return {
         y1: 12,
         y2: 20,
         style: {
-          'transform': transform,
+          transform: transform,
           'animation-delay': animationDelay,
-        }
+        },
       };
-    }
+    },
   },
   'lines-sharp': {
     dur: 1000,
     lines: 12,
     fn: (dur, index, total) => {
       const transform = `rotate(${30 * index + (index < 6 ? 180 : -180)}deg)`;
-      const animationDelay = `${(dur * index / total) - dur}ms`;
+      const animationDelay = `${(dur * index) / total - dur}ms`;
       return {
         y1: 17,
         y2: 29,
         style: {
-          'transform': transform,
+          transform: transform,
           'animation-delay': animationDelay,
-        }
+        },
       };
-    }
+    },
   },
   'lines-sharp-small': {
     dur: 1000,
     lines: 12,
     fn: (dur, index, total) => {
       const transform = `rotate(${30 * index + (index < 6 ? 180 : -180)}deg)`;
-      const animationDelay = `${(dur * index / total) - dur}ms`;
+      const animationDelay = `${(dur * index) / total - dur}ms`;
       return {
         y1: 12,
         y2: 20,
         style: {
-          'transform': transform,
+          transform: transform,
           'animation-delay': animationDelay,
-        }
+        },
       };
-    }
-  }
+    },
+  },
 };
 const SPINNERS = spinners;
 
@@ -42790,13 +42749,7 @@ class RefresherContent {
     const pullingIcon = this.pullingIcon;
     const hasSpinner = pullingIcon != null && SPINNERS[pullingIcon] !== undefined;
     const mode = getIonMode$1(this);
-    return (hAsync(Host, { class: mode }, hAsync("div", { class: "refresher-pulling" }, this.pullingIcon && hasSpinner &&
-      hAsync("div", { class: "refresher-pulling-icon" }, hAsync("div", { class: "spinner-arrow-container" }, hAsync("ion-spinner", { name: this.pullingIcon, paused: true }), mode === 'md' && this.pullingIcon === 'circular' &&
-        hAsync("div", { class: "arrow-container" }, hAsync("ion-icon", { icon: caretBackSharp })))), this.pullingIcon && !hasSpinner &&
-      hAsync("div", { class: "refresher-pulling-icon" }, hAsync("ion-icon", { icon: this.pullingIcon, lazy: false })), this.pullingText &&
-      hAsync("div", { class: "refresher-pulling-text", innerHTML: sanitizeDOMString(this.pullingText) })), hAsync("div", { class: "refresher-refreshing" }, this.refreshingSpinner &&
-      hAsync("div", { class: "refresher-refreshing-icon" }, hAsync("ion-spinner", { name: this.refreshingSpinner })), this.refreshingText &&
-      hAsync("div", { class: "refresher-refreshing-text", innerHTML: sanitizeDOMString(this.refreshingText) }))));
+    return (hAsync(Host, { class: mode }, hAsync("div", { class: "refresher-pulling" }, this.pullingIcon && hasSpinner && (hAsync("div", { class: "refresher-pulling-icon" }, hAsync("div", { class: "spinner-arrow-container" }, hAsync("ion-spinner", { name: this.pullingIcon, paused: true }), mode === 'md' && this.pullingIcon === 'circular' && (hAsync("div", { class: "arrow-container" }, hAsync("ion-icon", { icon: caretBackSharp })))))), this.pullingIcon && !hasSpinner && (hAsync("div", { class: "refresher-pulling-icon" }, hAsync("ion-icon", { icon: this.pullingIcon, lazy: false }))), this.pullingText && (hAsync("div", { class: "refresher-pulling-text", innerHTML: sanitizeDOMString(this.pullingText) }))), hAsync("div", { class: "refresher-refreshing" }, this.refreshingSpinner && (hAsync("div", { class: "refresher-refreshing-icon" }, hAsync("ion-spinner", { name: this.refreshingSpinner }))), this.refreshingText && (hAsync("div", { class: "refresher-refreshing-text", innerHTML: sanitizeDOMString(this.refreshingText) })))));
   }
   get el() { return getElement(this); }
   static get cmpMeta() { return {
@@ -51644,7 +51597,7 @@ class ReorderGroup {
   async connectedCallback() {
     const contentEl = this.el.closest('ion-content');
     if (contentEl) {
-      await new Promise(resolve => componentOnReady(contentEl, resolve));
+      await new Promise((resolve) => componentOnReady(contentEl, resolve));
       this.scrollEl = await contentEl.getScrollElement();
     }
     this.gesture = (await Promise.resolve().then(function () { return index$1; })).createGesture({
@@ -51654,9 +51607,9 @@ class ReorderGroup {
       threshold: 0,
       direction: 'y',
       passive: false,
-      canStart: detail => this.canStart(detail),
-      onStart: ev => this.onStart(ev),
-      onMove: ev => this.onMove(ev),
+      canStart: (detail) => this.canStart(detail),
+      onStart: (ev) => this.onStart(ev),
+      onMove: (ev) => this.onMove(ev),
       onEnd: () => this.onEnd(),
     });
     this.disabledChanged();
@@ -51702,7 +51655,7 @@ class ReorderGroup {
   }
   onStart(ev) {
     ev.event.preventDefault();
-    const item = this.selectedItemEl = ev.data;
+    const item = (this.selectedItemEl = ev.data);
     const heights = this.cachedHeights;
     heights.length = 0;
     const el = this.el;
@@ -51776,7 +51729,7 @@ class ReorderGroup {
       this.ionItemReorder.emit({
         from: fromIndex,
         to: toIndex,
-        complete: this.completeSync.bind(this)
+        complete: this.completeSync.bind(this),
       });
     }
     hapticSelectionEnd();
@@ -51789,9 +51742,7 @@ class ReorderGroup {
       const toIndex = this.lastToIndex;
       const fromIndex = indexForItem(selectedItemEl);
       if (toIndex !== fromIndex && (listOrReorder === undefined || listOrReorder === true)) {
-        const ref = (fromIndex < toIndex)
-          ? children[toIndex + 1]
-          : children[toIndex];
+        const ref = fromIndex < toIndex ? children[toIndex + 1] : children[toIndex];
         this.el.insertBefore(selectedItemEl, ref);
       }
       if (Array.isArray(listOrReorder)) {
@@ -52011,7 +51962,7 @@ class RippleEffect {
    * @param y The vertical coordinate of where the ripple should start.
    */
   async addRipple(x, y) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       readTask(() => {
         const rect = this.el.getBoundingClientRect();
         const width = rect.width;
@@ -52058,7 +52009,7 @@ class RippleEffect {
     const mode = getIonMode$1(this);
     return (hAsync(Host, { role: "presentation", class: {
         [mode]: true,
-        'unbounded': this.unbounded
+        unbounded: this.unbounded,
       } }));
   }
   get el() { return getElement(this); }
@@ -52180,9 +52131,7 @@ const ROUTER_INTENT_BACK = 'back';
  */
 /** Join the non empty segments with "/". */
 const generatePath = (segments) => {
-  const path = segments
-    .filter(s => s.length > 0)
-    .join('/');
+  const path = segments.filter((s) => s.length > 0).join('/');
   return '/' + path;
 };
 const generateUrl = (segments, useHash, queryString) => {
@@ -52273,9 +52222,10 @@ const parsePath = (path) => {
       queryString = path.substring(qsStart + 1);
       path = path.substring(0, qsStart);
     }
-    segments = path.split('/')
-      .map(s => s.trim())
-      .filter(s => s.length > 0);
+    segments = path
+      .split('/')
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
     if (segments.length === 0) {
       segments = [''];
     }
@@ -52290,8 +52240,8 @@ const printRoutes = (routes) => {
   console.group(`[ion-core] ROUTES[${routes.length}]`);
   for (const chain of routes) {
     const segments = [];
-    chain.forEach(r => segments.push(...r.segments));
-    const ids = chain.map(r => r.id);
+    chain.forEach((r) => segments.push(...r.segments));
+    const ids = chain.map((r) => r.id);
     console.debug(`%c ${generatePath(segments)}`, 'font-weight: bold; padding-left: 20px', '=>\t', `(${ids.join(', ')})`);
   }
   console.groupEnd();
@@ -52325,7 +52275,7 @@ const writeNavState = async (root, chain, direction, index, changed = false, ani
     if (index >= chain.length || !outlet) {
       return changed;
     }
-    await new Promise(resolve => componentOnReady(outlet, resolve));
+    await new Promise((resolve) => componentOnReady(outlet, resolve));
     const route = chain[index];
     const result = await outlet.setRouteId(route.id, route.params, direction, animation);
     // if the outlet changed the page, reset navigation to neutral (no direction)
@@ -52357,7 +52307,8 @@ const readNavState = async (root) => {
   const ids = [];
   let outlet;
   let node = root;
-  while (outlet = searchNavNode(node)) {
+  // eslint-disable-next-line no-cond-assign
+  while ((outlet = searchNavNode(node))) {
     const id = await outlet.getRouteId();
     if (id) {
       node = id.element;
@@ -52374,7 +52325,7 @@ const waitUntilNavNode = () => {
   if (searchNavNode(document.body)) {
     return Promise.resolve();
   }
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     window.addEventListener('ionNavWillLoad', () => resolve(), { once: true });
   });
 };
@@ -52422,7 +52373,7 @@ const matchesRedirect = (segments, redirect) => {
 };
 /** Returns the first redirect matching the path segments or undefined when no match found. */
 const findRouteRedirect = (segments, redirects) => {
-  return redirects.find(redirect => matchesRedirect(segments, redirect));
+  return redirects.find((redirect) => matchesRedirect(segments, redirect));
 };
 const matchesIDs = (ids, chain) => {
   const len = Math.min(ids.length, chain.length);
@@ -52456,7 +52407,7 @@ const matchesIDs = (ids, chain) => {
         // [':s1',':s2']
         // ```
         //
-        const pathWithParams = routeIdParams.map(key => `:${key}`);
+        const pathWithParams = routeIdParams.map((key) => `:${key}`);
         for (let j = 0; j < pathWithParams.length; j++) {
           // Skip results where the path variable is not a match
           if (pathWithParams[j].toLowerCase() !== routeChain.segments[j]) {
@@ -52507,9 +52458,7 @@ const matchesSegments = (segments, chain) => {
       matchesDefault = false;
     }
   }
-  const matches = (matchesDefault)
-    ? matchesDefault === (inputSegments.next() === '')
-    : true;
+  const matches = matchesDefault ? matchesDefault === (inputSegments.next() === '') : true;
   if (!matches) {
     return null;
   }
@@ -52519,7 +52468,7 @@ const matchesSegments = (segments, chain) => {
       segments: route.segments,
       params: mergeParams(route.params, allparams[i]),
       beforeEnter: route.beforeEnter,
-      beforeLeave: route.beforeLeave
+      beforeLeave: route.beforeLeave,
     }));
   }
   return chain;
@@ -52554,7 +52503,7 @@ const findChainForIDs = (ids, chains) => {
       return ({
         id: route.id,
         segments: route.segments,
-        params: mergeParams(route.params, (_a = ids[i]) === null || _a === void 0 ? void 0 : _a.params)
+        params: mergeParams(route.params, (_a = ids[i]) === null || _a === void 0 ? void 0 : _a.params),
       });
     });
   }
@@ -52640,8 +52589,8 @@ const readProp = (el, prop) => {
  */
 const readRedirects = (root) => {
   return Array.from(root.children)
-    .filter(el => el.tagName === 'ION-ROUTE-REDIRECT')
-    .map(el => {
+    .filter((el) => el.tagName === 'ION-ROUTE-REDIRECT')
+    .map((el) => {
     const to = readProp(el, 'to');
     return {
       from: parsePath(readProp(el, 'from')).segments,
@@ -52664,8 +52613,8 @@ const readRoutes = (root) => {
  */
 const readRouteNodes = (node) => {
   return Array.from(node.children)
-    .filter(el => el.tagName === 'ION-ROUTE' && el.component)
-    .map(el => {
+    .filter((el) => el.tagName === 'ION-ROUTE' && el.component)
+    .map((el) => {
     const component = readProp(el, 'component');
     return {
       segments: parsePath(readProp(el, 'url')).segments,
@@ -52673,7 +52622,7 @@ const readRouteNodes = (node) => {
       params: el.componentProps,
       beforeLeave: el.beforeLeave,
       beforeEnter: el.beforeEnter,
-      children: readRouteNodes(el)
+      children: readRouteNodes(el),
     };
   });
 };
@@ -52691,13 +52640,16 @@ const flattenRouterTree = (nodes) => {
 };
 /** Flattens a route node recursively and push each branch to the chains list. */
 const flattenNode = (chain, chains, node) => {
-  chain = [...chain, {
+  chain = [
+    ...chain,
+    {
       id: node.id,
       segments: node.segments,
       params: node.params,
       beforeLeave: node.beforeLeave,
-      beforeEnter: node.beforeEnter
-    }];
+      beforeEnter: node.beforeEnter,
+    },
+  ];
   if (node.children.length === 0) {
     chains.push(chain);
     return;
@@ -52771,7 +52723,7 @@ class Router {
     return this.writeNavStateRoot(segments, direction);
   }
   onBackButton(ev) {
-    ev.detail.register(0, processNextHandler => {
+    ev.detail.register(0, (processNextHandler) => {
       this.back();
       processNextHandler();
     });
@@ -52836,7 +52788,7 @@ class Router {
     const routes = readRoutes(this.el);
     const chain = findChainForIDs(ids, routes);
     if (!chain) {
-      console.warn('[ion-router] no matching URL for ', ids.map(i => i.id));
+      console.warn('[ion-router] no matching URL for ', ids.map((i) => i.id));
       return false;
     }
     const segments = chainToSegments(chain);
@@ -52917,7 +52869,7 @@ class Router {
   async lock() {
     const p = this.waitPromise;
     let resolve;
-    this.waitPromise = new Promise(r => resolve = r);
+    this.waitPromise = new Promise((r) => (resolve = r));
     if (p !== undefined) {
       await p;
     }
@@ -53025,11 +52977,11 @@ class RouterLink {
     const attrs = {
       href: this.href,
       rel: this.rel,
-      target: this.target
+      target: this.target,
     };
     return (hAsync(Host, { onClick: this.onClick, class: createColorClasses$1(this.color, {
         [mode]: true,
-        'ion-activatable': true
+        'ion-activatable': true,
       }) }, hAsync("a", Object.assign({}, attrs), hAsync("slot", null))));
   }
   static get style() { return routerLinkCss; }
@@ -53080,7 +53032,7 @@ class RouterOutlet {
         this.swipeHandler.onStart();
       }
     };
-    this.gesture = (await Promise.resolve().then(function () { return swipeBack; })).createSwipeBackGesture(this.el, () => !this.gestureOrAnimationInProgress && !!this.swipeHandler && this.swipeHandler.canStart(), () => onStart(), step => this.ani && this.ani.progressStep(step), (shouldComplete, step, dur) => {
+    this.gesture = (await Promise.resolve().then(function () { return swipeBack; })).createSwipeBackGesture(this.el, () => !this.gestureOrAnimationInProgress && !!this.swipeHandler && this.swipeHandler.canStart(), () => onStart(), (step) => { var _a; return (_a = this.ani) === null || _a === void 0 ? void 0 : _a.progressStep(step); }, (shouldComplete, step, dur) => {
       if (this.ani) {
         this.ani.onFinish(() => {
           this.gestureOrAnimationInProgress = false;
@@ -53089,7 +53041,7 @@ class RouterOutlet {
           }
         }, { oneTimeCallback: true });
         // Account for rounding errors in JS
-        let newStepValue = (shouldComplete) ? -0.001 : 0.001;
+        let newStepValue = shouldComplete ? -0.001 : 0.001;
         /**
          * Animation will be reversed here, so need to
          * reverse the easing curve as well
@@ -53140,21 +53092,23 @@ class RouterOutlet {
     const changed = await this.setRoot(id, params, {
       duration: direction === 'root' ? 0 : undefined,
       direction: direction === 'back' ? 'back' : 'forward',
-      animationBuilder: animation
+      animationBuilder: animation,
     });
     return {
       changed,
-      element: this.activeEl
+      element: this.activeEl,
     };
   }
   /** @internal */
   async getRouteId() {
     const active = this.activeEl;
-    return active ? {
-      id: active.tagName,
-      element: active,
-      params: this.activeParams,
-    } : undefined;
+    return active
+      ? {
+        id: active.tagName,
+        element: active,
+        params: this.activeParams,
+      }
+      : undefined;
   }
   async setRoot(component, params, opts) {
     if (this.activeComponent === component && shallowEqualStringMap(params, this.activeParams)) {
@@ -53183,8 +53137,8 @@ class RouterOutlet {
     await transition$2(Object.assign(Object.assign({ mode,
       animated,
       enteringEl,
-      leavingEl, baseEl: el, progressCallback: (opts.progressAnimation
-        ? ani => {
+      leavingEl, baseEl: el, progressCallback: opts.progressAnimation
+        ? (ani) => {
           /**
            * Because this progress callback is called asynchronously
            * it is possible for the gesture to start and end before
@@ -53212,7 +53166,7 @@ class RouterOutlet {
             this.ani = ani;
           }
         }
-        : undefined) }, opts), { animationBuilder }));
+        : undefined }, opts), { animationBuilder }));
     // emit nav changed event
     this.ionNavDidChange.emit();
     return true;
@@ -53220,14 +53174,14 @@ class RouterOutlet {
   async lock() {
     const p = this.waitPromise;
     let resolve;
-    this.waitPromise = new Promise(r => resolve = r);
+    this.waitPromise = new Promise((r) => (resolve = r));
     if (p !== undefined) {
       await p;
     }
     return resolve;
   }
   render() {
-    return (hAsync("slot", null));
+    return hAsync("slot", null);
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -53630,7 +53584,7 @@ class Searchbar {
   }
   emitStyle() {
     this.ionStyle.emit({
-      'searchbar': true
+      searchbar: true,
     });
   }
   /**
@@ -53656,7 +53610,7 @@ class Searchbar {
     const value = this.getValue();
     const prevAlignLeft = this.shouldAlignLeft;
     const mode = getIonMode$1(this);
-    const shouldAlignLeft = (!this.animated || value.trim() !== '' || !!this.focused);
+    const shouldAlignLeft = !this.animated || value.trim() !== '' || !!this.focused;
     this.shouldAlignLeft = shouldAlignLeft;
     if (mode !== 'ios') {
       return;
@@ -53693,9 +53647,9 @@ class Searchbar {
         const textWidth = tempSpan.offsetWidth;
         tempSpan.remove();
         // Calculate the input padding
-        const inputLeft = 'calc(50% - ' + (textWidth / 2) + 'px)';
+        const inputLeft = 'calc(50% - ' + textWidth / 2 + 'px)';
         // Calculate the icon margin
-        const iconLeft = 'calc(50% - ' + ((textWidth / 2) + 30) + 'px)';
+        const iconLeft = 'calc(50% - ' + (textWidth / 2 + 30) + 'px)';
         // Set the input padding start and icon margin start
         if (rtl) {
           inputEl.style.paddingRight = inputLeft;
@@ -53752,7 +53706,7 @@ class Searchbar {
    * 2. `showCancelButton` is set to `focus`, and the searchbar has been focused.
    */
   shouldShowCancelButton() {
-    if ((this.showCancelButton === 'never') || (this.showCancelButton === 'focus' && !this.focused)) {
+    if (this.showCancelButton === 'never' || (this.showCancelButton === 'focus' && !this.focused)) {
       return false;
     }
     return true;
@@ -53764,7 +53718,7 @@ class Searchbar {
    * 2. `showClearButton` is set to `focus`, and the searchbar has been focused.
    */
   shouldShowClearButton() {
-    if ((this.showClearButton === 'never') || (this.showClearButton === 'focus' && !this.focused)) {
+    if (this.showClearButton === 'never' || (this.showClearButton === 'focus' && !this.focused)) {
       return false;
     }
     return true;
@@ -53776,9 +53730,7 @@ class Searchbar {
     const clearIcon = this.clearIcon || (mode === 'ios' ? closeCircle : closeSharp);
     const searchIcon = this.searchIcon || (mode === 'ios' ? searchOutline : searchSharp);
     const shouldShowCancelButton = this.shouldShowCancelButton();
-    const cancelButton = (this.showCancelButton !== 'never') && (hAsync("button", { "aria-label": cancelButtonText, "aria-hidden": shouldShowCancelButton ? undefined : 'true', type: "button", tabIndex: mode === 'ios' && !shouldShowCancelButton ? -1 : undefined, onMouseDown: this.onCancelSearchbar, onTouchStart: this.onCancelSearchbar, class: "searchbar-cancel-button" }, hAsync("div", { "aria-hidden": "true" }, mode === 'md'
-      ? hAsync("ion-icon", { "aria-hidden": "true", mode: mode, icon: this.cancelButtonIcon, lazy: false })
-      : cancelButtonText)));
+    const cancelButton = this.showCancelButton !== 'never' && (hAsync("button", { "aria-label": cancelButtonText, "aria-hidden": shouldShowCancelButton ? undefined : 'true', type: "button", tabIndex: mode === 'ios' && !shouldShowCancelButton ? -1 : undefined, onMouseDown: this.onCancelSearchbar, onTouchStart: this.onCancelSearchbar, class: "searchbar-cancel-button" }, hAsync("div", { "aria-hidden": "true" }, mode === 'md' ? (hAsync("ion-icon", { "aria-hidden": "true", mode: mode, icon: this.cancelButtonIcon, lazy: false })) : (cancelButtonText))));
     return (hAsync(Host, { role: "search", "aria-disabled": this.disabled ? 'true' : null, class: createColorClasses$1(this.color, {
         [mode]: true,
         'searchbar-animated': animated,
@@ -53788,8 +53740,8 @@ class Searchbar {
         'searchbar-left-aligned': this.shouldAlignLeft,
         'searchbar-has-focus': this.focused,
         'searchbar-should-show-clear': this.shouldShowClearButton(),
-        'searchbar-should-show-cancel': this.shouldShowCancelButton()
-      }) }, hAsync("div", { class: "searchbar-input-container" }, hAsync("input", { "aria-label": "search text", disabled: this.disabled, ref: el => this.nativeInput = el, class: "searchbar-input", inputMode: this.inputmode, enterKeyHint: this.enterkeyhint, onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, placeholder: this.placeholder, type: this.type, value: this.getValue(), autoComplete: this.autocomplete, autoCorrect: this.autocorrect, spellcheck: this.spellcheck }), mode === 'md' && cancelButton, hAsync("ion-icon", { "aria-hidden": "true", mode: mode, icon: searchIcon, lazy: false, class: "searchbar-search-icon" }), hAsync("button", { "aria-label": "reset", type: "button", "no-blur": true, class: "searchbar-clear-button", onMouseDown: ev => this.onClearInput(ev, true), onTouchStart: ev => this.onClearInput(ev, true) }, hAsync("ion-icon", { "aria-hidden": "true", mode: mode, icon: clearIcon, lazy: false, class: "searchbar-clear-icon" }))), mode === 'ios' && cancelButton));
+        'searchbar-should-show-cancel': this.shouldShowCancelButton(),
+      }) }, hAsync("div", { class: "searchbar-input-container" }, hAsync("input", { "aria-label": "search text", disabled: this.disabled, ref: (el) => (this.nativeInput = el), class: "searchbar-input", inputMode: this.inputmode, enterKeyHint: this.enterkeyhint, onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, placeholder: this.placeholder, type: this.type, value: this.getValue(), autoComplete: this.autocomplete, autoCorrect: this.autocorrect, spellcheck: this.spellcheck }), mode === 'md' && cancelButton, hAsync("ion-icon", { "aria-hidden": "true", mode: mode, icon: searchIcon, lazy: false, class: "searchbar-search-icon" }), hAsync("button", { "aria-label": "reset", type: "button", "no-blur": true, class: "searchbar-clear-button", onMouseDown: (ev) => this.onClearInput(ev, true), onTouchStart: (ev) => this.onClearInput(ev, true) }, hAsync("ion-icon", { "aria-hidden": "true", mode: mode, icon: clearIcon, lazy: false, class: "searchbar-clear-icon" }))), mode === 'ios' && cancelButton));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -53890,8 +53842,8 @@ class Segment {
       this.checked = current;
     };
     this.getSegmentButton = (selector) => {
-      const buttons = this.getButtons().filter(button => !button.disabled);
-      const currIndex = buttons.findIndex(button => button === document.activeElement);
+      const buttons = this.getButtons().filter((button) => !button.disabled);
+      const currIndex = buttons.findIndex((button) => button === document.activeElement);
       switch (selector) {
         case 'first':
           return buttons[0];
@@ -53913,8 +53865,7 @@ class Segment {
      * we need to emit style so the segment-buttons
      * can apply their color classes properly.
      */
-    if ((oldValue === undefined && value !== undefined) ||
-      (oldValue !== undefined && value === undefined)) {
+    if ((oldValue === undefined && value !== undefined) || (oldValue !== undefined && value === undefined)) {
       this.emitStyle();
     }
   }
@@ -53959,9 +53910,9 @@ class Segment {
       gesturePriority: 100,
       threshold: 0,
       passive: false,
-      onStart: ev => this.onStart(ev),
-      onMove: ev => this.onMove(ev),
-      onEnd: ev => this.onEnd(ev),
+      onStart: (ev) => this.onStart(ev),
+      onMove: (ev) => this.onMove(ev),
+      onEnd: (ev) => this.onEnd(ev),
     });
     this.gestureChanged();
     if (this.disabled) {
@@ -54002,14 +53953,14 @@ class Segment {
       return;
     }
     const buttons = this.getButtons();
-    const checked = buttons.find(button => button.value === this.value);
+    const checked = buttons.find((button) => button.value === this.value);
     const root = checked.shadowRoot || checked;
     const ripple = root.querySelector('ion-ripple-effect');
     if (!ripple) {
       return;
     }
     const { x, y } = pointerCoord(detail.event);
-    ripple.addRipple(x, y).then(remove => remove());
+    ripple.addRipple(x, y).then((remove) => remove());
   }
   /*
    * Activate both the segment and the buttons
@@ -54017,7 +53968,7 @@ class Segment {
    */
   setActivated(activated) {
     const buttons = this.getButtons();
-    buttons.forEach(button => {
+    buttons.forEach((button) => {
       if (activated) {
         button.classList.add('segment-button-activated');
       }
@@ -54030,7 +53981,7 @@ class Segment {
   activate(detail) {
     const clicked = detail.event.target;
     const buttons = this.getButtons();
-    const checked = buttons.find(button => button.value === this.value);
+    const checked = buttons.find((button) => button.value === this.value);
     // Make sure we are only checking for activation on a segment button
     // since disabled buttons will get the click on the segment
     if (clicked.tagName !== 'ION-SEGMENT-BUTTON') {
@@ -54080,10 +54031,10 @@ class Segment {
   }
   setCheckedClasses() {
     const buttons = this.getButtons();
-    const index = buttons.findIndex(button => button.value === this.value);
+    const index = buttons.findIndex((button) => button.value === this.value);
     const next = index + 1;
     // Keep track of the currently checked button
-    this.checked = buttons.find(button => button.value === this.value);
+    this.checked = buttons.find((button) => button.value === this.value);
     for (const button of buttons) {
       button.classList.remove('segment-button-after-checked');
     }
@@ -54095,7 +54046,7 @@ class Segment {
     const rtl = isRTL(this.el);
     const activated = this.activated;
     const buttons = this.getButtons();
-    const index = buttons.findIndex(button => button.value === this.value);
+    const index = buttons.findIndex((button) => button.value === this.value);
     const previous = buttons[index];
     let current;
     let nextIndex;
@@ -54111,7 +54062,7 @@ class Segment {
     // gesture event and the Y coordinate of the starting element, since the gesture
     // can move up and down off of the segment
     const currentX = detail.currentX;
-    const previousY = rect.top + (rect.height / 2);
+    const previousY = rect.top + rect.height / 2;
     /**
      * Segment can be used inside the shadow dom
      * so doing document.elementFromPoint would never
@@ -54122,8 +54073,8 @@ class Segment {
      */
     const root = this.el.getRootNode();
     const nextEl = root.elementFromPoint(currentX, previousY);
-    const decreaseIndex = rtl ? currentX > (left + width) : currentX < left;
-    const increaseIndex = rtl ? currentX < left : currentX > (left + width);
+    const decreaseIndex = rtl ? currentX > left + width : currentX < left;
+    const increaseIndex = rtl ? currentX < left : currentX > left + width;
     // If the indicator is currently activated then we have started the gesture
     // on top of the checked button so we need to slide the indicator
     // by checking the button next to it as we move
@@ -54153,7 +54104,6 @@ class Segment {
     if (!activated && isEnd) {
       current = nextEl;
     }
-    /* tslint:disable-next-line */
     if (current != null) {
       /**
        * If current element is ion-segment then that means
@@ -54171,7 +54121,7 @@ class Segment {
   }
   emitStyle() {
     this.ionStyle.emit({
-      'segment': true
+      segment: true,
     });
   }
   onKeyDown(ev) {
@@ -54212,7 +54162,7 @@ class Segment {
   }
   /* By default, focus is delegated to the selected `ion-segment-button`.
    * If there is no selected button, focus will instead pass to the first child button.
-  **/
+   **/
   ensureFocusable() {
     var _a;
     if (this.value !== undefined) {
@@ -54229,7 +54179,7 @@ class Segment {
         'in-toolbar-color': hostContext('ion-toolbar[color]', this.el),
         'segment-activated': this.activated,
         'segment-disabled': this.disabled,
-        'segment-scrollable': this.scrollable
+        'segment-scrollable': this.scrollable,
       }) }, hAsync("slot", null)));
   }
   get el() { return getElement(this); }
@@ -54293,7 +54243,7 @@ class SegmentButton {
     /**
      * The value of the segment button.
      */
-    this.value = 'ion-sb-' + (ids++);
+    this.value = 'ion-sb-' + ids++;
     this.updateStyle = () => {
       forceUpdate$1(this);
     };
@@ -54304,7 +54254,7 @@ class SegmentButton {
     };
   }
   connectedCallback() {
-    const segmentEl = this.segmentEl = this.el.closest('ion-segment');
+    const segmentEl = (this.segmentEl = this.el.closest('ion-segment'));
     if (segmentEl) {
       this.updateState();
       addEventListener$1(segmentEl, 'ionSelect', this.updateState);
@@ -54331,7 +54281,7 @@ class SegmentButton {
   render() {
     const { checked, type, disabled, hasIcon, hasLabel, layout, segmentEl, tabIndex } = this;
     const mode = getIonMode$1(this);
-    const hasSegmentColor = () => segmentEl !== null && segmentEl.color !== undefined;
+    const hasSegmentColor = () => (segmentEl === null || segmentEl === void 0 ? void 0 : segmentEl.color) !== undefined;
     return (hAsync(Host, { role: "tab", "aria-selected": checked ? 'true' : 'false', "aria-disabled": disabled ? 'true' : null, tabIndex: tabIndex, class: {
         [mode]: true,
         'in-toolbar': hostContext('ion-toolbar', this.el),
@@ -54350,7 +54300,7 @@ class SegmentButton {
         'ion-focusable': true,
       } }, hAsync("button", { type: type, tabIndex: -1, class: "button-native", part: "native", disabled: disabled }, hAsync("span", { class: "button-inner" }, hAsync("slot", null)), mode === 'md' && hAsync("ion-ripple-effect", null)), hAsync("div", { part: "indicator", class: {
         'segment-button-indicator': true,
-        'segment-button-indicator-animated': true
+        'segment-button-indicator-animated': true,
       } }, hAsync("div", { part: "indicator-background", class: "segment-button-indicator-background" }))));
   }
   get el() { return getElement(this); }
@@ -54499,23 +54449,22 @@ class Select$1 {
  * (C) Ionic http://ionicframework.com - MIT License
  */
 const watchForOptions = (containerEl, tagName, onChange) => {
-  /* tslint:disable-next-line */
   if (typeof MutationObserver === 'undefined') {
     return;
   }
-  const mutation = new MutationObserver(mutationList => {
+  const mutation = new MutationObserver((mutationList) => {
     onChange(getSelectedOption(mutationList, tagName));
   });
   mutation.observe(containerEl, {
     childList: true,
-    subtree: true
+    subtree: true,
   });
   return mutation;
 };
 const getSelectedOption = (mutationList, tagName) => {
   let newOption;
-  mutationList.forEach(mut => {
-    // tslint:disable-next-line: prefer-for-of
+  mutationList.forEach((mut) => {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < mut.addedNodes.length; i++) {
       newOption = findCheckedOption(mut.addedNodes[i], tagName) || newOption;
     }
@@ -54526,9 +54475,7 @@ const findCheckedOption = (el, tagName) => {
   if (el.nodeType !== 1) {
     return undefined;
   }
-  const options = (el.tagName === tagName.toUpperCase())
-    ? [el]
-    : Array.from(el.querySelectorAll(tagName));
+  const options = el.tagName === tagName.toUpperCase() ? [el] : Array.from(el.querySelectorAll(tagName));
   return options.find((o) => o.value === el.value);
 };
 
@@ -54636,7 +54583,7 @@ class Select {
     if (this.disabled || this.isExpanded) {
       return undefined;
     }
-    const overlay = this.overlay = await this.createOverlay(event);
+    const overlay = (this.overlay = await this.createOverlay(event));
     this.isExpanded = true;
     overlay.onDidDismiss().then(() => {
       this.overlay = undefined;
@@ -54646,7 +54593,7 @@ class Select {
     await overlay.present();
     // focus selected option for popovers
     if (this.interface === 'popover') {
-      let indexOfSelected = this.childOpts.map(o => o.value).indexOf(this.value);
+      let indexOfSelected = this.childOpts.map((o) => o.value).indexOf(this.value);
       indexOfSelected = indexOfSelected > -1 ? indexOfSelected : 0; // default to first option if nothing selected
       const selectedEl = overlay.querySelector(`.select-interface-option:nth-child(${indexOfSelected + 1})`);
       if (selectedEl) {
@@ -54691,24 +54638,26 @@ class Select {
         }
         break;
       case 'alert':
-        const inputType = (this.multiple ? 'checkbox' : 'radio');
+        const inputType = this.multiple ? 'checkbox' : 'radio';
         overlay.inputs = this.createAlertInputs(childOpts, inputType, value);
         break;
     }
   }
   createActionSheetButtons(data, selectValue) {
-    const actionSheetButtons = data.map(option => {
+    const actionSheetButtons = data.map((option) => {
       const value = getOptionValue(option);
       // Remove hydrated before copying over classes
-      const copyClasses = Array.from(option.classList).filter(cls => cls !== 'hydrated').join(' ');
+      const copyClasses = Array.from(option.classList)
+        .filter((cls) => cls !== 'hydrated')
+        .join(' ');
       const optClass = `${OPTION_CLASS} ${copyClasses}`;
       return {
-        role: (isOptionSelected(selectValue, value, this.compareWith) ? 'selected' : ''),
+        role: isOptionSelected(selectValue, value, this.compareWith) ? 'selected' : '',
         text: option.textContent,
         cssClass: optClass,
         handler: () => {
           this.value = value;
-        }
+        },
       };
     });
     // Add "cancel" button
@@ -54717,15 +54666,17 @@ class Select {
       role: 'cancel',
       handler: () => {
         this.ionCancel.emit();
-      }
+      },
     });
     return actionSheetButtons;
   }
   createAlertInputs(data, inputType, selectValue) {
-    const alertInputs = data.map(option => {
+    const alertInputs = data.map((option) => {
       const value = getOptionValue(option);
       // Remove hydrated before copying over classes
-      const copyClasses = Array.from(option.classList).filter(cls => cls !== 'hydrated').join(' ');
+      const copyClasses = Array.from(option.classList)
+        .filter((cls) => cls !== 'hydrated')
+        .join(' ');
       const optClass = `${OPTION_CLASS} ${copyClasses}`;
       return {
         type: inputType,
@@ -54733,16 +54684,18 @@ class Select {
         label: option.textContent || '',
         value,
         checked: isOptionSelected(selectValue, value, this.compareWith),
-        disabled: option.disabled
+        disabled: option.disabled,
       };
     });
     return alertInputs;
   }
   createPopoverOptions(data, selectValue) {
-    const popoverOptions = data.map(option => {
+    const popoverOptions = data.map((option) => {
       const value = getOptionValue(option);
       // Remove hydrated before copying over classes
-      const copyClasses = Array.from(option.classList).filter(cls => cls !== 'hydrated').join(' ');
+      const copyClasses = Array.from(option.classList)
+        .filter((cls) => cls !== 'hydrated')
+        .join(' ');
       const optClass = `${OPTION_CLASS} ${copyClasses}`;
       return {
         text: option.textContent || '',
@@ -54755,7 +54708,7 @@ class Select {
           if (!this.multiple) {
             this.close();
           }
-        }
+        },
       };
     });
     return popoverOptions;
@@ -54774,7 +54727,7 @@ class Select {
     // full width of the item when it presents
     if (item && (item.classList.contains('item-label-floating') || item.classList.contains('item-label-stacked'))) {
       event = Object.assign(Object.assign({}, ev), { detail: {
-          ionShadowTarget: item
+          ionShadowTarget: item,
         } });
       size = 'cover';
     }
@@ -54786,7 +54739,7 @@ class Select {
         message: interfaceOptions.message,
         multiple,
         value,
-        options: this.createPopoverOptions(this.childOpts, value)
+        options: this.createPopoverOptions(this.childOpts, value),
       } });
     return popoverController.create(popoverOpts);
   }
@@ -54798,9 +54751,9 @@ class Select {
   }
   async openAlert() {
     const label = this.getLabel();
-    const labelText = (label) ? label.textContent : null;
+    const labelText = label ? label.textContent : null;
     const interfaceOptions = this.interfaceOptions;
-    const inputType = (this.multiple ? 'checkbox' : 'radio');
+    const inputType = this.multiple ? 'checkbox' : 'radio';
     const mode = getIonMode$1(this);
     const alertOpts = Object.assign(Object.assign({ mode }, interfaceOptions), { header: interfaceOptions.header ? interfaceOptions.header : labelText, inputs: this.createAlertInputs(this.childOpts, inputType, this.value), buttons: [
         {
@@ -54808,16 +54761,19 @@ class Select {
           role: 'cancel',
           handler: () => {
             this.ionCancel.emit();
-          }
+          },
         },
         {
           text: this.okText,
           handler: (selectedValues) => {
             this.value = selectedValues;
-          }
-        }
-      ], cssClass: ['select-alert', interfaceOptions.cssClass,
-        (this.multiple ? 'multiple-select-alert' : 'single-select-alert')] });
+          },
+        },
+      ], cssClass: [
+        'select-alert',
+        interfaceOptions.cssClass,
+        this.multiple ? 'multiple-select-alert' : 'single-select-alert',
+      ] });
     return alertController.create(alertOpts);
   }
   /**
@@ -54853,9 +54809,9 @@ class Select {
   }
   emitStyle() {
     this.ionStyle.emit({
-      'interactive': true,
+      interactive: true,
       'interactive-disabled': this.disabled,
-      'select': true,
+      select: true,
       'select-disabled': this.disabled,
       'has-placeholder': this.placeholder !== undefined,
       'has-value': this.hasValue(),
@@ -54876,22 +54832,20 @@ class Select {
     }
     const selectTextClasses = {
       'select-text': true,
-      'select-placeholder': addPlaceholderClass
+      'select-placeholder': addPlaceholderClass,
     };
     const textPart = addPlaceholderClass ? 'placeholder' : 'text';
     // If there is a label then we need to concatenate it with the
     // current value (or placeholder) and a comma so it separates
     // nicely when the screen reader announces it, otherwise just
     // announce the value / placeholder
-    const displayLabel = labelText !== undefined
-      ? (selectText !== '' ? `${selectText}, ${labelText}` : labelText)
-      : selectText;
+    const displayLabel = labelText !== undefined ? (selectText !== '' ? `${selectText}, ${labelText}` : labelText) : selectText;
     return (hAsync(Host, { onClick: this.onClick, role: "button", "aria-haspopup": "listbox", "aria-disabled": disabled ? 'true' : null, "aria-label": displayLabel, class: {
         [mode]: true,
         'in-item': hostContext('ion-item', el),
         'select-disabled': disabled,
-        'select-expanded': isExpanded
-      } }, hAsync("div", { "aria-hidden": "true", class: selectTextClasses, part: textPart }, selectText), hAsync("div", { class: "select-icon", role: "presentation", part: "icon" }, hAsync("div", { class: "select-icon-inner" })), hAsync("label", { id: labelId }, displayLabel), hAsync("button", { type: "button", disabled: disabled, id: inputId, "aria-labelledby": labelId, "aria-haspopup": "listbox", "aria-expanded": `${isExpanded}`, onFocus: this.onFocus, onBlur: this.onBlur, ref: (focusEl => this.focusEl = focusEl) })));
+        'select-expanded': isExpanded,
+      } }, hAsync("div", { "aria-hidden": "true", class: selectTextClasses, part: textPart }, selectText), hAsync("div", { class: "select-icon", role: "presentation", part: "icon" }, hAsync("div", { class: "select-icon-inner" })), hAsync("label", { id: labelId }, displayLabel), hAsync("button", { type: "button", disabled: disabled, id: inputId, "aria-labelledby": labelId, "aria-haspopup": "listbox", "aria-expanded": `${isExpanded}`, onFocus: this.onFocus, onBlur: this.onBlur, ref: (focusEl) => (this.focusEl = focusEl) })));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -54932,7 +54886,7 @@ const isOptionSelected = (currentValue, compareValue, compareWith) => {
     return false;
   }
   if (Array.isArray(currentValue)) {
-    return currentValue.some(val => compareOptions(val, compareValue, compareWith));
+    return currentValue.some((val) => compareOptions(val, compareValue, compareWith));
   }
   else {
     return compareOptions(currentValue, compareValue, compareWith);
@@ -54940,9 +54894,7 @@ const isOptionSelected = (currentValue, compareValue, compareWith) => {
 };
 const getOptionValue = (el) => {
   const value = el.value;
-  return (value === undefined)
-    ? el.textContent || ''
-    : value;
+  return value === undefined ? el.textContent || '' : value;
 };
 const parseValue = (value) => {
   if (value == null) {
@@ -54970,8 +54922,8 @@ const generateText = (opts, value, compareWith) => {
   }
   if (Array.isArray(value)) {
     return value
-      .map(v => textForValue(opts, v, compareWith))
-      .filter(opt => opt !== null)
+      .map((v) => textForValue(opts, v, compareWith))
+      .filter((opt) => opt !== null)
       .join(', ');
   }
   else {
@@ -54979,12 +54931,10 @@ const generateText = (opts, value, compareWith) => {
   }
 };
 const textForValue = (opts, value, compareWith) => {
-  const selectOpt = opts.find(opt => {
+  const selectOpt = opts.find((opt) => {
     return compareOptions(getOptionValue(opt), value, compareWith);
   });
-  return selectOpt
-    ? selectOpt.textContent
-    : null;
+  return selectOpt ? selectOpt.textContent : null;
 };
 let selectIds = 0;
 const OPTION_CLASS = 'select-interface-option';
@@ -55001,7 +54951,7 @@ class SelectOption {
     this.disabled = false;
   }
   render() {
-    return (hAsync(Host, { role: "option", id: this.inputId, class: getIonMode$1(this) }));
+    return hAsync(Host, { role: "option", id: this.inputId, class: getIonMode$1(this) });
   }
   get el() { return getElement(this); }
   static get style() { return selectOptionCss; }
@@ -55040,7 +54990,7 @@ class SelectPopover {
   }
   findOptionFromEvent(ev) {
     const { options } = this;
-    return options.find(o => o.value === ev.target.value);
+    return options.find((o) => o.value === ev.target.value);
   }
   /**
    * When an option is selected we need to get the value(s)
@@ -55050,7 +55000,7 @@ class SelectPopover {
   callOptionHandler(ev) {
     const option = this.findOptionFromEvent(ev);
     const values = this.getValues(ev);
-    if (option && option.handler) {
+    if (option === null || option === void 0 ? void 0 : option.handler) {
       safeCall(option.handler, values);
     }
   }
@@ -55076,7 +55026,7 @@ class SelectPopover {
     if (multiple) {
       // this is a popover with checkboxes (multiple value select)
       // return an array of all the checked values
-      return options.filter(o => o.checked).map(o => o.value);
+      return options.filter((o) => o.checked).map((o) => o.value);
     }
     // this is a popover with radio buttons (single value select)
     // return the value that was clicked, otherwise undefined
@@ -55086,22 +55036,23 @@ class SelectPopover {
   renderOptions(options) {
     const { multiple } = this;
     switch (multiple) {
-      case true: return this.renderCheckboxOptions(options);
-      default: return this.renderRadioOptions(options);
+      case true:
+        return this.renderCheckboxOptions(options);
+      default:
+        return this.renderRadioOptions(options);
     }
   }
   renderCheckboxOptions(options) {
-    return (options.map(option => hAsync("ion-item", { class: getClassMap(option.cssClass) }, hAsync("ion-checkbox", { slot: "start", value: option.value, disabled: option.disabled, checked: option.checked }), hAsync("ion-label", null, option.text))));
+    return options.map((option) => (hAsync("ion-item", { class: getClassMap(option.cssClass) }, hAsync("ion-checkbox", { slot: "start", value: option.value, disabled: option.disabled, checked: option.checked }), hAsync("ion-label", null, option.text))));
   }
   renderRadioOptions(options) {
-    const checked = options.filter(o => o.checked).map(o => o.value)[0];
-    return (hAsync("ion-radio-group", { value: checked }, options.map(option => hAsync("ion-item", { class: getClassMap(option.cssClass) }, hAsync("ion-label", null, option.text), hAsync("ion-radio", { value: option.value, disabled: option.disabled, onClick: ev => this.rbClick(ev) })))));
+    const checked = options.filter((o) => o.checked).map((o) => o.value)[0];
+    return (hAsync("ion-radio-group", { value: checked }, options.map((option) => (hAsync("ion-item", { class: getClassMap(option.cssClass) }, hAsync("ion-label", null, option.text), hAsync("ion-radio", { value: option.value, disabled: option.disabled, onClick: (ev) => this.rbClick(ev) }))))));
   }
   render() {
     const { header, message, options, subHeader } = this;
     const hasSubHeaderOrMessage = subHeader !== undefined || message !== undefined;
-    return (hAsync(Host, { class: getIonMode$1(this) }, hAsync("ion-list", null, header !== undefined && hAsync("ion-list-header", null, header), hasSubHeaderOrMessage &&
-      hAsync("ion-item", null, hAsync("ion-label", { class: "ion-text-wrap" }, subHeader !== undefined && hAsync("h3", null, subHeader), message !== undefined && hAsync("p", null, message))), this.renderOptions(options))));
+    return (hAsync(Host, { class: getIonMode$1(this) }, hAsync("ion-list", null, header !== undefined && hAsync("ion-list-header", null, header), hasSubHeaderOrMessage && (hAsync("ion-item", null, hAsync("ion-label", { class: "ion-text-wrap" }, subHeader !== undefined && hAsync("h3", null, subHeader), message !== undefined && hAsync("p", null, message)))), this.renderOptions(options))));
   }
   static get style() { return {
     ios: selectPopoverIosCss,
@@ -56335,7 +56286,7 @@ class SkeletonText {
     return (hAsync(Host, { class: {
         [mode]: true,
         'skeleton-text-animated': animated,
-        'in-media': inMedia
+        'in-media': inMedia,
       } }, hAsync("span", null, "\u00A0")));
   }
   get el() { return getElement(this); }
@@ -56363,7 +56314,7 @@ class Slide {
     return (hAsync(Host, { class: {
         [mode]: true,
         'swiper-slide': true,
-        'swiper-zoom-container': true
+        'swiper-zoom-container': true,
       } }));
   }
   static get style() { return slideCss; }
@@ -56404,7 +56355,9 @@ class Slides {
     this.ionSlideTouchStart = createEvent(this, "ionSlideTouchStart", 7);
     this.ionSlideTouchEnd = createEvent(this, "ionSlideTouchEnd", 7);
     this.swiperReady = false;
-    this.swiper = new Promise(resolve => { this.readySwiper = resolve; });
+    this.swiper = new Promise((resolve) => {
+      this.readySwiper = resolve;
+    });
     /**
      * Options to pass to the swiper instance.
      * See https://swiperjs.com/swiper-api for valid options
@@ -56444,10 +56397,7 @@ class Slides {
    * child slides.
    */
   async update() {
-    const [swiper] = await Promise.all([
-      this.getSwiper(),
-      waitForSlides(this.el)
-    ]);
+    const [swiper] = await Promise.all([this.getSwiper(), waitForSlides(this.el)]);
     swiper.update();
   }
   /**
@@ -56584,6 +56534,7 @@ class Slides {
   async initSwiper() {
     const finalOptions = this.normalizeOptions();
     // init swiper core
+    // eslint-disable-next-line
     // @ts-ignore
     const { Swiper } = await Promise.resolve().then(function () { return swiper_bundle; });
     await waitForSlides(this.el);
@@ -56655,27 +56606,27 @@ class Slides {
         stretch: 0,
         depth: 100,
         modifier: 1,
-        slideShadows: true
+        slideShadows: true,
       },
       flipEffect: {
         slideShadows: true,
-        limitRotation: true
+        limitRotation: true,
       },
       cubeEffect: {
         slideShadows: true,
         shadow: true,
         shadowOffset: 20,
-        shadowScale: 0.94
+        shadowScale: 0.94,
       },
       fadeEffect: {
-        crossFade: false
+        crossFade: false,
       },
       a11y: {
         prevSlideMessage: 'Previous slide',
         nextSlideMessage: 'Next slide',
         firstSlideMessage: 'This is the first slide',
-        lastSlideMessage: 'This is the last slide'
-      }
+        lastSlideMessage: 'This is the last slide',
+      },
     };
     if (this.pager) {
       swiperOptions.pagination = {
@@ -56716,10 +56667,10 @@ class Slides {
         touchStart: this.ionSlideTouchStart.emit,
         touchEnd: this.ionSlideTouchEnd.emit,
         tap: this.ionSlideTap.emit,
-        doubleTap: this.ionSlideDoubleTap.emit
-      }
+        doubleTap: this.ionSlideDoubleTap.emit,
+      },
     };
-    const customEvents = (!!this.options && !!this.options.on) ? this.options.on : {};
+    const customEvents = !!this.options && !!this.options.on ? this.options.on : {};
     // merge "on" event listeners, while giving our event listeners priority
     const mergedEventOptions = { on: Object.assign(Object.assign({}, customEvents), eventOptions.on) };
     // Merge the base, user options, and events together then pas to swiper
@@ -56731,8 +56682,8 @@ class Slides {
         [`${mode}`]: true,
         // Used internally for styling
         [`slides-${mode}`]: true,
-        'swiper-container': true
-      } }, hAsync("div", { class: "swiper-wrapper" }, hAsync("slot", null)), this.pager && hAsync("div", { class: "swiper-pagination", ref: el => this.paginationEl = el }), this.scrollbar && hAsync("div", { class: "swiper-scrollbar", ref: el => this.scrollbarEl = el })));
+        'swiper-container': true,
+      } }, hAsync("div", { class: "swiper-wrapper" }, hAsync("slot", null)), this.pager && hAsync("div", { class: "swiper-pagination", ref: (el) => (this.paginationEl = el) }), this.scrollbar && hAsync("div", { class: "swiper-scrollbar", ref: (el) => (this.scrollbarEl = el) })));
   }
   static get assetsDirs() { return ["swiper"]; }
   get el() { return getElement(this); }
@@ -56773,7 +56724,7 @@ class Slides {
   }; }
 }
 const waitForSlides = (el) => {
-  return Promise.all(Array.from(el.querySelectorAll('ion-slide')).map(s => new Promise(resolve => componentOnReady(s, resolve))));
+  return Promise.all(Array.from(el.querySelectorAll('ion-slide')).map((s) => new Promise((resolve) => componentOnReady(s, resolve))));
 };
 
 const spinnerCss = "/*!@:host*/.sc-ion-spinner-h{display:inline-block;position:relative;width:28px;height:28px;color:var(--color);user-select:none}/*!@:host(.ion-color)*/.ion-color.sc-ion-spinner-h{color:var(--ion-color-base)}/*!@svg*/svg.sc-ion-spinner{left:0;top:0;transform-origin:center;position:absolute;width:100%;height:100%;transform:translateZ(0)}/*!@[dir=rtl] svg, :host-context([dir=rtl]) svg*/[dir=rtl].sc-ion-spinner svg.sc-ion-spinner,[dir=rtl].sc-ion-spinner-h svg.sc-ion-spinner,[dir=rtl] .sc-ion-spinner-h svg.sc-ion-spinner{left:unset;right:unset;right:0}/*!@[dir=rtl] svg, :host-context([dir=rtl]) svg*/[dir=rtl].sc-ion-spinner svg.sc-ion-spinner,[dir=rtl].sc-ion-spinner-h svg.sc-ion-spinner,[dir=rtl] .sc-ion-spinner-h svg.sc-ion-spinner{transform-origin:calc(100% - center)}/*!@:host(.spinner-lines) line,\n:host(.spinner-lines-small) line*/.spinner-lines.sc-ion-spinner-h line.sc-ion-spinner,.spinner-lines-small.sc-ion-spinner-h line.sc-ion-spinner{stroke-width:7px}/*!@:host(.spinner-lines-sharp) line,\n:host(.spinner-lines-sharp-small) line*/.spinner-lines-sharp.sc-ion-spinner-h line.sc-ion-spinner,.spinner-lines-sharp-small.sc-ion-spinner-h line.sc-ion-spinner{stroke-width:4px}/*!@:host(.spinner-lines) line,\n:host(.spinner-lines-small) line,\n:host(.spinner-lines-sharp) line,\n:host(.spinner-lines-sharp-small) line*/.spinner-lines.sc-ion-spinner-h line.sc-ion-spinner,.spinner-lines-small.sc-ion-spinner-h line.sc-ion-spinner,.spinner-lines-sharp.sc-ion-spinner-h line.sc-ion-spinner,.spinner-lines-sharp-small.sc-ion-spinner-h line.sc-ion-spinner{stroke-linecap:round;stroke:currentColor}/*!@:host(.spinner-lines) svg,\n:host(.spinner-lines-small) svg,\n:host(.spinner-lines-sharp) svg,\n:host(.spinner-lines-sharp-small) svg*/.spinner-lines.sc-ion-spinner-h svg.sc-ion-spinner,.spinner-lines-small.sc-ion-spinner-h svg.sc-ion-spinner,.spinner-lines-sharp.sc-ion-spinner-h svg.sc-ion-spinner,.spinner-lines-sharp-small.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-fade-out 1s linear infinite}/*!@:host(.spinner-bubbles) svg*/.spinner-bubbles.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-scale-out 1s linear infinite;fill:currentColor}/*!@:host(.spinner-circles) svg*/.spinner-circles.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-fade-out 1s linear infinite;fill:currentColor}/*!@:host(.spinner-crescent) circle*/.spinner-crescent.sc-ion-spinner-h circle.sc-ion-spinner{fill:transparent;stroke-width:4px;stroke-dasharray:128px;stroke-dashoffset:82px;stroke:currentColor}/*!@:host(.spinner-crescent) svg*/.spinner-crescent.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-rotate 1s linear infinite}/*!@:host(.spinner-dots) circle*/.spinner-dots.sc-ion-spinner-h circle.sc-ion-spinner{stroke-width:0;fill:currentColor}/*!@:host(.spinner-dots) svg*/.spinner-dots.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-dots 1s linear infinite}/*!@:host(.spinner-circular) svg*/.spinner-circular.sc-ion-spinner-h svg.sc-ion-spinner{animation:spinner-circular linear infinite}/*!@:host(.spinner-circular) circle*/.spinner-circular.sc-ion-spinner-h circle.sc-ion-spinner{animation:spinner-circular-inner ease-in-out infinite;stroke:currentColor;stroke-dasharray:80px, 200px;stroke-dashoffset:0px;stroke-width:5.6;fill:none}/*!@:host(.spinner-paused),\n:host(.spinner-paused) svg,\n:host(.spinner-paused) circle*/.spinner-paused.sc-ion-spinner-h,.spinner-paused.sc-ion-spinner-h svg.sc-ion-spinner,.spinner-paused.sc-ion-spinner-h circle.sc-ion-spinner{animation-play-state:paused}@keyframes spinner-fade-out{0%{opacity:1}100%{opacity:0}}@keyframes spinner-scale-out{0%{transform:scale(1, 1)}100%{transform:scale(0, 0)}}@keyframes spinner-rotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@keyframes spinner-dots{0%{transform:scale(1, 1);opacity:0.9}50%{transform:scale(0.4, 0.4);opacity:0.3}100%{transform:scale(1, 1);opacity:0.9}}@keyframes spinner-circular{100%{transform:rotate(360deg)}}@keyframes spinner-circular-inner{0%{stroke-dasharray:1px, 200px;stroke-dashoffset:0px}50%{stroke-dasharray:100px, 200px;stroke-dashoffset:-15px}100%{stroke-dasharray:100px, 200px;stroke-dashoffset:-125px}}";
@@ -56792,14 +56743,14 @@ class Spinner {
     if (spinnerName) {
       return spinnerName;
     }
-    return (mode === 'ios') ? 'lines' : 'circular';
+    return mode === 'ios' ? 'lines' : 'circular';
   }
   render() {
     const self = this;
     const mode = getIonMode$1(self);
     const spinnerName = self.getName();
     const spinner = SPINNERS[spinnerName] || SPINNERS['lines'];
-    const duration = (typeof self.duration === 'number' && self.duration > 10 ? self.duration : spinner.dur);
+    const duration = typeof self.duration === 'number' && self.duration > 10 ? self.duration : spinner.dur;
     const svgs = [];
     if (spinner.circles !== undefined) {
       for (let i = 0; i < spinner.circles; i++) {
@@ -56814,7 +56765,7 @@ class Spinner {
     return (hAsync(Host, { class: createColorClasses$1(self.color, {
         [mode]: true,
         [`spinner-${spinnerName}`]: true,
-        'spinner-paused': self.paused || config$1.getBoolean('_testing')
+        'spinner-paused': self.paused || config$1.getBoolean('_testing'),
       }), role: "progressbar", style: spinner.elmDuration ? { animationDuration: duration + 'ms' } : {} }, svgs));
   }
   static get style() { return spinnerCss; }
@@ -56849,12 +56800,12 @@ const splitPaneMdCss = "/*!@:host*/.sc-ion-split-pane-md-h{--side-width:100%;lef
 
 const SPLIT_PANE_SIDE = 'split-pane-side';
 const QUERY = {
-  'xs': '(min-width: 0px)',
-  'sm': '(min-width: 576px)',
-  'md': '(min-width: 768px)',
-  'lg': '(min-width: 992px)',
-  'xl': '(min-width: 1200px)',
-  'never': ''
+  xs: '(min-width: 0px)',
+  sm: '(min-width: 576px)',
+  md: '(min-width: 768px)',
+  lg: '(min-width: 992px)',
+  xl: '(min-width: 1200px)',
+  never: '',
 };
 class SplitPane {
   constructor(hostRef) {
@@ -56900,8 +56851,7 @@ class SplitPane {
     if (!this.visible) {
       return false;
     }
-    return element.parentElement === this.el
-      && element.classList.contains(SPLIT_PANE_SIDE);
+    return element.parentElement === this.el && element.classList.contains(SPLIT_PANE_SIDE);
   }
   styleChildren() {
     {
@@ -56914,7 +56864,7 @@ class SplitPane {
         [mode]: true,
         // Used internally for styling
         [`split-pane-${mode}`]: true,
-        'split-pane-visible': this.visible
+        'split-pane-visible': this.visible,
       } }, hAsync("slot", null)));
   }
   get el() { return getElement(this); }
@@ -57073,7 +57023,7 @@ class Tab {
     const { tab, active, component } = this;
     return (hAsync(Host, { role: "tabpanel", "aria-hidden": !active ? 'true' : null, "aria-labelledby": `tab-button-${tab}`, class: {
         'ion-page': component === undefined,
-        'tab-hidden': !active
+        'tab-hidden': !active,
       } }, hAsync("slot", null)));
   }
   get el() { return getElement(this); }
@@ -57119,7 +57069,7 @@ class TabBar {
   selectedTabChanged() {
     if (this.selectedTab !== undefined) {
       this.ionTabBarChanged.emit({
-        tab: this.selectedTab
+        tab: this.selectedTab,
       });
     }
   }
@@ -57134,7 +57084,7 @@ class TabBar {
         }
       };
       this.keyboardWillHideHandler = () => {
-        setTimeout(() => this.keyboardVisible = false, 50);
+        setTimeout(() => (this.keyboardVisible = false), 50);
       };
       window.addEventListener('keyboardWillShow', this.keyboardWillShowHandler);
       window.addEventListener('keyboardWillHide', this.keyboardWillHideHandler);
@@ -57212,7 +57162,7 @@ class TabButton {
   onTabBarChanged(ev) {
     const dispatchedFrom = ev.target;
     const parent = this.el.parentElement;
-    if ((ev.composedPath && ev.composedPath().includes(parent)) || (dispatchedFrom && dispatchedFrom.contains(this.el))) {
+    if (ev.composedPath().includes(parent) || (dispatchedFrom === null || dispatchedFrom === void 0 ? void 0 : dispatchedFrom.contains(this.el))) {
       this.selected = this.tab === ev.detail.tab;
     }
   }
@@ -57227,7 +57177,7 @@ class TabButton {
         this.ionTabButtonClick.emit({
           tab: this.tab,
           href: this.href,
-          selected: this.selected
+          selected: this.selected,
         });
       }
       ev.preventDefault();
@@ -57256,7 +57206,7 @@ class TabButton {
       download: this.download,
       href,
       rel,
-      target
+      target,
     };
     return (hAsync(Host, { onClick: this.onClick, onKeyup: this.onKeyUp, role: "tab", tabindex: tabIndex, "aria-selected": selected ? 'true' : null, id: tab !== undefined ? `tab-button-${tab}` : null, class: {
         [mode]: true,
@@ -57269,7 +57219,7 @@ class TabButton {
         [`tab-layout-${layout}`]: true,
         'ion-activatable': true,
         'ion-selectable': true,
-        'ion-focusable': true
+        'ion-focusable': true,
       } }, hAsync("a", Object.assign({}, attrs, { tabIndex: -1, class: "button-native", part: "native" }), hAsync("span", { class: "button-inner" }, hAsync("slot", null)), mode === 'md' && hAsync("ion-ripple-effect", { type: "unbounded" }))));
   }
   get el() { return getElement(this); }
@@ -57454,7 +57404,8 @@ class Tabs {
   }
   /** @internal */
   async getRouteId() {
-    const tabId = this.selectedTab && this.selectedTab.tab;
+    var _a;
+    const tabId = (_a = this.selectedTab) === null || _a === void 0 ? void 0 : _a.tab;
     return tabId !== undefined ? { id: tabId, element: this.selectedTab } : undefined;
   }
   setActive(selectedTab) {
@@ -57522,9 +57473,7 @@ class Tabs {
   }; }
 }
 const getTab = (tabs, tab) => {
-  const tabEl = (typeof tab === 'string')
-    ? tabs.find(t => t.tab === tab)
-    : tab;
+  const tabEl = typeof tab === 'string' ? tabs.find((t) => t.tab === tab) : tab;
   if (!tabEl) {
     console.error(`tab with id: "${tabEl}" does not exist`);
   }
@@ -57727,13 +57676,13 @@ class Textarea {
   }
   emitStyle() {
     this.ionStyle.emit({
-      'interactive': true,
-      'textarea': true,
-      'input': true,
+      interactive: true,
+      textarea: true,
+      input: true,
       'interactive-disabled': this.disabled,
       'has-placeholder': this.placeholder !== undefined,
       'has-value': this.hasValue(),
-      'has-focus': this.hasFocus
+      'has-focus': this.hasFocus,
     });
   }
   /**
@@ -57774,7 +57723,7 @@ class Textarea {
     }
     return (hAsync(Host, { "aria-disabled": this.disabled ? 'true' : null, class: createColorClasses$1(this.color, {
         [mode]: true,
-      }) }, hAsync("div", { class: "textarea-wrapper", ref: el => this.textareaWrapper = el }, hAsync("textarea", Object.assign({ class: "native-textarea", "aria-labelledby": label ? labelId : null, ref: el => this.nativeInput = el, autoCapitalize: this.autocapitalize, autoFocus: this.autofocus, enterKeyHint: this.enterkeyhint, inputMode: this.inputmode, disabled: this.disabled, maxLength: this.maxlength, minLength: this.minlength, name: this.name, placeholder: this.placeholder || '', readOnly: this.readonly, required: this.required, spellcheck: this.spellcheck, cols: this.cols, rows: this.rows, wrap: this.wrap, onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onKeyDown: this.onKeyDown }, this.inheritedAttributes), value))));
+      }) }, hAsync("div", { class: "textarea-wrapper", ref: (el) => (this.textareaWrapper = el) }, hAsync("textarea", Object.assign({ class: "native-textarea", "aria-labelledby": label ? labelId : null, ref: (el) => (this.nativeInput = el), autoCapitalize: this.autocapitalize, autoFocus: this.autofocus, enterKeyHint: this.enterkeyhint, inputMode: this.inputmode, disabled: this.disabled, maxLength: this.maxlength, minLength: this.minlength, name: this.name, placeholder: this.placeholder || '', readOnly: this.readonly, required: this.required, spellcheck: this.spellcheck, cols: this.cols, rows: this.rows, wrap: this.wrap, onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onKeyDown: this.onKeyDown }, this.inheritedAttributes), value))));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -57870,10 +57819,7 @@ const iosEnterAnimation = (baseEl, position) => {
       wrapperAnimation.fromTo('transform', 'translateY(100%)', `translateY(${bottom})`);
       break;
   }
-  return baseAnimation
-    .easing('cubic-bezier(.155,1.105,.295,1.12)')
-    .duration(400)
-    .addAnimation(wrapperAnimation);
+  return baseAnimation.easing('cubic-bezier(.155,1.105,.295,1.12)').duration(400).addAnimation(wrapperAnimation);
 };
 
 /*!
@@ -57901,10 +57847,7 @@ const iosLeaveAnimation = (baseEl, position) => {
       wrapperAnimation.fromTo('transform', `translateY(${bottom})`, 'translateY(100%)');
       break;
   }
-  return baseAnimation
-    .easing('cubic-bezier(.36,.66,.04,1)')
-    .duration(300)
-    .addAnimation(wrapperAnimation);
+  return baseAnimation.easing('cubic-bezier(.36,.66,.04,1)').duration(300).addAnimation(wrapperAnimation);
 };
 
 /*!
@@ -57936,10 +57879,7 @@ const mdEnterAnimation = (baseEl, position) => {
       wrapperAnimation.fromTo('opacity', 0.01, 1);
       break;
   }
-  return baseAnimation
-    .easing('cubic-bezier(.36,.66,.04,1)')
-    .duration(400)
-    .addAnimation(wrapperAnimation);
+  return baseAnimation.easing('cubic-bezier(.36,.66,.04,1)').duration(400).addAnimation(wrapperAnimation);
 };
 
 /*!
@@ -57953,13 +57893,8 @@ const mdLeaveAnimation = (baseEl) => {
   const wrapperAnimation = createAnimation();
   const root = getElementRoot(baseEl);
   const wrapperEl = root.querySelector('.toast-wrapper');
-  wrapperAnimation
-    .addElement(wrapperEl)
-    .fromTo('opacity', 0.99, 0);
-  return baseAnimation
-    .easing('cubic-bezier(.36,.66,.04,1)')
-    .duration(300)
-    .addAnimation(wrapperAnimation);
+  wrapperAnimation.addElement(wrapperEl).fromTo('opacity', 0.99, 0);
+  return baseAnimation.easing('cubic-bezier(.36,.66,.04,1)').duration(300).addAnimation(wrapperAnimation);
 };
 
 const toastIosCss = "/*!@:host*/.sc-ion-toast-ios-h{--border-width:0;--border-style:none;--border-color:initial;--box-shadow:none;--min-width:auto;--width:auto;--min-height:auto;--height:auto;--max-height:auto;--white-space:normal;left:0;top:0;display:block;position:absolute;width:100%;height:100%;outline:none;color:var(--color);font-family:var(--ion-font-family, inherit);contain:strict;z-index:1001;pointer-events:none}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-toast-ios-h,[dir=rtl] .sc-ion-toast-ios-h{left:unset;right:unset;right:0}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-toast-ios-h{display:none}/*!@:host(.ion-color)*/.ion-color.sc-ion-toast-ios-h{--button-color:inherit;color:var(--ion-color-contrast)}/*!@:host(.ion-color) .toast-button-cancel*/.ion-color.sc-ion-toast-ios-h .toast-button-cancel.sc-ion-toast-ios{color:inherit}/*!@:host(.ion-color) .toast-wrapper*/.ion-color.sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios{background:var(--ion-color-base)}/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-ios{border-radius:var(--border-radius);left:var(--start);right:var(--end);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow)}/*!@[dir=rtl] .toast-wrapper, :host-context([dir=rtl]) .toast-wrapper*/[dir=rtl].sc-ion-toast-ios .toast-wrapper.sc-ion-toast-ios,[dir=rtl].sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios,[dir=rtl] .sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios{left:unset;right:unset;left:var(--end);right:var(--start)}/*!@.toast-container*/.toast-container.sc-ion-toast-ios{display:flex;align-items:center;pointer-events:auto;height:inherit;min-height:inherit;max-height:inherit;contain:content}/*!@.toast-content*/.toast-content.sc-ion-toast-ios{display:flex;flex:1;flex-direction:column;justify-content:center}/*!@.toast-icon*/.toast-icon.sc-ion-toast-ios{margin-left:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-icon*/.toast-icon.sc-ion-toast-ios{margin-left:unset;-webkit-margin-start:16px;margin-inline-start:16px}}/*!@.toast-message*/.toast-message.sc-ion-toast-ios{flex:1;white-space:var(--white-space)}/*!@.toast-button-group*/.toast-button-group.sc-ion-toast-ios{display:flex}/*!@.toast-button*/.toast-button.sc-ion-toast-ios{border:0;outline:none;color:var(--button-color);z-index:0}/*!@.toast-icon,\n.toast-button-icon*/.toast-icon.sc-ion-toast-ios,.toast-button-icon.sc-ion-toast-ios{font-size:1.4em}/*!@.toast-button-inner*/.toast-button-inner.sc-ion-toast-ios{display:flex;align-items:center}@media (any-hover: hover){/*!@.toast-button:hover*/.toast-button.sc-ion-toast-ios:hover{cursor:pointer}}/*!@:host*/.sc-ion-toast-ios-h{--background:var(--ion-color-step-50, #f2f2f2);--border-radius:14px;--button-color:var(--ion-color-primary, #3880ff);--color:var(--ion-color-step-850, #262626);--max-width:700px;--start:10px;--end:10px;font-size:14px}/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-ios{margin-left:auto;margin-right:auto;margin-top:auto;margin-bottom:auto;display:block;position:absolute;z-index:10}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-wrapper*/.toast-wrapper.sc-ion-toast-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}@supports (backdrop-filter: blur(0)){/*!@:host(.toast-translucent) .toast-wrapper*/.toast-translucent.sc-ion-toast-ios-h .toast-wrapper.sc-ion-toast-ios{background:rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);backdrop-filter:saturate(180%) blur(20px)}}/*!@.toast-wrapper.toast-top*/.toast-wrapper.toast-top.sc-ion-toast-ios{transform:translate3d(0,  -100%,  0);top:0}/*!@.toast-wrapper.toast-middle*/.toast-wrapper.toast-middle.sc-ion-toast-ios{opacity:0.01}/*!@.toast-wrapper.toast-bottom*/.toast-wrapper.toast-bottom.sc-ion-toast-ios{transform:translate3d(0,  100%,  0);bottom:0}/*!@.toast-content*/.toast-content.sc-ion-toast-ios{padding-left:15px;padding-right:15px;padding-top:15px;padding-bottom:15px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-content*/.toast-content.sc-ion-toast-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:15px;padding-inline-start:15px;-webkit-padding-end:15px;padding-inline-end:15px}}/*!@.toast-header*/.toast-header.sc-ion-toast-ios{margin-bottom:2px;font-weight:500}/*!@.toast-button*/.toast-button.sc-ion-toast-ios{padding-left:15px;padding-right:15px;padding-top:10px;padding-bottom:10px;height:44px;transition:background-color, opacity 100ms linear;border:0;background-color:transparent;font-family:var(--ion-font-family);font-size:17px;font-weight:500;overflow:hidden}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toast-button*/.toast-button.sc-ion-toast-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:15px;padding-inline-start:15px;-webkit-padding-end:15px;padding-inline-end:15px}}/*!@.toast-button.ion-activated*/.toast-button.ion-activated.sc-ion-toast-ios{opacity:0.4}@media (any-hover: hover){/*!@.toast-button:hover*/.toast-button.sc-ion-toast-ios:hover{opacity:0.6}}";
@@ -58009,7 +57944,7 @@ class Toast {
     this.dispatchCancelHandler = (ev) => {
       const role = ev.detail.role;
       if (isCancel(role)) {
-        const cancelButton = this.getButtons().find(b => b.role === 'cancel');
+        const cancelButton = this.getButtons().find((b) => b.role === 'cancel');
         this.callButtonHandler(cancelButton);
       }
     };
@@ -58055,10 +57990,8 @@ class Toast {
   }
   getButtons() {
     const buttons = this.buttons
-      ? this.buttons.map(b => {
-        return (typeof b === 'string')
-          ? { text: b }
-          : b;
+      ? this.buttons.map((b) => {
+        return typeof b === 'string' ? { text: b } : b;
       })
       : [];
     return buttons;
@@ -58075,7 +58008,7 @@ class Toast {
     return Promise.resolve();
   }
   async callButtonHandler(button) {
-    if (button && button.handler) {
+    if (button === null || button === void 0 ? void 0 : button.handler) {
       // a handler has been provided, execute it
       // pass the handler the values from the inputs
       try {
@@ -58098,27 +58031,23 @@ class Toast {
     const mode = getIonMode$1(this);
     const buttonGroupsClasses = {
       'toast-button-group': true,
-      [`toast-button-group-${side}`]: true
+      [`toast-button-group-${side}`]: true,
     };
-    return (hAsync("div", { class: buttonGroupsClasses }, buttons.map(b => hAsync("button", { type: "button", class: buttonClass(b), tabIndex: 0, onClick: () => this.buttonClick(b), part: "button" }, hAsync("div", { class: "toast-button-inner" }, b.icon &&
-      hAsync("ion-icon", { icon: b.icon, slot: b.text === undefined ? 'icon-only' : undefined, class: "toast-button-icon" }), b.text), mode === 'md' && hAsync("ion-ripple-effect", { type: b.icon !== undefined && b.text === undefined ? 'unbounded' : 'bounded' })))));
+    return (hAsync("div", { class: buttonGroupsClasses }, buttons.map((b) => (hAsync("button", { type: "button", class: buttonClass(b), tabIndex: 0, onClick: () => this.buttonClick(b), part: "button" }, hAsync("div", { class: "toast-button-inner" }, b.icon && (hAsync("ion-icon", { icon: b.icon, slot: b.text === undefined ? 'icon-only' : undefined, class: "toast-button-icon" })), b.text), mode === 'md' && (hAsync("ion-ripple-effect", { type: b.icon !== undefined && b.text === undefined ? 'unbounded' : 'bounded' })))))));
   }
   render() {
     const allButtons = this.getButtons();
-    const startButtons = allButtons.filter(b => b.side === 'start');
-    const endButtons = allButtons.filter(b => b.side !== 'start');
+    const startButtons = allButtons.filter((b) => b.side === 'start');
+    const endButtons = allButtons.filter((b) => b.side !== 'start');
     const mode = getIonMode$1(this);
     const wrapperClass = {
       'toast-wrapper': true,
-      [`toast-${this.position}`]: true
+      [`toast-${this.position}`]: true,
     };
     const role = allButtons.length > 0 ? 'dialog' : 'status';
     return (hAsync(Host, Object.assign({ "aria-live": "polite", "aria-atomic": "true", role: role, tabindex: "-1" }, this.htmlAttributes, { style: {
         zIndex: `${60000 + this.overlayIndex}`,
-      }, class: createColorClasses$1(this.color, Object.assign(Object.assign({ [mode]: true }, getClassMap(this.cssClass)), { 'overlay-hidden': true, 'toast-translucent': this.translucent })), onIonToastWillDismiss: this.dispatchCancelHandler }), hAsync("div", { class: wrapperClass }, hAsync("div", { class: "toast-container", part: "container" }, this.renderButtons(startButtons, 'start'), this.icon !== undefined &&
-      hAsync("ion-icon", { class: "toast-icon", part: "icon", icon: this.icon, lazy: false, "aria-hidden": "true" }), hAsync("div", { class: "toast-content" }, this.header !== undefined &&
-      hAsync("div", { class: "toast-header", part: "header" }, this.header), this.message !== undefined &&
-      hAsync("div", { class: "toast-message", part: "message", innerHTML: sanitizeDOMString(this.message) })), this.renderButtons(endButtons, 'end')))));
+      }, class: createColorClasses$1(this.color, Object.assign(Object.assign({ [mode]: true }, getClassMap(this.cssClass)), { 'overlay-hidden': true, 'toast-translucent': this.translucent })), onIonToastWillDismiss: this.dispatchCancelHandler }), hAsync("div", { class: wrapperClass }, hAsync("div", { class: "toast-container", part: "container" }, this.renderButtons(startButtons, 'start'), this.icon !== undefined && (hAsync("ion-icon", { class: "toast-icon", part: "icon", icon: this.icon, lazy: false, "aria-hidden": "true" })), hAsync("div", { class: "toast-content" }, this.header !== undefined && (hAsync("div", { class: "toast-header", part: "header" }, this.header)), this.message !== undefined && (hAsync("div", { class: "toast-message", part: "message", innerHTML: sanitizeDOMString(this.message) }))), this.renderButtons(endButtons, 'end')))));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -58246,7 +58175,7 @@ class Toggle {
   checkedChanged(isChecked) {
     this.ionChange.emit({
       checked: isChecked,
-      value: this.value
+      value: this.value,
     });
   }
   disabledChanged() {
@@ -58263,8 +58192,8 @@ class Toggle {
       threshold: 5,
       passive: false,
       onStart: () => this.onStart(),
-      onMove: ev => this.onMove(ev),
-      onEnd: ev => this.onEnd(ev),
+      onMove: (ev) => this.onMove(ev),
+      onEnd: (ev) => this.onEnd(ev),
     });
     this.disabledChanged();
   }
@@ -58312,15 +58241,15 @@ class Toggle {
     const mode = getIonMode$1(this);
     const { label, labelId, labelText } = getAriaLabel(el, inputId);
     const value = this.getValue();
-    renderHiddenInput(true, el, name, (checked ? value : ''), disabled);
+    renderHiddenInput(true, el, name, checked ? value : '', disabled);
     return (hAsync(Host, { onClick: this.onClick, "aria-labelledby": label ? labelId : null, "aria-checked": `${checked}`, "aria-hidden": disabled ? 'true' : null, role: "switch", class: createColorClasses$1(color, {
         [mode]: true,
         'in-item': hostContext('ion-item', el),
         'toggle-activated': activated,
         'toggle-checked': checked,
         'toggle-disabled': disabled,
-        'interactive': true
-      }) }, hAsync("div", { class: "toggle-icon", part: "track" }, hAsync("div", { class: "toggle-icon-wrapper" }, hAsync("div", { class: "toggle-inner", part: "handle" }))), hAsync("label", { htmlFor: inputId }, labelText), hAsync("input", { type: "checkbox", role: "switch", "aria-checked": `${checked}`, disabled: disabled, id: inputId, onFocus: () => this.onFocus(), onBlur: () => this.onBlur(), ref: focusEl => this.focusEl = focusEl })));
+        interactive: true,
+      }) }, hAsync("div", { class: "toggle-icon", part: "track" }, hAsync("div", { class: "toggle-icon-wrapper" }, hAsync("div", { class: "toggle-inner", part: "handle" }))), hAsync("label", { htmlFor: inputId }, labelText), hAsync("input", { type: "checkbox", role: "switch", "aria-checked": `${checked}`, disabled: disabled, id: inputId, onFocus: () => this.onFocus(), onBlur: () => this.onBlur(), ref: (focusEl) => (this.focusEl = focusEl) })));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -58349,12 +58278,10 @@ class Toggle {
 }
 const shouldToggle = (rtl, checked, deltaX, margin) => {
   if (checked) {
-    return (!rtl && (margin > deltaX)) ||
-      (rtl && (-margin < deltaX));
+    return (!rtl && margin > deltaX) || (rtl && -margin < deltaX);
   }
   else {
-    return (!rtl && (-margin < deltaX)) ||
-      (rtl && (margin > deltaX));
+    return (!rtl && -margin < deltaX) || (rtl && margin > deltaX);
   }
 };
 let toggleIds = 0;
@@ -58379,16 +58306,16 @@ class Toolbar {
   }
   componentWillLoad() {
     const buttons = Array.from(this.el.querySelectorAll('ion-buttons'));
-    const firstButtons = buttons.find(button => {
+    const firstButtons = buttons.find((button) => {
       return button.slot === 'start';
     });
     if (firstButtons) {
       firstButtons.classList.add('buttons-first-slot');
     }
     const buttonsReversed = buttons.reverse();
-    const lastButtons = buttonsReversed.find(button => button.slot === 'end') ||
-      buttonsReversed.find(button => button.slot === 'primary') ||
-      buttonsReversed.find(button => button.slot === 'secondary');
+    const lastButtons = buttonsReversed.find((button) => button.slot === 'end') ||
+      buttonsReversed.find((button) => button.slot === 'primary') ||
+      buttonsReversed.find((button) => button.slot === 'secondary');
     if (lastButtons) {
       lastButtons.classList.add('buttons-last-slot');
     }
@@ -58400,7 +58327,7 @@ class Toolbar {
     const newStyles = {};
     const childStyles = this.childrenStyles.get(tagName) || {};
     let hasStyleChange = false;
-    Object.keys(updatedStyles).forEach(key => {
+    Object.keys(updatedStyles).forEach((key) => {
       const childKey = `toolbar-${key}`;
       const newValue = updatedStyles[key];
       if (newValue !== childStyles[childKey]) {
@@ -58418,7 +58345,7 @@ class Toolbar {
   render() {
     const mode = getIonMode$1(this);
     const childStyles = {};
-    this.childrenStyles.forEach(value => {
+    this.childrenStyles.forEach((value) => {
       Object.assign(childStyles, value);
     });
     return (hAsync(Host, { class: Object.assign(Object.assign({}, childStyles), createColorClasses$1(this.color, {
@@ -58461,11 +58388,11 @@ class ToolbarTitle {
   emitStyle() {
     const size = this.getSize();
     this.ionStyle.emit({
-      [`title-${size}`]: true
+      [`title-${size}`]: true,
     });
   }
   getSize() {
-    return (this.size !== undefined) ? this.size : 'default';
+    return this.size !== undefined ? this.size : 'default';
   }
   render() {
     const mode = getIonMode$1(this);
@@ -58473,7 +58400,7 @@ class ToolbarTitle {
     return (hAsync(Host, { class: createColorClasses$1(this.color, {
         [mode]: true,
         [`title-${size}`]: true,
-        'title-rtl': document.dir === 'rtl'
+        'title-rtl': document.dir === 'rtl',
       }) }, hAsync("div", { class: "toolbar-title" }, hAsync("slot", null))));
   }
   get el() { return getElement(this); }
@@ -58522,7 +58449,7 @@ const updateVDom = (dom, heightIndex, cells, range) => {
   const end = range.offset + range.length;
   for (let i = range.offset; i < end; i++) {
     const cell = cells[i];
-    const node = dom.find(n => n.d && n.cell === cell);
+    const node = dom.find((n) => n.d && n.cell === cell);
     if (node) {
       const top = heightIndex[i];
       if (top !== node.top) {
@@ -58536,9 +58463,9 @@ const updateVDom = (dom, heightIndex, cells, range) => {
     }
   }
   // needs to append
-  const pool = dom.filter(n => n.d);
+  const pool = dom.filter((n) => n.d);
   for (const cell of toMutate) {
-    const node = pool.find(n => n.d && n.cell.type === cell.type);
+    const node = pool.find((n) => n.d && n.cell.type === cell.type);
     const index = cell.i;
     if (node) {
       node.d = false;
@@ -58557,14 +58484,14 @@ const updateVDom = (dom, heightIndex, cells, range) => {
     }
   }
   dom
-    .filter(n => n.d && n.top !== -9999)
-    .forEach(n => {
+    .filter((n) => n.d && n.top !== -9999)
+    .forEach((n) => {
     n.change = NODE_CHANGE_POSITION;
     n.top = -9999;
   });
 };
 const doRender = (el, nodeRender, dom, updateCellHeight) => {
-  const children = Array.from(el.children).filter(n => n.tagName !== 'TEMPLATE');
+  const children = Array.from(el.children).filter((n) => n.tagName !== 'TEMPLATE');
   const childrenNu = children.length;
   let child;
   for (let i = 0; i < dom.length; i++) {
@@ -58618,15 +58545,18 @@ const createNode = (el, type) => {
 };
 const getTemplate = (el, type) => {
   switch (type) {
-    case CELL_TYPE_ITEM: return el.querySelector('template:not([name])');
-    case CELL_TYPE_HEADER: return el.querySelector('template[name=header]');
-    case CELL_TYPE_FOOTER: return el.querySelector('template[name=footer]');
+    case CELL_TYPE_ITEM:
+      return el.querySelector('template:not([name])');
+    case CELL_TYPE_HEADER:
+      return el.querySelector('template[name=header]');
+    case CELL_TYPE_FOOTER:
+      return el.querySelector('template[name=footer]');
   }
 };
 const getViewport = (scrollTop, vierportHeight, margin) => {
   return {
     top: Math.max(scrollTop - margin, 0),
-    bottom: scrollTop + vierportHeight + margin
+    bottom: scrollTop + vierportHeight + margin,
   };
 };
 const getRange = (heightIndex, viewport, buffer) => {
@@ -58652,9 +58582,7 @@ const getRange = (heightIndex, viewport, buffer) => {
 };
 const getShouldUpdate = (dirtyIndex, currentRange, range) => {
   const end = range.offset + range.length;
-  return (dirtyIndex <= end ||
-    currentRange.offset !== range.offset ||
-    currentRange.length !== range.length);
+  return dirtyIndex <= end || currentRange.offset !== range.offset || currentRange.length !== range.length;
 };
 const findCellIndex = (cells, index) => {
   const max = cells.length > 0 ? cells[cells.length - 1].index : 0;
@@ -58665,7 +58593,7 @@ const findCellIndex = (cells, index) => {
     return cells.length;
   }
   else {
-    return cells.findIndex(c => c.index === index);
+    return cells.findIndex((c) => c.index === index);
   }
 };
 const inplaceUpdate = (dst, src, offset) => {
@@ -58747,7 +58675,7 @@ const resizeBuffer = (buf, len) => {
   }
 };
 const positionForIndex = (index, cells, heightIndex) => {
-  const cell = cells.find(c => c.type === CELL_TYPE_ITEM && c.index === index);
+  const cell = cells.find((c) => c.type === CELL_TYPE_ITEM && c.index === index);
   if (cell) {
     return heightIndex[cell.i];
   }
@@ -58851,9 +58779,7 @@ class VirtualScroll {
     if (!this.items) {
       return;
     }
-    const length = (len === -1)
-      ? this.items.length - offset
-      : len;
+    const length = len === -1 ? this.items.length - offset : len;
     const cellIndex = findCellIndex(this.cells, offset);
     const cells = calcCells(this.items, this.itemHeight, this.headerHeight, this.footerHeight, this.headerFn, this.footerFn, this.approxHeaderHeight, this.approxFooterHeight, this.approxItemHeight, cellIndex, offset, length);
     this.cells = inplaceUpdate(this.cells, cells, cellIndex);
@@ -58965,8 +58891,7 @@ class VirtualScroll {
     this.timerUpdate = setTimeout(() => this.updateVirtualScroll(), 100);
   }
   updateState() {
-    const shouldEnable = !!(this.scrollEl &&
-      this.cells);
+    const shouldEnable = !!(this.scrollEl && this.cells);
     if (shouldEnable !== this.isEnabled) {
       this.enableScrollEvents(shouldEnable);
       if (shouldEnable) {
@@ -59011,15 +58936,18 @@ class VirtualScroll {
   renderVirtualNode(node) {
     const { type, value, index } = node.cell;
     switch (type) {
-      case CELL_TYPE_ITEM: return this.renderItem(value, index);
-      case CELL_TYPE_HEADER: return this.renderHeader(value, index);
-      case CELL_TYPE_FOOTER: return this.renderFooter(value, index);
+      case CELL_TYPE_ITEM:
+        return this.renderItem(value, index);
+      case CELL_TYPE_HEADER:
+        return this.renderHeader(value, index);
+      case CELL_TYPE_FOOTER:
+        return this.renderFooter(value, index);
     }
   }
   render() {
     return (hAsync(Host, { style: {
-        height: `${this.totalHeight}px`
-      } }, this.renderItem && (hAsync(VirtualProxy, { dom: this.virtualDom }, this.virtualDom.map(node => this.renderVirtualNode(node))))));
+        height: `${this.totalHeight}px`,
+      } }, this.renderItem && (hAsync(VirtualProxy, { dom: this.virtualDom }, this.virtualDom.map((node) => this.renderVirtualNode(node))))));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -59532,7 +59460,7 @@ const createSwipeBackGesture = (el, canStartHandler, onStartHandler, onMoveHandl
      * or values greater than 1 which should not be possible.
      * Need to investigate more to find where the issue is.
      */
-    onEndHandler(shouldComplete, (stepValue <= 0) ? 0.01 : clamp(0, stepValue, 0.9999), realDur);
+    onEndHandler(shouldComplete, stepValue <= 0 ? 0.01 : clamp(0, stepValue, 0.9999), realDur);
   };
   return createGesture({
     el,
@@ -59542,7 +59470,7 @@ const createSwipeBackGesture = (el, canStartHandler, onStartHandler, onMoveHandl
     canStart,
     onStart: onStartHandler,
     onMove,
-    onEnd
+    onEnd,
   });
 };
 

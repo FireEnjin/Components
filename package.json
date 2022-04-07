@@ -31,13 +31,13 @@
     "presets:watch": "fireenjin presets watch"
   },
   "dependencies": {
-    "@fireenjin/sdk": "^1.2.50",
+    "@fireenjin/sdk": "^1.2.51",
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
-    "@ionic/core": "^6.0.14",
+    "@ionic/core": "^6.0.15",
     "@stencil/core": "2.13.0",
-    "@stripe/stripe-js": "^1.26.0",
+    "@stripe/stripe-js": "^1.27.0",
     "chart.js": "^3.7.1",
     "cleave.js": "^1.6.0",
     "clipboard": "^2.0.10",
@@ -50,8 +50,8 @@
     "rxjs": "^6.6.7"
   },
   "devDependencies": {
-    "@fireenjin/cli": "^1.0.15",
-    "@fireenjin/docs": "^1.0.15",
+    "@fireenjin/cli": "^1.0.19",
+    "@fireenjin/docs": "^1.0.16",
     "@stencil/eslint-plugin": "^0.4.0",
     "@types/cleave.js": "^1.4.6",
     "@types/jest": "^27.4.1",
