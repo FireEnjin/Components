@@ -31,7 +31,7 @@ export class Radios implements ComponentInterface {
   @Prop() disabled = false;
   @Prop() allowEmptySelection = false;
   @Prop() lines: "full" | "inset" | "none" = "none";
-  @Prop() labelPosition?: "stacked" | "fixed" | "floating";
+  @Prop() labelPosition?: "stacked" | "fixed" | "floating" = "stacked";
   @Prop() endpoint?: string;
   @Prop() orderBy?: string;
   @Prop() dataPropsMap?: any;

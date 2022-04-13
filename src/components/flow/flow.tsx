@@ -21,7 +21,7 @@ export class flow {
    * The next button for the slider
    */
   @Prop() nextButton: {
-    expand?: string;
+    expand?: "block" | "full";
     label?: string;
     color?: Color;
     fill?: "clear" | "outline" | "solid" | "default";
@@ -40,7 +40,7 @@ export class flow {
    * The prev button for the slider
    */
   @Prop() prevButton: {
-    expand?: string;
+    expand?: "block" | "full";
     label?: string;
     color?: Color;
     fill?: "clear" | "outline" | "solid" | "default";
@@ -59,7 +59,7 @@ export class flow {
    * The save button for the flow
    */
   @Prop() saveButton: {
-    expand?: string;
+    expand?: "block" | "full";
     label?: string;
     color?: Color;
     fill?: "clear" | "outline" | "solid" | "default";

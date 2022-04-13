@@ -4716,7 +4716,6 @@ function hydrateFactory($stencilWindow, $stencilHydrateOpts, $stencilHydrateResu
 
 
 var process = require('process');
-var content = require('@utils/content');
 var require$$1 = require('fs');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -11924,6 +11923,16 @@ const printIonWarning = (message) => {
 const printIonError = (message, ...params) => {
   return console.error(`[Ionic Error]: ${message}`, ...params);
 };
+/**
+ * Prints an error informing developers that an implementation requires an element to be used
+ * within a specific selector.
+ *
+ * @param el The web component element this is requiring the element.
+ * @param targetSelectors The selector or selectors that were not found.
+ */
+const printRequiredElementError = (el, ...targetSelectors) => {
+  return console.error(`<${el.tagName.toLowerCase()}> must be used inside ${targetSelectors.join(' or ')}.`);
+};
 
 /*!
  * (C) Ionic http://ionicframework.com - MIT License
@@ -14344,6 +14353,68 @@ class FabList {
 /*!
  * (C) Ionic http://ionicframework.com - MIT License
  */
+const ION_CONTENT_TAG_NAME = 'ION-CONTENT';
+const ION_CONTENT_ELEMENT_SELECTOR = 'ion-content';
+const ION_CONTENT_CLASS_SELECTOR = '.ion-content-scroll-host';
+/**
+ * Selector used for implementations reliant on `<ion-content>` for scroll event changes.
+ *
+ * Developers should use the `.ion-content-scroll-host` selector to target the element emitting
+ * scroll events. With virtual scroll implementations this will be the host element for
+ * the scroll viewport.
+ */
+const ION_CONTENT_SELECTOR = `${ION_CONTENT_ELEMENT_SELECTOR}, ${ION_CONTENT_CLASS_SELECTOR}`;
+const isIonContent = (el) => el && el.tagName === ION_CONTENT_TAG_NAME;
+/**
+ * Waits for the element host fully initialize before
+ * returning the inner scroll element.
+ *
+ * For `ion-content` the scroll target will be the result
+ * of the `getScrollElement` function.
+ *
+ * For custom implementations it will be the element host
+ * or a selector within the host, if supplied through `scrollTarget`.
+ */
+const getScrollElement = async (el) => {
+  if (isIonContent(el)) {
+    await new Promise((resolve) => componentOnReady(el, resolve));
+    return el.getScrollElement();
+  }
+  return el;
+};
+/**
+ * Queries the element matching the selector for IonContent.
+ * See ION_CONTENT_SELECTOR for the selector used.
+ */
+const findIonContent = (el) => {
+  /**
+   * First we try to query the custom scroll host selector in cases where
+   * the implementation is using an outer `ion-content` with an inner custom
+   * scroll container.
+   */
+  const customContentHost = el.querySelector(ION_CONTENT_CLASS_SELECTOR);
+  if (customContentHost) {
+    return customContentHost;
+  }
+  return el.querySelector(ION_CONTENT_SELECTOR);
+};
+/**
+ * Queries the closest element matching the selector for IonContent.
+ */
+const findClosestIonContent = (el) => {
+  return el.closest(ION_CONTENT_SELECTOR);
+};
+/**
+ * Prints an error informing developers that an implementation requires an element to be used
+ * within either the `ion-content` selector or the `.ion-content-scroll-host` class.
+ */
+const printIonContentErrorMsg = (el) => {
+  return printRequiredElementError(el, ION_CONTENT_ELEMENT_SELECTOR);
+};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 const handleFooterFade = (scrollEl, baseEl) => {
   readTask(() => {
     const scrollTop = scrollEl.scrollTop;
@@ -14402,16 +14473,16 @@ class Footer {
       this.destroyCollapsibleFooter();
       if (hasFade) {
         const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
-        const contentEl = pageEl ? content.findIonContent(pageEl) : null;
+        const contentEl = pageEl ? findIonContent(pageEl) : null;
         if (!contentEl) {
-          content.printIonContentErrorMsg(this.el);
+          printIonContentErrorMsg(this.el);
           return;
         }
         this.setupFadeFooter(contentEl);
       }
     };
     this.setupFadeFooter = async (contentEl) => {
-      const scrollEl = (this.scrollEl = await content.getScrollElement(contentEl));
+      const scrollEl = (this.scrollEl = await getScrollElement(contentEl));
       /**
        * Handle fading of toolbars on scroll
        */
@@ -24498,7 +24569,7 @@ class Header {
      */
     this.translucent = false;
     this.setupFadeHeader = async (contentEl, condenseHeader) => {
-      const scrollEl = (this.scrollEl = await content.getScrollElement(contentEl));
+      const scrollEl = (this.scrollEl = await getScrollElement(contentEl));
       /**
        * Handle fading of toolbars on scroll
        */
@@ -24532,7 +24603,7 @@ class Header {
     this.destroyCollapsibleHeader();
     if (hasCondense) {
       const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
-      const contentEl = pageEl ? content.findIonContent(pageEl) : null;
+      const contentEl = pageEl ? findIonContent(pageEl) : null;
       // Cloned elements are always needed in iOS transition
       writeTask(() => {
         const title = cloneElement('ion-title');
@@ -24543,9 +24614,9 @@ class Header {
     }
     else if (hasFade) {
       const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
-      const contentEl = pageEl ? content.findIonContent(pageEl) : null;
+      const contentEl = pageEl ? findIonContent(pageEl) : null;
       if (!contentEl) {
-        content.printIonContentErrorMsg(this.el);
+        printIonContentErrorMsg(this.el);
         return;
       }
       const condenseHeader = contentEl.querySelector('ion-header[collapse="condense"]');
@@ -24568,13 +24639,13 @@ class Header {
   }
   async setupCondenseHeader(contentEl, pageEl) {
     if (!contentEl || !pageEl) {
-      content.printIonContentErrorMsg(this.el);
+      printIonContentErrorMsg(this.el);
       return;
     }
     if (typeof IntersectionObserver === 'undefined') {
       return;
     }
-    this.scrollEl = await content.getScrollElement(contentEl);
+    this.scrollEl = await getScrollElement(contentEl);
     const headers = pageEl.querySelectorAll('ion-header');
     this.collapsibleMainHeader = Array.from(headers).find((header) => header.collapse !== 'condense');
     if (!this.collapsibleMainHeader) {
@@ -25022,12 +25093,12 @@ class InfiniteScroll {
     this.enableScrollEvents(!disabled);
   }
   async connectedCallback() {
-    const contentEl = content.findClosestIonContent(this.el);
+    const contentEl = findClosestIonContent(this.el);
     if (!contentEl) {
-      content.printIonContentErrorMsg(this.el);
+      printIonContentErrorMsg(this.el);
       return;
     }
-    this.scrollEl = await content.getScrollElement(contentEl);
+    this.scrollEl = await getScrollElement(contentEl);
     this.thresholdChanged();
     this.disabledChanged();
     if (this.position === 'top') {
@@ -41681,6 +41752,7 @@ class Radios {
     this.disabled = false;
     this.allowEmptySelection = false;
     this.lines = "none";
+    this.labelPosition = "stacked";
     this.limit = 15;
     this.radioSlot = "start";
     this.results = [];
@@ -42732,12 +42804,12 @@ class Refresher {
       console.error('Make sure you use: <ion-refresher slot="fixed">');
       return;
     }
-    const contentEl = content.findClosestIonContent(this.el);
+    const contentEl = findClosestIonContent(this.el);
     if (!contentEl) {
-      content.printIonContentErrorMsg(this.el);
+      printIonContentErrorMsg(this.el);
       return;
     }
-    this.scrollEl = await content.getScrollElement(contentEl);
+    this.scrollEl = await getScrollElement(contentEl);
     /**
      * Query the host `ion-content` directly (if it is available), to use its
      * inner #background-content has the target. Otherwise fallback to the
@@ -52036,9 +52108,9 @@ class ReorderGroup {
     }
   }
   async connectedCallback() {
-    const contentEl = content.findClosestIonContent(this.el);
+    const contentEl = findClosestIonContent(this.el);
     if (contentEl) {
-      this.scrollEl = await content.getScrollElement(contentEl);
+      this.scrollEl = await getScrollElement(contentEl);
     }
     this.gesture = (await Promise.resolve().then(function () { return index$1; })).createGesture({
       el: this.el,

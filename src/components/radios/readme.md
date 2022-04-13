@@ -13,7 +13,7 @@
 | `disabled`            | `disabled`              |             | `boolean`                            | `false`     |
 | `endpoint`            | `endpoint`              |             | `string`                             | `undefined` |
 | `label`               | `label`                 |             | `string`                             | `undefined` |
-| `labelPosition`       | `label-position`        |             | `"fixed" \| "floating" \| "stacked"` | `undefined` |
+| `labelPosition`       | `label-position`        |             | `"fixed" \| "floating" \| "stacked"` | `"stacked"` |
 | `limit`               | `limit`                 |             | `number`                             | `15`        |
 | `lines`               | `lines`                 |             | `"full" \| "inset" \| "none"`        | `"none"`    |
 | `mode`                | `mode`                  |             | `"ios" \| "md"`                      | `undefined` |

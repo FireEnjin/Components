@@ -35,7 +35,7 @@
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
-    "@ionic/core": "^6.1.0",
+    "@ionic/core": "^6.1.1-dev.11649883188.15e1465b",
     "@stencil/core": "2.13.0",
     "@stripe/stripe-js": "^1.27.0",
     "chart.js": "^3.7.1",
@@ -50,8 +50,8 @@
     "rxjs": "^6.6.7"
   },
   "devDependencies": {
-    "@fireenjin/cli": "^1.0.19",
-    "@fireenjin/docs": "^1.0.16",
+    "@fireenjin/cli": "^1.0.20",
+    "@fireenjin/docs": "^1.0.17",
     "@stencil/eslint-plugin": "^0.4.0",
     "@types/cleave.js": "^1.4.6",
     "@types/jest": "^27.4.1",
