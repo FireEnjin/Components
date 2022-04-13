@@ -4716,7 +4716,7 @@ function hydrateFactory($stencilWindow, $stencilHydrateOpts, $stencilHydrateResu
 
 
 var process = require('process');
-var logging = require('@utils/logging');
+var content = require('@utils/content');
 var require$$1 = require('fs');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -6562,6 +6562,16 @@ class AccordionGroup {
     if (!activeElement) {
       return;
     }
+    /**
+     * Make sure focus is in the header, not the body, of the accordion. This ensures
+     * that if there are any interactable elements in the body, their keyboard
+     * interaction doesn't get stolen by the accordion. Example: using up/down keys
+     * in ion-textarea.
+     */
+    const activeAccordionHeader = activeElement.closest('ion-accordion [slot="header"]');
+    if (!activeAccordionHeader) {
+      return;
+    }
     const accordionEl = activeElement.tagName === 'ION-ACCORDION' ? activeElement : activeElement.closest('ion-accordion');
     if (!accordionEl) {
       return;
@@ -8211,6 +8221,7 @@ const createAnimation = (animationId) => {
   let shouldCalculateNumAnimations = true;
   let keyframeName;
   let ani;
+  let paused = false;
   const id = animationId;
   const onFinishCallbacks = [];
   const onFinishOneTimeCallbacks = [];
@@ -8265,6 +8276,10 @@ const createAnimation = (animationId) => {
     numAnimationsRunning = 0;
     finished = false;
     willComplete = true;
+    paused = false;
+  };
+  const isRunning = () => {
+    return numAnimationsRunning !== 0 && !paused;
   };
   const onFinish = (callback, opts) => {
     const callbacks = (opts === null || opts === void 0 ? void 0 : opts.oneTimeCallback) ? onFinishOneTimeCallbacks : onFinishCallbacks;
@@ -8828,6 +8843,7 @@ const createAnimation = (animationId) => {
           setStyleProperty(element, 'animation-play-state', 'paused');
         });
       }
+      paused = true;
     }
   };
   const pause = () => {
@@ -8945,6 +8961,7 @@ const createAnimation = (animationId) => {
       else {
         playCSSAnimations();
       }
+      paused = false;
     });
   };
   const stop = () => {
@@ -9025,6 +9042,7 @@ const createAnimation = (animationId) => {
     beforeRemoveClass,
     beforeAddClass,
     onFinish,
+    isRunning,
     progressStart,
     progressStep,
     progressEnd,
@@ -11888,6 +11906,29 @@ const startFocusVisible = (rootEl) => {
  * (C) Ionic http://ionicframework.com - MIT License
  */
 /**
+ * Logs a warning to the console with an Ionic prefix
+ * to indicate the library that is warning the developer.
+ *
+ * @param message - The string message to be logged to the console.
+ */
+const printIonWarning = (message) => {
+  return console.warn(`[Ionic Warning]: ${message}`);
+};
+/*
+ * Logs an error to the console with an Ionic prefix
+ * to indicate the library that is warning the developer.
+ *
+ * @param message - The string message to be logged to the console.
+ * @param params - Additional arguments to supply to the console.error.
+ */
+const printIonError = (message, ...params) => {
+  return console.error(`[Ionic Error]: ${message}`, ...params);
+};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
+/**
  * Returns true if the selected day is equal to the reference day
  */
 const isSameDay = (baseParts, compareParts) => {
@@ -13522,7 +13563,7 @@ class Datetime {
           minute });
       }
       else {
-        logging.printIonWarning(`Unable to parse date string: ${this.value}. Please provide a valid ISO 8601 datetime string.`);
+        printIonWarning(`Unable to parse date string: ${this.value}. Please provide a valid ISO 8601 datetime string.`);
       }
     }
     this.emitStyle();
@@ -13795,9 +13836,24 @@ class Datetime {
         'calendar-month-disabled': !isWorkingMonth && swipeDisabled,
       } }, hAsync("div", { class: "calendar-month-grid" }, getDaysOfMonth(month, year, this.firstDayOfWeek % 7).map((dateObject, index) => {
       const { day, dayOfWeek } = dateObject;
+      const { isDateEnabled } = this;
       const referenceParts = { month, day, year };
       const { isActive, isToday, ariaLabel, ariaSelected, disabled } = getCalendarDayState(this.locale, referenceParts, this.activePartsClone, this.todayParts, this.minParts, this.maxParts, this.parsedDayValues);
-      return (hAsync("button", { tabindex: "-1", "data-day": day, "data-month": month, "data-year": year, "data-index": index, "data-day-of-week": dayOfWeek, disabled: isCalMonthDisabled || disabled, class: {
+      let isCalDayDisabled = isCalMonthDisabled || disabled;
+      if (!isCalDayDisabled && isDateEnabled !== undefined) {
+        try {
+          /**
+           * The `isDateEnabled` implementation is try-catch wrapped
+           * to prevent exceptions in the user's function from
+           * interrupting the calendar rendering.
+           */
+          isCalDayDisabled = !isDateEnabled(convertDataToISO(referenceParts));
+        }
+        catch (e) {
+          printIonError('Exception thrown from provided `isDateEnabled` function. Please check your function and try again.', e);
+        }
+      }
+      return (hAsync("button", { tabindex: "-1", "data-day": day, "data-month": month, "data-year": year, "data-index": index, "data-day-of-week": dayOfWeek, disabled: isCalDayDisabled, class: {
           'calendar-day-padding': day === null,
           'calendar-day': true,
           'calendar-day-active': isActive,
@@ -14009,6 +14065,7 @@ class Datetime {
       "name": [1],
       "disabled": [4],
       "readonly": [4],
+      "isDateEnabled": [16],
       "min": [1025],
       "max": [1025],
       "presentation": [1],
@@ -14345,17 +14402,16 @@ class Footer {
       this.destroyCollapsibleFooter();
       if (hasFade) {
         const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
-        const contentEl = pageEl ? pageEl.querySelector('ion-content') : null;
+        const contentEl = pageEl ? content.findIonContent(pageEl) : null;
+        if (!contentEl) {
+          content.printIonContentErrorMsg(this.el);
+          return;
+        }
         this.setupFadeFooter(contentEl);
       }
     };
     this.setupFadeFooter = async (contentEl) => {
-      if (!contentEl) {
-        console.error('ion-footer requires a content to collapse. Make sure there is an ion-content.');
-        return;
-      }
-      await new Promise((resolve) => componentOnReady(contentEl, resolve));
-      const scrollEl = (this.scrollEl = await contentEl.getScrollElement());
+      const scrollEl = (this.scrollEl = await content.getScrollElement(contentEl));
       /**
        * Handle fading of toolbars on scroll
        */
@@ -24442,12 +24498,7 @@ class Header {
      */
     this.translucent = false;
     this.setupFadeHeader = async (contentEl, condenseHeader) => {
-      if (!contentEl) {
-        console.error('ion-header requires a content to collapse. Make sure there is an ion-content.');
-        return;
-      }
-      await new Promise((resolve) => componentOnReady(contentEl, resolve));
-      const scrollEl = (this.scrollEl = await contentEl.getScrollElement());
+      const scrollEl = (this.scrollEl = await content.getScrollElement(contentEl));
       /**
        * Handle fading of toolbars on scroll
        */
@@ -24481,7 +24532,7 @@ class Header {
     this.destroyCollapsibleHeader();
     if (hasCondense) {
       const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
-      const contentEl = pageEl ? pageEl.querySelector('ion-content') : null;
+      const contentEl = pageEl ? content.findIonContent(pageEl) : null;
       // Cloned elements are always needed in iOS transition
       writeTask(() => {
         const title = cloneElement('ion-title');
@@ -24492,10 +24543,12 @@ class Header {
     }
     else if (hasFade) {
       const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
-      const contentEl = pageEl ? pageEl.querySelector('ion-content') : null;
-      const condenseHeader = contentEl
-        ? contentEl.querySelector('ion-header[collapse="condense"]')
-        : null;
+      const contentEl = pageEl ? content.findIonContent(pageEl) : null;
+      if (!contentEl) {
+        content.printIonContentErrorMsg(this.el);
+        return;
+      }
+      const condenseHeader = contentEl.querySelector('ion-header[collapse="condense"]');
       await this.setupFadeHeader(contentEl, condenseHeader);
     }
   }
@@ -24515,14 +24568,13 @@ class Header {
   }
   async setupCondenseHeader(contentEl, pageEl) {
     if (!contentEl || !pageEl) {
-      console.error('ion-header requires a content to collapse, make sure there is an ion-content.');
+      content.printIonContentErrorMsg(this.el);
       return;
     }
     if (typeof IntersectionObserver === 'undefined') {
       return;
     }
-    await new Promise((resolve) => componentOnReady(contentEl, resolve));
-    this.scrollEl = await contentEl.getScrollElement();
+    this.scrollEl = await content.getScrollElement(contentEl);
     const headers = pageEl.querySelectorAll('ion-header');
     this.collapsibleMainHeader = Array.from(headers).find((header) => header.collapse !== 'condense');
     if (!this.collapsibleMainHeader) {
@@ -24970,13 +25022,12 @@ class InfiniteScroll {
     this.enableScrollEvents(!disabled);
   }
   async connectedCallback() {
-    const contentEl = this.el.closest('ion-content');
+    const contentEl = content.findClosestIonContent(this.el);
     if (!contentEl) {
-      console.error('<ion-infinite-scroll> must be used inside an <ion-content>');
+      content.printIonContentErrorMsg(this.el);
       return;
     }
-    await new Promise((resolve) => componentOnReady(contentEl, resolve));
-    this.scrollEl = await contentEl.getScrollElement();
+    this.scrollEl = await content.getScrollElement(contentEl);
     this.thresholdChanged();
     this.disabledChanged();
     if (this.position === 'top') {
@@ -29893,6 +29944,9 @@ class Item {
      */
     this.type = 'button';
   }
+  counterFormatterChanged() {
+    this.updateCounterOutput(this.getFirstInput());
+  }
   handleIonChange(ev) {
     if (this.counter && ev.target === this.getFirstInput()) {
       this.updateCounterOutput(ev.target);
@@ -30029,10 +30083,26 @@ class Item {
   }
   updateCounterOutput(inputEl) {
     var _a, _b;
-    if (this.counter && !this.multipleInputs && (inputEl === null || inputEl === void 0 ? void 0 : inputEl.maxlength) !== undefined) {
-      const length = (_b = (_a = inputEl === null || inputEl === void 0 ? void 0 : inputEl.value) === null || _a === void 0 ? void 0 : _a.toString().length) !== null && _b !== void 0 ? _b : '0';
-      this.counterString = `${length} / ${inputEl.maxlength}`;
+    const { counter, counterFormatter, defaultCounterFormatter } = this;
+    if (counter && !this.multipleInputs && (inputEl === null || inputEl === void 0 ? void 0 : inputEl.maxlength) !== undefined) {
+      const length = (_b = (_a = inputEl === null || inputEl === void 0 ? void 0 : inputEl.value) === null || _a === void 0 ? void 0 : _a.toString().length) !== null && _b !== void 0 ? _b : 0;
+      if (counterFormatter === undefined) {
+        this.counterString = defaultCounterFormatter(length, inputEl.maxlength);
+      }
+      else {
+        try {
+          this.counterString = counterFormatter(length, inputEl.maxlength);
+        }
+        catch (e) {
+          printIonError('Exception in provided `counterFormatter`.', e);
+          // Fallback to the default counter formatter when an exception happens
+          this.counterString = defaultCounterFormatter(length, inputEl.maxlength);
+        }
+      }
     }
+  }
+  defaultCounterFormatter(length, maxlength) {
+    return `${length} / ${maxlength}`;
   }
   hasStartEl() {
     const startEl = this.el.querySelector('[slot="start"]');
@@ -30086,6 +30156,9 @@ class Item {
   }
   static get delegatesFocus() { return true; }
   get el() { return getElement(this); }
+  static get watchers() { return {
+    "counterFormatter": ["counterFormatterChanged"]
+  }; }
   static get style() { return {
     ios: itemIosCss,
     md: itemMdCss
@@ -30110,6 +30183,7 @@ class Item {
       "routerDirection": [1, "router-direction"],
       "target": [1],
       "type": [1],
+      "counterFormatter": [16],
       "multipleInputs": [32],
       "focusable": [32],
       "counterString": [32]
@@ -35448,6 +35522,7 @@ class Menu {
     }
   }
   afterAnimation(isOpen) {
+    var _a;
     assert(this.isAnimating, '_before() should be called while animating');
     // keep opening/closing the menu disabled for a touch more yet
     // only add listeners/css if it's enabled and isOpen
@@ -35474,11 +35549,16 @@ class Menu {
       }
       // emit open event
       this.ionDidOpen.emit();
-      // focus menu content for screen readers
-      if (this.menuInnerEl) {
-        this.focusFirstDescendant();
+      /**
+       * Move focus to the menu to prepare focus trapping, as long as
+       * it isn't already focused. Use the host element instead of the
+       * first descendant to avoid the scroll position jumping around.
+       */
+      const focusedMenu = (_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.closest('ion-menu');
+      if (focusedMenu !== this.el) {
+        this.el.focus();
       }
-      // setup focus trapping
+      // start focus trapping
       document.addEventListener('focus', this.handleFocus, true);
     }
     else {
@@ -35847,6 +35927,125 @@ const KEYBOARD_DID_OPEN = 'ionKeyboardDidShow';
 /*!
  * (C) Ionic http://ionicframework.com - MIT License
  */
+const handleCanDismiss = async (el, animation) => {
+  /**
+   * If canDismiss is not a function
+   * then we can return early. If canDismiss is `true`,
+   * then canDismissBlocksGesture is `false` as canDismiss
+   * will never interrupt the gesture. As a result,
+   * this code block is never reached. If canDismiss is `false`,
+   * then we never dismiss.
+   */
+  if (typeof el.canDismiss !== 'function') {
+    return;
+  }
+  /**
+   * Run the canDismiss callback.
+   * If the function returns `true`,
+   * then we can proceed with dismiss.
+   */
+  const shouldDismiss = await el.canDismiss();
+  if (!shouldDismiss) {
+    return;
+  }
+  /**
+   * If canDismiss resolved after the snap
+   * back animation finished, we can
+   * dismiss immediately.
+   *
+   * If canDismiss resolved before the snap
+   * back animation finished, we need to
+   * wait until the snap back animation is
+   * done before dismissing.
+   */
+  if (animation.isRunning()) {
+    animation.onFinish(() => {
+      el.dismiss(undefined, 'handler');
+    }, { oneTimeCallback: true });
+  }
+  else {
+    el.dismiss(undefined, 'handler');
+  }
+};
+/**
+ * This function lets us simulate a realistic spring-like animation
+ * when swiping down on the modal.
+ * There are two forces that we need to use to compute the spring physics:
+ *
+ * 1. Stiffness, k: This is a measure of resistance applied a spring.
+ * 2. Dampening, c: This value has the effect of reducing or preventing oscillation.
+ *
+ * Using these two values, we can calculate the Spring Force and the Dampening Force
+ * to compute the total force applied to a spring.
+ *
+ * Spring Force: This force pulls a spring back into its equilibrium position.
+ * Hooke's Law tells us that that spring force (FS) = kX.
+ * k is the stiffness of a spring, and X is the displacement of the spring from its
+ * equilibrium position. In this case, it is the amount by which the free end
+ * of a spring was displaced (stretched/pushed) from its "relaxed" position.
+ *
+ * Dampening Force: This force slows down motion. Without it, a spring would oscillate forever.
+ * The dampening force, FD, can be found via this formula: FD = -cv
+ * where c the dampening value and v is velocity.
+ *
+ * Therefore, the resulting force that is exerted on the block is:
+ * F = FS + FD = -kX - cv
+ *
+ * Newton's 2nd Law tells us that F = ma:
+ * ma = -kX - cv.
+ *
+ * For Ionic's purposes, we can assume that m = 1:
+ * a = -kX - cv
+ *
+ * Imagine a block attached to the end of a spring. At equilibrium
+ * the block is at position x = 1.
+ * Pressing on the block moves it to position x = 0;
+ * So, to calculate the displacement, we need to take the
+ * current position and subtract the previous position from it.
+ * X = x - x0 = 0 - 1 = -1.
+ *
+ * For Ionic's purposes, we are only pushing on the spring modal
+ * so we have a max position of 1.
+ * As a result, we can expand displacement to this formula:
+ * X = x - 1
+ *
+ * a = -k(x - 1) - cv
+ *
+ * We can represent the motion of something as a function of time: f(t) = x.
+ * The derivative of position gives us the velocity: f'(t)
+ * The derivative of the velocity gives us the acceleration: f''(t)
+ *
+ * We can substitute the formula above with these values:
+ *
+ * f"(t) = -k * (f(t) - 1) - c * f'(t)
+ *
+ * This is called a differential equation.
+ *
+ * We know that at t = 0, we are at x = 0 because the modal does not move: f(0) = 0
+ * This means our velocity is also zero: f'(0) = 0.
+ *
+ * We can cheat a bit and plug the formula into Wolfram Alpha.
+ * However, we need to pick stiffness and dampening values:
+ * k = 0.57
+ * c = 15
+ *
+ * I picked these as they are fairly close to native iOS's spring effect
+ * with the modal.
+ *
+ * What we plug in is this: f(0) = 0; f'(0) = 0; f''(t) = -0.57(f(t) - 1) - 15f'(t)
+ *
+ * The result is a formula that lets us calculate the acceleration
+ * for a given time t.
+ * Note: This is the approximate form of the solution. Wolfram Alpha will
+ * give you a complex differential equation too.
+ */
+const calculateSpringStep = (t) => {
+  return 0.00255275 * 2.71828 ** (-14.9619 * t) - 1.00255 * 2.71828 ** (-0.0380968 * t) + 1;
+};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 // Defaults for the card swipe animation
 const SwipeToCloseDefaults = {
   MIN_PRESENTING_SCALE: 0.93,
@@ -35854,6 +36053,8 @@ const SwipeToCloseDefaults = {
 const createSwipeToCloseGesture = (el, animation, onDismiss) => {
   const height = el.offsetHeight;
   let isOpen = false;
+  let canDismissBlocksGesture = false;
+  const canDismissMaxStep = 0.2;
   const canStart = (detail) => {
     const target = detail.event.target;
     if (target === null || !target.closest) {
@@ -35869,29 +36070,71 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
     return false;
   };
   const onStart = () => {
+    /**
+     * If canDismiss is anything other than `true`
+     * then users should be able to swipe down
+     * until a threshold is hit. At that point,
+     * the card modal should not proceed any further.
+     * TODO (FW-937)
+     * Remove undefined check
+     */
+    canDismissBlocksGesture = el.canDismiss !== undefined && el.canDismiss !== true;
     animation.progressStart(true, isOpen ? 1 : 0);
   };
   const onMove = (detail) => {
-    const step = clamp(0.0001, detail.deltaY / height, 0.9999);
-    animation.progressStep(step);
+    const step = detail.deltaY / height;
+    /**
+     * Check if user is swiping down and
+     * if we have a canDismiss value that
+     * should block the gesture from
+     * proceeding,
+     */
+    const isAttempingDismissWithCanDismiss = step >= 0 && canDismissBlocksGesture;
+    /**
+     * If we are blocking the gesture from dismissing,
+     * set the max step value so that the sheet cannot be
+     * completely hidden.
+     */
+    const maxStep = isAttempingDismissWithCanDismiss ? canDismissMaxStep : 0.9999;
+    /**
+     * If we are blocking the gesture from
+     * dismissing, calculate the spring modifier value
+     * this will be added to the starting breakpoint
+     * value to give the gesture a spring-like feeling.
+     * Note that the starting breakpoint is always 0,
+     * so we omit adding 0 to the result.
+     */
+    const processedStep = isAttempingDismissWithCanDismiss ? calculateSpringStep(step / maxStep) : step;
+    const clampedStep = clamp(0.0001, processedStep, maxStep);
+    animation.progressStep(clampedStep);
   };
   const onEnd = (detail) => {
     const velocity = detail.velocityY;
-    const step = clamp(0.0001, detail.deltaY / height, 0.9999);
+    const step = detail.deltaY / height;
+    const isAttempingDismissWithCanDismiss = step >= 0 && canDismissBlocksGesture;
+    const maxStep = isAttempingDismissWithCanDismiss ? canDismissMaxStep : 0.9999;
+    const processedStep = isAttempingDismissWithCanDismiss ? calculateSpringStep(step / maxStep) : step;
+    const clampedStep = clamp(0.0001, processedStep, maxStep);
     const threshold = (detail.deltaY + velocity * 1000) / height;
-    const shouldComplete = threshold >= 0.5;
+    /**
+     * If canDismiss blocks
+     * the swipe gesture, then the
+     * animation can never complete until
+     * canDismiss is checked.
+     */
+    const shouldComplete = !isAttempingDismissWithCanDismiss && threshold >= 0.5;
     let newStepValue = shouldComplete ? -0.001 : 0.001;
     if (!shouldComplete) {
       animation.easing('cubic-bezier(1, 0, 0.68, 0.28)');
-      newStepValue += getTimeGivenProgression([0, 0], [1, 0], [0.68, 0.28], [1, 1], step)[0];
+      newStepValue += getTimeGivenProgression([0, 0], [1, 0], [0.68, 0.28], [1, 1], clampedStep)[0];
     }
     else {
       animation.easing('cubic-bezier(0.32, 0.72, 0, 1)');
-      newStepValue += getTimeGivenProgression([0, 0], [0.32, 0.72], [0, 1], [1, 1], step)[0];
+      newStepValue += getTimeGivenProgression([0, 0], [0.32, 0.72], [0, 1], [1, 1], clampedStep)[0];
     }
     const duration = shouldComplete
       ? computeDuration(step * height, velocity)
-      : computeDuration((1 - step) * height, velocity);
+      : computeDuration((1 - clampedStep) * height, velocity);
     isOpen = shouldComplete;
     gesture.enable(false);
     animation
@@ -35901,7 +36144,22 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
       }
     })
       .progressEnd(shouldComplete ? 1 : 0, newStepValue, duration);
-    if (shouldComplete) {
+    /**
+     * If the canDismiss value blocked the gesture
+     * from proceeding, then we should ignore whatever
+     * shouldComplete is. Whether or not the modal
+     * animation should complete is now determined by
+     * canDismiss.
+     *
+     * If the user swiped >25% of the way
+     * to the max step, then we should
+     * check canDismiss. 25% was chosen
+     * to avoid accidental swipes.
+     */
+    if (isAttempingDismissWithCanDismiss && clampedStep > maxStep / 4) {
+      handleCanDismiss(el, animation);
+    }
+    else if (shouldComplete) {
       onDismiss();
     }
   };
@@ -36269,7 +36527,7 @@ const mdLeaveAnimation$2 = (baseEl, opts) => {
 /*!
  * (C) Ionic http://ionicframework.com - MIT License
  */
-const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, backdropBreakpoint, animation, breakpoints = [], onDismiss, onBreakpointChange) => {
+const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, backdropBreakpoint, animation, breakpoints = [], getCurrentBreakpoint, onDismiss, onBreakpointChange) => {
   // Defaults for the sheet swipe animation
   const defaultBackdrop = [
     { offset: 0, opacity: 'var(--backdrop-opacity)' },
@@ -36291,9 +36549,12 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
   const height = wrapperEl.clientHeight;
   let currentBreakpoint = initialBreakpoint;
   let offset = 0;
+  let canDismissBlocksGesture = false;
+  const canDismissMaxStep = 0.95;
   const wrapperAnimation = animation.childAnimations.find((ani) => ani.id === 'wrapperAnimation');
   const backdropAnimation = animation.childAnimations.find((ani) => ani.id === 'backdropAnimation');
   const maxBreakpoint = breakpoints[breakpoints.length - 1];
+  const minBreakpoint = breakpoints[0];
   const enableBackdrop = () => {
     baseEl.style.setProperty('pointer-events', 'auto');
     backdropEl.style.setProperty('pointer-events', 'auto');
@@ -36354,12 +36615,26 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
      * allow for scrolling on the content.
      */
     const content = detail.event.target.closest('ion-content');
+    currentBreakpoint = getCurrentBreakpoint();
     if (currentBreakpoint === 1 && content) {
       return false;
     }
     return true;
   };
   const onStart = () => {
+    /**
+     * If canDismiss is anything other than `true`
+     * then users should be able to swipe down
+     * until a threshold is hit. At that point,
+     * the card modal should not proceed any further.
+     *
+     * canDismiss is never fired via gesture if there is
+     * no 0 breakpoint. However, it can be fired if the user
+     * presses Esc or the hardware back button.
+     * TODO (FW-937)
+     * Remove undefined check
+     */
+    canDismissBlocksGesture = baseEl.canDismiss !== undefined && baseEl.canDismiss !== true && minBreakpoint === 0;
     /**
      * If swiping on the content
      * we should disable scrolling otherwise
@@ -36384,7 +36659,34 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
      * relative to where the user dragged.
      */
     const initialStep = 1 - currentBreakpoint;
-    offset = clamp(0.0001, initialStep + detail.deltaY / height, 0.9999);
+    const secondToLastBreakpoint = breakpoints.length > 1 ? 1 - breakpoints[1] : undefined;
+    const step = initialStep + detail.deltaY / height;
+    const isAttemptingDismissWithCanDismiss = secondToLastBreakpoint !== undefined && step >= secondToLastBreakpoint && canDismissBlocksGesture;
+    /**
+     * If we are blocking the gesture from dismissing,
+     * set the max step value so that the sheet cannot be
+     * completely hidden.
+     */
+    const maxStep = isAttemptingDismissWithCanDismiss ? canDismissMaxStep : 0.9999;
+    /**
+     * If we are blocking the gesture from
+     * dismissing, calculate the spring modifier value
+     * this will be added to the starting breakpoint
+     * value to give the gesture a spring-like feeling.
+     * Note that when isAttemptingDismissWithCanDismiss is true,
+     * the modifier is always added to the breakpoint that
+     * appears right after the 0 breakpoint.
+     *
+     * Note that this modifier is essentially the progression
+     * between secondToLastBreakpoint and maxStep which is
+     * why we subtract secondToLastBreakpoint. This lets us get
+     * the result as a value from 0 to 1.
+     */
+    const processedStep = isAttemptingDismissWithCanDismiss && secondToLastBreakpoint !== undefined
+      ? secondToLastBreakpoint +
+        calculateSpringStep((step - secondToLastBreakpoint) / (maxStep - secondToLastBreakpoint))
+      : step;
+    offset = clamp(0.0001, processedStep, maxStep);
     animation.progressStep(offset);
   };
   const onEnd = (detail) => {
@@ -36398,7 +36700,23 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
     const closest = breakpoints.reduce((a, b) => {
       return Math.abs(b - diff) < Math.abs(a - diff) ? b : a;
     });
-    const shouldRemainOpen = closest !== 0;
+    moveSheetToBreakpoint({
+      breakpoint: closest,
+      breakpointOffset: offset,
+      canDismiss: canDismissBlocksGesture,
+    });
+  };
+  const moveSheetToBreakpoint = (options) => {
+    const { breakpoint, canDismiss, breakpointOffset } = options;
+    /**
+     * canDismiss should only prevent snapping
+     * when users are trying to dismiss. If canDismiss
+     * is present but the user is trying to swipe upwards,
+     * we should allow that to happen,
+     */
+    const shouldPreventDismiss = canDismiss && breakpoint === 0;
+    const snapToBreakpoint = shouldPreventDismiss ? currentBreakpoint : breakpoint;
+    const shouldRemainOpen = snapToBreakpoint !== 0;
     currentBreakpoint = 0;
     /**
      * Update the animation so that it plays from
@@ -36406,17 +36724,17 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
      */
     if (wrapperAnimation && backdropAnimation) {
       wrapperAnimation.keyframes([
-        { offset: 0, transform: `translateY(${offset * 100}%)` },
-        { offset: 1, transform: `translateY(${(1 - closest) * 100}%)` },
+        { offset: 0, transform: `translateY(${breakpointOffset * 100}%)` },
+        { offset: 1, transform: `translateY(${(1 - snapToBreakpoint) * 100}%)` },
       ]);
       backdropAnimation.keyframes([
         {
           offset: 0,
-          opacity: `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(1 - offset, backdropBreakpoint)})`,
+          opacity: `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(1 - breakpointOffset, backdropBreakpoint)})`,
         },
         {
           offset: 1,
-          opacity: `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(closest, backdropBreakpoint)})`,
+          opacity: `calc(var(--backdrop-opacity) * ${getBackdropValueForSheet(snapToBreakpoint, backdropBreakpoint)})`,
         },
       ]);
       animation.progressStep(0);
@@ -36440,8 +36758,8 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
           raf(() => {
             wrapperAnimation.keyframes([...SheetDefaults.WRAPPER_KEYFRAMES]);
             backdropAnimation.keyframes([...SheetDefaults.BACKDROP_KEYFRAMES]);
-            animation.progressStart(true, 1 - closest);
-            currentBreakpoint = closest;
+            animation.progressStart(true, 1 - snapToBreakpoint);
+            currentBreakpoint = snapToBreakpoint;
             onBreakpointChange(currentBreakpoint);
             /**
              * If the sheet is fully expanded, we can safely
@@ -36475,7 +36793,10 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
        */
     }, { oneTimeCallback: true })
       .progressEnd(1, 0, 500);
-    if (!shouldRemainOpen) {
+    if (shouldPreventDismiss) {
+      handleCanDismiss(baseEl, animation);
+    }
+    else if (!shouldRemainOpen) {
       onDismiss();
     }
   };
@@ -36490,7 +36811,10 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
     onMove,
     onEnd,
   });
-  return gesture;
+  return {
+    gesture,
+    moveSheetToBreakpoint,
+  };
 };
 
 const modalIosCss = "/*!@:host*/.sc-ion-modal-ios-h{--width:100%;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--overflow:hidden;--border-radius:0;--border-width:0;--border-style:none;--border-color:transparent;--background:var(--ion-background-color, #fff);--box-shadow:none;--backdrop-opacity:0;left:0;right:0;top:0;bottom:0;display:flex;position:absolute;align-items:center;justify-content:center;outline:none;contain:strict}/*!@.modal-wrapper, ion-backdrop*/.modal-wrapper.sc-ion-modal-ios,ion-backdrop.sc-ion-modal-ios{pointer-events:auto}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-modal-ios-h{display:none}/*!@.modal-wrapper,\n.modal-shadow*/.modal-wrapper.sc-ion-modal-ios,.modal-shadow.sc-ion-modal-ios{border-radius:var(--border-radius);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow);overflow:var(--overflow);z-index:10}/*!@.modal-shadow*/.modal-shadow.sc-ion-modal-ios{position:absolute;background:transparent}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-ios-h{--width:600px;--height:500px;--ion-safe-area-top:0px;--ion-safe-area-bottom:0px;--ion-safe-area-right:0px;--ion-safe-area-left:0px}}@media only screen and (min-width: 768px) and (min-height: 768px){/*!@:host*/.sc-ion-modal-ios-h{--width:600px;--height:600px}}/*!@.modal-handle*/.modal-handle.sc-ion-modal-ios{left:0px;right:0px;top:5px;border-radius:8px;margin-left:auto;margin-right:auto;position:absolute;width:36px;height:5px;transform:translateZ(0);background:var(--ion-color-step-350, #c0c0be);z-index:11}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.modal-handle*/.modal-handle.sc-ion-modal-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@:host(.modal-sheet)*/.modal-sheet.sc-ion-modal-ios-h{--height:calc(100% - (var(--ion-safe-area-top) + 10px))}/*!@:host(.modal-sheet) .modal-wrapper,\n:host(.modal-sheet) .modal-shadow*/.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,.modal-sheet.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{position:absolute;bottom:0}/*!@:host*/.sc-ion-modal-ios-h{--backdrop-opacity:var(--ion-backdrop-opacity, 0.4)}/*!@:host(.modal-card),\n:host(.modal-sheet)*/.modal-card.sc-ion-modal-ios-h,.modal-sheet.sc-ion-modal-ios-h{--border-radius:10px}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-ios-h{--border-radius:10px}}/*!@.modal-wrapper*/.modal-wrapper.sc-ion-modal-ios{transform:translate3d(0,  100%,  0)}@media screen and (max-width: 767px){/*!@@supports (width: max(0px, 1px))*/@supports .sc-ion-modal-ios (width.sc-ion-modal-ios: max(0px.sc-ion-modal-ios, 1px)).sc-ion-modal-ios{.sc-ion-modal-ios-h.modal-card{--height:calc(100% - max(30px, var(--ion-safe-area-top)) - 10px)}}/*!@@supports not (width: max(0px, 1px))*/@supports .sc-ion-modal-ios not.sc-ion-modal-ios (width.sc-ion-modal-ios: max(0px.sc-ion-modal-ios, 1px)).sc-ion-modal-ios{.sc-ion-modal-ios-h.modal-card{--height:calc(100% - 40px)}}/*!@:host(.modal-card) .modal-wrapper*/.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host-context([dir=rtl]):host(.modal-card) .modal-wrapper, :host-context([dir=rtl]).modal-card .modal-wrapper*/[dir=rtl].sc-ion-modal-ios-h -no-combinator.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .sc-ion-modal-ios-h -no-combinator.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl].modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host(.modal-card)*/.modal-card.sc-ion-modal-ios-h{--backdrop-opacity:0;--width:100%;align-items:flex-end}/*!@:host(.modal-card) .modal-shadow*/.modal-card.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{display:none}/*!@:host(.modal-card) ion-backdrop*/.modal-card.sc-ion-modal-ios-h ion-backdrop.sc-ion-modal-ios{pointer-events:none}}@media screen and (min-width: 768px){/*!@:host(.modal-card)*/.modal-card.sc-ion-modal-ios-h{--width:calc(100% - 120px);--height:calc(100% - (120px + var(--ion-safe-area-top) + var(--ion-safe-area-bottom)));--max-width:720px;--max-height:1000px;--backdrop-opacity:0;--box-shadow:0px 0px 30px 10px rgba(0, 0, 0, 0.1);transition:all 0.5s ease-in-out}/*!@:host(.modal-card) .modal-wrapper*/.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{box-shadow:none}/*!@:host(.modal-card) .modal-shadow*/.modal-card.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{box-shadow:var(--box-shadow)}}/*!@:host(.modal-sheet) .modal-wrapper*/.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host-context([dir=rtl]):host(.modal-sheet) .modal-wrapper, :host-context([dir=rtl]).modal-sheet .modal-wrapper*/[dir=rtl].sc-ion-modal-ios-h -no-combinator.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .sc-ion-modal-ios-h -no-combinator.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl].modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}";
@@ -36513,6 +36837,7 @@ class Modal {
     this.willPresent = createEvent(this, "ionModalWillPresent", 7);
     this.willDismiss = createEvent(this, "ionModalWillDismiss", 7);
     this.didDismiss = createEvent(this, "ionModalDidDismiss", 7);
+    this.ionBreakpointDidChange = createEvent(this, "ionBreakpointDidChange", 7);
     this.didPresentShorthand = createEvent(this, "didPresent", 7);
     this.willPresentShorthand = createEvent(this, "willPresent", 7);
     this.willDismissShorthand = createEvent(this, "willDismiss", 7);
@@ -36554,6 +36879,7 @@ class Modal {
     this.animated = true;
     /**
      * If `true`, the modal can be swiped to dismiss. Only applies in iOS mode.
+     * @deprecated - To prevent modals from dismissing, use canDismiss instead.
      */
     this.swipeToClose = false;
     /**
@@ -36624,19 +36950,30 @@ class Modal {
       this.initSwipeToClose();
     }
   }
+  breakpointsChanged(breakpoints) {
+    if (breakpoints !== undefined) {
+      this.sortedBreakpoints = breakpoints.sort((a, b) => a - b);
+    }
+  }
   connectedCallback() {
     prepareOverlay(this.el);
   }
   componentWillLoad() {
-    const { breakpoints, initialBreakpoint } = this;
+    const { breakpoints, initialBreakpoint, swipeToClose } = this;
     /**
      * If user has custom ID set then we should
      * not assign the default incrementing ID.
      */
     this.modalId = this.el.hasAttribute('id') ? this.el.getAttribute('id') : `ion-modal-${this.modalIndex}`;
-    this.isSheetModal = breakpoints !== undefined && initialBreakpoint !== undefined;
+    const isSheetModal = (this.isSheetModal = breakpoints !== undefined && initialBreakpoint !== undefined);
+    if (isSheetModal) {
+      this.currentBreakpoint = this.initialBreakpoint;
+    }
     if (breakpoints !== undefined && initialBreakpoint !== undefined && !breakpoints.includes(initialBreakpoint)) {
-      console.warn('[Ionic Warning]: Your breakpoints array must include the initialBreakpoint value.');
+      printIonWarning('Your breakpoints array must include the initialBreakpoint value.');
+    }
+    if (swipeToClose) {
+      printIonWarning('swipeToClose has been deprecated in favor of canDismiss.\n\nIf you want a card modal to be swipeable, set canDismiss to `true`. In the next major release of Ionic, swipeToClose will be removed, and all card modals will be swipeable by default.');
     }
   }
   componentDidLoad() {
@@ -36647,6 +36984,7 @@ class Modal {
     if (this.isOpen === true) {
       raf(() => this.present());
     }
+    this.breakpointsChanged(this.breakpoints);
     this.configureTriggerInteraction();
   }
   /**
@@ -36680,6 +37018,25 @@ class Modal {
     return { inline, delegate };
   }
   /**
+   * Determines whether or not the
+   * modal is allowed to dismiss based
+   * on the state of the canDismiss prop.
+   */
+  async checkCanDismiss() {
+    const { canDismiss } = this;
+    /**
+     * TODO (FW-937) - Remove the following check in
+     * the next major release of Ionic.
+     */
+    if (canDismiss === undefined) {
+      return true;
+    }
+    if (typeof canDismiss === 'function') {
+      return canDismiss();
+    }
+    return canDismiss;
+  }
+  /**
    * Present the modal overlay after it has been created.
    */
   async present() {
@@ -36710,10 +37067,20 @@ class Modal {
     await this.currentTransition;
     if (this.isSheetModal) {
       this.initSheetGesture();
+      /**
+       * TODO (FW-937) - In the next major release of Ionic, all card modals
+       * will be swipeable by default. canDismiss will be used to determine if the
+       * modal can be dismissed. This check should change to check the presence of
+       * presentingElement instead.
+       *
+       * If we did not do this check, then not using swipeToClose would mean you could
+       * not run canDismiss on swipe as there would be no swipe gesture created.
+       */
     }
-    else if (this.swipeToClose) {
+    else if (this.swipeToClose || (this.canDismiss !== undefined && this.presentingElement !== undefined)) {
       this.initSwipeToClose();
     }
+    /* tslint:disable-next-line */
     if (typeof window !== 'undefined') {
       this.keyboardOpenCallback = () => {
         if (this.gesture) {
@@ -36767,7 +37134,6 @@ class Modal {
     this.gesture.enable(true);
   }
   initSheetGesture() {
-    var _a;
     const { wrapperEl, initialBreakpoint, backdropBreakpoint } = this;
     if (!wrapperEl || initialBreakpoint === undefined) {
       return;
@@ -36779,27 +37145,34 @@ class Modal {
       backdropBreakpoint,
     }));
     ani.progressStart(true, 1);
-    const sortedBreakpoints = ((_a = this.breakpoints) === null || _a === void 0 ? void 0 : _a.sort((a, b) => a - b)) || [];
-    this.gesture = createSheetGesture(this.el, this.backdropEl, wrapperEl, initialBreakpoint, backdropBreakpoint, ani, sortedBreakpoints, () => {
-      /**
-       * While the gesture animation is finishing
-       * it is possible for a user to tap the backdrop.
-       * This would result in the dismiss animation
-       * being played again. Typically this is avoided
-       * by setting `presented = false` on the overlay
-       * component; however, we cannot do that here as
-       * that would prevent the element from being
-       * removed from the DOM.
-       */
-      this.gestureAnimationDismissing = true;
-      this.animation.onFinish(async () => {
-        await this.dismiss(undefined, 'gesture');
-        this.gestureAnimationDismissing = false;
-      });
-    }, (breakpoint) => {
-      this.currentBreakpoint = breakpoint;
+    const { gesture, moveSheetToBreakpoint } = createSheetGesture(this.el, this.backdropEl, wrapperEl, initialBreakpoint, backdropBreakpoint, ani, this.sortedBreakpoints, () => { var _a; return (_a = this.currentBreakpoint) !== null && _a !== void 0 ? _a : 0; }, () => this.sheetOnDismiss(), (breakpoint) => {
+      if (this.currentBreakpoint !== breakpoint) {
+        this.currentBreakpoint = breakpoint;
+        this.ionBreakpointDidChange.emit({ breakpoint });
+      }
     });
+    this.gesture = gesture;
+    this.moveSheetToBreakpoint = moveSheetToBreakpoint;
     this.gesture.enable(true);
+  }
+  sheetOnDismiss() {
+    /**
+     * While the gesture animation is finishing
+     * it is possible for a user to tap the backdrop.
+     * This would result in the dismiss animation
+     * being played again. Typically this is avoided
+     * by setting `presented = false` on the overlay
+     * component; however, we cannot do that here as
+     * that would prevent the element from being
+     * removed from the DOM.
+     */
+    this.gestureAnimationDismissing = true;
+    this.animation.onFinish(async () => {
+      this.currentBreakpoint = 0;
+      this.ionBreakpointDidChange.emit({ breakpoint: this.currentBreakpoint });
+      await this.dismiss(undefined, 'gesture');
+      this.gestureAnimationDismissing = false;
+    });
   }
   /**
    * Dismiss the modal overlay after it has been presented.
@@ -36811,6 +37184,15 @@ class Modal {
     if (this.gestureAnimationDismissing && role !== 'gesture') {
       return false;
     }
+    /**
+     * If a canDismiss handler is responsible
+     * for calling the dismiss method, we should
+     * not run the canDismiss check again.
+     */
+    if (role !== 'handler' && !(await this.checkCanDismiss())) {
+      return false;
+    }
+    /* tslint:disable-next-line */
     if (typeof window !== 'undefined' && this.keyboardOpenCallback) {
       window.removeEventListener(KEYBOARD_DID_OPEN, this.keyboardOpenCallback);
     }
@@ -36860,6 +37242,37 @@ class Modal {
   onWillDismiss() {
     return eventMethod(this.el, 'ionModalWillDismiss');
   }
+  /**
+   * Move a sheet style modal to a specific breakpoint. The breakpoint value must
+   * be a value defined in your `breakpoints` array.
+   */
+  async setCurrentBreakpoint(breakpoint) {
+    if (!this.isSheetModal) {
+      printIonWarning('setCurrentBreakpoint is only supported on sheet modals.');
+      return;
+    }
+    if (!this.breakpoints.includes(breakpoint)) {
+      printIonWarning(`Attempted to set invalid breakpoint value ${breakpoint}. Please double check that the breakpoint value is part of your defined breakpoints.`);
+      return;
+    }
+    const { currentBreakpoint, moveSheetToBreakpoint, canDismiss, breakpoints } = this;
+    if (currentBreakpoint === breakpoint) {
+      return;
+    }
+    if (moveSheetToBreakpoint) {
+      moveSheetToBreakpoint({
+        breakpoint,
+        breakpointOffset: 1 - currentBreakpoint,
+        canDismiss: canDismiss !== undefined && canDismiss !== true && breakpoints[0] === 0,
+      });
+    }
+  }
+  /**
+   * Returns the current breakpoint of a sheet style modal
+   */
+  async getCurrentBreakpoint() {
+    return this.currentBreakpoint;
+  }
   render() {
     const { handle, isSheetModal, presentingElement, htmlAttributes } = this;
     const showHandle = handle !== false && isSheetModal;
@@ -36905,11 +37318,14 @@ class Modal {
       "htmlAttributes": [16],
       "isOpen": [4, "is-open"],
       "trigger": [1],
+      "canDismiss": [4, "can-dismiss"],
       "presented": [32],
       "present": [64],
       "dismiss": [64],
       "onDidDismiss": [64],
-      "onWillDismiss": [64]
+      "onWillDismiss": [64],
+      "setCurrentBreakpoint": [64],
+      "getCurrentBreakpoint": [64]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",
@@ -39726,8 +40142,17 @@ const focusItem = (item) => {
 const isTriggerElement = (el) => el.hasAttribute('data-ion-popover-trigger');
 const configureKeyboardInteraction = (popoverEl) => {
   const callback = async (ev) => {
+    var _a;
     const activeElement = document.activeElement;
     let items = [];
+    const targetTagName = (_a = ev.target) === null || _a === void 0 ? void 0 : _a.tagName;
+    /**
+     * Only handle custom keyboard interactions for the host popover element
+     * and children ion-item elements.
+     */
+    if (targetTagName !== 'ION-POPOVER' && targetTagName !== 'ION-ITEM') {
+      return;
+    }
     /**
      * Complex selectors with :not() are :not supported
      * in older versions of Chromium so we need to do a
@@ -39741,7 +40166,7 @@ const configureKeyboardInteraction = (popoverEl) => {
       items = Array.from(popoverEl.querySelectorAll('ion-item:not(ion-popover ion-popover *):not([disabled])'));
       /* eslint-disable-next-line */
     }
-    catch (_a) { }
+    catch (_b) { }
     switch (ev.key) {
       /**
        * If we are in a child popover
@@ -41349,6 +41774,8 @@ class Range {
     this.ionStyle = createEvent(this, "ionStyle", 7);
     this.ionFocus = createEvent(this, "ionFocus", 7);
     this.ionBlur = createEvent(this, "ionBlur", 7);
+    this.ionKnobMoveStart = createEvent(this, "ionKnobMoveStart", 7);
+    this.ionKnobMoveEnd = createEvent(this, "ionKnobMoveEnd", 7);
     this.didLoad = false;
     this.noUpdate = false;
     this.hasFocus = false;
@@ -41440,6 +41867,7 @@ class Range {
       }
     };
     this.handleKeyboard = (knob, isIncrease) => {
+      const { ensureValueInBounds } = this;
       let step = this.step;
       step = step > 0 ? step : 1;
       step = step / (this.max - this.min);
@@ -41452,7 +41880,9 @@ class Range {
       else {
         this.ratioB = clamp(0, this.ratioB + step, 1);
       }
+      this.ionKnobMoveStart.emit({ value: ensureValueInBounds(this.value) });
       this.updateValue();
+      this.ionKnobMoveEnd.emit({ value: ensureValueInBounds(this.value) });
     };
     this.onBlur = () => {
       if (this.hasFocus) {
@@ -41563,6 +41993,7 @@ class Range {
     this.setFocus(this.pressedKnob);
     // update the active knob's position
     this.update(currentX);
+    this.ionKnobMoveStart.emit({ value: this.ensureValueInBounds(this.value) });
   }
   onMove(detail) {
     this.update(detail.currentX);
@@ -41570,6 +42001,7 @@ class Range {
   onEnd(detail) {
     this.update(detail.currentX);
     this.pressedKnob = undefined;
+    this.ionKnobMoveEnd.emit({ value: this.ensureValueInBounds(this.value) });
   }
   update(currentX) {
     // figure out where the pointer is currently at
@@ -42295,18 +42727,27 @@ class Refresher {
     this.checkNativeRefresher();
   }
   async connectedCallback() {
+    var _a;
     if (this.el.getAttribute('slot') !== 'fixed') {
       console.error('Make sure you use: <ion-refresher slot="fixed">');
       return;
     }
-    const contentEl = this.el.closest('ion-content');
+    const contentEl = content.findClosestIonContent(this.el);
     if (!contentEl) {
-      console.error('<ion-refresher> must be used inside an <ion-content>');
+      content.printIonContentErrorMsg(this.el);
       return;
     }
-    await new Promise((resolve) => componentOnReady(contentEl, resolve));
-    this.scrollEl = await contentEl.getScrollElement();
-    this.backgroundContentEl = getElementRoot(contentEl).querySelector('#background-content');
+    this.scrollEl = await content.getScrollElement(contentEl);
+    /**
+     * Query the host `ion-content` directly (if it is available), to use its
+     * inner #background-content has the target. Otherwise fallback to the
+     * custom scroll target host.
+     *
+     * This makes it so that implementers do not need to re-create the background content
+     * element and styles.
+     */
+    const backgroundContentHost = (_a = this.el.closest('ion-content')) !== null && _a !== void 0 ? _a : contentEl;
+    this.backgroundContentEl = getElementRoot(backgroundContentHost).querySelector('#background-content');
     if (await shouldUseNativeRefresher(this.el, getIonMode$1(this))) {
       this.setupNativeRefresher(contentEl);
     }
@@ -51595,10 +52036,9 @@ class ReorderGroup {
     }
   }
   async connectedCallback() {
-    const contentEl = this.el.closest('ion-content');
+    const contentEl = content.findClosestIonContent(this.el);
     if (contentEl) {
-      await new Promise((resolve) => componentOnReady(contentEl, resolve));
-      this.scrollEl = await contentEl.getScrollElement();
+      this.scrollEl = await content.getScrollElement(contentEl);
     }
     this.gesture = (await Promise.resolve().then(function () { return index$1; })).createGesture({
       el: this.el,
@@ -54495,6 +54935,7 @@ class Select {
     registerInstance(this, hostRef);
     this.ionChange = createEvent(this, "ionChange", 7);
     this.ionCancel = createEvent(this, "ionCancel", 7);
+    this.ionDismiss = createEvent(this, "ionDismiss", 7);
     this.ionFocus = createEvent(this, "ionFocus", 7);
     this.ionBlur = createEvent(this, "ionBlur", 7);
     this.ionStyle = createEvent(this, "ionStyle", 7);
@@ -54588,6 +55029,7 @@ class Select {
     overlay.onDidDismiss().then(() => {
       this.overlay = undefined;
       this.isExpanded = false;
+      this.ionDismiss.emit();
       this.setFocus();
     });
     await overlay.present();
@@ -58771,7 +59213,7 @@ class VirtualScroll {
    * This method marks a subset of items as dirty, so they can be re-rendered. Items should be marked as
    * dirty any time the content or their style changes.
    *
-   * The subset of items to be updated can are specifing by an offset and a length.
+   * The subset of items to be updated can are specifying by an offset and a length.
    */
   async checkRange(offset, len = -1) {
     // TODO: kind of hacky how we do in-place updated of the cells
