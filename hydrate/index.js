@@ -12335,25 +12335,48 @@ const calculateHourFromAMPM = (currentParts, newAMPM) => {
 /**
  * Returns the current date as
  * an ISO string in the user's
- * timezone.
+ * time zone.
  */
 const getToday = () => {
   /**
-   * Grab the current date object
-   * as well as the timezone offset
+   * ion-datetime intentionally does not
+   * parse time zones/do automatic time zone
+   * conversion when accepting user input.
+   * However when we get today's date string,
+   * we want it formatted relative to the user's
+   * time zone.
+   *
+   * When calling toISOString(), the browser
+   * will convert the date to UTC time by either adding
+   * or subtracting the time zone offset.
+   * To work around this, we need to either add
+   * or subtract the time zone offset to the Date
+   * object prior to calling toISOString().
+   * This allows us to get an ISO string
+   * that is in the user's time zone.
+   *
+   * Example:
+   * Time zone offset is 240
+   * Meaning: The browser needs to add 240 minutes
+   * to the Date object to get UTC time.
+   * What Ionic does: We subtract 240 minutes
+   * from the Date object. The browser then adds
+   * 240 minutes in toISOString(). The result
+   * is a time that is in the user's time zone
+   * and not UTC.
+   *
+   * Note: Some timezones include minute adjustments
+   * such as 30 or 45 minutes. This is why we use setMinutes
+   * instead of setHours.
+   * Example: India Standard Time
+   * Timezone offset: -330 = -5.5 hours.
+   *
+   * List of timezones with 30 and 45 minute timezones:
+   * https://www.timeanddate.com/time/time-zones-interesting.html
    */
   const date = new Date();
   const tzOffset = date.getTimezoneOffset();
-  /**
-   * When converting to ISO string, everything is
-   * set to UTC. Since we want to show these dates
-   * relative to the user's timezone, we need to
-   * subtract the timezone offset from the date
-   * so that when `toISOString()` adds it back
-   * there was a net change of zero hours from the
-   * local date.
-   */
-  date.setHours(date.getHours() - tzOffset / 60);
+  date.setMinutes(date.getMinutes() - tzOffset);
   return date.toISOString();
 };
 const minutes = [
@@ -36984,11 +37007,6 @@ class Modal {
     this.onBackdropTap = () => {
       this.dismiss(undefined, BACKDROP);
     };
-    this.onDismiss = (ev) => {
-      ev.stopPropagation();
-      ev.preventDefault();
-      this.dismiss();
-    };
     this.onLifecycle = (modalEvent) => {
       const el = this.usersElement;
       const name = LIFECYCLE_MAP$1[modalEvent.type];
@@ -37352,7 +37370,7 @@ class Modal {
     const isCardModal = presentingElement !== undefined && mode === 'ios';
     return (hAsync(Host, Object.assign({ "no-router": true, "aria-modal": "true", tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${20000 + this.overlayIndex}`,
-      }, class: Object.assign({ [mode]: true, ['modal-default']: !isCardModal && !isSheetModal, [`modal-card`]: isCardModal, [`modal-sheet`]: isSheetModal, 'overlay-hidden': true }, getClassMap(this.cssClass)), id: modalId, onIonBackdropTap: this.onBackdropTap, onIonDismiss: this.onDismiss, onIonModalDidPresent: this.onLifecycle, onIonModalWillPresent: this.onLifecycle, onIonModalWillDismiss: this.onLifecycle, onIonModalDidDismiss: this.onLifecycle }), hAsync("ion-backdrop", { ref: (el) => (this.backdropEl = el), visible: this.showBackdrop, tappable: this.backdropDismiss, part: "backdrop" }), mode === 'ios' && hAsync("div", { class: "modal-shadow" }), hAsync("div", { role: "dialog", class: "modal-wrapper ion-overlay-wrapper", part: "content", ref: (el) => (this.wrapperEl = el) }, showHandle && hAsync("div", { class: "modal-handle", part: "handle" }), hAsync("slot", null))));
+      }, class: Object.assign({ [mode]: true, ['modal-default']: !isCardModal && !isSheetModal, [`modal-card`]: isCardModal, [`modal-sheet`]: isSheetModal, 'overlay-hidden': true }, getClassMap(this.cssClass)), id: modalId, onIonBackdropTap: this.onBackdropTap, onIonModalDidPresent: this.onLifecycle, onIonModalWillPresent: this.onLifecycle, onIonModalWillDismiss: this.onLifecycle, onIonModalDidDismiss: this.onLifecycle }), hAsync("ion-backdrop", { ref: (el) => (this.backdropEl = el), visible: this.showBackdrop, tappable: this.backdropDismiss, part: "backdrop" }), mode === 'ios' && hAsync("div", { class: "modal-shadow" }), hAsync("div", { role: "dialog", class: "modal-wrapper ion-overlay-wrapper", part: "content", ref: (el) => (this.wrapperEl = el) }, showHandle && hAsync("div", { class: "modal-handle", part: "handle" }), hAsync("slot", null))));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -41012,11 +41030,6 @@ class Popover {
      * behavior in a popover using a list of items.
      */
     this.keyboardEvents = false;
-    this.onDismiss = (ev) => {
-      ev.stopPropagation();
-      ev.preventDefault();
-      this.dismiss();
-    };
     this.onBackdropTap = () => {
       this.dismiss(undefined, BACKDROP);
     };
@@ -41266,7 +41279,7 @@ class Popover {
     const enableArrow = arrow && !parentPopover;
     return (hAsync(Host, Object.assign({ "aria-modal": "true", "no-router": true, tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${20000 + this.overlayIndex}`,
-      }, id: popoverId, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'popover-translucent': this.translucent, 'overlay-hidden': true, 'popover-desktop': desktop, [`popover-side-${side}`]: true, 'popover-nested': !!parentPopover }), onIonPopoverDidPresent: onLifecycle, onIonPopoverWillPresent: onLifecycle, onIonPopoverWillDismiss: onLifecycle, onIonPopoverDidDismiss: onLifecycle, onIonDismiss: this.onDismiss, onIonBackdropTap: this.onBackdropTap }), !parentPopover && hAsync("ion-backdrop", { tappable: this.backdropDismiss, visible: this.showBackdrop, part: "backdrop" }), hAsync("div", { class: "popover-wrapper ion-overlay-wrapper", onClick: dismissOnSelect ? () => this.dismiss() : undefined }, enableArrow && hAsync("div", { class: "popover-arrow", part: "arrow" }), hAsync("div", { class: "popover-content", part: "content" }, hAsync("slot", null)))));
+      }, id: popoverId, class: Object.assign(Object.assign({}, getClassMap(this.cssClass)), { [mode]: true, 'popover-translucent': this.translucent, 'overlay-hidden': true, 'popover-desktop': desktop, [`popover-side-${side}`]: true, 'popover-nested': !!parentPopover }), onIonPopoverDidPresent: onLifecycle, onIonPopoverWillPresent: onLifecycle, onIonPopoverWillDismiss: onLifecycle, onIonPopoverDidDismiss: onLifecycle, onIonBackdropTap: this.onBackdropTap }), !parentPopover && hAsync("ion-backdrop", { tappable: this.backdropDismiss, visible: this.showBackdrop, part: "backdrop" }), hAsync("div", { class: "popover-wrapper ion-overlay-wrapper", onClick: dismissOnSelect ? () => this.dismiss() : undefined }, enableArrow && hAsync("div", { class: "popover-arrow", part: "arrow" }), hAsync("div", { class: "popover-content", part: "content" }, hAsync("slot", null)))));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
