@@ -11322,6 +11322,26 @@ class Chip {
   }; }
 }
 
+const chipBarCss = "fireenjin-chip-bar{display:block;padding:3px;height:46px;width:100%;overflow:hidden;overflow-x:auto !important;white-space:nowrap}ion-chip ion-icon.ft-icon-style{height:14px !important;width:14px !important;padding:4px !important}fireenjin-chip-bar ion-router-link:hover ion-icon{color:var(--ion-color-secondary)}fireenjin-chip-bar::-webkit-scrollbar{width:0;height:5px}fireenjin-chip-bar::-webkit-scrollbar-thumb{background:rgba(var(--ion-text-color-rgb), 0.6);border-radius:2px}";
+
+class ChipBar {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+  }
+  render() {
+    return (hAsync(Host, null, hAsync("slot", null)));
+  }
+  static get style() { return chipBarCss; }
+  static get cmpMeta() { return {
+    "$flags$": 4,
+    "$tagName$": "fireenjin-chip-bar",
+    "$members$": undefined,
+    "$listeners$": undefined,
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": []
+  }; }
+}
+
 /*!
  * (C) Ionic http://ionicframework.com - MIT License
  */
@@ -59827,6 +59847,7 @@ registerComponents([
   CardTitle,
   Checkbox,
   Chip,
+  ChipBar,
   Col,
   Content,
   Datetime,
