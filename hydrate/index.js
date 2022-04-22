@@ -13503,7 +13503,7 @@ class Datetime {
     this.processValue = (value) => {
       const valueToProcess = value || getToday();
       const { month, day, year, hour, minute, tzOffset } = parseDate(valueToProcess);
-      this.workingParts = {
+      this.setWorkingParts({
         month,
         day,
         year,
@@ -13511,7 +13511,7 @@ class Datetime {
         minute,
         tzOffset,
         ampm: hour >= 12 ? 'pm' : 'am',
-      };
+      });
       this.activeParts = {
         month,
         day,
@@ -13608,11 +13608,18 @@ class Datetime {
       const valueDateParts = parseDate(this.value);
       if (valueDateParts) {
         const { month, day, year, hour, minute } = valueDateParts;
+        const ampm = hour >= 12 ? 'pm' : 'am';
         this.activePartsClone = Object.assign(Object.assign({}, this.activeParts), { month,
           day,
           year,
           hour,
-          minute });
+          minute,
+          ampm });
+        /**
+         * The working parts am/pm value must be updated when the value changes, to
+         * ensure the time picker hour column values are generated correctly.
+         */
+        this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { ampm }));
       }
       else {
         printIonWarning(`Unable to parse date string: ${this.value}. Please provide a valid ISO 8601 datetime string.`);
@@ -14005,7 +14012,7 @@ class Datetime {
     const { workingParts, presentation } = this;
     const timeOnlyPresentation = presentation === 'time';
     const use24Hour = is24Hour(this.locale, this.hourCycle);
-    const { hours, minutes, am, pm } = generateTime(this.workingParts, use24Hour ? 'h23' : 'h12', this.minParts, this.maxParts, this.parsedHourValues, this.parsedMinuteValues);
+    const { hours, minutes, am, pm } = generateTime(workingParts, use24Hour ? 'h23' : 'h12', this.minParts, this.maxParts, this.parsedHourValues, this.parsedMinuteValues);
     const hoursItems = hours.map((hour) => {
       return {
         text: getFormattedHour(hour, use24Hour),
@@ -26966,7 +26973,7 @@ var registerWrapper = function registerWrapper(stripe, startTime) {
 
   stripe._registerWrapper({
     name: 'stripe-js',
-    version: "1.27.0",
+    version: "1.28.0",
     startTime: startTime
   });
 };
