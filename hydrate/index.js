@@ -5888,6 +5888,72 @@ const inheritAttributes$1 = (el, attributes = []) => {
   });
   return attributeObject;
 };
+/**
+ * List of available ARIA attributes + `role`.
+ * Removed deprecated attributes.
+ * https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes
+ */
+const ariaAttributes = [
+  'role',
+  'aria-activedescendant',
+  'aria-atomic',
+  'aria-autocomplete',
+  'aria-braillelabel',
+  'aria-brailleroledescription',
+  'aria-busy',
+  'aria-checked',
+  'aria-colcount',
+  'aria-colindex',
+  'aria-colindextext',
+  'aria-colspan',
+  'aria-controls',
+  'aria-current',
+  'aria-describedby',
+  'aria-description',
+  'aria-details',
+  'aria-disabled',
+  'aria-errormessage',
+  'aria-expanded',
+  'aria-flowto',
+  'aria-haspopup',
+  'aria-hidden',
+  'aria-invalid',
+  'aria-keyshortcuts',
+  'aria-label',
+  'aria-labelledby',
+  'aria-level',
+  'aria-live',
+  'aria-multiline',
+  'aria-multiselectable',
+  'aria-orientation',
+  'aria-owns',
+  'aria-placeholder',
+  'aria-posinset',
+  'aria-pressed',
+  'aria-readonly',
+  'aria-relevant',
+  'aria-required',
+  'aria-roledescription',
+  'aria-rowcount',
+  'aria-rowindex',
+  'aria-rowindextext',
+  'aria-rowspan',
+  'aria-selected',
+  'aria-setsize',
+  'aria-sort',
+  'aria-valuemax',
+  'aria-valuemin',
+  'aria-valuenow',
+  'aria-valuetext',
+];
+/**
+ * Returns an array of aria attributes that should be copied from
+ * the shadow host element to a target within the light DOM.
+ * @param el The element that the attributes should be copied from.
+ */
+const inheritAriaAttributes = (el) => {
+  return inheritAttributes$1(el, ariaAttributes);
+};
 const addEventListener$1 = (el, eventName, callback, opts) => {
   var _a;
   if (typeof window !== 'undefined') {
@@ -10067,7 +10133,7 @@ class BackButton {
     };
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
+    this.inheritedAttributes = inheritAriaAttributes(this.el);
     if (this.defaultHref === undefined) {
       this.defaultHref = config$1.get('backButtonDefaultHref');
     }
@@ -10289,7 +10355,7 @@ class Breadcrumb {
     };
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
+    this.inheritedAttributes = inheritAriaAttributes(this.el);
   }
   isClickable() {
     return this.href !== undefined;
@@ -10572,7 +10638,7 @@ class Button {
     this.inToolbar = !!this.el.closest('ion-buttons');
     this.inListHeader = !!this.el.closest('ion-list-header');
     this.inItem = !!this.el.closest('ion-item') || !!this.el.closest('ion-item-divider');
-    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
+    this.inheritedAttributes = inheritAriaAttributes(this.el);
   }
   get hasIconOnly() {
     return !!this.el.querySelector('[slot="icon-only"]');
@@ -13004,6 +13070,15 @@ class Datetime {
     this.ionStyle = createEvent(this, "ionStyle", 7);
     this.inputId = `ion-dt-${datetimeIds++}`;
     this.overlayIsPresenting = false;
+    /**
+     * Whether to highlight the active day with a solid circle (as opposed
+     * to the outline circle around today). If you don't specify an initial
+     * value for the datetime, it doesn't automatically init to a default to
+     * avoid unwanted change events firing. If the solid circle were still
+     * shown then, it would look like a date had already been selected, which
+     * is misleading UX.
+     */
+    this.highlightActiveParts = false;
     this.todayParts = parseDate(getToday());
     this.prevPresentation = null;
     this.showMonthAndYear = false;
@@ -13501,6 +13576,7 @@ class Datetime {
       };
     };
     this.processValue = (value) => {
+      this.highlightActiveParts = !!value;
       const valueToProcess = value || getToday();
       const { month, day, year, hour, minute, tzOffset } = parseDate(valueToProcess);
       this.setWorkingParts({
@@ -13871,6 +13947,7 @@ class Datetime {
     }))));
   }
   renderMonth(month, year) {
+    const { highlightActiveParts } = this;
     const yearAllowed = this.parsedYearValues === undefined || this.parsedYearValues.includes(year);
     const monthAllowed = this.parsedMonthValues === undefined || this.parsedMonthValues.includes(month);
     const isCalMonthDisabled = !yearAllowed || !monthAllowed;
@@ -13915,12 +13992,19 @@ class Datetime {
       return (hAsync("button", { tabindex: "-1", "data-day": day, "data-month": month, "data-year": year, "data-index": index, "data-day-of-week": dayOfWeek, disabled: isCalDayDisabled, class: {
           'calendar-day-padding': day === null,
           'calendar-day': true,
-          'calendar-day-active': isActive,
+          'calendar-day-active': isActive && highlightActiveParts,
           'calendar-day-today': isToday,
         }, "aria-selected": ariaSelected, "aria-label": ariaLabel, onClick: () => {
           if (day === null) {
             return;
           }
+          /**
+           * Note that for datetimes with confirm/cancel buttons, the value
+           * isn't updated until you call confirm(). We need to bring the
+           * solid circle back on day click for UX reasons, rather than only
+           * show the circle if `value` is truthy.
+           */
+          this.highlightActiveParts = true;
           this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { month,
             day,
             year }));
@@ -24631,7 +24715,7 @@ class Header {
     };
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes$1(this.el, ['role']);
+    this.inheritedAttributes = inheritAriaAttributes(this.el);
   }
   componentDidLoad() {
     this.checkCollapsibleHeader();
@@ -26973,7 +27057,7 @@ var registerWrapper = function registerWrapper(stripe, startTime) {
 
   stripe._registerWrapper({
     name: 'stripe-js',
-    version: "1.28.0",
+    version: "1.29.0",
     startTime: startTime
   });
 };
@@ -27630,7 +27714,7 @@ class Input {
     this.ionChange.emit({ value: this.value == null ? this.value : this.value.toString() });
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label', 'tabindex', 'title']);
+    this.inheritedAttributes = Object.assign(Object.assign({}, inheritAriaAttributes(this.el)), inheritAttributes$1(this.el, ['tabindex', 'title']));
   }
   connectedCallback() {
     this.emitStyle();
@@ -35335,7 +35419,7 @@ class Menu {
     }
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
+    this.inheritedAttributes = inheritAriaAttributes(this.el);
   }
   async componentDidLoad() {
     this.ionMenuChange.emit({ disabled: this.disabled, open: this._isOpen });
@@ -35837,7 +35921,7 @@ class MenuButton {
     };
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
+    this.inheritedAttributes = inheritAriaAttributes(this.el);
   }
   componentDidLoad() {
     this.visibilityChanged();
@@ -39451,7 +39535,7 @@ class PickerColumnInternal {
         }
       }
     };
-    new IntersectionObserver(visibleCallback, { threshold: 0.01 }).observe(this.el);
+    new IntersectionObserver(visibleCallback, { threshold: 0.001 }).observe(this.el);
     const parentEl = this.el.closest('ion-picker-internal');
     if (parentEl !== null) {
       parentEl.addEventListener('ionInputModeChange', (ev) => this.inputModeChange(ev));
@@ -42060,7 +42144,7 @@ class Range {
      * not assign the default incrementing ID.
      */
     this.rangeId = this.el.hasAttribute('id') ? this.el.getAttribute('id') : `ion-r-${rangeIds++}`;
-    this.inheritedAttributes = inheritAttributes$1(this.el, ['aria-label']);
+    this.inheritedAttributes = inheritAriaAttributes(this.el);
   }
   componentDidLoad() {
     this.setupGesture();
@@ -52012,7 +52096,7 @@ class RenderTemplate {
   }
   async setHelpers(helpers) {
     try {
-      if ((helpers === null || helpers === void 0 ? void 0 : helpers.length) && this.helpers !== helpers) {
+      if (this.helpers !== helpers) {
         this.helpers = helpers;
       }
       for (const [helperName, helperFn] of Object.entries(this.helpers)) {
@@ -55153,8 +55237,8 @@ class Select {
     if (this.disabled || this.isExpanded) {
       return undefined;
     }
-    const overlay = (this.overlay = await this.createOverlay(event));
     this.isExpanded = true;
+    const overlay = (this.overlay = await this.createOverlay(event));
     overlay.onDidDismiss().then(() => {
       this.overlay = undefined;
       this.isExpanded = false;
@@ -58203,7 +58287,7 @@ class Textarea {
   disconnectedCallback() {
   }
   componentWillLoad() {
-    this.inheritedAttributes = inheritAttributes$1(this.el, ['title']);
+    this.inheritedAttributes = Object.assign(Object.assign({}, inheritAriaAttributes(this.el)), inheritAttributes$1(this.el, ['title']));
   }
   componentDidLoad() {
     raf(() => this.runAutoGrow());
