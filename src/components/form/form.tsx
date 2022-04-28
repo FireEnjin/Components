@@ -320,6 +320,20 @@ export class Form implements ComponentInterface {
     this.formData = await this.mapFormData(this.fetchDataMap, data || {});
   }
 
+  @Method()
+  async fetchData() {
+    this.fireenjinFetch.emit({
+      endpoint: typeof this.fetch === "string" ? this.fetch : this.endpoint,
+      name: this.name || null,
+      dataPropsMap: this.fetchDataMap || null,
+      method: "get",
+      params: {
+        ...(this.fetchParams ? this.fetchParams : {}),
+        id: this.documentId,
+      },
+    });
+  }
+
   async setFilteredValue(key: string, value: any) {
     let newValue = value;
     for (const filter of typeof this.filterData === "string"
@@ -409,16 +423,7 @@ export class Form implements ComponentInterface {
     }, 2000);
     if (this.fetch) {
       if (!this.disableLoader) this.loading = true;
-      this.fireenjinFetch.emit({
-        endpoint: typeof this.fetch === "string" ? this.fetch : this.endpoint,
-        name: this.name || null,
-        dataPropsMap: this.fetchDataMap || null,
-        method: "get",
-        params: {
-          ...(this.fetchParams ? this.fetchParams : {}),
-          id: this.documentId,
-        },
-      });
+      this.fetchData();
     }
     if (this.formData) {
       this.setFormData(this.formData);
