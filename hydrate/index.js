@@ -10048,8 +10048,9 @@ class Avatar$1 {
   render() {
     var _a, _b, _c;
     return (hAsync("div", { class: "avatar-image", style: {
+        background: this.color,
         backgroundImage: !((_a = this.src) === null || _a === void 0 ? void 0 : _a.length) && this.initials
-          ? `url('https://avatars.dicebear.com/api/initials/${this.initials}.svg')`
+          ? `url('https://avatars.dicebear.com/api/initials/${this.initials}.svg${this.color ? this.color.replace("#", "%23") : ""}')`
           : `url('${((_b = this.src) === null || _b === void 0 ? void 0 : _b.length)
             ? this.src
             : ((_c = this.fallback) === null || _c === void 0 ? void 0 : _c.length)
@@ -10064,6 +10065,7 @@ class Avatar$1 {
     "$flags$": 0,
     "$tagName$": "fireenjin-avatar",
     "$members$": {
+      "color": [1],
       "src": [1],
       "size": [1],
       "initials": [1],
@@ -14871,6 +14873,15 @@ class Form {
     });
     this.formData = await this.mapFormData(this.fetchDataMap, data || {});
   }
+  async fetchData() {
+    this.fireenjinFetch.emit({
+      endpoint: typeof this.fetch === "string" ? this.fetch : this.endpoint,
+      name: this.name || null,
+      dataPropsMap: this.fetchDataMap || null,
+      method: "get",
+      params: Object.assign(Object.assign({}, (this.fetchParams ? this.fetchParams : {})), { id: this.documentId }),
+    });
+  }
   async setFilteredValue(key, value) {
     var _a, _b;
     let newValue = value;
@@ -14961,13 +14972,7 @@ class Form {
     if (this.fetch) {
       if (!this.disableLoader)
         this.loading = true;
-      this.fireenjinFetch.emit({
-        endpoint: typeof this.fetch === "string" ? this.fetch : this.endpoint,
-        name: this.name || null,
-        dataPropsMap: this.fetchDataMap || null,
-        method: "get",
-        params: Object.assign(Object.assign({}, (this.fetchParams ? this.fetchParams : {})), { id: this.documentId }),
-      });
+      this.fetchData();
     }
     if (this.formData) {
       this.setFormData(this.formData);
@@ -15011,7 +15016,8 @@ class Form {
       "reset": [64],
       "checkFormValidity": [64],
       "reportFormValidity": [64],
-      "setFormData": [64]
+      "setFormData": [64],
+      "fetchData": [64]
     },
     "$listeners$": [[0, "keydown", "handleKeyDown"], [0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onInput"], [0, "fireenjinSuccess", "onSuccess"], [0, "fireenjinError", "onError"]],
     "$lazyBundleId$": "-",

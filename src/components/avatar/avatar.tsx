@@ -5,6 +5,7 @@ import { Component, ComponentInterface, Prop, h } from "@stencil/core";
   styleUrl: "avatar.css",
 })
 export class Avatar implements ComponentInterface {
+  @Prop() color: string;
   @Prop() src: string;
   @Prop() size: string;
   @Prop() initials: string;
@@ -15,9 +16,12 @@ export class Avatar implements ComponentInterface {
       <div
         class="avatar-image"
         style={{
+          background: this.color,
           backgroundImage:
             !this.src?.length && this.initials
-              ? `url('https://avatars.dicebear.com/api/initials/${this.initials}.svg')`
+              ? `url('https://avatars.dicebear.com/api/initials/${
+                  this.initials
+                }.svg${this.color ? this.color.replace("#", "%23") : ""}')`
               : `url('${
                   this.src?.length
                     ? this.src

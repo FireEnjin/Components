@@ -58,6 +58,16 @@ Type: `Promise<boolean>`
 
 
 
+### `fetchData() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `reportFormValidity() => Promise<void>`
 
 
