@@ -10048,14 +10048,21 @@ class Avatar$1 {
   getCssVarColor(color) {
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
       return color;
-    return getComputedStyle(document.documentElement).getPropertyValue(`--ion-color-${color}`);
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(`--ion-color-${color}`)
+      .replace(" ", "");
   }
   render() {
     var _a, _b, _c;
     return (hAsync("div", { class: "avatar-image", style: {
         background: this.color,
         backgroundImage: !((_a = this.src) === null || _a === void 0 ? void 0 : _a.length) && this.initials
-          ? `url('https://avatars.dicebear.com/api/initials/${this.initials}.svg${this.color && this.color.includes("#")
+          ? `url('https://avatars.dicebear.com/api/initials/${this.initials}.svg${this.color &&
+            (this.color.includes("#") ||
+              this.color.includes("rgb(") ||
+              this.color.includes("rgba(") ||
+              this.color.includes("hsl(") ||
+              this.color.includes("hsla("))
             ? `?b=${this.color.replace("#", "%23")}`
             : this.color
               ? `?b=${this.getCssVarColor(this.color).replace("#", "%23")}`
@@ -28382,7 +28389,7 @@ async function resizeImage(base64image, width = 1080, height = 1080) {
   });
 }
 
-const inputPhotoCss = "fireenjin-input-photo .upload-wrapper{display:block;margin:0 auto;height:150px;width:150px;position:relative}fireenjin-input-photo .upload-wrapper .photo{position:relative;border-radius:4px;border:2px solid var(--ion-color-light);height:150px;width:150px;margin:0 auto;display:block;background-repeat:no-repeat;background-size:cover;background-position:center;color:var(--ion-color-medium);font-size:75px;line-height:150px;text-align:center;font-weight:bolder}fireenjin-input-photo .upload-wrapper .photo.is-loading:before{border-radius:4px}fireenjin-input-photo .upload-wrapper .photo.is-loading:after{border-radius:4px}fireenjin-input-photo .upload-wrapper .photo:hover{cursor:pointer;border-color:var(--ion-color-primary)}fireenjin-input-photo input[type=\"file\"]{height:0;width:0;visibility:hidden;opacity:0;pointer-events:none;float:left}";
+const inputPhotoCss = "fireenjin-input-photo .upload-wrapper{display:block;margin:0 auto;height:150px;width:150px;position:relative}fireenjin-input-photo .upload-wrapper .photo{position:relative;border-radius:4px;border:2px solid var(--ion-color-light);height:150px;width:150px;margin:0 auto;display:block;background-color:var(--fireenjin-photo-background, transparent);background-repeat:no-repeat;background-size:cover;background-position:center;font-size:75px;line-height:150px;text-align:center}fireenjin-input-photo .upload-wrapper .photo.is-loading:before{border-radius:4px}fireenjin-input-photo .upload-wrapper .photo.is-loading:after{border-radius:4px}fireenjin-input-photo .upload-wrapper .photo:hover{cursor:pointer;border-color:var(--ion-color-primary)}fireenjin-input-photo input[type=\"file\"]{height:0;width:0;visibility:hidden;opacity:0;pointer-events:none;float:left}";
 
 class InputPhoto {
   constructor(hostRef) {
@@ -28504,15 +28511,23 @@ class InputPhoto {
   getCssVarColor(color) {
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
       return color;
-    return getComputedStyle(document.documentElement).getPropertyValue(`--ion-color-${color}`);
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(`--ion-color-${color}`)
+      .replace(" ", "");
   }
   render() {
-    return (hAsync("div", null, hAsync("div", { class: "upload-wrapper" }, hAsync("div", { class: this.loading ? "photo is-loading" : "photo", style: {
-        backgroundColor: this.color && this.color.includes("#")
+    return (hAsync("div", { style: {
+        "--fireenjin-photo-background": this.color &&
+          (this.color.includes("#") ||
+            this.color.includes("rgb(") ||
+            this.color.includes("rgba(") ||
+            this.color.includes("hsl(") ||
+            this.color.includes("hsla("))
           ? this.color
           : this.color
             ? this.getCssVarColor(this.color)
             : "transparent",
+      } }, hAsync("div", { class: "upload-wrapper" }, hAsync("div", { class: this.loading ? "photo is-loading" : "photo", style: {
         backgroundImage: this.photoUrl ? `url('${this.photoUrl}')` : null,
       }, onClick: (event) => this.triggerFileInput(event), onDrop: (event) => this.onDrop(event), onDragOver: (event) => this.onDrag(event), onDragEnter: () => this.onDragEnter(), onDragLeave: () => this.onDragLeave() }, !this.photoUrl && this.initials ? this.initials : null), this.showButton ? (hAsync("ion-button", { fill: "clear", expand: "block", size: "small", onClick: (event) => this.triggerFileInput(event) }, this.buttonText, hAsync("ion-icon", { name: "image", slot: "end" }))) : null), hAsync("slot", null), hAsync("input", { type: "file", onChange: (event) => this.selectFile(event), accept: "image/*", multiple: this.multiple })));
   }

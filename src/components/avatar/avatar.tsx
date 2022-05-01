@@ -13,9 +13,9 @@ export class Avatar implements ComponentInterface {
 
   getCssVarColor(color: string) {
     if (!Build?.isBrowser) return color;
-    return getComputedStyle(document.documentElement).getPropertyValue(
-      `--ion-color-${color}`
-    );
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(`--ion-color-${color}`)
+      .replace(" ", "");
   }
 
   render() {
@@ -29,7 +29,12 @@ export class Avatar implements ComponentInterface {
               ? `url('https://avatars.dicebear.com/api/initials/${
                   this.initials
                 }.svg${
-                  this.color && this.color.includes("#")
+                  this.color &&
+                  (this.color.includes("#") ||
+                    this.color.includes("rgb(") ||
+                    this.color.includes("rgba(") ||
+                    this.color.includes("hsl(") ||
+                    this.color.includes("hsla("))
                     ? `?b=${this.color.replace("#", "%23")}`
                     : this.color
                     ? `?b=${this.getCssVarColor(this.color).replace(

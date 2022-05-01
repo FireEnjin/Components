@@ -14,14 +14,13 @@ fireenjin-input-photo .upload-wrapper .photo {
   width: 150px;
   margin: 0 auto;
   display: block;
+  background-color: var(--fireenjin-photo-background, transparent);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  color: var(--ion-color-medium);
   font-size: 75px;
   line-height: 150px;
   text-align: center;
-  font-weight: bolder;
 }
 
 fireenjin-input-photo .upload-wrapper .photo.is-loading:before {

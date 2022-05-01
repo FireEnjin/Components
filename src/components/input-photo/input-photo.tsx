@@ -184,24 +184,32 @@ export class InputPhoto implements ComponentInterface {
 
   getCssVarColor(color: string) {
     if (!Build?.isBrowser) return color;
-    return getComputedStyle(document.documentElement).getPropertyValue(
-      `--ion-color-${color}`
-    );
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(`--ion-color-${color}`)
+      .replace(" ", "");
   }
 
   render() {
     return (
-      <div>
+      <div
+        style={{
+          "--fireenjin-photo-background":
+            this.color &&
+            (this.color.includes("#") ||
+              this.color.includes("rgb(") ||
+              this.color.includes("rgba(") ||
+              this.color.includes("hsl(") ||
+              this.color.includes("hsla("))
+              ? this.color
+              : this.color
+              ? this.getCssVarColor(this.color)
+              : "transparent",
+        }}
+      >
         <div class="upload-wrapper">
           <div
             class={this.loading ? "photo is-loading" : "photo"}
             style={{
-              backgroundColor:
-                this.color && this.color.includes("#")
-                  ? this.color
-                  : this.color
-                  ? this.getCssVarColor(this.color)
-                  : "transparent",
               backgroundImage: this.photoUrl ? `url('${this.photoUrl}')` : null,
             }}
             onClick={(event) => this.triggerFileInput(event)}
