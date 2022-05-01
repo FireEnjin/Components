@@ -8,6 +8,7 @@
 | Property     | Attribute     | Description                                      | Type      | Default        |
 | ------------ | ------------- | ------------------------------------------------ | --------- | -------------- |
 | `buttonText` | `button-text` | Text to display on the photo upload button       | `string`  | `"Edit Image"` |
+| `color`      | `color`       |                                                  | `string`  | `undefined`    |
 | `disabled`   | `disabled`    | Is the uploader disabled                         | `boolean` | `false`        |
 | `documentId` | `document-id` | The ID of the document the photo is tied to      | `string`  | `undefined`    |
 | `endpoint`   | `endpoint`    | The endpoint to upload to                        | `string`  | `"upload"`     |

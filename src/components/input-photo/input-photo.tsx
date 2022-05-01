@@ -22,6 +22,7 @@ import resizeImage from "../../helpers/resizeImage";
 export class InputPhoto implements ComponentInterface {
   @Element() photoUploaderEl: any;
 
+  @Prop() color: string;
   /**
    * Is the uploader disabled
    */
@@ -188,6 +189,7 @@ export class InputPhoto implements ComponentInterface {
           <div
             class={this.loading ? "photo is-loading" : "photo"}
             style={{
+              background: this.color,
               backgroundImage: this.photoUrl ? `url('${this.photoUrl}')` : null,
             }}
             onClick={(event) => this.triggerFileInput(event)}

@@ -28494,6 +28494,7 @@ class InputPhoto {
   }
   render() {
     return (hAsync("div", null, hAsync("div", { class: "upload-wrapper" }, hAsync("div", { class: this.loading ? "photo is-loading" : "photo", style: {
+        background: this.color,
         backgroundImage: this.photoUrl ? `url('${this.photoUrl}')` : null,
       }, onClick: (event) => this.triggerFileInput(event), onDrop: (event) => this.onDrop(event), onDragOver: (event) => this.onDrag(event), onDragEnter: () => this.onDragEnter(), onDragLeave: () => this.onDragLeave() }, !this.photoUrl && this.initials ? this.initials : null), this.showButton ? (hAsync("ion-button", { fill: "clear", expand: "block", size: "small", onClick: (event) => this.triggerFileInput(event) }, this.buttonText, hAsync("ion-icon", { name: "image", slot: "end" }))) : null), hAsync("slot", null), hAsync("input", { type: "file", onChange: (event) => this.selectFile(event), accept: "image/*", multiple: this.multiple })));
   }
@@ -28506,6 +28507,7 @@ class InputPhoto {
     "$flags$": 4,
     "$tagName$": "fireenjin-input-photo",
     "$members$": {
+      "color": [1],
       "disabled": [4],
       "value": [1025],
       "path": [1],
