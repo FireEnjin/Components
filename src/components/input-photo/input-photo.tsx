@@ -182,6 +182,13 @@ export class InputPhoto implements ComponentInterface {
     this.showButton = false;
   }
 
+  getCssVarColor(color: string) {
+    if (!Build?.isBrowser) return color;
+    return getComputedStyle(document.documentElement).getPropertyValue(
+      `--ion-color-${color}`
+    );
+  }
+
   render() {
     return (
       <div>
@@ -189,7 +196,12 @@ export class InputPhoto implements ComponentInterface {
           <div
             class={this.loading ? "photo is-loading" : "photo"}
             style={{
-              background: this.color,
+              backgroundColor:
+                this.color && this.color.includes("#")
+                  ? this.color
+                  : this.color
+                  ? this.getCssVarColor(this.color)
+                  : "transparent",
               backgroundImage: this.photoUrl ? `url('${this.photoUrl}')` : null,
             }}
             onClick={(event) => this.triggerFileInput(event)}

@@ -10045,12 +10045,21 @@ class Avatar$1 {
   constructor(hostRef) {
     registerInstance(this, hostRef);
   }
+  getCssVarColor(color) {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return color;
+    return getComputedStyle(document.documentElement).getPropertyValue(`--ion-color-${color}`);
+  }
   render() {
     var _a, _b, _c;
     return (hAsync("div", { class: "avatar-image", style: {
         background: this.color,
         backgroundImage: !((_a = this.src) === null || _a === void 0 ? void 0 : _a.length) && this.initials
-          ? `url('https://avatars.dicebear.com/api/initials/${this.initials}.svg${this.color ? this.color.replace("#", "%23") : ""}')`
+          ? `url('https://avatars.dicebear.com/api/initials/${this.initials}.svg${this.color && this.color.includes("#")
+            ? `?b=${this.color.replace("#", "%23")}`
+            : this.color
+              ? `?b=${this.getCssVarColor(this.color).replace("#", "%23")}`
+              : ""}')`
           : `url('${((_b = this.src) === null || _b === void 0 ? void 0 : _b.length)
             ? this.src
             : ((_c = this.fallback) === null || _c === void 0 ? void 0 : _c.length)
@@ -16976,9 +16985,9 @@ function parseMaxStyle(styleValue, node, parentProperty) {
   }
   return valueInPixels;
 }
-const getComputedStyle = (element) => window.getComputedStyle(element, null);
+const getComputedStyle$1 = (element) => window.getComputedStyle(element, null);
 function getStyle(el, property) {
-  return getComputedStyle(el).getPropertyValue(property);
+  return getComputedStyle$1(el).getPropertyValue(property);
 }
 const positions = ['top', 'right', 'bottom', 'left'];
 function getPositionedStyle(styles, style, suffix) {
@@ -17013,7 +17022,7 @@ function getCanvasPosition(evt, canvas) {
 }
 function getRelativePosition$1(evt, chart) {
   const {canvas, currentDevicePixelRatio} = chart;
-  const style = getComputedStyle(canvas);
+  const style = getComputedStyle$1(canvas);
   const borderBox = style.boxSizing === 'border-box';
   const paddings = getPositionedStyle(style, 'padding');
   const borders = getPositionedStyle(style, 'border', 'width');
@@ -17039,7 +17048,7 @@ function getContainerSize(canvas, width, height) {
       height = canvas.clientHeight;
     } else {
       const rect = container.getBoundingClientRect();
-      const containerStyle = getComputedStyle(container);
+      const containerStyle = getComputedStyle$1(container);
       const containerBorder = getPositionedStyle(containerStyle, 'border', 'width');
       const containerPadding = getPositionedStyle(containerStyle, 'padding');
       width = rect.width - containerPadding.width - containerBorder.width;
@@ -17057,7 +17066,7 @@ function getContainerSize(canvas, width, height) {
 }
 const round1 = v => Math.round(v * 10) / 10;
 function getMaximumSize(canvas, bbWidth, bbHeight, aspectRatio) {
-  const style = getComputedStyle(canvas);
+  const style = getComputedStyle$1(canvas);
   const margins = getPositionedStyle(style, 'margin');
   const maxWidth = parseMaxStyle(style.maxWidth, canvas, 'clientWidth') || INFINITY;
   const maxHeight = parseMaxStyle(style.maxHeight, canvas, 'clientHeight') || INFINITY;
@@ -28373,7 +28382,7 @@ async function resizeImage(base64image, width = 1080, height = 1080) {
   });
 }
 
-const inputPhotoCss = "fireenjin-input-photo .upload-wrapper{display:block;margin:0 auto;height:150px;width:150px;position:relative}fireenjin-input-photo .upload-wrapper .photo{position:relative;background:var(--ion-color-medium);border-radius:4px;border:2px solid var(--ion-color-light);height:150px;width:150px;margin:0 auto;display:block;background-repeat:no-repeat;background-size:cover;background-position:center;color:var(--ion-color-medium);font-size:75px;line-height:150px;text-align:center;font-weight:bolder}fireenjin-input-photo .upload-wrapper .photo.is-loading:before{border-radius:4px}fireenjin-input-photo .upload-wrapper .photo.is-loading:after{border-radius:4px}fireenjin-input-photo .upload-wrapper .photo:hover{cursor:pointer;border-color:var(--ion-color-primary)}fireenjin-input-photo input[type=\"file\"]{height:0;width:0;visibility:hidden;opacity:0;pointer-events:none;float:left}";
+const inputPhotoCss = "fireenjin-input-photo .upload-wrapper{display:block;margin:0 auto;height:150px;width:150px;position:relative}fireenjin-input-photo .upload-wrapper .photo{position:relative;border-radius:4px;border:2px solid var(--ion-color-light);height:150px;width:150px;margin:0 auto;display:block;background-repeat:no-repeat;background-size:cover;background-position:center;color:var(--ion-color-medium);font-size:75px;line-height:150px;text-align:center;font-weight:bolder}fireenjin-input-photo .upload-wrapper .photo.is-loading:before{border-radius:4px}fireenjin-input-photo .upload-wrapper .photo.is-loading:after{border-radius:4px}fireenjin-input-photo .upload-wrapper .photo:hover{cursor:pointer;border-color:var(--ion-color-primary)}fireenjin-input-photo input[type=\"file\"]{height:0;width:0;visibility:hidden;opacity:0;pointer-events:none;float:left}";
 
 class InputPhoto {
   constructor(hostRef) {
@@ -28492,9 +28501,18 @@ class InputPhoto {
   onDragLeave() {
     this.showButton = false;
   }
+  getCssVarColor(color) {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return color;
+    return getComputedStyle(document.documentElement).getPropertyValue(`--ion-color-${color}`);
+  }
   render() {
     return (hAsync("div", null, hAsync("div", { class: "upload-wrapper" }, hAsync("div", { class: this.loading ? "photo is-loading" : "photo", style: {
-        background: this.color,
+        backgroundColor: this.color && this.color.includes("#")
+          ? this.color
+          : this.color
+            ? this.getCssVarColor(this.color)
+            : "transparent",
         backgroundImage: this.photoUrl ? `url('${this.photoUrl}')` : null,
       }, onClick: (event) => this.triggerFileInput(event), onDrop: (event) => this.onDrop(event), onDragOver: (event) => this.onDrag(event), onDragEnter: () => this.onDragEnter(), onDragLeave: () => this.onDragLeave() }, !this.photoUrl && this.initials ? this.initials : null), this.showButton ? (hAsync("ion-button", { fill: "clear", expand: "block", size: "small", onClick: (event) => this.triggerFileInput(event) }, this.buttonText, hAsync("ion-icon", { name: "image", slot: "end" }))) : null), hAsync("slot", null), hAsync("input", { type: "file", onChange: (event) => this.selectFile(event), accept: "image/*", multiple: this.multiple })));
   }

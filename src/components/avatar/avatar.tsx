@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, h } from "@stencil/core";
+import { Component, ComponentInterface, Prop, h, Build } from "@stencil/core";
 
 @Component({
   tag: "fireenjin-avatar",
@@ -11,6 +11,13 @@ export class Avatar implements ComponentInterface {
   @Prop() initials: string;
   @Prop() fallback: string;
 
+  getCssVarColor(color: string) {
+    if (!Build?.isBrowser) return color;
+    return getComputedStyle(document.documentElement).getPropertyValue(
+      `--ion-color-${color}`
+    );
+  }
+
   render() {
     return (
       <div
@@ -21,7 +28,16 @@ export class Avatar implements ComponentInterface {
             !this.src?.length && this.initials
               ? `url('https://avatars.dicebear.com/api/initials/${
                   this.initials
-                }.svg${this.color ? this.color.replace("#", "%23") : ""}')`
+                }.svg${
+                  this.color && this.color.includes("#")
+                    ? `?b=${this.color.replace("#", "%23")}`
+                    : this.color
+                    ? `?b=${this.getCssVarColor(this.color).replace(
+                        "#",
+                        "%23"
+                      )}`
+                    : ""
+                }')`
               : `url('${
                   this.src?.length
                     ? this.src
