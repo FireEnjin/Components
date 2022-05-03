@@ -57,7 +57,17 @@ Type: `Promise<void>`
 
 
 
-### `addTag() => Promise<void>`
+### `addTag(tag: string, event?: any) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `addValue(value: any, event?: any) => Promise<void>`
 
 
 
@@ -87,16 +97,6 @@ Type: `Promise<void>`
 
 
 
-### `getChoices() => Promise<any>`
-
-
-
-#### Returns
-
-Type: `Promise<any>`
-
-
-
 ### `getResults(options?: { page?: number; next?: boolean; limit?: number; paramData?: any; }) => Promise<void>`
 
 
@@ -107,7 +107,7 @@ Type: `Promise<void>`
 
 
 
-### `setValue(value: any) => Promise<void>`
+### `removeValue(value: any, event?: any) => Promise<void>`
 
 
 
@@ -124,9 +124,9 @@ Type: `Promise<void>`
 
 - ion-item
 - ion-label
-- ion-select
-- ion-select-option
-- ion-button
+- ion-input
+- [fireenjin-chip-bar](../chip-bar)
+- ion-chip
 - ion-icon
 
 ### Graph
@@ -134,31 +134,14 @@ Type: `Promise<void>`
 graph TD;
   fireenjin-select-tags --> ion-item
   fireenjin-select-tags --> ion-label
-  fireenjin-select-tags --> ion-select
-  fireenjin-select-tags --> ion-select-option
-  fireenjin-select-tags --> ion-button
+  fireenjin-select-tags --> ion-input
+  fireenjin-select-tags --> fireenjin-chip-bar
+  fireenjin-select-tags --> ion-chip
   fireenjin-select-tags --> ion-icon
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
-  ion-select --> ion-select-popover
-  ion-select --> ion-popover
-  ion-select --> ion-action-sheet
-  ion-select --> ion-alert
-  ion-select-popover --> ion-item
-  ion-select-popover --> ion-checkbox
-  ion-select-popover --> ion-label
-  ion-select-popover --> ion-radio-group
-  ion-select-popover --> ion-radio
-  ion-select-popover --> ion-list
-  ion-select-popover --> ion-list-header
-  ion-popover --> ion-backdrop
-  ion-action-sheet --> ion-backdrop
-  ion-action-sheet --> ion-icon
-  ion-action-sheet --> ion-ripple-effect
-  ion-alert --> ion-ripple-effect
-  ion-alert --> ion-backdrop
-  ion-button --> ion-ripple-effect
+  ion-chip --> ion-ripple-effect
   style fireenjin-select-tags fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

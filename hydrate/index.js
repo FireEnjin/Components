@@ -55813,7 +55813,7 @@ class SelectPopover {
   }; }
 }
 
-const selectTagsCss = "fireenjin-select-tags{display:block;overflow:visible !important;position:relative;z-index:9}fireenjin-select-tags ion-label{align-self:unset !important;color:var(--ion-text-color, #000);font-size:12px;font-weight:bold;font-family:arial;display:inline-block;background:transparent;text-align:left;padding:2px 35px 8px 0;font-family:var(--ion-font-family);color:var(--ion-text-color, #000) !important}fireenjin-select-tags .invalid{--border-color:var(--ion-color-danger) !important}fireenjin-select-tags .invalid ion-label{color:var(--ion-color-danger) !important}fireenjin-select-tags .valid{--border-color:var(--ion-color-success) !important}fireenjin-select-tags .valid ion-label{color:var(--ion-color-success) !important}fireenjin-select-tags ion-item{overflow:visible;--background:transparent !important}fireenjin-select-tags select{display:none !important}fireenjin-select-tags .choices{width:100%;display:block;margin-top:15px}fireenjin-select-tags .choices.is-open{z-index:90}fireenjin-select-tags .choices__inner{padding:0 !important;padding-bottom:0 !important;background-color:transparent;border:none;min-height:30px}fireenjin-select-tags .choices{position:relative;margin-bottom:24px;font-size:16px}fireenjin-select-tags .choices:focus{outline:0}fireenjin-select-tags .choices:last-child{margin-bottom:0}fireenjin-select-tags .choices.is-disabled .choices__inner,fireenjin-select-tags .choices.is-disabled .choices__input{background-color:transparent;cursor:not-allowed;-webkit-user-select:none;-ms-user-select:none;user-select:none}fireenjin-select-tags .choices.is-disabled .choices__item{cursor:not-allowed}fireenjin-select-tags .choices [hidden]{display:none !important}fireenjin-select-tags .choices[data-type*=\"select-one\"]{cursor:pointer}fireenjin-select-tags .choices[data-type*=\"select-one\"] .choices__inner{padding-bottom:7.5px}fireenjin-select-tags .choices[data-type*=\"select-one\"] .choices__input{display:block;width:100%;padding:10px;border-bottom:1px solid #ddd;background-color:transparent;margin:0}fireenjin-select-tags .choices[data-type*=\"select-one\"] .choices__button{background-image:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMjEiIHZpZXdCb3g9IjAgMCAyMSAyMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjMDAwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yLjU5Mi4wNDRsMTguMzY0IDE4LjM2NC0yLjU0OCAyLjU0OEwuMDQ0IDIuNTkyeiIvPjxwYXRoIGQ9Ik0wIDE4LjM2NEwxOC4zNjQgMGwyLjU0OCAyLjU0OEwyLjU0OCAyMC45MTJ6Ii8+PC9nPjwvc3ZnPg==);padding:0;background-size:8px;position:absolute;top:50%;right:0;margin-top:-10px;margin-right:25px;height:20px;width:20px;border-radius:10em;opacity:0.5}fireenjin-select-tags .choices[data-type*=\"select-one\"] .choices__button:focus,fireenjin-select-tags .choices[data-type*=\"select-one\"] .choices__button:hover{opacity:1}fireenjin-select-tags .choices[data-type*=\"select-one\"] .choices__button:focus{box-shadow:0 0 0 2px var(--ion-color-primary)}fireenjin-select-tags .choices[data-type*=\"select-one\"]:after{content:\"\";height:0;width:0;border-style:solid;border-color:#333 transparent transparent;border-width:5px;position:absolute;right:11.5px;top:50%;margin-top:-2.5px;pointer-events:none}fireenjin-select-tags .choices[data-type*=\"select-one\"].is-open:after{border-color:transparent transparent #333;margin-top:-7.5px}fireenjin-select-tags .choices[data-type*=\"select-one\"][dir=\"rtl\"]:after{left:11.5px;right:auto}fireenjin-select-tags .choices[data-type*=\"select-one\"][dir=\"rtl\"] .choices__button{right:auto;left:0;margin-left:25px;margin-right:0}fireenjin-select-tags .choices[data-type*=\"select-multiple\"] .choices__inner,fireenjin-select-tags .choices[data-type*=\"text\"] .choices__inner{cursor:text}fireenjin-select-tags .choices[data-type*=\"select-multiple\"] .choices__button,fireenjin-select-tags .choices[data-type*=\"text\"] .choices__button{position:relative;display:inline-block;margin:0 -4px 0 8px;padding-left:16px;border-left:1px solid var(--ion-color-primary-shade);background-image:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMjEiIHZpZXdCb3g9IjAgMCAyMSAyMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjRkZGIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yLjU5Mi4wNDRsMTguMzY0IDE4LjM2NC0yLjU0OCAyLjU0OEwuMDQ0IDIuNTkyeiIvPjxwYXRoIGQ9Ik0wIDE4LjM2NEwxOC4zNjQgMGwyLjU0OCAyLjU0OEwyLjU0OCAyMC45MTJ6Ii8+PC9nPjwvc3ZnPg==);background-size:8px;width:8px;line-height:1;opacity:0.75;border-radius:0}fireenjin-select-tags .choices[data-type*=\"select-multiple\"] .choices__button:focus,fireenjin-select-tags .choices[data-type*=\"select-multiple\"] .choices__button:hover,fireenjin-select-tags .choices[data-type*=\"text\"] .choices__button:focus,fireenjin-select-tags .choices[data-type*=\"text\"] .choices__button:hover{opacity:1}fireenjin-select-tags .choices__inner{display:inline-block;vertical-align:top;width:100%;background-color:transparent;padding:7.5px 7.5px 3.75px;border:none;border-radius:2.5px;font-size:14px;min-height:34px;overflow:hidden;z-index:99}fireenjin-select-tags .is-focused .choices__inner,fireenjin-select-tags .is-open .choices__inner{border-color:var(--ion-color-light)}fireenjin-select-tags .is-open .choices__inner{border-radius:2.5px 2.5px 0 0}fireenjin-select-tags .is-flipped.is-open .choices__inner{border-radius:0 0 2.5px 2.5px}fireenjin-select-tags .choices__list{margin:0;padding-left:0;list-style:none}fireenjin-select-tags .choices__list--single{padding:4px 16px 4px 4px;width:100%;display:flex;align-items:center;justify-content:center}fireenjin-select-tags [dir=\"rtl\"] .choices__list--single{padding-right:4px;padding-left:16px}fireenjin-select-tags .choices__list--single .choices__item{width:100%}fireenjin-select-tags .choices__list--multiple{display:inline}fireenjin-select-tags .choices__list--multiple .choices__item{display:inline-block;vertical-align:middle;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:500;margin-right:3.75px;margin-bottom:3.75px;background-color:var(--ion-color-primary);border:1px solid var(--ion-color-primary-shade);color:var(--ion-text-color, #000);word-break:break-all;position:relative}fireenjin-select-tags .choices__list--multiple .choices__item ion-icon{position:absolute;top:3px;right:5px;height:20px;width:20px}fireenjin-select-tags .choices__list--multiple .choices__item[data-deletable]{padding-right:5px}fireenjin-select-tags [dir=\"rtl\"] .choices__list--multiple .choices__item{margin-right:0;margin-left:3.75px}fireenjin-select-tags .choices__list--multiple .choices__item.is-highlighted{background-color:var(--ion-color-primary);border:1px solid var(--ion-color-primary-shade)}fireenjin-select-tags .is-disabled .choices__list--multiple .choices__item{background-color:#aaa;border:1px solid #919191}fireenjin-select-tags .choices__list--dropdown{display:none;z-index:1;position:absolute;width:100%;background-color:var(--ion-background-color, #fff);border:1px solid #ddd;top:100%;margin-top:-1px;border-bottom-left-radius:2.5px;border-bottom-right-radius:2.5px;overflow:hidden;word-break:break-all}fireenjin-select-tags .choices__list--dropdown.is-active{display:block}fireenjin-select-tags .is-open .choices__list--dropdown{border-color:var(--ion-color-light)}fireenjin-select-tags .is-flipped .choices__list--dropdown{top:auto;bottom:100%;margin-top:0;margin-bottom:-1px;border-radius:0.25rem 0.25rem 0 0}fireenjin-select-tags .choices__list--dropdown .choices__list{position:relative;max-height:300px;overflow:auto;-webkit-overflow-scrolling:touch;will-change:scroll-position}fireenjin-select-tags .choices__list--dropdown .choices__item{position:relative;padding:10px;font-size:14px}fireenjin-select-tags [dir=\"rtl\"] .choices__list--dropdown .choices__item{text-align:right}@media (min-width: 640px){fireenjin-select-tags .choices__list--dropdown .choices__item--selectable{padding-right:100px}fireenjin-select-tags .choices__list--dropdown .choices__item--selectable:after{content:attr(data-select-text);font-size:12px;opacity:0;position:absolute;right:10px;top:50%;transform:translateY(-50%)}fireenjin-select-tags [dir=\"rtl\"] .choices__list--dropdown .choices__item--selectable{text-align:right;padding-left:100px;padding-right:10px}fireenjin-select-tags [dir=\"rtl\"] .choices__list--dropdown .choices__item--selectable:after{right:auto;left:10px}}fireenjin-select-tags .choices__list--dropdown .choices__item--selectable.is-highlighted{background-color:var(--ion-color-primary)}fireenjin-select-tags .choices__list--dropdown .choices__item--selectable.is-highlighted:after{opacity:0.5}fireenjin-select-tags .choices__item{cursor:default}fireenjin-select-tags .choices__item--selectable{cursor:pointer}fireenjin-select-tags .choices__item--disabled{cursor:not-allowed;-webkit-user-select:none;-ms-user-select:none;user-select:none;opacity:0.5}fireenjin-select-tags .choices__heading{font-weight:600;font-size:12px;padding:10px;border-bottom:1px solid #f7f7f7;color:gray}fireenjin-select-tags .choices__button{text-indent:-9999px;-webkit-appearance:none;-moz-appearance:none;appearance:none;border:0;background-color:transparent;background-repeat:no-repeat;background-position:center;cursor:pointer}fireenjin-select-tags .choices__button:focus,fireenjin-select-tags .choices__input:focus{outline:0}fireenjin-select-tags .choices__input{position:absolute;right:0px;top:-38px;vertical-align:baseline;background-color:var(--ion-color-success);font-size:14px;margin-bottom:5px;color:#ffffff;border:0;width:auto;border-radius:15px;padding:6px 0;font-weight:bold;text-indent:10px;max-width:138px;cursor:pointer}fireenjin-select-tags .choices__input::placeholder{text-indent:10px;color:#ffffff}fireenjin-select-tags .choices__input:-ms-input-placeholder{text-indent:10px;color:#ffffff}fireenjin-select-tags .choices__input::-ms-input-placeholder{text-indent:10px;color:#ffffff}fireenjin-select-tags [dir=\"rtl\"] .choices__input{padding-right:2px;padding-left:0}fireenjin-select-tags .choices__placeholder{opacity:0.5}";
+const selectTagsCss = "fireenjin-select-tags{display:block;overflow:visible !important;position:relative;z-index:9}fireenjin-select-tags ion-label{align-self:unset !important;color:var(--ion-text-color, #000);font-size:12px;font-weight:bold;font-family:arial;display:inline-block;background:transparent;text-align:left;padding:2px 35px 8px 0;font-family:var(--ion-font-family);color:var(--ion-text-color, #000) !important}fireenjin-select-tags .invalid{--border-color:var(--ion-color-danger) !important}fireenjin-select-tags .invalid ion-label{color:var(--ion-color-danger) !important}fireenjin-select-tags .valid{--border-color:var(--ion-color-success) !important}fireenjin-select-tags .valid ion-label{color:var(--ion-color-success) !important}fireenjin-select-tags ion-item{--background:transparent !important}fireenjin-select-tags .options-wrapper{height:50px}fireenjin-select-tags fireenjin-chip-bar{position:absolute;left:0;right:0;bottom:0;height:50px}";
 
 class SelectTags {
   constructor(hostRef) {
@@ -55863,9 +55863,6 @@ class SelectTags {
     }
     if (this.multiple) {
       try {
-        this.value = this.choices
-          .getValue()
-          .map((choice) => this.options.find((option) => option.value === choice.value).value);
         this.ionChange.emit({
           event,
           name: this.name,
@@ -55891,47 +55888,8 @@ class SelectTags {
       this.allowAdding &&
       ((_b = (_a = event.target) === null || _a === void 0 ? void 0 : _a.value) === null || _b === void 0 ? void 0 : _b.length) >= 1) {
       const value = event.target.value.toLocaleLowerCase();
-      this.value = [...(this.value ? this.value : []), value];
-      const option = {
-        label: event.target.value,
-        value,
-        selected: true,
-      };
-      this.options.push(option);
-      this.choices.setChoices([option]);
-      this.choices.clearInput();
-      this.ionChange.emit({
-        event,
-        name: this.name,
-        value: this.value,
-      });
+      this.addTag(value, event);
     }
-  }
-  toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-  }
-  async setValue(value) {
-    try {
-      this.choices.setChoiceByValue(value);
-    }
-    catch (error) {
-      console.log("Error setting value...");
-    }
-  }
-  async getChoices() {
-    return this.choices;
-  }
-  async onValueChange(newValue, oldValue) {
-    if (!this.value || newValue === oldValue || !this.choices)
-      return false;
-    await this.setValue(this.value);
-  }
-  async onOptionsChange(newValue, oldValue) {
-    if (newValue === oldValue || !this.choices)
-      return false;
-    await this.choices.setChoices(newValue, this.value, this.label, true);
   }
   async clearParamData(key) {
     if (key && this.paramData[key]) {
@@ -55961,19 +55919,28 @@ class SelectTags {
     this.page = 0;
     this.results = [];
   }
-  async addTag() {
+  async addTag(tag, event) {
+    const value = tag.toLocaleLowerCase();
+    if (!value.length)
+      return;
     this.fireenjinTrigger.emit({
       name: "newTag",
-      payload: {},
+      payload: {
+        value,
+      },
     });
-    if ((window === null || window === void 0 ? void 0 : window.prompt) && this.allowAdding !== "custom") {
-      const value = prompt(this.addPrompt ||
-        `What ${this.label || this.name} would you like to add?`);
-      this.options = [
-        ...this.options,
-        { label: this.toTitleCase(value), value },
-      ];
+    if (!(this.value || []).includes(value)) {
+      const option = {
+        label: value,
+        value,
+        selected: true,
+      };
+      this.options = [...(this.options ? this.options : []), option];
     }
+    this.addValue(value, event);
+    this.query = null;
+    if (this.inputEl)
+      this.inputEl.value = null;
   }
   async getResults(options = {}) {
     var _a, _b, _c;
@@ -56001,6 +55968,22 @@ class SelectTags {
       },
     });
   }
+  async addValue(value, event) {
+    this.value = [...new Set([...(this.value ? this.value : []), value])];
+    this.ionChange.emit({
+      event,
+      name: this.name,
+      value: this.value,
+    });
+  }
+  async removeValue(value, event) {
+    this.value = (this.value || []).filter((val) => val !== value);
+    this.ionChange.emit({
+      event,
+      name: this.name,
+      value: this.value,
+    });
+  }
   componentDidLoad() {
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
       return;
@@ -56013,16 +55996,13 @@ class SelectTags {
     this.itemEl.shadowRoot.querySelector(".input-wrapper").style.overflow = "visible";
   }
   render() {
-    const OptionEl = "option";
-    return (hAsync("ion-item", { ref: (el) => (this.itemEl = el), lines: this.lines }, this.label && (hAsync("ion-label", { position: this.labelPosition }, this.label)), hAsync("ion-select", { title: this.placeholder || this.name, disabled: this.disabled, multiple: this.multiple, name: this.name, value: this.value, ref: (el) => (this.choicesEl = el) }, hAsync("slot", null), !this.multiple && this.placeholder ? (hAsync(OptionEl, { placeholder: true }, this.placeholder)) : null, this.options.map((option) => (hAsync("ion-select-option", { value: option.value }, option.label)))), this.allowAdding && (hAsync("ion-button", { slot: "end", size: "large", fill: "clear", shape: "round", onClick: () => this.addTag() }, hAsync("ion-icon", { slot: "icon-only", name: this.addIcon })))));
+    return (hAsync("ion-item", { ref: (el) => (this.itemEl = el), lines: this.lines }, this.label && (hAsync("ion-label", { position: this.labelPosition }, this.label)), this.allowAdding && (hAsync("ion-input", { ref: (el) => (this.inputEl = el), value: this.query })), hAsync("div", { class: "options-wrapper" }, hAsync("fireenjin-chip-bar", null, this.allowAdding && (hAsync("ion-chip", { class: "add-tag", onClick: (event) => { var _a; return this.addTag((_a = this.inputEl) === null || _a === void 0 ? void 0 : _a.value, event); } }, "Add", hAsync("ion-icon", { name: this.addIcon }))), (this.options || []).map((option) => (hAsync("ion-chip", { outline: !(this.value || []).includes(option === null || option === void 0 ? void 0 : option.value), onClick: (event) => (this.value || []).includes(option === null || option === void 0 ? void 0 : option.value)
+        ? this.removeValue(option === null || option === void 0 ? void 0 : option.value, event)
+        : this.addValue(option === null || option === void 0 ? void 0 : option.value, event) }, (option === null || option === void 0 ? void 0 : option.label) || "", (this.value || []).includes(option === null || option === void 0 ? void 0 : option.value) && (hAsync("ion-icon", { name: "close-circle" })))))))));
   }
-  static get watchers() { return {
-    "value": ["onValueChange"],
-    "options": ["onOptionsChange"]
-  }; }
   static get style() { return selectTagsCss; }
   static get cmpMeta() { return {
-    "$flags$": 4,
+    "$flags$": 0,
     "$tagName$": "fireenjin-select-tags",
     "$members$": {
       "disableFetch": [4, "disable-fetch"],
@@ -56045,21 +56025,20 @@ class SelectTags {
       "page": [1026],
       "results": [1040],
       "fetchData": [8, "fetch-data"],
-      "query": [1],
+      "query": [1025],
       "lines": [1],
       "labelPosition": [1, "label-position"],
       "addPrompt": [1, "add-prompt"],
       "addIcon": [1, "add-icon"],
-      "choices": [32],
       "hasValue": [32],
       "paramData": [32],
-      "setValue": [64],
-      "getChoices": [64],
       "clearParamData": [64],
       "addResults": [64],
       "clearResults": [64],
       "addTag": [64],
-      "getResults": [64]
+      "getResults": [64],
+      "addValue": [64],
+      "removeValue": [64]
     },
     "$listeners$": [[16, "fireenjinSuccess", "onSuccess"], [0, "change", "onChange"], [0, "keydown", "onKeyDown"]],
     "$lazyBundleId$": "-",

@@ -8,7 +8,6 @@ import {
   Method,
   Prop,
   State,
-  Watch,
   h,
   Build,
 } from "@stencil/core";
@@ -18,7 +17,6 @@ import {
   styleUrl: "select-tags.css",
 })
 export class SelectTags implements ComponentInterface {
-  choicesEl: any;
   itemEl: HTMLIonItemElement;
   inputEl: HTMLIonInputElement;
 
@@ -50,13 +48,12 @@ export class SelectTags implements ComponentInterface {
   @Prop({ mutable: true }) page? = 0;
   @Prop({ mutable: true }) results: any[] = [];
   @Prop() fetchData?: any;
-  @Prop() query?: string;
+  @Prop({ mutable: true }) query?: string;
   @Prop() lines: "full" | "inset" | "none";
   @Prop() labelPosition?: "stacked" | "fixed" | "floating" = "stacked";
   @Prop() addPrompt: string;
   @Prop() addIcon = "add-circle";
 
-  @State() choices: any;
   @State() hasValue = false;
   @State() paramData: {
     query?: string;
@@ -105,13 +102,6 @@ export class SelectTags implements ComponentInterface {
 
     if (this.multiple) {
       try {
-        this.value = this.choices
-          .getValue()
-          .map(
-            (choice) =>
-              this.options.find((option) => option.value === choice.value).value
-          );
-
         this.ionChange.emit({
           event,
           name: this.name,
@@ -138,53 +128,8 @@ export class SelectTags implements ComponentInterface {
       event.target?.value?.length >= 1
     ) {
       const value = event.target.value.toLocaleLowerCase();
-      this.value = [...(this.value ? this.value : []), value];
-      const option = {
-        label: event.target.value,
-        value,
-        selected: true,
-      };
-      this.options.push(option);
-      this.choices.setChoices([option]);
-      this.choices.clearInput();
-      this.ionChange.emit({
-        event,
-        name: this.name,
-        value: this.value,
-      });
+      this.addTag(value, event);
     }
-  }
-
-  toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-  }
-
-  @Method()
-  async setValue(value) {
-    try {
-      this.choices.setChoiceByValue(value);
-    } catch (error) {
-      console.log("Error setting value...");
-    }
-  }
-
-  @Method()
-  async getChoices() {
-    return this.choices;
-  }
-
-  @Watch("value")
-  async onValueChange(newValue, oldValue) {
-    if (!this.value || newValue === oldValue || !this.choices) return false;
-    await this.setValue(this.value);
-  }
-
-  @Watch("options")
-  async onOptionsChange(newValue, oldValue) {
-    if (newValue === oldValue || !this.choices) return false;
-    await this.choices.setChoices(newValue, this.value, this.label, true);
   }
 
   @Method()
@@ -222,21 +167,26 @@ export class SelectTags implements ComponentInterface {
   }
 
   @Method()
-  async addTag() {
+  async addTag(tag: string, event?: any) {
+    const value = tag.toLocaleLowerCase();
+    if (!value.length) return;
     this.fireenjinTrigger.emit({
       name: "newTag",
-      payload: {},
+      payload: {
+        value,
+      },
     });
-    if (window?.prompt && this.allowAdding !== "custom") {
-      const value = prompt(
-        this.addPrompt ||
-          `What ${this.label || this.name} would you like to add?`
-      );
-      this.options = [
-        ...this.options,
-        { label: this.toTitleCase(value), value },
-      ];
+    if (!(this.value || []).includes(value)) {
+      const option = {
+        label: value,
+        value,
+        selected: true,
+      };
+      this.options = [...(this.options ? this.options : []), option];
     }
+    this.addValue(value, event);
+    this.query = null;
+    if (this.inputEl) this.inputEl.value = null;
   }
 
   @Method()
@@ -283,6 +233,26 @@ export class SelectTags implements ComponentInterface {
     });
   }
 
+  @Method()
+  async addValue(value, event?: any) {
+    this.value = [...new Set([...(this.value ? this.value : []), value])];
+    this.ionChange.emit({
+      event,
+      name: this.name,
+      value: this.value,
+    });
+  }
+
+  @Method()
+  async removeValue(value, event?: any) {
+    this.value = (this.value || []).filter((val) => val !== value);
+    this.ionChange.emit({
+      event,
+      name: this.name,
+      value: this.value,
+    });
+  }
+
   componentDidLoad() {
     if (!Build?.isBrowser) return;
 
@@ -299,41 +269,44 @@ export class SelectTags implements ComponentInterface {
   }
 
   render() {
-    const OptionEl: any = "option";
     return (
       <ion-item ref={(el) => (this.itemEl = el)} lines={this.lines}>
         {this.label && (
           <ion-label position={this.labelPosition}>{this.label}</ion-label>
         )}
-        <ion-select
-          title={this.placeholder || this.name}
-          disabled={this.disabled}
-          multiple={this.multiple}
-          name={this.name}
-          value={this.value}
-          ref={(el) => (this.choicesEl = el)}
-        >
-          <slot />
-          {!this.multiple && this.placeholder ? (
-            <OptionEl placeholder>{this.placeholder}</OptionEl>
-          ) : null}
-          {this.options.map((option) => (
-            <ion-select-option value={option.value}>
-              {option.label}
-            </ion-select-option>
-          ))}
-        </ion-select>
         {this.allowAdding && (
-          <ion-button
-            slot="end"
-            size="large"
-            fill="clear"
-            shape="round"
-            onClick={() => this.addTag()}
-          >
-            <ion-icon slot="icon-only" name={this.addIcon} />
-          </ion-button>
+          <ion-input ref={(el) => (this.inputEl = el)} value={this.query} />
         )}
+        <div class="options-wrapper">
+          <fireenjin-chip-bar>
+            {this.allowAdding && (
+              <ion-chip
+                class="add-tag"
+                onClick={(event) =>
+                  this.addTag(this.inputEl?.value as string, event)
+                }
+              >
+                Add
+                <ion-icon name={this.addIcon} />
+              </ion-chip>
+            )}
+            {(this.options || []).map((option) => (
+              <ion-chip
+                outline={!(this.value || []).includes(option?.value)}
+                onClick={(event) =>
+                  (this.value || []).includes(option?.value)
+                    ? this.removeValue(option?.value, event)
+                    : this.addValue(option?.value, event)
+                }
+              >
+                {option?.label || ""}
+                {(this.value || []).includes(option?.value) && (
+                  <ion-icon name="close-circle" />
+                )}
+              </ion-chip>
+            ))}
+          </fireenjin-chip-bar>
+        </div>
       </ion-item>
     );
   }

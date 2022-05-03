@@ -46,8 +46,8 @@ export default {
     props: {
       allowAdding: true,
       label: "Tags",
-      endpoint: "listRoles",
-      resultsKey: "roles",
+      endpoint: "listLocations",
+      resultsKey: "locations",
       limit: 100,
     },
   },
