@@ -41654,6 +41654,41 @@ class ProgressCircle {
 class Query {
   constructor(hostRef) {
     registerInstance(this, hostRef);
+    this.fireenjinFetch = createEvent(this, "fireenjinFetch", 7);
+    this.name = "query";
+    this.params = {};
+  }
+  async onSuccess(event) {
+    var _a;
+    if (event.detail.name === this.name) {
+      let result = ((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.data) || [];
+      if (this.resultsKey) {
+        try {
+          result = this.resultsKey
+            .split(".")
+            .reduce((o, i) => o[i], event.detail.data);
+        }
+        catch (error) {
+          console.log("Error getting results", event.detail, this.resultsKey);
+        }
+      }
+      if (typeof this.success === "function")
+        this.success(result);
+    }
+  }
+  async fetch(options = {}) {
+    this.params = (options === null || options === void 0 ? void 0 : options.paramData) || {};
+    this.fireenjinFetch.emit({
+      name: this.name,
+      endpoint: this.endpoint,
+      dataPropsMap: this.dataPropsMap ? this.dataPropsMap : null,
+      params: this.params || {},
+    });
+  }
+  componentDidLoad() {
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
+      return;
+    this.fetch();
   }
   render() {
     return (hAsync(Host, null, hAsync("slot", null)));
@@ -41661,8 +41696,16 @@ class Query {
   static get cmpMeta() { return {
     "$flags$": 4,
     "$tagName$": "fireenjin-query",
-    "$members$": undefined,
-    "$listeners$": undefined,
+    "$members$": {
+      "endpoint": [1],
+      "name": [1],
+      "dataPropsMap": [8, "data-props-map"],
+      "params": [8],
+      "resultsKey": [1, "results-key"],
+      "success": [16],
+      "fetch": [64]
+    },
+    "$listeners$": [[16, "fireenjinSuccess", "onSuccess"], [16, "ionRouteDidChange", "fetch"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
