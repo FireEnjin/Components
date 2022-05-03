@@ -18,13 +18,22 @@ export class Query {
   @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
 
   @Prop() endpoint: string;
-  @Prop() name = "query";
+  @Prop() name: string;
   @Prop() dataPropsMap: any;
   @Prop() params: any = {};
   @Prop() resultsKey: string;
+  @Prop() error?: (data) => void;
   @Prop() success?: (data) => void;
 
-  @Listen("fireenjinSuccess", { target: "body" })
+  @Listen("fireenjinError")
+  async onError(event) {
+    if (event.detail.name === this.name) {
+      let result = event?.detail?.data || null;
+      if (typeof this.error === "function") this.error(result);
+    }
+  }
+
+  @Listen("fireenjinSuccess")
   async onSuccess(event) {
     if (event.detail.name === this.name) {
       let result = event?.detail?.data || [];
@@ -43,12 +52,7 @@ export class Query {
 
   @Listen("ionRouteDidChange", { target: "body" })
   @Method()
-  async fetch(
-    options: {
-      paramData?: any;
-    } = {}
-  ) {
-    this.params = options?.paramData || {};
+  async fetch() {
     this.fireenjinFetch.emit({
       name: this.name,
       endpoint: this.endpoint,
@@ -59,6 +63,7 @@ export class Query {
 
   componentDidLoad() {
     if (!Build?.isBrowser) return;
+    if (!this.name) this.name = this.endpoint;
     this.fetch();
   }
 
