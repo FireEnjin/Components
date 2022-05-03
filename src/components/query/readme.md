@@ -11,7 +11,8 @@
 | -------------- | ---------------- | ----------- | --------------------- | ----------- |
 | `dataPropsMap` | `data-props-map` |             | `any`                 | `undefined` |
 | `endpoint`     | `endpoint`       |             | `string`              | `undefined` |
-| `name`         | `name`           |             | `string`              | `"query"`   |
+| `error`        | --               |             | `(data: any) => void` | `undefined` |
+| `name`         | `name`           |             | `string`              | `undefined` |
 | `params`       | `params`         |             | `any`                 | `{}`        |
 | `resultsKey`   | `results-key`    |             | `string`              | `undefined` |
 | `success`      | --               |             | `(data: any) => void` | `undefined` |
@@ -26,7 +27,7 @@
 
 ## Methods
 
-### `fetch(options?: { paramData?: any; }) => Promise<void>`
+### `fetch() => Promise<void>`
 
 
 

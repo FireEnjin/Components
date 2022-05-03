@@ -41655,8 +41655,15 @@ class Query {
   constructor(hostRef) {
     registerInstance(this, hostRef);
     this.fireenjinFetch = createEvent(this, "fireenjinFetch", 7);
-    this.name = "query";
     this.params = {};
+  }
+  async onError(event) {
+    var _a;
+    if (event.detail.name === this.name) {
+      let result = ((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.data) || null;
+      if (typeof this.error === "function")
+        this.error(result);
+    }
   }
   async onSuccess(event) {
     var _a;
@@ -41676,8 +41683,7 @@ class Query {
         this.success(result);
     }
   }
-  async fetch(options = {}) {
-    this.params = (options === null || options === void 0 ? void 0 : options.paramData) || {};
+  async fetch() {
     this.fireenjinFetch.emit({
       name: this.name,
       endpoint: this.endpoint,
@@ -41688,6 +41694,8 @@ class Query {
   componentDidLoad() {
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
       return;
+    if (!this.name)
+      this.name = this.endpoint;
     this.fetch();
   }
   render() {
@@ -41702,10 +41710,11 @@ class Query {
       "dataPropsMap": [8, "data-props-map"],
       "params": [8],
       "resultsKey": [1, "results-key"],
+      "error": [16],
       "success": [16],
       "fetch": [64]
     },
-    "$listeners$": [[16, "fireenjinSuccess", "onSuccess"], [16, "ionRouteDidChange", "fetch"]],
+    "$listeners$": [[0, "fireenjinError", "onError"], [0, "fireenjinSuccess", "onSuccess"], [16, "ionRouteDidChange", "fetch"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
