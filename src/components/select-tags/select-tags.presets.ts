@@ -31,6 +31,14 @@ export default {
       value: ["important"],
     },
   },
+  withValueNoOption: {
+    name: "With Value and No Option",
+    props: {
+      label: "Tags",
+      multiple: true,
+      value: ["important"],
+    },
+  },
   withAdding: {
     name: "With Adding",
     props: {

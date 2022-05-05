@@ -54,6 +54,9 @@
   <body>
     <fireenjin-docs-gallery></fireenjin-docs-gallery>
     <script>
+      document.addEventListener("ionChange", function (event) {
+        console.log(event);
+      });
       document.addEventListener("DOMContentLoaded", function () {
         var firebaseConfig = {
           apiKey: "AIzaSyAz5C9TRxQ9bUkTwVaD6Yc-Iisw57UslPM",

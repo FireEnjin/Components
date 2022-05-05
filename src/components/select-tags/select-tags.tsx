@@ -35,7 +35,6 @@ export class SelectTags implements ComponentInterface {
   @Prop({ mutable: true }) value: any;
   @Prop({ mutable: true }) options: { label: string; value: any }[] = [];
   @Prop() required = false;
-  @Prop() multiple: boolean;
   @Prop() duplicates = false;
   @Prop() disabled = false;
   @Prop() allowAdding: boolean | "custom" = false;
@@ -89,37 +88,6 @@ export class SelectTags implements ComponentInterface {
     }
   }
 
-  @Listen("change")
-  async onChange(event) {
-    if (
-      !event ||
-      !event.detail ||
-      !event.detail.value ||
-      !this.options.length
-    ) {
-      return false;
-    }
-
-    if (this.multiple) {
-      try {
-        this.ionChange.emit({
-          event,
-          name: this.name,
-          value: this.value,
-        });
-      } catch (error) {
-        console.log("Error setting value");
-      }
-    } else {
-      this.value = event.detail.value;
-      this.ionChange.emit({
-        event,
-        name: this.name,
-        value: this.value,
-      });
-    }
-  }
-
   @Listen("keydown")
   async onKeyDown(event: any) {
     if (
@@ -168,6 +136,7 @@ export class SelectTags implements ComponentInterface {
 
   @Method()
   async addTag(tag: string, event?: any) {
+    if (!tag?.length) return;
     const value = tag.toLocaleLowerCase();
     if (!value.length) return;
     this.fireenjinTrigger.emit({
@@ -253,6 +222,20 @@ export class SelectTags implements ComponentInterface {
     });
   }
 
+  @Method()
+  async updateOptionsForValue() {
+    const optionValues = (this.options || []).map((option) => option?.value);
+    for (const value of this.value) {
+      if (!optionValues.includes(value)) {
+        this.options.push({
+          label: value,
+          value,
+        });
+      }
+    }
+    this.options = [...this.options];
+  }
+
   componentDidLoad() {
     if (!Build?.isBrowser) return;
 
@@ -266,6 +249,9 @@ export class SelectTags implements ComponentInterface {
     (
       this.itemEl.shadowRoot.querySelector(".input-wrapper") as HTMLElement
     ).style.overflow = "visible";
+    if (this.value?.length) {
+      this.updateOptionsForValue();
+    }
   }
 
   render() {

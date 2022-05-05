@@ -22,7 +22,6 @@
 | `labelPosition`  | `label-position`  |             | `"fixed" \| "floating" \| "stacked"` | `"stacked"`     |
 | `limit`          | `limit`           |             | `number`                             | `15`            |
 | `lines`          | `lines`           |             | `"full" \| "inset" \| "none"`        | `undefined`     |
-| `multiple`       | `multiple`        |             | `boolean`                            | `undefined`     |
 | `name`           | `name`            |             | `string`                             | `"tags"`        |
 | `options`        | --                |             | `{ label: string; value: any; }[]`   | `[]`            |
 | `orderBy`        | `order-by`        |             | `string`                             | `undefined`     |
@@ -108,6 +107,16 @@ Type: `Promise<void>`
 
 
 ### `removeValue(value: any, event?: any) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `updateOptionsForValue() => Promise<void>`
 
 
 

@@ -55863,34 +55863,6 @@ class SelectTags {
       }
     }
   }
-  async onChange(event) {
-    if (!event ||
-      !event.detail ||
-      !event.detail.value ||
-      !this.options.length) {
-      return false;
-    }
-    if (this.multiple) {
-      try {
-        this.ionChange.emit({
-          event,
-          name: this.name,
-          value: this.value,
-        });
-      }
-      catch (error) {
-        console.log("Error setting value");
-      }
-    }
-    else {
-      this.value = event.detail.value;
-      this.ionChange.emit({
-        event,
-        name: this.name,
-        value: this.value,
-      });
-    }
-  }
   async onKeyDown(event) {
     var _a, _b;
     if (event.key === "Enter" &&
@@ -55929,6 +55901,8 @@ class SelectTags {
     this.results = [];
   }
   async addTag(tag, event) {
+    if (!(tag === null || tag === void 0 ? void 0 : tag.length))
+      return;
     const value = tag.toLocaleLowerCase();
     if (!value.length)
       return;
@@ -55993,7 +55967,20 @@ class SelectTags {
       value: this.value,
     });
   }
+  async updateOptionsForValue() {
+    const optionValues = (this.options || []).map((option) => option === null || option === void 0 ? void 0 : option.value);
+    for (const value of this.value) {
+      if (!optionValues.includes(value)) {
+        this.options.push({
+          label: value,
+          value,
+        });
+      }
+    }
+    this.options = [...this.options];
+  }
   componentDidLoad() {
+    var _a;
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
       return;
     if (this.endpoint) {
@@ -56003,6 +55990,9 @@ class SelectTags {
       return false;
     }
     this.itemEl.shadowRoot.querySelector(".input-wrapper").style.overflow = "visible";
+    if ((_a = this.value) === null || _a === void 0 ? void 0 : _a.length) {
+      this.updateOptionsForValue();
+    }
   }
   render() {
     return (hAsync("ion-item", { ref: (el) => (this.itemEl = el), lines: this.lines }, this.label && (hAsync("ion-label", { position: this.labelPosition }, this.label)), this.allowAdding && (hAsync("ion-input", { ref: (el) => (this.inputEl = el), value: this.query })), hAsync("div", { class: "options-wrapper" }, hAsync("fireenjin-chip-bar", null, this.allowAdding && (hAsync("ion-chip", { class: "add-tag", onClick: (event) => { var _a; return this.addTag((_a = this.inputEl) === null || _a === void 0 ? void 0 : _a.value, event); } }, "Add", hAsync("ion-icon", { name: this.addIcon }))), (this.options || []).map((option) => (hAsync("ion-chip", { outline: !(this.value || []).includes(option === null || option === void 0 ? void 0 : option.value), onClick: (event) => (this.value || []).includes(option === null || option === void 0 ? void 0 : option.value)
@@ -56021,7 +56011,6 @@ class SelectTags {
       "value": [1032],
       "options": [1040],
       "required": [4],
-      "multiple": [4],
       "duplicates": [4],
       "disabled": [4],
       "allowAdding": [8, "allow-adding"],
@@ -56047,9 +56036,10 @@ class SelectTags {
       "addTag": [64],
       "getResults": [64],
       "addValue": [64],
-      "removeValue": [64]
+      "removeValue": [64],
+      "updateOptionsForValue": [64]
     },
-    "$listeners$": [[16, "fireenjinSuccess", "onSuccess"], [0, "change", "onChange"], [0, "keydown", "onKeyDown"]],
+    "$listeners$": [[16, "fireenjinSuccess", "onSuccess"], [0, "keydown", "onKeyDown"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
