@@ -119,7 +119,7 @@ export class RenderTemplate implements ComponentInterface {
   @Watch("helpers")
   async setHelpers(helpers?: { [helperName: string]: any }) {
     try {
-      if (this.helpers !== helpers) {
+      if (helpers && this.helpers !== helpers) {
         this.helpers = helpers;
       }
       for (const [helperName, helperFn] of Object.entries(this.helpers)) {
