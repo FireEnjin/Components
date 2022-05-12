@@ -234,28 +234,31 @@ export class RenderTemplate implements ComponentInterface {
             loading={this.loading}
           />
         </div>
-        <ion-button
-          style={{
-            position: "absolute",
-            top: "var(--fullscreen-button-top, 0px)",
-            left: "var(--fullscreen-button-left, auto)",
-            bottom: "var(--fullscreen-button-bottom, auto)",
-            right: "var(--fullscreen-button-right, 0px)",
-            "--background": "var(--fullscreen-button-background, transparent)",
-            "--color": "var(--fullscreen-button-color, black)",
-          }}
-          fill="clear"
-          onClick={() => this.fullscreen()}
-        >
-          <ion-icon
+        {this.allowFullscreen && (
+          <ion-button
             style={{
-              height: "var(--fullscreen-icon-size, 25px)",
-              width: "var(--fullscreen-icon-size, 25px)",
+              position: "absolute",
+              top: "var(--fullscreen-button-top, 0px)",
+              left: "var(--fullscreen-button-left, auto)",
+              bottom: "var(--fullscreen-button-bottom, auto)",
+              right: "var(--fullscreen-button-right, 0px)",
+              "--background":
+                "var(--fullscreen-button-background, transparent)",
+              "--color": "var(--fullscreen-button-color, black)",
             }}
-            slot="icon-only"
-            name="resize"
-          />
-        </ion-button>
+            fill="clear"
+            onClick={() => this.fullscreen()}
+          >
+            <ion-icon
+              style={{
+                height: "var(--fullscreen-icon-size, 25px)",
+                width: "var(--fullscreen-icon-size, 25px)",
+              }}
+              slot="icon-only"
+              name="resize"
+            />
+          </ion-button>
+        )}
       </Host>
     );
   }
