@@ -12,6 +12,7 @@ import {
   State,
   Listen,
   Method,
+  Host,
 } from "@stencil/core";
 import Handlebars from "handlebars";
 import * as jsonLogic from "json-logic-js";
@@ -19,13 +20,21 @@ import backoff from "../../helpers/backoff";
 
 @Component({
   tag: "fireenjin-render-template",
+  shadow: true,
 })
 export class RenderTemplate implements ComponentInterface {
+  frameEl: HTMLIFrameElement;
+
   @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
 
+  @Prop() resize = false;
+  @Prop() zoom: number | string = 1;
+  @Prop() allowFullscreen = false;
+  @Prop() loading: "eager" | "lazy" = "lazy";
   @Prop() templateId: string;
   @Prop() name: string;
   @Prop() data: any = {};
+  @Prop() enableClicks = false;
   @Prop({ mutable: true }) template: any = {};
   @Prop({ mutable: true }) partials: {
     id: string;
@@ -139,10 +148,10 @@ export class RenderTemplate implements ComponentInterface {
   }
 
   @Method()
-  async renderTemplate() {
-    this.html = Handlebars.compile(
-      this.template?.html ? this.template?.html : ""
-    )(this.data ? this.data : {});
+  async renderTemplate(html?: string) {
+    this.html = Handlebars.compile(html || this.template?.html || "")(
+      this.data ? this.data : {}
+    );
   }
 
   @Listen("fireenjinSuccess", { target: "body" })
@@ -177,7 +186,77 @@ export class RenderTemplate implements ComponentInterface {
     backoff(10, this.renderTemplate.bind(this));
   }
 
+  @Method()
+  async fullscreen() {
+    this.frameEl.requestFullscreen();
+  }
+
+  @Method()
+  async getFrameEl() {
+    return this.frameEl;
+  }
+
   render() {
-    return <div innerHTML={this.html || ""} />;
+    const percentPosition =
+      this.zoom && (1 / parseFloat(this.zoom as string)) * 100;
+    return (
+      <Host
+        style={{
+          position: "relative",
+          display: "block",
+          resize: this.resize ? "both" : "initial",
+          overflow: "auto",
+        }}
+      >
+        <div
+          class="render-wrapper"
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            right: "0",
+            bottom: "0",
+            pointerEvents: this.enableClicks ? "initial" : "none",
+          }}
+        >
+          <iframe
+            ref={(el) => (this.frameEl = el)}
+            style={{
+              display: "block",
+              transform: `scale(${this.zoom || 1})`,
+              transformOrigin: "0 0",
+              height: this.zoom ? `${percentPosition}%` : "100%",
+              width: this.zoom ? `${percentPosition}%` : "100%",
+            }}
+            allowFullScreen={this.allowFullscreen}
+            srcDoc={this.html}
+            frameBorder={0}
+            loading={this.loading}
+          />
+        </div>
+        <ion-button
+          style={{
+            position: "absolute",
+            top: "var(--fullscreen-button-top, 0px)",
+            left: "var(--fullscreen-button-left, auto)",
+            bottom: "var(--fullscreen-button-bottom, auto)",
+            right: "var(--fullscreen-button-right, 0px)",
+            "--background": "var(--fullscreen-button-background, transparent)",
+            "--color": "var(--fullscreen-button-color, black)",
+          }}
+          fill="clear"
+          onClick={() => this.fullscreen()}
+        >
+          <ion-icon
+            style={{
+              height: "var(--fullscreen-icon-size, 25px)",
+              width: "var(--fullscreen-icon-size, 25px)",
+            }}
+            slot="icon-only"
+            name="resize"
+          />
+        </ion-button>
+      </Host>
+    );
   }
 }

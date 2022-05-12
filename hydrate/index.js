@@ -52203,7 +52203,12 @@ class RenderTemplate {
   constructor(hostRef) {
     registerInstance(this, hostRef);
     this.fireenjinFetch = createEvent(this, "fireenjinFetch", 7);
+    this.resize = false;
+    this.zoom = 1;
+    this.allowFullscreen = false;
+    this.loading = "lazy";
     this.data = {};
+    this.enableClicks = false;
     this.template = {};
     this.partials = [];
     this.helpers = {
@@ -52303,9 +52308,9 @@ class RenderTemplate {
       console.log("Error setting helpers.");
     }
   }
-  async renderTemplate() {
-    var _a, _b;
-    this.html = lib.compile(((_a = this.template) === null || _a === void 0 ? void 0 : _a.html) ? (_b = this.template) === null || _b === void 0 ? void 0 : _b.html : "")(this.data ? this.data : {});
+  async renderTemplate(html) {
+    var _a;
+    this.html = lib.compile(html || ((_a = this.template) === null || _a === void 0 ? void 0 : _a.html) || "")(this.data ? this.data : {});
   }
   onSuccess(event) {
     var _a, _b, _c, _d, _e, _f;
@@ -52330,8 +52335,44 @@ class RenderTemplate {
   onTemplate() {
     backoff(10, this.renderTemplate.bind(this));
   }
+  async fullscreen() {
+    this.frameEl.requestFullscreen();
+  }
+  async getFrameEl() {
+    return this.frameEl;
+  }
   render() {
-    return hAsync("div", { innerHTML: this.html || "" });
+    const percentPosition = this.zoom && (1 / parseFloat(this.zoom)) * 100;
+    return (hAsync(Host, { style: {
+        position: "relative",
+        display: "block",
+        resize: this.resize ? "both" : "initial",
+        overflow: "auto",
+      } }, hAsync("div", { class: "render-wrapper", style: {
+        position: "absolute",
+        top: "0",
+        left: "0",
+        right: "0",
+        bottom: "0",
+        pointerEvents: this.enableClicks ? "initial" : "none",
+      } }, hAsync("iframe", { ref: (el) => (this.frameEl = el), style: {
+        display: "block",
+        transform: `scale(${this.zoom || 1})`,
+        transformOrigin: "0 0",
+        height: this.zoom ? `${percentPosition}%` : "100%",
+        width: this.zoom ? `${percentPosition}%` : "100%",
+      }, allowFullScreen: this.allowFullscreen, srcDoc: this.html, frameBorder: 0, loading: this.loading })), hAsync("ion-button", { style: {
+        position: "absolute",
+        top: "var(--fullscreen-button-top, 0px)",
+        left: "var(--fullscreen-button-left, auto)",
+        bottom: "var(--fullscreen-button-bottom, auto)",
+        right: "var(--fullscreen-button-right, 0px)",
+        "--background": "var(--fullscreen-button-background, transparent)",
+        "--color": "var(--fullscreen-button-color, black)",
+      }, fill: "clear", onClick: () => this.fullscreen() }, hAsync("ion-icon", { style: {
+        height: "var(--fullscreen-icon-size, 25px)",
+        width: "var(--fullscreen-icon-size, 25px)",
+      }, slot: "icon-only", name: "resize" }))));
   }
   static get watchers() { return {
     "partials": ["setPartials"],
@@ -52341,12 +52382,17 @@ class RenderTemplate {
     "template": ["onTemplate"]
   }; }
   static get cmpMeta() { return {
-    "$flags$": 0,
+    "$flags$": 9,
     "$tagName$": "fireenjin-render-template",
     "$members$": {
+      "resize": [4],
+      "zoom": [8],
+      "allowFullscreen": [4, "allow-fullscreen"],
+      "loading": [1],
       "templateId": [1, "template-id"],
       "name": [1],
       "data": [8],
+      "enableClicks": [4, "enable-clicks"],
       "template": [1032],
       "partials": [1040],
       "helpers": [16],
@@ -52357,7 +52403,9 @@ class RenderTemplate {
       "unsetPartials": [64],
       "setPartials": [64],
       "setHelpers": [64],
-      "renderTemplate": [64]
+      "renderTemplate": [64],
+      "fullscreen": [64],
+      "getFrameEl": [64]
     },
     "$listeners$": [[16, "fireenjinSuccess", "onSuccess"]],
     "$lazyBundleId$": "-",
