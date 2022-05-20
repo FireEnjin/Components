@@ -229,7 +229,6 @@ export class Form implements ComponentInterface {
       this.beforeSubmit && typeof this.beforeSubmit === "function"
         ? await this.beforeSubmit(this.formData, options)
         : this.formData;
-    console.log(this.filterData);
     this.fireenjinSubmit.emit({
       event,
       id: this.documentId,

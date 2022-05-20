@@ -31,7 +31,6 @@ export class StarRating implements ComponentInterface {
 
   @Listen("input")
   onInput(event) {
-    console.log(event);
     if (this.disabled) {
       return false;
     }

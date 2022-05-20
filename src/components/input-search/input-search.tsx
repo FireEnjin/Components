@@ -93,7 +93,6 @@ export class InputSearch implements ComponentInterface {
       event.detail.data,
       this.resultsKey ? this.resultsKey : "searchUsers.results"
     );
-    console.log(this.results);
     if (this.mode === "popover") {
       this.resultsPopover = await popoverController.create({
         translucent: true,
