@@ -56,7 +56,6 @@ export class InputAddress implements ComponentInterface {
 
   @State() place: any;
   @State() manualEntry = false;
-  @State() forceUpdate: boolean;
 
   @Event() ionInput: EventEmitter;
   @Event() fireenjinAddressMode: EventEmitter;
@@ -78,6 +77,8 @@ export class InputAddress implements ComponentInterface {
           value: this.value,
         });
       }, 100);
+    } else if (this.value?.full && !this.autocompleteFieldEl?.value) {
+      this.value = null;
     }
   }
 
@@ -162,9 +163,6 @@ export class InputAddress implements ComponentInterface {
     }
     this.fireenjinAddressMode.emit({ maual: this.manualEntry });
     this.fireenjinUpdateAutoHeight.emit();
-    setTimeout(() => {
-      this.addressAutocompleteEl.forceUpdate();
-    }, 0);
   }
 
   render() {
