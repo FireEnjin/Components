@@ -92,8 +92,7 @@ export class InputAddress implements ComponentInterface {
   }
 
   async componentDidLoad() {
-    if (!Build?.isBrowser || !window?.google?.maps || !this.googleMapsKey)
-      return;
+    if (!Build?.isBrowser || !this.googleMapsKey) return;
     this.google = window?.google || (await this.loadGoogleMaps());
     const inputEl = await this.autocompleteFieldEl.getInputElement();
     setTimeout(() => {
