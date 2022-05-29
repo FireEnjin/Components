@@ -6315,15 +6315,12 @@ class Accordion {
       ionItem.appendChild(iconEl);
     };
     this.expandAccordion = (initialUpdate = false) => {
-      if (initialUpdate) {
+      const { contentEl, contentElWrapper } = this;
+      if (initialUpdate || contentEl === undefined || contentElWrapper === undefined) {
         this.state = 4 /* Expanded */;
         return;
       }
       if (this.state === 4 /* Expanded */) {
-        return;
-      }
-      const { contentEl, contentElWrapper } = this;
-      if (contentEl === undefined || contentElWrapper === undefined) {
         return;
       }
       if (this.currentRaf !== undefined) {
@@ -6347,15 +6344,12 @@ class Accordion {
       }
     };
     this.collapseAccordion = (initialUpdate = false) => {
-      if (initialUpdate) {
+      const { contentEl } = this;
+      if (initialUpdate || contentEl === undefined) {
         this.state = 1 /* Collapsed */;
         return;
       }
       if (this.state === 1 /* Collapsed */) {
-        return;
-      }
-      const { contentEl } = this;
-      if (contentEl === undefined) {
         return;
       }
       if (this.currentRaf !== undefined) {
@@ -13721,17 +13715,25 @@ class Datetime {
    */
   async confirm(closeOverlay = false) {
     /**
-     * Prevent convertDataToISO from doing any
-     * kind of transformation based on timezone
-     * This cancels out any change it attempts to make
-     *
-     * Important: Take the timezone offset based on
-     * the date that is currently selected, otherwise
-     * there can be 1 hr difference when dealing w/ DST
+     * If highlightActiveParts is false, this means the datetime was inited
+     * without a value, and the user hasn't selected one yet. We shouldn't
+     * update the value in this case, since otherwise it would be mysteriously
+     * set to today.
      */
-    const date = new Date(convertDataToISO(this.activeParts));
-    this.activeParts.tzOffset = date.getTimezoneOffset() * -1;
-    this.value = convertDataToISO(this.activeParts);
+    if (this.highlightActiveParts) {
+      /**
+       * Prevent convertDataToISO from doing any
+       * kind of transformation based on timezone
+       * This cancels out any change it attempts to make
+       *
+       * Important: Take the timezone offset based on
+       * the date that is currently selected, otherwise
+       * there can be 1 hr difference when dealing w/ DST
+       */
+      const date = new Date(convertDataToISO(this.activeParts));
+      this.activeParts.tzOffset = date.getTimezoneOffset() * -1;
+      this.value = convertDataToISO(this.activeParts);
+    }
     if (closeOverlay) {
       this.closeParentOverlay();
     }
@@ -15033,7 +15035,7 @@ class Form {
 }
 
 /*!
- * Chart.js v3.7.1
+ * Chart.js v3.8.0
  * https://www.chartjs.org
  * (c) 2022 Chart.js Contributors
  * Released under the MIT License
@@ -15089,7 +15091,7 @@ function isArray$1(value) {
     return true;
   }
   const type = Object.prototype.toString.call(value);
-  if (type.substr(0, 7) === '[object' && type.substr(-6) === 'Array]') {
+  if (type.slice(0, 7) === '[object' && type.slice(-6) === 'Array]') {
     return true;
   }
   return false;
@@ -15231,7 +15233,7 @@ function resolveObjectKey(obj, key) {
   let pos = 0;
   let idx = indexOfDotOrLength(key, pos);
   while (obj && idx > pos) {
-    obj = obj[key.substr(pos, idx - pos)];
+    obj = obj[key.slice(pos, idx)];
     pos = idx + 1;
     idx = indexOfDotOrLength(key, pos);
   }
@@ -15456,561 +15458,589 @@ const effects = {
 };
 
 /*!
- * @kurkle/color v0.1.9
+ * @kurkle/color v0.2.1
  * https://github.com/kurkle/color#readme
- * (c) 2020 Jukka Kurkela
+ * (c) 2022 Jukka Kurkela
  * Released under the MIT License
  */
-const map$1 = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, A: 10, B: 11, C: 12, D: 13, E: 14, F: 15, a: 10, b: 11, c: 12, d: 13, e: 14, f: 15};
-const hex = '0123456789ABCDEF';
-const h1 = (b) => hex[b & 0xF];
-const h2 = (b) => hex[(b & 0xF0) >> 4] + hex[b & 0xF];
-const eq$1 = (b) => (((b & 0xF0) >> 4) === (b & 0xF));
-function isShort(v) {
-	return eq$1(v.r) && eq$1(v.g) && eq$1(v.b) && eq$1(v.a);
-}
-function hexParse(str) {
-	var len = str.length;
-	var ret;
-	if (str[0] === '#') {
-		if (len === 4 || len === 5) {
-			ret = {
-				r: 255 & map$1[str[1]] * 17,
-				g: 255 & map$1[str[2]] * 17,
-				b: 255 & map$1[str[3]] * 17,
-				a: len === 5 ? map$1[str[4]] * 17 : 255
-			};
-		} else if (len === 7 || len === 9) {
-			ret = {
-				r: map$1[str[1]] << 4 | map$1[str[2]],
-				g: map$1[str[3]] << 4 | map$1[str[4]],
-				b: map$1[str[5]] << 4 | map$1[str[6]],
-				a: len === 9 ? (map$1[str[7]] << 4 | map$1[str[8]]) : 255
-			};
-		}
-	}
-	return ret;
-}
-function hexString(v) {
-	var f = isShort(v) ? h1 : h2;
-	return v
-		? '#' + f(v.r) + f(v.g) + f(v.b) + (v.a < 255 ? f(v.a) : '')
-		: v;
-}
 function round(v) {
-	return v + 0.5 | 0;
+  return v + 0.5 | 0;
 }
 const lim = (v, l, h) => Math.max(Math.min(v, h), l);
 function p2b(v) {
-	return lim(round(v * 2.55), 0, 255);
+  return lim(round(v * 2.55), 0, 255);
 }
 function n2b(v) {
-	return lim(round(v * 255), 0, 255);
+  return lim(round(v * 255), 0, 255);
 }
 function b2n(v) {
-	return lim(round(v / 2.55) / 100, 0, 1);
+  return lim(round(v / 2.55) / 100, 0, 1);
 }
 function n2p(v) {
-	return lim(round(v * 100), 0, 100);
+  return lim(round(v * 100), 0, 100);
 }
-const RGB_RE = /^rgba?\(\s*([-+.\d]+)(%)?[\s,]+([-+.e\d]+)(%)?[\s,]+([-+.e\d]+)(%)?(?:[\s,/]+([-+.e\d]+)(%)?)?\s*\)$/;
-function rgbParse(str) {
-	const m = RGB_RE.exec(str);
-	let a = 255;
-	let r, g, b;
-	if (!m) {
-		return;
-	}
-	if (m[7] !== r) {
-		const v = +m[7];
-		a = 255 & (m[8] ? p2b(v) : v * 255);
-	}
-	r = +m[1];
-	g = +m[3];
-	b = +m[5];
-	r = 255 & (m[2] ? p2b(r) : r);
-	g = 255 & (m[4] ? p2b(g) : g);
-	b = 255 & (m[6] ? p2b(b) : b);
-	return {
-		r: r,
-		g: g,
-		b: b,
-		a: a
-	};
+const map$1 = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, A: 10, B: 11, C: 12, D: 13, E: 14, F: 15, a: 10, b: 11, c: 12, d: 13, e: 14, f: 15};
+const hex = [...'0123456789ABCDEF'];
+const h1 = b => hex[b & 0xF];
+const h2 = b => hex[(b & 0xF0) >> 4] + hex[b & 0xF];
+const eq$1 = b => ((b & 0xF0) >> 4) === (b & 0xF);
+const isShort = v => eq$1(v.r) && eq$1(v.g) && eq$1(v.b) && eq$1(v.a);
+function hexParse(str) {
+  var len = str.length;
+  var ret;
+  if (str[0] === '#') {
+    if (len === 4 || len === 5) {
+      ret = {
+        r: 255 & map$1[str[1]] * 17,
+        g: 255 & map$1[str[2]] * 17,
+        b: 255 & map$1[str[3]] * 17,
+        a: len === 5 ? map$1[str[4]] * 17 : 255
+      };
+    } else if (len === 7 || len === 9) {
+      ret = {
+        r: map$1[str[1]] << 4 | map$1[str[2]],
+        g: map$1[str[3]] << 4 | map$1[str[4]],
+        b: map$1[str[5]] << 4 | map$1[str[6]],
+        a: len === 9 ? (map$1[str[7]] << 4 | map$1[str[8]]) : 255
+      };
+    }
+  }
+  return ret;
 }
-function rgbString(v) {
-	return v && (
-		v.a < 255
-			? `rgba(${v.r}, ${v.g}, ${v.b}, ${b2n(v.a)})`
-			: `rgb(${v.r}, ${v.g}, ${v.b})`
-	);
+const alpha = (a, f) => a < 255 ? f(a) : '';
+function hexString(v) {
+  var f = isShort(v) ? h1 : h2;
+  return v
+    ? '#' + f(v.r) + f(v.g) + f(v.b) + alpha(v.a, f)
+    : undefined;
 }
 const HUE_RE = /^(hsla?|hwb|hsv)\(\s*([-+.e\d]+)(?:deg)?[\s,]+([-+.e\d]+)%[\s,]+([-+.e\d]+)%(?:[\s,]+([-+.e\d]+)(%)?)?\s*\)$/;
 function hsl2rgbn(h, s, l) {
-	const a = s * Math.min(l, 1 - l);
-	const f = (n, k = (n + h / 30) % 12) => l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-	return [f(0), f(8), f(4)];
+  const a = s * Math.min(l, 1 - l);
+  const f = (n, k = (n + h / 30) % 12) => l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+  return [f(0), f(8), f(4)];
 }
 function hsv2rgbn(h, s, v) {
-	const f = (n, k = (n + h / 60) % 6) => v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
-	return [f(5), f(3), f(1)];
+  const f = (n, k = (n + h / 60) % 6) => v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
+  return [f(5), f(3), f(1)];
 }
 function hwb2rgbn(h, w, b) {
-	const rgb = hsl2rgbn(h, 1, 0.5);
-	let i;
-	if (w + b > 1) {
-		i = 1 / (w + b);
-		w *= i;
-		b *= i;
-	}
-	for (i = 0; i < 3; i++) {
-		rgb[i] *= 1 - w - b;
-		rgb[i] += w;
-	}
-	return rgb;
+  const rgb = hsl2rgbn(h, 1, 0.5);
+  let i;
+  if (w + b > 1) {
+    i = 1 / (w + b);
+    w *= i;
+    b *= i;
+  }
+  for (i = 0; i < 3; i++) {
+    rgb[i] *= 1 - w - b;
+    rgb[i] += w;
+  }
+  return rgb;
+}
+function hueValue(r, g, b, d, max) {
+  if (r === max) {
+    return ((g - b) / d) + (g < b ? 6 : 0);
+  }
+  if (g === max) {
+    return (b - r) / d + 2;
+  }
+  return (r - g) / d + 4;
 }
 function rgb2hsl(v) {
-	const range = 255;
-	const r = v.r / range;
-	const g = v.g / range;
-	const b = v.b / range;
-	const max = Math.max(r, g, b);
-	const min = Math.min(r, g, b);
-	const l = (max + min) / 2;
-	let h, s, d;
-	if (max !== min) {
-		d = max - min;
-		s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-		h = max === r
-			? ((g - b) / d) + (g < b ? 6 : 0)
-			: max === g
-				? (b - r) / d + 2
-				: (r - g) / d + 4;
-		h = h * 60 + 0.5;
-	}
-	return [h | 0, s || 0, l];
+  const range = 255;
+  const r = v.r / range;
+  const g = v.g / range;
+  const b = v.b / range;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  let h, s, d;
+  if (max !== min) {
+    d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    h = hueValue(r, g, b, d, max);
+    h = h * 60 + 0.5;
+  }
+  return [h | 0, s || 0, l];
 }
 function calln(f, a, b, c) {
-	return (
-		Array.isArray(a)
-			? f(a[0], a[1], a[2])
-			: f(a, b, c)
-	).map(n2b);
+  return (
+    Array.isArray(a)
+      ? f(a[0], a[1], a[2])
+      : f(a, b, c)
+  ).map(n2b);
 }
 function hsl2rgb(h, s, l) {
-	return calln(hsl2rgbn, h, s, l);
+  return calln(hsl2rgbn, h, s, l);
 }
 function hwb2rgb(h, w, b) {
-	return calln(hwb2rgbn, h, w, b);
+  return calln(hwb2rgbn, h, w, b);
 }
 function hsv2rgb(h, s, v) {
-	return calln(hsv2rgbn, h, s, v);
+  return calln(hsv2rgbn, h, s, v);
 }
 function hue(h) {
-	return (h % 360 + 360) % 360;
+  return (h % 360 + 360) % 360;
 }
 function hueParse(str) {
-	const m = HUE_RE.exec(str);
-	let a = 255;
-	let v;
-	if (!m) {
-		return;
-	}
-	if (m[5] !== v) {
-		a = m[6] ? p2b(+m[5]) : n2b(+m[5]);
-	}
-	const h = hue(+m[2]);
-	const p1 = +m[3] / 100;
-	const p2 = +m[4] / 100;
-	if (m[1] === 'hwb') {
-		v = hwb2rgb(h, p1, p2);
-	} else if (m[1] === 'hsv') {
-		v = hsv2rgb(h, p1, p2);
-	} else {
-		v = hsl2rgb(h, p1, p2);
-	}
-	return {
-		r: v[0],
-		g: v[1],
-		b: v[2],
-		a: a
-	};
+  const m = HUE_RE.exec(str);
+  let a = 255;
+  let v;
+  if (!m) {
+    return;
+  }
+  if (m[5] !== v) {
+    a = m[6] ? p2b(+m[5]) : n2b(+m[5]);
+  }
+  const h = hue(+m[2]);
+  const p1 = +m[3] / 100;
+  const p2 = +m[4] / 100;
+  if (m[1] === 'hwb') {
+    v = hwb2rgb(h, p1, p2);
+  } else if (m[1] === 'hsv') {
+    v = hsv2rgb(h, p1, p2);
+  } else {
+    v = hsl2rgb(h, p1, p2);
+  }
+  return {
+    r: v[0],
+    g: v[1],
+    b: v[2],
+    a: a
+  };
 }
 function rotate(v, deg) {
-	var h = rgb2hsl(v);
-	h[0] = hue(h[0] + deg);
-	h = hsl2rgb(h);
-	v.r = h[0];
-	v.g = h[1];
-	v.b = h[2];
+  var h = rgb2hsl(v);
+  h[0] = hue(h[0] + deg);
+  h = hsl2rgb(h);
+  v.r = h[0];
+  v.g = h[1];
+  v.b = h[2];
 }
 function hslString(v) {
-	if (!v) {
-		return;
-	}
-	const a = rgb2hsl(v);
-	const h = a[0];
-	const s = n2p(a[1]);
-	const l = n2p(a[2]);
-	return v.a < 255
-		? `hsla(${h}, ${s}%, ${l}%, ${b2n(v.a)})`
-		: `hsl(${h}, ${s}%, ${l}%)`;
+  if (!v) {
+    return;
+  }
+  const a = rgb2hsl(v);
+  const h = a[0];
+  const s = n2p(a[1]);
+  const l = n2p(a[2]);
+  return v.a < 255
+    ? `hsla(${h}, ${s}%, ${l}%, ${b2n(v.a)})`
+    : `hsl(${h}, ${s}%, ${l}%)`;
 }
-const map$1$1 = {
-	x: 'dark',
-	Z: 'light',
-	Y: 're',
-	X: 'blu',
-	W: 'gr',
-	V: 'medium',
-	U: 'slate',
-	A: 'ee',
-	T: 'ol',
-	S: 'or',
-	B: 'ra',
-	C: 'lateg',
-	D: 'ights',
-	R: 'in',
-	Q: 'turquois',
-	E: 'hi',
-	P: 'ro',
-	O: 'al',
-	N: 'le',
-	M: 'de',
-	L: 'yello',
-	F: 'en',
-	K: 'ch',
-	G: 'arks',
-	H: 'ea',
-	I: 'ightg',
-	J: 'wh'
+const map$2 = {
+  x: 'dark',
+  Z: 'light',
+  Y: 're',
+  X: 'blu',
+  W: 'gr',
+  V: 'medium',
+  U: 'slate',
+  A: 'ee',
+  T: 'ol',
+  S: 'or',
+  B: 'ra',
+  C: 'lateg',
+  D: 'ights',
+  R: 'in',
+  Q: 'turquois',
+  E: 'hi',
+  P: 'ro',
+  O: 'al',
+  N: 'le',
+  M: 'de',
+  L: 'yello',
+  F: 'en',
+  K: 'ch',
+  G: 'arks',
+  H: 'ea',
+  I: 'ightg',
+  J: 'wh'
 };
-const names = {
-	OiceXe: 'f0f8ff',
-	antiquewEte: 'faebd7',
-	aqua: 'ffff',
-	aquamarRe: '7fffd4',
-	azuY: 'f0ffff',
-	beige: 'f5f5dc',
-	bisque: 'ffe4c4',
-	black: '0',
-	blanKedOmond: 'ffebcd',
-	Xe: 'ff',
-	XeviTet: '8a2be2',
-	bPwn: 'a52a2a',
-	burlywood: 'deb887',
-	caMtXe: '5f9ea0',
-	KartYuse: '7fff00',
-	KocTate: 'd2691e',
-	cSO: 'ff7f50',
-	cSnflowerXe: '6495ed',
-	cSnsilk: 'fff8dc',
-	crimson: 'dc143c',
-	cyan: 'ffff',
-	xXe: '8b',
-	xcyan: '8b8b',
-	xgTMnPd: 'b8860b',
-	xWay: 'a9a9a9',
-	xgYF: '6400',
-	xgYy: 'a9a9a9',
-	xkhaki: 'bdb76b',
-	xmagFta: '8b008b',
-	xTivegYF: '556b2f',
-	xSange: 'ff8c00',
-	xScEd: '9932cc',
-	xYd: '8b0000',
-	xsOmon: 'e9967a',
-	xsHgYF: '8fbc8f',
-	xUXe: '483d8b',
-	xUWay: '2f4f4f',
-	xUgYy: '2f4f4f',
-	xQe: 'ced1',
-	xviTet: '9400d3',
-	dAppRk: 'ff1493',
-	dApskyXe: 'bfff',
-	dimWay: '696969',
-	dimgYy: '696969',
-	dodgerXe: '1e90ff',
-	fiYbrick: 'b22222',
-	flSOwEte: 'fffaf0',
-	foYstWAn: '228b22',
-	fuKsia: 'ff00ff',
-	gaRsbSo: 'dcdcdc',
-	ghostwEte: 'f8f8ff',
-	gTd: 'ffd700',
-	gTMnPd: 'daa520',
-	Way: '808080',
-	gYF: '8000',
-	gYFLw: 'adff2f',
-	gYy: '808080',
-	honeyMw: 'f0fff0',
-	hotpRk: 'ff69b4',
-	RdianYd: 'cd5c5c',
-	Rdigo: '4b0082',
-	ivSy: 'fffff0',
-	khaki: 'f0e68c',
-	lavFMr: 'e6e6fa',
-	lavFMrXsh: 'fff0f5',
-	lawngYF: '7cfc00',
-	NmoncEffon: 'fffacd',
-	ZXe: 'add8e6',
-	ZcSO: 'f08080',
-	Zcyan: 'e0ffff',
-	ZgTMnPdLw: 'fafad2',
-	ZWay: 'd3d3d3',
-	ZgYF: '90ee90',
-	ZgYy: 'd3d3d3',
-	ZpRk: 'ffb6c1',
-	ZsOmon: 'ffa07a',
-	ZsHgYF: '20b2aa',
-	ZskyXe: '87cefa',
-	ZUWay: '778899',
-	ZUgYy: '778899',
-	ZstAlXe: 'b0c4de',
-	ZLw: 'ffffe0',
-	lime: 'ff00',
-	limegYF: '32cd32',
-	lRF: 'faf0e6',
-	magFta: 'ff00ff',
-	maPon: '800000',
-	VaquamarRe: '66cdaa',
-	VXe: 'cd',
-	VScEd: 'ba55d3',
-	VpurpN: '9370db',
-	VsHgYF: '3cb371',
-	VUXe: '7b68ee',
-	VsprRggYF: 'fa9a',
-	VQe: '48d1cc',
-	VviTetYd: 'c71585',
-	midnightXe: '191970',
-	mRtcYam: 'f5fffa',
-	mistyPse: 'ffe4e1',
-	moccasR: 'ffe4b5',
-	navajowEte: 'ffdead',
-	navy: '80',
-	Tdlace: 'fdf5e6',
-	Tive: '808000',
-	TivedBb: '6b8e23',
-	Sange: 'ffa500',
-	SangeYd: 'ff4500',
-	ScEd: 'da70d6',
-	pOegTMnPd: 'eee8aa',
-	pOegYF: '98fb98',
-	pOeQe: 'afeeee',
-	pOeviTetYd: 'db7093',
-	papayawEp: 'ffefd5',
-	pHKpuff: 'ffdab9',
-	peru: 'cd853f',
-	pRk: 'ffc0cb',
-	plum: 'dda0dd',
-	powMrXe: 'b0e0e6',
-	purpN: '800080',
-	YbeccapurpN: '663399',
-	Yd: 'ff0000',
-	Psybrown: 'bc8f8f',
-	PyOXe: '4169e1',
-	saddNbPwn: '8b4513',
-	sOmon: 'fa8072',
-	sandybPwn: 'f4a460',
-	sHgYF: '2e8b57',
-	sHshell: 'fff5ee',
-	siFna: 'a0522d',
-	silver: 'c0c0c0',
-	skyXe: '87ceeb',
-	UXe: '6a5acd',
-	UWay: '708090',
-	UgYy: '708090',
-	snow: 'fffafa',
-	sprRggYF: 'ff7f',
-	stAlXe: '4682b4',
-	tan: 'd2b48c',
-	teO: '8080',
-	tEstN: 'd8bfd8',
-	tomato: 'ff6347',
-	Qe: '40e0d0',
-	viTet: 'ee82ee',
-	JHt: 'f5deb3',
-	wEte: 'ffffff',
-	wEtesmoke: 'f5f5f5',
-	Lw: 'ffff00',
-	LwgYF: '9acd32'
+const names$1 = {
+  OiceXe: 'f0f8ff',
+  antiquewEte: 'faebd7',
+  aqua: 'ffff',
+  aquamarRe: '7fffd4',
+  azuY: 'f0ffff',
+  beige: 'f5f5dc',
+  bisque: 'ffe4c4',
+  black: '0',
+  blanKedOmond: 'ffebcd',
+  Xe: 'ff',
+  XeviTet: '8a2be2',
+  bPwn: 'a52a2a',
+  burlywood: 'deb887',
+  caMtXe: '5f9ea0',
+  KartYuse: '7fff00',
+  KocTate: 'd2691e',
+  cSO: 'ff7f50',
+  cSnflowerXe: '6495ed',
+  cSnsilk: 'fff8dc',
+  crimson: 'dc143c',
+  cyan: 'ffff',
+  xXe: '8b',
+  xcyan: '8b8b',
+  xgTMnPd: 'b8860b',
+  xWay: 'a9a9a9',
+  xgYF: '6400',
+  xgYy: 'a9a9a9',
+  xkhaki: 'bdb76b',
+  xmagFta: '8b008b',
+  xTivegYF: '556b2f',
+  xSange: 'ff8c00',
+  xScEd: '9932cc',
+  xYd: '8b0000',
+  xsOmon: 'e9967a',
+  xsHgYF: '8fbc8f',
+  xUXe: '483d8b',
+  xUWay: '2f4f4f',
+  xUgYy: '2f4f4f',
+  xQe: 'ced1',
+  xviTet: '9400d3',
+  dAppRk: 'ff1493',
+  dApskyXe: 'bfff',
+  dimWay: '696969',
+  dimgYy: '696969',
+  dodgerXe: '1e90ff',
+  fiYbrick: 'b22222',
+  flSOwEte: 'fffaf0',
+  foYstWAn: '228b22',
+  fuKsia: 'ff00ff',
+  gaRsbSo: 'dcdcdc',
+  ghostwEte: 'f8f8ff',
+  gTd: 'ffd700',
+  gTMnPd: 'daa520',
+  Way: '808080',
+  gYF: '8000',
+  gYFLw: 'adff2f',
+  gYy: '808080',
+  honeyMw: 'f0fff0',
+  hotpRk: 'ff69b4',
+  RdianYd: 'cd5c5c',
+  Rdigo: '4b0082',
+  ivSy: 'fffff0',
+  khaki: 'f0e68c',
+  lavFMr: 'e6e6fa',
+  lavFMrXsh: 'fff0f5',
+  lawngYF: '7cfc00',
+  NmoncEffon: 'fffacd',
+  ZXe: 'add8e6',
+  ZcSO: 'f08080',
+  Zcyan: 'e0ffff',
+  ZgTMnPdLw: 'fafad2',
+  ZWay: 'd3d3d3',
+  ZgYF: '90ee90',
+  ZgYy: 'd3d3d3',
+  ZpRk: 'ffb6c1',
+  ZsOmon: 'ffa07a',
+  ZsHgYF: '20b2aa',
+  ZskyXe: '87cefa',
+  ZUWay: '778899',
+  ZUgYy: '778899',
+  ZstAlXe: 'b0c4de',
+  ZLw: 'ffffe0',
+  lime: 'ff00',
+  limegYF: '32cd32',
+  lRF: 'faf0e6',
+  magFta: 'ff00ff',
+  maPon: '800000',
+  VaquamarRe: '66cdaa',
+  VXe: 'cd',
+  VScEd: 'ba55d3',
+  VpurpN: '9370db',
+  VsHgYF: '3cb371',
+  VUXe: '7b68ee',
+  VsprRggYF: 'fa9a',
+  VQe: '48d1cc',
+  VviTetYd: 'c71585',
+  midnightXe: '191970',
+  mRtcYam: 'f5fffa',
+  mistyPse: 'ffe4e1',
+  moccasR: 'ffe4b5',
+  navajowEte: 'ffdead',
+  navy: '80',
+  Tdlace: 'fdf5e6',
+  Tive: '808000',
+  TivedBb: '6b8e23',
+  Sange: 'ffa500',
+  SangeYd: 'ff4500',
+  ScEd: 'da70d6',
+  pOegTMnPd: 'eee8aa',
+  pOegYF: '98fb98',
+  pOeQe: 'afeeee',
+  pOeviTetYd: 'db7093',
+  papayawEp: 'ffefd5',
+  pHKpuff: 'ffdab9',
+  peru: 'cd853f',
+  pRk: 'ffc0cb',
+  plum: 'dda0dd',
+  powMrXe: 'b0e0e6',
+  purpN: '800080',
+  YbeccapurpN: '663399',
+  Yd: 'ff0000',
+  Psybrown: 'bc8f8f',
+  PyOXe: '4169e1',
+  saddNbPwn: '8b4513',
+  sOmon: 'fa8072',
+  sandybPwn: 'f4a460',
+  sHgYF: '2e8b57',
+  sHshell: 'fff5ee',
+  siFna: 'a0522d',
+  silver: 'c0c0c0',
+  skyXe: '87ceeb',
+  UXe: '6a5acd',
+  UWay: '708090',
+  UgYy: '708090',
+  snow: 'fffafa',
+  sprRggYF: 'ff7f',
+  stAlXe: '4682b4',
+  tan: 'd2b48c',
+  teO: '8080',
+  tEstN: 'd8bfd8',
+  tomato: 'ff6347',
+  Qe: '40e0d0',
+  viTet: 'ee82ee',
+  JHt: 'f5deb3',
+  wEte: 'ffffff',
+  wEtesmoke: 'f5f5f5',
+  Lw: 'ffff00',
+  LwgYF: '9acd32'
 };
 function unpack() {
-	const unpacked = {};
-	const keys = Object.keys(names);
-	const tkeys = Object.keys(map$1$1);
-	let i, j, k, ok, nk;
-	for (i = 0; i < keys.length; i++) {
-		ok = nk = keys[i];
-		for (j = 0; j < tkeys.length; j++) {
-			k = tkeys[j];
-			nk = nk.replace(k, map$1$1[k]);
-		}
-		k = parseInt(names[ok], 16);
-		unpacked[nk] = [k >> 16 & 0xFF, k >> 8 & 0xFF, k & 0xFF];
-	}
-	return unpacked;
+  const unpacked = {};
+  const keys = Object.keys(names$1);
+  const tkeys = Object.keys(map$2);
+  let i, j, k, ok, nk;
+  for (i = 0; i < keys.length; i++) {
+    ok = nk = keys[i];
+    for (j = 0; j < tkeys.length; j++) {
+      k = tkeys[j];
+      nk = nk.replace(k, map$2[k]);
+    }
+    k = parseInt(names$1[ok], 16);
+    unpacked[nk] = [k >> 16 & 0xFF, k >> 8 & 0xFF, k & 0xFF];
+  }
+  return unpacked;
 }
-let names$1;
+let names;
 function nameParse(str) {
-	if (!names$1) {
-		names$1 = unpack();
-		names$1.transparent = [0, 0, 0, 0];
-	}
-	const a = names$1[str.toLowerCase()];
-	return a && {
-		r: a[0],
-		g: a[1],
-		b: a[2],
-		a: a.length === 4 ? a[3] : 255
-	};
+  if (!names) {
+    names = unpack();
+    names.transparent = [0, 0, 0, 0];
+  }
+  const a = names[str.toLowerCase()];
+  return a && {
+    r: a[0],
+    g: a[1],
+    b: a[2],
+    a: a.length === 4 ? a[3] : 255
+  };
+}
+const RGB_RE = /^rgba?\(\s*([-+.\d]+)(%)?[\s,]+([-+.e\d]+)(%)?[\s,]+([-+.e\d]+)(%)?(?:[\s,/]+([-+.e\d]+)(%)?)?\s*\)$/;
+function rgbParse(str) {
+  const m = RGB_RE.exec(str);
+  let a = 255;
+  let r, g, b;
+  if (!m) {
+    return;
+  }
+  if (m[7] !== r) {
+    const v = +m[7];
+    a = m[8] ? p2b(v) : lim(v * 255, 0, 255);
+  }
+  r = +m[1];
+  g = +m[3];
+  b = +m[5];
+  r = 255 & (m[2] ? p2b(r) : lim(r, 0, 255));
+  g = 255 & (m[4] ? p2b(g) : lim(g, 0, 255));
+  b = 255 & (m[6] ? p2b(b) : lim(b, 0, 255));
+  return {
+    r: r,
+    g: g,
+    b: b,
+    a: a
+  };
+}
+function rgbString(v) {
+  return v && (
+    v.a < 255
+      ? `rgba(${v.r}, ${v.g}, ${v.b}, ${b2n(v.a)})`
+      : `rgb(${v.r}, ${v.g}, ${v.b})`
+  );
+}
+const to = v => v <= 0.0031308 ? v * 12.92 : Math.pow(v, 1.0 / 2.4) * 1.055 - 0.055;
+const from = v => v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+function interpolate(rgb1, rgb2, t) {
+  const r = from(b2n(rgb1.r));
+  const g = from(b2n(rgb1.g));
+  const b = from(b2n(rgb1.b));
+  return {
+    r: n2b(to(r + t * (from(b2n(rgb2.r)) - r))),
+    g: n2b(to(g + t * (from(b2n(rgb2.g)) - g))),
+    b: n2b(to(b + t * (from(b2n(rgb2.b)) - b))),
+    a: rgb1.a + t * (rgb2.a - rgb1.a)
+  };
 }
 function modHSL(v, i, ratio) {
-	if (v) {
-		let tmp = rgb2hsl(v);
-		tmp[i] = Math.max(0, Math.min(tmp[i] + tmp[i] * ratio, i === 0 ? 360 : 1));
-		tmp = hsl2rgb(tmp);
-		v.r = tmp[0];
-		v.g = tmp[1];
-		v.b = tmp[2];
-	}
+  if (v) {
+    let tmp = rgb2hsl(v);
+    tmp[i] = Math.max(0, Math.min(tmp[i] + tmp[i] * ratio, i === 0 ? 360 : 1));
+    tmp = hsl2rgb(tmp);
+    v.r = tmp[0];
+    v.g = tmp[1];
+    v.b = tmp[2];
+  }
 }
 function clone(v, proto) {
-	return v ? Object.assign(proto || {}, v) : v;
+  return v ? Object.assign(proto || {}, v) : v;
 }
 function fromObject(input) {
-	var v = {r: 0, g: 0, b: 0, a: 255};
-	if (Array.isArray(input)) {
-		if (input.length >= 3) {
-			v = {r: input[0], g: input[1], b: input[2], a: 255};
-			if (input.length > 3) {
-				v.a = n2b(input[3]);
-			}
-		}
-	} else {
-		v = clone(input, {r: 0, g: 0, b: 0, a: 1});
-		v.a = n2b(v.a);
-	}
-	return v;
+  var v = {r: 0, g: 0, b: 0, a: 255};
+  if (Array.isArray(input)) {
+    if (input.length >= 3) {
+      v = {r: input[0], g: input[1], b: input[2], a: 255};
+      if (input.length > 3) {
+        v.a = n2b(input[3]);
+      }
+    }
+  } else {
+    v = clone(input, {r: 0, g: 0, b: 0, a: 1});
+    v.a = n2b(v.a);
+  }
+  return v;
 }
 function functionParse(str) {
-	if (str.charAt(0) === 'r') {
-		return rgbParse(str);
-	}
-	return hueParse(str);
+  if (str.charAt(0) === 'r') {
+    return rgbParse(str);
+  }
+  return hueParse(str);
 }
 class Color {
-	constructor(input) {
-		if (input instanceof Color) {
-			return input;
-		}
-		const type = typeof input;
-		let v;
-		if (type === 'object') {
-			v = fromObject(input);
-		} else if (type === 'string') {
-			v = hexParse(input) || nameParse(input) || functionParse(input);
-		}
-		this._rgb = v;
-		this._valid = !!v;
-	}
-	get valid() {
-		return this._valid;
-	}
-	get rgb() {
-		var v = clone(this._rgb);
-		if (v) {
-			v.a = b2n(v.a);
-		}
-		return v;
-	}
-	set rgb(obj) {
-		this._rgb = fromObject(obj);
-	}
-	rgbString() {
-		return this._valid ? rgbString(this._rgb) : this._rgb;
-	}
-	hexString() {
-		return this._valid ? hexString(this._rgb) : this._rgb;
-	}
-	hslString() {
-		return this._valid ? hslString(this._rgb) : this._rgb;
-	}
-	mix(color, weight) {
-		const me = this;
-		if (color) {
-			const c1 = me.rgb;
-			const c2 = color.rgb;
-			let w2;
-			const p = weight === w2 ? 0.5 : weight;
-			const w = 2 * p - 1;
-			const a = c1.a - c2.a;
-			const w1 = ((w * a === -1 ? w : (w + a) / (1 + w * a)) + 1) / 2.0;
-			w2 = 1 - w1;
-			c1.r = 0xFF & w1 * c1.r + w2 * c2.r + 0.5;
-			c1.g = 0xFF & w1 * c1.g + w2 * c2.g + 0.5;
-			c1.b = 0xFF & w1 * c1.b + w2 * c2.b + 0.5;
-			c1.a = p * c1.a + (1 - p) * c2.a;
-			me.rgb = c1;
-		}
-		return me;
-	}
-	clone() {
-		return new Color(this.rgb);
-	}
-	alpha(a) {
-		this._rgb.a = n2b(a);
-		return this;
-	}
-	clearer(ratio) {
-		const rgb = this._rgb;
-		rgb.a *= 1 - ratio;
-		return this;
-	}
-	greyscale() {
-		const rgb = this._rgb;
-		const val = round(rgb.r * 0.3 + rgb.g * 0.59 + rgb.b * 0.11);
-		rgb.r = rgb.g = rgb.b = val;
-		return this;
-	}
-	opaquer(ratio) {
-		const rgb = this._rgb;
-		rgb.a *= 1 + ratio;
-		return this;
-	}
-	negate() {
-		const v = this._rgb;
-		v.r = 255 - v.r;
-		v.g = 255 - v.g;
-		v.b = 255 - v.b;
-		return this;
-	}
-	lighten(ratio) {
-		modHSL(this._rgb, 2, ratio);
-		return this;
-	}
-	darken(ratio) {
-		modHSL(this._rgb, 2, -ratio);
-		return this;
-	}
-	saturate(ratio) {
-		modHSL(this._rgb, 1, ratio);
-		return this;
-	}
-	desaturate(ratio) {
-		modHSL(this._rgb, 1, -ratio);
-		return this;
-	}
-	rotate(deg) {
-		rotate(this._rgb, deg);
-		return this;
-	}
+  constructor(input) {
+    if (input instanceof Color) {
+      return input;
+    }
+    const type = typeof input;
+    let v;
+    if (type === 'object') {
+      v = fromObject(input);
+    } else if (type === 'string') {
+      v = hexParse(input) || nameParse(input) || functionParse(input);
+    }
+    this._rgb = v;
+    this._valid = !!v;
+  }
+  get valid() {
+    return this._valid;
+  }
+  get rgb() {
+    var v = clone(this._rgb);
+    if (v) {
+      v.a = b2n(v.a);
+    }
+    return v;
+  }
+  set rgb(obj) {
+    this._rgb = fromObject(obj);
+  }
+  rgbString() {
+    return this._valid ? rgbString(this._rgb) : undefined;
+  }
+  hexString() {
+    return this._valid ? hexString(this._rgb) : undefined;
+  }
+  hslString() {
+    return this._valid ? hslString(this._rgb) : undefined;
+  }
+  mix(color, weight) {
+    if (color) {
+      const c1 = this.rgb;
+      const c2 = color.rgb;
+      let w2;
+      const p = weight === w2 ? 0.5 : weight;
+      const w = 2 * p - 1;
+      const a = c1.a - c2.a;
+      const w1 = ((w * a === -1 ? w : (w + a) / (1 + w * a)) + 1) / 2.0;
+      w2 = 1 - w1;
+      c1.r = 0xFF & w1 * c1.r + w2 * c2.r + 0.5;
+      c1.g = 0xFF & w1 * c1.g + w2 * c2.g + 0.5;
+      c1.b = 0xFF & w1 * c1.b + w2 * c2.b + 0.5;
+      c1.a = p * c1.a + (1 - p) * c2.a;
+      this.rgb = c1;
+    }
+    return this;
+  }
+  interpolate(color, t) {
+    if (color) {
+      this._rgb = interpolate(this._rgb, color._rgb, t);
+    }
+    return this;
+  }
+  clone() {
+    return new Color(this.rgb);
+  }
+  alpha(a) {
+    this._rgb.a = n2b(a);
+    return this;
+  }
+  clearer(ratio) {
+    const rgb = this._rgb;
+    rgb.a *= 1 - ratio;
+    return this;
+  }
+  greyscale() {
+    const rgb = this._rgb;
+    const val = round(rgb.r * 0.3 + rgb.g * 0.59 + rgb.b * 0.11);
+    rgb.r = rgb.g = rgb.b = val;
+    return this;
+  }
+  opaquer(ratio) {
+    const rgb = this._rgb;
+    rgb.a *= 1 + ratio;
+    return this;
+  }
+  negate() {
+    const v = this._rgb;
+    v.r = 255 - v.r;
+    v.g = 255 - v.g;
+    v.b = 255 - v.b;
+    return this;
+  }
+  lighten(ratio) {
+    modHSL(this._rgb, 2, ratio);
+    return this;
+  }
+  darken(ratio) {
+    modHSL(this._rgb, 2, -ratio);
+    return this;
+  }
+  saturate(ratio) {
+    modHSL(this._rgb, 1, ratio);
+    return this;
+  }
+  desaturate(ratio) {
+    modHSL(this._rgb, 1, -ratio);
+    return this;
+  }
+  rotate(deg) {
+    rotate(this._rgb, deg);
+    return this;
+  }
 }
 function index_esm(input) {
-	return new Color(input);
+  return new Color(input);
 }
 
-const isPatternOrGradient = (value) => value instanceof CanvasGradient || value instanceof CanvasPattern;
+function isPatternOrGradient(value) {
+  if (value && typeof value === 'object') {
+    const type = value.toString();
+    return type === '[object CanvasPattern]' || type === '[object CanvasGradient]';
+  }
+  return false;
+}
 function color(value) {
   return isPatternOrGradient(value) ? value : index_esm(value);
 }
@@ -16069,7 +16099,8 @@ class Defaults {
     this.indexAxis = 'x';
     this.interaction = {
       mode: 'nearest',
-      intersect: true
+      intersect: true,
+      includeInvisible: false
     };
     this.maintainAspectRatio = true;
     this.onHover = null;
@@ -17000,8 +17031,7 @@ function getPositionedStyle(styles, style, suffix) {
   return result;
 }
 const useOffsetPos = (x, y, target) => (x > 0 || y > 0) && (!target || !target.shadowRoot);
-function getCanvasPosition(evt, canvas) {
-  const e = evt.native || evt;
+function getCanvasPosition(e, canvas) {
   const touches = e.touches;
   const source = touches && touches.length ? touches[0] : e;
   const {offsetX, offsetY} = source;
@@ -17018,7 +17048,10 @@ function getCanvasPosition(evt, canvas) {
   }
   return {x, y, box};
 }
-function getRelativePosition$1(evt, chart) {
+function getRelativePosition(evt, chart) {
+  if ('native' in evt) {
+    return evt;
+  }
   const {canvas, currentDevicePixelRatio} = chart;
   const style = getComputedStyle$1(canvas);
   const borderBox = style.boxSizing === 'border-box';
@@ -17408,7 +17441,7 @@ function styleChanged(style, prevStyle) {
 }
 
 /*!
- * Chart.js v3.7.1
+ * Chart.js v3.8.0
  * https://www.chartjs.org
  * (c) 2022 Chart.js Contributors
  * Released under the MIT License
@@ -18022,6 +18055,7 @@ class DatasetController {
     this._drawStart = undefined;
     this._drawCount = undefined;
     this.enableOptionSharing = false;
+    this.supportsDecimation = false;
     this.$context = undefined;
     this._syncList = [];
     this.initialize();
@@ -18927,6 +18961,11 @@ class BarController extends DatasetController {
       if (value === actualBase) {
         base -= size / 2;
       }
+      const startPixel = vScale.getPixelForDecimal(0);
+      const endPixel = vScale.getPixelForDecimal(1);
+      const min = Math.min(startPixel, endPixel);
+      const max = Math.max(startPixel, endPixel);
+      base = Math.max(Math.min(base, max), min);
       head = base + size;
     }
     if (base === vScale.getPixelForValue(actualBase)) {
@@ -19315,6 +19354,7 @@ DoughnutController.overrides = {
 class LineController extends DatasetController {
   initialize() {
     this.enableOptionSharing = true;
+    this.supportsDecimation = true;
     super.initialize();
   }
   update(mode) {
@@ -19363,7 +19403,7 @@ class LineController extends DatasetController {
       const iPixel = properties[iAxis] = iScale.getPixelForValue(parsed[iAxis], i);
       const vPixel = properties[vAxis] = reset || nullData ? vScale.getBasePixel() : vScale.getPixelForValue(_stacked ? this.applyStack(vScale, parsed, _stacked) : parsed[vAxis], i);
       properties.skip = isNaN(iPixel) || isNaN(vPixel) || nullData;
-      properties.stop = i > 0 && (parsed[iAxis] - prevParsed[iAxis]) > maxGapLength;
+      properties.stop = i > 0 && (Math.abs(parsed[iAxis] - prevParsed[iAxis])) > maxGapLength;
       if (segment) {
         properties.parsed = parsed;
         properties.raw = _dataset.data[i];
@@ -19468,28 +19508,6 @@ PieController.defaults = {
   radius: '100%'
 };
 
-function getRelativePosition(e, chart) {
-  if ('native' in e) {
-    return {
-      x: e.x,
-      y: e.y
-    };
-  }
-  return getRelativePosition$1(e, chart);
-}
-function evaluateAllVisibleItems(chart, handler) {
-  const metasets = chart.getSortedVisibleDatasetMetas();
-  let index, data, element;
-  for (let i = 0, ilen = metasets.length; i < ilen; ++i) {
-    ({index, data} = metasets[i]);
-    for (let j = 0, jlen = data.length; j < jlen; ++j) {
-      element = data[j];
-      if (!element.skip) {
-        handler(element, index, j);
-      }
-    }
-  }
-}
 function binarySearch(metaset, axis, value, intersect) {
   const {controller, data, _sorted} = metaset;
   const iScale = controller._cachedMeta.iScale;
@@ -19509,7 +19527,7 @@ function binarySearch(metaset, axis, value, intersect) {
   }
   return {lo: 0, hi: data.length - 1};
 }
-function optimizedEvaluateItems(chart, axis, position, handler, intersect) {
+function evaluateInteractionItems(chart, axis, position, handler, intersect) {
   const metasets = chart.getSortedVisibleDatasetMetas();
   const value = position[axis];
   for (let i = 0, ilen = metasets.length; i < ilen; ++i) {
@@ -19532,17 +19550,20 @@ function getDistanceMetricForAxis(axis) {
     return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
   };
 }
-function getIntersectItems(chart, position, axis, useFinalPosition) {
+function getIntersectItems(chart, position, axis, useFinalPosition, includeInvisible) {
   const items = [];
-  if (!_isPointInArea(position, chart.chartArea, chart._minPadding)) {
+  if (!includeInvisible && !chart.isPointInArea(position)) {
     return items;
   }
   const evaluationFunc = function(element, datasetIndex, index) {
+    if (!includeInvisible && !_isPointInArea(element, chart.chartArea, 0)) {
+      return;
+    }
     if (element.inRange(position.x, position.y, useFinalPosition)) {
       items.push({element, datasetIndex, index});
     }
   };
-  optimizedEvaluateItems(chart, axis, position, evaluationFunc, true);
+  evaluateInteractionItems(chart, axis, position, evaluationFunc, true);
   return items;
 }
 function getNearestRadialItems(chart, position, axis, useFinalPosition) {
@@ -19554,10 +19575,10 @@ function getNearestRadialItems(chart, position, axis, useFinalPosition) {
       items.push({element, datasetIndex, index});
     }
   }
-  optimizedEvaluateItems(chart, axis, position, evaluationFunc);
+  evaluateInteractionItems(chart, axis, position, evaluationFunc);
   return items;
 }
-function getNearestCartesianItems(chart, position, axis, intersect, useFinalPosition) {
+function getNearestCartesianItems(chart, position, axis, intersect, useFinalPosition, includeInvisible) {
   let items = [];
   const distanceMetric = getDistanceMetricForAxis(axis);
   let minDistance = Number.POSITIVE_INFINITY;
@@ -19567,7 +19588,7 @@ function getNearestCartesianItems(chart, position, axis, intersect, useFinalPosi
       return;
     }
     const center = element.getCenterPoint(useFinalPosition);
-    const pointInArea = _isPointInArea(center, chart.chartArea, chart._minPadding);
+    const pointInArea = !!includeInvisible || chart.isPointInArea(center);
     if (!pointInArea && !inRange) {
       return;
     }
@@ -19579,44 +19600,42 @@ function getNearestCartesianItems(chart, position, axis, intersect, useFinalPosi
       items.push({element, datasetIndex, index});
     }
   }
-  optimizedEvaluateItems(chart, axis, position, evaluationFunc);
+  evaluateInteractionItems(chart, axis, position, evaluationFunc);
   return items;
 }
-function getNearestItems(chart, position, axis, intersect, useFinalPosition) {
-  if (!_isPointInArea(position, chart.chartArea, chart._minPadding)) {
+function getNearestItems(chart, position, axis, intersect, useFinalPosition, includeInvisible) {
+  if (!includeInvisible && !chart.isPointInArea(position)) {
     return [];
   }
   return axis === 'r' && !intersect
     ? getNearestRadialItems(chart, position, axis, useFinalPosition)
-    : getNearestCartesianItems(chart, position, axis, intersect, useFinalPosition);
+    : getNearestCartesianItems(chart, position, axis, intersect, useFinalPosition, includeInvisible);
 }
-function getAxisItems(chart, e, options, useFinalPosition) {
-  const position = getRelativePosition(e, chart);
+function getAxisItems(chart, position, axis, intersect, useFinalPosition) {
   const items = [];
-  const axis = options.axis;
   const rangeMethod = axis === 'x' ? 'inXRange' : 'inYRange';
   let intersectsItem = false;
-  evaluateAllVisibleItems(chart, (element, datasetIndex, index) => {
+  evaluateInteractionItems(chart, axis, position, (element, datasetIndex, index) => {
     if (element[rangeMethod](position[axis], useFinalPosition)) {
       items.push({element, datasetIndex, index});
-    }
-    if (element.inRange(position.x, position.y, useFinalPosition)) {
-      intersectsItem = true;
+      intersectsItem = intersectsItem || element.inRange(position.x, position.y, useFinalPosition);
     }
   });
-  if (options.intersect && !intersectsItem) {
+  if (intersect && !intersectsItem) {
     return [];
   }
   return items;
 }
 var Interaction = {
+  evaluateInteractionItems,
   modes: {
     index(chart, e, options, useFinalPosition) {
       const position = getRelativePosition(e, chart);
       const axis = options.axis || 'x';
+      const includeInvisible = options.includeInvisible || false;
       const items = options.intersect
-        ? getIntersectItems(chart, position, axis, useFinalPosition)
-        : getNearestItems(chart, position, axis, false, useFinalPosition);
+        ? getIntersectItems(chart, position, axis, useFinalPosition, includeInvisible)
+        : getNearestItems(chart, position, axis, false, useFinalPosition, includeInvisible);
       const elements = [];
       if (!items.length) {
         return [];
@@ -19633,9 +19652,10 @@ var Interaction = {
     dataset(chart, e, options, useFinalPosition) {
       const position = getRelativePosition(e, chart);
       const axis = options.axis || 'xy';
+      const includeInvisible = options.includeInvisible || false;
       let items = options.intersect
-        ? getIntersectItems(chart, position, axis, useFinalPosition) :
-        getNearestItems(chart, position, axis, false, useFinalPosition);
+        ? getIntersectItems(chart, position, axis, useFinalPosition, includeInvisible) :
+        getNearestItems(chart, position, axis, false, useFinalPosition, includeInvisible);
       if (items.length > 0) {
         const datasetIndex = items[0].datasetIndex;
         const data = chart.getDatasetMeta(datasetIndex).data;
@@ -19649,18 +19669,22 @@ var Interaction = {
     point(chart, e, options, useFinalPosition) {
       const position = getRelativePosition(e, chart);
       const axis = options.axis || 'xy';
-      return getIntersectItems(chart, position, axis, useFinalPosition);
+      const includeInvisible = options.includeInvisible || false;
+      return getIntersectItems(chart, position, axis, useFinalPosition, includeInvisible);
     },
     nearest(chart, e, options, useFinalPosition) {
       const position = getRelativePosition(e, chart);
       const axis = options.axis || 'xy';
-      return getNearestItems(chart, position, axis, options.intersect, useFinalPosition);
+      const includeInvisible = options.includeInvisible || false;
+      return getNearestItems(chart, position, axis, options.intersect, useFinalPosition, includeInvisible);
     },
     x(chart, e, options, useFinalPosition) {
-      return getAxisItems(chart, e, {axis: 'x', intersect: options.intersect}, useFinalPosition);
+      const position = getRelativePosition(e, chart);
+      return getAxisItems(chart, position, 'x', options.intersect, useFinalPosition);
     },
     y(chart, e, options, useFinalPosition) {
-      return getAxisItems(chart, e, {axis: 'y', intersect: options.intersect}, useFinalPosition);
+      const position = getRelativePosition(e, chart);
+      return getAxisItems(chart, position, 'y', options.intersect, useFinalPosition);
     }
   }
 };
@@ -20067,7 +20091,7 @@ function removeListener(chart, type, listener) {
 }
 function fromNativeEvent(event, chart) {
   const type = EVENT_TYPES[event.type] || event.type;
-  const {x, y} = getRelativePosition$1(event, chart);
+  const {x, y} = getRelativePosition(event, chart);
   return {
     type,
     chart,
@@ -20786,6 +20810,7 @@ class Scale extends Element$1 {
     if (tickOpts.display && (tickOpts.autoSkip || tickOpts.source === 'auto')) {
       this.ticks = autoSkip(this, this.ticks);
       this._labelSizes = null;
+      this.afterAutoSkip();
     }
     if (samplingEnabled) {
       this._convertTicksToLabels(this.ticks);
@@ -20906,6 +20931,7 @@ class Scale extends Element$1 {
   afterCalculateLabelRotation() {
     callback(this.options.afterCalculateLabelRotation, [this]);
   }
+  afterAutoSkip() {}
   beforeFit() {
     callback(this.options.beforeFit, [this]);
   }
@@ -20972,7 +20998,7 @@ class Scale extends Element$1 {
         paddingRight = last.width;
       } else if (align === 'end') {
         paddingLeft = first.width;
-      } else {
+      } else if (align !== 'inner') {
         paddingLeft = first.width / 2;
         paddingRight = last.width / 2;
       }
@@ -21323,8 +21349,18 @@ class Scale extends Element$1 {
       const color = optsAtIndex.color;
       const strokeColor = optsAtIndex.textStrokeColor;
       const strokeWidth = optsAtIndex.textStrokeWidth;
+      let tickTextAlign = textAlign;
       if (isHorizontal) {
         x = pixel;
+        if (textAlign === 'inner') {
+          if (i === ilen - 1) {
+            tickTextAlign = !this.options.reverse ? 'right' : 'left';
+          } else if (i === 0) {
+            tickTextAlign = !this.options.reverse ? 'left' : 'right';
+          } else {
+            tickTextAlign = 'center';
+          }
+        }
         if (position === 'top') {
           if (crossAlign === 'near' || rotation !== 0) {
             textOffset = -lineCount * lineHeight + lineHeight / 2;
@@ -21388,7 +21424,7 @@ class Scale extends Element$1 {
         strokeColor,
         strokeWidth,
         textOffset,
-        textAlign,
+        textAlign: tickTextAlign,
         textBaseline,
         translation: [x, y],
         backdrop,
@@ -21407,6 +21443,8 @@ class Scale extends Element$1 {
       align = 'left';
     } else if (ticks.align === 'end') {
       align = 'right';
+    } else if (ticks.align === 'inner') {
+      align = 'inner';
     }
     return align;
   }
@@ -22249,7 +22287,7 @@ function needContext(proxy, names) {
   return false;
 }
 
-var version = "3.7.1";
+var version = "3.8.0";
 
 const KNOWN_POSITIONS = ['top', 'bottom', 'left', 'right', 'chartArea'];
 function positionIsHorizontal(position, axis) {
@@ -22790,6 +22828,9 @@ class Chart {
     args.cancelable = false;
     this.notifyPlugins('afterDatasetDraw', args);
   }
+  isPointInArea(point) {
+    return _isPointInArea(point, this.chartArea, this._minPadding);
+  }
   getElementsAtEventForMode(e, mode, options, useFinalPosition) {
     const method = Interaction.modes[mode];
     if (typeof method === 'function') {
@@ -23029,7 +23070,7 @@ class Chart {
       event: e,
       replay,
       cancelable: true,
-      inChartArea: _isPointInArea(e, this.chartArea, this._minPadding)
+      inChartArea: this.isPointInArea(e)
     };
     const eventFilter = (plugin) => (plugin.options.events || this.options.events).includes(e.native.type);
     if (this.notifyPlugins('beforeEvent', args, eventFilter) === false) {
@@ -27070,7 +27111,7 @@ var registerWrapper = function registerWrapper(stripe, startTime) {
 
   stripe._registerWrapper({
     name: 'stripe-js',
-    version: "1.29.0",
+    version: "1.31.0",
     startTime: startTime
   });
 };
@@ -30376,6 +30417,7 @@ class Item {
     });
     const ariaDisabled = disabled || childStyles['item-interactive-disabled'] ? 'true' : null;
     const fillValue = fill || 'none';
+    const inList = hostContext('ion-list', this.el);
     return (hAsync(Host, { "aria-disabled": ariaDisabled, class: Object.assign(Object.assign(Object.assign({}, childStyles), labelColorStyles), createColorClasses$1(this.color, {
         item: true,
         [mode]: true,
@@ -30383,12 +30425,12 @@ class Item {
         [`item-fill-${fillValue}`]: true,
         [`item-shape-${shape}`]: shape !== undefined,
         'item-disabled': disabled,
-        'in-list': hostContext('ion-list', this.el),
+        'in-list': inList,
         'item-multiple-inputs': this.multipleInputs,
         'ion-activatable': canActivate,
         'ion-focusable': this.focusable,
         'item-rtl': document.dir === 'rtl',
-      })) }, hAsync(TagType, Object.assign({}, attrs, { class: "item-native", part: "native", disabled: disabled }, clickFn), hAsync("slot", { name: "start" }), hAsync("div", { class: "item-inner" }, hAsync("div", { class: "input-wrapper" }, hAsync("slot", null)), hAsync("slot", { name: "end" }), showDetail && (hAsync("ion-icon", { icon: detailIcon, lazy: false, class: "item-detail-icon", part: "detail-icon", "aria-hidden": "true", "flip-rtl": detailIcon === chevronForward })), hAsync("div", { class: "item-inner-highlight" })), canActivate && mode === 'md' && hAsync("ion-ripple-effect", null), hAsync("div", { class: "item-highlight" })), hAsync("div", { class: "item-bottom" }, hAsync("slot", { name: "error" }), hAsync("slot", { name: "helper" }), counterString && hAsync("ion-note", { class: "item-counter" }, counterString))));
+      })), role: inList ? 'listitem' : null }, hAsync(TagType, Object.assign({}, attrs, { class: "item-native", part: "native", disabled: disabled }, clickFn), hAsync("slot", { name: "start" }), hAsync("div", { class: "item-inner" }, hAsync("div", { class: "input-wrapper" }, hAsync("slot", null)), hAsync("slot", { name: "end" }), showDetail && (hAsync("ion-icon", { icon: detailIcon, lazy: false, class: "item-detail-icon", part: "detail-icon", "aria-hidden": "true", "flip-rtl": detailIcon === chevronForward })), hAsync("div", { class: "item-inner-highlight" })), canActivate && mode === 'md' && hAsync("ion-ripple-effect", null), hAsync("div", { class: "item-highlight" })), hAsync("div", { class: "item-bottom" }, hAsync("slot", { name: "error" }), hAsync("slot", { name: "helper" }), counterString && hAsync("ion-note", { class: "item-counter" }, counterString))));
   }
   static get delegatesFocus() { return true; }
   get el() { return getElement(this); }
@@ -31264,7 +31306,7 @@ class List {
   render() {
     const mode = getIonMode$1(this);
     const { lines, inset } = this;
-    return (hAsync(Host, { class: {
+    return (hAsync(Host, { role: "list", class: {
         [mode]: true,
         // Used internally for styling
         [`list-${mode}`]: true,
@@ -35347,9 +35389,9 @@ class Map$1 {
   }; }
 }
 
-const menuIosCss = "/*!@:host*/.sc-ion-menu-ios-h{--width:304px;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--background:var(--ion-background-color, #fff);left:0;right:0;top:0;bottom:0;display:none;position:absolute;contain:strict}/*!@:host(.show-menu)*/.show-menu.sc-ion-menu-ios-h{display:block}/*!@.menu-inner*/.menu-inner.sc-ion-menu-ios{left:0;right:auto;top:0;bottom:0;transform:translate3d(-9999px,  0,  0);display:flex;position:absolute;flex-direction:column;justify-content:space-between;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);contain:strict}/*!@[dir=rtl] .menu-inner, :host-context([dir=rtl]) .menu-inner*/[dir=rtl].sc-ion-menu-ios .menu-inner.sc-ion-menu-ios,[dir=rtl].sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios,[dir=rtl] .sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios{left:unset;right:unset;left:auto;right:0}/*!@[dir=rtl] .menu-inner, :host-context([dir=rtl]) .menu-inner*/[dir=rtl].sc-ion-menu-ios .menu-inner.sc-ion-menu-ios,[dir=rtl].sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios,[dir=rtl] .sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios{transform:translate3d(calc(-1 * -9999px),  0,  0)}/*!@:host(.menu-side-start) .menu-inner*/.menu-side-start.sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios{--ion-safe-area-right:0px;right:auto;left:0}/*!@:host(.menu-side-end) .menu-inner*/.menu-side-end.sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios{--ion-safe-area-left:0px;right:0;left:auto}/*!@ion-backdrop*/ion-backdrop.sc-ion-menu-ios{display:none;opacity:0.01;z-index:-1}@media (max-width: 340px){/*!@.menu-inner*/.menu-inner.sc-ion-menu-ios{--width:264px}}/*!@:host(.menu-type-reveal)*/.menu-type-reveal.sc-ion-menu-ios-h{z-index:0}/*!@:host(.menu-type-reveal.show-menu) .menu-inner*/.menu-type-reveal.show-menu.sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios{transform:translate3d(0,  0,  0)}/*!@:host(.menu-type-overlay)*/.menu-type-overlay.sc-ion-menu-ios-h{z-index:1000}/*!@:host(.menu-type-overlay) .show-backdrop*/.menu-type-overlay.sc-ion-menu-ios-h .show-backdrop.sc-ion-menu-ios{display:block;cursor:pointer}/*!@:host(.menu-pane-visible)*/.menu-pane-visible.sc-ion-menu-ios-h{width:var(--width);min-width:var(--min-width);max-width:var(--max-width)}/*!@:host(.menu-pane-visible) .menu-inner*/.menu-pane-visible.sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios{left:0;right:0;width:auto;transform:none !important;box-shadow:none !important}/*!@:host(.menu-pane-visible) ion-backdrop*/.menu-pane-visible.sc-ion-menu-ios-h ion-backdrop.sc-ion-menu-ios{display:hidden !important}/*!@:host(.menu-type-push)*/.menu-type-push.sc-ion-menu-ios-h{z-index:1000}/*!@:host(.menu-type-push) .show-backdrop*/.menu-type-push.sc-ion-menu-ios-h .show-backdrop.sc-ion-menu-ios{display:block}";
+const menuIosCss = "/*!@:host*/.sc-ion-menu-ios-h{--width:304px;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--background:var(--ion-background-color, #fff);left:0;right:0;top:0;bottom:0;display:none;position:absolute;contain:strict}/*!@:host(.show-menu)*/.show-menu.sc-ion-menu-ios-h{display:block}/*!@.menu-inner*/.menu-inner.sc-ion-menu-ios{left:0;right:auto;top:0;bottom:0;transform:translateX(-9999px);display:flex;position:absolute;flex-direction:column;justify-content:space-between;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);contain:strict}/*!@[dir=rtl] .menu-inner, :host-context([dir=rtl]) .menu-inner*/[dir=rtl].sc-ion-menu-ios .menu-inner.sc-ion-menu-ios,[dir=rtl].sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios,[dir=rtl] .sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios{left:unset;right:unset;left:auto;right:0}/*!@:host(.menu-side-start) .menu-inner*/.menu-side-start.sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios{--ion-safe-area-right:0px;right:auto;left:0}/*!@:host(.menu-side-end) .menu-inner*/.menu-side-end.sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios{--ion-safe-area-left:0px;right:0;left:auto}/*!@ion-backdrop*/ion-backdrop.sc-ion-menu-ios{display:none;opacity:0.01;z-index:-1}@media (max-width: 340px){/*!@.menu-inner*/.menu-inner.sc-ion-menu-ios{--width:264px}}/*!@:host(.menu-type-reveal)*/.menu-type-reveal.sc-ion-menu-ios-h{z-index:0}/*!@:host(.menu-type-reveal.show-menu) .menu-inner*/.menu-type-reveal.show-menu.sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios{transform:translate3d(0,  0,  0)}/*!@:host(.menu-type-overlay)*/.menu-type-overlay.sc-ion-menu-ios-h{z-index:1000}/*!@:host(.menu-type-overlay) .show-backdrop*/.menu-type-overlay.sc-ion-menu-ios-h .show-backdrop.sc-ion-menu-ios{display:block;cursor:pointer}/*!@:host(.menu-pane-visible)*/.menu-pane-visible.sc-ion-menu-ios-h{width:var(--width);min-width:var(--min-width);max-width:var(--max-width)}/*!@:host(.menu-pane-visible) .menu-inner*/.menu-pane-visible.sc-ion-menu-ios-h .menu-inner.sc-ion-menu-ios{left:0;right:0;width:auto;transform:none !important;box-shadow:none !important}/*!@:host(.menu-pane-visible) ion-backdrop*/.menu-pane-visible.sc-ion-menu-ios-h ion-backdrop.sc-ion-menu-ios{display:hidden !important}/*!@:host(.menu-type-push)*/.menu-type-push.sc-ion-menu-ios-h{z-index:1000}/*!@:host(.menu-type-push) .show-backdrop*/.menu-type-push.sc-ion-menu-ios-h .show-backdrop.sc-ion-menu-ios{display:block}";
 
-const menuMdCss = "/*!@:host*/.sc-ion-menu-md-h{--width:304px;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--background:var(--ion-background-color, #fff);left:0;right:0;top:0;bottom:0;display:none;position:absolute;contain:strict}/*!@:host(.show-menu)*/.show-menu.sc-ion-menu-md-h{display:block}/*!@.menu-inner*/.menu-inner.sc-ion-menu-md{left:0;right:auto;top:0;bottom:0;transform:translate3d(-9999px,  0,  0);display:flex;position:absolute;flex-direction:column;justify-content:space-between;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);contain:strict}/*!@[dir=rtl] .menu-inner, :host-context([dir=rtl]) .menu-inner*/[dir=rtl].sc-ion-menu-md .menu-inner.sc-ion-menu-md,[dir=rtl].sc-ion-menu-md-h .menu-inner.sc-ion-menu-md,[dir=rtl] .sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{left:unset;right:unset;left:auto;right:0}/*!@[dir=rtl] .menu-inner, :host-context([dir=rtl]) .menu-inner*/[dir=rtl].sc-ion-menu-md .menu-inner.sc-ion-menu-md,[dir=rtl].sc-ion-menu-md-h .menu-inner.sc-ion-menu-md,[dir=rtl] .sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{transform:translate3d(calc(-1 * -9999px),  0,  0)}/*!@:host(.menu-side-start) .menu-inner*/.menu-side-start.sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{--ion-safe-area-right:0px;right:auto;left:0}/*!@:host(.menu-side-end) .menu-inner*/.menu-side-end.sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{--ion-safe-area-left:0px;right:0;left:auto}/*!@ion-backdrop*/ion-backdrop.sc-ion-menu-md{display:none;opacity:0.01;z-index:-1}@media (max-width: 340px){/*!@.menu-inner*/.menu-inner.sc-ion-menu-md{--width:264px}}/*!@:host(.menu-type-reveal)*/.menu-type-reveal.sc-ion-menu-md-h{z-index:0}/*!@:host(.menu-type-reveal.show-menu) .menu-inner*/.menu-type-reveal.show-menu.sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{transform:translate3d(0,  0,  0)}/*!@:host(.menu-type-overlay)*/.menu-type-overlay.sc-ion-menu-md-h{z-index:1000}/*!@:host(.menu-type-overlay) .show-backdrop*/.menu-type-overlay.sc-ion-menu-md-h .show-backdrop.sc-ion-menu-md{display:block;cursor:pointer}/*!@:host(.menu-pane-visible)*/.menu-pane-visible.sc-ion-menu-md-h{width:var(--width);min-width:var(--min-width);max-width:var(--max-width)}/*!@:host(.menu-pane-visible) .menu-inner*/.menu-pane-visible.sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{left:0;right:0;width:auto;transform:none !important;box-shadow:none !important}/*!@:host(.menu-pane-visible) ion-backdrop*/.menu-pane-visible.sc-ion-menu-md-h ion-backdrop.sc-ion-menu-md{display:hidden !important}/*!@:host(.menu-type-overlay) .menu-inner*/.menu-type-overlay.sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{box-shadow:4px 0px 16px rgba(0, 0, 0, 0.18)}";
+const menuMdCss = "/*!@:host*/.sc-ion-menu-md-h{--width:304px;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--background:var(--ion-background-color, #fff);left:0;right:0;top:0;bottom:0;display:none;position:absolute;contain:strict}/*!@:host(.show-menu)*/.show-menu.sc-ion-menu-md-h{display:block}/*!@.menu-inner*/.menu-inner.sc-ion-menu-md{left:0;right:auto;top:0;bottom:0;transform:translateX(-9999px);display:flex;position:absolute;flex-direction:column;justify-content:space-between;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);contain:strict}/*!@[dir=rtl] .menu-inner, :host-context([dir=rtl]) .menu-inner*/[dir=rtl].sc-ion-menu-md .menu-inner.sc-ion-menu-md,[dir=rtl].sc-ion-menu-md-h .menu-inner.sc-ion-menu-md,[dir=rtl] .sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{left:unset;right:unset;left:auto;right:0}/*!@:host(.menu-side-start) .menu-inner*/.menu-side-start.sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{--ion-safe-area-right:0px;right:auto;left:0}/*!@:host(.menu-side-end) .menu-inner*/.menu-side-end.sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{--ion-safe-area-left:0px;right:0;left:auto}/*!@ion-backdrop*/ion-backdrop.sc-ion-menu-md{display:none;opacity:0.01;z-index:-1}@media (max-width: 340px){/*!@.menu-inner*/.menu-inner.sc-ion-menu-md{--width:264px}}/*!@:host(.menu-type-reveal)*/.menu-type-reveal.sc-ion-menu-md-h{z-index:0}/*!@:host(.menu-type-reveal.show-menu) .menu-inner*/.menu-type-reveal.show-menu.sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{transform:translate3d(0,  0,  0)}/*!@:host(.menu-type-overlay)*/.menu-type-overlay.sc-ion-menu-md-h{z-index:1000}/*!@:host(.menu-type-overlay) .show-backdrop*/.menu-type-overlay.sc-ion-menu-md-h .show-backdrop.sc-ion-menu-md{display:block;cursor:pointer}/*!@:host(.menu-pane-visible)*/.menu-pane-visible.sc-ion-menu-md-h{width:var(--width);min-width:var(--min-width);max-width:var(--max-width)}/*!@:host(.menu-pane-visible) .menu-inner*/.menu-pane-visible.sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{left:0;right:0;width:auto;transform:none !important;box-shadow:none !important}/*!@:host(.menu-pane-visible) ion-backdrop*/.menu-pane-visible.sc-ion-menu-md-h ion-backdrop.sc-ion-menu-md{display:hidden !important}/*!@:host(.menu-type-overlay) .menu-inner*/.menu-type-overlay.sc-ion-menu-md-h .menu-inner.sc-ion-menu-md{box-shadow:4px 0px 16px rgba(0, 0, 0, 0.18)}";
 
 const iosEasing = 'cubic-bezier(0.32,0.72,0,1)';
 const mdEasing = 'cubic-bezier(0.0,0.0,0.2,1)';
@@ -36286,14 +36328,16 @@ const calculateSpringStep = (t) => {
 const SwipeToCloseDefaults = {
   MIN_PRESENTING_SCALE: 0.93,
 };
-const createSwipeToCloseGesture = (el, contentEl, scrollEl, animation, onDismiss) => {
+const createSwipeToCloseGesture = (el, animation, onDismiss) => {
   const height = el.offsetHeight;
   let isOpen = false;
   let canDismissBlocksGesture = false;
+  let contentEl = null;
+  let scrollEl = null;
   const canDismissMaxStep = 0.2;
-  const hasRefresherInContent = !!contentEl.querySelector('ion-refresher');
+  let initialScrollY = true;
   const getScrollY = () => {
-    if (isIonContent(contentEl)) {
+    if (contentEl && isIonContent(contentEl)) {
       return contentEl.scrollY;
       /**
        * Custom scroll containers are intended to be
@@ -36305,8 +36349,10 @@ const createSwipeToCloseGesture = (el, contentEl, scrollEl, animation, onDismiss
       return true;
     }
   };
-  const initialScrollY = getScrollY();
   const disableContentScroll = () => {
+    if (!contentEl) {
+      return;
+    }
     if (isIonContent(contentEl)) {
       contentEl.scrollY = false;
     }
@@ -36315,6 +36361,9 @@ const createSwipeToCloseGesture = (el, contentEl, scrollEl, animation, onDismiss
     }
   };
   const resetContentScroll = () => {
+    if (!contentEl) {
+      return;
+    }
     if (isIonContent(contentEl)) {
       contentEl.scrollY = initialScrollY;
     }
@@ -36333,9 +36382,17 @@ const createSwipeToCloseGesture = (el, contentEl, scrollEl, animation, onDismiss
      * the content is scrolled all the way
      * to the top so that we do not interfere
      * with scrolling.
+     *
+     * We cannot assume that the `ion-content`
+     * target will remain consistent between
+     * swipes. For example, when using
+     * ion-nav within a card modal it is
+     * possible to swipe, push a view, and then
+     * swipe again. The target content will not
+     * be the same between swipes.
      */
-    const content = target.closest('ion-content');
-    if (content) {
+    contentEl = findClosestIonContent(target);
+    if (contentEl) {
       /**
        * The card should never swipe to close
        * on the content with a refresher.
@@ -36344,7 +36401,20 @@ const createSwipeToCloseGesture = (el, contentEl, scrollEl, animation, onDismiss
        * than the refresher gesture as the iOS native
        * refresh gesture uses a scroll listener in
        * addition to a gesture.
+       *
+       * Note: Do not use getScrollElement here
+       * because we need this to be a synchronous
+       * operation, and getScrollElement is
+       * asynchronous.
        */
+      if (isIonContent(contentEl)) {
+        const root = getElementRoot(contentEl);
+        scrollEl = root.querySelector('.inner-scroll');
+      }
+      else {
+        scrollEl = contentEl;
+      }
+      const hasRefresherInContent = !!contentEl.querySelector('ion-refresher');
       return !hasRefresherInContent && scrollEl.scrollTop === 0;
     }
     /**
@@ -36359,6 +36429,12 @@ const createSwipeToCloseGesture = (el, contentEl, scrollEl, animation, onDismiss
   };
   const onStart = (detail) => {
     const { deltaY } = detail;
+    /**
+     * Get the initial scrollY value so
+     * that we can correctly reset the scrollY
+     * prop when the gesture ends.
+     */
+    initialScrollY = getScrollY();
     /**
      * If canDismiss is anything other than `true`
      * then users should be able to swipe down
@@ -36485,7 +36561,7 @@ const createSwipeToCloseGesture = (el, contentEl, scrollEl, animation, onDismiss
   const gesture = createGesture({
     el,
     gestureName: 'modalSwipeToClose',
-    gesturePriority: 40,
+    gesturePriority: 39,
     direction: 'y',
     threshold: 10,
     canStart,
@@ -37424,7 +37500,7 @@ class Modal {
     }
     this.currentTransition = undefined;
   }
-  async initSwipeToClose() {
+  initSwipeToClose() {
     if (getIonMode$1(this) !== 'ios') {
       return;
     }
@@ -37439,8 +37515,7 @@ class Modal {
       printIonContentErrorMsg(el);
       return;
     }
-    const scrollEl = await getScrollElement(contentEl);
-    this.gesture = createSwipeToCloseGesture(el, contentEl, scrollEl, ani, () => {
+    this.gesture = createSwipeToCloseGesture(el, ani, () => {
       /**
        * While the gesture animation is finishing
        * it is possible for a user to tap the backdrop.
@@ -43119,17 +43194,23 @@ class Refresher {
     this.checkNativeRefresher();
   }
   async connectedCallback() {
-    var _a;
     if (this.el.getAttribute('slot') !== 'fixed') {
       console.error('Make sure you use: <ion-refresher slot="fixed">');
       return;
     }
-    const contentEl = findClosestIonContent(this.el);
+    const contentEl = this.el.closest(ION_CONTENT_ELEMENT_SELECTOR);
     if (!contentEl) {
       printIonContentErrorMsg(this.el);
       return;
     }
-    this.scrollEl = await getScrollElement(contentEl);
+    const customScrollTarget = contentEl.querySelector(ION_CONTENT_CLASS_SELECTOR);
+    /**
+     * Query the custom scroll target (if available), first. In refresher implementations,
+     * the ion-refresher element will always be a direct child of ion-content (slot="fixed"). By
+     * querying the custom scroll target first and falling back to the ion-content element,
+     * the correct scroll element will be returned by the implementation.
+     */
+    this.scrollEl = await getScrollElement(customScrollTarget !== null && customScrollTarget !== void 0 ? customScrollTarget : contentEl);
     /**
      * Query the host `ion-content` directly (if it is available), to use its
      * inner #background-content has the target. Otherwise fallback to the
@@ -43138,8 +43219,7 @@ class Refresher {
      * This makes it so that implementers do not need to re-create the background content
      * element and styles.
      */
-    const backgroundContentHost = (_a = this.el.closest('ion-content')) !== null && _a !== void 0 ? _a : contentEl;
-    this.backgroundContentEl = getElementRoot(backgroundContentHost).querySelector('#background-content');
+    this.backgroundContentEl = getElementRoot(contentEl !== null && contentEl !== void 0 ? contentEl : customScrollTarget).querySelector('#background-content');
     if (await shouldUseNativeRefresher(this.el, getIonMode$1(this))) {
       this.setupNativeRefresher(contentEl);
     }
