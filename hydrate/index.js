@@ -28009,9 +28009,7 @@ class InputAddress {
   }
   async componentDidLoad() {
     var _a;
-    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
-      return;
-    if (!((_a = window === null || window === void 0 ? void 0 : window.google) === null || _a === void 0 ? void 0 : _a.maps) && !this.googleMapsKey)
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser) || !((_a = window === null || window === void 0 ? void 0 : window.google) === null || _a === void 0 ? void 0 : _a.maps) || !this.googleMapsKey)
       return;
     this.google = (window === null || window === void 0 ? void 0 : window.google) || (await this.loadGoogleMaps());
     const inputEl = await this.autocompleteFieldEl.getInputElement();
