@@ -5766,7 +5766,7 @@ const cmpModules = new Map, getModule = e => {
  isTesting: !1
 }, styles$2 = new Map, modeResolutionChain = [];
 
-/* Ionicons v6.0.1, ES Modules */
+/* Ionicons v6.0.2, ES Modules */
 const arrowBackSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Arrow Back</title><path stroke-linecap='square' stroke-miterlimit='10' stroke-width='48' d='M244 400L100 256l144-144M120 256h292' class='ionicon-fill-none'/></svg>";
 const arrowDown = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Arrow Down</title><path stroke-linecap='round' stroke-linejoin='round' stroke-width='48' d='M112 268l144 144 144-144M256 392V100' class='ionicon-fill-none'/></svg>";
 const caretBackSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Caret Back</title><path d='M368 64L144 256l224 192V64z'/></svg>";
@@ -14556,6 +14556,38 @@ const findClosestIonContent = (el) => {
  */
 const printIonContentErrorMsg = (el) => {
   return printRequiredElementError(el, ION_CONTENT_ELEMENT_SELECTOR);
+};
+/**
+ * Several components in Ionic need to prevent scrolling
+ * during a gesture (card modal, range, item sliding, etc).
+ * Use this utility to account for ion-content and custom content hosts.
+ */
+const disableContentScrollY = (contentEl) => {
+  if (isIonContent(contentEl)) {
+    const ionContent = contentEl;
+    const initialScrollY = ionContent.scrollY;
+    ionContent.scrollY = false;
+    /**
+     * This should be passed into resetContentScrollY
+     * so that we can revert ion-content's scrollY to the
+     * correct state. For example, if scrollY = false
+     * initially, we do not want to enable scrolling
+     * when we call resetContentScrollY.
+     */
+    return initialScrollY;
+  }
+  else {
+    contentEl.style.setProperty('overflow', 'hidden');
+    return true;
+  }
+};
+const resetContentScrollY = (contentEl, initialScrollY) => {
+  if (isIonContent(contentEl)) {
+    contentEl.scrollY = initialScrollY;
+  }
+  else {
+    contentEl.style.removeProperty('overflow');
+  }
 };
 
 /*!
@@ -28008,8 +28040,7 @@ class InputAddress {
     return loader.load();
   }
   async componentDidLoad() {
-    var _a;
-    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser) || !((_a = window === null || window === void 0 ? void 0 : window.google) === null || _a === void 0 ? void 0 : _a.maps) || !this.googleMapsKey)
+    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser) || !this.googleMapsKey)
       return;
     this.google = (window === null || window === void 0 ? void 0 : window.google) || (await this.loadGoogleMaps());
     const inputEl = await this.autocompleteFieldEl.getInputElement();
@@ -30695,7 +30726,7 @@ class ItemSliding {
     this.optsWidthLeftSide = 0;
     this.sides = 0 /* None */;
     this.optsDirty = true;
-    this.closestContent = null;
+    this.contentEl = null;
     this.initialContentScrollY = true;
     this.state = 2 /* Disabled */;
     /**
@@ -30710,7 +30741,7 @@ class ItemSliding {
   }
   async connectedCallback() {
     this.item = this.el.querySelector('ion-item');
-    this.closestContent = this.el.closest('ion-content');
+    this.contentEl = findClosestIonContent(this.el);
     await this.updateOptions();
     this.gesture = (await Promise.resolve().then(function () { return index$1; })).createGesture({
       el: this.el,
@@ -30872,19 +30903,6 @@ class ItemSliding {
     }
     return !!(this.rightOptions || this.leftOptions);
   }
-  disableContentScrollY() {
-    if (this.closestContent === null) {
-      return;
-    }
-    this.initialContentScrollY = this.closestContent.scrollY;
-    this.closestContent.scrollY = false;
-  }
-  restoreContentScrollY() {
-    if (this.closestContent === null) {
-      return;
-    }
-    this.closestContent.scrollY = this.initialContentScrollY;
-  }
   onStart() {
     /**
      * We need to query for the ion-item
@@ -30892,8 +30910,10 @@ class ItemSliding {
      * may toggle ion-item elements via *ngIf.
      */
     this.item = this.el.querySelector('ion-item');
-    // Prevent scrolling during gesture
-    this.disableContentScrollY();
+    const { contentEl } = this;
+    if (contentEl) {
+      this.initialContentScrollY = disableContentScrollY(contentEl);
+    }
     openSlidingItem = this.el;
     if (this.tmr !== undefined) {
       clearTimeout(this.tmr);
@@ -30940,8 +30960,10 @@ class ItemSliding {
     this.setOpenAmount(openAmount, false);
   }
   onEnd(gesture) {
-    // Restore ion-content scrollY to initial value when gesture ends
-    this.restoreContentScrollY();
+    const { contentEl, initialContentScrollY } = this;
+    if (contentEl) {
+      resetContentScrollY(contentEl, initialContentScrollY);
+    }
     const velocity = gesture.velocityX;
     let restingPoint = this.openAmount > 0 ? this.optsWidthRightSide : -this.optsWidthLeftSide;
     // Check if the drag didn't clear the buttons mid-point
@@ -36347,28 +36369,6 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
       return true;
     }
   };
-  const disableContentScroll = () => {
-    if (!contentEl) {
-      return;
-    }
-    if (isIonContent(contentEl)) {
-      contentEl.scrollY = false;
-    }
-    else {
-      contentEl.style.setProperty('overflow', 'hidden');
-    }
-  };
-  const resetContentScroll = () => {
-    if (!contentEl) {
-      return;
-    }
-    if (isIonContent(contentEl)) {
-      contentEl.scrollY = initialScrollY;
-    }
-    else {
-      contentEl.style.removeProperty('overflow');
-    }
-  };
   const canStart = (detail) => {
     const target = detail.event.target;
     if (target === null || !target.closest) {
@@ -36448,8 +36448,8 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
      * content. We do not want scrolling to
      * happen at the same time as the gesture.
      */
-    if (deltaY > 0) {
-      disableContentScroll();
+    if (deltaY > 0 && contentEl) {
+      disableContentScrollY(contentEl);
     }
     animation.progressStart(true, isOpen ? 1 : 0);
   };
@@ -36461,8 +36461,8 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
      * content. We do not want scrolling to
      * happen at the same time as the gesture.
      */
-    if (deltaY > 0) {
-      disableContentScroll();
+    if (deltaY > 0 && contentEl) {
+      disableContentScrollY(contentEl);
     }
     /**
      * If we are swiping on the content
@@ -36529,7 +36529,9 @@ const createSwipeToCloseGesture = (el, animation, onDismiss) => {
       : computeDuration((1 - clampedStep) * height, velocity);
     isOpen = shouldComplete;
     gesture.enable(false);
-    resetContentScroll();
+    if (contentEl) {
+      resetContentScrollY(contentEl, initialScrollY);
+    }
     animation
       .onFinish(() => {
       if (!shouldComplete) {
@@ -42245,6 +42247,8 @@ class Range {
     this.noUpdate = false;
     this.hasFocus = false;
     this.inheritedAttributes = {};
+    this.contentEl = null;
+    this.initialContentScrollY = true;
     this.ratioA = 0;
     this.ratioB = 0;
     /**
@@ -42415,6 +42419,7 @@ class Range {
     if (this.didLoad) {
       this.setupGesture();
     }
+    this.contentEl = findClosestIonContent(this.el);
   }
   disconnectedCallback() {
     if (this.gesture) {
@@ -42447,6 +42452,10 @@ class Range {
     });
   }
   onStart(detail) {
+    const { contentEl } = this;
+    if (contentEl) {
+      this.initialContentScrollY = disableContentScrollY(contentEl);
+    }
     const rect = (this.rect = this.rangeSlider.getBoundingClientRect());
     const currentX = detail.currentX;
     // figure out which knob they started closer to
@@ -42464,6 +42473,10 @@ class Range {
     this.update(detail.currentX);
   }
   onEnd(detail) {
+    const { contentEl, initialContentScrollY } = this;
+    if (contentEl) {
+      resetContentScrollY(contentEl, initialContentScrollY);
+    }
     this.update(detail.currentX);
     this.pressedKnob = undefined;
     this.ionKnobMoveEnd.emit({ value: this.ensureValueInBounds(this.value) });
