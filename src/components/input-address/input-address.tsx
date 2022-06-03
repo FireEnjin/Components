@@ -79,6 +79,10 @@ export class InputAddress implements ComponentInterface {
       }, 100);
     } else if (this.value?.full && !this.autocompleteFieldEl?.value) {
       this.value = null;
+      this.ionInput.emit({
+        name: this.name,
+        value: this.value,
+      });
     }
   }
 
@@ -236,7 +240,7 @@ export class InputAddress implements ComponentInterface {
           type="text"
           placeholder={this.placeholder}
           value={value.full}
-          autocomplete="off"
+          autocomplete="fireenjin"
           required={this.required && !this.manualEntry}
         />
         <ion-button
