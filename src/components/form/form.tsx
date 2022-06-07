@@ -417,16 +417,12 @@ export class Form implements ComponentInterface {
 
   componentDidLoad() {
     if (!Build?.isBrowser) return;
-    setTimeout(() => {
-      this.componentIsLoaded = true;
-    }, 2000);
     if (this.fetch) {
-      if (!this.disableLoader) this.loading = true;
       this.fetchData();
+      if (!this.disableLoader) this.loading = true;
     }
-    if (this.formData) {
-      this.setFormData(this.formData);
-    }
+    if (this.formData) this.setFormData(this.formData);
+    this.componentIsLoaded = true;
   }
 
   render() {

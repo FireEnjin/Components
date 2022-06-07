@@ -15007,17 +15007,14 @@ class Form {
   componentDidLoad() {
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
       return;
-    setTimeout(() => {
-      this.componentIsLoaded = true;
-    }, 2000);
     if (this.fetch) {
+      this.fetchData();
       if (!this.disableLoader)
         this.loading = true;
-      this.fetchData();
     }
-    if (this.formData) {
+    if (this.formData)
       this.setFormData(this.formData);
-    }
+    this.componentIsLoaded = true;
   }
   render() {
     return (hAsync("form", { ref: (el) => (this.formEl = el), name: this.name, id: this.name, action: this.action ? this.action : `/${this.endpoint}`, method: this.method, onReset: (event) => this.reset(event), onSubmit: (event) => this.submit(event), class: { "is-loading": this.loading } }, hAsync("slot", null), !this.hideControls && (hAsync("ion-grid", { class: "form-controls" }, hAsync("ion-row", null, hAsync("ion-col", null, this.resetButton ? (hAsync("ion-button", { ref: (el) => (this.resetButtonEl = el), type: "reset", fill: this.resetButtonFill, color: this.resetButtonColor, innerHTML: this.resetButton })) : null), hAsync("ion-col", null, this.submitButton ? (hAsync("ion-button", { ref: (el) => (this.submitButtonEl = el), type: "submit", color: this.submitButtonColor, fill: this.submitButtonFill, innerHTML: this.submitButton })) : null))))));
@@ -28033,6 +28030,10 @@ class InputAddress {
     }
     else if (((_a = this.value) === null || _a === void 0 ? void 0 : _a.full) && !((_b = this.autocompleteFieldEl) === null || _b === void 0 ? void 0 : _b.value)) {
       this.value = null;
+      this.ionInput.emit({
+        name: this.name,
+        value: this.value,
+      });
     }
   }
   async loadGoogleMaps(options) {
@@ -28111,7 +28112,7 @@ class InputAddress {
     const value = this.value ? this.value : {};
     return [
       hAsync("ion-item", { lines: this.lines, class: { "is-hidden": !this.manualEntry } }, hAsync("ion-label", { position: this.labelPosition }, this.label), hAsync("div", { class: "manual-fields" }, hAsync("ion-input", { ref: (el) => (this.streetInputEl = el), type: "text", name: this.name + ".street", placeholder: "Street Address", value: value.street, required: this.required && this.manualEntry }), hAsync("ion-input", { ref: (el) => (this.unitInputEl = el), type: "text", name: this.name + ".unit", placeholder: "Street Address 2", value: value.unit }), hAsync("ion-input", { ref: (el) => (this.cityInputEl = el), type: "text", name: this.name + ".city", placeholder: "City", value: value.city, required: this.required && this.manualEntry }), hAsync("ion-grid", null, hAsync("ion-row", null, hAsync("ion-col", { size: "6" }, hAsync("fireenjin-input-state", { ref: (el) => (this.stateSelectEl = el), name: this.name + ".state", value: value.state, placeholder: "State" })), hAsync("ion-col", { size: "6" }, hAsync("ion-input", { ref: (el) => (this.zipInputEl = el), class: "zip-input", type: "tel", name: this.name + ".zip", min: "0", max: "999999", value: value.zip, placeholder: "Zip Code", required: this.required && this.manualEntry }))))), hAsync("ion-button", { fill: "clear", color: "primary", onClick: () => this.toggleManualEntry(), slot: "end" }, "Search")),
-      hAsync("ion-item", { class: { "is-hidden": this.manualEntry } }, hAsync("ion-label", { position: "stacked" }, this.label), hAsync("ion-input", { ref: (el) => (this.autocompleteFieldEl = el), class: "autocomplete-field", type: "text", placeholder: this.placeholder, value: value.full, autocomplete: "off", required: this.required && !this.manualEntry }), hAsync("ion-button", { fill: "clear", color: "primary", onClick: () => this.toggleManualEntry(), slot: "end" }, "Manual")),
+      hAsync("ion-item", { class: { "is-hidden": this.manualEntry } }, hAsync("ion-label", { position: "stacked" }, this.label), hAsync("ion-input", { ref: (el) => (this.autocompleteFieldEl = el), class: "autocomplete-field", type: "text", placeholder: this.placeholder, value: value.full, autocomplete: "fireenjin", required: this.required && !this.manualEntry }), hAsync("ion-button", { fill: "clear", color: "primary", onClick: () => this.toggleManualEntry(), slot: "end" }, "Manual")),
     ];
   }
   get addressAutocompleteEl() { return getElement(this); }
