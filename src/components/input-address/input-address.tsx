@@ -241,7 +241,7 @@ export class InputAddress implements ComponentInterface {
           type="text"
           placeholder={this.placeholder}
           value={value.full}
-          autocomplete="off"
+          autocomplete="fireenjin"
           required={this.required && !this.manualEntry}
         />
         <ion-button
