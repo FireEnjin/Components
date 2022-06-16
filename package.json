@@ -35,8 +35,8 @@
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
-    "@ionic/core": "^6.1.8",
-    "@stripe/stripe-js": "^1.31.0",
+    "@ionic/core": "^6.1.10",
+    "@stripe/stripe-js": "^1.32.0",
     "chart.js": "^3.8.0",
     "cleave.js": "^1.6.0",
     "clipboard": "^2.0.11",
@@ -47,17 +47,17 @@
     "json-formatter-js": "^2.3.4"
   },
   "devDependencies": {
-    "@fireenjin/cli": "^1.0.20",
+    "@fireenjin/cli": "^1.0.22",
     "@fireenjin/docs": "^1.0.18",
     "@stencil/core": "2.13.0",
     "@stencil/eslint-plugin": "^0.4.0",
-    "@types/cleave.js": "^1.4.6",
-    "@types/jest": "^28.1.0",
+    "@types/cleave.js": "^1.4.7",
+    "@types/jest": "^28.1.1",
     "husky": "^8.0.1",
-    "jest": "^28.1.0",
-    "jest-cli": "^28.1.0",
+    "jest": "^28.1.1",
+    "jest-cli": "^28.1.1",
     "npm-run-all": "^4.1.5",
-    "typescript": "^4.7.2"
+    "typescript": "^4.7.3"
   },
   "jest": {
     "preset": "@stencil/core/testing"
