@@ -15,6 +15,7 @@ import {
 @Component({
   tag: "fireenjin-input-address",
   styleUrl: "input-address.css",
+  shadow: true,
 })
 export class InputAddress implements ComponentInterface {
   google: google;
@@ -240,7 +241,7 @@ export class InputAddress implements ComponentInterface {
           type="text"
           placeholder={this.placeholder}
           value={value.full}
-          autocomplete="fireenjin"
+          autocomplete="off"
           required={this.required && !this.manualEntry}
         />
         <ion-button
