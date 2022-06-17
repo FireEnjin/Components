@@ -101,8 +101,6 @@ export class InputAddress implements ComponentInterface {
     this.google = window?.google || (await this.loadGoogleMaps());
     const inputEl = await this.autocompleteFieldEl.getInputElement();
     setTimeout(() => {
-      inputEl.setAttribute("autocomplete", "new-password");
-
       const autocomplete = new this.google.maps.places.Autocomplete(inputEl, {
         types: ["address"],
       });
@@ -241,7 +239,7 @@ export class InputAddress implements ComponentInterface {
           type="text"
           placeholder={this.placeholder}
           value={value.full}
-          autocomplete="fireenjin"
+          autocomplete="off"
           required={this.required && !this.manualEntry}
         />
         <ion-button
