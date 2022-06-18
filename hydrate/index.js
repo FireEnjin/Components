@@ -28066,17 +28066,32 @@ class InputAddress {
       });
     }
   }
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
   async loadGoogleMaps(options) {
-    const loader = new Loader(this.googleMapsKey, Object.assign({ libraries: ["places"] }, options));
-    return loader.load();
+    var _a;
+    if (window === null || window === void 0 ? void 0 : window.google)
+      return window.google;
+    if ((_a = window) === null || _a === void 0 ? void 0 : _a._dk_google_maps_loader_cb) {
+      await this.sleep(200);
+      return this.loadGoogleMaps();
+    }
+    try {
+      const loader = new Loader(this.googleMapsKey, Object.assign({ libraries: ["places"] }, options));
+      return loader.load();
+    }
+    catch (e) {
+      console.log(e);
+      setTimeout(this.loadGoogleMaps.bind(this), 2000);
+    }
   }
   async componentDidLoad() {
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser) || !this.googleMapsKey)
       return;
-    this.google = (window === null || window === void 0 ? void 0 : window.google) || (await this.loadGoogleMaps());
+    this.google = await this.loadGoogleMaps();
     const inputEl = await this.autocompleteFieldEl.getInputElement();
     setTimeout(() => {
-      inputEl.setAttribute("autocomplete", "new-password");
       const autocomplete = new this.google.maps.places.Autocomplete(inputEl, {
         types: ["address"],
       });
@@ -28142,7 +28157,7 @@ class InputAddress {
     const value = this.value ? this.value : {};
     return [
       hAsync("ion-item", { lines: this.lines, class: { "is-hidden": !this.manualEntry } }, hAsync("ion-label", { position: this.labelPosition }, this.label), hAsync("div", { class: "manual-fields" }, hAsync("ion-input", { ref: (el) => (this.streetInputEl = el), type: "text", name: this.name + ".street", placeholder: "Street Address", value: value.street, required: this.required && this.manualEntry }), hAsync("ion-input", { ref: (el) => (this.unitInputEl = el), type: "text", name: this.name + ".unit", placeholder: "Street Address 2", value: value.unit }), hAsync("ion-input", { ref: (el) => (this.cityInputEl = el), type: "text", name: this.name + ".city", placeholder: "City", value: value.city, required: this.required && this.manualEntry }), hAsync("ion-grid", null, hAsync("ion-row", null, hAsync("ion-col", { size: "6" }, hAsync("fireenjin-input-state", { ref: (el) => (this.stateSelectEl = el), name: this.name + ".state", value: value.state, placeholder: "State" })), hAsync("ion-col", { size: "6" }, hAsync("ion-input", { ref: (el) => (this.zipInputEl = el), class: "zip-input", type: "tel", name: this.name + ".zip", min: "0", max: "999999", value: value.zip, placeholder: "Zip Code", required: this.required && this.manualEntry }))))), hAsync("ion-button", { fill: "clear", color: "primary", onClick: () => this.toggleManualEntry(), slot: "end" }, "Search")),
-      hAsync("ion-item", { class: { "is-hidden": this.manualEntry } }, hAsync("ion-label", { position: "stacked" }, this.label), hAsync("ion-input", { ref: (el) => (this.autocompleteFieldEl = el), class: "autocomplete-field", type: "text", placeholder: this.placeholder, value: value.full, autocomplete: "fireenjin", required: this.required && !this.manualEntry }), hAsync("ion-button", { fill: "clear", color: "primary", onClick: () => this.toggleManualEntry(), slot: "end" }, "Manual")),
+      hAsync("ion-item", { class: { "is-hidden": this.manualEntry } }, hAsync("ion-label", { position: "stacked" }, this.label), hAsync("ion-input", { ref: (el) => (this.autocompleteFieldEl = el), class: "autocomplete-field", type: "text", placeholder: this.placeholder, value: value.full, autocomplete: "off", required: this.required && !this.manualEntry }), hAsync("ion-button", { fill: "clear", color: "primary", onClick: () => this.toggleManualEntry(), slot: "end" }, "Manual")),
     ];
   }
   get addressAutocompleteEl() { return getElement(this); }

@@ -10,7 +10,7 @@ export default {
   multipleInputs: {
     name: "Multiple Inputs",
     innerHTML: () =>
-      `<fireenjin-input-address name="primary" label="Primary Address" google-maps-key="AIzaSyAz5C9TRxQ9bUkTwVaD6Yc-Iisw57UslPM"></fireenjin-input-address>
-      <fireenjin-input-address name="secondary" label="Secondary Address" google-maps-key="AIzaSyAz5C9TRxQ9bUkTwVaD6Yc-Iisw57UslPM"></fireenjin-input-address>`,
+      `<fireenjin-form><fireenjin-input-address name="primary" label="Primary Address" google-maps-key="AIzaSyAz5C9TRxQ9bUkTwVaD6Yc-Iisw57UslPM" />
+      <fireenjin-input-address name="secondary" label="Secondary Address" google-maps-key="AIzaSyAz5C9TRxQ9bUkTwVaD6Yc-Iisw57UslPM" /></fireenjin-form>`,
   },
 } as ComponentPresets;

@@ -87,18 +87,32 @@ export class InputAddress implements ComponentInterface {
     }
   }
 
-  async loadGoogleMaps(options?: LoaderOptions) {
-    const loader = new Loader(this.googleMapsKey, {
-      libraries: ["places"],
-      ...options,
-    });
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
-    return loader.load();
+  async loadGoogleMaps(options?: LoaderOptions) {
+    if (window?.google) return window.google;
+    if ((window as any)?._dk_google_maps_loader_cb) {
+      await this.sleep(200);
+      return this.loadGoogleMaps();
+    }
+    try {
+      const loader = new Loader(this.googleMapsKey, {
+        libraries: ["places"],
+        ...options,
+      });
+
+      return loader.load();
+    } catch (e) {
+      console.log(e);
+      setTimeout(this.loadGoogleMaps.bind(this), 2000);
+    }
   }
 
   async componentDidLoad() {
     if (!Build?.isBrowser || !this.googleMapsKey) return;
-    this.google = window?.google || (await this.loadGoogleMaps());
+    this.google = await this.loadGoogleMaps();
     const inputEl = await this.autocompleteFieldEl.getInputElement();
     setTimeout(() => {
       const autocomplete = new this.google.maps.places.Autocomplete(inputEl, {
