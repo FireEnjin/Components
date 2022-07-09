@@ -4715,6 +4715,8 @@ function hydrateFactory($stencilWindow, $stencilHydrateOpts, $stencilHydrateResu
   /*hydrateAppClosure start*/
 
 
+var logging = require('@utils/logging');
+
 const NAMESPACE = 'fireenjin';
 const BUILD = /* fireenjin */ { allRenderFn: false, appendChildSlotFix: false, asyncLoading: true, attachStyles: true, cloneNodeFix: false, cmpDidLoad: true, cmpDidRender: true, cmpDidUnload: false, cmpDidUpdate: true, cmpShouldUpdate: false, cmpWillLoad: true, cmpWillRender: true, cmpWillUpdate: false, connectedCallback: true, constructableCSS: false, cssAnnotations: true, cssVarShim: false, devTools: false, disconnectedCallback: true, dynamicImportShim: false, element: false, event: true, hasRenderFn: true, hostListener: true, hostListenerTarget: true, hostListenerTargetBody: true, hostListenerTargetDocument: true, hostListenerTargetParent: false, hostListenerTargetWindow: true, hotModuleReplacement: false, hydrateClientSide: true, hydrateServerSide: true, hydratedAttribute: false, hydratedClass: true, isDebug: false, isDev: false, isTesting: false, lazyLoad: true, lifecycle: true, lifecycleDOMEvents: false, member: true, method: true, mode: true, observeAttribute: true, profile: false, prop: true, propBoolean: true, propMutable: true, propNumber: true, propString: true, reflect: true, safari10: false, scoped: true, scriptDataOpts: false, shadowDelegatesFocus: true, shadowDom: true, shadowDomShim: true, slot: true, slotChildNodesFix: false, slotRelocation: true, state: true, style: true, svg: true, taskQueue: true, updatable: true, vdomAttribute: true, vdomClass: true, vdomFunctional: true, vdomKey: true, vdomListener: true, vdomPropOrAttr: true, vdomRef: true, vdomRender: true, vdomStyle: true, vdomText: true, vdomXlink: true, watchCallback: true };
 
@@ -12058,6 +12060,14 @@ const isAfter = (baseParts, compareParts) => {
       baseParts.day &&
       baseParts.day > compareParts.day));
 };
+const warnIfValueOutOfBounds = (value, min, max) => {
+  if ((min && isBefore(value, min)) || (max && isAfter(value, max))) {
+    logging.printIonWarning('The value provided to ion-datetime is out of bounds.\n\n' +
+      `Min: ${JSON.stringify(min)}\n` +
+      `Max: ${JSON.stringify(max)}\n` +
+      `Value: ${JSON.stringify(value)}`);
+  }
+};
 
 /*!
  * (C) Ionic http://ionicframework.com - MIT License
@@ -13596,7 +13606,9 @@ class Datetime {
     this.processValue = (value) => {
       this.highlightActiveParts = !!value;
       const valueToProcess = parseDate(value || getToday());
-      const { month, day, year, hour, minute, tzOffset } = clampDate(valueToProcess, this.minParts, this.maxParts);
+      const { minParts, maxParts } = this;
+      warnIfValueOutOfBounds(valueToProcess, minParts, maxParts);
+      const { month, day, year, hour, minute, tzOffset } = clampDate(valueToProcess, minParts, maxParts);
       this.setWorkingParts({
         month,
         day,
@@ -13701,6 +13713,7 @@ class Datetime {
        */
       const valueDateParts = parseDate(this.value);
       if (valueDateParts) {
+        warnIfValueOutOfBounds(valueDateParts, this.minParts, this.maxParts);
         const { month, day, year, hour, minute } = valueDateParts;
         const ampm = hour >= 12 ? 'pm' : 'am';
         this.activePartsClone = Object.assign(Object.assign({}, this.activeParts), { month,
@@ -38924,6 +38937,7 @@ class Pagination$1 {
     this.name = "pagination";
     this.disableVirtualScroll = false;
     this.removeDuplicates = false;
+    this.nextKey = "id";
     this.paramData = {};
   }
   onQuery() {
@@ -39069,8 +39083,8 @@ class Pagination$1 {
     }
     if (options.next &&
       ((_b = this.results) === null || _b === void 0 ? void 0 : _b.length) &&
-      ((_c = this.results[this.results.length - 1]) === null || _c === void 0 ? void 0 : _c.id)) {
-      this.paramData.next = this.results[this.results.length - 1].id;
+      ((_c = this.results[this.results.length - 1]) === null || _c === void 0 ? void 0 : _c[this.nextKey])) {
+      this.paramData.next = this.results[this.results.length - 1][this.nextKey];
     }
     this.fireenjinFetch.emit({
       name: this.name,
@@ -39160,6 +39174,7 @@ class Pagination$1 {
       "disableVirtualScroll": [4, "disable-virtual-scroll"],
       "removeDuplicates": [4, "remove-duplicates"],
       "fetchParams": [8, "fetch-params"],
+      "nextKey": [1, "next-key"],
       "paramData": [32],
       "clearParamData": [64],
       "addResults": [64],
@@ -39988,7 +40003,14 @@ class PickerColumnInternal {
       this.centerPickerItemInView(activeEl, false);
     }
   }
-  setValue(value) {
+  /**
+   * Sets the value prop and fires the ionChange event.
+   * This is used when we need to fire ionChange from
+   * user-generated events that cannot be caught with normal
+   * input/change event listeners.
+   * @internal
+   */
+  async setValue(value) {
     const { items } = this;
     this.value = value;
     const findItem = items.find((item) => item.value === value);
@@ -40029,7 +40051,8 @@ class PickerColumnInternal {
       "color": [513],
       "numericInput": [4, "numeric-input"],
       "isActive": [32],
-      "scrollActiveItemIntoView": [64]
+      "scrollActiveItemIntoView": [64],
+      "setValue": [64]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",
@@ -40336,7 +40359,7 @@ class PickerInternal {
        */
       const findItemFromCompleteValue = values.find(({ text }) => text.replace(/^0+/, '') === inputEl.value);
       if (findItemFromCompleteValue) {
-        inputModeColumn.value = findItemFromCompleteValue.value;
+        inputModeColumn.setValue(findItemFromCompleteValue.value);
         return;
       }
       /**
@@ -40359,7 +40382,7 @@ class PickerInternal {
       const behavior = zeroBehavior === 'start' ? /^0+/ : /0$/;
       const item = colEl.items.find(({ text }) => text.replace(behavior, '') === value);
       if (item) {
-        colEl.value = item.value;
+        colEl.setValue(item.value);
       }
     };
     this.selectMultiColumn = () => {
@@ -46947,6 +46970,7 @@ class Select {
   }
   valueChanged() {
     this.emitStyle();
+    // TODO: FW-1160 - Remove the `didInit` property when ionChange behavior is changed in v7.
     if (this.didInit) {
       this.ionChange.emit({
         value: this.value,

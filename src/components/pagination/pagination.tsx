@@ -70,6 +70,7 @@ export class Pagination implements ComponentInterface {
   @Prop() disableVirtualScroll = false;
   @Prop() removeDuplicates = false;
   @Prop() fetchParams: any;
+  @Prop() nextKey = "id";
 
   @State() paramData: {
     query?: string;
@@ -275,9 +276,9 @@ export class Pagination implements ComponentInterface {
     if (
       options.next &&
       this.results?.length &&
-      this.results[this.results.length - 1]?.id
+      this.results[this.results.length - 1]?.[this.nextKey]
     ) {
-      this.paramData.next = this.results[this.results.length - 1].id;
+      this.paramData.next = this.results[this.results.length - 1][this.nextKey];
     }
 
     this.fireenjinFetch.emit({

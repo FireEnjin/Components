@@ -26,6 +26,7 @@
 | `loadingSpinner`       | `loading-spinner`        |             | `string`                        | `"bubbles"`              |
 | `loadingText`          | `loading-text`           |             | `string`                        | `"Loading more data..."` |
 | `name`                 | `name`                   |             | `string`                        | `"pagination"`           |
+| `nextKey`              | `next-key`               |             | `string`                        | `"id"`                   |
 | `orderBy`              | `order-by`               |             | `string`                        | `undefined`              |
 | `orderDirection`       | `order-direction`        |             | `string`                        | `undefined`              |
 | `page`                 | `page`                   |             | `number`                        | `0`                      |
