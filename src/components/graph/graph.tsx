@@ -25,6 +25,7 @@ import {
   PointElement,
   LinearScale,
   Title,
+  Legend,
 } from "chart.js";
 
 @Component({
@@ -66,6 +67,7 @@ export class Graph implements ComponentInterface {
       height: number;
       labelStyle: TooltipLabelStyle;
       labelTextColors: string[];
+      legend: string;
       legendBackgroundColor: string;
       opacity: number;
       title: string[];
@@ -186,7 +188,16 @@ export class Graph implements ComponentInterface {
         labels: this.labels,
         datasets: this.datasets,
       },
-      options: {},
+      options: {
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
+              color: "rgb(255, 99, 132)",
+            },
+          },
+        },
+      },
     };
     if (!this.config.options) {
       this.config.options = {};
@@ -217,6 +228,7 @@ export class Graph implements ComponentInterface {
       LineElement,
       PointElement,
       LinearScale,
+      Legend,
       Title
     );
   }
