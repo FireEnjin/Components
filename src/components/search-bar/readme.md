@@ -5,15 +5,14 @@
 
 ## Properties
 
-| Property           | Attribute            | Description | Type               | Default     |
-| ------------------ | -------------------- | ----------- | ------------------ | ----------- |
-| `beforeGetResults` | `before-get-results` |             | `any`              | `undefined` |
-| `disabled`         | `disabled`           |             | `boolean`          | `false`     |
-| `displayMode`      | `display-mode`       |             | `"grid" \| "list"` | `"grid"`    |
-| `filters`          | --                   |             | `FilterControl[]`  | `undefined` |
-| `modeToggle`       | `mode-toggle`        |             | `boolean`          | `false`     |
-| `paginationEl`     | `pagination-el`      |             | `any`              | `undefined` |
-| `showFilter`       | `show-filter`        |             | `boolean`          | `true`      |
+| Property           | Attribute            | Description | Type              | Default     |
+| ------------------ | -------------------- | ----------- | ----------------- | ----------- |
+| `beforeGetResults` | `before-get-results` |             | `any`             | `undefined` |
+| `disabled`         | `disabled`           |             | `boolean`         | `false`     |
+| `filters`          | --                   |             | `FilterControl[]` | `undefined` |
+| `modeToggle`       | `mode-toggle`        |             | `boolean`         | `false`     |
+| `paginationEl`     | `pagination-el`      |             | `any`             | `undefined` |
+| `showFilter`       | `show-filter`        |             | `boolean`         | `true`      |
 
 
 ## Events
@@ -26,16 +25,6 @@
 ## Methods
 
 ### `clearFilter(event: any, clearingControl: FilterControl) => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `togglePaginationDisplay() => Promise<void>`
 
 
 

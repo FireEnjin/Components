@@ -9,6 +9,8 @@ import {
   Listen,
   Method,
   Prop,
+  State,
+  Watch,
 } from "@stencil/core";
 import { FilterControl } from "../../typings";
 
@@ -17,14 +19,12 @@ import { FilterControl } from "../../typings";
   styleUrl: "search-bar.css",
 })
 export class SearchBar implements ComponentInterface {
+  filterNameToIndex: { [name: string]: number } = {};
+
   @Event() fireenjinTrigger: EventEmitter<FireEnjinTriggerInput>;
   @Prop({ mutable: true }) filters?: FilterControl[];
   @Prop() paginationEl: any;
   @Prop() modeToggle = false;
-  @Prop({
-    mutable: true,
-  })
-  displayMode: "list" | "grid" = "grid";
   @Prop() disabled = false;
   @Prop() beforeGetResults: any;
   @Prop({
@@ -32,24 +32,31 @@ export class SearchBar implements ComponentInterface {
   })
   showFilter = true;
 
+  @State() fetchData: any;
+
+  @Watch("filters")
+  onFiltersChange() {
+    for (const [index, filter] of (this.filters || []).entries()) {
+      this.filterNameToIndex[filter?.name] = index;
+    }
+  }
+
   @Listen("fireenjinTrigger", { target: "document" })
   async onTrigger(event) {
-    if (event?.detail?.name === "set" && event?.detail?.payload?.name) {
-      for (const [i, control] of this.filters.entries()) {
-        if (!control?.name || event?.detail?.payload?.name !== control?.name)
-          continue;
-        const controlData = {
-          ...control,
-          value: event?.detail?.payload?.value || null,
-        };
-        this.filters[i] = controlData;
-        this.filters = [...this.filters];
-        if (this.paginationEl && !this.paginationEl?.disableFetch)
-          this.paginationEl.fetchData = {
-            ...(this.paginationEl?.fetchData || {}),
-            [control.name]: event?.detail?.payload?.value,
-          };
-      }
+    if (
+      event?.detail?.name === "set" &&
+      event?.detail?.payload?.name &&
+      !event?.detail?.payload?.clear
+    ) {
+      const fetchData = this.paginationEl.fetchData || {};
+      const filters = this.filters || [];
+      filters[this.filterNameToIndex[event?.detail?.payload?.name]].value =
+        event?.detail?.payload?.value || null;
+      fetchData[event?.detail?.payload?.name] =
+        event?.detail?.payload?.value || null;
+      this.filters = filters;
+      this.fetchData = fetchData;
+      if (this.paginationEl) this.paginationEl.fetchData = fetchData;
       if (!this.paginationEl?.clearResults || !this.paginationEl?.getResults)
         return;
       await this.paginationEl.clearResults();
@@ -72,52 +79,37 @@ export class SearchBar implements ComponentInterface {
   }
 
   @Method()
-  async togglePaginationDisplay() {
-    this.displayMode = this.displayMode === "grid" ? "list" : "grid";
-    this.paginationEl.display = this.displayMode;
-  }
-
-  @Method()
   async clearFilter(event, clearingControl: FilterControl) {
     event.preventDefault();
     event.stopPropagation();
+    if (this.paginationEl?.clearParamData)
+      await this.paginationEl.clearParamData(clearingControl?.name);
     const fetchData = this.paginationEl?.fetchData || {};
-    for (const [i, control] of this.filters.entries()) {
-      if (
-        !control.name ||
-        !control.value ||
-        control.name !== clearingControl.name
-      )
-        continue;
-      this.filters[i] = {
-        ...control,
-        value: null,
-      };
-      if (fetchData[control.name]) delete fetchData[control.name];
-      this.filters = [...this.filters];
-      if (!this.paginationEl?.clearParamData) continue;
-      await this.paginationEl.clearParamData(control.name);
-    }
-    const paramData = {};
-    for (const filter of this.filters) {
-      paramData[filter.name] = filter.value;
-    }
+    if (fetchData[clearingControl?.name])
+      delete fetchData[clearingControl.name];
+    const filters = this.filters || [];
+    filters[this.filterNameToIndex[clearingControl?.name]].value = null;
+    this.filters = filters;
+    this.fetchData = fetchData;
     this.fireenjinTrigger.emit({
       event,
       name: "set",
       payload: {
+        clear: true,
         name: clearingControl.name,
         value: null,
       },
     });
-    let options = { paramData };
+    let fetchOptions = {
+      fetchData,
+    };
     if (this.beforeGetResults && typeof this.beforeGetResults === "function")
-      options = await this.beforeGetResults(options);
+      fetchOptions = await this.beforeGetResults(fetchOptions);
     if (this.paginationEl && !this.paginationEl?.disableFetch)
       this.paginationEl.fetchData = fetchData;
     if (this.paginationEl?.clearResults) await this.paginationEl.clearResults();
     if (this.paginationEl?.getResults)
-      await this.paginationEl.getResults(options);
+      await this.paginationEl.getResults(fetchOptions);
   }
 
   getLabelForValue(control: FilterControl, value: any) {
