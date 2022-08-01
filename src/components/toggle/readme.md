@@ -35,6 +35,7 @@ graph TD;
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
+  ion-toggle --> ion-icon
   style fireenjin-toggle fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

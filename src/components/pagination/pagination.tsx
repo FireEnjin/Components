@@ -133,7 +133,7 @@ export class Pagination implements ComponentInterface {
         }
         this.page = this.pageKey
           ? this.pageKey.split(".").reduce((o, i) => o[i], event.detail.data)
-          : this.page + 1;
+          : this.page;
         await this.addResults(results);
       } catch (err) {
         console.log("Error updating results!");

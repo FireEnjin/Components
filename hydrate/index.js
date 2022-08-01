@@ -4715,8 +4715,6 @@ function hydrateFactory($stencilWindow, $stencilHydrateOpts, $stencilHydrateResu
   /*hydrateAppClosure start*/
 
 
-var logging = require('@utils/logging');
-
 const NAMESPACE = 'fireenjin';
 const BUILD = /* fireenjin */ { allRenderFn: false, appendChildSlotFix: false, asyncLoading: true, attachStyles: true, cloneNodeFix: false, cmpDidLoad: true, cmpDidRender: true, cmpDidUnload: false, cmpDidUpdate: true, cmpShouldUpdate: false, cmpWillLoad: true, cmpWillRender: true, cmpWillUpdate: false, connectedCallback: true, constructableCSS: false, cssAnnotations: true, cssVarShim: false, devTools: false, disconnectedCallback: true, dynamicImportShim: false, element: false, event: true, hasRenderFn: true, hostListener: true, hostListenerTarget: true, hostListenerTargetBody: true, hostListenerTargetDocument: true, hostListenerTargetParent: false, hostListenerTargetWindow: true, hotModuleReplacement: false, hydrateClientSide: true, hydrateServerSide: true, hydratedAttribute: false, hydratedClass: true, isDebug: false, isDev: false, isTesting: false, lazyLoad: true, lifecycle: true, lifecycleDOMEvents: false, member: true, method: true, mode: true, observeAttribute: true, profile: false, prop: true, propBoolean: true, propMutable: true, propNumber: true, propString: true, reflect: true, safari10: false, scoped: true, scriptDataOpts: false, shadowDelegatesFocus: true, shadowDom: true, shadowDomShim: true, slot: true, slotChildNodesFix: false, slotRelocation: true, state: true, style: true, svg: true, taskQueue: true, updatable: true, vdomAttribute: true, vdomClass: true, vdomFunctional: true, vdomKey: true, vdomListener: true, vdomPropOrAttr: true, vdomRef: true, vdomRender: true, vdomStyle: true, vdomText: true, vdomXlink: true, watchCallback: true };
 
@@ -5774,6 +5772,7 @@ const arrowDown = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/sv
 const caretBackSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Caret Back</title><path d='M368 64L144 256l224 192V64z'/></svg>";
 const caretDownSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Caret Down</title><path d='M64 144l192 224 192-224H64z'/></svg>";
 const caretUpSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Caret Up</title><path d='M448 368L256 144 64 368h384z'/></svg>";
+const checkmarkOutline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Checkmark</title><path stroke-linecap='round' stroke-linejoin='round' d='M416 128L192 384l-96-96' class='ionicon-fill-none ionicon-stroke-width'/></svg>";
 const chevronBack = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Chevron Back</title><path stroke-linecap='round' stroke-linejoin='round' stroke-width='48' d='M328 112L184 256l144 144' class='ionicon-fill-none'/></svg>";
 const chevronDown = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Chevron Down</title><path stroke-linecap='round' stroke-linejoin='round' stroke-width='48' d='M112 184l144 144 144-144' class='ionicon-fill-none'/></svg>";
 const chevronForward = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Chevron Forward</title><path stroke-linecap='round' stroke-linejoin='round' stroke-width='48' d='M184 112l144 144-144 144' class='ionicon-fill-none'/></svg>";
@@ -5781,9 +5780,11 @@ const chevronForwardOutline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3
 const close = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Close</title><path d='M289.94 256l95-95A24 24 0 00351 127l-95 95-95-95a24 24 0 00-34 34l95 95-95 95a24 24 0 1034 34l95-95 95 95a24 24 0 0034-34z'/></svg>";
 const closeCircle = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Close Circle</title><path d='M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm75.31 260.69a16 16 0 11-22.62 22.62L256 278.63l-52.69 52.68a16 16 0 01-22.62-22.62L233.37 256l-52.68-52.69a16 16 0 0122.62-22.62L256 233.37l52.69-52.68a16 16 0 0122.62 22.62L278.63 256z'/></svg>";
 const closeSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Close</title><path d='M400 145.49L366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49z'/></svg>";
+const ellipseOutline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Ellipse</title><circle cx='256' cy='256' r='192' stroke-linecap='round' stroke-linejoin='round' class='ionicon-fill-none ionicon-stroke-width'/></svg>";
 const ellipsisHorizontal = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Ellipsis Horizontal</title><circle cx='256' cy='256' r='48'/><circle cx='416' cy='256' r='48'/><circle cx='96' cy='256' r='48'/></svg>";
 const menuOutline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Menu</title><path stroke-linecap='round' stroke-miterlimit='10' d='M80 160h352M80 256h352M80 352h352' class='ionicon-fill-none ionicon-stroke-width'/></svg>";
 const menuSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Menu</title><path d='M64 384h384v-42.67H64zm0-106.67h384v-42.66H64zM64 128v42.67h384V128z'/></svg>";
+const removeOutline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Remove</title><path stroke-linecap='round' stroke-linejoin='round' d='M400 256H112' class='ionicon-fill-none ionicon-stroke-width'/></svg>";
 const reorderThreeOutline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Reorder Three</title><path stroke-linecap='round' stroke-linejoin='round' d='M96 256h320M96 176h320M96 336h320' class='ionicon-fill-none ionicon-stroke-width'/></svg>";
 const reorderTwoSharp = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Reorder Two</title><path stroke-linecap='square' stroke-linejoin='round' stroke-width='44' d='M118 304h276M118 208h276' class='ionicon-fill-none'/></svg>";
 const searchOutline = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Search</title><path d='M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z' stroke-miterlimit='10' class='ionicon-fill-none ionicon-stroke-width'/><path stroke-linecap='round' stroke-miterlimit='10' d='M338.29 338.29L448 448' class='ionicon-fill-none ionicon-stroke-width'/></svg>";
@@ -12005,8 +12006,8 @@ const startFocusVisible = (rootEl) => {
  *
  * @param message - The string message to be logged to the console.
  */
-const printIonWarning = (message) => {
-  return console.warn(`[Ionic Warning]: ${message}`);
+const printIonWarning = (message, ...params) => {
+  return console.warn(`[Ionic Warning]: ${message}`, ...params);
 };
 /*
  * Logs an error to the console with an Ionic prefix
@@ -12061,11 +12062,15 @@ const isAfter = (baseParts, compareParts) => {
       baseParts.day > compareParts.day));
 };
 const warnIfValueOutOfBounds = (value, min, max) => {
-  if ((min && isBefore(value, min)) || (max && isAfter(value, max))) {
-    logging.printIonWarning('The value provided to ion-datetime is out of bounds.\n\n' +
-      `Min: ${JSON.stringify(min)}\n` +
-      `Max: ${JSON.stringify(max)}\n` +
-      `Value: ${JSON.stringify(value)}`);
+  const valueArray = Array.isArray(value) ? value : [value];
+  for (const val of valueArray) {
+    if ((min && isBefore(val, min)) || (max && isAfter(val, max))) {
+      printIonWarning('The value provided to ion-datetime is out of bounds.\n\n' +
+        `Min: ${JSON.stringify(min)}\n` +
+        `Max: ${JSON.stringify(max)}\n` +
+        `Value: ${JSON.stringify(value)}`);
+      break;
+    }
   }
 };
 
@@ -12150,6 +12155,16 @@ const isMonthFirstLocale = (locale) => {
   const parts = new Intl.DateTimeFormat(locale, { month: 'numeric', year: 'numeric' }).formatToParts(new Date());
   return parts[0].type === 'month';
 };
+/**
+ * Determines if the given locale formats the day period (am/pm) to the
+ * left or right of the hour.
+ * @param locale The locale to check.
+ * @returns `true` if the locale formats the day period to the left of the hour.
+ */
+const isLocaleDayPeriodRTL = (locale) => {
+  const parts = new Intl.DateTimeFormat(locale, { hour: 'numeric' }).formatToParts(new Date());
+  return parts[0].type === 'dayPeriod';
+};
 
 /*!
  * (C) Ionic http://ionicframework.com - MIT License
@@ -12160,7 +12175,10 @@ const twoDigit = (val) => {
 const fourDigit = (val) => {
   return ('000' + (val !== undefined ? Math.abs(val) : '0')).slice(-4);
 };
-const convertDataToISO = (data) => {
+function convertDataToISO(data) {
+  if (Array.isArray(data)) {
+    return data.map((parts) => convertDataToISO(parts));
+  }
   // https://www.w3.org/TR/NOTE-datetime
   let rtn = '';
   if (data.year !== undefined) {
@@ -12196,7 +12214,7 @@ const convertDataToISO = (data) => {
     rtn = twoDigit(data.hour) + ':' + twoDigit(data.minute);
   }
   return rtn;
-};
+}
 /**
  * Converts an 12 hour value to 24 hours.
  */
@@ -12437,6 +12455,191 @@ const calculateHourFromAMPM = (currentParts, newAMPM) => {
 /*!
  * (C) Ionic http://ionicframework.com - MIT License
  */
+const getFormattedDayPeriod = (dayPeriod) => {
+  if (dayPeriod === undefined) {
+    return '';
+  }
+  return dayPeriod.toUpperCase();
+};
+const getLocalizedTime = (locale, refParts, use24Hour) => {
+  if (refParts.hour === undefined || refParts.minute === undefined) {
+    return 'Invalid Time';
+  }
+  return new Intl.DateTimeFormat(locale, {
+    hour: 'numeric',
+    minute: 'numeric',
+    timeZone: 'UTC',
+    hour12: !use24Hour,
+  }).format(new Date(convertDataToISO(refParts)));
+};
+/**
+ * Adds padding to a time value so
+ * that it is always 2 digits.
+ */
+const addTimePadding = (value) => {
+  const valueToString = value.toString();
+  if (valueToString.length > 1) {
+    return valueToString;
+  }
+  return `0${valueToString}`;
+};
+/**
+ * Formats the hour value so that it
+ * is always 2 digits. Only applies
+ * if using 12 hour format.
+ */
+const getFormattedHour = (hour, use24Hour) => {
+  if (!use24Hour) {
+    return hour.toString();
+  }
+  return addTimePadding(hour);
+};
+/**
+ * Generates an aria-label to be read by screen readers
+ * given a local, a date, and whether or not that date is
+ * today's date.
+ */
+const generateDayAriaLabel = (locale, today, refParts) => {
+  if (refParts.day === null) {
+    return null;
+  }
+  /**
+   * MM/DD/YYYY will return midnight in the user's timezone.
+   */
+  const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year} GMT+0000`);
+  const labelString = new Intl.DateTimeFormat(locale, {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(date);
+  /**
+   * If date is today, prepend "Today" so screen readers indicate
+   * that the date is today.
+   */
+  return today ? `Today, ${labelString}` : labelString;
+};
+/**
+ * Gets the day of the week, month, and day
+ * Used for the header in MD mode.
+ */
+const getMonthAndDay = (locale, refParts) => {
+  const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year} GMT+0000`);
+  return new Intl.DateTimeFormat(locale, { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(date);
+};
+/**
+ * Given a locale and a date object,
+ * return a formatted string that includes
+ * the month name and full year.
+ * Example: May 2021
+ */
+const getMonthAndYear = (locale, refParts) => {
+  const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year} GMT+0000`);
+  return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
+};
+/**
+ * Given a locale and a date object,
+ * return a formatted string that includes
+ * the short month, numeric day, and full year.
+ * Example: Apr 22, 2021
+ */
+const getMonthDayAndYear = (locale, refParts) => {
+  return getLocalizedDateTime(locale, refParts, { month: 'short', day: 'numeric', year: 'numeric' });
+};
+/**
+ * Wrapper function for Intl.DateTimeFormat.
+ * Allows developers to apply an allowed format to DatetimeParts.
+ * This function also has built in safeguards for older browser bugs
+ * with Intl.DateTimeFormat.
+ */
+const getLocalizedDateTime = (locale, refParts, options) => {
+  const timeString = !!refParts.hour && !!refParts.minute ? ` ${refParts.hour}:${refParts.minute}` : '';
+  const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year}${timeString} GMT+0000`);
+  return new Intl.DateTimeFormat(locale, Object.assign(Object.assign({}, options), { timeZone: 'UTC' })).format(date);
+};
+/**
+ * Gets a localized version of "Today"
+ * Falls back to "Today" in English for
+ * browsers that do not support RelativeTimeFormat.
+ */
+const getTodayLabel = (locale) => {
+  if ('RelativeTimeFormat' in Intl) {
+    const label = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(0, 'day');
+    return label.charAt(0).toUpperCase() + label.slice(1);
+  }
+  else {
+    return 'Today';
+  }
+};
+/**
+ * When calling toISOString(), the browser
+ * will convert the date to UTC time by either adding
+ * or subtracting the time zone offset.
+ * To work around this, we need to either add
+ * or subtract the time zone offset to the Date
+ * object prior to calling toISOString().
+ * This allows us to get an ISO string
+ * that is in the user's time zone.
+ *
+ * Example:
+ * Time zone offset is 240
+ * Meaning: The browser needs to add 240 minutes
+ * to the Date object to get UTC time.
+ * What Ionic does: We subtract 240 minutes
+ * from the Date object. The browser then adds
+ * 240 minutes in toISOString(). The result
+ * is a time that is in the user's time zone
+ * and not UTC.
+ *
+ * Note: Some timezones include minute adjustments
+ * such as 30 or 45 minutes. This is why we use setMinutes
+ * instead of setHours.
+ * Example: India Standard Time
+ * Timezone offset: -330 = -5.5 hours.
+ *
+ * List of timezones with 30 and 45 minute timezones:
+ * https://www.timeanddate.com/time/time-zones-interesting.html
+ */
+const removeDateTzOffset = (date) => {
+  const tzOffset = date.getTimezoneOffset();
+  date.setMinutes(date.getMinutes() - tzOffset);
+  return date;
+};
+const DATE_AM = removeDateTzOffset(new Date('2022T01:00'));
+const DATE_PM = removeDateTzOffset(new Date('2022T13:00'));
+/**
+ * Formats the locale's string representation of the day period (am/pm) for a given
+ * ref parts day period.
+ *
+ * @param locale The locale to format the day period in.
+ * @param value The date string, in ISO format.
+ * @returns The localized day period (am/pm) representation of the given value.
+ */
+const getLocalizedDayPeriod = (locale, dayPeriod) => {
+  const date = dayPeriod === 'am' ? DATE_AM : DATE_PM;
+  const localizedDayPeriod = new Intl.DateTimeFormat(locale, {
+    hour: 'numeric',
+    timeZone: 'UTC',
+  })
+    .formatToParts(date)
+    .find((part) => part.type === 'dayPeriod');
+  if (localizedDayPeriod) {
+    return localizedDayPeriod.value;
+  }
+  return getFormattedDayPeriod(dayPeriod);
+};
+/**
+ * Formats the datetime's value to a string, for use in the native input.
+ *
+ * @param value The value to format, either an ISO string or an array thereof.
+ */
+const formatValue = (value) => {
+  return Array.isArray(value) ? value.join(',') : value;
+};
+
+/*!
+ * (C) Ionic http://ionicframework.com - MIT License
+ */
 /**
  * Returns the current date as
  * an ISO string in the user's
@@ -12459,30 +12662,8 @@ const getToday = () => {
    * object prior to calling toISOString().
    * This allows us to get an ISO string
    * that is in the user's time zone.
-   *
-   * Example:
-   * Time zone offset is 240
-   * Meaning: The browser needs to add 240 minutes
-   * to the Date object to get UTC time.
-   * What Ionic does: We subtract 240 minutes
-   * from the Date object. The browser then adds
-   * 240 minutes in toISOString(). The result
-   * is a time that is in the user's time zone
-   * and not UTC.
-   *
-   * Note: Some timezones include minute adjustments
-   * such as 30 or 45 minutes. This is why we use setMinutes
-   * instead of setHours.
-   * Example: India Standard Time
-   * Timezone offset: -330 = -5.5 hours.
-   *
-   * List of timezones with 30 and 45 minute timezones:
-   * https://www.timeanddate.com/time/time-zones-interesting.html
    */
-  const date = new Date();
-  const tzOffset = date.getTimezoneOffset();
-  date.setMinutes(date.getMinutes() - tzOffset);
-  return date.toISOString();
+  return removeDateTzOffset(new Date()).toISOString();
 };
 const minutes = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
@@ -12681,7 +12862,9 @@ const generateMonths = (refParts) => {
     getNextMonth(refParts),
   ];
 };
-const getPickerMonths = (locale, refParts, minParts, maxParts, monthValues) => {
+const getMonthColumnData = (locale, refParts, minParts, maxParts, monthValues, formatOptions = {
+  month: 'long',
+}) => {
   const { year } = refParts;
   const months = [];
   if (monthValues !== undefined) {
@@ -12694,7 +12877,7 @@ const getPickerMonths = (locale, refParts, minParts, maxParts, monthValues) => {
     }
     processedMonths.forEach((processedMonth) => {
       const date = new Date(`${processedMonth}/1/${year} GMT+0000`);
-      const monthString = new Intl.DateTimeFormat(locale, { month: 'long', timeZone: 'UTC' }).format(date);
+      const monthString = new Intl.DateTimeFormat(locale, Object.assign(Object.assign({}, formatOptions), { timeZone: 'UTC' })).format(date);
       months.push({ text: monthString, value: processedMonth });
     });
   }
@@ -12727,122 +12910,193 @@ const getPickerMonths = (locale, refParts, minParts, maxParts, monthValues) => {
        * new Date('1/1/1992 GMT+0000').toUTCString() // "Wed, 01 Jan 1992 00:00:00 GMT"
        */
       const date = new Date(`${i}/1/${year} GMT+0000`);
-      const monthString = new Intl.DateTimeFormat(locale, { month: 'long', timeZone: 'UTC' }).format(date);
+      const monthString = new Intl.DateTimeFormat(locale, Object.assign(Object.assign({}, formatOptions), { timeZone: 'UTC' })).format(date);
       months.push({ text: monthString, value: i });
     }
   }
   return months;
 };
-const getCalendarYears = (refParts, minParts, maxParts, yearValues) => {
+/**
+ * Returns information regarding
+ * selectable dates (i.e 1st, 2nd, 3rd, etc)
+ * within a reference month.
+ * @param locale The locale to format the date with
+ * @param refParts The reference month/year to generate dates for
+ * @param minParts The minimum bound on the date that can be returned
+ * @param maxParts The maximum bound on the date that can be returned
+ * @param dayValues The allowed date values
+ * @returns Date data to be used in ion-picker-column-internal
+ */
+const getDayColumnData = (locale, refParts, minParts, maxParts, dayValues, formatOptions = {
+  day: 'numeric',
+}) => {
+  const { month, year } = refParts;
+  const days = [];
+  /**
+   * If we have max/min bounds that in the same
+   * month/year as the refParts, we should
+   * use the define day as the max/min day.
+   * Otherwise, fallback to the max/min days in a month.
+   */
+  const numDaysInMonth = getNumDaysInMonth(month, year);
+  const maxDay = (maxParts === null || maxParts === void 0 ? void 0 : maxParts.day) && maxParts.year === year && maxParts.month === month ? maxParts.day : numDaysInMonth;
+  const minDay = (minParts === null || minParts === void 0 ? void 0 : minParts.day) && minParts.year === year && minParts.month === month ? minParts.day : 1;
+  if (dayValues !== undefined) {
+    let processedDays = dayValues;
+    processedDays = processedDays.filter((day) => day >= minDay && day <= maxDay);
+    processedDays.forEach((processedDay) => {
+      const date = new Date(`${month}/${processedDay}/${year} GMT+0000`);
+      const dayString = new Intl.DateTimeFormat(locale, Object.assign(Object.assign({}, formatOptions), { timeZone: 'UTC' })).format(date);
+      days.push({ text: dayString, value: processedDay });
+    });
+  }
+  else {
+    for (let i = minDay; i <= maxDay; i++) {
+      const date = new Date(`${month}/${i}/${year} GMT+0000`);
+      const dayString = new Intl.DateTimeFormat(locale, Object.assign(Object.assign({}, formatOptions), { timeZone: 'UTC' })).format(date);
+      days.push({ text: dayString, value: i });
+    }
+  }
+  return days;
+};
+const getYearColumnData = (refParts, minParts, maxParts, yearValues) => {
+  let processedYears = [];
   if (yearValues !== undefined) {
-    let processedYears = yearValues;
+    processedYears = yearValues;
     if ((maxParts === null || maxParts === void 0 ? void 0 : maxParts.year) !== undefined) {
       processedYears = processedYears.filter((year) => year <= maxParts.year);
     }
     if ((minParts === null || minParts === void 0 ? void 0 : minParts.year) !== undefined) {
       processedYears = processedYears.filter((year) => year >= minParts.year);
     }
-    return processedYears;
   }
   else {
     const { year } = refParts;
     const maxYear = (maxParts === null || maxParts === void 0 ? void 0 : maxParts.year) || year;
     const minYear = (minParts === null || minParts === void 0 ? void 0 : minParts.year) || year - 100;
-    const years = [];
     for (let i = maxYear; i >= minYear; i--) {
-      years.push(i);
+      processedYears.push(i);
     }
-    return years;
   }
-};
-
-/*!
- * (C) Ionic http://ionicframework.com - MIT License
- */
-const get12HourTime = (hour) => {
-  return hour % 12 || 12;
-};
-const getFormattedAMPM = (ampm) => {
-  if (ampm === undefined) {
-    return '';
-  }
-  return ampm.toUpperCase();
-};
-const getFormattedTime = (refParts, use24Hour) => {
-  if (refParts.hour === undefined || refParts.minute === undefined) {
-    return 'Invalid Time';
-  }
-  const hour = use24Hour ? getFormattedHour(refParts.hour, use24Hour) : get12HourTime(refParts.hour);
-  const minute = addTimePadding(refParts.minute);
-  if (use24Hour) {
-    return `${hour}:${minute}`;
-  }
-  return `${hour}:${minute} ${getFormattedAMPM(refParts.ampm)}`;
+  return processedYears.map((year) => ({
+    text: `${year}`,
+    value: year,
+  }));
 };
 /**
- * Adds padding to a time value so
- * that it is always 2 digits.
+ * Given a starting date and an upper bound,
+ * this functions returns an array of all
+ * month objects in that range.
  */
-const addTimePadding = (value) => {
-  const valueToString = value.toString();
-  if (valueToString.length > 1) {
-    return valueToString;
+const getAllMonthsInRange = (currentParts, maxParts) => {
+  if (currentParts.month === maxParts.month && currentParts.year === maxParts.year) {
+    return [currentParts];
   }
-  return `0${valueToString}`;
+  return [currentParts, ...getAllMonthsInRange(getNextMonth(currentParts), maxParts)];
 };
 /**
- * Formats the hour value so that it
- * is always 2 digits. Only applies
- * if using 12 hour format.
+ * Creates and returns picker items
+ * that represent the days in a month.
+ * Example: "Thu, Jun 2"
  */
-const getFormattedHour = (hour, use24Hour) => {
-  if (!use24Hour) {
-    return hour.toString();
-  }
-  return addTimePadding(hour);
-};
-/**
- * Generates an aria-label to be read by screen readers
- * given a local, a date, and whether or not that date is
- * today's date.
- */
-const generateDayAriaLabel = (locale, today, refParts) => {
-  if (refParts.day === null) {
-    return null;
+const getCombinedDateColumnData = (locale, refParts, todayParts, minParts, maxParts, dayValues, monthValues) => {
+  let items = [];
+  let parts = [];
+  /**
+   * Get all month objects from the min date
+   * to the max date. Note: Do not use getMonthColumnData
+   * as that function only generates dates within a
+   * single year.
+   */
+  let months = getAllMonthsInRange(minParts, maxParts);
+  /**
+   * Filter out any disallowed month values.
+   */
+  if (monthValues) {
+    months = months.filter(({ month }) => monthValues.includes(month));
   }
   /**
-   * MM/DD/YYYY will return midnight in the user's timezone.
+   * Get all of the days in the month.
+   * From there, generate an array where
+   * each item has the month, date, and day
+   * of work as the text.
    */
-  const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year} GMT+0000`);
-  const labelString = new Intl.DateTimeFormat(locale, {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-    timeZone: 'UTC',
-  }).format(date);
-  /**
-   * If date is today, prepend "Today" so screen readers indicate
-   * that the date is today.
-   */
-  return today ? `Today, ${labelString}` : labelString;
+  months.forEach((monthObject) => {
+    const referenceMonth = { month: monthObject.month, day: null, year: refParts.year };
+    const monthDays = getDayColumnData(locale, referenceMonth, minParts, maxParts, dayValues, {
+      month: 'short',
+      day: 'numeric',
+      weekday: 'short',
+    });
+    const dateParts = [];
+    const dateColumnItems = [];
+    monthDays.forEach((dayObject) => {
+      const isToday = isSameDay(Object.assign(Object.assign({}, referenceMonth), { day: dayObject.value }), todayParts);
+      /**
+       * Today's date should read as "Today" (localized)
+       * not the actual date string
+       */
+      dateColumnItems.push({
+        text: isToday ? getTodayLabel(locale) : dayObject.text,
+        value: `${refParts.year}-${monthObject.month}-${dayObject.value}`,
+      });
+      /**
+       * When selecting a date in the wheel picker
+       * we need access to the raw datetime parts data.
+       * The picker column only accepts values of
+       * type string or number, so we need to return
+       * two sets of data: A data set to be passed
+       * to the picker column, and a data set to
+       * be used to reference the raw data when
+       * updating the picker column value.
+       */
+      dateParts.push({
+        month: monthObject.month,
+        year: refParts.year,
+        day: dayObject.value,
+      });
+    });
+    parts = [...parts, ...dateParts];
+    items = [...items, ...dateColumnItems];
+  });
+  return {
+    parts,
+    items,
+  };
 };
-/**
- * Gets the day of the week, month, and day
- * Used for the header in MD mode.
- */
-const getMonthAndDay = (locale, refParts) => {
-  const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year} GMT+0000`);
-  return new Intl.DateTimeFormat(locale, { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(date);
-};
-/**
- * Given a locale and a date object,
- * return a formatted string that includes
- * the month name and full year.
- * Example: May 2021
- */
-const getMonthAndYear = (locale, refParts) => {
-  const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year} GMT+0000`);
-  return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
+const getTimeColumnsData = (locale, refParts, hourCycle, minParts, maxParts, allowedHourValues, allowedMinuteVaues) => {
+  const use24Hour = is24Hour(locale, hourCycle);
+  const { hours, minutes, am, pm } = generateTime(refParts, use24Hour ? 'h23' : 'h12', minParts, maxParts, allowedHourValues, allowedMinuteVaues);
+  const hoursItems = hours.map((hour) => {
+    return {
+      text: getFormattedHour(hour, use24Hour),
+      value: getInternalHourValue(hour, use24Hour, refParts.ampm),
+    };
+  });
+  const minutesItems = minutes.map((minute) => {
+    return {
+      text: addTimePadding(minute),
+      value: minute,
+    };
+  });
+  const dayPeriodItems = [];
+  if (am && !use24Hour) {
+    dayPeriodItems.push({
+      text: getLocalizedDayPeriod(locale, 'am'),
+      value: 'am',
+    });
+  }
+  if (pm && !use24Hour) {
+    dayPeriodItems.push({
+      text: getLocalizedDayPeriod(locale, 'pm'),
+      value: 'pm',
+    });
+  }
+  return {
+    minutesData: minutesItems,
+    hoursData: hoursItems,
+    dayPeriodData: dayPeriodItems,
+  };
 };
 
 /*!
@@ -12890,12 +13144,10 @@ const getPartsFromCalendarDay = (el) => {
     dayOfWeek: parseInt(el.getAttribute('data-day-of-week'), 10),
   };
 };
-/**
- * Given an ISO-8601 string, format out the parts
- * We do not use the JS Date object here because
- * it adjusts the date for the current timezone.
- */
-const parseDate = (val) => {
+function parseDate(val) {
+  if (Array.isArray(val)) {
+    return val.map((valStr) => parseDate(valStr));
+  }
   // manually parse IS0 cuz Date.parse cannot be trusted
   // ISO 8601 format: 1994-12-15T13:47:20Z
   let parse = null;
@@ -12933,17 +13185,16 @@ const parseDate = (val) => {
       tzOffset *= -1;
     }
   }
+  // can also get second and millisecond from parse[6] and parse[7] if needed
   return {
     year: parse[1],
     month: parse[2],
     day: parse[3],
     hour: parse[4],
     minute: parse[5],
-    second: parse[6],
-    millisecond: parse[7],
     tzOffset,
   };
-};
+}
 const clampDate = (dateParts, minParts, maxParts) => {
   if (minParts && isBefore(dateParts, minParts)) {
     return minParts;
@@ -12952,6 +13203,14 @@ const clampDate = (dateParts, minParts, maxParts) => {
     return maxParts;
   }
   return dateParts;
+};
+/**
+ * Parses an hour and returns if the value is in the morning (am) or afternoon (pm).
+ * @param hour The hour to format, should be 0-23
+ * @returns `pm` if the hour is greater than or equal to 12, `am` if less than 12.
+ */
+const parseAmPm = (hour) => {
+  return hour >= 12 ? 'pm' : 'am';
 };
 
 /*!
@@ -13023,13 +13282,29 @@ const isDayDisabled = (refParts, minParts, maxParts, dayValues) => {
   return false;
 };
 /**
- * Given a locale, a date, the selected date, and today's date,
+ * Given a locale, a date, the selected date(s), and today's date,
  * generate the state for a given calendar day button.
  */
 const getCalendarDayState = (locale, refParts, activeParts, todayParts, minParts, maxParts, dayValues) => {
-  const isActive = isSameDay(refParts, activeParts);
+  /**
+   * activeParts signals what day(s) are currently selected in the datetime.
+   * If multiple="true", this will be an array, but the logic in this util
+   * is the same whether we have one selected day or many because we're only
+   * calculating the state for one button. So, we treat a single activeParts value
+   * the same as an array of length one.
+   */
+  const activePartsArray = Array.isArray(activeParts) ? activeParts : [activeParts];
+  /**
+   * The day button is active if it is selected, or in other words, if refParts
+   * matches at least one selected date.
+   */
+  const isActive = activePartsArray.find((parts) => isSameDay(refParts, parts)) !== undefined;
   const isToday = isSameDay(refParts, todayParts);
   const disabled = isDayDisabled(refParts, minParts, maxParts, dayValues);
+  /**
+   * Note that we always return one object regardless of whether activeParts
+   * was an array, since we pare down to one value for isActive.
+   */
   return {
     disabled,
     isActive,
@@ -13077,9 +13352,9 @@ const isNextMonthDisabled = (refParts, maxParts) => {
   });
 };
 
-const datetimeIosCss = "/*!@:host*/.sc-ion-datetime-ios-h{display:flex;flex-flow:column;background:var(--background);overflow:hidden}/*!@:host(.datetime-size-fixed)*/.datetime-size-fixed.sc-ion-datetime-ios-h{width:auto;max-width:350px;height:auto}/*!@:host(.datetime-size-cover)*/.datetime-size-cover.sc-ion-datetime-ios-h{width:100%}/*!@:host .calendar-body,\n:host .datetime-year*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{opacity:0}/*!@:host(:not(.datetime-ready)) .datetime-year*/.sc-ion-datetime-ios-h:not(.datetime-ready) .datetime-year.sc-ion-datetime-ios{position:absolute;pointer-events:none}/*!@:host(.datetime-ready) .calendar-body*/.datetime-ready.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios{opacity:1}/*!@:host(.datetime-ready) .datetime-year*/.datetime-ready.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{display:none;opacity:1}/*!@:host .datetime-year .order-month-first .month-column*/.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios .order-month-first.sc-ion-datetime-ios .month-column.sc-ion-datetime-ios{order:1}/*!@:host .datetime-year .order-month-first .year-column*/.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios .order-month-first.sc-ion-datetime-ios .year-column.sc-ion-datetime-ios{order:2}/*!@:host .datetime-year .order-year-first .month-column*/.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios .order-year-first.sc-ion-datetime-ios .month-column.sc-ion-datetime-ios{order:2;text-align:end}/*!@:host .datetime-year .order-year-first .year-column*/.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios .order-year-first.sc-ion-datetime-ios .year-column.sc-ion-datetime-ios{order:1;text-align:start}/*!@:host .datetime-calendar,\n:host .datetime-year*/.sc-ion-datetime-ios-h .datetime-calendar.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{display:flex;flex:1 1 auto;flex-flow:column}/*!@:host(.show-month-and-year) .datetime-year*/.show-month-and-year.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{display:flex}@supports (background: -webkit-named-image(apple-pay-logo-black)) and (not (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{left:-99999px;position:absolute;visibility:hidden;pointer-events:none}/*!@:host-context([dir=rtl]):host(.show-month-and-year) .calendar-next-prev, :host-context([dir=rtl]).show-month-and-year .calendar-next-prev, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-days-of-week, :host-context([dir=rtl]).show-month-and-year .calendar-days-of-week, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-body, :host-context([dir=rtl]).show-month-and-year .calendar-body, :host-context([dir=rtl]):host(.show-month-and-year) .datetime-time, :host-context([dir=rtl]).show-month-and-year .datetime-time*/[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{left:unset;right:unset;right:-99999px}}@supports (not (background: -webkit-named-image(apple-pay-logo-black))) or ((background: -webkit-named-image(apple-pay-logo-black)) and (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{display:none}}/*!@:host(.month-year-picker-open) .datetime-footer*/.month-year-picker-open.sc-ion-datetime-ios-h .datetime-footer.sc-ion-datetime-ios{display:none}/*!@:host(.datetime-readonly),\n:host(.datetime-disabled)*/.datetime-readonly.sc-ion-datetime-ios-h,.datetime-disabled.sc-ion-datetime-ios-h{pointer-events:none}/*!@:host(.datetime-disabled)*/.datetime-disabled.sc-ion-datetime-ios-h{opacity:0.4}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios .datetime-title.sc-ion-datetime-ios{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}/*!@:host .datetime-action-buttons.has-clear-button*/.sc-ion-datetime-ios-h .datetime-action-buttons.has-clear-button.sc-ion-datetime-ios{width:100%}/*!@:host .datetime-action-buttons ion-buttons*/.sc-ion-datetime-ios-h .datetime-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons ion-item,\n:host .calendar-action-buttons ion-button*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-button.sc-ion-datetime-ios{--background:translucent}/*!@:host .calendar-action-buttons ion-item ion-label*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-label.sc-ion-datetime-ios{display:flex;align-items:center}/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-icon.sc-ion-datetime-ios{padding-left:4px;padding-right:0;padding-top:0;padding-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-icon.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:0;padding-inline-end:0}}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios{display:grid;grid-template-columns:repeat(7, 1fr);text-align:center}/*!@:host .calendar-body*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios{display:flex;flex-grow:1;scroll-snap-type:x mandatory;overflow-x:scroll;overflow-y:hidden;scrollbar-width:none;outline:none}/*!@:host .calendar-body .calendar-month*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month.sc-ion-datetime-ios{scroll-snap-align:start;scroll-snap-stop:always;flex-shrink:0;width:100%}/*!@:host .calendar-body .calendar-month-disabled*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month-disabled.sc-ion-datetime-ios{scroll-snap-align:none}/*!@:host .calendar-body::-webkit-scrollbar*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios::-webkit-scrollbar{display:none}/*!@:host .calendar-body .calendar-month-grid*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month-grid.sc-ion-datetime-ios{display:grid;grid-template-columns:repeat(7, 1fr);height:100%}/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{padding-left:0px;padding-right:0px;padding-top:0px;padding-bottom:0px;margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:0px;display:flex;position:relative;align-items:center;justify-content:center;border:none;outline:none;background:none;color:currentColor;cursor:pointer;appearance:none;z-index:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:0px;padding-inline-start:0px;-webkit-padding-end:0px;padding-inline-end:0px}}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:0px;margin-inline-start:0px;-webkit-margin-end:0px;margin-inline-end:0px}}/*!@:host .calendar-day[disabled]*/.sc-ion-datetime-ios-h .calendar-day[disabled].sc-ion-datetime-ios{pointer-events:none;opacity:0.4}/*!@:host .calendar-day:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:after{border-radius:32px;padding-left:4px;padding-right:4px;padding-top:4px;padding-bottom:4px;position:absolute;top:50%;left:50%;width:32px;height:32px;transform:translate(-50%, -50%);content:\" \";z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:after{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:4px;padding-inline-end:4px}}/*!@:host .datetime-time*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{display:flex;justify-content:space-between}/*!@:host(.datetime-presentation-time) .datetime-time*/.datetime-presentation-time.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0}/*!@:host ion-popover*/.sc-ion-datetime-ios-h ion-popover.sc-ion-datetime-ios{--height:200px}/*!@:host .time-header*/.sc-ion-datetime-ios-h .time-header.sc-ion-datetime-ios{display:flex;align-items:center}/*!@:host .time-body*/.sc-ion-datetime-ios-h .time-body.sc-ion-datetime-ios{border-radius:8px;padding-left:12px;padding-right:12px;padding-top:6px;padding-bottom:6px;display:flex;border:none;background:var(--ion-color-step-300, #edeef0);color:var(--ion-text-color, #000);font-family:inherit;font-size:inherit;cursor:pointer;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .time-body*/.sc-ion-datetime-ios-h .time-body.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}/*!@:host .time-body-active*/.sc-ion-datetime-ios-h .time-body-active.sc-ion-datetime-ios{color:var(--ion-color-base)}/*!@:host(.in-item)*/.in-item.sc-ion-datetime-ios-h{position:static}/*!@:host(.show-month-and-year) .calendar-action-buttons ion-item*/.show-month-and-year.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios{--color:var(--ion-color-base)}/*!@:host*/.sc-ion-datetime-ios-h{--background:var(--ion-color-light, #ffffff);--background-rgb:var(--ion-color-light-rgb);--title-color:var(--ion-color-step-600, #666666)}/*!@:host(.datetime-presentation-date-time),\n:host(.datetime-presentation-time-date),\n:host(.datetime-presentation-date)*/.datetime-presentation-date-time.sc-ion-datetime-ios-h,.datetime-presentation-time-date.sc-ion-datetime-ios-h,.datetime-presentation-date.sc-ion-datetime-ios-h{min-height:350px}/*!@:host .datetime-header*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios{padding-left:16px;padding-right:16px;padding-top:16px;padding-bottom:16px;border-bottom:0.55px solid var(--ion-color-step-200, #cccccc)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-header*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios .datetime-title.sc-ion-datetime-ios{color:var(--title-color);font-size:14px}/*!@:host .calendar-action-buttons ion-item*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios{--padding-start:16px;--background-hover:transparent;--background-activated:transparent;font-size:16px;font-weight:600}/*!@:host .calendar-action-buttons ion-item ion-icon,\n:host .calendar-action-buttons ion-buttons ion-button*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-icon.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios ion-button.sc-ion-datetime-ios{color:var(--ion-color-base)}/*!@:host .calendar-action-buttons ion-buttons*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios{padding-left:0;padding-right:0;padding-top:8px;padding-bottom:0}/*!@:host .calendar-action-buttons ion-buttons ion-button*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios ion-button.sc-ion-datetime-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios{padding-left:8px;padding-right:8px;padding-top:0;padding-bottom:0;color:var(--ion-color-step-300, #b3b3b3);font-size:12px;font-weight:600;line-height:24px;text-transform:uppercase}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-days-of-week*/.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month.sc-ion-datetime-ios .calendar-month-grid.sc-ion-datetime-ios{padding-left:8px;padding-right:8px;padding-top:8px;padding-bottom:8px;height:calc(100% - 16px)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month.sc-ion-datetime-ios .calendar-month-grid.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{font-size:20px}/*!@:host .calendar-day:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:after{opacity:0.2}/*!@:host .calendar-day:focus:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:focus:after{background:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-today*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-today.sc-ion-datetime-ios{color:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-active*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-active.sc-ion-datetime-ios{color:var(--ion-color-base);font-weight:600}/*!@:host .calendar-day.calendar-day-active:after*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-active.sc-ion-datetime-ios:after{background:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-today.calendar-day-active*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-today.calendar-day-active.sc-ion-datetime-ios{color:var(--ion-color-contrast)}/*!@:host .calendar-day.calendar-day-today.calendar-day-active:after*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-today.calendar-day-active.sc-ion-datetime-ios:after{background:var(--ion-color-base);opacity:1}/*!@:host .datetime-time*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{padding-left:16px;padding-right:16px;padding-top:8px;padding-bottom:16px;font-size:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-time*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host .datetime-time .time-header*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios .time-header.sc-ion-datetime-ios{font-weight:600}/*!@:host .datetime-buttons*/.sc-ion-datetime-ios-h .datetime-buttons.sc-ion-datetime-ios{padding-left:8px;padding-right:8px;padding-top:8px;padding-bottom:8px;border-top:0.55px solid var(--ion-color-step-200, #cccccc)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-buttons*/.sc-ion-datetime-ios-h .datetime-buttons.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}/*!@:host .datetime-buttons ::slotted(ion-buttons),\n:host .datetime-buttons ion-buttons*/.sc-ion-datetime-ios-h .datetime-buttons .sc-ion-datetime-ios-s>ion-buttons,.sc-ion-datetime-ios-h .datetime-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios{display:flex;align-items:center;justify-content:space-between}/*!@:host .datetime-action-buttons*/.sc-ion-datetime-ios-h .datetime-action-buttons.sc-ion-datetime-ios{width:100%}";
+const datetimeIosCss = "/*!@:host*/.sc-ion-datetime-ios-h{display:flex;flex-flow:column;background:var(--background);overflow:hidden}/*!@ion-picker-column-internal*/ion-picker-column-internal.sc-ion-datetime-ios{min-width:26px}/*!@:host(.datetime-size-fixed)*/.datetime-size-fixed.sc-ion-datetime-ios-h{width:auto;height:auto}/*!@:host(.datetime-size-fixed:not(.datetime-prefer-wheel))*/.datetime-size-fixed.sc-ion-datetime-ios-h:not(.datetime-prefer-wheel){max-width:350px}/*!@:host(.datetime-size-fixed.datetime-prefer-wheel)*/.datetime-size-fixed.datetime-prefer-wheel.sc-ion-datetime-ios-h{min-width:350px;max-width:max-content}/*!@:host(.datetime-size-cover)*/.datetime-size-cover.sc-ion-datetime-ios-h{width:100%}/*!@:host .calendar-body,\n:host .datetime-year*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{opacity:0}/*!@:host(:not(.datetime-ready)) .datetime-year*/.sc-ion-datetime-ios-h:not(.datetime-ready) .datetime-year.sc-ion-datetime-ios{position:absolute;pointer-events:none}/*!@:host(.datetime-ready) .calendar-body*/.datetime-ready.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios{opacity:1}/*!@:host(.datetime-ready) .datetime-year*/.datetime-ready.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{display:none;opacity:1}/*!@:host .wheel-order-year-first .day-column*/.sc-ion-datetime-ios-h .wheel-order-year-first.sc-ion-datetime-ios .day-column.sc-ion-datetime-ios{order:3;text-align:end}/*!@:host .wheel-order-year-first .month-column*/.sc-ion-datetime-ios-h .wheel-order-year-first.sc-ion-datetime-ios .month-column.sc-ion-datetime-ios{order:2;text-align:end}/*!@:host .wheel-order-year-first .year-column*/.sc-ion-datetime-ios-h .wheel-order-year-first.sc-ion-datetime-ios .year-column.sc-ion-datetime-ios{order:1;text-align:start}/*!@:host .datetime-calendar,\n:host .datetime-year*/.sc-ion-datetime-ios-h .datetime-calendar.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{display:flex;flex:1 1 auto;flex-flow:column}/*!@:host(.show-month-and-year) .datetime-year*/.show-month-and-year.sc-ion-datetime-ios-h .datetime-year.sc-ion-datetime-ios{display:flex}@supports (background: -webkit-named-image(apple-pay-logo-black)) and (not (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{left:-99999px;position:absolute;visibility:hidden;pointer-events:none}/*!@:host-context([dir=rtl]):host(.show-month-and-year) .calendar-next-prev, :host-context([dir=rtl]).show-month-and-year .calendar-next-prev, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-days-of-week, :host-context([dir=rtl]).show-month-and-year .calendar-days-of-week, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-body, :host-context([dir=rtl]).show-month-and-year .calendar-body, :host-context([dir=rtl]):host(.show-month-and-year) .datetime-time, :host-context([dir=rtl]).show-month-and-year .datetime-time*/[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,[dir=rtl].sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios,[dir=rtl] .sc-ion-datetime-ios-h -no-combinator.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios,[dir=rtl].show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios,[dir=rtl] .show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{left:unset;right:unset;right:-99999px}}@supports (not (background: -webkit-named-image(apple-pay-logo-black))) or ((background: -webkit-named-image(apple-pay-logo-black)) and (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-ios-h .calendar-next-prev.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios,.show-month-and-year.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{display:none}}/*!@:host(.month-year-picker-open) .datetime-footer*/.month-year-picker-open.sc-ion-datetime-ios-h .datetime-footer.sc-ion-datetime-ios{display:none}/*!@:host(.datetime-readonly),\n:host(.datetime-disabled)*/.datetime-readonly.sc-ion-datetime-ios-h,.datetime-disabled.sc-ion-datetime-ios-h{pointer-events:none}/*!@:host(.datetime-disabled)*/.datetime-disabled.sc-ion-datetime-ios-h{opacity:0.4}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios .datetime-title.sc-ion-datetime-ios{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}/*!@:host .datetime-action-buttons.has-clear-button*/.sc-ion-datetime-ios-h .datetime-action-buttons.has-clear-button.sc-ion-datetime-ios{width:100%}/*!@:host .datetime-action-buttons ion-buttons*/.sc-ion-datetime-ios-h .datetime-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons ion-item,\n:host .calendar-action-buttons ion-button*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-button.sc-ion-datetime-ios{--background:translucent}/*!@:host .calendar-action-buttons ion-item ion-label*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-label.sc-ion-datetime-ios{display:flex;align-items:center}/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-icon.sc-ion-datetime-ios{padding-left:4px;padding-right:0;padding-top:0;padding-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-icon.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:0;padding-inline-end:0}}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios{display:grid;grid-template-columns:repeat(7, 1fr);text-align:center}/*!@:host .calendar-body*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios{display:flex;flex-grow:1;scroll-snap-type:x mandatory;overflow-x:scroll;overflow-y:hidden;scrollbar-width:none;outline:none}/*!@:host .calendar-body .calendar-month*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month.sc-ion-datetime-ios{scroll-snap-align:start;scroll-snap-stop:always;flex-shrink:0;width:100%}/*!@:host .calendar-body .calendar-month-disabled*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month-disabled.sc-ion-datetime-ios{scroll-snap-align:none}/*!@:host .calendar-body::-webkit-scrollbar*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios::-webkit-scrollbar{display:none}/*!@:host .calendar-body .calendar-month-grid*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month-grid.sc-ion-datetime-ios{display:grid;grid-template-columns:repeat(7, 1fr);height:100%}/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{padding-left:0px;padding-right:0px;padding-top:0px;padding-bottom:0px;margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:0px;display:flex;position:relative;align-items:center;justify-content:center;border:none;outline:none;background:none;color:currentColor;cursor:pointer;appearance:none;z-index:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:0px;padding-inline-start:0px;-webkit-padding-end:0px;padding-inline-end:0px}}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:0px;margin-inline-start:0px;-webkit-margin-end:0px;margin-inline-end:0px}}/*!@:host .calendar-day[disabled]*/.sc-ion-datetime-ios-h .calendar-day[disabled].sc-ion-datetime-ios{pointer-events:none;opacity:0.4}/*!@:host .calendar-day:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:after{border-radius:32px;padding-left:4px;padding-right:4px;padding-top:4px;padding-bottom:4px;position:absolute;top:50%;left:50%;width:32px;height:32px;transform:translate(-50%, -50%);content:\" \";z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:after{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:4px;padding-inline-end:4px}}/*!@:host .datetime-time*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{display:flex;justify-content:space-between}/*!@:host(.datetime-presentation-time) .datetime-time*/.datetime-presentation-time.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0}/*!@:host ion-popover*/.sc-ion-datetime-ios-h ion-popover.sc-ion-datetime-ios{--height:200px}/*!@:host .time-header*/.sc-ion-datetime-ios-h .time-header.sc-ion-datetime-ios{display:flex;align-items:center}/*!@:host .time-body*/.sc-ion-datetime-ios-h .time-body.sc-ion-datetime-ios{border-radius:8px;padding-left:12px;padding-right:12px;padding-top:6px;padding-bottom:6px;display:flex;border:none;background:var(--ion-color-step-300, #edeef0);color:var(--ion-text-color, #000);font-family:inherit;font-size:inherit;cursor:pointer;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .time-body*/.sc-ion-datetime-ios-h .time-body.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}/*!@:host .time-body-active*/.sc-ion-datetime-ios-h .time-body-active.sc-ion-datetime-ios{color:var(--ion-color-base)}/*!@:host(.in-item)*/.in-item.sc-ion-datetime-ios-h{position:static}/*!@:host(.show-month-and-year) .calendar-action-buttons ion-item*/.show-month-and-year.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios{--color:var(--ion-color-base)}/*!@:host*/.sc-ion-datetime-ios-h{--background:var(--ion-color-light, #ffffff);--background-rgb:var(--ion-color-light-rgb);--title-color:var(--ion-color-step-600, #666666)}/*!@:host(.datetime-presentation-date-time:not(.datetime-prefer-wheel)),\n:host(.datetime-presentation-time-date:not(.datetime-prefer-wheel)),\n:host(.datetime-presentation-date:not(.datetime-prefer-wheel))*/.datetime-presentation-date-time.sc-ion-datetime-ios-h:not(.datetime-prefer-wheel),.datetime-presentation-time-date.sc-ion-datetime-ios-h:not(.datetime-prefer-wheel),.datetime-presentation-date.sc-ion-datetime-ios-h:not(.datetime-prefer-wheel){min-height:350px}/*!@:host .datetime-header*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios{padding-left:16px;padding-right:16px;padding-top:16px;padding-bottom:16px;border-bottom:0.55px solid var(--ion-color-step-200, #cccccc)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-header*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-ios-h .datetime-header.sc-ion-datetime-ios .datetime-title.sc-ion-datetime-ios{color:var(--title-color);font-size:14px}/*!@:host .calendar-action-buttons ion-item*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios{--padding-start:16px;--background-hover:transparent;--background-activated:transparent;font-size:16px;font-weight:600}/*!@:host .calendar-action-buttons ion-item ion-icon,\n:host .calendar-action-buttons ion-buttons ion-button*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-item.sc-ion-datetime-ios ion-icon.sc-ion-datetime-ios,.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios ion-button.sc-ion-datetime-ios{color:var(--ion-color-base)}/*!@:host .calendar-action-buttons ion-buttons*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios{padding-left:0;padding-right:0;padding-top:8px;padding-bottom:0}/*!@:host .calendar-action-buttons ion-buttons ion-button*/.sc-ion-datetime-ios-h .calendar-action-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios ion-button.sc-ion-datetime-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios{padding-left:8px;padding-right:8px;padding-top:0;padding-bottom:0;color:var(--ion-color-step-300, #b3b3b3);font-size:12px;font-weight:600;line-height:24px;text-transform:uppercase}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-days-of-week*/.sc-ion-datetime-ios-h .calendar-days-of-week.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month.sc-ion-datetime-ios .calendar-month-grid.sc-ion-datetime-ios{padding-left:8px;padding-right:8px;padding-top:8px;padding-bottom:8px;height:calc(100% - 16px)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-ios-h .calendar-body.sc-ion-datetime-ios .calendar-month.sc-ion-datetime-ios .calendar-month-grid.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}/*!@:host .calendar-day*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios{font-size:20px}/*!@:host .calendar-day:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:after{opacity:0.2}/*!@:host .calendar-day:focus:after*/.sc-ion-datetime-ios-h .calendar-day.sc-ion-datetime-ios:focus:after{background:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-today*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-today.sc-ion-datetime-ios{color:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-active*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-active.sc-ion-datetime-ios{color:var(--ion-color-base);font-weight:600}/*!@:host .calendar-day.calendar-day-active:after*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-active.sc-ion-datetime-ios:after{background:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-today.calendar-day-active*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-today.calendar-day-active.sc-ion-datetime-ios{color:var(--ion-color-contrast)}/*!@:host .calendar-day.calendar-day-today.calendar-day-active:after*/.sc-ion-datetime-ios-h .calendar-day.calendar-day-today.calendar-day-active.sc-ion-datetime-ios:after{background:var(--ion-color-base);opacity:1}/*!@:host .datetime-time*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{padding-left:16px;padding-right:16px;padding-top:8px;padding-bottom:16px;font-size:16px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-time*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host .datetime-time .time-header*/.sc-ion-datetime-ios-h .datetime-time.sc-ion-datetime-ios .time-header.sc-ion-datetime-ios{font-weight:600}/*!@:host .datetime-buttons*/.sc-ion-datetime-ios-h .datetime-buttons.sc-ion-datetime-ios{padding-left:8px;padding-right:8px;padding-top:8px;padding-bottom:8px;border-top:0.55px solid var(--ion-color-step-200, #cccccc)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-buttons*/.sc-ion-datetime-ios-h .datetime-buttons.sc-ion-datetime-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}/*!@:host .datetime-buttons ::slotted(ion-buttons),\n:host .datetime-buttons ion-buttons*/.sc-ion-datetime-ios-h .datetime-buttons .sc-ion-datetime-ios-s>ion-buttons,.sc-ion-datetime-ios-h .datetime-buttons.sc-ion-datetime-ios ion-buttons.sc-ion-datetime-ios{display:flex;align-items:center;justify-content:space-between}/*!@:host .datetime-action-buttons*/.sc-ion-datetime-ios-h .datetime-action-buttons.sc-ion-datetime-ios{width:100%}";
 
-const datetimeMdCss = "/*!@:host*/.sc-ion-datetime-md-h{display:flex;flex-flow:column;background:var(--background);overflow:hidden}/*!@:host(.datetime-size-fixed)*/.datetime-size-fixed.sc-ion-datetime-md-h{width:auto;max-width:350px;height:auto}/*!@:host(.datetime-size-cover)*/.datetime-size-cover.sc-ion-datetime-md-h{width:100%}/*!@:host .calendar-body,\n:host .datetime-year*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{opacity:0}/*!@:host(:not(.datetime-ready)) .datetime-year*/.sc-ion-datetime-md-h:not(.datetime-ready) .datetime-year.sc-ion-datetime-md{position:absolute;pointer-events:none}/*!@:host(.datetime-ready) .calendar-body*/.datetime-ready.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md{opacity:1}/*!@:host(.datetime-ready) .datetime-year*/.datetime-ready.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{display:none;opacity:1}/*!@:host .datetime-year .order-month-first .month-column*/.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md .order-month-first.sc-ion-datetime-md .month-column.sc-ion-datetime-md{order:1}/*!@:host .datetime-year .order-month-first .year-column*/.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md .order-month-first.sc-ion-datetime-md .year-column.sc-ion-datetime-md{order:2}/*!@:host .datetime-year .order-year-first .month-column*/.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md .order-year-first.sc-ion-datetime-md .month-column.sc-ion-datetime-md{order:2;text-align:end}/*!@:host .datetime-year .order-year-first .year-column*/.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md .order-year-first.sc-ion-datetime-md .year-column.sc-ion-datetime-md{order:1;text-align:start}/*!@:host .datetime-calendar,\n:host .datetime-year*/.sc-ion-datetime-md-h .datetime-calendar.sc-ion-datetime-md,.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{display:flex;flex:1 1 auto;flex-flow:column}/*!@:host(.show-month-and-year) .datetime-year*/.show-month-and-year.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{display:flex}@supports (background: -webkit-named-image(apple-pay-logo-black)) and (not (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{left:-99999px;position:absolute;visibility:hidden;pointer-events:none}/*!@:host-context([dir=rtl]):host(.show-month-and-year) .calendar-next-prev, :host-context([dir=rtl]).show-month-and-year .calendar-next-prev, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-days-of-week, :host-context([dir=rtl]).show-month-and-year .calendar-days-of-week, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-body, :host-context([dir=rtl]).show-month-and-year .calendar-body, :host-context([dir=rtl]):host(.show-month-and-year) .datetime-time, :host-context([dir=rtl]).show-month-and-year .datetime-time*/[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{left:unset;right:unset;right:-99999px}}@supports (not (background: -webkit-named-image(apple-pay-logo-black))) or ((background: -webkit-named-image(apple-pay-logo-black)) and (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{display:none}}/*!@:host(.month-year-picker-open) .datetime-footer*/.month-year-picker-open.sc-ion-datetime-md-h .datetime-footer.sc-ion-datetime-md{display:none}/*!@:host(.datetime-readonly),\n:host(.datetime-disabled)*/.datetime-readonly.sc-ion-datetime-md-h,.datetime-disabled.sc-ion-datetime-md-h{pointer-events:none}/*!@:host(.datetime-disabled)*/.datetime-disabled.sc-ion-datetime-md-h{opacity:0.4}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md .datetime-title.sc-ion-datetime-md{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}/*!@:host .datetime-action-buttons.has-clear-button*/.sc-ion-datetime-md-h .datetime-action-buttons.has-clear-button.sc-ion-datetime-md{width:100%}/*!@:host .datetime-action-buttons ion-buttons*/.sc-ion-datetime-md-h .datetime-action-buttons.sc-ion-datetime-md ion-buttons.sc-ion-datetime-md{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons ion-item,\n:host .calendar-action-buttons ion-button*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md,.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-button.sc-ion-datetime-md{--background:translucent}/*!@:host .calendar-action-buttons ion-item ion-label*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md ion-label.sc-ion-datetime-md{display:flex;align-items:center}/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md ion-icon.sc-ion-datetime-md{padding-left:4px;padding-right:0;padding-top:0;padding-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md ion-icon.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:0;padding-inline-end:0}}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md{display:grid;grid-template-columns:repeat(7, 1fr);text-align:center}/*!@:host .calendar-body*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md{display:flex;flex-grow:1;scroll-snap-type:x mandatory;overflow-x:scroll;overflow-y:hidden;scrollbar-width:none;outline:none}/*!@:host .calendar-body .calendar-month*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month.sc-ion-datetime-md{scroll-snap-align:start;scroll-snap-stop:always;flex-shrink:0;width:100%}/*!@:host .calendar-body .calendar-month-disabled*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month-disabled.sc-ion-datetime-md{scroll-snap-align:none}/*!@:host .calendar-body::-webkit-scrollbar*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md::-webkit-scrollbar{display:none}/*!@:host .calendar-body .calendar-month-grid*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month-grid.sc-ion-datetime-md{display:grid;grid-template-columns:repeat(7, 1fr);height:100%}/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:0px;padding-right:0px;padding-top:0px;padding-bottom:0px;margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:0px;display:flex;position:relative;align-items:center;justify-content:center;border:none;outline:none;background:none;color:currentColor;cursor:pointer;appearance:none;z-index:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:0px;padding-inline-start:0px;-webkit-padding-end:0px;padding-inline-end:0px}}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{margin-left:unset;margin-right:unset;-webkit-margin-start:0px;margin-inline-start:0px;-webkit-margin-end:0px;margin-inline-end:0px}}/*!@:host .calendar-day[disabled]*/.sc-ion-datetime-md-h .calendar-day[disabled].sc-ion-datetime-md{pointer-events:none;opacity:0.4}/*!@:host .calendar-day:after*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md:after{border-radius:32px;padding-left:4px;padding-right:4px;padding-top:4px;padding-bottom:4px;position:absolute;top:50%;left:50%;width:32px;height:32px;transform:translate(-50%, -50%);content:\" \";z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day:after*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md:after{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:4px;padding-inline-end:4px}}/*!@:host .datetime-time*/.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{display:flex;justify-content:space-between}/*!@:host(.datetime-presentation-time) .datetime-time*/.datetime-presentation-time.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0}/*!@:host ion-popover*/.sc-ion-datetime-md-h ion-popover.sc-ion-datetime-md{--height:200px}/*!@:host .time-header*/.sc-ion-datetime-md-h .time-header.sc-ion-datetime-md{display:flex;align-items:center}/*!@:host .time-body*/.sc-ion-datetime-md-h .time-body.sc-ion-datetime-md{border-radius:8px;padding-left:12px;padding-right:12px;padding-top:6px;padding-bottom:6px;display:flex;border:none;background:var(--ion-color-step-300, #edeef0);color:var(--ion-text-color, #000);font-family:inherit;font-size:inherit;cursor:pointer;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .time-body*/.sc-ion-datetime-md-h .time-body.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}/*!@:host .time-body-active*/.sc-ion-datetime-md-h .time-body-active.sc-ion-datetime-md{color:var(--ion-color-base)}/*!@:host(.in-item)*/.in-item.sc-ion-datetime-md-h{position:static}/*!@:host(.show-month-and-year) .calendar-action-buttons ion-item*/.show-month-and-year.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md{--color:var(--ion-color-base)}/*!@:host*/.sc-ion-datetime-md-h{--background:var(--ion-color-step-100, #ffffff);--title-color:var(--ion-color-contrast)}/*!@:host .datetime-header*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md{padding-left:20px;padding-right:20px;padding-top:20px;padding-bottom:20px;background:var(--ion-color-base);color:var(--title-color)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-header*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:20px;padding-inline-start:20px;-webkit-padding-end:20px;padding-inline-end:20px}}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md .datetime-title.sc-ion-datetime-md{font-size:12px;text-transform:uppercase}/*!@:host .datetime-header .datetime-selected-date*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md .datetime-selected-date.sc-ion-datetime-md{margin-top:30px;font-size:34px}/*!@:host .datetime-calendar .calendar-action-buttons ion-item*/.sc-ion-datetime-md-h .datetime-calendar.sc-ion-datetime-md .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md{--padding-start:20px}/*!@:host .calendar-action-buttons ion-item,\n:host .calendar-action-buttons ion-button*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md,.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-button.sc-ion-datetime-md{color:var(--ion-color-step-650, #595959)}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md{padding-left:10px;padding-right:10px;padding-top:0px;padding-bottom:0px;color:var(--ion-color-step-500, gray);font-size:14px;line-height:36px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-days-of-week*/.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:10px;padding-inline-start:10px;-webkit-padding-end:10px;padding-inline-end:10px}}/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month.sc-ion-datetime-md .calendar-month-grid.sc-ion-datetime-md{padding-left:10px;padding-right:10px;padding-top:3px;padding-bottom:0px;grid-template-rows:repeat(6, 1fr)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month.sc-ion-datetime-md .calendar-month-grid.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:10px;padding-inline-start:10px;-webkit-padding-end:10px;padding-inline-end:10px}}/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:0px;padding-right:0;padding-top:13px;padding-bottom:13px;font-size:14px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:0px;padding-inline-start:0px;-webkit-padding-end:0;padding-inline-end:0}}/*!@:host .calendar-day:focus:after*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md:focus:after{background:rgba(var(--ion-color-base-rgb), 0.2);box-shadow:0px 0px 0px 4px rgba(var(--ion-color-base-rgb), 0.2)}/*!@:host .calendar-day.calendar-day-today*/.sc-ion-datetime-md-h .calendar-day.calendar-day-today.sc-ion-datetime-md{color:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-today:after*/.sc-ion-datetime-md-h .calendar-day.calendar-day-today.sc-ion-datetime-md:after{border:1px solid var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-active*/.sc-ion-datetime-md-h .calendar-day.calendar-day-active.sc-ion-datetime-md{color:var(--ion-color-contrast)}/*!@:host .calendar-day.calendar-day-active:after*/.sc-ion-datetime-md-h .calendar-day.calendar-day-active.sc-ion-datetime-md:after{border:1px solid var(--ion-color-base);background:var(--ion-color-base)}/*!@:host .datetime-time*/.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{padding-left:16px;padding-right:16px;padding-top:8px;padding-bottom:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-time*/.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host .time-header*/.sc-ion-datetime-md-h .time-header.sc-ion-datetime-md{color:var(--ion-color-step-650, #595959)}/*!@:host(.datetime-presentation-month) .datetime-year,\n:host(.datetime-presentation-year) .datetime-year,\n:host(.datetime-presentation-month-year) .datetime-year*/.datetime-presentation-month.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md,.datetime-presentation-year.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md,.datetime-presentation-month-year.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{margin-top:20px;margin-bottom:20px}/*!@:host .datetime-buttons*/.sc-ion-datetime-md-h .datetime-buttons.sc-ion-datetime-md{padding-left:10px;padding-right:10px;padding-top:10px;padding-bottom:10px;display:flex;align-items:center;justify-content:flex-end}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-buttons*/.sc-ion-datetime-md-h .datetime-buttons.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:10px;padding-inline-start:10px;-webkit-padding-end:10px;padding-inline-end:10px}}/*!@:host .datetime-view-buttons ion-button*/.sc-ion-datetime-md-h .datetime-view-buttons.sc-ion-datetime-md ion-button.sc-ion-datetime-md{color:var(--ion-color-step-800, #333333)}";
+const datetimeMdCss = "/*!@:host*/.sc-ion-datetime-md-h{display:flex;flex-flow:column;background:var(--background);overflow:hidden}/*!@ion-picker-column-internal*/ion-picker-column-internal.sc-ion-datetime-md{min-width:26px}/*!@:host(.datetime-size-fixed)*/.datetime-size-fixed.sc-ion-datetime-md-h{width:auto;height:auto}/*!@:host(.datetime-size-fixed:not(.datetime-prefer-wheel))*/.datetime-size-fixed.sc-ion-datetime-md-h:not(.datetime-prefer-wheel){max-width:350px}/*!@:host(.datetime-size-fixed.datetime-prefer-wheel)*/.datetime-size-fixed.datetime-prefer-wheel.sc-ion-datetime-md-h{min-width:350px;max-width:max-content}/*!@:host(.datetime-size-cover)*/.datetime-size-cover.sc-ion-datetime-md-h{width:100%}/*!@:host .calendar-body,\n:host .datetime-year*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{opacity:0}/*!@:host(:not(.datetime-ready)) .datetime-year*/.sc-ion-datetime-md-h:not(.datetime-ready) .datetime-year.sc-ion-datetime-md{position:absolute;pointer-events:none}/*!@:host(.datetime-ready) .calendar-body*/.datetime-ready.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md{opacity:1}/*!@:host(.datetime-ready) .datetime-year*/.datetime-ready.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{display:none;opacity:1}/*!@:host .wheel-order-year-first .day-column*/.sc-ion-datetime-md-h .wheel-order-year-first.sc-ion-datetime-md .day-column.sc-ion-datetime-md{order:3;text-align:end}/*!@:host .wheel-order-year-first .month-column*/.sc-ion-datetime-md-h .wheel-order-year-first.sc-ion-datetime-md .month-column.sc-ion-datetime-md{order:2;text-align:end}/*!@:host .wheel-order-year-first .year-column*/.sc-ion-datetime-md-h .wheel-order-year-first.sc-ion-datetime-md .year-column.sc-ion-datetime-md{order:1;text-align:start}/*!@:host .datetime-calendar,\n:host .datetime-year*/.sc-ion-datetime-md-h .datetime-calendar.sc-ion-datetime-md,.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{display:flex;flex:1 1 auto;flex-flow:column}/*!@:host(.show-month-and-year) .datetime-year*/.show-month-and-year.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{display:flex}@supports (background: -webkit-named-image(apple-pay-logo-black)) and (not (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{left:-99999px;position:absolute;visibility:hidden;pointer-events:none}/*!@:host-context([dir=rtl]):host(.show-month-and-year) .calendar-next-prev, :host-context([dir=rtl]).show-month-and-year .calendar-next-prev, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-days-of-week, :host-context([dir=rtl]).show-month-and-year .calendar-days-of-week, :host-context([dir=rtl]):host(.show-month-and-year) .calendar-body, :host-context([dir=rtl]).show-month-and-year .calendar-body, :host-context([dir=rtl]):host(.show-month-and-year) .datetime-time, :host-context([dir=rtl]).show-month-and-year .datetime-time*/[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,[dir=rtl].sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md,[dir=rtl] .sc-ion-datetime-md-h -no-combinator.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md,[dir=rtl].show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md,[dir=rtl] .show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{left:unset;right:unset;right:-99999px}}@supports (not (background: -webkit-named-image(apple-pay-logo-black))) or ((background: -webkit-named-image(apple-pay-logo-black)) and (aspect-ratio: 1/1)){/*!@:host(.show-month-and-year) .calendar-next-prev,\n:host(.show-month-and-year) .calendar-days-of-week,\n:host(.show-month-and-year) .calendar-body,\n:host(.show-month-and-year) .datetime-time*/.show-month-and-year.sc-ion-datetime-md-h .calendar-next-prev.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md,.show-month-and-year.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{display:none}}/*!@:host(.month-year-picker-open) .datetime-footer*/.month-year-picker-open.sc-ion-datetime-md-h .datetime-footer.sc-ion-datetime-md{display:none}/*!@:host(.datetime-readonly),\n:host(.datetime-disabled)*/.datetime-readonly.sc-ion-datetime-md-h,.datetime-disabled.sc-ion-datetime-md-h{pointer-events:none}/*!@:host(.datetime-disabled)*/.datetime-disabled.sc-ion-datetime-md-h{opacity:0.4}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md .datetime-title.sc-ion-datetime-md{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}/*!@:host .datetime-action-buttons.has-clear-button*/.sc-ion-datetime-md-h .datetime-action-buttons.has-clear-button.sc-ion-datetime-md{width:100%}/*!@:host .datetime-action-buttons ion-buttons*/.sc-ion-datetime-md-h .datetime-action-buttons.sc-ion-datetime-md ion-buttons.sc-ion-datetime-md{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md{display:flex;justify-content:space-between}/*!@:host .calendar-action-buttons ion-item,\n:host .calendar-action-buttons ion-button*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md,.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-button.sc-ion-datetime-md{--background:translucent}/*!@:host .calendar-action-buttons ion-item ion-label*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md ion-label.sc-ion-datetime-md{display:flex;align-items:center}/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md ion-icon.sc-ion-datetime-md{padding-left:4px;padding-right:0;padding-top:0;padding-bottom:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-action-buttons ion-item ion-icon*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md ion-icon.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:0;padding-inline-end:0}}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md{display:grid;grid-template-columns:repeat(7, 1fr);text-align:center}/*!@:host .calendar-body*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md{display:flex;flex-grow:1;scroll-snap-type:x mandatory;overflow-x:scroll;overflow-y:hidden;scrollbar-width:none;outline:none}/*!@:host .calendar-body .calendar-month*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month.sc-ion-datetime-md{scroll-snap-align:start;scroll-snap-stop:always;flex-shrink:0;width:100%}/*!@:host .calendar-body .calendar-month-disabled*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month-disabled.sc-ion-datetime-md{scroll-snap-align:none}/*!@:host .calendar-body::-webkit-scrollbar*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md::-webkit-scrollbar{display:none}/*!@:host .calendar-body .calendar-month-grid*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month-grid.sc-ion-datetime-md{display:grid;grid-template-columns:repeat(7, 1fr);height:100%}/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:0px;padding-right:0px;padding-top:0px;padding-bottom:0px;margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:0px;display:flex;position:relative;align-items:center;justify-content:center;border:none;outline:none;background:none;color:currentColor;cursor:pointer;appearance:none;z-index:0}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:0px;padding-inline-start:0px;-webkit-padding-end:0px;padding-inline-end:0px}}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{margin-left:unset;margin-right:unset;-webkit-margin-start:0px;margin-inline-start:0px;-webkit-margin-end:0px;margin-inline-end:0px}}/*!@:host .calendar-day[disabled]*/.sc-ion-datetime-md-h .calendar-day[disabled].sc-ion-datetime-md{pointer-events:none;opacity:0.4}/*!@:host .calendar-day:after*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md:after{border-radius:32px;padding-left:4px;padding-right:4px;padding-top:4px;padding-bottom:4px;position:absolute;top:50%;left:50%;width:32px;height:32px;transform:translate(-50%, -50%);content:\" \";z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day:after*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md:after{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:4px;padding-inline-end:4px}}/*!@:host .datetime-time*/.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{display:flex;justify-content:space-between}/*!@:host(.datetime-presentation-time) .datetime-time*/.datetime-presentation-time.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0}/*!@:host ion-popover*/.sc-ion-datetime-md-h ion-popover.sc-ion-datetime-md{--height:200px}/*!@:host .time-header*/.sc-ion-datetime-md-h .time-header.sc-ion-datetime-md{display:flex;align-items:center}/*!@:host .time-body*/.sc-ion-datetime-md-h .time-body.sc-ion-datetime-md{border-radius:8px;padding-left:12px;padding-right:12px;padding-top:6px;padding-bottom:6px;display:flex;border:none;background:var(--ion-color-step-300, #edeef0);color:var(--ion-text-color, #000);font-family:inherit;font-size:inherit;cursor:pointer;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .time-body*/.sc-ion-datetime-md-h .time-body.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}/*!@:host .time-body-active*/.sc-ion-datetime-md-h .time-body-active.sc-ion-datetime-md{color:var(--ion-color-base)}/*!@:host(.in-item)*/.in-item.sc-ion-datetime-md-h{position:static}/*!@:host(.show-month-and-year) .calendar-action-buttons ion-item*/.show-month-and-year.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md{--color:var(--ion-color-base)}/*!@:host*/.sc-ion-datetime-md-h{--background:var(--ion-color-step-100, #ffffff);--title-color:var(--ion-color-contrast)}/*!@:host .datetime-header*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md{padding-left:20px;padding-right:20px;padding-top:20px;padding-bottom:20px;background:var(--ion-color-base);color:var(--title-color)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-header*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:20px;padding-inline-start:20px;-webkit-padding-end:20px;padding-inline-end:20px}}/*!@:host .datetime-header .datetime-title*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md .datetime-title.sc-ion-datetime-md{font-size:12px;text-transform:uppercase}/*!@:host .datetime-header .datetime-selected-date*/.sc-ion-datetime-md-h .datetime-header.sc-ion-datetime-md .datetime-selected-date.sc-ion-datetime-md{margin-top:30px;font-size:34px}/*!@:host .datetime-calendar .calendar-action-buttons ion-item*/.sc-ion-datetime-md-h .datetime-calendar.sc-ion-datetime-md .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md{--padding-start:20px}/*!@:host .calendar-action-buttons ion-item,\n:host .calendar-action-buttons ion-button*/.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-item.sc-ion-datetime-md,.sc-ion-datetime-md-h .calendar-action-buttons.sc-ion-datetime-md ion-button.sc-ion-datetime-md{color:var(--ion-color-step-650, #595959)}/*!@:host .calendar-days-of-week*/.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md{padding-left:10px;padding-right:10px;padding-top:0px;padding-bottom:0px;color:var(--ion-color-step-500, gray);font-size:14px;line-height:36px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-days-of-week*/.sc-ion-datetime-md-h .calendar-days-of-week.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:10px;padding-inline-start:10px;-webkit-padding-end:10px;padding-inline-end:10px}}/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month.sc-ion-datetime-md .calendar-month-grid.sc-ion-datetime-md{padding-left:10px;padding-right:10px;padding-top:3px;padding-bottom:0px;grid-template-rows:repeat(6, 1fr)}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-body .calendar-month .calendar-month-grid*/.sc-ion-datetime-md-h .calendar-body.sc-ion-datetime-md .calendar-month.sc-ion-datetime-md .calendar-month-grid.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:10px;padding-inline-start:10px;-webkit-padding-end:10px;padding-inline-end:10px}}/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:0px;padding-right:0;padding-top:13px;padding-bottom:13px;font-size:14px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .calendar-day*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:0px;padding-inline-start:0px;-webkit-padding-end:0;padding-inline-end:0}}/*!@:host .calendar-day:focus:after*/.sc-ion-datetime-md-h .calendar-day.sc-ion-datetime-md:focus:after{background:rgba(var(--ion-color-base-rgb), 0.2);box-shadow:0px 0px 0px 4px rgba(var(--ion-color-base-rgb), 0.2)}/*!@:host .calendar-day.calendar-day-today*/.sc-ion-datetime-md-h .calendar-day.calendar-day-today.sc-ion-datetime-md{color:var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-today:after*/.sc-ion-datetime-md-h .calendar-day.calendar-day-today.sc-ion-datetime-md:after{border:1px solid var(--ion-color-base)}/*!@:host .calendar-day.calendar-day-active*/.sc-ion-datetime-md-h .calendar-day.calendar-day-active.sc-ion-datetime-md{color:var(--ion-color-contrast)}/*!@:host .calendar-day.calendar-day-active:after*/.sc-ion-datetime-md-h .calendar-day.calendar-day-active.sc-ion-datetime-md:after{border:1px solid var(--ion-color-base);background:var(--ion-color-base)}/*!@:host .datetime-time*/.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{padding-left:16px;padding-right:16px;padding-top:8px;padding-bottom:8px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-time*/.sc-ion-datetime-md-h .datetime-time.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host .time-header*/.sc-ion-datetime-md-h .time-header.sc-ion-datetime-md{color:var(--ion-color-step-650, #595959)}/*!@:host(.datetime-presentation-month) .datetime-year,\n:host(.datetime-presentation-year) .datetime-year,\n:host(.datetime-presentation-month-year) .datetime-year*/.datetime-presentation-month.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md,.datetime-presentation-year.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md,.datetime-presentation-month-year.sc-ion-datetime-md-h .datetime-year.sc-ion-datetime-md{margin-top:20px;margin-bottom:20px}/*!@:host .datetime-buttons*/.sc-ion-datetime-md-h .datetime-buttons.sc-ion-datetime-md{padding-left:10px;padding-right:10px;padding-top:10px;padding-bottom:10px;display:flex;align-items:center;justify-content:flex-end}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .datetime-buttons*/.sc-ion-datetime-md-h .datetime-buttons.sc-ion-datetime-md{padding-left:unset;padding-right:unset;-webkit-padding-start:10px;padding-inline-start:10px;-webkit-padding-end:10px;padding-inline-end:10px}}/*!@:host .datetime-view-buttons ion-button*/.sc-ion-datetime-md-h .datetime-view-buttons.sc-ion-datetime-md ion-button.sc-ion-datetime-md{color:var(--ion-color-step-800, #333333)}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -13096,8 +13371,8 @@ class Datetime {
     this.ionFocus = createEvent(this, "ionFocus", 7);
     this.ionBlur = createEvent(this, "ionBlur", 7);
     this.ionStyle = createEvent(this, "ionStyle", 7);
+    this.ionRender = createEvent(this, "ionRender", 7);
     this.inputId = `ion-dt-${datetimeIds++}`;
-    this.overlayIsPresenting = false;
     /**
      * Whether to highlight the active day with a solid circle (as opposed
      * to the outline circle around today). If you don't specify an initial
@@ -13179,6 +13454,11 @@ class Datetime {
      */
     this.firstDayOfWeek = 0;
     /**
+     * If `true`, multiple dates can be selected at once. Only
+     * applies to `presentation="date"` and `preferWheel="false"`.
+     */
+    this.multiple = false;
+    /**
      * If `true`, a header will be shown above the calendar
      * picker. On `ios` mode this will include the
      * slotted title, and on `md` mode this will include
@@ -13217,6 +13497,19 @@ class Datetime {
      * If `fixed`, the `ion-datetime` will have a fixed width.
      */
     this.size = 'fixed';
+    /**
+     * If `true`, a wheel picker will be rendered instead of a calendar grid
+     * where possible. If `false`, a calendar grid will be rendered instead of
+     * a wheel picker where possible.
+     *
+     * A wheel picker can be rendered instead of a grid when `presentation` is
+     * one of the following values: `'date'`, `'date-time'`, or `'time-date'`.
+     *
+     * A wheel picker will always be rendered regardless of
+     * the `preferWheel` value when `presentation` is one of the following values:
+     * `'time'`, `'month'`, `'month-year'`, or `'year'`.
+     */
+    this.preferWheel = false;
     this.closeParentOverlay = () => {
       const popoverOrModal = this.el.closest('ion-modal, ion-popover');
       if (popoverOrModal) {
@@ -13226,8 +13519,48 @@ class Datetime {
     this.setWorkingParts = (parts) => {
       this.workingParts = Object.assign({}, parts);
     };
-    this.setActiveParts = (parts) => {
-      this.activeParts = Object.assign({}, parts);
+    this.setActiveParts = (parts, removeDate = false) => {
+      const { multiple, activePartsClone, highlightActiveParts } = this;
+      if (multiple) {
+        /**
+         * We read from activePartsClone here because valueChanged() only updates that,
+         * so it's the more reliable source of truth. If we read from activeParts, then
+         * if you click July 1, manually set the value to July 2, and then click July 3,
+         * the new value would be [July 1, July 3], ignoring the value set.
+         *
+         * We can then pass the new value to activeParts (rather than activePartsClone)
+         * since the clone will be updated automatically by activePartsChanged().
+         */
+        const activePartsArray = Array.isArray(activePartsClone) ? activePartsClone : [activePartsClone];
+        if (removeDate) {
+          this.activeParts = activePartsArray.filter((p) => !isSameDay(p, parts));
+        }
+        else if (highlightActiveParts) {
+          this.activeParts = [...activePartsArray, parts];
+        }
+        else {
+          /**
+           * If highlightActiveParts is false, that means we just have a
+           * default value of today in activeParts; we need to replace that
+           * rather than adding to it since it's just a placeholder.
+           */
+          this.activeParts = [parts];
+        }
+      }
+      else {
+        this.activeParts = Object.assign({}, parts);
+      }
+      /**
+       * Now that the user has interacted somehow to select something, we can
+       * show the solid highlight. This needs to be done after checking it above,
+       * but before the confirm call below.
+       *
+       * Note that for datetimes with confirm/cancel buttons, the value
+       * isn't updated until you call confirm(). We need to bring the
+       * solid circle back on day click for UX reasons, rather than only
+       * show the circle if `value` is truthy.
+       */
+      this.highlightActiveParts = true;
       const hasSlottedButtons = this.el.querySelector('[slot="buttons"]') !== null;
       if (hasSlottedButtons || this.showDefaultButtons) {
         return;
@@ -13396,18 +13729,16 @@ class Datetime {
         minute,
       };
     };
-    this.initializeCalendarIOListeners = () => {
+    this.initializeCalendarListener = () => {
       const calendarBodyRef = this.getCalendarBodyEl();
       if (!calendarBodyRef) {
         return;
       }
-      const mode = getIonMode$1(this);
       /**
        * For performance reasons, we only render 3
        * months at a time: The current month, the previous
-       * month, and the next month. We have IntersectionObservers
-       * on the previous and next month elements to append/prepend
-       * new months.
+       * month, and the next month. We have a scroll listener
+       * on the calendar body to append/prepend new months.
        *
        * We can do this because Stencil is smart enough to not
        * re-create the .calendar-month containers, but rather
@@ -13422,39 +13753,75 @@ class Datetime {
       const startMonth = months[0];
       const workingMonth = months[1];
       const endMonth = months[2];
+      const mode = getIonMode$1(this);
+      const needsiOSRubberBandFix = mode === 'ios' && typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1;
       /**
-       * Before setting up the IntersectionObserver,
+       * Before setting up the scroll listener,
        * scroll the middle month into view.
        * scrollIntoView() will scroll entire page
        * if element is not in viewport. Use scrollLeft instead.
        */
-      let endIO;
-      let startIO;
       writeTask(() => {
         calendarBodyRef.scrollLeft = startMonth.clientWidth * (isRTL(this.el) ? -1 : 1);
-        const ioCallback = (callbackType, entries) => {
-          const refIO = callbackType === 'start' ? startIO : endIO;
-          const refMonth = callbackType === 'start' ? startMonth : endMonth;
-          const refMonthFn = callbackType === 'start' ? getPreviousMonth : getNextMonth;
+        const getChangedMonth = (parts) => {
+          const box = calendarBodyRef.getBoundingClientRect();
+          const root = this.el.shadowRoot;
           /**
-           * If the month is not fully in view, do not do anything
+           * Get the element that is in the center of the calendar body.
+           * This will be an element inside of the active month.
            */
-          const ev = entries[0];
-          if (!ev.isIntersecting) {
+          const elementAtCenter = root.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+          /**
+           * If there is no element then the
+           * component may be re-rendering on a slow device.
+           */
+          if (!elementAtCenter)
+            return;
+          const month = elementAtCenter.closest('.calendar-month');
+          if (!month)
+            return;
+          /**
+           * The edge of the month must be lined up with
+           * the edge of the calendar body in order for
+           * the component to update. Otherwise, it
+           * may be the case that the user has paused their
+           * swipe or the browser has not finished snapping yet.
+           * Rather than check if the x values are equal,
+           * we give it a tolerance of 2px to account for
+           * sub pixel rendering.
+           */
+          const monthBox = month.getBoundingClientRect();
+          if (Math.abs(monthBox.x - box.x) > 2)
+            return;
+          /**
+           * From here, we can determine if the start
+           * month or the end month was scrolled into view.
+           * If no month was changed, then we can return from
+           * the scroll callback early.
+           */
+          if (month === startMonth) {
+            return getPreviousMonth(parts);
+          }
+          else if (month === endMonth) {
+            return getNextMonth(parts);
+          }
+          else {
             return;
           }
-          /**
-           * When presenting an inline overlay,
-           * subsequent presentations will cause
-           * the IO to fire again (since the overlay
-           * is now visible and therefore the calendar
-           * months are intersecting).
-           */
-          if (this.overlayIsPresenting) {
-            this.overlayIsPresenting = false;
-            return;
+        };
+        const updateActiveMonth = () => {
+          if (needsiOSRubberBandFix) {
+            calendarBodyRef.style.removeProperty('pointer-events');
+            appliediOSRubberBandFix = false;
           }
-          const { month, year, day } = refMonthFn(this.workingParts);
+          /**
+           * If the month did not change
+           * then we can return early.
+           */
+          const newDate = getChangedMonth(this.workingParts);
+          if (!newDate)
+            return;
+          const { month, day, year } = newDate;
           if (isMonthDisabled({ month, year, day: null }, {
             minParts: Object.assign(Object.assign({}, this.minParts), { day: null }),
             maxParts: Object.assign(Object.assign({}, this.maxParts), { day: null }),
@@ -13462,37 +13829,11 @@ class Datetime {
             return;
           }
           /**
-           * On iOS, we need to set pointer-events: none
-           * when the user is almost done with the gesture
-           * so that they cannot quickly swipe while
-           * the scrollable container is snapping.
-           * Updating the container while snapping
-           * causes WebKit to snap incorrectly.
-           */
-          if (mode === 'ios') {
-            const ratio = ev.intersectionRatio;
-            // `maxTouchPoints` will be 1 in device preview, but > 1 on device
-            const shouldDisable = Math.abs(ratio - 0.7) <= 0.1 && navigator.maxTouchPoints > 1;
-            if (shouldDisable) {
-              calendarBodyRef.style.setProperty('pointer-events', 'none');
-              return;
-            }
-          }
-          /**
            * Prevent scrolling for other browsers
            * to give the DOM time to update and the container
            * time to properly snap.
            */
           calendarBodyRef.style.setProperty('overflow', 'hidden');
-          /**
-           * Remove the IO temporarily
-           * otherwise you can sometimes get duplicate
-           * events when rubber banding.
-           */
-          if (refIO === undefined) {
-            return;
-          }
-          refIO.disconnect();
           /**
            * Use a writeTask here to ensure
            * that the state is updated and the
@@ -13503,69 +13844,45 @@ class Datetime {
            * if we did not do this.
            */
           writeTask(() => {
-            // Disconnect all active intersection observers
-            // to avoid a re-render causing a duplicate event.
-            if (this.destroyCalendarIO) {
-              this.destroyCalendarIO();
-            }
-            raf(() => {
-              this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { month, day: day, year }));
-              calendarBodyRef.scrollLeft = workingMonth.clientWidth * (isRTL(this.el) ? -1 : 1);
-              calendarBodyRef.style.removeProperty('overflow');
-              calendarBodyRef.style.removeProperty('pointer-events');
-              endIO === null || endIO === void 0 ? void 0 : endIO.observe(endMonth);
-              startIO === null || startIO === void 0 ? void 0 : startIO.observe(startMonth);
-            });
-            /**
-             * Now that state has been updated
-             * and the correct month is in view,
-             * we can resume the IO.
-             */
-            if (refIO === undefined) {
-              return;
-            }
-            refIO.observe(refMonth);
+            this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { month, day: day, year }));
+            calendarBodyRef.scrollLeft = workingMonth.clientWidth * (isRTL(this.el) ? -1 : 1);
+            calendarBodyRef.style.removeProperty('overflow');
           });
         };
-        const threshold = mode === 'ios' && typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1 ? [0.7, 1] : 1;
-        // Intersection observers cannot accurately detect the
-        // intersection with a threshold of 1, when the observed
-        // element width is a sub-pixel value (i.e. 334.05px).
-        // Setting a root margin to 1px solves the issue.
-        const rootMargin = '1px';
         /**
-         * Listen on the first month to
-         * prepend a new month and on the last
-         * month to append a new month.
-         * The 0.7 threshold is required on ios
-         * so that we can remove pointer-events
-         * when adding new months.
-         * Adding to a scroll snapping container
-         * while the container is snapping does not
-         * completely work as expected in WebKit.
-         * Adding pointer-events: none allows us to
-         * avoid these issues.
-         *
-         * This should be fine on Chromium, but
-         * when you set pointer-events: none
-         * it applies to active gestures which is not
-         * something WebKit does.
+         * When the container finishes scrolling we
+         * need to update the DOM with the selected month.
          */
-        endIO = new IntersectionObserver((ev) => ioCallback('end', ev), {
-          threshold,
-          root: calendarBodyRef,
-          rootMargin,
-        });
-        endIO.observe(endMonth);
-        startIO = new IntersectionObserver((ev) => ioCallback('start', ev), {
-          threshold,
-          root: calendarBodyRef,
-          rootMargin,
-        });
-        startIO.observe(startMonth);
-        this.destroyCalendarIO = () => {
-          endIO === null || endIO === void 0 ? void 0 : endIO.disconnect();
-          startIO === null || startIO === void 0 ? void 0 : startIO.disconnect();
+        let scrollTimeout;
+        /**
+         * We do not want to attempt to set pointer-events
+         * multiple times within a single swipe gesture as
+         * that adds unnecessary work to the main thread.
+         */
+        let appliediOSRubberBandFix = false;
+        const scrollCallback = () => {
+          if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+          }
+          /**
+           * On iOS it is possible to quickly rubber band
+           * the scroll area before the scroll timeout has fired.
+           * This results in users reaching the end of the scrollable
+           * container before the DOM has updated.
+           * By setting `pointer-events: none` we can ensure that
+           * subsequent swipes do not happen while the container
+           * is snapping.
+           */
+          if (!appliediOSRubberBandFix && needsiOSRubberBandFix) {
+            calendarBodyRef.style.setProperty('pointer-events', 'none');
+            appliediOSRubberBandFix = true;
+          }
+          // Wait ~3 frames
+          scrollTimeout = setTimeout(updateActiveMonth, 50);
+        };
+        calendarBodyRef.addEventListener('scroll', scrollCallback);
+        this.destroyCalendarListener = () => {
+          calendarBodyRef.removeEventListener('scroll', scrollCallback);
         };
       });
     };
@@ -13575,40 +13892,31 @@ class Datetime {
      * if the datetime has been hidden/presented by a modal or popover.
      */
     this.destroyInteractionListeners = () => {
-      const { destroyCalendarIO, destroyKeyboardMO } = this;
-      if (destroyCalendarIO !== undefined) {
-        destroyCalendarIO();
+      const { destroyCalendarListener, destroyKeyboardMO } = this;
+      if (destroyCalendarListener !== undefined) {
+        destroyCalendarListener();
       }
       if (destroyKeyboardMO !== undefined) {
         destroyKeyboardMO();
       }
     };
-    /**
-     * When doing subsequent presentations of an inline
-     * overlay, the IO callback will fire again causing
-     * the calendar to go back one month. We need to listen
-     * for the presentation of the overlay so we can properly
-     * cancel that IO callback.
-     */
-    this.initializeOverlayListener = () => {
-      const overlay = this.el.closest('ion-popover, ion-modal');
-      if (overlay === null) {
-        return;
-      }
-      const overlayListener = () => {
-        this.overlayIsPresenting = true;
-      };
-      overlay.addEventListener('willPresent', overlayListener);
-      this.destroyOverlayListener = () => {
-        overlay.removeEventListener('willPresent', overlayListener);
-      };
-    };
     this.processValue = (value) => {
       this.highlightActiveParts = !!value;
-      const valueToProcess = parseDate(value || getToday());
-      const { minParts, maxParts } = this;
+      let valueToProcess = parseDate(value || getToday());
+      const { minParts, maxParts, multiple } = this;
+      if (!multiple && Array.isArray(value)) {
+        this.value = value[0];
+        valueToProcess = valueToProcess[0];
+      }
       warnIfValueOutOfBounds(valueToProcess, minParts, maxParts);
-      const { month, day, year, hour, minute, tzOffset } = clampDate(valueToProcess, minParts, maxParts);
+      /**
+       * If there are multiple values, pick an arbitrary one to clamp to. This way,
+       * if the values are across months, we always show at least one of them. Note
+       * that the values don't necessarily have to be in order.
+       */
+      const singleValue = Array.isArray(valueToProcess) ? valueToProcess[0] : valueToProcess;
+      const { month, day, year, hour, minute, tzOffset } = clampDate(singleValue, minParts, maxParts);
+      const ampm = parseAmPm(hour);
       this.setWorkingParts({
         month,
         day,
@@ -13616,17 +13924,22 @@ class Datetime {
         hour,
         minute,
         tzOffset,
-        ampm: hour >= 12 ? 'pm' : 'am',
+        ampm,
       });
-      this.activeParts = {
-        month,
-        day,
-        year,
-        hour,
-        minute,
-        tzOffset,
-        ampm: hour >= 12 ? 'pm' : 'am',
-      };
+      if (Array.isArray(valueToProcess)) {
+        this.activeParts = [...valueToProcess];
+      }
+      else {
+        this.activeParts = {
+          month,
+          day,
+          year,
+          hour,
+          minute,
+          tzOffset,
+          ampm,
+        };
+      }
     };
     this.onFocus = () => {
       this.ionFocus.emit();
@@ -13703,7 +14016,12 @@ class Datetime {
    * Update the datetime value when the value changes
    */
   valueChanged() {
+    const { value, minParts, maxParts, workingParts, multiple } = this;
     if (this.hasValue()) {
+      if (!multiple && Array.isArray(value)) {
+        this.value = value[0];
+        return; // setting this.value will trigger re-run of this function
+      }
       /**
        * Clones the value of the `activeParts` to the private clone, to update
        * the date display on the current render cycle without causing another render.
@@ -13711,31 +14029,37 @@ class Datetime {
        * This allows us to update the current value's date/time display without
        * refocusing or shifting the user's display (leaves the user in place).
        */
-      const valueDateParts = parseDate(this.value);
+      const valueDateParts = parseDate(value);
       if (valueDateParts) {
-        warnIfValueOutOfBounds(valueDateParts, this.minParts, this.maxParts);
-        const { month, day, year, hour, minute } = valueDateParts;
-        const ampm = hour >= 12 ? 'pm' : 'am';
-        this.activePartsClone = Object.assign(Object.assign({}, this.activeParts), { month,
-          day,
-          year,
-          hour,
-          minute,
-          ampm });
-        /**
-         * The working parts am/pm value must be updated when the value changes, to
-         * ensure the time picker hour column values are generated correctly.
-         */
-        this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { ampm }));
+        warnIfValueOutOfBounds(valueDateParts, minParts, maxParts);
+        if (Array.isArray(valueDateParts)) {
+          this.activePartsClone = [...valueDateParts];
+        }
+        else {
+          const { month, day, year, hour, minute } = valueDateParts;
+          const ampm = hour ? (hour >= 12 ? 'pm' : 'am') : undefined;
+          this.activePartsClone = Object.assign(Object.assign({}, this.activeParts), { month,
+            day,
+            year,
+            hour,
+            minute,
+            ampm });
+          /**
+           * The working parts am/pm value must be updated when the value changes, to
+           * ensure the time picker hour column values are generated correctly.
+           *
+           * Note that we don't need to do this if valueDateParts is an array, since
+           * multiple="true" does not apply to time pickers.
+           */
+          this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { ampm }));
+        }
       }
       else {
-        printIonWarning(`Unable to parse date string: ${this.value}. Please provide a valid ISO 8601 datetime string.`);
+        printIonWarning(`Unable to parse date string: ${value}. Please provide a valid ISO 8601 datetime string.`);
       }
     }
     this.emitStyle();
-    this.ionChange.emit({
-      value: this.value,
-    });
+    this.ionChange.emit({ value });
   }
   /**
    * Confirms the selected datetime value, updates the
@@ -13743,6 +14067,7 @@ class Datetime {
    * or modal that the datetime was presented in.
    */
   async confirm(closeOverlay = false) {
+    const { highlightActiveParts, isCalendarPicker, activeParts } = this;
     /**
      * We only update the value if the presentation is not a calendar picker,
      * or if `highlightActiveParts` is true; indicating that the user
@@ -13750,19 +14075,33 @@ class Datetime {
      *
      * Otherwise "today" would accidentally be set as the value.
      */
-    if (this.highlightActiveParts || !this.isCalendarPicker) {
-      /**
-       * Prevent convertDataToISO from doing any
-       * kind of transformation based on timezone
-       * This cancels out any change it attempts to make
-       *
-       * Important: Take the timezone offset based on
-       * the date that is currently selected, otherwise
-       * there can be 1 hr difference when dealing w/ DST
-       */
-      const date = new Date(convertDataToISO(this.activeParts));
-      this.activeParts.tzOffset = date.getTimezoneOffset() * -1;
-      this.value = convertDataToISO(this.activeParts);
+    if (highlightActiveParts || !isCalendarPicker) {
+      const activePartsIsArray = Array.isArray(activeParts);
+      if (activePartsIsArray && activeParts.length === 0) {
+        this.value = undefined;
+      }
+      else {
+        /**
+         * Prevent convertDataToISO from doing any
+         * kind of transformation based on timezone
+         * This cancels out any change it attempts to make
+         *
+         * Important: Take the timezone offset based on
+         * the date that is currently selected, otherwise
+         * there can be 1 hr difference when dealing w/ DST
+         */
+        if (activePartsIsArray) {
+          const dates = convertDataToISO(activeParts).map((str) => new Date(str));
+          for (let i = 0; i < dates.length; i++) {
+            activeParts[i].tzOffset = dates[i].getTimezoneOffset() * -1;
+          }
+        }
+        else {
+          const date = new Date(convertDataToISO(activeParts));
+          activeParts.tzOffset = date.getTimezoneOffset() * -1;
+        }
+        this.value = convertDataToISO(activeParts);
+      }
     }
     if (closeOverlay) {
       this.closeParentOverlay();
@@ -13802,9 +14141,8 @@ class Datetime {
     }
   }
   initializeListeners() {
-    this.initializeCalendarIOListeners();
+    this.initializeCalendarListener();
     this.initializeKeyboardListeners();
-    this.initializeOverlayListener();
   }
   componentDidLoad() {
     /**
@@ -13887,12 +14225,27 @@ class Datetime {
     }
     this.prevPresentation = presentation;
     this.destroyInteractionListeners();
-    if (this.destroyOverlayListener !== undefined) {
-      this.destroyOverlayListener();
-    }
     this.initializeListeners();
+    /**
+     * The month/year picker from the date interface
+     * should be closed as it is not available in non-date
+     * interfaces.
+     */
+    this.showMonthAndYear = false;
+    raf(() => {
+      this.ionRender.emit();
+    });
   }
   componentWillLoad() {
+    const { el, multiple, presentation, preferWheel } = this;
+    if (multiple) {
+      if (presentation !== 'date') {
+        printIonWarning('Multiple date selection is only supported for presentation="date".', el);
+      }
+      if (preferWheel) {
+        printIonWarning('Multiple date selection is not supported with preferWheel="true".', el);
+      }
+    }
     this.processMinParts();
     this.processMaxParts();
     this.processValue(this.value);
@@ -13910,6 +14263,11 @@ class Datetime {
       'interactive-disabled': this.disabled,
     });
   }
+  /**
+   * Universal render methods
+   * These are pieces of datetime that
+   * are rendered independently of presentation.
+   */
   renderFooter() {
     const { showDefaultButtons, showClearButton } = this;
     const hasSlottedButtons = this.el.querySelector('[slot="buttons"]') !== null;
@@ -13932,55 +14290,270 @@ class Datetime {
         ['has-clear-button']: this.showClearButton,
       } }, hAsync("slot", { name: "buttons" }, hAsync("ion-buttons", null, showDefaultButtons && (hAsync("ion-button", { id: "cancel-button", color: this.color, onClick: () => this.cancel(true) }, this.cancelText)), hAsync("div", null, showClearButton && (hAsync("ion-button", { id: "clear-button", color: this.color, onClick: () => clearButtonClick() }, this.clearText)), showDefaultButtons && (hAsync("ion-button", { id: "confirm-button", color: this.color, onClick: () => this.confirm(true) }, this.doneText)))))))));
   }
-  renderYearView() {
-    const { presentation, workingParts, locale } = this;
-    const calendarYears = getCalendarYears(this.todayParts, this.minParts, this.maxParts, this.parsedYearValues);
-    const showMonth = presentation !== 'year';
-    const showYear = presentation !== 'month';
-    const months = getPickerMonths(locale, workingParts, this.minParts, this.maxParts, this.parsedMonthValues);
-    const years = calendarYears.map((year) => {
-      return {
-        text: `${year}`,
-        value: year,
-      };
-    });
+  /**
+   * Wheel picker render methods
+   */
+  renderWheelPicker(forcePresentation = this.presentation) {
+    /**
+     * If presentation="time-date" we switch the
+     * order of the render array here instead of
+     * manually reordering each date/time picker
+     * column with CSS. This allows for additional
+     * flexibility if we need to render subsets
+     * of the date/time data or do additional ordering
+     * within the child render functions.
+     */
+    const renderArray = forcePresentation === 'time-date'
+      ? [this.renderTimePickerColumns(forcePresentation), this.renderDatePickerColumns(forcePresentation)]
+      : [this.renderDatePickerColumns(forcePresentation), this.renderTimePickerColumns(forcePresentation)];
+    return hAsync("ion-picker-internal", null, renderArray);
+  }
+  renderDatePickerColumns(forcePresentation) {
+    return forcePresentation === 'date-time' || forcePresentation === 'time-date'
+      ? this.renderCombinedDatePickerColumn()
+      : this.renderIndividualDatePickerColumns(forcePresentation);
+  }
+  renderCombinedDatePickerColumn() {
+    const { activeParts, workingParts, locale, minParts, maxParts, todayParts, isDateEnabled } = this;
+    /**
+     * By default, generate a range of 3 months:
+     * Previous month, current month, and next month
+     */
+    const monthsToRender = generateMonths(workingParts);
+    /**
+     * generateMonths returns the day data as well,
+     * but we do not want the day value to act as a max/min
+     * on the data we are going to generate.
+     */
+    for (let i = 0; i <= monthsToRender.length - 1; i++) {
+      monthsToRender[i].day = null;
+    }
+    /**
+     * If developers have provided their own
+     * min/max values, use that instead. Otherwise,
+     * fallback to the default range of 3 months.
+     */
+    const min = minParts || monthsToRender[0];
+    const max = maxParts || monthsToRender[monthsToRender.length - 1];
+    const result = getCombinedDateColumnData(locale, workingParts, todayParts, min, max, this.parsedDayValues, this.parsedMonthValues);
+    let items = result.items;
+    const parts = result.parts;
+    if (isDateEnabled) {
+      items = items.map((itemObject, index) => {
+        const referenceParts = parts[index];
+        let disabled;
+        try {
+          /**
+           * The `isDateEnabled` implementation is try-catch wrapped
+           * to prevent exceptions in the user's function from
+           * interrupting the calendar rendering.
+           */
+          disabled = !isDateEnabled(convertDataToISO(referenceParts));
+        }
+        catch (e) {
+          printIonError('Exception thrown from provided `isDateEnabled` function. Please check your function and try again.', e);
+        }
+        return Object.assign(Object.assign({}, itemObject), { disabled });
+      });
+    }
+    /**
+     * If we have selected a day already, then default the column
+     * to that value. Otherwise, default it to today.
+     */
+    const todayString = workingParts.day
+      ? `${workingParts.year}-${workingParts.month}-${workingParts.day}`
+      : `${todayParts.year}-${todayParts.month}-${todayParts.day}`;
+    return (hAsync("ion-picker-column-internal", { class: "date-column", color: this.color, items: items, value: todayString, onIonChange: (ev) => {
+        // TODO(FW-1823) Remove this when iOS 14 support is dropped.
+        // Due to a Safari 14 issue we need to destroy
+        // the scroll listener before we update state
+        // and trigger a re-render.
+        if (this.destroyCalendarListener) {
+          this.destroyCalendarListener();
+        }
+        const { value } = ev.detail;
+        const findPart = parts.find(({ month, day, year }) => value === `${year}-${month}-${day}`);
+        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), findPart));
+        if (!Array.isArray(activeParts)) {
+          this.setActiveParts(Object.assign(Object.assign({}, activeParts), findPart));
+        }
+        // We can re-attach the scroll listener after
+        // the working parts have been updated.
+        this.initializeCalendarListener();
+        ev.stopPropagation();
+      } }));
+  }
+  renderIndividualDatePickerColumns(forcePresentation) {
+    const { workingParts, isDateEnabled } = this;
+    const shouldRenderMonths = forcePresentation !== 'year' && forcePresentation !== 'time';
+    const months = shouldRenderMonths
+      ? getMonthColumnData(this.locale, workingParts, this.minParts, this.maxParts, this.parsedMonthValues)
+      : [];
+    const shouldRenderDays = forcePresentation === 'date';
+    let days = shouldRenderDays
+      ? getDayColumnData(this.locale, workingParts, this.minParts, this.maxParts, this.parsedDayValues)
+      : [];
+    if (isDateEnabled) {
+      days = days.map((dayObject) => {
+        const { value } = dayObject;
+        const valueNum = typeof value === 'string' ? parseInt(value) : value;
+        const referenceParts = {
+          month: workingParts.month,
+          day: valueNum,
+          year: workingParts.year,
+        };
+        let disabled;
+        try {
+          /**
+           * The `isDateEnabled` implementation is try-catch wrapped
+           * to prevent exceptions in the user's function from
+           * interrupting the calendar rendering.
+           */
+          disabled = !isDateEnabled(convertDataToISO(referenceParts));
+        }
+        catch (e) {
+          printIonError('Exception thrown from provided `isDateEnabled` function. Please check your function and try again.', e);
+        }
+        return Object.assign(Object.assign({}, dayObject), { disabled });
+      });
+    }
+    const shouldRenderYears = forcePresentation !== 'month' && forcePresentation !== 'time';
+    const years = shouldRenderYears
+      ? getYearColumnData(this.todayParts, this.minParts, this.maxParts, this.parsedYearValues)
+      : [];
+    return [this.renderMonthPickerColumn(months), this.renderDayPickerColumn(days), this.renderYearPickerColumn(years)];
+  }
+  renderDayPickerColumn(days) {
+    var _a;
+    if (days.length === 0) {
+      return [];
+    }
+    const { activeParts, workingParts } = this;
+    return (hAsync("ion-picker-column-internal", { class: "day-column", color: this.color, items: days, value: (_a = (workingParts.day || this.todayParts.day)) !== null && _a !== void 0 ? _a : undefined, onIonChange: (ev) => {
+        // TODO(FW-1823) Remove this when iOS 14 support is dropped.
+        // Due to a Safari 14 issue we need to destroy
+        // the scroll listener before we update state
+        // and trigger a re-render.
+        if (this.destroyCalendarListener) {
+          this.destroyCalendarListener();
+        }
+        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { day: ev.detail.value }));
+        if (!Array.isArray(activeParts)) {
+          this.setActiveParts(Object.assign(Object.assign({}, activeParts), { day: ev.detail.value }));
+        }
+        // We can re-attach the scroll listener after
+        // the working parts have been updated.
+        this.initializeCalendarListener();
+        ev.stopPropagation();
+      } }));
+  }
+  renderMonthPickerColumn(months) {
+    if (months.length === 0) {
+      return [];
+    }
+    const { activeParts, workingParts } = this;
+    return (hAsync("ion-picker-column-internal", { class: "month-column", color: this.color, items: months, value: workingParts.month, onIonChange: (ev) => {
+        // TODO(FW-1823) Remove this when iOS 14 support is dropped.
+        // Due to a Safari 14 issue we need to destroy
+        // the scroll listener before we update state
+        // and trigger a re-render.
+        if (this.destroyCalendarListener) {
+          this.destroyCalendarListener();
+        }
+        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { month: ev.detail.value }));
+        if (!Array.isArray(activeParts)) {
+          this.setActiveParts(Object.assign(Object.assign({}, activeParts), { month: ev.detail.value }));
+        }
+        // We can re-attach the scroll listener after
+        // the working parts have been updated.
+        this.initializeCalendarListener();
+        ev.stopPropagation();
+      } }));
+  }
+  renderYearPickerColumn(years) {
+    if (years.length === 0) {
+      return [];
+    }
+    const { activeParts, workingParts } = this;
+    return (hAsync("ion-picker-column-internal", { class: "year-column", color: this.color, items: years, value: workingParts.year, onIonChange: (ev) => {
+        // TODO(FW-1823) Remove this when iOS 14 support is dropped.
+        // Due to a Safari 14 issue we need to destroy
+        // the scroll listener before we update state
+        // and trigger a re-render.
+        if (this.destroyCalendarListener) {
+          this.destroyCalendarListener();
+        }
+        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { year: ev.detail.value }));
+        if (!Array.isArray(activeParts)) {
+          this.setActiveParts(Object.assign(Object.assign({}, activeParts), { year: ev.detail.value }));
+        }
+        // We can re-attach the scroll listener after
+        // the working parts have been updated.
+        this.initializeCalendarListener();
+        ev.stopPropagation();
+      } }));
+  }
+  renderTimePickerColumns(forcePresentation) {
+    if (['date', 'month', 'month-year', 'year'].includes(forcePresentation)) {
+      return [];
+    }
+    const { hoursData, minutesData, dayPeriodData } = getTimeColumnsData(this.locale, this.workingParts, this.hourCycle, this.value ? this.minParts : undefined, this.value ? this.maxParts : undefined, this.parsedHourValues, this.parsedMinuteValues);
+    return [
+      this.renderHourPickerColumn(hoursData),
+      this.renderMinutePickerColumn(minutesData),
+      this.renderDayPeriodPickerColumn(dayPeriodData),
+    ];
+  }
+  renderHourPickerColumn(hoursData) {
+    const { workingParts, activePartsClone } = this;
+    if (hoursData.length === 0)
+      return [];
+    return (hAsync("ion-picker-column-internal", { color: this.color, value: activePartsClone.hour, items: hoursData, numericInput: true, onIonChange: (ev) => {
+        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { hour: ev.detail.value }));
+        if (!Array.isArray(activePartsClone)) {
+          this.setActiveParts(Object.assign(Object.assign({}, activePartsClone), { hour: ev.detail.value }));
+        }
+        ev.stopPropagation();
+      } }));
+  }
+  renderMinutePickerColumn(minutesData) {
+    const { workingParts, activePartsClone } = this;
+    if (minutesData.length === 0)
+      return [];
+    return (hAsync("ion-picker-column-internal", { color: this.color, value: activePartsClone.minute, items: minutesData, numericInput: true, onIonChange: (ev) => {
+        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { minute: ev.detail.value }));
+        if (!Array.isArray(activePartsClone)) {
+          this.setActiveParts(Object.assign(Object.assign({}, activePartsClone), { minute: ev.detail.value }));
+        }
+        ev.stopPropagation();
+      } }));
+  }
+  renderDayPeriodPickerColumn(dayPeriodData) {
+    const { workingParts, activePartsClone } = this;
+    if (dayPeriodData.length === 0) {
+      return [];
+    }
+    const isDayPeriodRTL = isLocaleDayPeriodRTL(this.locale);
+    return (hAsync("ion-picker-column-internal", { style: isDayPeriodRTL ? { order: '-1' } : {}, color: this.color, value: activePartsClone.ampm, items: dayPeriodData, onIonChange: (ev) => {
+        const hour = calculateHourFromAMPM(workingParts, ev.detail.value);
+        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { ampm: ev.detail.value, hour }));
+        if (!Array.isArray(activePartsClone)) {
+          this.setActiveParts(Object.assign(Object.assign({}, activePartsClone), { ampm: ev.detail.value, hour }));
+        }
+        ev.stopPropagation();
+      } }));
+  }
+  renderWheelView(forcePresentation) {
+    const { locale } = this;
     const showMonthFirst = isMonthFirstLocale(locale);
     const columnOrder = showMonthFirst ? 'month-first' : 'year-first';
-    return (hAsync("div", { class: "datetime-year" }, hAsync("div", { class: {
-        'datetime-year-body': true,
-        [`order-${columnOrder}`]: true,
-      } }, hAsync("ion-picker-internal", null, showMonth && (hAsync("ion-picker-column-internal", { class: "month-column", color: this.color, items: months, value: workingParts.month, onIonChange: (ev) => {
-        // Due to a Safari 14 issue we need to destroy
-        // the intersection observer before we update state
-        // and trigger a re-render.
-        if (this.destroyCalendarIO) {
-          this.destroyCalendarIO();
-        }
-        this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { month: ev.detail.value }));
-        if (presentation === 'month' || presentation === 'month-year') {
-          this.setActiveParts(Object.assign(Object.assign({}, this.activeParts), { month: ev.detail.value }));
-        }
-        // We can re-attach the intersection observer after
-        // the working parts have been updated.
-        this.initializeCalendarIOListeners();
-        ev.stopPropagation();
-      } })), showYear && (hAsync("ion-picker-column-internal", { class: "year-column", color: this.color, items: years, value: workingParts.year, onIonChange: (ev) => {
-        // Due to a Safari 14 issue we need to destroy
-        // the intersection observer before we update state
-        // and trigger a re-render.
-        if (this.destroyCalendarIO) {
-          this.destroyCalendarIO();
-        }
-        this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { year: ev.detail.value }));
-        if (presentation === 'year' || presentation === 'month-year') {
-          this.setActiveParts(Object.assign(Object.assign({}, this.activeParts), { year: ev.detail.value }));
-        }
-        // We can re-attach the intersection observer after
-        // the working parts have been updated.
-        this.initializeCalendarIOListeners();
-        ev.stopPropagation();
-      } }))))));
+    return (hAsync("div", { class: {
+        [`wheel-order-${columnOrder}`]: true,
+      } }, this.renderWheelPicker(forcePresentation)));
   }
+  /**
+   * Grid Render Methods
+   */
   renderCalendarHeader(mode) {
     const expandedIcon = mode === 'ios' ? chevronDown : caretUpSharp;
     const collapsedIcon = mode === 'ios' ? chevronForward : caretDownSharp;
@@ -14016,7 +14589,7 @@ class Datetime {
         'calendar-month-disabled': !isWorkingMonth && swipeDisabled,
       } }, hAsync("div", { class: "calendar-month-grid" }, getDaysOfMonth(month, year, this.firstDayOfWeek % 7).map((dateObject, index) => {
       const { day, dayOfWeek } = dateObject;
-      const { isDateEnabled } = this;
+      const { isDateEnabled, multiple } = this;
       const referenceParts = { month, day, year };
       const { isActive, isToday, ariaLabel, ariaSelected, disabled } = getCalendarDayState(this.locale, referenceParts, this.activePartsClone, this.todayParts, this.minParts, this.maxParts, this.parsedDayValues);
       let isCalDayDisabled = isCalMonthDisabled || disabled;
@@ -14042,19 +14615,22 @@ class Datetime {
           if (day === null) {
             return;
           }
-          /**
-           * Note that for datetimes with confirm/cancel buttons, the value
-           * isn't updated until you call confirm(). We need to bring the
-           * solid circle back on day click for UX reasons, rather than only
-           * show the circle if `value` is truthy.
-           */
-          this.highlightActiveParts = true;
           this.setWorkingParts(Object.assign(Object.assign({}, this.workingParts), { month,
             day,
             year }));
-          this.setActiveParts(Object.assign(Object.assign({}, this.activeParts), { month,
-            day,
-            year }));
+          // multiple only needs date info, so we can wipe out other fields like time
+          if (multiple) {
+            this.setActiveParts({
+              month,
+              day,
+              year,
+            }, isActive);
+          }
+          else {
+            this.setActiveParts(Object.assign(Object.assign({}, this.activeParts), { month,
+              day,
+              year }));
+          }
         } }, day));
     }))));
   }
@@ -14073,24 +14649,8 @@ class Datetime {
     }
     return hAsync("slot", { name: "time-label" }, "Time");
   }
-  renderTimePicker(hoursItems, minutesItems, ampmItems, use24Hour) {
-    const { color, activePartsClone, workingParts } = this;
-    return (hAsync("ion-picker-internal", null, hAsync("ion-picker-column-internal", { color: color, value: activePartsClone.hour, items: hoursItems, numericInput: true, onIonChange: (ev) => {
-        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { hour: ev.detail.value }));
-        this.setActiveParts(Object.assign(Object.assign({}, activePartsClone), { hour: ev.detail.value }));
-        ev.stopPropagation();
-      } }), hAsync("ion-picker-column-internal", { color: color, value: activePartsClone.minute, items: minutesItems, numericInput: true, onIonChange: (ev) => {
-        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { minute: ev.detail.value }));
-        this.setActiveParts(Object.assign(Object.assign({}, activePartsClone), { minute: ev.detail.value }));
-        ev.stopPropagation();
-      } }), !use24Hour && (hAsync("ion-picker-column-internal", { color: color, value: activePartsClone.ampm, items: ampmItems, onIonChange: (ev) => {
-        const hour = calculateHourFromAMPM(workingParts, ev.detail.value);
-        this.setWorkingParts(Object.assign(Object.assign({}, workingParts), { ampm: ev.detail.value, hour }));
-        this.setActiveParts(Object.assign(Object.assign({}, activePartsClone), { ampm: ev.detail.value, hour }));
-        ev.stopPropagation();
-      } }))));
-  }
-  renderTimeOverlay(hoursItems, minutesItems, ampmItems, use24Hour) {
+  renderTimeOverlay() {
+    const use24Hour = is24Hour(this.locale, this.hourCycle);
     return [
       hAsync("div", { class: "time-header" }, this.renderTimeLabel()),
       hAsync("button", { class: {
@@ -14108,7 +14668,7 @@ class Datetime {
             await popoverRef.onWillDismiss();
             this.isTimePopoverOpen = false;
           }
-        } }, getFormattedTime(this.activePartsClone, use24Hour)),
+        } }, getLocalizedTime(this.locale, this.activePartsClone, use24Hour)),
       hAsync("ion-popover", { alignment: "center", translucent: true, overlayIndex: 1, arrow: false, onWillPresent: (ev) => {
           /**
            * Intersection Observers do not consistently fire between Blink and Webkit
@@ -14123,11 +14683,19 @@ class Datetime {
           cols.forEach((col) => col.scrollActiveItemIntoView());
         }, style: {
           '--offset-y': '-10px',
+          '--min-width': 'fit-content',
         },
         // Allow native browser keyboard events to support up/down/home/end key
         // navigation within the time picker.
-        keyboardEvents: true, ref: (el) => (this.popoverRef = el) }, this.renderTimePicker(hoursItems, minutesItems, ampmItems, use24Hour)),
+        keyboardEvents: true, ref: (el) => (this.popoverRef = el) }, this.renderWheelPicker('time')),
     ];
+  }
+  renderCalendarViewHeader(mode) {
+    const hasSlottedTitle = this.el.querySelector('[slot="title"]') !== null;
+    if (!hasSlottedTitle && !this.showDefaultTitle) {
+      return;
+    }
+    return (hAsync("div", { class: "datetime-header" }, hAsync("div", { class: "datetime-title" }, hAsync("slot", { name: "title" }, "Select Date")), mode === 'md' && !this.multiple && (hAsync("div", { class: "datetime-selected-date" }, getMonthAndDay(this.locale, this.activeParts)))));
   }
   /**
    * Render time picker inside of datetime.
@@ -14137,54 +14705,41 @@ class Datetime {
    * should just be the default segment.
    */
   renderTime() {
-    const { workingParts, presentation } = this;
-    const timeOnlyPresentation = presentation === 'time';
-    const use24Hour = is24Hour(this.locale, this.hourCycle);
-    const { hours, minutes, am, pm } = generateTime(workingParts, use24Hour ? 'h23' : 'h12', this.value ? this.minParts : undefined, this.value ? this.maxParts : undefined, this.parsedHourValues, this.parsedMinuteValues);
-    const hoursItems = hours.map((hour) => {
-      return {
-        text: getFormattedHour(hour, use24Hour),
-        value: getInternalHourValue(hour, use24Hour, workingParts.ampm),
-      };
-    });
-    const minutesItems = minutes.map((minute) => {
-      return {
-        text: addTimePadding(minute),
-        value: minute,
-      };
-    });
-    const ampmItems = [];
-    if (am) {
-      ampmItems.push({
-        text: 'AM',
-        value: 'am',
-      });
-    }
-    if (pm) {
-      ampmItems.push({
-        text: 'PM',
-        value: 'pm',
-      });
-    }
-    return (hAsync("div", { class: "datetime-time" }, timeOnlyPresentation
-      ? this.renderTimePicker(hoursItems, minutesItems, ampmItems, use24Hour)
-      : this.renderTimeOverlay(hoursItems, minutesItems, ampmItems, use24Hour)));
-  }
-  renderCalendarViewHeader(mode) {
-    const hasSlottedTitle = this.el.querySelector('[slot="title"]') !== null;
-    if (!hasSlottedTitle && !this.showDefaultTitle) {
-      return;
-    }
-    return (hAsync("div", { class: "datetime-header" }, hAsync("div", { class: "datetime-title" }, hAsync("slot", { name: "title" }, "Select Date")), mode === 'md' && hAsync("div", { class: "datetime-selected-date" }, getMonthAndDay(this.locale, this.activeParts))));
-  }
-  renderDatetime(mode) {
     const { presentation } = this;
+    const timeOnlyPresentation = presentation === 'time';
+    return (hAsync("div", { class: "datetime-time" }, timeOnlyPresentation ? this.renderWheelPicker() : this.renderTimeOverlay()));
+  }
+  /**
+   * Renders the month/year picker that is
+   * displayed on the calendar grid.
+   * The .datetime-year class has additional
+   * styles that let us show/hide the
+   * picker when the user clicks on the
+   * toggle in the calendar header.
+   */
+  renderCalendarViewMonthYearPicker() {
+    return hAsync("div", { class: "datetime-year" }, this.renderWheelView('month-year'));
+  }
+  /**
+   * Render entry point
+   * All presentation types are rendered from here.
+   */
+  renderDatetime(mode) {
+    const { presentation, preferWheel } = this;
+    /**
+     * Certain presentation types have separate grid and wheel displays.
+     * If preferWheel is true then we should show a wheel picker instead.
+     */
+    const hasWheelVariant = presentation === 'date' || presentation === 'date-time' || presentation === 'time-date';
+    if (preferWheel && hasWheelVariant) {
+      return [this.renderWheelView(), this.renderFooter()];
+    }
     switch (presentation) {
       case 'date-time':
         return [
           this.renderCalendarViewHeader(mode),
           this.renderCalendar(mode),
-          this.renderYearView(),
+          this.renderCalendarViewMonthYearPicker(),
           this.renderTime(),
           this.renderFooter(),
         ];
@@ -14193,7 +14748,7 @@ class Datetime {
           this.renderCalendarViewHeader(mode),
           this.renderTime(),
           this.renderCalendar(mode),
-          this.renderYearView(),
+          this.renderCalendarViewMonthYearPicker(),
           this.renderFooter(),
         ];
       case 'time':
@@ -14201,23 +14756,26 @@ class Datetime {
       case 'month':
       case 'month-year':
       case 'year':
-        return [this.renderYearView(), this.renderFooter()];
+        return [this.renderWheelView(), this.renderFooter()];
       default:
         return [
           this.renderCalendarViewHeader(mode),
           this.renderCalendar(mode),
-          this.renderYearView(),
+          this.renderCalendarViewMonthYearPicker(),
           this.renderFooter(),
         ];
     }
   }
   render() {
-    const { name, value, disabled, el, color, isPresented, readonly, showMonthAndYear, presentation, size } = this;
+    const { name, value, disabled, el, color, isPresented, readonly, showMonthAndYear, preferWheel, presentation, size, } = this;
     const mode = getIonMode$1(this);
     const isMonthAndYearPresentation = presentation === 'year' || presentation === 'month' || presentation === 'month-year';
     const shouldShowMonthAndYear = showMonthAndYear || isMonthAndYearPresentation;
     const monthYearPickerOpen = showMonthAndYear && !isMonthAndYearPresentation;
-    renderHiddenInput(true, el, name, value, disabled);
+    const hasDatePresentation = presentation === 'date' || presentation === 'date-time' || presentation === 'time-date';
+    const hasWheelVariant = hasDatePresentation && preferWheel;
+    const hasGrid = hasDatePresentation && !preferWheel;
+    renderHiddenInput(true, el, name, formatValue(value), disabled);
     return (hAsync(Host, { "aria-disabled": disabled ? 'true' : null, onFocus: this.onFocus, onBlur: this.onBlur, class: Object.assign({}, createColorClasses$1(color, {
         [mode]: true,
         ['datetime-presented']: isPresented,
@@ -14227,6 +14785,8 @@ class Datetime {
         'month-year-picker-open': monthYearPickerOpen,
         [`datetime-presentation-${presentation}`]: true,
         [`datetime-size-${size}`]: true,
+        [`datetime-prefer-wheel`]: hasWheelVariant,
+        [`datetime-grid`]: hasGrid,
       })) }, this.renderDatetime(mode)));
   }
   get el() { return getElement(this); }
@@ -14268,6 +14828,7 @@ class Datetime {
       "minuteValues": [8, "minute-values"],
       "locale": [1],
       "firstDayOfWeek": [2, "first-day-of-week"],
+      "multiple": [4],
       "value": [1025],
       "showDefaultTitle": [4, "show-default-title"],
       "showDefaultButtons": [4, "show-default-buttons"],
@@ -14275,6 +14836,7 @@ class Datetime {
       "showDefaultTimeLabel": [4, "show-default-time-label"],
       "hourCycle": [1, "hour-cycle"],
       "size": [1],
+      "preferWheel": [4, "prefer-wheel"],
       "showMonthAndYear": [32],
       "activeParts": [32],
       "workingParts": [32],
@@ -14290,6 +14852,331 @@ class Datetime {
   }; }
 }
 let datetimeIds = 0;
+
+const iosDatetimeButtonCss = "/*!@:host*/.sc-ion-datetime-button-ios-h{display:flex;align-items:center;justify-content:center}/*!@:host button*/.sc-ion-datetime-button-ios-h button.sc-ion-datetime-button-ios{border-radius:8px;padding-left:12px;padding-right:12px;padding-top:6px;padding-bottom:6px;margin-left:2px;margin-right:2px;margin-top:0px;margin-bottom:0px;position:relative;transition:150ms color ease-in-out;border:none;background:var(--ion-color-step-300, #edeef0);color:var(--ion-text-color, #000);font-family:inherit;font-size:inherit;cursor:pointer;appearance:none;overflow:hidden}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host button*/.sc-ion-datetime-button-ios-h button.sc-ion-datetime-button-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host button*/.sc-ion-datetime-button-ios-h button.sc-ion-datetime-button-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:2px;margin-inline-start:2px;-webkit-margin-end:2px;margin-inline-end:2px}}/*!@:host(.time-active) #time-button,\n:host(.date-active) #date-button*/.time-active.sc-ion-datetime-button-ios-h #time-button.sc-ion-datetime-button-ios,.date-active.sc-ion-datetime-button-ios-h #date-button.sc-ion-datetime-button-ios{color:var(--ion-color-base)}/*!@:host(.datetime-button-disabled)*/.datetime-button-disabled.sc-ion-datetime-button-ios-h{pointer-events:none}/*!@:host(.datetime-button-disabled) button*/.datetime-button-disabled.sc-ion-datetime-button-ios-h button.sc-ion-datetime-button-ios{opacity:0.4}";
+
+const mdDatetimeButtonCss = "/*!@:host*/.sc-ion-datetime-button-md-h{display:flex;align-items:center;justify-content:center}/*!@:host button*/.sc-ion-datetime-button-md-h button.sc-ion-datetime-button-md{border-radius:8px;padding-left:12px;padding-right:12px;padding-top:6px;padding-bottom:6px;margin-left:2px;margin-right:2px;margin-top:0px;margin-bottom:0px;position:relative;transition:150ms color ease-in-out;border:none;background:var(--ion-color-step-300, #edeef0);color:var(--ion-text-color, #000);font-family:inherit;font-size:inherit;cursor:pointer;appearance:none;overflow:hidden}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host button*/.sc-ion-datetime-button-md-h button.sc-ion-datetime-button-md{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host button*/.sc-ion-datetime-button-md-h button.sc-ion-datetime-button-md{margin-left:unset;margin-right:unset;-webkit-margin-start:2px;margin-inline-start:2px;-webkit-margin-end:2px;margin-inline-end:2px}}/*!@:host(.time-active) #time-button,\n:host(.date-active) #date-button*/.time-active.sc-ion-datetime-button-md-h #time-button.sc-ion-datetime-button-md,.date-active.sc-ion-datetime-button-md-h #date-button.sc-ion-datetime-button-md{color:var(--ion-color-base)}/*!@:host(.datetime-button-disabled)*/.datetime-button-disabled.sc-ion-datetime-button-md-h{pointer-events:none}/*!@:host(.datetime-button-disabled) button*/.datetime-button-disabled.sc-ion-datetime-button-md-h button.sc-ion-datetime-button-md{opacity:0.4}";
+
+/**
+ * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
+ *
+ * @slot date-target - Content displayed inside of the date button.
+ * @slot time-target - Content displayed inside of the time button.
+ *
+ * @part native - The native HTML button that wraps the slotted text.
+ */
+class DatetimeButton {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    this.datetimeEl = null;
+    this.overlayEl = null;
+    this.datetimePresentation = 'date-time';
+    this.datetimeActive = false;
+    /**
+     * The color to use from your application's color palette.
+     * Default options are: `"primary"`, `"secondary"`, `"tertiary"`, `"success"`, `"warning"`, `"danger"`, `"light"`, `"medium"`, and `"dark"`.
+     * For more information on colors, see [theming](/docs/theming/basics).
+     */
+    this.color = 'primary';
+    /**
+     * If `true`, the user cannot interact with the button.
+     */
+    this.disabled = false;
+    /**
+     * Check the value property on the linked
+     * ion-datetime and then format it according
+     * to the locale specified on ion-datetime.
+     */
+    this.setDateTimeText = () => {
+      const { datetimeEl, datetimePresentation } = this;
+      if (!datetimeEl) {
+        return;
+      }
+      const { value, locale, hourCycle, preferWheel, multiple } = datetimeEl;
+      if (multiple) {
+        printIonWarning(`Multi-date selection cannot be used with ion-datetime-button.
+
+Please upvote https://github.com/ionic-team/ionic-framework/issues/25668 if you are interested in seeing this functionality added.
+      `, this.el);
+        return;
+      }
+      /**
+       * Both ion-datetime and ion-datetime-button default
+       * to today's date and time if no value is set.
+       */
+      const parsedDatetime = parseDate(value || getToday());
+      const use24Hour = is24Hour(locale, hourCycle);
+      // TODO(FW-1865) - Remove once FW-1831 is fixed.
+      parsedDatetime.tzOffset = undefined;
+      this.dateText = this.timeText = undefined;
+      switch (datetimePresentation) {
+        case 'date-time':
+        case 'time-date':
+          const dateText = getMonthDayAndYear(locale, parsedDatetime);
+          const timeText = getLocalizedTime(locale, parsedDatetime, use24Hour);
+          if (preferWheel) {
+            this.dateText = `${dateText} ${timeText}`;
+          }
+          else {
+            this.dateText = dateText;
+            this.timeText = timeText;
+          }
+          break;
+        case 'date':
+          this.dateText = getMonthDayAndYear(locale, parsedDatetime);
+          break;
+        case 'time':
+          this.timeText = getLocalizedTime(locale, parsedDatetime, use24Hour);
+          break;
+        case 'month-year':
+          this.dateText = getMonthAndYear(locale, parsedDatetime);
+          break;
+        case 'month':
+          this.dateText = getLocalizedDateTime(locale, parsedDatetime, { month: 'long' });
+          break;
+        case 'year':
+          this.dateText = getLocalizedDateTime(locale, parsedDatetime, { year: 'numeric' });
+          break;
+      }
+    };
+    /**
+     * Waits for the ion-datetime to re-render.
+     * This is needed in order to correctly position
+     * a popover relative to the trigger element.
+     */
+    this.waitForDatetimeChanges = async () => {
+      const { datetimeEl } = this;
+      if (!datetimeEl) {
+        return Promise.resolve();
+      }
+      return new Promise((resolve) => {
+        addEventListener$1(datetimeEl, 'ionRender', resolve, { once: true });
+      });
+    };
+    this.handleDateClick = async (ev) => {
+      const { datetimeEl, datetimePresentation } = this;
+      if (!datetimeEl) {
+        return;
+      }
+      let needsPresentationChange = false;
+      /**
+       * When clicking the date button,
+       * we need to make sure that only a date
+       * picker is displayed. For presentation styles
+       * that display content other than a date picker,
+       * we need to update the presentation style.
+       */
+      switch (datetimePresentation) {
+        case 'date-time':
+        case 'time-date':
+          const needsChange = datetimeEl.presentation !== 'date';
+          /**
+           * The date+time wheel picker
+           * shows date and time together,
+           * so do not adjust the presentation
+           * in that case.
+           */
+          if (!datetimeEl.preferWheel && needsChange) {
+            datetimeEl.presentation = 'date';
+            needsPresentationChange = true;
+          }
+          break;
+      }
+      /**
+       * Track which button was clicked
+       * so that it can have the correct
+       * activated styles applied when
+       * the modal/popover containing
+       * the datetime is opened.
+       */
+      this.selectedButton = 'date';
+      this.presentOverlay(ev, needsPresentationChange, this.dateTargetEl);
+    };
+    this.handleTimeClick = (ev) => {
+      const { datetimeEl, datetimePresentation } = this;
+      if (!datetimeEl) {
+        return;
+      }
+      let needsPresentationChange = false;
+      /**
+       * When clicking the time button,
+       * we need to make sure that only a time
+       * picker is displayed. For presentation styles
+       * that display content other than a time picker,
+       * we need to update the presentation style.
+       */
+      switch (datetimePresentation) {
+        case 'date-time':
+        case 'time-date':
+          const needsChange = datetimeEl.presentation !== 'time';
+          if (needsChange) {
+            datetimeEl.presentation = 'time';
+            needsPresentationChange = true;
+          }
+          break;
+      }
+      /**
+       * Track which button was clicked
+       * so that it can have the correct
+       * activated styles applied when
+       * the modal/popover containing
+       * the datetime is opened.
+       */
+      this.selectedButton = 'time';
+      this.presentOverlay(ev, needsPresentationChange, this.timeTargetEl);
+    };
+    /**
+     * If the datetime is presented in an
+     * overlay, the datetime and overlay
+     * should be appropriately sized.
+     * These classes provide default sizing values
+     * that developers can customize.
+     * The goal is to provide an overlay that is
+     * reasonably sized with a datetime that
+     * fills the entire container.
+     */
+    this.presentOverlay = async (ev, needsPresentationChange, triggerEl) => {
+      const { overlayEl } = this;
+      if (!overlayEl) {
+        return;
+      }
+      if (overlayEl.tagName === 'ION-POPOVER') {
+        /**
+         * When the presentation on datetime changes,
+         * we need to wait for the component to re-render
+         * otherwise the computed width/height of the
+         * popover content will be wrong, causing
+         * the popover to not align with the trigger element.
+         */
+        if (needsPresentationChange) {
+          await this.waitForDatetimeChanges();
+        }
+        /**
+         * We pass the trigger button element
+         * so that the popover aligns with the individual
+         * button that was clicked, not the component container.
+         */
+        overlayEl.present(Object.assign(Object.assign({}, ev), { detail: {
+            ionShadowTarget: triggerEl,
+          } }));
+      }
+      else {
+        overlayEl.present();
+      }
+    };
+  }
+  async componentWillLoad() {
+    const { datetime } = this;
+    if (!datetime) {
+      printIonError('An ID associated with an ion-datetime instance is required for ion-datetime-button to function properly.', this.el);
+      return;
+    }
+    const datetimeEl = (this.datetimeEl = document.getElementById(datetime));
+    if (!datetimeEl) {
+      printIonError(`No ion-datetime instance found for ID '${datetime}'.`, this.el);
+      return;
+    }
+    /**
+     * Since the datetime can be used in any context (overlays, accordion, etc)
+     * we track when it is visible to determine when it is active.
+     * This informs which button is highlighted as well as the
+     * aria-expanded state.
+     */
+    const io = new IntersectionObserver((entries) => {
+      const ev = entries[0];
+      this.datetimeActive = ev.isIntersecting;
+    }, {
+      threshold: 0.01,
+    });
+    io.observe(datetimeEl);
+    /**
+     * Get a reference to any modal/popover
+     * the datetime is being used in so we can
+     * correctly size it when it is presented.
+     */
+    const overlayEl = (this.overlayEl = datetimeEl.closest('ion-modal, ion-popover'));
+    /**
+     * The .ion-datetime-button-overlay class contains
+     * styles that allow any modal/popover to be
+     * sized according to the dimensions of the datetime.
+     * If developers want a smaller/larger overlay all they need
+     * to do is change the width/height of the datetime.
+     * Additionally, this lets us avoid having to set
+     * explicit widths on each variant of datetime.
+     */
+    if (overlayEl) {
+      overlayEl.classList.add('ion-datetime-button-overlay');
+    }
+    componentOnReady(datetimeEl, () => {
+      const datetimePresentation = (this.datetimePresentation = datetimeEl.presentation || 'date-time');
+      /**
+       * Set the initial display
+       * in the rendered buttons.
+       *
+       * From there, we need to listen
+       * for ionChange to be emitted
+       * from datetime so we know when
+       * to re-render the displayed
+       * text in the buttons.
+       */
+      this.setDateTimeText();
+      addEventListener$1(datetimeEl, 'ionChange', this.setDateTimeText);
+      /**
+       * Configure the initial selected button
+       * in the event that the datetime is displayed
+       * without clicking one of the datetime buttons.
+       * For example, a datetime could be expanded
+       * in an accordion. In this case users only
+       * need to click the accordion header to show
+       * the datetime.
+       */
+      switch (datetimePresentation) {
+        case 'date-time':
+        case 'date':
+        case 'month-year':
+        case 'month':
+        case 'year':
+          this.selectedButton = 'date';
+          break;
+        case 'time-date':
+        case 'time':
+          this.selectedButton = 'time';
+          break;
+      }
+    });
+  }
+  render() {
+    const { color, dateText, timeText, selectedButton, datetimeActive, disabled } = this;
+    const mode = getIonMode$1(this);
+    return (hAsync(Host, { class: createColorClasses$1(color, {
+        [mode]: true,
+        [`${selectedButton}-active`]: datetimeActive,
+        ['datetime-button-disabled']: disabled,
+      }) }, dateText && (hAsync("button", { class: "ion-activatable", id: "date-button", "aria-expanded": datetimeActive ? 'true' : 'false', onClick: this.handleDateClick, disabled: disabled, part: "native", ref: (el) => (this.dateTargetEl = el) }, hAsync("slot", { name: "date-target" }, dateText), mode === 'md' && hAsync("ion-ripple-effect", null))), timeText && (hAsync("button", { class: "ion-activatable", id: "time-button", "aria-expanded": datetimeActive ? 'true' : 'false', onClick: this.handleTimeClick, disabled: disabled, part: "native", ref: (el) => (this.timeTargetEl = el) }, hAsync("slot", { name: "time-target" }, timeText), mode === 'md' && hAsync("ion-ripple-effect", null)))));
+  }
+  get el() { return getElement(this); }
+  static get style() { return {
+    ios: iosDatetimeButtonCss,
+    md: mdDatetimeButtonCss
+  }; }
+  static get cmpMeta() { return {
+    "$flags$": 41,
+    "$tagName$": "ion-datetime-button",
+    "$members$": {
+      "color": [513],
+      "disabled": [516],
+      "datetime": [1],
+      "datetimePresentation": [32],
+      "dateText": [32],
+      "timeText": [32],
+      "datetimeActive": [32],
+      "selectedButton": [32]
+    },
+    "$listeners$": undefined,
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": [["color", "color"], ["disabled", "disabled"]]
+  }; }
+}
 
 const fabCss = "/*!@:host*/.sc-ion-fab-h{position:absolute;z-index:999}/*!@:host(.fab-horizontal-center)*/.fab-horizontal-center.sc-ion-fab-h{left:50%;margin-left:-28px}/*!@:host-context([dir=rtl]):host(.fab-horizontal-center), :host-context([dir=rtl]).fab-horizontal-center*/[dir=rtl].sc-ion-fab-h -no-combinator.fab-horizontal-center.sc-ion-fab-h,[dir=rtl] .sc-ion-fab-h -no-combinator.fab-horizontal-center.sc-ion-fab-h,[dir=rtl].fab-horizontal-center.sc-ion-fab-h,[dir=rtl] .fab-horizontal-center.sc-ion-fab-h{left:unset;right:unset;right:50%}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.fab-horizontal-center)*/.fab-horizontal-center.sc-ion-fab-h{margin-left:unset;-webkit-margin-start:-28px;margin-inline-start:-28px}}/*!@:host(.fab-horizontal-start)*/.fab-horizontal-start.sc-ion-fab-h{left:calc(10px + var(--ion-safe-area-left, 0px))}/*!@:host-context([dir=rtl]):host(.fab-horizontal-start), :host-context([dir=rtl]).fab-horizontal-start*/[dir=rtl].sc-ion-fab-h -no-combinator.fab-horizontal-start.sc-ion-fab-h,[dir=rtl] .sc-ion-fab-h -no-combinator.fab-horizontal-start.sc-ion-fab-h,[dir=rtl].fab-horizontal-start.sc-ion-fab-h,[dir=rtl] .fab-horizontal-start.sc-ion-fab-h{left:unset;right:unset;right:calc(10px + var(--ion-safe-area-left, 0px))}/*!@:host(.fab-horizontal-end)*/.fab-horizontal-end.sc-ion-fab-h{right:calc(10px + var(--ion-safe-area-right, 0px))}/*!@:host-context([dir=rtl]):host(.fab-horizontal-end), :host-context([dir=rtl]).fab-horizontal-end*/[dir=rtl].sc-ion-fab-h -no-combinator.fab-horizontal-end.sc-ion-fab-h,[dir=rtl] .sc-ion-fab-h -no-combinator.fab-horizontal-end.sc-ion-fab-h,[dir=rtl].fab-horizontal-end.sc-ion-fab-h,[dir=rtl] .fab-horizontal-end.sc-ion-fab-h{left:unset;right:unset;left:calc(10px + var(--ion-safe-area-right, 0px))}/*!@:host(.fab-vertical-top)*/.fab-vertical-top.sc-ion-fab-h{top:10px}/*!@:host(.fab-vertical-top.fab-edge)*/.fab-vertical-top.fab-edge.sc-ion-fab-h{top:-28px}/*!@:host(.fab-vertical-bottom)*/.fab-vertical-bottom.sc-ion-fab-h{bottom:10px}/*!@:host(.fab-vertical-bottom.fab-edge)*/.fab-vertical-bottom.fab-edge.sc-ion-fab-h{bottom:-28px}/*!@:host(.fab-vertical-center)*/.fab-vertical-center.sc-ion-fab-h{margin-top:-28px;top:50%}";
 
@@ -14390,6 +15277,7 @@ class FabButton {
     this.ionFocus = createEvent(this, "ionFocus", 7);
     this.ionBlur = createEvent(this, "ionBlur", 7);
     this.fab = null;
+    this.inheritedAttributes = {};
     /**
      * If `true`, the fab button will be show a close icon.
      */
@@ -14440,8 +15328,11 @@ class FabButton {
   connectedCallback() {
     this.fab = this.el.closest('ion-fab');
   }
+  componentWillLoad() {
+    this.inheritedAttributes = inheritAriaAttributes(this.el);
+  }
   render() {
-    const { el, disabled, color, href, activated, show, translucent, size } = this;
+    const { el, disabled, color, href, activated, show, translucent, size, inheritedAttributes } = this;
     const inList = hostContext('ion-fab-list', el);
     const mode = getIonMode$1(this);
     const TagType = href === undefined ? 'button' : 'a';
@@ -14464,7 +15355,7 @@ class FabButton {
         'ion-activatable': true,
         'ion-focusable': true,
         [`fab-button-${size}`]: size !== undefined,
-      }) }, hAsync(TagType, Object.assign({}, attrs, { class: "button-native", part: "native", disabled: disabled, onFocus: this.onFocus, onBlur: this.onBlur, onClick: (ev) => openURL(href, ev, this.routerDirection, this.routerAnimation) }), hAsync("ion-icon", { icon: this.closeIcon, part: "close-icon", class: "close-icon", lazy: false }), hAsync("span", { class: "button-inner" }, hAsync("slot", null)), mode === 'md' && hAsync("ion-ripple-effect", null))));
+      }) }, hAsync(TagType, Object.assign({}, attrs, { class: "button-native", part: "native", disabled: disabled, onFocus: this.onFocus, onBlur: this.onBlur, onClick: (ev) => openURL(href, ev, this.routerDirection, this.routerAnimation) }, inheritedAttributes), hAsync("ion-icon", { icon: this.closeIcon, part: "close-icon", class: "close-icon", lazy: false }), hAsync("span", { class: "button-inner" }, hAsync("slot", null)), mode === 'md' && hAsync("ion-ripple-effect", null))));
   }
   get el() { return getElement(this); }
   static get style() { return {
@@ -15112,7 +16003,7 @@ class Form {
 }
 
 /*!
- * Chart.js v3.8.0
+ * Chart.js v3.8.2
  * https://www.chartjs.org
  * (c) 2022 Chart.js Contributors
  * Released under the MIT License
@@ -16274,7 +17165,10 @@ function clearCanvas(canvas, ctx) {
   ctx.restore();
 }
 function drawPoint(ctx, options, x, y) {
-  let type, xOffset, yOffset, size, cornerRadius;
+  drawPointLegend(ctx, options, x, y, null);
+}
+function drawPointLegend(ctx, options, x, y, w) {
+  let type, xOffset, yOffset, size, cornerRadius, width;
   const style = options.pointStyle;
   const rotation = options.rotation;
   const radius = options.radius;
@@ -16296,7 +17190,11 @@ function drawPoint(ctx, options, x, y) {
   ctx.beginPath();
   switch (style) {
   default:
-    ctx.arc(x, y, radius, 0, TAU);
+    if (w) {
+      ctx.ellipse(x, y, w / 2, radius, 0, 0, TAU);
+    } else {
+      ctx.arc(x, y, radius, 0, TAU);
+    }
     ctx.closePath();
     break;
   case 'triangle':
@@ -16321,7 +17219,8 @@ function drawPoint(ctx, options, x, y) {
   case 'rect':
     if (!rotation) {
       size = Math.SQRT1_2 * radius;
-      ctx.rect(x - size, y - size, 2 * size, 2 * size);
+      width = w ? w / 2 : size;
+      ctx.rect(x - width, y - size, 2 * width, 2 * size);
       break;
     }
     rad += QUARTER_PI;
@@ -16360,7 +17259,7 @@ function drawPoint(ctx, options, x, y) {
     ctx.lineTo(x - yOffset, y + xOffset);
     break;
   case 'line':
-    xOffset = Math.cos(rad) * radius;
+    xOffset = w ? w / 2 : Math.cos(rad) * radius;
     yOffset = Math.sin(rad) * radius;
     ctx.moveTo(x - xOffset, y - yOffset);
     ctx.lineTo(x + xOffset, y + yOffset);
@@ -17518,7 +18417,7 @@ function styleChanged(style, prevStyle) {
 }
 
 /*!
- * Chart.js v3.8.0
+ * Chart.js v3.8.2
  * https://www.chartjs.org
  * (c) 2022 Chart.js Contributors
  * Released under the MIT License
@@ -18533,6 +19432,14 @@ class DatasetController {
   includeOptions(mode, sharedOptions) {
     return !sharedOptions || isDirectUpdateMode(mode) || this.chart._animationsDisabled;
   }
+  _getSharedOptions(start, mode) {
+    const firstOpts = this.resolveDataElementOptions(start, mode);
+    const previouslySharedOptions = this._sharedOptions;
+    const sharedOptions = this.getSharedOptions(firstOpts);
+    const includeOptions = this.includeOptions(mode, sharedOptions) || (sharedOptions !== previouslySharedOptions);
+    this.updateSharedOptions(sharedOptions, mode, firstOpts);
+    return {sharedOptions, includeOptions};
+  }
   updateElement(element, index, properties, mode) {
     if (isDirectUpdateMode(mode)) {
       Object.assign(element, properties);
@@ -18908,10 +19815,7 @@ class BarController extends DatasetController {
     const base = vScale.getBasePixel();
     const horizontal = vScale.isHorizontal();
     const ruler = this._getRuler();
-    const firstOpts = this.resolveDataElementOptions(start, mode);
-    const sharedOptions = this.getSharedOptions(firstOpts);
-    const includeOptions = this.includeOptions(mode, sharedOptions);
-    this.updateSharedOptions(sharedOptions, mode, firstOpts);
+    const {sharedOptions, includeOptions} = this._getSharedOptions(start, mode);
     for (let i = start; i < start + count; i++) {
       const parsed = this.getParsed(i);
       const vpixels = reset || isNullOrUndef(parsed[vScale.axis]) ? {base, head: base} : this._calculateBarValuePixels(i);
@@ -18936,31 +19840,27 @@ class BarController extends DatasetController {
     }
   }
   _getStacks(last, dataIndex) {
-    const meta = this._cachedMeta;
-    const iScale = meta.iScale;
-    const metasets = iScale.getMatchingVisibleMetas(this._type);
+    const {iScale} = this._cachedMeta;
+    const metasets = iScale.getMatchingVisibleMetas(this._type)
+      .filter(meta => meta.controller.options.grouped);
     const stacked = iScale.options.stacked;
-    const ilen = metasets.length;
     const stacks = [];
-    let i, item;
-    for (i = 0; i < ilen; ++i) {
-      item = metasets[i];
-      if (!item.controller.options.grouped) {
+    const skipNull = (meta) => {
+      const parsed = meta.controller.getParsed(dataIndex);
+      const val = parsed && parsed[meta.vScale.axis];
+      if (isNullOrUndef(val) || isNaN(val)) {
+        return true;
+      }
+    };
+    for (const meta of metasets) {
+      if (dataIndex !== undefined && skipNull(meta)) {
         continue;
       }
-      if (typeof dataIndex !== 'undefined') {
-        const val = item.controller.getParsed(dataIndex)[
-          item.controller._cachedMeta.vScale.axis
-        ];
-        if (isNullOrUndef(val) || isNaN(val)) {
-          continue;
-        }
+      if (stacked === false || stacks.indexOf(meta.stack) === -1 ||
+				(stacked === undefined && meta.stack === undefined)) {
+        stacks.push(meta.stack);
       }
-      if (stacked === false || stacks.indexOf(item.stack) === -1 ||
-				(stacked === undefined && item.stack === undefined)) {
-        stacks.push(item.stack);
-      }
-      if (item.index === last) {
+      if (meta.index === last) {
         break;
       }
     }
@@ -19244,9 +20144,7 @@ class DoughnutController extends DatasetController {
     const animateScale = reset && animationOpts.animateScale;
     const innerRadius = animateScale ? 0 : this.innerRadius;
     const outerRadius = animateScale ? 0 : this.outerRadius;
-    const firstOpts = this.resolveDataElementOptions(start, mode);
-    const sharedOptions = this.getSharedOptions(firstOpts);
-    const includeOptions = this.includeOptions(mode, sharedOptions);
+    const {sharedOptions, includeOptions} = this._getSharedOptions(start, mode);
     let startAngle = this._getRotation();
     let i;
     for (i = 0; i < start; ++i) {
@@ -19270,7 +20168,6 @@ class DoughnutController extends DatasetController {
       startAngle += circumference;
       this.updateElement(arc, i, properties, mode);
     }
-    this.updateSharedOptions(sharedOptions, mode, firstOpts);
   }
   calculateTotal() {
     const meta = this._cachedMeta;
@@ -19463,9 +20360,7 @@ class LineController extends DatasetController {
   updateElements(points, start, count, mode) {
     const reset = mode === 'reset';
     const {iScale, vScale, _stacked, _dataset} = this._cachedMeta;
-    const firstOpts = this.resolveDataElementOptions(start, mode);
-    const sharedOptions = this.getSharedOptions(firstOpts);
-    const includeOptions = this.includeOptions(mode, sharedOptions);
+    const {sharedOptions, includeOptions} = this._getSharedOptions(start, mode);
     const iAxis = iScale.axis;
     const vAxis = vScale.axis;
     const {spanGaps, segment} = this.options;
@@ -19493,7 +20388,6 @@ class LineController extends DatasetController {
       }
       prevParsed = parsed;
     }
-    this.updateSharedOptions(sharedOptions, mode, firstOpts);
   }
   getMaxOverflow() {
     const meta = this._cachedMeta;
@@ -22035,6 +22929,7 @@ class PluginService {
   }
 }
 function allPlugins(config) {
+  const localIds = {};
   const plugins = [];
   const keys = Object.keys(registry.plugins.items);
   for (let i = 0; i < keys.length; i++) {
@@ -22045,9 +22940,10 @@ function allPlugins(config) {
     const plugin = local[i];
     if (plugins.indexOf(plugin) === -1) {
       plugins.push(plugin);
+      localIds[plugin.id] = true;
     }
   }
-  return plugins;
+  return {plugins, localIds};
 }
 function getOpts(options, all) {
   if (!all && options === false) {
@@ -22058,11 +22954,10 @@ function getOpts(options, all) {
   }
   return options;
 }
-function createDescriptors(chart, plugins, options, all) {
+function createDescriptors(chart, {plugins, localIds}, options, all) {
   const result = [];
   const context = chart.getContext();
-  for (let i = 0; i < plugins.length; i++) {
-    const plugin = plugins[i];
+  for (const plugin of plugins) {
     const id = plugin.id;
     const opts = getOpts(options[id], all);
     if (opts === null) {
@@ -22070,15 +22965,22 @@ function createDescriptors(chart, plugins, options, all) {
     }
     result.push({
       plugin,
-      options: pluginOpts(chart.config, plugin, opts, context)
+      options: pluginOpts(chart.config, {plugin, local: localIds[id]}, opts, context)
     });
   }
   return result;
 }
-function pluginOpts(config, plugin, opts, context) {
+function pluginOpts(config, {plugin, local}, opts, context) {
   const keys = config.pluginScopeKeys(plugin);
   const scopes = config.getOptionScopes(opts, keys);
-  return config.createResolver(scopes, context, [''], {scriptable: false, indexable: false, allKeys: true});
+  if (local && plugin.defaults) {
+    scopes.push(plugin.defaults);
+  }
+  return config.createResolver(scopes, context, [''], {
+    scriptable: false,
+    indexable: false,
+    allKeys: true
+  });
 }
 
 function getIndexAxis(type, options) {
@@ -22364,7 +23266,7 @@ function needContext(proxy, names) {
   return false;
 }
 
-var version = "3.8.0";
+var version = "3.8.2";
 
 const KNOWN_POSITIONS = ['top', 'bottom', 'left', 'right', 'chartArea'];
 function positionIsHorizontal(position, axis) {
@@ -22434,7 +23336,7 @@ class Chart {
     if (existingChart) {
       throw new Error(
         'Canvas is already in use. Chart with ID \'' + existingChart.id + '\'' +
-				' must be destroyed before the canvas can be reused.'
+				' must be destroyed before the canvas with ID \'' + existingChart.canvas.id + '\' can be reused.'
       );
     }
     const options = config.createResolver(config.chartOptionScopes(), this.getContext());
@@ -27188,7 +28090,7 @@ var registerWrapper = function registerWrapper(stripe, startTime) {
 
   stripe._registerWrapper({
     name: 'stripe-js',
-    version: "1.32.0",
+    version: "1.34.0",
     startTime: startTime
   });
 };
@@ -27930,7 +28832,7 @@ class Input {
         [mode]: true,
         'has-value': this.hasValue(),
         'has-focus': this.hasFocus,
-      }) }, hAsync("input", Object.assign({ class: "native-input", ref: (input) => (this.nativeInput = input), "aria-labelledby": label ? labelId : null, disabled: this.disabled, accept: this.accept, autoCapitalize: this.autocapitalize, autoComplete: this.autocomplete, autoCorrect: this.autocorrect, autoFocus: this.autofocus, enterKeyHint: this.enterkeyhint, inputMode: this.inputmode, min: this.min, max: this.max, minLength: this.minlength, maxLength: this.maxlength, multiple: this.multiple, name: this.name, pattern: this.pattern, placeholder: this.placeholder || '', readOnly: this.readonly, required: this.required, spellcheck: this.spellcheck, step: this.step, size: this.size, type: this.type, value: value, onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onKeyDown: this.onKeydown }, this.inheritedAttributes)), this.clearInput && !this.readonly && !this.disabled && (hAsync("button", { "aria-label": "reset", type: "button", class: "input-clear-icon", onTouchStart: this.clearTextInput, onMouseDown: this.clearTextInput, onKeyDown: this.clearTextOnEnter }))));
+      }) }, hAsync("input", Object.assign({ class: "native-input", ref: (input) => (this.nativeInput = input), "aria-labelledby": label ? labelId : null, disabled: this.disabled, accept: this.accept, autoCapitalize: this.autocapitalize, autoComplete: this.autocomplete, autoCorrect: this.autocorrect, autoFocus: this.autofocus, enterKeyHint: this.enterkeyhint, inputMode: this.inputmode, min: this.min, max: this.max, minLength: this.minlength, maxLength: this.maxlength, multiple: this.multiple, name: this.name, pattern: this.pattern, placeholder: this.placeholder || '', readOnly: this.readonly, required: this.required, spellcheck: this.spellcheck, step: this.step, size: this.size, type: this.type, value: value, onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onKeyDown: this.onKeydown }, this.inheritedAttributes)), this.clearInput && !this.readonly && !this.disabled && (hAsync("button", { "aria-label": "reset", type: "button", class: "input-clear-icon", onPointerDown: this.clearTextInput, onKeyDown: this.clearTextOnEnter }))));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -31747,7 +32649,7 @@ function toDate(argument) {
   } else {
     if ((typeof argument === 'string' || argStr === '[object String]') && typeof console !== 'undefined') {
       // eslint-disable-next-line no-console
-      console.warn("Starting with v2.0.0-beta.1 date-fns doesn't accept strings as date arguments. Please use `parseISO` to parse strings. See: https://git.io/fjule"); // eslint-disable-next-line no-console
+      console.warn("Starting with v2.0.0-beta.1 date-fns doesn't accept strings as date arguments. Please use `parseISO` to parse strings. See: https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#string-arguments"); // eslint-disable-next-line no-console
 
       console.warn(new Error().stack);
     }
@@ -31763,10 +32665,6 @@ function toDate(argument) {
  *
  * @description
  * Add the specified number of milliseconds to the given date.
- *
- * ### v2.0.0 breaking changes:
- *
- * - [Changes that are common for the whole library](https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#Common-Changes).
  *
  * @param {Date|Number} date - the date to be changed
  * @param {Number} amount - the amount of milliseconds to be added. Positive decimals will be rounded using `Math.floor`, decimals less than zero will be rounded using `Math.ceil`.
@@ -31784,6 +32682,11 @@ function addMilliseconds(dirtyDate, dirtyAmount) {
   var timestamp = toDate(dirtyDate).getTime();
   var amount = toInteger(dirtyAmount);
   return new Date(timestamp + amount);
+}
+
+var defaultOptions = {};
+function getDefaultOptions() {
+  return defaultOptions;
 }
 
 /**
@@ -31810,10 +32713,6 @@ function getTimezoneOffsetInMilliseconds(date) {
  *
  * @description
  * Returns true if the given value is an instance of Date. The function works for dates transferred across iframes.
- *
- * ### v2.0.0 breaking changes:
- *
- * - [Changes that are common for the whole library](https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#Common-Changes).
  *
  * @param {*} value - the value to check
  * @returns {boolean} true if the given value is a date
@@ -31857,32 +32756,6 @@ function isDate(value) {
  *
  * Time value of Date: http://es5.github.io/#x15.9.1.1
  *
- * ### v2.0.0 breaking changes:
- *
- * - [Changes that are common for the whole library](https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#Common-Changes).
- *
- * - Now `isValid` doesn't throw an exception
- *   if the first argument is not an instance of Date.
- *   Instead, argument is converted beforehand using `toDate`.
- *
- *   Examples:
- *
- *   | `isValid` argument        | Before v2.0.0 | v2.0.0 onward |
- *   |---------------------------|---------------|---------------|
- *   | `new Date()`              | `true`        | `true`        |
- *   | `new Date('2016-01-01')`  | `true`        | `true`        |
- *   | `new Date('')`            | `false`       | `false`       |
- *   | `new Date(1488370835081)` | `true`        | `true`        |
- *   | `new Date(NaN)`           | `false`       | `false`       |
- *   | `'2016-01-01'`            | `TypeError`   | `false`       |
- *   | `''`                      | `TypeError`   | `false`       |
- *   | `1488370835081`           | `TypeError`   | `true`        |
- *   | `NaN`                     | `TypeError`   | `false`       |
- *
- *   We introduce this change to make *date-fns* consistent with ECMAScript behavior
- *   that try to coerce arguments to the expected type
- *   (which is also the case with other *date-fns* functions).
- *
  * @param {*} date - the date to check
  * @returns {Boolean} the date is valid
  * @throws {TypeError} 1 argument required
@@ -31914,505 +32787,6 @@ function isValid(dirtyDate) {
   return !isNaN(Number(date));
 }
 
-var formatDistanceLocale = {
-  lessThanXSeconds: {
-    one: 'less than a second',
-    other: 'less than {{count}} seconds'
-  },
-  xSeconds: {
-    one: '1 second',
-    other: '{{count}} seconds'
-  },
-  halfAMinute: 'half a minute',
-  lessThanXMinutes: {
-    one: 'less than a minute',
-    other: 'less than {{count}} minutes'
-  },
-  xMinutes: {
-    one: '1 minute',
-    other: '{{count}} minutes'
-  },
-  aboutXHours: {
-    one: 'about 1 hour',
-    other: 'about {{count}} hours'
-  },
-  xHours: {
-    one: '1 hour',
-    other: '{{count}} hours'
-  },
-  xDays: {
-    one: '1 day',
-    other: '{{count}} days'
-  },
-  aboutXWeeks: {
-    one: 'about 1 week',
-    other: 'about {{count}} weeks'
-  },
-  xWeeks: {
-    one: '1 week',
-    other: '{{count}} weeks'
-  },
-  aboutXMonths: {
-    one: 'about 1 month',
-    other: 'about {{count}} months'
-  },
-  xMonths: {
-    one: '1 month',
-    other: '{{count}} months'
-  },
-  aboutXYears: {
-    one: 'about 1 year',
-    other: 'about {{count}} years'
-  },
-  xYears: {
-    one: '1 year',
-    other: '{{count}} years'
-  },
-  overXYears: {
-    one: 'over 1 year',
-    other: 'over {{count}} years'
-  },
-  almostXYears: {
-    one: 'almost 1 year',
-    other: 'almost {{count}} years'
-  }
-};
-
-var formatDistance = function (token, count, options) {
-  var result;
-  var tokenValue = formatDistanceLocale[token];
-
-  if (typeof tokenValue === 'string') {
-    result = tokenValue;
-  } else if (count === 1) {
-    result = tokenValue.one;
-  } else {
-    result = tokenValue.other.replace('{{count}}', count.toString());
-  }
-
-  if (options !== null && options !== void 0 && options.addSuffix) {
-    if (options.comparison && options.comparison > 0) {
-      return 'in ' + result;
-    } else {
-      return result + ' ago';
-    }
-  }
-
-  return result;
-};
-
-function buildFormatLongFn(args) {
-  return function () {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    // TODO: Remove String()
-    var width = options.width ? String(options.width) : args.defaultWidth;
-    var format = args.formats[width] || args.formats[args.defaultWidth];
-    return format;
-  };
-}
-
-var dateFormats = {
-  full: 'EEEE, MMMM do, y',
-  long: 'MMMM do, y',
-  medium: 'MMM d, y',
-  short: 'MM/dd/yyyy'
-};
-var timeFormats = {
-  full: 'h:mm:ss a zzzz',
-  long: 'h:mm:ss a z',
-  medium: 'h:mm:ss a',
-  short: 'h:mm a'
-};
-var dateTimeFormats = {
-  full: "{{date}} 'at' {{time}}",
-  long: "{{date}} 'at' {{time}}",
-  medium: '{{date}}, {{time}}',
-  short: '{{date}}, {{time}}'
-};
-var formatLong = {
-  date: buildFormatLongFn({
-    formats: dateFormats,
-    defaultWidth: 'full'
-  }),
-  time: buildFormatLongFn({
-    formats: timeFormats,
-    defaultWidth: 'full'
-  }),
-  dateTime: buildFormatLongFn({
-    formats: dateTimeFormats,
-    defaultWidth: 'full'
-  })
-};
-
-var formatRelativeLocale = {
-  lastWeek: "'last' eeee 'at' p",
-  yesterday: "'yesterday at' p",
-  today: "'today at' p",
-  tomorrow: "'tomorrow at' p",
-  nextWeek: "eeee 'at' p",
-  other: 'P'
-};
-
-var formatRelative = function (token, _date, _baseDate, _options) {
-  return formatRelativeLocale[token];
-};
-
-function buildLocalizeFn(args) {
-  return function (dirtyIndex, dirtyOptions) {
-    var options = dirtyOptions || {};
-    var context = options.context ? String(options.context) : 'standalone';
-    var valuesArray;
-
-    if (context === 'formatting' && args.formattingValues) {
-      var defaultWidth = args.defaultFormattingWidth || args.defaultWidth;
-      var width = options.width ? String(options.width) : defaultWidth;
-      valuesArray = args.formattingValues[width] || args.formattingValues[defaultWidth];
-    } else {
-      var _defaultWidth = args.defaultWidth;
-
-      var _width = options.width ? String(options.width) : args.defaultWidth;
-
-      valuesArray = args.values[_width] || args.values[_defaultWidth];
-    }
-
-    var index = args.argumentCallback ? args.argumentCallback(dirtyIndex) : dirtyIndex; // @ts-ignore: For some reason TypeScript just don't want to match it, no matter how hard we try. I challenge you to try to remove it!
-
-    return valuesArray[index];
-  };
-}
-
-var eraValues = {
-  narrow: ['B', 'A'],
-  abbreviated: ['BC', 'AD'],
-  wide: ['Before Christ', 'Anno Domini']
-};
-var quarterValues = {
-  narrow: ['1', '2', '3', '4'],
-  abbreviated: ['Q1', 'Q2', 'Q3', 'Q4'],
-  wide: ['1st quarter', '2nd quarter', '3rd quarter', '4th quarter']
-}; // Note: in English, the names of days of the week and months are capitalized.
-// If you are making a new locale based on this one, check if the same is true for the language you're working on.
-// Generally, formatted dates should look like they are in the middle of a sentence,
-// e.g. in Spanish language the weekdays and months should be in the lowercase.
-
-var monthValues = {
-  narrow: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
-  abbreviated: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-  wide: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-};
-var dayValues = {
-  narrow: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-  short: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-  abbreviated: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-  wide: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-};
-var dayPeriodValues = {
-  narrow: {
-    am: 'a',
-    pm: 'p',
-    midnight: 'mi',
-    noon: 'n',
-    morning: 'morning',
-    afternoon: 'afternoon',
-    evening: 'evening',
-    night: 'night'
-  },
-  abbreviated: {
-    am: 'AM',
-    pm: 'PM',
-    midnight: 'midnight',
-    noon: 'noon',
-    morning: 'morning',
-    afternoon: 'afternoon',
-    evening: 'evening',
-    night: 'night'
-  },
-  wide: {
-    am: 'a.m.',
-    pm: 'p.m.',
-    midnight: 'midnight',
-    noon: 'noon',
-    morning: 'morning',
-    afternoon: 'afternoon',
-    evening: 'evening',
-    night: 'night'
-  }
-};
-var formattingDayPeriodValues = {
-  narrow: {
-    am: 'a',
-    pm: 'p',
-    midnight: 'mi',
-    noon: 'n',
-    morning: 'in the morning',
-    afternoon: 'in the afternoon',
-    evening: 'in the evening',
-    night: 'at night'
-  },
-  abbreviated: {
-    am: 'AM',
-    pm: 'PM',
-    midnight: 'midnight',
-    noon: 'noon',
-    morning: 'in the morning',
-    afternoon: 'in the afternoon',
-    evening: 'in the evening',
-    night: 'at night'
-  },
-  wide: {
-    am: 'a.m.',
-    pm: 'p.m.',
-    midnight: 'midnight',
-    noon: 'noon',
-    morning: 'in the morning',
-    afternoon: 'in the afternoon',
-    evening: 'in the evening',
-    night: 'at night'
-  }
-};
-
-var ordinalNumber = function (dirtyNumber, _options) {
-  var number = Number(dirtyNumber); // If ordinal numbers depend on context, for example,
-  // if they are different for different grammatical genders,
-  // use `options.unit`.
-  //
-  // `unit` can be 'year', 'quarter', 'month', 'week', 'date', 'dayOfYear',
-  // 'day', 'hour', 'minute', 'second'.
-
-  var rem100 = number % 100;
-
-  if (rem100 > 20 || rem100 < 10) {
-    switch (rem100 % 10) {
-      case 1:
-        return number + 'st';
-
-      case 2:
-        return number + 'nd';
-
-      case 3:
-        return number + 'rd';
-    }
-  }
-
-  return number + 'th';
-};
-
-var localize = {
-  ordinalNumber: ordinalNumber,
-  era: buildLocalizeFn({
-    values: eraValues,
-    defaultWidth: 'wide'
-  }),
-  quarter: buildLocalizeFn({
-    values: quarterValues,
-    defaultWidth: 'wide',
-    argumentCallback: function (quarter) {
-      return quarter - 1;
-    }
-  }),
-  month: buildLocalizeFn({
-    values: monthValues,
-    defaultWidth: 'wide'
-  }),
-  day: buildLocalizeFn({
-    values: dayValues,
-    defaultWidth: 'wide'
-  }),
-  dayPeriod: buildLocalizeFn({
-    values: dayPeriodValues,
-    defaultWidth: 'wide',
-    formattingValues: formattingDayPeriodValues,
-    defaultFormattingWidth: 'wide'
-  })
-};
-
-function buildMatchFn(args) {
-  return function (string) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var width = options.width;
-    var matchPattern = width && args.matchPatterns[width] || args.matchPatterns[args.defaultMatchWidth];
-    var matchResult = string.match(matchPattern);
-
-    if (!matchResult) {
-      return null;
-    }
-
-    var matchedString = matchResult[0];
-    var parsePatterns = width && args.parsePatterns[width] || args.parsePatterns[args.defaultParseWidth];
-    var key = Array.isArray(parsePatterns) ? findIndex(parsePatterns, function (pattern) {
-      return pattern.test(matchedString);
-    }) : findKey(parsePatterns, function (pattern) {
-      return pattern.test(matchedString);
-    });
-    var value;
-    value = args.valueCallback ? args.valueCallback(key) : key;
-    value = options.valueCallback ? options.valueCallback(value) : value;
-    var rest = string.slice(matchedString.length);
-    return {
-      value: value,
-      rest: rest
-    };
-  };
-}
-
-function findKey(object, predicate) {
-  for (var key in object) {
-    if (object.hasOwnProperty(key) && predicate(object[key])) {
-      return key;
-    }
-  }
-
-  return undefined;
-}
-
-function findIndex(array, predicate) {
-  for (var key = 0; key < array.length; key++) {
-    if (predicate(array[key])) {
-      return key;
-    }
-  }
-
-  return undefined;
-}
-
-function buildMatchPatternFn(args) {
-  return function (string) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var matchResult = string.match(args.matchPattern);
-    if (!matchResult) return null;
-    var matchedString = matchResult[0];
-    var parseResult = string.match(args.parsePattern);
-    if (!parseResult) return null;
-    var value = args.valueCallback ? args.valueCallback(parseResult[0]) : parseResult[0];
-    value = options.valueCallback ? options.valueCallback(value) : value;
-    var rest = string.slice(matchedString.length);
-    return {
-      value: value,
-      rest: rest
-    };
-  };
-}
-
-var matchOrdinalNumberPattern = /^(\d+)(th|st|nd|rd)?/i;
-var parseOrdinalNumberPattern = /\d+/i;
-var matchEraPatterns = {
-  narrow: /^(b|a)/i,
-  abbreviated: /^(b\.?\s?c\.?|b\.?\s?c\.?\s?e\.?|a\.?\s?d\.?|c\.?\s?e\.?)/i,
-  wide: /^(before christ|before common era|anno domini|common era)/i
-};
-var parseEraPatterns = {
-  any: [/^b/i, /^(a|c)/i]
-};
-var matchQuarterPatterns = {
-  narrow: /^[1234]/i,
-  abbreviated: /^q[1234]/i,
-  wide: /^[1234](th|st|nd|rd)? quarter/i
-};
-var parseQuarterPatterns = {
-  any: [/1/i, /2/i, /3/i, /4/i]
-};
-var matchMonthPatterns = {
-  narrow: /^[jfmasond]/i,
-  abbreviated: /^(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i,
-  wide: /^(january|february|march|april|may|june|july|august|september|october|november|december)/i
-};
-var parseMonthPatterns = {
-  narrow: [/^j/i, /^f/i, /^m/i, /^a/i, /^m/i, /^j/i, /^j/i, /^a/i, /^s/i, /^o/i, /^n/i, /^d/i],
-  any: [/^ja/i, /^f/i, /^mar/i, /^ap/i, /^may/i, /^jun/i, /^jul/i, /^au/i, /^s/i, /^o/i, /^n/i, /^d/i]
-};
-var matchDayPatterns = {
-  narrow: /^[smtwf]/i,
-  short: /^(su|mo|tu|we|th|fr|sa)/i,
-  abbreviated: /^(sun|mon|tue|wed|thu|fri|sat)/i,
-  wide: /^(sunday|monday|tuesday|wednesday|thursday|friday|saturday)/i
-};
-var parseDayPatterns = {
-  narrow: [/^s/i, /^m/i, /^t/i, /^w/i, /^t/i, /^f/i, /^s/i],
-  any: [/^su/i, /^m/i, /^tu/i, /^w/i, /^th/i, /^f/i, /^sa/i]
-};
-var matchDayPeriodPatterns = {
-  narrow: /^(a|p|mi|n|(in the|at) (morning|afternoon|evening|night))/i,
-  any: /^([ap]\.?\s?m\.?|midnight|noon|(in the|at) (morning|afternoon|evening|night))/i
-};
-var parseDayPeriodPatterns = {
-  any: {
-    am: /^a/i,
-    pm: /^p/i,
-    midnight: /^mi/i,
-    noon: /^no/i,
-    morning: /morning/i,
-    afternoon: /afternoon/i,
-    evening: /evening/i,
-    night: /night/i
-  }
-};
-var match = {
-  ordinalNumber: buildMatchPatternFn({
-    matchPattern: matchOrdinalNumberPattern,
-    parsePattern: parseOrdinalNumberPattern,
-    valueCallback: function (value) {
-      return parseInt(value, 10);
-    }
-  }),
-  era: buildMatchFn({
-    matchPatterns: matchEraPatterns,
-    defaultMatchWidth: 'wide',
-    parsePatterns: parseEraPatterns,
-    defaultParseWidth: 'any'
-  }),
-  quarter: buildMatchFn({
-    matchPatterns: matchQuarterPatterns,
-    defaultMatchWidth: 'wide',
-    parsePatterns: parseQuarterPatterns,
-    defaultParseWidth: 'any',
-    valueCallback: function (index) {
-      return index + 1;
-    }
-  }),
-  month: buildMatchFn({
-    matchPatterns: matchMonthPatterns,
-    defaultMatchWidth: 'wide',
-    parsePatterns: parseMonthPatterns,
-    defaultParseWidth: 'any'
-  }),
-  day: buildMatchFn({
-    matchPatterns: matchDayPatterns,
-    defaultMatchWidth: 'wide',
-    parsePatterns: parseDayPatterns,
-    defaultParseWidth: 'any'
-  }),
-  dayPeriod: buildMatchFn({
-    matchPatterns: matchDayPeriodPatterns,
-    defaultMatchWidth: 'any',
-    parsePatterns: parseDayPeriodPatterns,
-    defaultParseWidth: 'any'
-  })
-};
-
-/**
- * @type {Locale}
- * @category Locales
- * @summary English locale (United States).
- * @language English
- * @iso-639-2 eng
- * @author Sasha Koss [@kossnocorp]{@link https://github.com/kossnocorp}
- * @author Lesha Koss [@leshakoss]{@link https://github.com/leshakoss}
- */
-var locale = {
-  code: 'en-US',
-  formatDistance: formatDistance,
-  formatLong: formatLong,
-  formatRelative: formatRelative,
-  localize: localize,
-  match: match,
-  options: {
-    weekStartsOn: 0
-    /* Sunday */
-    ,
-    firstWeekContainsDate: 1
-  }
-};
-
 /**
  * @name subMilliseconds
  * @category Millisecond Helpers
@@ -32420,10 +32794,6 @@ var locale = {
  *
  * @description
  * Subtract the specified number of milliseconds from the given date.
- *
- * ### v2.0.0 breaking changes:
- *
- * - [Changes that are common for the whole library](https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#Common-Changes).
  *
  * @param {Date|Number} date - the date to be changed
  * @param {Number} amount - the amount of milliseconds to be subtracted. Positive decimals will be rounded using `Math.floor`, decimals less than zero will be rounded using `Math.ceil`.
@@ -32442,9 +32812,7 @@ function subMilliseconds(dirtyDate, dirtyAmount) {
   return addMilliseconds(dirtyDate, -amount);
 }
 
-var MILLISECONDS_IN_DAY = 86400000; // This function will be a part of public API when UTC function will be implemented.
-// See issue: https://github.com/date-fns/date-fns/issues/376
-
+var MILLISECONDS_IN_DAY = 86400000;
 function getUTCDayOfYear(dirtyDate) {
   requiredArgs(1, arguments);
   var date = toDate(dirtyDate);
@@ -32456,8 +32824,6 @@ function getUTCDayOfYear(dirtyDate) {
   return Math.floor(difference / MILLISECONDS_IN_DAY) + 1;
 }
 
-// See issue: https://github.com/date-fns/date-fns/issues/376
-
 function startOfUTCISOWeek(dirtyDate) {
   requiredArgs(1, arguments);
   var weekStartsOn = 1;
@@ -32468,8 +32834,6 @@ function startOfUTCISOWeek(dirtyDate) {
   date.setUTCHours(0, 0, 0, 0);
   return date;
 }
-
-// See issue: https://github.com/date-fns/date-fns/issues/376
 
 function getUTCISOWeekYear(dirtyDate) {
   requiredArgs(1, arguments);
@@ -32493,8 +32857,6 @@ function getUTCISOWeekYear(dirtyDate) {
   }
 }
 
-// See issue: https://github.com/date-fns/date-fns/issues/376
-
 function startOfUTCISOWeekYear(dirtyDate) {
   requiredArgs(1, arguments);
   var year = getUTCISOWeekYear(dirtyDate);
@@ -32505,9 +32867,7 @@ function startOfUTCISOWeekYear(dirtyDate) {
   return date;
 }
 
-var MILLISECONDS_IN_WEEK$1 = 604800000; // This function will be a part of public API when UTC function will be implemented.
-// See issue: https://github.com/date-fns/date-fns/issues/376
-
+var MILLISECONDS_IN_WEEK$1 = 604800000;
 function getUTCISOWeek(dirtyDate) {
   requiredArgs(1, arguments);
   var date = toDate(dirtyDate);
@@ -32518,15 +32878,12 @@ function getUTCISOWeek(dirtyDate) {
   return Math.round(diff / MILLISECONDS_IN_WEEK$1) + 1;
 }
 
-// See issue: https://github.com/date-fns/date-fns/issues/376
+function startOfUTCWeek(dirtyDate, options) {
+  var _ref, _ref2, _ref3, _options$weekStartsOn, _options$locale, _options$locale$optio, _defaultOptions$local, _defaultOptions$local2;
 
-function startOfUTCWeek(dirtyDate, dirtyOptions) {
   requiredArgs(1, arguments);
-  var options = dirtyOptions || {};
-  var locale = options.locale;
-  var localeWeekStartsOn = locale && locale.options && locale.options.weekStartsOn;
-  var defaultWeekStartsOn = localeWeekStartsOn == null ? 0 : toInteger(localeWeekStartsOn);
-  var weekStartsOn = options.weekStartsOn == null ? defaultWeekStartsOn : toInteger(options.weekStartsOn); // Test if weekStartsOn is between 0 and 6 _and_ is not NaN
+  var defaultOptions = getDefaultOptions();
+  var weekStartsOn = toInteger((_ref = (_ref2 = (_ref3 = (_options$weekStartsOn = options === null || options === void 0 ? void 0 : options.weekStartsOn) !== null && _options$weekStartsOn !== void 0 ? _options$weekStartsOn : options === null || options === void 0 ? void 0 : (_options$locale = options.locale) === null || _options$locale === void 0 ? void 0 : (_options$locale$optio = _options$locale.options) === null || _options$locale$optio === void 0 ? void 0 : _options$locale$optio.weekStartsOn) !== null && _ref3 !== void 0 ? _ref3 : defaultOptions.weekStartsOn) !== null && _ref2 !== void 0 ? _ref2 : (_defaultOptions$local = defaultOptions.locale) === null || _defaultOptions$local === void 0 ? void 0 : (_defaultOptions$local2 = _defaultOptions$local.options) === null || _defaultOptions$local2 === void 0 ? void 0 : _defaultOptions$local2.weekStartsOn) !== null && _ref !== void 0 ? _ref : 0); // Test if weekStartsOn is between 0 and 6 _and_ is not NaN
 
   if (!(weekStartsOn >= 0 && weekStartsOn <= 6)) {
     throw new RangeError('weekStartsOn must be between 0 and 6 inclusively');
@@ -32540,17 +32897,14 @@ function startOfUTCWeek(dirtyDate, dirtyOptions) {
   return date;
 }
 
-// See issue: https://github.com/date-fns/date-fns/issues/376
+function getUTCWeekYear(dirtyDate, options) {
+  var _ref, _ref2, _ref3, _options$firstWeekCon, _options$locale, _options$locale$optio, _defaultOptions$local, _defaultOptions$local2;
 
-function getUTCWeekYear(dirtyDate, dirtyOptions) {
   requiredArgs(1, arguments);
   var date = toDate(dirtyDate);
   var year = date.getUTCFullYear();
-  var options = dirtyOptions || {};
-  var locale = options.locale;
-  var localeFirstWeekContainsDate = locale && locale.options && locale.options.firstWeekContainsDate;
-  var defaultFirstWeekContainsDate = localeFirstWeekContainsDate == null ? 1 : toInteger(localeFirstWeekContainsDate);
-  var firstWeekContainsDate = options.firstWeekContainsDate == null ? defaultFirstWeekContainsDate : toInteger(options.firstWeekContainsDate); // Test if weekStartsOn is between 1 and 7 _and_ is not NaN
+  var defaultOptions = getDefaultOptions();
+  var firstWeekContainsDate = toInteger((_ref = (_ref2 = (_ref3 = (_options$firstWeekCon = options === null || options === void 0 ? void 0 : options.firstWeekContainsDate) !== null && _options$firstWeekCon !== void 0 ? _options$firstWeekCon : options === null || options === void 0 ? void 0 : (_options$locale = options.locale) === null || _options$locale === void 0 ? void 0 : (_options$locale$optio = _options$locale.options) === null || _options$locale$optio === void 0 ? void 0 : _options$locale$optio.firstWeekContainsDate) !== null && _ref3 !== void 0 ? _ref3 : defaultOptions.firstWeekContainsDate) !== null && _ref2 !== void 0 ? _ref2 : (_defaultOptions$local = defaultOptions.locale) === null || _defaultOptions$local === void 0 ? void 0 : (_defaultOptions$local2 = _defaultOptions$local.options) === null || _defaultOptions$local2 === void 0 ? void 0 : _defaultOptions$local2.firstWeekContainsDate) !== null && _ref !== void 0 ? _ref : 1); // Test if weekStartsOn is between 1 and 7 _and_ is not NaN
 
   if (!(firstWeekContainsDate >= 1 && firstWeekContainsDate <= 7)) {
     throw new RangeError('firstWeekContainsDate must be between 1 and 7 inclusively');
@@ -32559,11 +32913,11 @@ function getUTCWeekYear(dirtyDate, dirtyOptions) {
   var firstWeekOfNextYear = new Date(0);
   firstWeekOfNextYear.setUTCFullYear(year + 1, 0, firstWeekContainsDate);
   firstWeekOfNextYear.setUTCHours(0, 0, 0, 0);
-  var startOfNextYear = startOfUTCWeek(firstWeekOfNextYear, dirtyOptions);
+  var startOfNextYear = startOfUTCWeek(firstWeekOfNextYear, options);
   var firstWeekOfThisYear = new Date(0);
   firstWeekOfThisYear.setUTCFullYear(year, 0, firstWeekContainsDate);
   firstWeekOfThisYear.setUTCHours(0, 0, 0, 0);
-  var startOfThisYear = startOfUTCWeek(firstWeekOfThisYear, dirtyOptions);
+  var startOfThisYear = startOfUTCWeek(firstWeekOfThisYear, options);
 
   if (date.getTime() >= startOfNextYear.getTime()) {
     return year + 1;
@@ -32574,26 +32928,21 @@ function getUTCWeekYear(dirtyDate, dirtyOptions) {
   }
 }
 
-// See issue: https://github.com/date-fns/date-fns/issues/376
+function startOfUTCWeekYear(dirtyDate, options) {
+  var _ref, _ref2, _ref3, _options$firstWeekCon, _options$locale, _options$locale$optio, _defaultOptions$local, _defaultOptions$local2;
 
-function startOfUTCWeekYear(dirtyDate, dirtyOptions) {
   requiredArgs(1, arguments);
-  var options = dirtyOptions || {};
-  var locale = options.locale;
-  var localeFirstWeekContainsDate = locale && locale.options && locale.options.firstWeekContainsDate;
-  var defaultFirstWeekContainsDate = localeFirstWeekContainsDate == null ? 1 : toInteger(localeFirstWeekContainsDate);
-  var firstWeekContainsDate = options.firstWeekContainsDate == null ? defaultFirstWeekContainsDate : toInteger(options.firstWeekContainsDate);
-  var year = getUTCWeekYear(dirtyDate, dirtyOptions);
+  var defaultOptions = getDefaultOptions();
+  var firstWeekContainsDate = toInteger((_ref = (_ref2 = (_ref3 = (_options$firstWeekCon = options === null || options === void 0 ? void 0 : options.firstWeekContainsDate) !== null && _options$firstWeekCon !== void 0 ? _options$firstWeekCon : options === null || options === void 0 ? void 0 : (_options$locale = options.locale) === null || _options$locale === void 0 ? void 0 : (_options$locale$optio = _options$locale.options) === null || _options$locale$optio === void 0 ? void 0 : _options$locale$optio.firstWeekContainsDate) !== null && _ref3 !== void 0 ? _ref3 : defaultOptions.firstWeekContainsDate) !== null && _ref2 !== void 0 ? _ref2 : (_defaultOptions$local = defaultOptions.locale) === null || _defaultOptions$local === void 0 ? void 0 : (_defaultOptions$local2 = _defaultOptions$local.options) === null || _defaultOptions$local2 === void 0 ? void 0 : _defaultOptions$local2.firstWeekContainsDate) !== null && _ref !== void 0 ? _ref : 1);
+  var year = getUTCWeekYear(dirtyDate, options);
   var firstWeek = new Date(0);
   firstWeek.setUTCFullYear(year, 0, firstWeekContainsDate);
   firstWeek.setUTCHours(0, 0, 0, 0);
-  var date = startOfUTCWeek(firstWeek, dirtyOptions);
+  var date = startOfUTCWeek(firstWeek, options);
   return date;
 }
 
-var MILLISECONDS_IN_WEEK = 604800000; // This function will be a part of public API when UTC function will be implemented.
-// See issue: https://github.com/date-fns/date-fns/issues/376
-
+var MILLISECONDS_IN_WEEK = 604800000;
 function getUTCWeek(dirtyDate, options) {
   requiredArgs(1, arguments);
   var date = toDate(dirtyDate);
@@ -32708,6 +33057,7 @@ var dayPeriodEnum = {
   evening: 'evening',
   night: 'night'
 };
+
 /*
  * |     | Unit                           |     | Unit                           |
  * |-----|--------------------------------|-----|--------------------------------|
@@ -32753,7 +33103,6 @@ var dayPeriodEnum = {
  * - `P` is long localized date format
  * - `p` is long localized time format
  */
-
 var formatters = {
   // Era
   G: function (date, token, localize) {
@@ -33556,7 +33905,7 @@ function formatTimezone(offset, dirtyDelimiter) {
   return sign + hours + delimiter + minutes;
 }
 
-function dateLongFormatter(pattern, formatLong) {
+var dateLongFormatter = function (pattern, formatLong) {
   switch (pattern) {
     case 'P':
       return formatLong.date({
@@ -33579,9 +33928,9 @@ function dateLongFormatter(pattern, formatLong) {
         width: 'full'
       });
   }
-}
+};
 
-function timeLongFormatter(pattern, formatLong) {
+var timeLongFormatter = function (pattern, formatLong) {
   switch (pattern) {
     case 'p':
       return formatLong.time({
@@ -33604,9 +33953,9 @@ function timeLongFormatter(pattern, formatLong) {
         width: 'full'
       });
   }
-}
+};
 
-function dateTimeLongFormatter(pattern, formatLong) {
+var dateTimeLongFormatter = function (pattern, formatLong) {
   var matchResult = pattern.match(/(P+)(p+)?/) || [];
   var datePattern = matchResult[1];
   var timePattern = matchResult[2];
@@ -33645,7 +33994,7 @@ function dateTimeLongFormatter(pattern, formatLong) {
   }
 
   return dateTimeFormat.replace('{{date}}', dateLongFormatter(datePattern, formatLong)).replace('{{time}}', timeLongFormatter(timePattern, formatLong));
-}
+};
 
 var longFormatters = {
   p: timeLongFormatter,
@@ -33662,15 +34011,513 @@ function isProtectedWeekYearToken(token) {
 }
 function throwProtectedError(token, format, input) {
   if (token === 'YYYY') {
-    throw new RangeError("Use `yyyy` instead of `YYYY` (in `".concat(format, "`) for formatting years to the input `").concat(input, "`; see: https://git.io/fxCyr"));
+    throw new RangeError("Use `yyyy` instead of `YYYY` (in `".concat(format, "`) for formatting years to the input `").concat(input, "`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md"));
   } else if (token === 'YY') {
-    throw new RangeError("Use `yy` instead of `YY` (in `".concat(format, "`) for formatting years to the input `").concat(input, "`; see: https://git.io/fxCyr"));
+    throw new RangeError("Use `yy` instead of `YY` (in `".concat(format, "`) for formatting years to the input `").concat(input, "`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md"));
   } else if (token === 'D') {
-    throw new RangeError("Use `d` instead of `D` (in `".concat(format, "`) for formatting days of the month to the input `").concat(input, "`; see: https://git.io/fxCyr"));
+    throw new RangeError("Use `d` instead of `D` (in `".concat(format, "`) for formatting days of the month to the input `").concat(input, "`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md"));
   } else if (token === 'DD') {
-    throw new RangeError("Use `dd` instead of `DD` (in `".concat(format, "`) for formatting days of the month to the input `").concat(input, "`; see: https://git.io/fxCyr"));
+    throw new RangeError("Use `dd` instead of `DD` (in `".concat(format, "`) for formatting days of the month to the input `").concat(input, "`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md"));
   }
 }
+
+var formatDistanceLocale = {
+  lessThanXSeconds: {
+    one: 'less than a second',
+    other: 'less than {{count}} seconds'
+  },
+  xSeconds: {
+    one: '1 second',
+    other: '{{count}} seconds'
+  },
+  halfAMinute: 'half a minute',
+  lessThanXMinutes: {
+    one: 'less than a minute',
+    other: 'less than {{count}} minutes'
+  },
+  xMinutes: {
+    one: '1 minute',
+    other: '{{count}} minutes'
+  },
+  aboutXHours: {
+    one: 'about 1 hour',
+    other: 'about {{count}} hours'
+  },
+  xHours: {
+    one: '1 hour',
+    other: '{{count}} hours'
+  },
+  xDays: {
+    one: '1 day',
+    other: '{{count}} days'
+  },
+  aboutXWeeks: {
+    one: 'about 1 week',
+    other: 'about {{count}} weeks'
+  },
+  xWeeks: {
+    one: '1 week',
+    other: '{{count}} weeks'
+  },
+  aboutXMonths: {
+    one: 'about 1 month',
+    other: 'about {{count}} months'
+  },
+  xMonths: {
+    one: '1 month',
+    other: '{{count}} months'
+  },
+  aboutXYears: {
+    one: 'about 1 year',
+    other: 'about {{count}} years'
+  },
+  xYears: {
+    one: '1 year',
+    other: '{{count}} years'
+  },
+  overXYears: {
+    one: 'over 1 year',
+    other: 'over {{count}} years'
+  },
+  almostXYears: {
+    one: 'almost 1 year',
+    other: 'almost {{count}} years'
+  }
+};
+
+var formatDistance = function (token, count, options) {
+  var result;
+  var tokenValue = formatDistanceLocale[token];
+
+  if (typeof tokenValue === 'string') {
+    result = tokenValue;
+  } else if (count === 1) {
+    result = tokenValue.one;
+  } else {
+    result = tokenValue.other.replace('{{count}}', count.toString());
+  }
+
+  if (options !== null && options !== void 0 && options.addSuffix) {
+    if (options.comparison && options.comparison > 0) {
+      return 'in ' + result;
+    } else {
+      return result + ' ago';
+    }
+  }
+
+  return result;
+};
+
+function buildFormatLongFn(args) {
+  return function () {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    // TODO: Remove String()
+    var width = options.width ? String(options.width) : args.defaultWidth;
+    var format = args.formats[width] || args.formats[args.defaultWidth];
+    return format;
+  };
+}
+
+var dateFormats = {
+  full: 'EEEE, MMMM do, y',
+  long: 'MMMM do, y',
+  medium: 'MMM d, y',
+  short: 'MM/dd/yyyy'
+};
+var timeFormats = {
+  full: 'h:mm:ss a zzzz',
+  long: 'h:mm:ss a z',
+  medium: 'h:mm:ss a',
+  short: 'h:mm a'
+};
+var dateTimeFormats = {
+  full: "{{date}} 'at' {{time}}",
+  long: "{{date}} 'at' {{time}}",
+  medium: '{{date}}, {{time}}',
+  short: '{{date}}, {{time}}'
+};
+var formatLong = {
+  date: buildFormatLongFn({
+    formats: dateFormats,
+    defaultWidth: 'full'
+  }),
+  time: buildFormatLongFn({
+    formats: timeFormats,
+    defaultWidth: 'full'
+  }),
+  dateTime: buildFormatLongFn({
+    formats: dateTimeFormats,
+    defaultWidth: 'full'
+  })
+};
+
+var formatRelativeLocale = {
+  lastWeek: "'last' eeee 'at' p",
+  yesterday: "'yesterday at' p",
+  today: "'today at' p",
+  tomorrow: "'tomorrow at' p",
+  nextWeek: "eeee 'at' p",
+  other: 'P'
+};
+
+var formatRelative = function (token, _date, _baseDate, _options) {
+  return formatRelativeLocale[token];
+};
+
+function buildLocalizeFn(args) {
+  return function (dirtyIndex, options) {
+    var context = options !== null && options !== void 0 && options.context ? String(options.context) : 'standalone';
+    var valuesArray;
+
+    if (context === 'formatting' && args.formattingValues) {
+      var defaultWidth = args.defaultFormattingWidth || args.defaultWidth;
+      var width = options !== null && options !== void 0 && options.width ? String(options.width) : defaultWidth;
+      valuesArray = args.formattingValues[width] || args.formattingValues[defaultWidth];
+    } else {
+      var _defaultWidth = args.defaultWidth;
+
+      var _width = options !== null && options !== void 0 && options.width ? String(options.width) : args.defaultWidth;
+
+      valuesArray = args.values[_width] || args.values[_defaultWidth];
+    }
+
+    var index = args.argumentCallback ? args.argumentCallback(dirtyIndex) : dirtyIndex; // @ts-ignore: For some reason TypeScript just don't want to match it, no matter how hard we try. I challenge you to try to remove it!
+
+    return valuesArray[index];
+  };
+}
+
+var eraValues = {
+  narrow: ['B', 'A'],
+  abbreviated: ['BC', 'AD'],
+  wide: ['Before Christ', 'Anno Domini']
+};
+var quarterValues = {
+  narrow: ['1', '2', '3', '4'],
+  abbreviated: ['Q1', 'Q2', 'Q3', 'Q4'],
+  wide: ['1st quarter', '2nd quarter', '3rd quarter', '4th quarter']
+}; // Note: in English, the names of days of the week and months are capitalized.
+// If you are making a new locale based on this one, check if the same is true for the language you're working on.
+// Generally, formatted dates should look like they are in the middle of a sentence,
+// e.g. in Spanish language the weekdays and months should be in the lowercase.
+
+var monthValues = {
+  narrow: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+  abbreviated: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  wide: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+};
+var dayValues = {
+  narrow: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+  short: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+  abbreviated: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  wide: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+};
+var dayPeriodValues = {
+  narrow: {
+    am: 'a',
+    pm: 'p',
+    midnight: 'mi',
+    noon: 'n',
+    morning: 'morning',
+    afternoon: 'afternoon',
+    evening: 'evening',
+    night: 'night'
+  },
+  abbreviated: {
+    am: 'AM',
+    pm: 'PM',
+    midnight: 'midnight',
+    noon: 'noon',
+    morning: 'morning',
+    afternoon: 'afternoon',
+    evening: 'evening',
+    night: 'night'
+  },
+  wide: {
+    am: 'a.m.',
+    pm: 'p.m.',
+    midnight: 'midnight',
+    noon: 'noon',
+    morning: 'morning',
+    afternoon: 'afternoon',
+    evening: 'evening',
+    night: 'night'
+  }
+};
+var formattingDayPeriodValues = {
+  narrow: {
+    am: 'a',
+    pm: 'p',
+    midnight: 'mi',
+    noon: 'n',
+    morning: 'in the morning',
+    afternoon: 'in the afternoon',
+    evening: 'in the evening',
+    night: 'at night'
+  },
+  abbreviated: {
+    am: 'AM',
+    pm: 'PM',
+    midnight: 'midnight',
+    noon: 'noon',
+    morning: 'in the morning',
+    afternoon: 'in the afternoon',
+    evening: 'in the evening',
+    night: 'at night'
+  },
+  wide: {
+    am: 'a.m.',
+    pm: 'p.m.',
+    midnight: 'midnight',
+    noon: 'noon',
+    morning: 'in the morning',
+    afternoon: 'in the afternoon',
+    evening: 'in the evening',
+    night: 'at night'
+  }
+};
+
+var ordinalNumber = function (dirtyNumber, _options) {
+  var number = Number(dirtyNumber); // If ordinal numbers depend on context, for example,
+  // if they are different for different grammatical genders,
+  // use `options.unit`.
+  //
+  // `unit` can be 'year', 'quarter', 'month', 'week', 'date', 'dayOfYear',
+  // 'day', 'hour', 'minute', 'second'.
+
+  var rem100 = number % 100;
+
+  if (rem100 > 20 || rem100 < 10) {
+    switch (rem100 % 10) {
+      case 1:
+        return number + 'st';
+
+      case 2:
+        return number + 'nd';
+
+      case 3:
+        return number + 'rd';
+    }
+  }
+
+  return number + 'th';
+};
+
+var localize = {
+  ordinalNumber: ordinalNumber,
+  era: buildLocalizeFn({
+    values: eraValues,
+    defaultWidth: 'wide'
+  }),
+  quarter: buildLocalizeFn({
+    values: quarterValues,
+    defaultWidth: 'wide',
+    argumentCallback: function (quarter) {
+      return quarter - 1;
+    }
+  }),
+  month: buildLocalizeFn({
+    values: monthValues,
+    defaultWidth: 'wide'
+  }),
+  day: buildLocalizeFn({
+    values: dayValues,
+    defaultWidth: 'wide'
+  }),
+  dayPeriod: buildLocalizeFn({
+    values: dayPeriodValues,
+    defaultWidth: 'wide',
+    formattingValues: formattingDayPeriodValues,
+    defaultFormattingWidth: 'wide'
+  })
+};
+
+function buildMatchFn(args) {
+  return function (string) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var width = options.width;
+    var matchPattern = width && args.matchPatterns[width] || args.matchPatterns[args.defaultMatchWidth];
+    var matchResult = string.match(matchPattern);
+
+    if (!matchResult) {
+      return null;
+    }
+
+    var matchedString = matchResult[0];
+    var parsePatterns = width && args.parsePatterns[width] || args.parsePatterns[args.defaultParseWidth];
+    var key = Array.isArray(parsePatterns) ? findIndex(parsePatterns, function (pattern) {
+      return pattern.test(matchedString);
+    }) : findKey(parsePatterns, function (pattern) {
+      return pattern.test(matchedString);
+    });
+    var value;
+    value = args.valueCallback ? args.valueCallback(key) : key;
+    value = options.valueCallback ? options.valueCallback(value) : value;
+    var rest = string.slice(matchedString.length);
+    return {
+      value: value,
+      rest: rest
+    };
+  };
+}
+
+function findKey(object, predicate) {
+  for (var key in object) {
+    if (object.hasOwnProperty(key) && predicate(object[key])) {
+      return key;
+    }
+  }
+
+  return undefined;
+}
+
+function findIndex(array, predicate) {
+  for (var key = 0; key < array.length; key++) {
+    if (predicate(array[key])) {
+      return key;
+    }
+  }
+
+  return undefined;
+}
+
+function buildMatchPatternFn(args) {
+  return function (string) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var matchResult = string.match(args.matchPattern);
+    if (!matchResult) return null;
+    var matchedString = matchResult[0];
+    var parseResult = string.match(args.parsePattern);
+    if (!parseResult) return null;
+    var value = args.valueCallback ? args.valueCallback(parseResult[0]) : parseResult[0];
+    value = options.valueCallback ? options.valueCallback(value) : value;
+    var rest = string.slice(matchedString.length);
+    return {
+      value: value,
+      rest: rest
+    };
+  };
+}
+
+var matchOrdinalNumberPattern = /^(\d+)(th|st|nd|rd)?/i;
+var parseOrdinalNumberPattern = /\d+/i;
+var matchEraPatterns = {
+  narrow: /^(b|a)/i,
+  abbreviated: /^(b\.?\s?c\.?|b\.?\s?c\.?\s?e\.?|a\.?\s?d\.?|c\.?\s?e\.?)/i,
+  wide: /^(before christ|before common era|anno domini|common era)/i
+};
+var parseEraPatterns = {
+  any: [/^b/i, /^(a|c)/i]
+};
+var matchQuarterPatterns = {
+  narrow: /^[1234]/i,
+  abbreviated: /^q[1234]/i,
+  wide: /^[1234](th|st|nd|rd)? quarter/i
+};
+var parseQuarterPatterns = {
+  any: [/1/i, /2/i, /3/i, /4/i]
+};
+var matchMonthPatterns = {
+  narrow: /^[jfmasond]/i,
+  abbreviated: /^(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i,
+  wide: /^(january|february|march|april|may|june|july|august|september|october|november|december)/i
+};
+var parseMonthPatterns = {
+  narrow: [/^j/i, /^f/i, /^m/i, /^a/i, /^m/i, /^j/i, /^j/i, /^a/i, /^s/i, /^o/i, /^n/i, /^d/i],
+  any: [/^ja/i, /^f/i, /^mar/i, /^ap/i, /^may/i, /^jun/i, /^jul/i, /^au/i, /^s/i, /^o/i, /^n/i, /^d/i]
+};
+var matchDayPatterns = {
+  narrow: /^[smtwf]/i,
+  short: /^(su|mo|tu|we|th|fr|sa)/i,
+  abbreviated: /^(sun|mon|tue|wed|thu|fri|sat)/i,
+  wide: /^(sunday|monday|tuesday|wednesday|thursday|friday|saturday)/i
+};
+var parseDayPatterns = {
+  narrow: [/^s/i, /^m/i, /^t/i, /^w/i, /^t/i, /^f/i, /^s/i],
+  any: [/^su/i, /^m/i, /^tu/i, /^w/i, /^th/i, /^f/i, /^sa/i]
+};
+var matchDayPeriodPatterns = {
+  narrow: /^(a|p|mi|n|(in the|at) (morning|afternoon|evening|night))/i,
+  any: /^([ap]\.?\s?m\.?|midnight|noon|(in the|at) (morning|afternoon|evening|night))/i
+};
+var parseDayPeriodPatterns = {
+  any: {
+    am: /^a/i,
+    pm: /^p/i,
+    midnight: /^mi/i,
+    noon: /^no/i,
+    morning: /morning/i,
+    afternoon: /afternoon/i,
+    evening: /evening/i,
+    night: /night/i
+  }
+};
+var match = {
+  ordinalNumber: buildMatchPatternFn({
+    matchPattern: matchOrdinalNumberPattern,
+    parsePattern: parseOrdinalNumberPattern,
+    valueCallback: function (value) {
+      return parseInt(value, 10);
+    }
+  }),
+  era: buildMatchFn({
+    matchPatterns: matchEraPatterns,
+    defaultMatchWidth: 'wide',
+    parsePatterns: parseEraPatterns,
+    defaultParseWidth: 'any'
+  }),
+  quarter: buildMatchFn({
+    matchPatterns: matchQuarterPatterns,
+    defaultMatchWidth: 'wide',
+    parsePatterns: parseQuarterPatterns,
+    defaultParseWidth: 'any',
+    valueCallback: function (index) {
+      return index + 1;
+    }
+  }),
+  month: buildMatchFn({
+    matchPatterns: matchMonthPatterns,
+    defaultMatchWidth: 'wide',
+    parsePatterns: parseMonthPatterns,
+    defaultParseWidth: 'any'
+  }),
+  day: buildMatchFn({
+    matchPatterns: matchDayPatterns,
+    defaultMatchWidth: 'wide',
+    parsePatterns: parseDayPatterns,
+    defaultParseWidth: 'any'
+  }),
+  dayPeriod: buildMatchFn({
+    matchPatterns: matchDayPeriodPatterns,
+    defaultMatchWidth: 'any',
+    parsePatterns: parseDayPeriodPatterns,
+    defaultParseWidth: 'any'
+  })
+};
+
+/**
+ * @type {Locale}
+ * @category Locales
+ * @summary English locale (United States).
+ * @language English
+ * @iso-639-2 eng
+ * @author Sasha Koss [@kossnocorp]{@link https://github.com/kossnocorp}
+ * @author Lesha Koss [@leshakoss]{@link https://github.com/leshakoss}
+ */
+var locale = {
+  code: 'en-US',
+  formatDistance: formatDistance,
+  formatLong: formatLong,
+  formatRelative: formatRelative,
+  localize: localize,
+  match: match,
+  options: {
+    weekStartsOn: 0
+    /* Sunday */
+    ,
+    firstWeekContainsDate: 1
+  }
+};
 
 // - [yYQqMLwIdDecihHKkms]o matches any available ordinal number token
 //   (one of the certain letters followed by `o`)
@@ -33699,7 +34546,7 @@ var unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  * Return the formatted date string in the given format. The result may vary by locale.
  *
  * > ⚠️ Please note that the `format` tokens differ from Moment.js and other libraries.
- * > See: https://git.io/fxCyr
+ * > See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
  *
  * The characters wrapped between two single quotes characters (') are escaped.
  * Two single quotes in a row, whether inside or outside a quoted sequence, represent a 'real' single quote.
@@ -33935,30 +34782,10 @@ var unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  *    - `p`: long localized time
  *
  * 8. `YY` and `YYYY` tokens represent week-numbering years but they are often confused with years.
- *    You should enable `options.useAdditionalWeekYearTokens` to use them. See: https://git.io/fxCyr
+ *    You should enable `options.useAdditionalWeekYearTokens` to use them. See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
  *
  * 9. `D` and `DD` tokens represent days of the year but they are often confused with days of the month.
- *    You should enable `options.useAdditionalDayOfYearTokens` to use them. See: https://git.io/fxCyr
- *
- * ### v2.0.0 breaking changes:
- *
- * - [Changes that are common for the whole library](https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#Common-Changes).
- *
- * - The second argument is now required for the sake of explicitness.
- *
- *   ```javascript
- *   // Before v2.0.0
- *   format(new Date(2016, 0, 1))
- *
- *   // v2.0.0 onward
- *   format(new Date(2016, 0, 1), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
- *   ```
- *
- * - New format string API for `format` function
- *   which is based on [Unicode Technical Standard #35](https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table).
- *   See [this post](https://blog.date-fns.org/post/unicode-tokens-in-date-fns-v2-sreatyki91jg) for more details.
- *
- * - Characters are now escaped using single quote symbols (`'`) instead of square brackets.
+ *    You should enable `options.useAdditionalDayOfYearTokens` to use them. See: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
  *
  * @param {Date|Number} date - the original date
  * @param {String} format - the string of tokens
@@ -33967,9 +34794,9 @@ var unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  * @param {0|1|2|3|4|5|6} [options.weekStartsOn=0] - the index of the first day of the week (0 - Sunday)
  * @param {Number} [options.firstWeekContainsDate=1] - the day of January, which is
  * @param {Boolean} [options.useAdditionalWeekYearTokens=false] - if true, allows usage of the week-numbering year tokens `YY` and `YYYY`;
- *   see: https://git.io/fxCyr
+ *   see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
  * @param {Boolean} [options.useAdditionalDayOfYearTokens=false] - if true, allows usage of the day of year tokens `D` and `DD`;
- *   see: https://git.io/fxCyr
+ *   see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
  * @returns {String} the formatted date string
  * @throws {TypeError} 2 arguments required
  * @throws {RangeError} `date` must not be Invalid Date
@@ -33977,47 +34804,45 @@ var unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  * @throws {RangeError} `options.locale` must contain `formatLong` property
  * @throws {RangeError} `options.weekStartsOn` must be between 0 and 6
  * @throws {RangeError} `options.firstWeekContainsDate` must be between 1 and 7
- * @throws {RangeError} use `yyyy` instead of `YYYY` for formatting years using [format provided] to the input [input provided]; see: https://git.io/fxCyr
- * @throws {RangeError} use `yy` instead of `YY` for formatting years using [format provided] to the input [input provided]; see: https://git.io/fxCyr
- * @throws {RangeError} use `d` instead of `D` for formatting days of the month using [format provided] to the input [input provided]; see: https://git.io/fxCyr
- * @throws {RangeError} use `dd` instead of `DD` for formatting days of the month using [format provided] to the input [input provided]; see: https://git.io/fxCyr
+ * @throws {RangeError} use `yyyy` instead of `YYYY` for formatting years using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ * @throws {RangeError} use `yy` instead of `YY` for formatting years using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ * @throws {RangeError} use `d` instead of `D` for formatting days of the month using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
+ * @throws {RangeError} use `dd` instead of `DD` for formatting days of the month using [format provided] to the input [input provided]; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md
  * @throws {RangeError} format string contains an unescaped latin alphabet character
  *
  * @example
  * // Represent 11 February 2014 in middle-endian format:
- * var result = format(new Date(2014, 1, 11), 'MM/dd/yyyy')
+ * const result = format(new Date(2014, 1, 11), 'MM/dd/yyyy')
  * //=> '02/11/2014'
  *
  * @example
  * // Represent 2 July 2014 in Esperanto:
  * import { eoLocale } from 'date-fns/locale/eo'
- * var result = format(new Date(2014, 6, 2), "do 'de' MMMM yyyy", {
+ * const result = format(new Date(2014, 6, 2), "do 'de' MMMM yyyy", {
  *   locale: eoLocale
  * })
  * //=> '2-a de julio 2014'
  *
  * @example
  * // Escape string by single quote characters:
- * var result = format(new Date(2014, 6, 2, 15), "h 'o''clock'")
+ * const result = format(new Date(2014, 6, 2, 15), "h 'o''clock'")
  * //=> "3 o'clock"
  */
 
-function format(dirtyDate, dirtyFormatStr, dirtyOptions) {
+function format(dirtyDate, dirtyFormatStr, options) {
+  var _ref, _options$locale, _ref2, _ref3, _ref4, _options$firstWeekCon, _options$locale2, _options$locale2$opti, _defaultOptions$local, _defaultOptions$local2, _ref5, _ref6, _ref7, _options$weekStartsOn, _options$locale3, _options$locale3$opti, _defaultOptions$local3, _defaultOptions$local4;
+
   requiredArgs(2, arguments);
   var formatStr = String(dirtyFormatStr);
-  var options = dirtyOptions || {};
-  var locale$1 = options.locale || locale;
-  var localeFirstWeekContainsDate = locale$1.options && locale$1.options.firstWeekContainsDate;
-  var defaultFirstWeekContainsDate = localeFirstWeekContainsDate == null ? 1 : toInteger(localeFirstWeekContainsDate);
-  var firstWeekContainsDate = options.firstWeekContainsDate == null ? defaultFirstWeekContainsDate : toInteger(options.firstWeekContainsDate); // Test if weekStartsOn is between 1 and 7 _and_ is not NaN
+  var defaultOptions = getDefaultOptions();
+  var locale$1 = (_ref = (_options$locale = options === null || options === void 0 ? void 0 : options.locale) !== null && _options$locale !== void 0 ? _options$locale : defaultOptions.locale) !== null && _ref !== void 0 ? _ref : locale;
+  var firstWeekContainsDate = toInteger((_ref2 = (_ref3 = (_ref4 = (_options$firstWeekCon = options === null || options === void 0 ? void 0 : options.firstWeekContainsDate) !== null && _options$firstWeekCon !== void 0 ? _options$firstWeekCon : options === null || options === void 0 ? void 0 : (_options$locale2 = options.locale) === null || _options$locale2 === void 0 ? void 0 : (_options$locale2$opti = _options$locale2.options) === null || _options$locale2$opti === void 0 ? void 0 : _options$locale2$opti.firstWeekContainsDate) !== null && _ref4 !== void 0 ? _ref4 : defaultOptions.firstWeekContainsDate) !== null && _ref3 !== void 0 ? _ref3 : (_defaultOptions$local = defaultOptions.locale) === null || _defaultOptions$local === void 0 ? void 0 : (_defaultOptions$local2 = _defaultOptions$local.options) === null || _defaultOptions$local2 === void 0 ? void 0 : _defaultOptions$local2.firstWeekContainsDate) !== null && _ref2 !== void 0 ? _ref2 : 1); // Test if weekStartsOn is between 1 and 7 _and_ is not NaN
 
   if (!(firstWeekContainsDate >= 1 && firstWeekContainsDate <= 7)) {
     throw new RangeError('firstWeekContainsDate must be between 1 and 7 inclusively');
   }
 
-  var localeWeekStartsOn = locale$1.options && locale$1.options.weekStartsOn;
-  var defaultWeekStartsOn = localeWeekStartsOn == null ? 0 : toInteger(localeWeekStartsOn);
-  var weekStartsOn = options.weekStartsOn == null ? defaultWeekStartsOn : toInteger(options.weekStartsOn); // Test if weekStartsOn is between 0 and 6 _and_ is not NaN
+  var weekStartsOn = toInteger((_ref5 = (_ref6 = (_ref7 = (_options$weekStartsOn = options === null || options === void 0 ? void 0 : options.weekStartsOn) !== null && _options$weekStartsOn !== void 0 ? _options$weekStartsOn : options === null || options === void 0 ? void 0 : (_options$locale3 = options.locale) === null || _options$locale3 === void 0 ? void 0 : (_options$locale3$opti = _options$locale3.options) === null || _options$locale3$opti === void 0 ? void 0 : _options$locale3$opti.weekStartsOn) !== null && _ref7 !== void 0 ? _ref7 : defaultOptions.weekStartsOn) !== null && _ref6 !== void 0 ? _ref6 : (_defaultOptions$local3 = defaultOptions.locale) === null || _defaultOptions$local3 === void 0 ? void 0 : (_defaultOptions$local4 = _defaultOptions$local3.options) === null || _defaultOptions$local4 === void 0 ? void 0 : _defaultOptions$local4.weekStartsOn) !== null && _ref5 !== void 0 ? _ref5 : 0); // Test if weekStartsOn is between 0 and 6 _and_ is not NaN
 
   if (!(weekStartsOn >= 0 && weekStartsOn <= 6)) {
     throw new RangeError('weekStartsOn must be between 0 and 6 inclusively');
@@ -34053,7 +34878,7 @@ function format(dirtyDate, dirtyFormatStr, dirtyOptions) {
 
     if (firstCharacter === 'p' || firstCharacter === 'P') {
       var longFormatter = longFormatters[firstCharacter];
-      return longFormatter(substring, locale$1.formatLong, formatterOptions);
+      return longFormatter(substring, locale$1.formatLong);
     }
 
     return substring;
@@ -34072,12 +34897,12 @@ function format(dirtyDate, dirtyFormatStr, dirtyOptions) {
     var formatter = formatters[firstCharacter];
 
     if (formatter) {
-      if (!options.useAdditionalWeekYearTokens && isProtectedWeekYearToken(substring)) {
-        throwProtectedError(substring, dirtyFormatStr, dirtyDate);
+      if (!(options !== null && options !== void 0 && options.useAdditionalWeekYearTokens) && isProtectedWeekYearToken(substring)) {
+        throwProtectedError(substring, dirtyFormatStr, String(dirtyDate));
       }
 
-      if (!options.useAdditionalDayOfYearTokens && isProtectedDayOfYearToken(substring)) {
-        throwProtectedError(substring, dirtyFormatStr, dirtyDate);
+      if (!(options !== null && options !== void 0 && options.useAdditionalDayOfYearTokens) && isProtectedDayOfYearToken(substring)) {
+        throwProtectedError(substring, dirtyFormatStr, String(dirtyDate));
       }
 
       return formatter(utcDate, substring, locale$1.localize, formatterOptions);
@@ -34093,7 +34918,13 @@ function format(dirtyDate, dirtyFormatStr, dirtyOptions) {
 }
 
 function cleanEscapedString(input) {
-  return input.match(escapedStringRegExp)[1].replace(doubleQuoteRegExp, "'");
+  var matched = input.match(escapedStringRegExp);
+
+  if (!matched) {
+    return input;
+  }
+
+  return matched[1].replace(doubleQuoteRegExp, "'");
 }
 
 const logItemCss = "fireenjin-log-item{display:block}fireenjin-log-item ion-label{margin-top:0}fireenjin-log-item fireenjin-json-viewer{max-height:60px;display:block;overflow:hidden;transition:all ease 0.3s}fireenjin-log-item:hover fireenjin-json-viewer{cursor:pointer;max-height:none}fireenjin-log-item h3{color:var(--ion-color-medium);text-indent:10px}";
@@ -37320,61 +38151,68 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
      * snapping animation completes.
      */
     gesture.enable(false);
-    animation
-      .onFinish(() => {
-      if (shouldRemainOpen) {
-        /**
-         * Once the snapping animation completes,
-         * we need to reset the animation to go
-         * from 0 to 1 so users can swipe in any direction.
-         * We then set the animation offset to the current
-         * breakpoint so that it starts at the snapped position.
-         */
-        if (wrapperAnimation && backdropAnimation) {
-          raf(() => {
-            wrapperAnimation.keyframes([...SheetDefaults.WRAPPER_KEYFRAMES]);
-            backdropAnimation.keyframes([...SheetDefaults.BACKDROP_KEYFRAMES]);
-            animation.progressStart(true, 1 - snapToBreakpoint);
-            currentBreakpoint = snapToBreakpoint;
-            onBreakpointChange(currentBreakpoint);
-            /**
-             * If the sheet is fully expanded, we can safely
-             * enable scrolling again.
-             */
-            if (contentEl && currentBreakpoint === breakpoints[breakpoints.length - 1]) {
-              contentEl.scrollY = true;
-            }
-            /**
-             * Backdrop should become enabled
-             * after the backdropBreakpoint value
-             */
-            const shouldEnableBackdrop = currentBreakpoint > backdropBreakpoint;
-            if (shouldEnableBackdrop) {
-              enableBackdrop();
-            }
-            else {
-              disableBackdrop();
-            }
-            gesture.enable(true);
-          });
-        }
-        else {
-          gesture.enable(true);
-        }
-      }
-      /**
-       * This must be a one time callback
-       * otherwise a new callback will
-       * be added every time onEnd runs.
-       */
-    }, { oneTimeCallback: true })
-      .progressEnd(1, 0, 500);
     if (shouldPreventDismiss) {
       handleCanDismiss(baseEl, animation);
     }
     else if (!shouldRemainOpen) {
       onDismiss();
     }
+    return new Promise((resolve) => {
+      animation
+        .onFinish(() => {
+        if (shouldRemainOpen) {
+          /**
+           * Once the snapping animation completes,
+           * we need to reset the animation to go
+           * from 0 to 1 so users can swipe in any direction.
+           * We then set the animation offset to the current
+           * breakpoint so that it starts at the snapped position.
+           */
+          if (wrapperAnimation && backdropAnimation) {
+            raf(() => {
+              wrapperAnimation.keyframes([...SheetDefaults.WRAPPER_KEYFRAMES]);
+              backdropAnimation.keyframes([...SheetDefaults.BACKDROP_KEYFRAMES]);
+              animation.progressStart(true, 1 - snapToBreakpoint);
+              currentBreakpoint = snapToBreakpoint;
+              onBreakpointChange(currentBreakpoint);
+              /**
+               * If the sheet is fully expanded, we can safely
+               * enable scrolling again.
+               */
+              if (contentEl && currentBreakpoint === breakpoints[breakpoints.length - 1]) {
+                contentEl.scrollY = true;
+              }
+              /**
+               * Backdrop should become enabled
+               * after the backdropBreakpoint value
+               */
+              const shouldEnableBackdrop = currentBreakpoint > backdropBreakpoint;
+              if (shouldEnableBackdrop) {
+                enableBackdrop();
+              }
+              else {
+                disableBackdrop();
+              }
+              gesture.enable(true);
+              resolve();
+            });
+          }
+          else {
+            gesture.enable(true);
+            resolve();
+          }
+        }
+        else {
+          resolve();
+        }
+        /**
+         * This must be a one time callback
+         * otherwise a new callback will
+         * be added every time onEnd runs.
+         */
+      }, { oneTimeCallback: true })
+        .progressEnd(1, 0, 500);
+    });
   };
   const gesture = createGesture({
     el: wrapperEl,
@@ -37393,9 +38231,9 @@ const createSheetGesture = (baseEl, backdropEl, wrapperEl, initialBreakpoint, ba
   };
 };
 
-const modalIosCss = "/*!@:host*/.sc-ion-modal-ios-h{--width:100%;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--overflow:hidden;--border-radius:0;--border-width:0;--border-style:none;--border-color:transparent;--background:var(--ion-background-color, #fff);--box-shadow:none;--backdrop-opacity:0;left:0;right:0;top:0;bottom:0;display:flex;position:absolute;align-items:center;justify-content:center;outline:none;contain:strict}/*!@.modal-wrapper, ion-backdrop*/.modal-wrapper.sc-ion-modal-ios,ion-backdrop.sc-ion-modal-ios{pointer-events:auto}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-modal-ios-h{display:none}/*!@.modal-wrapper,\n.modal-shadow*/.modal-wrapper.sc-ion-modal-ios,.modal-shadow.sc-ion-modal-ios{border-radius:var(--border-radius);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow);overflow:var(--overflow);z-index:10}/*!@.modal-shadow*/.modal-shadow.sc-ion-modal-ios{position:absolute;background:transparent}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-ios-h{--width:600px;--height:500px;--ion-safe-area-top:0px;--ion-safe-area-bottom:0px;--ion-safe-area-right:0px;--ion-safe-area-left:0px}}@media only screen and (min-width: 768px) and (min-height: 768px){/*!@:host*/.sc-ion-modal-ios-h{--width:600px;--height:600px}}/*!@.modal-handle*/.modal-handle.sc-ion-modal-ios{left:0px;right:0px;top:5px;border-radius:8px;margin-left:auto;margin-right:auto;position:absolute;width:36px;height:5px;transform:translateZ(0);background:var(--ion-color-step-350, #c0c0be);z-index:11}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.modal-handle*/.modal-handle.sc-ion-modal-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@:host(.modal-sheet)*/.modal-sheet.sc-ion-modal-ios-h{--height:calc(100% - (var(--ion-safe-area-top) + 10px))}/*!@:host(.modal-sheet) .modal-wrapper,\n:host(.modal-sheet) .modal-shadow*/.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,.modal-sheet.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{position:absolute;bottom:0}/*!@:host*/.sc-ion-modal-ios-h{--backdrop-opacity:var(--ion-backdrop-opacity, 0.4)}/*!@:host(.modal-card),\n:host(.modal-sheet)*/.modal-card.sc-ion-modal-ios-h,.modal-sheet.sc-ion-modal-ios-h{--border-radius:10px}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-ios-h{--border-radius:10px}}/*!@.modal-wrapper*/.modal-wrapper.sc-ion-modal-ios{transform:translate3d(0,  100%,  0)}@media screen and (max-width: 767px){/*!@@supports (width: 1px)*/@supports .sc-ion-modal-ios (width.sc-ion-modal-ios: 1px).sc-ion-modal-ios{.sc-ion-modal-ios-h.modal-card{--height:calc(100% - max(30px, var(--ion-safe-area-top)) - 10px)}}/*!@@supports not (width: 1px)*/@supports .sc-ion-modal-ios not.sc-ion-modal-ios (width.sc-ion-modal-ios: 1px).sc-ion-modal-ios{.sc-ion-modal-ios-h.modal-card{--height:calc(100% - 40px)}}/*!@:host(.modal-card) .modal-wrapper*/.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host-context([dir=rtl]):host(.modal-card) .modal-wrapper, :host-context([dir=rtl]).modal-card .modal-wrapper*/[dir=rtl].sc-ion-modal-ios-h -no-combinator.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .sc-ion-modal-ios-h -no-combinator.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl].modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host(.modal-card)*/.modal-card.sc-ion-modal-ios-h{--backdrop-opacity:0;--width:100%;align-items:flex-end}/*!@:host(.modal-card) .modal-shadow*/.modal-card.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{display:none}/*!@:host(.modal-card) ion-backdrop*/.modal-card.sc-ion-modal-ios-h ion-backdrop.sc-ion-modal-ios{pointer-events:none}}@media screen and (min-width: 768px){/*!@:host(.modal-card)*/.modal-card.sc-ion-modal-ios-h{--width:calc(100% - 120px);--height:calc(100% - (120px + var(--ion-safe-area-top) + var(--ion-safe-area-bottom)));--max-width:720px;--max-height:1000px;--backdrop-opacity:0;--box-shadow:0px 0px 30px 10px rgba(0, 0, 0, 0.1);transition:all 0.5s ease-in-out}/*!@:host(.modal-card) .modal-wrapper*/.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{box-shadow:none}/*!@:host(.modal-card) .modal-shadow*/.modal-card.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{box-shadow:var(--box-shadow)}}/*!@:host(.modal-sheet) .modal-wrapper*/.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host-context([dir=rtl]):host(.modal-sheet) .modal-wrapper, :host-context([dir=rtl]).modal-sheet .modal-wrapper*/[dir=rtl].sc-ion-modal-ios-h -no-combinator.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .sc-ion-modal-ios-h -no-combinator.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl].modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}";
+const modalIosCss = "/*!@:host*/.sc-ion-modal-ios-h{--width:100%;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--overflow:hidden;--border-radius:0;--border-width:0;--border-style:none;--border-color:transparent;--background:var(--ion-background-color, #fff);--box-shadow:none;--backdrop-opacity:0;left:0;right:0;top:0;bottom:0;display:flex;position:absolute;align-items:center;justify-content:center;outline:none;contain:strict}/*!@.modal-wrapper,\nion-backdrop*/.modal-wrapper.sc-ion-modal-ios,ion-backdrop.sc-ion-modal-ios{pointer-events:auto}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-modal-ios-h{display:none}/*!@.modal-wrapper,\n.modal-shadow*/.modal-wrapper.sc-ion-modal-ios,.modal-shadow.sc-ion-modal-ios{border-radius:var(--border-radius);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow);overflow:var(--overflow);z-index:10}/*!@.modal-shadow*/.modal-shadow.sc-ion-modal-ios{position:absolute;background:transparent}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-ios-h{--width:600px;--height:500px;--ion-safe-area-top:0px;--ion-safe-area-bottom:0px;--ion-safe-area-right:0px;--ion-safe-area-left:0px}}@media only screen and (min-width: 768px) and (min-height: 768px){/*!@:host*/.sc-ion-modal-ios-h{--width:600px;--height:600px}}/*!@.modal-handle*/.modal-handle.sc-ion-modal-ios{left:0px;right:0px;top:5px;border-radius:8px;margin-left:auto;margin-right:auto;position:absolute;width:36px;height:5px;transform:translateZ(0);border:0;background:var(--ion-color-step-350, #c0c0be);cursor:pointer;z-index:11}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.modal-handle*/.modal-handle.sc-ion-modal-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@.modal-handle::before*/.modal-handle.sc-ion-modal-ios::before{padding-left:4px;padding-right:4px;padding-top:4px;padding-bottom:4px;position:absolute;width:36px;height:5px;transform:translate(-50%, -50%);content:\"\"}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.modal-handle::before*/.modal-handle.sc-ion-modal-ios::before{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:4px;padding-inline-end:4px}}/*!@:host(.modal-sheet)*/.modal-sheet.sc-ion-modal-ios-h{--height:calc(100% - (var(--ion-safe-area-top) + 10px))}/*!@:host(.modal-sheet) .modal-wrapper,\n:host(.modal-sheet) .modal-shadow*/.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,.modal-sheet.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{position:absolute;bottom:0}/*!@:host*/.sc-ion-modal-ios-h{--backdrop-opacity:var(--ion-backdrop-opacity, 0.4)}/*!@:host(.modal-card),\n:host(.modal-sheet)*/.modal-card.sc-ion-modal-ios-h,.modal-sheet.sc-ion-modal-ios-h{--border-radius:10px}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-ios-h{--border-radius:10px}}/*!@.modal-wrapper*/.modal-wrapper.sc-ion-modal-ios{transform:translate3d(0,  100%,  0)}@media screen and (max-width: 767px){/*!@@supports (width: 1px)*/@supports .sc-ion-modal-ios (width.sc-ion-modal-ios: 1px).sc-ion-modal-ios{.sc-ion-modal-ios-h.modal-card{--height:calc(100% - max(30px, var(--ion-safe-area-top)) - 10px)}}/*!@@supports not (width: 1px)*/@supports .sc-ion-modal-ios not.sc-ion-modal-ios (width.sc-ion-modal-ios: 1px).sc-ion-modal-ios{.sc-ion-modal-ios-h.modal-card{--height:calc(100% - 40px)}}/*!@:host(.modal-card) .modal-wrapper*/.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host-context([dir=rtl]):host(.modal-card) .modal-wrapper, :host-context([dir=rtl]).modal-card .modal-wrapper*/[dir=rtl].sc-ion-modal-ios-h -no-combinator.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .sc-ion-modal-ios-h -no-combinator.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl].modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host(.modal-card)*/.modal-card.sc-ion-modal-ios-h{--backdrop-opacity:0;--width:100%;align-items:flex-end}/*!@:host(.modal-card) .modal-shadow*/.modal-card.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{display:none}/*!@:host(.modal-card) ion-backdrop*/.modal-card.sc-ion-modal-ios-h ion-backdrop.sc-ion-modal-ios{pointer-events:none}}@media screen and (min-width: 768px){/*!@:host(.modal-card)*/.modal-card.sc-ion-modal-ios-h{--width:calc(100% - 120px);--height:calc(100% - (120px + var(--ion-safe-area-top) + var(--ion-safe-area-bottom)));--max-width:720px;--max-height:1000px;--backdrop-opacity:0;--box-shadow:0px 0px 30px 10px rgba(0, 0, 0, 0.1);transition:all 0.5s ease-in-out}/*!@:host(.modal-card) .modal-wrapper*/.modal-card.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{box-shadow:none}/*!@:host(.modal-card) .modal-shadow*/.modal-card.sc-ion-modal-ios-h .modal-shadow.sc-ion-modal-ios{box-shadow:var(--box-shadow)}}/*!@:host(.modal-sheet) .modal-wrapper*/.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}/*!@:host-context([dir=rtl]):host(.modal-sheet) .modal-wrapper, :host-context([dir=rtl]).modal-sheet .modal-wrapper*/[dir=rtl].sc-ion-modal-ios-h -no-combinator.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .sc-ion-modal-ios-h -no-combinator.modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl].modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios,[dir=rtl] .modal-sheet.sc-ion-modal-ios-h .modal-wrapper.sc-ion-modal-ios{border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);border-bottom-right-radius:0;border-bottom-left-radius:0}";
 
-const modalMdCss = "/*!@:host*/.sc-ion-modal-md-h{--width:100%;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--overflow:hidden;--border-radius:0;--border-width:0;--border-style:none;--border-color:transparent;--background:var(--ion-background-color, #fff);--box-shadow:none;--backdrop-opacity:0;left:0;right:0;top:0;bottom:0;display:flex;position:absolute;align-items:center;justify-content:center;outline:none;contain:strict}/*!@.modal-wrapper, ion-backdrop*/.modal-wrapper.sc-ion-modal-md,ion-backdrop.sc-ion-modal-md{pointer-events:auto}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-modal-md-h{display:none}/*!@.modal-wrapper,\n.modal-shadow*/.modal-wrapper.sc-ion-modal-md,.modal-shadow.sc-ion-modal-md{border-radius:var(--border-radius);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow);overflow:var(--overflow);z-index:10}/*!@.modal-shadow*/.modal-shadow.sc-ion-modal-md{position:absolute;background:transparent}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-md-h{--width:600px;--height:500px;--ion-safe-area-top:0px;--ion-safe-area-bottom:0px;--ion-safe-area-right:0px;--ion-safe-area-left:0px}}@media only screen and (min-width: 768px) and (min-height: 768px){/*!@:host*/.sc-ion-modal-md-h{--width:600px;--height:600px}}/*!@.modal-handle*/.modal-handle.sc-ion-modal-md{left:0px;right:0px;top:5px;border-radius:8px;margin-left:auto;margin-right:auto;position:absolute;width:36px;height:5px;transform:translateZ(0);background:var(--ion-color-step-350, #c0c0be);z-index:11}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.modal-handle*/.modal-handle.sc-ion-modal-md{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@:host(.modal-sheet)*/.modal-sheet.sc-ion-modal-md-h{--height:calc(100% - (var(--ion-safe-area-top) + 10px))}/*!@:host(.modal-sheet) .modal-wrapper,\n:host(.modal-sheet) .modal-shadow*/.modal-sheet.sc-ion-modal-md-h .modal-wrapper.sc-ion-modal-md,.modal-sheet.sc-ion-modal-md-h .modal-shadow.sc-ion-modal-md{position:absolute;bottom:0}/*!@:host*/.sc-ion-modal-md-h{--backdrop-opacity:var(--ion-backdrop-opacity, 0.32)}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-md-h{--border-radius:2px;--box-shadow:0 28px 48px rgba(0, 0, 0, 0.4)}}/*!@.modal-wrapper*/.modal-wrapper.sc-ion-modal-md{transform:translate3d(0,  40px,  0);opacity:0.01}";
+const modalMdCss = "/*!@:host*/.sc-ion-modal-md-h{--width:100%;--min-width:auto;--max-width:auto;--height:100%;--min-height:auto;--max-height:auto;--overflow:hidden;--border-radius:0;--border-width:0;--border-style:none;--border-color:transparent;--background:var(--ion-background-color, #fff);--box-shadow:none;--backdrop-opacity:0;left:0;right:0;top:0;bottom:0;display:flex;position:absolute;align-items:center;justify-content:center;outline:none;contain:strict}/*!@.modal-wrapper,\nion-backdrop*/.modal-wrapper.sc-ion-modal-md,ion-backdrop.sc-ion-modal-md{pointer-events:auto}/*!@:host(.overlay-hidden)*/.overlay-hidden.sc-ion-modal-md-h{display:none}/*!@.modal-wrapper,\n.modal-shadow*/.modal-wrapper.sc-ion-modal-md,.modal-shadow.sc-ion-modal-md{border-radius:var(--border-radius);width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);box-shadow:var(--box-shadow);overflow:var(--overflow);z-index:10}/*!@.modal-shadow*/.modal-shadow.sc-ion-modal-md{position:absolute;background:transparent}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-md-h{--width:600px;--height:500px;--ion-safe-area-top:0px;--ion-safe-area-bottom:0px;--ion-safe-area-right:0px;--ion-safe-area-left:0px}}@media only screen and (min-width: 768px) and (min-height: 768px){/*!@:host*/.sc-ion-modal-md-h{--width:600px;--height:600px}}/*!@.modal-handle*/.modal-handle.sc-ion-modal-md{left:0px;right:0px;top:5px;border-radius:8px;margin-left:auto;margin-right:auto;position:absolute;width:36px;height:5px;transform:translateZ(0);border:0;background:var(--ion-color-step-350, #c0c0be);cursor:pointer;z-index:11}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.modal-handle*/.modal-handle.sc-ion-modal-md{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@.modal-handle::before*/.modal-handle.sc-ion-modal-md::before{padding-left:4px;padding-right:4px;padding-top:4px;padding-bottom:4px;position:absolute;width:36px;height:5px;transform:translate(-50%, -50%);content:\"\"}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.modal-handle::before*/.modal-handle.sc-ion-modal-md::before{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:4px;padding-inline-end:4px}}/*!@:host(.modal-sheet)*/.modal-sheet.sc-ion-modal-md-h{--height:calc(100% - (var(--ion-safe-area-top) + 10px))}/*!@:host(.modal-sheet) .modal-wrapper,\n:host(.modal-sheet) .modal-shadow*/.modal-sheet.sc-ion-modal-md-h .modal-wrapper.sc-ion-modal-md,.modal-sheet.sc-ion-modal-md-h .modal-shadow.sc-ion-modal-md{position:absolute;bottom:0}/*!@:host*/.sc-ion-modal-md-h{--backdrop-opacity:var(--ion-backdrop-opacity, 0.32)}@media only screen and (min-width: 768px) and (min-height: 600px){/*!@:host*/.sc-ion-modal-md-h{--border-radius:2px;--box-shadow:0 28px 48px rgba(0, 0, 0, 0.4)}}/*!@.modal-wrapper*/.modal-wrapper.sc-ion-modal-md{transform:translate3d(0,  40px,  0);opacity:0.01}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -37442,6 +38280,16 @@ class Modal {
      */
     this.backdropBreakpoint = 0;
     /**
+     * The interaction behavior for the sheet modal when the handle is pressed.
+     *
+     * Defaults to `"none"`, which  means the modal will not change size or position when the handle is pressed.
+     * Set to `"cycle"` to let the modal cycle between available breakpoints when pressed.
+     *
+     * Handle behavior is unavailable when the `handle` property is set to `false` or
+     * when the `breakpoints` property is not set (using a fullscreen or card modal).
+     */
+    this.handleBehavior = 'none';
+    /**
      * If `true`, the modal will be dismissed when the backdrop is clicked.
      */
     this.backdropDismiss = true;
@@ -37470,6 +38318,18 @@ class Modal {
      * the modal dismisses. You will need to do that in your code.
      */
     this.isOpen = false;
+    /**
+     * If `true`, the component passed into `ion-modal` will
+     * automatically be mounted when the modal is created. The
+     * component will remain mounted even when the modal is dismissed.
+     * However, the component will be destroyed when the modal is
+     * destroyed. This property is not reactive and should only be
+     * used when initially creating a modal.
+     *
+     * Note: This feature only applies to inline modals in JavaScript
+     * frameworks such as Angular, React, and Vue.
+     */
+    this.keepContentsMounted = false;
     this.configureTriggerInteraction = () => {
       const { trigger, el, destroyTriggerInteraction } = this;
       if (destroyTriggerInteraction) {
@@ -37490,7 +38350,29 @@ class Modal {
       };
       this.destroyTriggerInteraction = configureTriggerInteraction(triggerEl, el);
     };
+    this.onHandleClick = () => {
+      const { sheetTransition, handleBehavior } = this;
+      if (handleBehavior !== 'cycle' || sheetTransition !== undefined) {
+        /**
+         * The sheet modal should not advance to the next breakpoint
+         * if the handle behavior is not `cycle` or if the handle
+         * is clicked while the sheet is moving to a breakpoint.
+         */
+        return;
+      }
+      this.moveToNextBreakpoint();
+    };
     this.onBackdropTap = () => {
+      const { sheetTransition } = this;
+      if (sheetTransition !== undefined) {
+        /**
+         * When the handle is double clicked at the largest breakpoint,
+         * it will start to move to the first breakpoint. While transitioning,
+         * the backdrop will often receive the second click. We prevent the
+         * backdrop from dismissing the modal while moving between breakpoints.
+         */
+        return;
+      }
       this.dismiss(undefined, BACKDROP);
     };
     this.onLifecycle = (modalEvent) => {
@@ -37866,11 +38748,13 @@ class Modal {
       return;
     }
     if (moveSheetToBreakpoint) {
-      moveSheetToBreakpoint({
+      this.sheetTransition = moveSheetToBreakpoint({
         breakpoint,
         breakpointOffset: 1 - currentBreakpoint,
         canDismiss: canDismiss !== undefined && canDismiss !== true && breakpoints[0] === 0,
       });
+      await this.sheetTransition;
+      this.sheetTransition = undefined;
     }
   }
   /**
@@ -37879,15 +38763,39 @@ class Modal {
   async getCurrentBreakpoint() {
     return this.currentBreakpoint;
   }
+  async moveToNextBreakpoint() {
+    const { breakpoints, currentBreakpoint } = this;
+    if (!breakpoints || currentBreakpoint == null) {
+      /**
+       * If the modal does not have breakpoints and/or the current
+       * breakpoint is not set, we can't move to the next breakpoint.
+       */
+      return false;
+    }
+    const allowedBreakpoints = breakpoints.filter((b) => b !== 0);
+    const currentBreakpointIndex = allowedBreakpoints.indexOf(currentBreakpoint);
+    const nextBreakpointIndex = (currentBreakpointIndex + 1) % allowedBreakpoints.length;
+    const nextBreakpoint = allowedBreakpoints[nextBreakpointIndex];
+    /**
+     * Sets the current breakpoint to the next available breakpoint.
+     * If the current breakpoint is the last breakpoint, we set the current
+     * breakpoint to the first non-zero breakpoint to avoid dismissing the sheet.
+     */
+    await this.setCurrentBreakpoint(nextBreakpoint);
+    return true;
+  }
   render() {
-    const { handle, isSheetModal, presentingElement, htmlAttributes } = this;
+    const { handle, isSheetModal, presentingElement, htmlAttributes, handleBehavior } = this;
     const showHandle = handle !== false && isSheetModal;
     const mode = getIonMode$1(this);
     const { modalId } = this;
     const isCardModal = presentingElement !== undefined && mode === 'ios';
+    const isHandleCycle = handleBehavior === 'cycle';
     return (hAsync(Host, Object.assign({ "no-router": true, "aria-modal": "true", tabindex: "-1" }, htmlAttributes, { style: {
         zIndex: `${20000 + this.overlayIndex}`,
-      }, class: Object.assign({ [mode]: true, ['modal-default']: !isCardModal && !isSheetModal, [`modal-card`]: isCardModal, [`modal-sheet`]: isSheetModal, 'overlay-hidden': true }, getClassMap(this.cssClass)), id: modalId, onIonBackdropTap: this.onBackdropTap, onIonModalDidPresent: this.onLifecycle, onIonModalWillPresent: this.onLifecycle, onIonModalWillDismiss: this.onLifecycle, onIonModalDidDismiss: this.onLifecycle }), hAsync("ion-backdrop", { ref: (el) => (this.backdropEl = el), visible: this.showBackdrop, tappable: this.backdropDismiss, part: "backdrop" }), mode === 'ios' && hAsync("div", { class: "modal-shadow" }), hAsync("div", { role: "dialog", class: "modal-wrapper ion-overlay-wrapper", part: "content", ref: (el) => (this.wrapperEl = el) }, showHandle && hAsync("div", { class: "modal-handle", part: "handle" }), hAsync("slot", null))));
+      }, class: Object.assign({ [mode]: true, ['modal-default']: !isCardModal && !isSheetModal, [`modal-card`]: isCardModal, [`modal-sheet`]: isSheetModal, 'overlay-hidden': true }, getClassMap(this.cssClass)), id: modalId, onIonBackdropTap: this.onBackdropTap, onIonModalDidPresent: this.onLifecycle, onIonModalWillPresent: this.onLifecycle, onIonModalWillDismiss: this.onLifecycle, onIonModalDidDismiss: this.onLifecycle }), hAsync("ion-backdrop", { ref: (el) => (this.backdropEl = el), visible: this.showBackdrop, tappable: this.backdropDismiss, part: "backdrop" }), mode === 'ios' && hAsync("div", { class: "modal-shadow" }), hAsync("div", { role: "dialog", class: "modal-wrapper ion-overlay-wrapper", part: "content", ref: (el) => (this.wrapperEl = el) }, showHandle && (hAsync("button", { class: "modal-handle",
+      // Prevents the handle from receiving keyboard focus when it does not cycle
+      tabIndex: !isHandleCycle ? -1 : 0, "aria-label": "Activate to adjust the size of the dialog overlaying the screen", onClick: isHandleCycle ? this.onHandleClick : undefined, part: "handle" })), hAsync("slot", null))));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -37913,6 +38821,7 @@ class Modal {
       "initialBreakpoint": [2, "initial-breakpoint"],
       "backdropBreakpoint": [2, "backdrop-breakpoint"],
       "handle": [4],
+      "handleBehavior": [1, "handle-behavior"],
       "component": [1],
       "componentProps": [16],
       "cssClass": [1, "css-class"],
@@ -37924,6 +38833,7 @@ class Modal {
       "htmlAttributes": [16],
       "isOpen": [4, "is-open"],
       "trigger": [1],
+      "keepContentsMounted": [4, "keep-contents-mounted"],
       "canDismiss": [4, "can-dismiss"],
       "presented": [32],
       "present": [64],
@@ -38065,6 +38975,9 @@ class Nav {
     this.rootChanged();
     this.gesture = (await Promise.resolve().then(function () { return swipeBack; })).createSwipeBackGesture(this.el, this.canStart.bind(this), this.onStart.bind(this), this.onMove.bind(this), this.onEnd.bind(this));
     this.swipeGestureChanged();
+  }
+  connectedCallback() {
+    this.destroyed = false;
   }
   disconnectedCallback() {
     for (const view of this.views) {
@@ -38649,9 +39562,13 @@ class Nav {
     return this.transitionFinish(hasCompleted, enteringView, leavingView, opts);
   }
   transitionFinish(hasCompleted, enteringView, leavingView, opts) {
-    const cleanupView = hasCompleted ? enteringView : leavingView;
-    if (cleanupView) {
-      this.cleanup(cleanupView);
+    /**
+     * If the transition did not complete, the leavingView will still be the active
+     * view on the stack. Otherwise unmount all the views after the enteringView.
+     */
+    const activeView = hasCompleted ? enteringView : leavingView;
+    if (activeView) {
+      this.unmountInactiveViews(activeView);
     }
     return {
       hasCompleted,
@@ -38706,9 +39623,13 @@ class Nav {
     this.removeView(view);
   }
   /**
+   * Unmounts all inactive views after the specified active view.
+   *
    * DOM WRITE
+   *
+   * @param activeView The view that is actively visible in the stack. Used to calculate which views to unmount.
    */
-  cleanup(activeView) {
+  unmountInactiveViews(activeView) {
     // ok, cleanup time!! Destroy all of the views that are
     // INACTIVE and come after the active view
     // only do this if the views exist, though
@@ -38977,7 +39898,7 @@ class Pagination$1 {
         }
         this.page = this.pageKey
           ? this.pageKey.split(".").reduce((o, i) => o[i], event.detail.data)
-          : this.page + 1;
+          : this.page;
         await this.addResults(results);
       }
       catch (err) {
@@ -39762,9 +40683,9 @@ const DECELERATION_FRICTION = 0.97;
 const MAX_PICKER_SPEED = 90;
 const TRANSITION_DURATION = 150;
 
-const pickerColumnInternalIosCss = "/*!@:host*/.sc-ion-picker-column-internal-ios-h{padding-left:16px;padding-right:16px;padding-top:0px;padding-bottom:0px;height:200px;outline:none;font-size:22px;scroll-snap-type:y mandatory;overflow-x:hidden;overflow-y:scroll;scrollbar-width:none;text-align:center}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-picker-column-internal-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host::-webkit-scrollbar*/.sc-ion-picker-column-internal-ios-h::-webkit-scrollbar{display:none}/*!@:host .picker-item*/.sc-ion-picker-column-internal-ios-h .picker-item.sc-ion-picker-column-internal-ios{height:34px;line-height:34px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;scroll-snap-align:center}/*!@:host .picker-item-empty*/.sc-ion-picker-column-internal-ios-h .picker-item-empty.sc-ion-picker-column-internal-ios{scroll-snap-align:none}/*!@:host(.picker-column-active) .picker-item.picker-item-active*/.picker-column-active.sc-ion-picker-column-internal-ios-h .picker-item.picker-item-active.sc-ion-picker-column-internal-ios{color:var(--ion-color-base)}@media (any-hover: hover){/*!@:host(:focus)*/.sc-ion-picker-column-internal-ios-h:focus{outline:none;background:rgba(var(--ion-color-base-rgb), 0.2)}}";
+const pickerColumnInternalIosCss = "/*!@:host*/.sc-ion-picker-column-internal-ios-h{padding-left:16px;padding-right:16px;padding-top:0px;padding-bottom:0px;height:200px;outline:none;font-size:22px;scroll-snap-type:y mandatory;overflow-x:hidden;overflow-y:scroll;scrollbar-width:none;text-align:center}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-picker-column-internal-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host::-webkit-scrollbar*/.sc-ion-picker-column-internal-ios-h::-webkit-scrollbar{display:none}/*!@:host .picker-item*/.sc-ion-picker-column-internal-ios-h .picker-item.sc-ion-picker-column-internal-ios{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;display:block;width:100%;height:34px;border:0px;outline:none;background:transparent;color:inherit;font-size:inherit;line-height:34px;text-align:inherit;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;overflow:hidden;scroll-snap-align:center}/*!@:host .picker-item-empty,\n:host .picker-item.picker-item-disabled*/.sc-ion-picker-column-internal-ios-h .picker-item-empty.sc-ion-picker-column-internal-ios,.sc-ion-picker-column-internal-ios-h .picker-item.picker-item-disabled.sc-ion-picker-column-internal-ios{scroll-snap-align:none;cursor:default}/*!@:host .picker-item.picker-item-disabled*/.sc-ion-picker-column-internal-ios-h .picker-item.picker-item-disabled.sc-ion-picker-column-internal-ios{opacity:0.4}/*!@:host(.picker-column-active) .picker-item.picker-item-active*/.picker-column-active.sc-ion-picker-column-internal-ios-h .picker-item.picker-item-active.sc-ion-picker-column-internal-ios{color:var(--ion-color-base)}@media (any-hover: hover){/*!@:host(:focus)*/.sc-ion-picker-column-internal-ios-h:focus{outline:none;background:rgba(var(--ion-color-base-rgb), 0.2)}}";
 
-const pickerColumnInternalMdCss = "/*!@:host*/.sc-ion-picker-column-internal-md-h{padding-left:16px;padding-right:16px;padding-top:0px;padding-bottom:0px;height:200px;outline:none;font-size:22px;scroll-snap-type:y mandatory;overflow-x:hidden;overflow-y:scroll;scrollbar-width:none;text-align:center}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-picker-column-internal-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host::-webkit-scrollbar*/.sc-ion-picker-column-internal-md-h::-webkit-scrollbar{display:none}/*!@:host .picker-item*/.sc-ion-picker-column-internal-md-h .picker-item.sc-ion-picker-column-internal-md{height:34px;line-height:34px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;scroll-snap-align:center}/*!@:host .picker-item-empty*/.sc-ion-picker-column-internal-md-h .picker-item-empty.sc-ion-picker-column-internal-md{scroll-snap-align:none}/*!@:host(.picker-column-active) .picker-item.picker-item-active*/.picker-column-active.sc-ion-picker-column-internal-md-h .picker-item.picker-item-active.sc-ion-picker-column-internal-md{color:var(--ion-color-base)}@media (any-hover: hover){/*!@:host(:focus)*/.sc-ion-picker-column-internal-md-h:focus{outline:none;background:rgba(var(--ion-color-base-rgb), 0.2)}}/*!@:host .picker-item-active*/.sc-ion-picker-column-internal-md-h .picker-item-active.sc-ion-picker-column-internal-md{color:var(--ion-color-base)}";
+const pickerColumnInternalMdCss = "/*!@:host*/.sc-ion-picker-column-internal-md-h{padding-left:16px;padding-right:16px;padding-top:0px;padding-bottom:0px;height:200px;outline:none;font-size:22px;scroll-snap-type:y mandatory;overflow-x:hidden;overflow-y:scroll;scrollbar-width:none;text-align:center}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-picker-column-internal-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}/*!@:host::-webkit-scrollbar*/.sc-ion-picker-column-internal-md-h::-webkit-scrollbar{display:none}/*!@:host .picker-item*/.sc-ion-picker-column-internal-md-h .picker-item.sc-ion-picker-column-internal-md{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;display:block;width:100%;height:34px;border:0px;outline:none;background:transparent;color:inherit;font-size:inherit;line-height:34px;text-align:inherit;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;overflow:hidden;scroll-snap-align:center}/*!@:host .picker-item-empty,\n:host .picker-item.picker-item-disabled*/.sc-ion-picker-column-internal-md-h .picker-item-empty.sc-ion-picker-column-internal-md,.sc-ion-picker-column-internal-md-h .picker-item.picker-item-disabled.sc-ion-picker-column-internal-md{scroll-snap-align:none;cursor:default}/*!@:host .picker-item.picker-item-disabled*/.sc-ion-picker-column-internal-md-h .picker-item.picker-item-disabled.sc-ion-picker-column-internal-md{opacity:0.4}/*!@:host(.picker-column-active) .picker-item.picker-item-active*/.picker-column-active.sc-ion-picker-column-internal-md-h .picker-item.picker-item-active.sc-ion-picker-column-internal-md{color:var(--ion-color-base)}@media (any-hover: hover){/*!@:host(:focus)*/.sc-ion-picker-column-internal-md-h:focus{outline:none;background:rgba(var(--ion-color-base-rgb), 0.2)}}/*!@:host .picker-item-active*/.sc-ion-picker-column-internal-md-h .picker-item-active.sc-ion-picker-column-internal-md{color:var(--ion-color-base)}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -39880,6 +40801,9 @@ class PickerColumnInternal {
           if (activeEl !== null) {
             activeEl.classList.remove(PICKER_COL_ACTIVE);
           }
+          if (activeElement.disabled) {
+            return;
+          }
           /**
            * If we are selecting a new value,
            * we need to run haptics again.
@@ -39931,6 +40855,66 @@ class PickerColumnInternal {
         };
       });
     };
+  }
+  itemsChange(currentItems, previousItems) {
+    const { value } = this;
+    /**
+     * When the items change, it is possible for the item
+     * that was selected to no longer exist. In that case, we need
+     * to automatically select the nearest item. If we do not,
+     * then the scroll position will be reset to zero and it will
+     * look like the first item was automatically selected.
+     *
+     * If we cannot find a closest item then we do nothing, and
+     * the browser will reset the scroll position to 0.
+     */
+    const findCurrentItem = currentItems.find((item) => item.value === value);
+    if (!findCurrentItem) {
+      /**
+       * The default behavior is to assume
+       * that the new set of data is similar to the old
+       * set of data, just with some items filtered out.
+       * We walk backwards through the data to find the
+       * closest enabled picker item and select it.
+       *
+       * Developers can also swap the items out for an entirely
+       * new set of data. In that case, the value we select
+       * here likely will not make much sense. For this use case,
+       * developers should update the `value` prop themselves
+       * when swapping out the data.
+       */
+      const findPreviousItemIndex = previousItems.findIndex((item) => item.value === value);
+      if (findPreviousItemIndex === -1) {
+        return;
+      }
+      /**
+       * Step through the current items backwards
+       * until we find a neighbor we can select.
+       * We start at the last known location of the
+       * current selected item in order to
+       * account for data that has been added. This
+       * search prioritizes stability in that it
+       * tries to keep the scroll position as close
+       * to where it was before the update.
+       * Before Items: ['a', 'b', 'c'], Selected Value: 'b'
+       * After Items:  ['a', 'dog', 'c']
+       * Even though 'dog' is a different item than 'b',
+       * it is the closest item we can select while
+       * preserving the scroll position.
+       */
+      let nearestItem;
+      for (let i = findPreviousItemIndex; i >= 0; i--) {
+        const item = currentItems[i];
+        if (item !== undefined && item.disabled !== true) {
+          nearestItem = item;
+          break;
+        }
+      }
+      if (nearestItem) {
+        this.setValue(nearestItem.value);
+        return;
+      }
+    }
   }
   valueChange() {
     if (this.isColumnVisible) {
@@ -40013,13 +40997,13 @@ class PickerColumnInternal {
   async setValue(value) {
     const { items } = this;
     this.value = value;
-    const findItem = items.find((item) => item.value === value);
+    const findItem = items.find((item) => item.value === value && item.disabled !== true);
     if (findItem) {
       this.ionChange.emit(findItem);
     }
   }
   get activeItem() {
-    return getElementRoot(this.el).querySelector(`.picker-item[data-value="${this.value}"]`);
+    return getElementRoot(this.el).querySelector(`.picker-item[data-value="${this.value}"]:not([disabled])`);
   }
   render() {
     const { items, color, isActive, numericInput } = this;
@@ -40029,13 +41013,17 @@ class PickerColumnInternal {
         ['picker-column-active']: isActive,
         ['picker-column-numeric-input']: numericInput,
       }) }, hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), items.map((item, index) => {
-      return (hAsync("div", { class: "picker-item", "data-value": item.value, "data-index": index, onClick: (ev) => {
+      return (hAsync("button", { tabindex: "-1", class: {
+          'picker-item': true,
+          'picker-item-disabled': item.disabled || false,
+        }, "data-value": item.value, "data-index": index, onClick: (ev) => {
           this.centerPickerItemInView(ev.target);
-        } }, item.text));
+        }, disabled: item.disabled }, item.text));
     }), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0"), hAsync("div", { class: "picker-item picker-item-empty" }, "\u00A0")));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
+    "items": ["itemsChange"],
     "value": ["valueChange"]
   }; }
   static get style() { return {
@@ -40061,9 +41049,9 @@ class PickerColumnInternal {
 }
 const PICKER_COL_ACTIVE = 'picker-item-active';
 
-const pickerInternalIosCss = "/*!@:host*/.sc-ion-picker-internal-ios-h{display:flex;position:relative;align-items:center;justify-content:center;width:100%;height:200px;direction:ltr;z-index:0}/*!@:host .picker-before,\n:host .picker-after*/.sc-ion-picker-internal-ios-h .picker-before.sc-ion-picker-internal-ios,.sc-ion-picker-internal-ios-h .picker-after.sc-ion-picker-internal-ios{position:absolute;width:100%;z-index:1;pointer-events:none}/*!@:host .picker-before*/.sc-ion-picker-internal-ios-h .picker-before.sc-ion-picker-internal-ios{left:0;top:0;height:83px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-ios-h,[dir=rtl] .sc-ion-picker-internal-ios-h{left:unset;right:unset;right:0}/*!@:host .picker-after*/.sc-ion-picker-internal-ios-h .picker-after.sc-ion-picker-internal-ios{left:0;top:116px;height:84px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-ios-h,[dir=rtl] .sc-ion-picker-internal-ios-h{left:unset;right:unset;right:0}/*!@:host .picker-highlight*/.sc-ion-picker-internal-ios-h .picker-highlight.sc-ion-picker-internal-ios{border-radius:8px;left:0;right:0;top:50%;bottom:0;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;position:absolute;width:calc(100% - 16px);height:34px;transform:translateY(-50%);z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .picker-highlight*/.sc-ion-picker-internal-ios-h .picker-highlight.sc-ion-picker-internal-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@:host input*/.sc-ion-picker-internal-ios-h input.sc-ion-picker-internal-ios{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@:host ::slotted(ion-picker-column-internal:first-of-type)*/.sc-ion-picker-internal-ios-h .sc-ion-picker-internal-ios-s>ion-picker-column-internal:first-of-type{text-align:start}/*!@:host ::slotted(ion-picker-column-internal:last-of-type)*/.sc-ion-picker-internal-ios-h .sc-ion-picker-internal-ios-s>ion-picker-column-internal:last-of-type{text-align:end}/*!@:host .picker-before*/.sc-ion-picker-internal-ios-h .picker-before.sc-ion-picker-internal-ios{background:linear-gradient(to bottom, var(--background, var(--ion-background-color, #fff)) 20%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0.8) 100%)}/*!@:host .picker-after*/.sc-ion-picker-internal-ios-h .picker-after.sc-ion-picker-internal-ios{background:linear-gradient(to top, var(--background, var(--ion-background-color, #fff)) 20%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0.8) 100%)}/*!@:host .picker-highlight*/.sc-ion-picker-internal-ios-h .picker-highlight.sc-ion-picker-internal-ios{background:var(--ion-color-step-150, #eeeeef)}";
+const pickerInternalIosCss = "/*!@:host*/.sc-ion-picker-internal-ios-h{display:flex;position:relative;align-items:center;justify-content:center;width:100%;height:200px;direction:ltr;z-index:0}/*!@:host .picker-before,\n:host .picker-after*/.sc-ion-picker-internal-ios-h .picker-before.sc-ion-picker-internal-ios,.sc-ion-picker-internal-ios-h .picker-after.sc-ion-picker-internal-ios{position:absolute;width:100%;z-index:1;pointer-events:none}/*!@:host .picker-before*/.sc-ion-picker-internal-ios-h .picker-before.sc-ion-picker-internal-ios{left:0;top:0;height:83px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-ios-h,[dir=rtl] .sc-ion-picker-internal-ios-h{left:unset;right:unset;right:0}/*!@:host .picker-after*/.sc-ion-picker-internal-ios-h .picker-after.sc-ion-picker-internal-ios{left:0;top:116px;height:84px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-ios-h,[dir=rtl] .sc-ion-picker-internal-ios-h{left:unset;right:unset;right:0}/*!@:host .picker-highlight*/.sc-ion-picker-internal-ios-h .picker-highlight.sc-ion-picker-internal-ios{border-radius:8px;left:0;right:0;top:50%;bottom:0;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;position:absolute;width:calc(100% - 16px);height:34px;transform:translateY(-50%);z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .picker-highlight*/.sc-ion-picker-internal-ios-h .picker-highlight.sc-ion-picker-internal-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@:host input*/.sc-ion-picker-internal-ios-h input.sc-ion-picker-internal-ios{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@:host ::slotted(ion-picker-column-internal:first-of-type)*/.sc-ion-picker-internal-ios-h .sc-ion-picker-internal-ios-s>ion-picker-column-internal:first-of-type{text-align:start}/*!@:host ::slotted(ion-picker-column-internal:last-of-type)*/.sc-ion-picker-internal-ios-h .sc-ion-picker-internal-ios-s>ion-picker-column-internal:last-of-type{text-align:end}/*!@:host ::slotted(ion-picker-column-internal:only-child)*/.sc-ion-picker-internal-ios-h .sc-ion-picker-internal-ios-s>ion-picker-column-internal:only-child{text-align:center}/*!@:host .picker-before*/.sc-ion-picker-internal-ios-h .picker-before.sc-ion-picker-internal-ios{background:linear-gradient(to bottom, var(--background, var(--ion-background-color, #fff)) 20%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0.8) 100%)}/*!@:host .picker-after*/.sc-ion-picker-internal-ios-h .picker-after.sc-ion-picker-internal-ios{background:linear-gradient(to top, var(--background, var(--ion-background-color, #fff)) 20%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0.8) 100%)}/*!@:host .picker-highlight*/.sc-ion-picker-internal-ios-h .picker-highlight.sc-ion-picker-internal-ios{background:var(--ion-color-step-150, #eeeeef)}";
 
-const pickerInternalMdCss = "/*!@:host*/.sc-ion-picker-internal-md-h{display:flex;position:relative;align-items:center;justify-content:center;width:100%;height:200px;direction:ltr;z-index:0}/*!@:host .picker-before,\n:host .picker-after*/.sc-ion-picker-internal-md-h .picker-before.sc-ion-picker-internal-md,.sc-ion-picker-internal-md-h .picker-after.sc-ion-picker-internal-md{position:absolute;width:100%;z-index:1;pointer-events:none}/*!@:host .picker-before*/.sc-ion-picker-internal-md-h .picker-before.sc-ion-picker-internal-md{left:0;top:0;height:83px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-md-h,[dir=rtl] .sc-ion-picker-internal-md-h{left:unset;right:unset;right:0}/*!@:host .picker-after*/.sc-ion-picker-internal-md-h .picker-after.sc-ion-picker-internal-md{left:0;top:116px;height:84px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-md-h,[dir=rtl] .sc-ion-picker-internal-md-h{left:unset;right:unset;right:0}/*!@:host .picker-highlight*/.sc-ion-picker-internal-md-h .picker-highlight.sc-ion-picker-internal-md{border-radius:8px;left:0;right:0;top:50%;bottom:0;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;position:absolute;width:calc(100% - 16px);height:34px;transform:translateY(-50%);z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .picker-highlight*/.sc-ion-picker-internal-md-h .picker-highlight.sc-ion-picker-internal-md{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@:host input*/.sc-ion-picker-internal-md-h input.sc-ion-picker-internal-md{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@:host ::slotted(ion-picker-column-internal:first-of-type)*/.sc-ion-picker-internal-md-h .sc-ion-picker-internal-md-s>ion-picker-column-internal:first-of-type{text-align:start}/*!@:host ::slotted(ion-picker-column-internal:last-of-type)*/.sc-ion-picker-internal-md-h .sc-ion-picker-internal-md-s>ion-picker-column-internal:last-of-type{text-align:end}/*!@:host .picker-before*/.sc-ion-picker-internal-md-h .picker-before.sc-ion-picker-internal-md{background:linear-gradient(to bottom, var(--background, var(--ion-background-color, #fff)) 20%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0) 90%)}/*!@:host .picker-after*/.sc-ion-picker-internal-md-h .picker-after.sc-ion-picker-internal-md{background:linear-gradient(to top, var(--background, var(--ion-background-color, #fff)) 30%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0) 90%)}";
+const pickerInternalMdCss = "/*!@:host*/.sc-ion-picker-internal-md-h{display:flex;position:relative;align-items:center;justify-content:center;width:100%;height:200px;direction:ltr;z-index:0}/*!@:host .picker-before,\n:host .picker-after*/.sc-ion-picker-internal-md-h .picker-before.sc-ion-picker-internal-md,.sc-ion-picker-internal-md-h .picker-after.sc-ion-picker-internal-md{position:absolute;width:100%;z-index:1;pointer-events:none}/*!@:host .picker-before*/.sc-ion-picker-internal-md-h .picker-before.sc-ion-picker-internal-md{left:0;top:0;height:83px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-md-h,[dir=rtl] .sc-ion-picker-internal-md-h{left:unset;right:unset;right:0}/*!@:host .picker-after*/.sc-ion-picker-internal-md-h .picker-after.sc-ion-picker-internal-md{left:0;top:116px;height:84px}/*!@:host-context([dir=rtl])*/[dir=rtl].sc-ion-picker-internal-md-h,[dir=rtl] .sc-ion-picker-internal-md-h{left:unset;right:unset;right:0}/*!@:host .picker-highlight*/.sc-ion-picker-internal-md-h .picker-highlight.sc-ion-picker-internal-md{border-radius:8px;left:0;right:0;top:50%;bottom:0;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;position:absolute;width:calc(100% - 16px);height:34px;transform:translateY(-50%);z-index:-1}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host .picker-highlight*/.sc-ion-picker-internal-md-h .picker-highlight.sc-ion-picker-internal-md{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}/*!@:host input*/.sc-ion-picker-internal-md-h input.sc-ion-picker-internal-md{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@:host ::slotted(ion-picker-column-internal:first-of-type)*/.sc-ion-picker-internal-md-h .sc-ion-picker-internal-md-s>ion-picker-column-internal:first-of-type{text-align:start}/*!@:host ::slotted(ion-picker-column-internal:last-of-type)*/.sc-ion-picker-internal-md-h .sc-ion-picker-internal-md-s>ion-picker-column-internal:last-of-type{text-align:end}/*!@:host ::slotted(ion-picker-column-internal:only-child)*/.sc-ion-picker-internal-md-h .sc-ion-picker-internal-md-s>ion-picker-column-internal:only-child{text-align:center}/*!@:host .picker-before*/.sc-ion-picker-internal-md-h .picker-before.sc-ion-picker-internal-md{background:linear-gradient(to bottom, var(--background, var(--ion-background-color, #fff)) 20%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0) 90%)}/*!@:host .picker-after*/.sc-ion-picker-internal-md-h .picker-after.sc-ion-picker-internal-md{background:linear-gradient(to top, var(--background, var(--ion-background-color, #fff)) 30%, rgba(var(--background-rgb, var(--ion-background-color-rgb, 255, 255, 255)), 0) 90%)}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -40320,7 +41308,7 @@ class PickerInternal {
       if (!inputEl || !inputModeColumn) {
         return;
       }
-      const values = inputModeColumn.items;
+      const values = inputModeColumn.items.filter((item) => item.disabled !== true);
       /**
        * If users pause for a bit, the search
        * value should be reset similar to how a
@@ -40380,7 +41368,7 @@ class PickerInternal {
      */
     this.searchColumn = (colEl, value, zeroBehavior = 'start') => {
       const behavior = zeroBehavior === 'start' ? /^0+/ : /0$/;
-      const item = colEl.items.find(({ text }) => text.replace(behavior, '') === value);
+      const item = colEl.items.find(({ text, disabled }) => disabled !== true && text.replace(behavior, '') === value);
       if (item) {
         colEl.setValue(item.value);
       }
@@ -41599,6 +42587,18 @@ class Popover {
      * behavior in a popover using a list of items.
      */
     this.keyboardEvents = false;
+    /**
+     * If `true`, the component passed into `ion-popover` will
+     * automatically be mounted when the popover is created. The
+     * component will remain mounted even when the popover is dismissed.
+     * However, the component will be destroyed when the popover is
+     * destroyed. This property is not reactive and should only be
+     * used when initially creating a popover.
+     *
+     * Note: This feature only applies to inline popovers in JavaScript
+     * frameworks such as Angular, React, and Vue.
+     */
+    this.keepContentsMounted = false;
     this.onBackdropTap = () => {
       this.dismiss(undefined, BACKDROP);
     };
@@ -41889,6 +42889,7 @@ class Popover {
       "arrow": [4],
       "isOpen": [4, "is-open"],
       "keyboardEvents": [4, "keyboard-events"],
+      "keepContentsMounted": [4, "keep-contents-mounted"],
       "presented": [32],
       "presentFromTrigger": [64],
       "present": [64],
@@ -42637,6 +43638,19 @@ class Range {
       this.updateRatio();
     }
   }
+  activeBarStartChanged() {
+    const { activeBarStart } = this;
+    if (activeBarStart !== undefined) {
+      if (activeBarStart > this.max) {
+        printIonWarning(`Range: The value of activeBarStart (${activeBarStart}) is greater than the max (${this.max}). Valid values are greater than or equal to the min value and less than or equal to the max value.`, this.el);
+        this.activeBarStart = this.max;
+      }
+      else if (activeBarStart < this.min) {
+        printIonWarning(`Range: The value of activeBarStart (${activeBarStart}) is less than the min (${this.min}). Valid values are greater than or equal to the min value and less than or equal to the max value.`, this.el);
+        this.activeBarStart = this.min;
+      }
+    }
+  }
   disabledChanged() {
     if (this.gesture) {
       this.gesture.enable(!this.disabled);
@@ -42666,6 +43680,7 @@ class Range {
     this.updateRatio();
     this.debounceChanged();
     this.disabledChanged();
+    this.activeBarStartChanged();
     /**
      * If we have not yet rendered
      * ion-range, then rangeSlider is not defined.
@@ -42769,7 +43784,11 @@ class Range {
     if (this.dualKnobs) {
       return Math.min(this.ratioA, this.ratioB);
     }
-    return 0;
+    const { activeBarStart } = this;
+    if (activeBarStart == null) {
+      return 0;
+    }
+    return valueToRatio(activeBarStart, this.min, this.max);
   }
   get ratioUpper() {
     if (this.dualKnobs) {
@@ -42808,6 +43827,7 @@ class Range {
     }
   }
   render() {
+    var _a;
     const { min, max, step, el, handleKeyboard, pressedKnob, disabled, pin, ratioLower, ratioUpper, inheritedAttributes, rangeId, pinFormatter, } = this;
     /**
      * Look for external label, ion-label, or aria-labelledby.
@@ -42819,8 +43839,8 @@ class Range {
       labelText = inheritedAttributes['aria-label'];
     }
     const mode = getIonMode$1(this);
-    const barStart = `${ratioLower * 100}%`;
-    const barEnd = `${100 - ratioUpper * 100}%`;
+    let barStart = `${ratioLower * 100}%`;
+    let barEnd = `${100 - ratioUpper * 100}%`;
     const rtl = isRTL(this.el);
     const start = rtl ? 'right' : 'left';
     const end = rtl ? 'left' : 'right';
@@ -42829,6 +43849,33 @@ class Range {
         [start]: tick[start],
       };
     };
+    if (this.dualKnobs === false) {
+      /**
+       * When the value is less than the activeBarStart or the min value,
+       * the knob will display at the start of the active bar.
+       */
+      if (this.valA < ((_a = this.activeBarStart) !== null && _a !== void 0 ? _a : this.min)) {
+        /**
+         * Sets the bar positions relative to the upper and lower limits.
+         * Converts the ratio values into percentages, used as offsets for left/right styles.
+         *
+         * The ratioUpper refers to the knob position on the bar.
+         * The ratioLower refers to the end position of the active bar (the value).
+         */
+        barStart = `${ratioUpper * 100}%`;
+        barEnd = `${100 - ratioLower * 100}%`;
+      }
+      else {
+        /**
+         * Otherwise, the knob will display at the end of the active bar.
+         *
+         * The ratioLower refers to the start position of the active bar (the value).
+         * The ratioUpper refers to the knob position on the bar.
+         */
+        barStart = `${ratioLower * 100}%`;
+        barEnd = `${100 - ratioUpper * 100}%`;
+      }
+    }
     const barStyle = {
       [start]: barStart,
       [end]: barEnd,
@@ -42837,9 +43884,15 @@ class Range {
     if (this.snaps && this.ticks) {
       for (let value = min; value <= max; value += step) {
         const ratio = valueToRatio(value, min, max);
+        const ratioMin = Math.min(ratioLower, ratioUpper);
+        const ratioMax = Math.max(ratioLower, ratioUpper);
         const tick = {
           ratio,
-          active: ratio >= ratioLower && ratio <= ratioUpper,
+          /**
+           * Sets the tick mark as active when the tick is between the min bounds and the knob.
+           * When using activeBarStart, the tick mark will be active between the knob and activeBarStart.
+           */
+          active: ratio >= ratioMin && ratio <= ratioMax,
         };
         tick[start] = `${ratio * 100}%`;
         ticks.push(tick);
@@ -42887,6 +43940,7 @@ class Range {
     "debounce": ["debounceChanged"],
     "min": ["minChanged"],
     "max": ["maxChanged"],
+    "activeBarStart": ["activeBarStartChanged"],
     "disabled": ["disabledChanged"],
     "value": ["valueChanged"]
   }; }
@@ -42909,6 +43963,7 @@ class Range {
       "snaps": [4],
       "step": [2],
       "ticks": [4],
+      "activeBarStart": [1026, "active-bar-start"],
       "disabled": [4],
       "value": [1026],
       "ratioA": [32],
@@ -49911,9 +50966,9 @@ class Text {
   }; }
 }
 
-const textareaIosCss = ".sc-ion-textarea-ios-h{--background:initial;--color:initial;--placeholder-color:initial;--placeholder-font-style:initial;--placeholder-font-weight:initial;--placeholder-opacity:.5;--padding-top:0;--padding-end:0;--padding-bottom:0;--padding-start:0;--border-radius:0;display:block;position:relative;flex:1;width:100%;background:var(--background);color:var(--color);font-family:var(--ion-font-family, inherit);white-space:pre-wrap;z-index:2;box-sizing:border-box}.ion-color.sc-ion-textarea-ios-h{background:initial}.ion-color.sc-ion-textarea-ios-h{color:var(--ion-color-base)}ion-item.sc-ion-textarea-ios-h,ion-item .sc-ion-textarea-ios-h{align-self:baseline}ion-item.sc-ion-textarea-ios-h:not(.item-label),ion-item:not(.item-label) .sc-ion-textarea-ios-h{--padding-start:0}.textarea-wrapper.sc-ion-textarea-ios{min-width:inherit;max-width:inherit;min-height:inherit;max-height:inherit}.native-textarea.sc-ion-textarea-ios{border-radius:var(--border-radius);margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;display:block;width:100%;max-width:100%;max-height:100%;border:0;outline:none;background:transparent;box-sizing:border-box;resize:none;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.native-textarea.sc-ion-textarea-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}.native-textarea.sc-ion-textarea-ios::placeholder{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;color:var(--placeholder-color);font-family:inherit;font-style:var(--placeholder-font-style);font-weight:var(--placeholder-font-weight);opacity:var(--placeholder-opacity)}.native-textarea[disabled].sc-ion-textarea-ios{opacity:0.4}.cloned-input.sc-ion-textarea-ios{left:0;top:0;position:absolute;pointer-events:none}[dir=rtl].sc-ion-textarea-ios .cloned-input.sc-ion-textarea-ios,[dir=rtl].sc-ion-textarea-ios-h .cloned-input.sc-ion-textarea-ios,[dir=rtl] .sc-ion-textarea-ios-h .cloned-input.sc-ion-textarea-ios{left:unset;right:unset;right:0}.item-label-floating.item-has-placeholder.sc-ion-textarea-ios-h:not(.item-has-value),.item-label-floating.item-has-placeholder:not(.item-has-value) .sc-ion-textarea-ios-h{opacity:0}.item-label-floating.item-has-placeholder.sc-ion-textarea-ios-h:not(.item-has-value).item-has-focus,.item-label-floating.item-has-placeholder:not(.item-has-value).item-has-focus .sc-ion-textarea-ios-h{transition:opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);opacity:1}.sc-ion-textarea-ios-h{--padding-top:10px;--padding-end:10px;--padding-bottom:10px;--padding-start:0;font-size:inherit}.item-label-stacked.sc-ion-textarea-ios-h,.item-label-stacked .sc-ion-textarea-ios-h,.item-label-floating.sc-ion-textarea-ios-h,.item-label-floating .sc-ion-textarea-ios-h{--padding-top:8px;--padding-bottom:8px;--padding-start:0px}";
+const textareaIosCss = ".sc-ion-textarea-ios-h{--background:initial;--color:initial;--placeholder-color:initial;--placeholder-font-style:initial;--placeholder-font-weight:initial;--placeholder-opacity:0.5;--padding-top:0;--padding-end:0;--padding-bottom:0;--padding-start:0;--border-radius:0;display:block;position:relative;flex:1;width:100%;background:var(--background);color:var(--color);font-family:var(--ion-font-family, inherit);white-space:pre-wrap;z-index:2;box-sizing:border-box}.ion-color.sc-ion-textarea-ios-h{background:initial}.ion-color.sc-ion-textarea-ios-h{color:var(--ion-color-base)}ion-item.sc-ion-textarea-ios-h,ion-item .sc-ion-textarea-ios-h{align-self:baseline}ion-item.sc-ion-textarea-ios-h:not(.item-label),ion-item:not(.item-label) .sc-ion-textarea-ios-h{--padding-start:0}.textarea-wrapper.sc-ion-textarea-ios{display:grid;min-width:inherit;max-width:inherit;min-height:inherit;max-height:inherit}.textarea-wrapper.sc-ion-textarea-ios::after{white-space:pre-wrap;content:attr(data-replicated-value) \" \";visibility:hidden}.native-textarea.sc-ion-textarea-ios,.textarea-wrapper.sc-ion-textarea-ios::after{padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;grid-area:1/1/2/2}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.native-textarea.sc-ion-textarea-ios,.textarea-wrapper.sc-ion-textarea-ios::after{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}.native-textarea.sc-ion-textarea-ios{border-radius:var(--border-radius);margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;display:block;width:100%;max-width:100%;max-height:100%;border:0;outline:none;background:transparent;box-sizing:border-box;resize:none;appearance:none;overflow:hidden}.native-textarea.sc-ion-textarea-ios::placeholder{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;color:var(--placeholder-color);font-family:inherit;font-style:var(--placeholder-font-style);font-weight:var(--placeholder-font-weight);opacity:var(--placeholder-opacity)}.native-textarea[disabled].sc-ion-textarea-ios{opacity:0.4}.cloned-input.sc-ion-textarea-ios{left:0;top:0;position:absolute;pointer-events:none}[dir=rtl].sc-ion-textarea-ios .cloned-input.sc-ion-textarea-ios,[dir=rtl].sc-ion-textarea-ios-h .cloned-input.sc-ion-textarea-ios,[dir=rtl] .sc-ion-textarea-ios-h .cloned-input.sc-ion-textarea-ios{left:unset;right:unset;right:0}[auto-grow].sc-ion-textarea-ios-h .cloned-input.sc-ion-textarea-ios{height:100%}.item-label-floating.item-has-placeholder.sc-ion-textarea-ios-h:not(.item-has-value),.item-label-floating.item-has-placeholder:not(.item-has-value) .sc-ion-textarea-ios-h{opacity:0}.item-label-floating.item-has-placeholder.sc-ion-textarea-ios-h:not(.item-has-value).item-has-focus,.item-label-floating.item-has-placeholder:not(.item-has-value).item-has-focus .sc-ion-textarea-ios-h{transition:opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);opacity:1}.sc-ion-textarea-ios-h{--padding-top:10px;--padding-end:10px;--padding-bottom:10px;--padding-start:0;font-size:inherit}.item-label-stacked.sc-ion-textarea-ios-h,.item-label-stacked .sc-ion-textarea-ios-h,.item-label-floating.sc-ion-textarea-ios-h,.item-label-floating .sc-ion-textarea-ios-h{--padding-top:8px;--padding-bottom:8px;--padding-start:0px}";
 
-const textareaMdCss = ".sc-ion-textarea-md-h{--background:initial;--color:initial;--placeholder-color:initial;--placeholder-font-style:initial;--placeholder-font-weight:initial;--placeholder-opacity:.5;--padding-top:0;--padding-end:0;--padding-bottom:0;--padding-start:0;--border-radius:0;display:block;position:relative;flex:1;width:100%;background:var(--background);color:var(--color);font-family:var(--ion-font-family, inherit);white-space:pre-wrap;z-index:2;box-sizing:border-box}.ion-color.sc-ion-textarea-md-h{background:initial}.ion-color.sc-ion-textarea-md-h{color:var(--ion-color-base)}ion-item.sc-ion-textarea-md-h,ion-item .sc-ion-textarea-md-h{align-self:baseline}ion-item.sc-ion-textarea-md-h:not(.item-label),ion-item:not(.item-label) .sc-ion-textarea-md-h{--padding-start:0}.textarea-wrapper.sc-ion-textarea-md{min-width:inherit;max-width:inherit;min-height:inherit;max-height:inherit}.native-textarea.sc-ion-textarea-md{border-radius:var(--border-radius);margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;display:block;width:100%;max-width:100%;max-height:100%;border:0;outline:none;background:transparent;box-sizing:border-box;resize:none;appearance:none}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.native-textarea.sc-ion-textarea-md{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}.native-textarea.sc-ion-textarea-md::placeholder{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;color:var(--placeholder-color);font-family:inherit;font-style:var(--placeholder-font-style);font-weight:var(--placeholder-font-weight);opacity:var(--placeholder-opacity)}.native-textarea[disabled].sc-ion-textarea-md{opacity:0.4}.cloned-input.sc-ion-textarea-md{left:0;top:0;position:absolute;pointer-events:none}[dir=rtl].sc-ion-textarea-md .cloned-input.sc-ion-textarea-md,[dir=rtl].sc-ion-textarea-md-h .cloned-input.sc-ion-textarea-md,[dir=rtl] .sc-ion-textarea-md-h .cloned-input.sc-ion-textarea-md{left:unset;right:unset;right:0}.item-label-floating.item-has-placeholder.sc-ion-textarea-md-h:not(.item-has-value),.item-label-floating.item-has-placeholder:not(.item-has-value) .sc-ion-textarea-md-h{opacity:0}.item-label-floating.item-has-placeholder.sc-ion-textarea-md-h:not(.item-has-value).item-has-focus,.item-label-floating.item-has-placeholder:not(.item-has-value).item-has-focus .sc-ion-textarea-md-h{transition:opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);opacity:1}.sc-ion-textarea-md-h{--padding-top:10px;--padding-end:0;--padding-bottom:11px;--padding-start:8px;margin-left:0;margin-right:0;margin-top:8px;margin-bottom:0;font-size:inherit}.item-label-stacked.sc-ion-textarea-md-h,.item-label-stacked .sc-ion-textarea-md-h,.item-label-floating.sc-ion-textarea-md-h,.item-label-floating .sc-ion-textarea-md-h{--padding-top:8px;--padding-bottom:8px;--padding-start:0}";
+const textareaMdCss = ".sc-ion-textarea-md-h{--background:initial;--color:initial;--placeholder-color:initial;--placeholder-font-style:initial;--placeholder-font-weight:initial;--placeholder-opacity:0.5;--padding-top:0;--padding-end:0;--padding-bottom:0;--padding-start:0;--border-radius:0;display:block;position:relative;flex:1;width:100%;background:var(--background);color:var(--color);font-family:var(--ion-font-family, inherit);white-space:pre-wrap;z-index:2;box-sizing:border-box}.ion-color.sc-ion-textarea-md-h{background:initial}.ion-color.sc-ion-textarea-md-h{color:var(--ion-color-base)}ion-item.sc-ion-textarea-md-h,ion-item .sc-ion-textarea-md-h{align-self:baseline}ion-item.sc-ion-textarea-md-h:not(.item-label),ion-item:not(.item-label) .sc-ion-textarea-md-h{--padding-start:0}.textarea-wrapper.sc-ion-textarea-md{display:grid;min-width:inherit;max-width:inherit;min-height:inherit;max-height:inherit}.textarea-wrapper.sc-ion-textarea-md::after{white-space:pre-wrap;content:attr(data-replicated-value) \" \";visibility:hidden}.native-textarea.sc-ion-textarea-md,.textarea-wrapper.sc-ion-textarea-md::after{padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-indent:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;grid-area:1/1/2/2}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){.native-textarea.sc-ion-textarea-md,.textarea-wrapper.sc-ion-textarea-md::after{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}.native-textarea.sc-ion-textarea-md{border-radius:var(--border-radius);margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;display:block;width:100%;max-width:100%;max-height:100%;border:0;outline:none;background:transparent;box-sizing:border-box;resize:none;appearance:none;overflow:hidden}.native-textarea.sc-ion-textarea-md::placeholder{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;color:var(--placeholder-color);font-family:inherit;font-style:var(--placeholder-font-style);font-weight:var(--placeholder-font-weight);opacity:var(--placeholder-opacity)}.native-textarea[disabled].sc-ion-textarea-md{opacity:0.4}.cloned-input.sc-ion-textarea-md{left:0;top:0;position:absolute;pointer-events:none}[dir=rtl].sc-ion-textarea-md .cloned-input.sc-ion-textarea-md,[dir=rtl].sc-ion-textarea-md-h .cloned-input.sc-ion-textarea-md,[dir=rtl] .sc-ion-textarea-md-h .cloned-input.sc-ion-textarea-md{left:unset;right:unset;right:0}[auto-grow].sc-ion-textarea-md-h .cloned-input.sc-ion-textarea-md{height:100%}.item-label-floating.item-has-placeholder.sc-ion-textarea-md-h:not(.item-has-value),.item-label-floating.item-has-placeholder:not(.item-has-value) .sc-ion-textarea-md-h{opacity:0}.item-label-floating.item-has-placeholder.sc-ion-textarea-md-h:not(.item-has-value).item-has-focus,.item-label-floating.item-has-placeholder:not(.item-has-value).item-has-focus .sc-ion-textarea-md-h{transition:opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);opacity:1}.sc-ion-textarea-md-h{--padding-top:10px;--padding-end:0;--padding-bottom:11px;--padding-start:8px;margin-left:0;margin-right:0;margin-top:8px;margin-bottom:0;font-size:inherit}.item-label-stacked.sc-ion-textarea-md-h,.item-label-stacked .sc-ion-textarea-md-h,.item-label-floating.sc-ion-textarea-md-h,.item-label-floating .sc-ion-textarea-md-h{--padding-top:8px;--padding-bottom:8px;--padding-start:0}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -49977,7 +51032,8 @@ class Textarea {
      */
     this.spellcheck = false;
     /**
-     * If `true`, the element height will increase based on the value.
+     * If `true`, the textarea container will grow and shrink based
+     * on the contents of the textarea.
      */
     this.autoGrow = false;
     /**
@@ -50038,19 +51094,7 @@ class Textarea {
     this.inheritedAttributes = Object.assign(Object.assign({}, inheritAriaAttributes(this.el)), inheritAttributes$1(this.el, ['title']));
   }
   componentDidLoad() {
-    raf(() => this.runAutoGrow());
-  }
-  runAutoGrow() {
-    const nativeInput = this.nativeInput;
-    if (nativeInput && this.autoGrow) {
-      readTask(() => {
-        nativeInput.style.height = 'auto';
-        nativeInput.style.height = nativeInput.scrollHeight + 'px';
-        if (this.textareaWrapper) {
-          this.textareaWrapper.style.height = nativeInput.scrollHeight + 'px';
-        }
-      });
-    }
+    this.runAutoGrow();
   }
   /**
    * Sets focus on the native `textarea` in `ion-textarea`. Use this method instead of the global
@@ -50087,6 +51131,18 @@ class Textarea {
       'has-value': this.hasValue(),
       'has-focus': this.hasFocus,
     });
+  }
+  runAutoGrow() {
+    if (this.nativeInput && this.autoGrow) {
+      writeTask(() => {
+        var _a;
+        if (this.textareaWrapper) {
+          // Replicated value is an attribute to be used in the stylesheet
+          // to set the inner contents of a pseudo element.
+          this.textareaWrapper.dataset.replicatedValue = (_a = this.value) !== null && _a !== void 0 ? _a : '';
+        }
+      });
+    }
   }
   /**
    * Check if we need to clear the text input if clearOnEdit is enabled
@@ -50161,7 +51217,7 @@ class Textarea {
       "cols": [2],
       "rows": [2],
       "wrap": [1],
-      "autoGrow": [4, "auto-grow"],
+      "autoGrow": [516, "auto-grow"],
       "value": [1025],
       "hasFocus": [32],
       "setFocus": [64],
@@ -50170,7 +51226,7 @@ class Textarea {
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",
-    "$attrsToReflect$": [["color", "color"]]
+    "$attrsToReflect$": [["color", "color"], ["autoGrow", "auto-grow"]]
   }; }
 }
 let textareaIds = 0;
@@ -50522,9 +51578,9 @@ class Toggle$1 {
   }; }
 }
 
-const toggleIosCss = "/*!@:host*/.sc-ion-toggle-ios-h{box-sizing:content-box !important;display:inline-block;position:relative;outline:none;contain:content;cursor:pointer;touch-action:none;user-select:none;z-index:2}/*!@:host(.ion-focused) input*/.ion-focused.sc-ion-toggle-ios-h input.sc-ion-toggle-ios{border:2px solid #5e9ed6}/*!@:host(.toggle-disabled)*/.toggle-disabled.sc-ion-toggle-ios-h{pointer-events:none}/*!@label*/label.sc-ion-toggle-ios{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;appearance:none;outline:none;display:flex;align-items:center;opacity:0;pointer-events:none}/*!@[dir=rtl] label, :host-context([dir=rtl]) label*/[dir=rtl].sc-ion-toggle-ios label.sc-ion-toggle-ios,[dir=rtl].sc-ion-toggle-ios-h label.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h label.sc-ion-toggle-ios{left:unset;right:unset;right:0}/*!@label::-moz-focus-inner*/label.sc-ion-toggle-ios::-moz-focus-inner{border:0}/*!@input*/input.sc-ion-toggle-ios{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@.toggle-icon-wrapper*/.toggle-icon-wrapper.sc-ion-toggle-ios{display:flex;position:relative;align-items:center;width:100%;height:100%;transition:var(--handle-transition);will-change:transform}/*!@.toggle-icon*/.toggle-icon.sc-ion-toggle-ios{border-radius:var(--border-radius);display:block;position:relative;width:100%;height:100%;background:var(--background);pointer-events:none;overflow:inherit}/*!@:host(.toggle-checked) .toggle-icon*/.toggle-checked.sc-ion-toggle-ios-h .toggle-icon.sc-ion-toggle-ios{background:var(--background-checked)}/*!@.toggle-inner*/.toggle-inner.sc-ion-toggle-ios{left:var(--handle-spacing);border-radius:var(--handle-border-radius);position:absolute;width:var(--handle-width);height:var(--handle-height);max-height:var(--handle-max-height);transition:var(--handle-transition);background:var(--handle-background);box-shadow:var(--handle-box-shadow);contain:strict}/*!@[dir=rtl] .toggle-inner, :host-context([dir=rtl]) .toggle-inner*/[dir=rtl].sc-ion-toggle-ios .toggle-inner.sc-ion-toggle-ios,[dir=rtl].sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios{left:unset;right:unset;right:var(--handle-spacing)}/*!@:host(.toggle-checked) .toggle-icon-wrapper*/.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios{transform:translate3d(calc(100% - var(--handle-width)), 0, 0)}/*!@:host-context([dir=rtl]):host(.toggle-checked) .toggle-icon-wrapper, :host-context([dir=rtl]).toggle-checked .toggle-icon-wrapper*/[dir=rtl].sc-ion-toggle-ios-h -no-combinator.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h -no-combinator.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl].toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl] .toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios{transform:translate3d(calc(-100% + var(--handle-width)), 0, 0)}/*!@:host(.toggle-checked) .toggle-inner*/.toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios{transform:translate3d(calc(var(--handle-spacing) * -2), 0, 0);background:var(--handle-background-checked)}/*!@:host-context([dir=rtl]):host(.toggle-checked) .toggle-inner, :host-context([dir=rtl]).toggle-checked .toggle-inner*/[dir=rtl].sc-ion-toggle-ios-h -no-combinator.toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h -no-combinator.toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios,[dir=rtl].toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios,[dir=rtl] .toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios{transform:translate3d(calc(var(--handle-spacing) * 2), 0, 0)}/*!@:host*/.sc-ion-toggle-ios-h{--background:rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.088);--background-checked:var(--ion-color-primary, #3880ff);--border-radius:16px;--handle-background:#ffffff;--handle-background-checked:#ffffff;--handle-border-radius:25.5px;--handle-box-shadow:0 3px 12px rgba(0, 0, 0, 0.16), 0 3px 1px rgba(0, 0, 0, 0.1);--handle-height:calc(32px - (2px * 2));--handle-max-height:calc(100% - var(--handle-spacing) * 2);--handle-width:calc(32px - (2px * 2));--handle-spacing:2px;--handle-transition:transform 300ms, width 120ms ease-in-out 80ms, left 110ms ease-in-out 80ms, right 110ms ease-in-out 80ms;width:51px;height:32px;contain:strict;overflow:hidden}/*!@:host(.ion-color.toggle-checked) .toggle-icon*/.ion-color.toggle-checked.sc-ion-toggle-ios-h .toggle-icon.sc-ion-toggle-ios{background:var(--ion-color-base)}/*!@.toggle-icon*/.toggle-icon.sc-ion-toggle-ios{transform:translate3d(0, 0, 0);transition:background-color 300ms}/*!@.toggle-inner*/.toggle-inner.sc-ion-toggle-ios{will-change:transform}/*!@:host(.toggle-activated) .toggle-icon::before,\n:host(.toggle-checked) .toggle-icon::before*/.toggle-activated.sc-ion-toggle-ios-h .toggle-icon.sc-ion-toggle-ios::before,.toggle-checked.sc-ion-toggle-ios-h .toggle-icon.sc-ion-toggle-ios::before{transform:scale3d(0, 0, 0)}/*!@:host(.toggle-activated.toggle-checked) .toggle-inner::before*/.toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios::before{transform:scale3d(0, 0, 0)}/*!@:host(.toggle-activated) .toggle-inner*/.toggle-activated.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios{width:calc(var(--handle-width) + 6px)}/*!@:host(.toggle-activated.toggle-checked) .toggle-icon-wrapper*/.toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios{transform:translate3d(calc(100% - var(--handle-width) - 6px), 0, 0)}/*!@:host-context([dir=rtl]):host(.toggle-activated.toggle-checked) .toggle-icon-wrapper, :host-context([dir=rtl]).toggle-activated.toggle-checked .toggle-icon-wrapper*/[dir=rtl].sc-ion-toggle-ios-h -no-combinator.toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h -no-combinator.toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl].toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl] .toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios{transform:translate3d(calc(-100% + var(--handle-width) + 6px), 0, 0)}/*!@:host(.toggle-disabled)*/.toggle-disabled.sc-ion-toggle-ios-h{opacity:0.3}/*!@:host(.in-item[slot])*/.in-item[slot].sc-ion-toggle-ios-h{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:20px;padding-right:10px;padding-top:6px;padding-bottom:5px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.in-item[slot])*/.in-item[slot].sc-ion-toggle-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:20px;padding-inline-start:20px;-webkit-padding-end:10px;padding-inline-end:10px}}/*!@:host(.in-item[slot=start])*/.in-item[slot=start].sc-ion-toggle-ios-h{padding-left:0;padding-right:16px;padding-top:6px;padding-bottom:5px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.in-item[slot=start])*/.in-item[slot=start].sc-ion-toggle-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:0;padding-inline-start:0;-webkit-padding-end:16px;padding-inline-end:16px}}";
+const toggleIosCss = "/*!@:host*/.sc-ion-toggle-ios-h{box-sizing:content-box !important;display:inline-block;position:relative;outline:none;contain:content;cursor:pointer;touch-action:none;user-select:none;z-index:2}/*!@:host(.ion-focused) input*/.ion-focused.sc-ion-toggle-ios-h input.sc-ion-toggle-ios{border:2px solid #5e9ed6}/*!@:host(.toggle-disabled)*/.toggle-disabled.sc-ion-toggle-ios-h{pointer-events:none}/*!@label*/label.sc-ion-toggle-ios{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;appearance:none;outline:none;display:flex;align-items:center;opacity:0;pointer-events:none}/*!@[dir=rtl] label, :host-context([dir=rtl]) label*/[dir=rtl].sc-ion-toggle-ios label.sc-ion-toggle-ios,[dir=rtl].sc-ion-toggle-ios-h label.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h label.sc-ion-toggle-ios{left:unset;right:unset;right:0}/*!@label::-moz-focus-inner*/label.sc-ion-toggle-ios::-moz-focus-inner{border:0}/*!@input*/input.sc-ion-toggle-ios{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@.toggle-icon-wrapper*/.toggle-icon-wrapper.sc-ion-toggle-ios{display:flex;position:relative;align-items:center;width:100%;height:100%;transition:var(--handle-transition);will-change:transform}/*!@.toggle-icon*/.toggle-icon.sc-ion-toggle-ios{border-radius:var(--border-radius);display:block;position:relative;width:100%;height:100%;background:var(--background);pointer-events:none;overflow:inherit}/*!@:host(.toggle-checked) .toggle-icon*/.toggle-checked.sc-ion-toggle-ios-h .toggle-icon.sc-ion-toggle-ios{background:var(--background-checked)}/*!@.toggle-inner*/.toggle-inner.sc-ion-toggle-ios{left:var(--handle-spacing);border-radius:var(--handle-border-radius);position:absolute;width:var(--handle-width);height:var(--handle-height);max-height:var(--handle-max-height);transition:var(--handle-transition);background:var(--handle-background);box-shadow:var(--handle-box-shadow);contain:strict}/*!@[dir=rtl] .toggle-inner, :host-context([dir=rtl]) .toggle-inner*/[dir=rtl].sc-ion-toggle-ios .toggle-inner.sc-ion-toggle-ios,[dir=rtl].sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios{left:unset;right:unset;right:var(--handle-spacing)}/*!@:host(.toggle-checked) .toggle-icon-wrapper*/.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios{transform:translate3d(calc(100% - var(--handle-width)), 0, 0)}/*!@:host-context([dir=rtl]):host(.toggle-checked) .toggle-icon-wrapper, :host-context([dir=rtl]).toggle-checked .toggle-icon-wrapper*/[dir=rtl].sc-ion-toggle-ios-h -no-combinator.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h -no-combinator.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl].toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl] .toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios{transform:translate3d(calc(-100% + var(--handle-width)), 0, 0)}/*!@:host(.toggle-checked) .toggle-inner*/.toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios{transform:translate3d(calc(var(--handle-spacing) * -2), 0, 0);background:var(--handle-background-checked)}/*!@:host-context([dir=rtl]):host(.toggle-checked) .toggle-inner, :host-context([dir=rtl]).toggle-checked .toggle-inner*/[dir=rtl].sc-ion-toggle-ios-h -no-combinator.toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h -no-combinator.toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios,[dir=rtl].toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios,[dir=rtl] .toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios{transform:translate3d(calc(var(--handle-spacing) * 2), 0, 0)}/*!@:host*/.sc-ion-toggle-ios-h{--background:rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.088);--background-checked:var(--ion-color-primary, #3880ff);--border-radius:16px;--handle-background:#ffffff;--handle-background-checked:#ffffff;--handle-border-radius:25.5px;--handle-box-shadow:0 3px 12px rgba(0, 0, 0, 0.16), 0 3px 1px rgba(0, 0, 0, 0.1);--handle-height:calc(32px - (2px * 2));--handle-max-height:calc(100% - var(--handle-spacing) * 2);--handle-width:calc(32px - (2px * 2));--handle-spacing:2px;--handle-transition:transform 300ms, width 120ms ease-in-out 80ms, left 110ms ease-in-out 80ms, right 110ms ease-in-out 80ms;width:51px;height:32px;contain:strict;overflow:hidden}/*!@:host(.ion-color.toggle-checked) .toggle-icon*/.ion-color.toggle-checked.sc-ion-toggle-ios-h .toggle-icon.sc-ion-toggle-ios{background:var(--ion-color-base)}/*!@:host(.toggle-activated) .toggle-switch-icon*/.toggle-activated.sc-ion-toggle-ios-h .toggle-switch-icon.sc-ion-toggle-ios{opacity:0}/*!@.toggle-icon*/.toggle-icon.sc-ion-toggle-ios{transform:translate3d(0, 0, 0);transition:background-color 300ms}/*!@.toggle-inner*/.toggle-inner.sc-ion-toggle-ios{will-change:transform}/*!@.toggle-switch-icon*/.toggle-switch-icon.sc-ion-toggle-ios{position:absolute;top:50%;width:11px;height:11px;transform:translateY(-50%);transition:opacity 300ms, color 300ms}/*!@.toggle-switch-icon*/.toggle-switch-icon.sc-ion-toggle-ios{right:6px;position:absolute;color:var(--ion-color-dark)}/*!@[dir=rtl] .toggle-switch-icon, :host-context([dir=rtl]) .toggle-switch-icon*/[dir=rtl].sc-ion-toggle-ios .toggle-switch-icon.sc-ion-toggle-ios,[dir=rtl].sc-ion-toggle-ios-h .toggle-switch-icon.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h .toggle-switch-icon.sc-ion-toggle-ios{right:initial;left:6px}/*!@:host(.toggle-checked) .toggle-switch-icon.toggle-switch-icon-checked*/.toggle-checked.sc-ion-toggle-ios-h .toggle-switch-icon.toggle-switch-icon-checked.sc-ion-toggle-ios{color:var(--ion-color-contrast, #fff)}/*!@:host(.toggle-checked) .toggle-switch-icon:not(.toggle-switch-icon-checked)*/.toggle-checked.sc-ion-toggle-ios-h .toggle-switch-icon.sc-ion-toggle-ios:not(.toggle-switch-icon-checked){opacity:0}/*!@.toggle-switch-icon-checked*/.toggle-switch-icon-checked.sc-ion-toggle-ios{right:initial;left:4px;position:absolute;width:15px;height:15px;transform:translateY(-50%) rotate(90deg)}/*!@[dir=rtl] .toggle-switch-icon-checked, :host-context([dir=rtl]) .toggle-switch-icon-checked*/[dir=rtl].sc-ion-toggle-ios .toggle-switch-icon-checked.sc-ion-toggle-ios,[dir=rtl].sc-ion-toggle-ios-h .toggle-switch-icon-checked.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h .toggle-switch-icon-checked.sc-ion-toggle-ios{right:4px}/*!@:host(.toggle-activated) .toggle-icon::before,\n:host(.toggle-checked) .toggle-icon::before*/.toggle-activated.sc-ion-toggle-ios-h .toggle-icon.sc-ion-toggle-ios::before,.toggle-checked.sc-ion-toggle-ios-h .toggle-icon.sc-ion-toggle-ios::before{transform:scale3d(0, 0, 0)}/*!@:host(.toggle-activated.toggle-checked) .toggle-inner::before*/.toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios::before{transform:scale3d(0, 0, 0)}/*!@:host(.toggle-activated) .toggle-inner*/.toggle-activated.sc-ion-toggle-ios-h .toggle-inner.sc-ion-toggle-ios{width:calc(var(--handle-width) + 6px)}/*!@:host(.toggle-activated.toggle-checked) .toggle-icon-wrapper*/.toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios{transform:translate3d(calc(100% - var(--handle-width) - 6px), 0, 0)}/*!@:host-context([dir=rtl]):host(.toggle-activated.toggle-checked) .toggle-icon-wrapper, :host-context([dir=rtl]).toggle-activated.toggle-checked .toggle-icon-wrapper*/[dir=rtl].sc-ion-toggle-ios-h -no-combinator.toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl] .sc-ion-toggle-ios-h -no-combinator.toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl].toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios,[dir=rtl] .toggle-activated.toggle-checked.sc-ion-toggle-ios-h .toggle-icon-wrapper.sc-ion-toggle-ios{transform:translate3d(calc(-100% + var(--handle-width) + 6px), 0, 0)}/*!@:host(.toggle-disabled)*/.toggle-disabled.sc-ion-toggle-ios-h{opacity:0.3}/*!@:host(.in-item[slot])*/.in-item[slot].sc-ion-toggle-ios-h{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:20px;padding-right:10px;padding-top:6px;padding-bottom:5px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.in-item[slot])*/.in-item[slot].sc-ion-toggle-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:20px;padding-inline-start:20px;-webkit-padding-end:10px;padding-inline-end:10px}}/*!@:host(.in-item[slot=start])*/.in-item[slot=start].sc-ion-toggle-ios-h{padding-left:0;padding-right:16px;padding-top:6px;padding-bottom:5px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.in-item[slot=start])*/.in-item[slot=start].sc-ion-toggle-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:0;padding-inline-start:0;-webkit-padding-end:16px;padding-inline-end:16px}}";
 
-const toggleMdCss = "/*!@:host*/.sc-ion-toggle-md-h{box-sizing:content-box !important;display:inline-block;position:relative;outline:none;contain:content;cursor:pointer;touch-action:none;user-select:none;z-index:2}/*!@:host(.ion-focused) input*/.ion-focused.sc-ion-toggle-md-h input.sc-ion-toggle-md{border:2px solid #5e9ed6}/*!@:host(.toggle-disabled)*/.toggle-disabled.sc-ion-toggle-md-h{pointer-events:none}/*!@label*/label.sc-ion-toggle-md{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;appearance:none;outline:none;display:flex;align-items:center;opacity:0;pointer-events:none}/*!@[dir=rtl] label, :host-context([dir=rtl]) label*/[dir=rtl].sc-ion-toggle-md label.sc-ion-toggle-md,[dir=rtl].sc-ion-toggle-md-h label.sc-ion-toggle-md,[dir=rtl] .sc-ion-toggle-md-h label.sc-ion-toggle-md{left:unset;right:unset;right:0}/*!@label::-moz-focus-inner*/label.sc-ion-toggle-md::-moz-focus-inner{border:0}/*!@input*/input.sc-ion-toggle-md{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@.toggle-icon-wrapper*/.toggle-icon-wrapper.sc-ion-toggle-md{display:flex;position:relative;align-items:center;width:100%;height:100%;transition:var(--handle-transition);will-change:transform}/*!@.toggle-icon*/.toggle-icon.sc-ion-toggle-md{border-radius:var(--border-radius);display:block;position:relative;width:100%;height:100%;background:var(--background);pointer-events:none;overflow:inherit}/*!@:host(.toggle-checked) .toggle-icon*/.toggle-checked.sc-ion-toggle-md-h .toggle-icon.sc-ion-toggle-md{background:var(--background-checked)}/*!@.toggle-inner*/.toggle-inner.sc-ion-toggle-md{left:var(--handle-spacing);border-radius:var(--handle-border-radius);position:absolute;width:var(--handle-width);height:var(--handle-height);max-height:var(--handle-max-height);transition:var(--handle-transition);background:var(--handle-background);box-shadow:var(--handle-box-shadow);contain:strict}/*!@[dir=rtl] .toggle-inner, :host-context([dir=rtl]) .toggle-inner*/[dir=rtl].sc-ion-toggle-md .toggle-inner.sc-ion-toggle-md,[dir=rtl].sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md,[dir=rtl] .sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md{left:unset;right:unset;right:var(--handle-spacing)}/*!@:host(.toggle-checked) .toggle-icon-wrapper*/.toggle-checked.sc-ion-toggle-md-h .toggle-icon-wrapper.sc-ion-toggle-md{transform:translate3d(calc(100% - var(--handle-width)), 0, 0)}/*!@:host-context([dir=rtl]):host(.toggle-checked) .toggle-icon-wrapper, :host-context([dir=rtl]).toggle-checked .toggle-icon-wrapper*/[dir=rtl].sc-ion-toggle-md-h -no-combinator.toggle-checked.sc-ion-toggle-md-h .toggle-icon-wrapper.sc-ion-toggle-md,[dir=rtl] .sc-ion-toggle-md-h -no-combinator.toggle-checked.sc-ion-toggle-md-h .toggle-icon-wrapper.sc-ion-toggle-md,[dir=rtl].toggle-checked.sc-ion-toggle-md-h .toggle-icon-wrapper.sc-ion-toggle-md,[dir=rtl] .toggle-checked.sc-ion-toggle-md-h .toggle-icon-wrapper.sc-ion-toggle-md{transform:translate3d(calc(-100% + var(--handle-width)), 0, 0)}/*!@:host(.toggle-checked) .toggle-inner*/.toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md{transform:translate3d(calc(var(--handle-spacing) * -2), 0, 0);background:var(--handle-background-checked)}/*!@:host-context([dir=rtl]):host(.toggle-checked) .toggle-inner, :host-context([dir=rtl]).toggle-checked .toggle-inner*/[dir=rtl].sc-ion-toggle-md-h -no-combinator.toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md,[dir=rtl] .sc-ion-toggle-md-h -no-combinator.toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md,[dir=rtl].toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md,[dir=rtl] .toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md{transform:translate3d(calc(var(--handle-spacing) * 2), 0, 0)}/*!@:host*/.sc-ion-toggle-md-h{--background:rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.39);--background-checked:rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.5);--border-radius:14px;--handle-background:#ffffff;--handle-background-checked:var(--ion-color-primary, #3880ff);--handle-border-radius:50%;--handle-box-shadow:0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);--handle-width:20px;--handle-height:20px;--handle-max-height:calc(100% + 6px);--handle-spacing:0;--handle-transition:transform 160ms cubic-bezier(0.4, 0, 0.2, 1), background-color 160ms cubic-bezier(0.4, 0, 0.2, 1);padding-left:12px;padding-right:12px;padding-top:12px;padding-bottom:12px;width:36px;height:14px;contain:strict}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-toggle-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}/*!@:host(.ion-color.toggle-checked) .toggle-icon*/.ion-color.toggle-checked.sc-ion-toggle-md-h .toggle-icon.sc-ion-toggle-md{background:rgba(var(--ion-color-base-rgb), 0.5)}/*!@:host(.ion-color.toggle-checked) .toggle-inner*/.ion-color.toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md{background:var(--ion-color-base)}/*!@.toggle-icon*/.toggle-icon.sc-ion-toggle-md{transition:background-color 160ms}/*!@.toggle-inner*/.toggle-inner.sc-ion-toggle-md{will-change:background-color, transform}/*!@:host(.toggle-disabled)*/.toggle-disabled.sc-ion-toggle-md-h{opacity:0.3}/*!@:host(.in-item[slot])*/.in-item[slot].sc-ion-toggle-md-h{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:16px;padding-right:0;padding-top:12px;padding-bottom:12px;cursor:pointer}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.in-item[slot])*/.in-item[slot].sc-ion-toggle-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:0;padding-inline-end:0}}/*!@:host(.in-item[slot=start])*/.in-item[slot=start].sc-ion-toggle-md-h{padding-left:2px;padding-right:18px;padding-top:12px;padding-bottom:12px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.in-item[slot=start])*/.in-item[slot=start].sc-ion-toggle-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:2px;padding-inline-start:2px;-webkit-padding-end:18px;padding-inline-end:18px}}";
+const toggleMdCss = "/*!@:host*/.sc-ion-toggle-md-h{box-sizing:content-box !important;display:inline-block;position:relative;outline:none;contain:content;cursor:pointer;touch-action:none;user-select:none;z-index:2}/*!@:host(.ion-focused) input*/.ion-focused.sc-ion-toggle-md-h input.sc-ion-toggle-md{border:2px solid #5e9ed6}/*!@:host(.toggle-disabled)*/.toggle-disabled.sc-ion-toggle-md-h{pointer-events:none}/*!@label*/label.sc-ion-toggle-md{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;appearance:none;outline:none;display:flex;align-items:center;opacity:0;pointer-events:none}/*!@[dir=rtl] label, :host-context([dir=rtl]) label*/[dir=rtl].sc-ion-toggle-md label.sc-ion-toggle-md,[dir=rtl].sc-ion-toggle-md-h label.sc-ion-toggle-md,[dir=rtl] .sc-ion-toggle-md-h label.sc-ion-toggle-md{left:unset;right:unset;right:0}/*!@label::-moz-focus-inner*/label.sc-ion-toggle-md::-moz-focus-inner{border:0}/*!@input*/input.sc-ion-toggle-md{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:0;clip:rect(0 0 0 0);opacity:0;overflow:hidden;-webkit-appearance:none;-moz-appearance:none}/*!@.toggle-icon-wrapper*/.toggle-icon-wrapper.sc-ion-toggle-md{display:flex;position:relative;align-items:center;width:100%;height:100%;transition:var(--handle-transition);will-change:transform}/*!@.toggle-icon*/.toggle-icon.sc-ion-toggle-md{border-radius:var(--border-radius);display:block;position:relative;width:100%;height:100%;background:var(--background);pointer-events:none;overflow:inherit}/*!@:host(.toggle-checked) .toggle-icon*/.toggle-checked.sc-ion-toggle-md-h .toggle-icon.sc-ion-toggle-md{background:var(--background-checked)}/*!@.toggle-inner*/.toggle-inner.sc-ion-toggle-md{left:var(--handle-spacing);border-radius:var(--handle-border-radius);position:absolute;width:var(--handle-width);height:var(--handle-height);max-height:var(--handle-max-height);transition:var(--handle-transition);background:var(--handle-background);box-shadow:var(--handle-box-shadow);contain:strict}/*!@[dir=rtl] .toggle-inner, :host-context([dir=rtl]) .toggle-inner*/[dir=rtl].sc-ion-toggle-md .toggle-inner.sc-ion-toggle-md,[dir=rtl].sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md,[dir=rtl] .sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md{left:unset;right:unset;right:var(--handle-spacing)}/*!@:host(.toggle-checked) .toggle-icon-wrapper*/.toggle-checked.sc-ion-toggle-md-h .toggle-icon-wrapper.sc-ion-toggle-md{transform:translate3d(calc(100% - var(--handle-width)), 0, 0)}/*!@:host-context([dir=rtl]):host(.toggle-checked) .toggle-icon-wrapper, :host-context([dir=rtl]).toggle-checked .toggle-icon-wrapper*/[dir=rtl].sc-ion-toggle-md-h -no-combinator.toggle-checked.sc-ion-toggle-md-h .toggle-icon-wrapper.sc-ion-toggle-md,[dir=rtl] .sc-ion-toggle-md-h -no-combinator.toggle-checked.sc-ion-toggle-md-h .toggle-icon-wrapper.sc-ion-toggle-md,[dir=rtl].toggle-checked.sc-ion-toggle-md-h .toggle-icon-wrapper.sc-ion-toggle-md,[dir=rtl] .toggle-checked.sc-ion-toggle-md-h .toggle-icon-wrapper.sc-ion-toggle-md{transform:translate3d(calc(-100% + var(--handle-width)), 0, 0)}/*!@:host(.toggle-checked) .toggle-inner*/.toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md{transform:translate3d(calc(var(--handle-spacing) * -2), 0, 0);background:var(--handle-background-checked)}/*!@:host-context([dir=rtl]):host(.toggle-checked) .toggle-inner, :host-context([dir=rtl]).toggle-checked .toggle-inner*/[dir=rtl].sc-ion-toggle-md-h -no-combinator.toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md,[dir=rtl] .sc-ion-toggle-md-h -no-combinator.toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md,[dir=rtl].toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md,[dir=rtl] .toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md{transform:translate3d(calc(var(--handle-spacing) * 2), 0, 0)}/*!@:host*/.sc-ion-toggle-md-h{--background:rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.39);--background-checked:rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.5);--border-radius:14px;--handle-background:#ffffff;--handle-background-checked:var(--ion-color-primary, #3880ff);--handle-border-radius:50%;--handle-box-shadow:0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);--handle-width:20px;--handle-height:20px;--handle-max-height:calc(100% + 6px);--handle-spacing:0;--handle-transition:transform 160ms cubic-bezier(0.4, 0, 0.2, 1), background-color 160ms cubic-bezier(0.4, 0, 0.2, 1);padding-left:12px;padding-right:12px;padding-top:12px;padding-bottom:12px;width:36px;height:14px;contain:strict}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host*/.sc-ion-toggle-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:12px;padding-inline-start:12px;-webkit-padding-end:12px;padding-inline-end:12px}}/*!@:host(.ion-color.toggle-checked) .toggle-icon*/.ion-color.toggle-checked.sc-ion-toggle-md-h .toggle-icon.sc-ion-toggle-md{background:rgba(var(--ion-color-base-rgb), 0.5)}/*!@:host(.ion-color.toggle-checked) .toggle-inner*/.ion-color.toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md{background:var(--ion-color-base)}/*!@:host(.toggle-checked) .toggle-inner*/.toggle-checked.sc-ion-toggle-md-h .toggle-inner.sc-ion-toggle-md{color:var(--ion-color-contrast, #fff)}/*!@.toggle-icon*/.toggle-icon.sc-ion-toggle-md{transition:background-color 160ms}/*!@.toggle-inner*/.toggle-inner.sc-ion-toggle-md{will-change:background-color, transform;display:flex;align-items:center;justify-content:center;color:#000}/*!@.toggle-inner .toggle-switch-icon*/.toggle-inner.sc-ion-toggle-md .toggle-switch-icon.sc-ion-toggle-md{padding-left:1px;padding-right:1px;padding-top:1px;padding-bottom:1px;width:100%;height:100%}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@.toggle-inner .toggle-switch-icon*/.toggle-inner.sc-ion-toggle-md .toggle-switch-icon.sc-ion-toggle-md{padding-left:unset;padding-right:unset;-webkit-padding-start:1px;padding-inline-start:1px;-webkit-padding-end:1px;padding-inline-end:1px}}/*!@:host(.toggle-disabled)*/.toggle-disabled.sc-ion-toggle-md-h{opacity:0.3}/*!@:host(.in-item[slot])*/.in-item[slot].sc-ion-toggle-md-h{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:16px;padding-right:0;padding-top:12px;padding-bottom:12px;cursor:pointer}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.in-item[slot])*/.in-item[slot].sc-ion-toggle-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:0;padding-inline-end:0}}/*!@:host(.in-item[slot=start])*/.in-item[slot=start].sc-ion-toggle-md-h{padding-left:2px;padding-right:18px;padding-top:12px;padding-bottom:12px}@supports (margin-inline-start: 0) or (-webkit-margin-start: 0){/*!@:host(.in-item[slot=start])*/.in-item[slot=start].sc-ion-toggle-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:2px;padding-inline-start:2px;-webkit-padding-end:18px;padding-inline-end:18px}}";
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -50562,6 +51618,10 @@ class Toggle {
      * it's only used when the toggle participates in a native `<form>`.
      */
     this.value = 'on';
+    /**
+     * Enables the on/off accessibility switch labels within the toggle.
+     */
+    this.enableOnOffLabels = undefined;
     this.onClick = (ev) => {
       ev.preventDefault();
       if (this.lastDrag + 300 < Date.now()) {
@@ -50573,6 +51633,12 @@ class Toggle {
     };
     this.onBlur = () => {
       this.ionBlur.emit();
+    };
+    this.getSwitchLabelIcon = (mode, checked) => {
+      if (mode === 'md') {
+        return checked ? checkmarkOutline : removeOutline;
+      }
+      return checked ? removeOutline : ellipseOutline;
     };
   }
   checkedChanged(isChecked) {
@@ -50639,8 +51705,15 @@ class Toggle {
       this.focusEl.focus();
     }
   }
+  renderOnOffSwitchLabels(mode, checked) {
+    const icon = this.getSwitchLabelIcon(mode, checked);
+    return (hAsync("ion-icon", { class: {
+        'toggle-switch-icon': true,
+        'toggle-switch-icon-checked': checked,
+      }, icon: icon }));
+  }
   render() {
-    const { activated, color, checked, disabled, el, inputId, name } = this;
+    const { activated, color, checked, disabled, el, inputId, name, enableOnOffLabels } = this;
     const mode = getIonMode$1(this);
     const { label, labelId, labelText } = getAriaLabel(el, inputId);
     const value = this.getValue();
@@ -50652,7 +51725,8 @@ class Toggle {
         'toggle-checked': checked,
         'toggle-disabled': disabled,
         interactive: true,
-      }) }, hAsync("div", { class: "toggle-icon", part: "track" }, hAsync("div", { class: "toggle-icon-wrapper" }, hAsync("div", { class: "toggle-inner", part: "handle" }))), hAsync("label", { htmlFor: inputId }, labelText), hAsync("input", { type: "checkbox", role: "switch", "aria-checked": `${checked}`, disabled: disabled, id: inputId, onFocus: () => this.onFocus(), onBlur: () => this.onBlur(), ref: (focusEl) => (this.focusEl = focusEl) })));
+      }) }, hAsync("div", { class: "toggle-icon", part: "track" }, enableOnOffLabels &&
+      mode === 'ios' && [this.renderOnOffSwitchLabels(mode, true), this.renderOnOffSwitchLabels(mode, false)], hAsync("div", { class: "toggle-icon-wrapper" }, hAsync("div", { class: "toggle-inner", part: "handle" }, enableOnOffLabels && mode === 'md' && this.renderOnOffSwitchLabels(mode, checked)))), hAsync("label", { htmlFor: inputId }, labelText), hAsync("input", { type: "checkbox", role: "switch", "aria-checked": `${checked}`, disabled: disabled, id: inputId, onFocus: () => this.onFocus(), onBlur: () => this.onBlur(), ref: (focusEl) => (this.focusEl = focusEl) })));
   }
   get el() { return getElement(this); }
   static get watchers() { return {
@@ -50672,6 +51746,7 @@ class Toggle {
       "checked": [1028],
       "disabled": [4],
       "value": [1],
+      "enableOnOffLabels": [4, "enable-on-off-labels"],
       "activated": [32]
     },
     "$listeners$": undefined,
@@ -51707,6 +52782,7 @@ registerComponents([
   Col,
   Content,
   Datetime,
+  DatetimeButton,
   Fab,
   FabButton,
   FabList,
