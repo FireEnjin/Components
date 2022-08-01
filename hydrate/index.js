@@ -25463,19 +25463,8 @@ class Graph {
         labels: this.labels,
         datasets: this.datasets,
       },
-      options: {},
+      options: this.options || {},
     };
-    if (!this.config.options) {
-      this.config.options = {};
-    }
-    // if (!this.config.options.tooltips) {
-    //   this.config.options.tooltips = {
-    //     enabled: false,
-    //     custom: (event) => {
-    //       this.fireenjinGraphTooltip.emit({ event: event as any });
-    //     },
-    //   };
-    // }
     if (!this.config.options.onClick) {
       this.config.options.onClick = this.onGraphClick.bind(this);
     }
@@ -25495,6 +25484,7 @@ class Graph {
     "$flags$": 0,
     "$tagName$": "fireenjin-graph",
     "$members$": {
+      "options": [8],
       "datasets": [1040],
       "labels": [1040],
       "name": [1],

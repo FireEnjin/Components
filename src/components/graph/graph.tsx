@@ -88,6 +88,10 @@ export class Graph implements ComponentInterface {
   @Event() fireenjinGraphClick: EventEmitter<{ event; item?: any }>;
 
   /**
+   * Options to configure Chart.js
+   */
+  @Prop() options: any;
+  /**
    * The dataset to render graph with
    */
   @Prop({
@@ -186,19 +190,8 @@ export class Graph implements ComponentInterface {
         labels: this.labels,
         datasets: this.datasets,
       },
-      options: {},
+      options: this.options || {},
     };
-    if (!this.config.options) {
-      this.config.options = {};
-    }
-    // if (!this.config.options.tooltips) {
-    //   this.config.options.tooltips = {
-    //     enabled: false,
-    //     custom: (event) => {
-    //       this.fireenjinGraphTooltip.emit({ event: event as any });
-    //     },
-    //   };
-    // }
 
     if (!this.config.options.onClick) {
       this.config.options.onClick = this.onGraphClick.bind(this);
