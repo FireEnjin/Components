@@ -39841,7 +39841,7 @@ class Pagination$1 {
     this.disablePageCheck = false;
     this.disableFetch = false;
     this.display = "list";
-    this.page = 0;
+    this.page = 1;
     this.results = [];
     this.loadingSpinner = "bubbles";
     this.loadingText = "Loading more data...";
@@ -39883,7 +39883,7 @@ class Pagination$1 {
         console.log("Error getting results", event.detail, this.resultsKey);
       }
       try {
-        if (this.page === 0) {
+        if (this.page === 1) {
           this.results = [];
         }
         this.page = this.pageKey
@@ -39969,7 +39969,7 @@ class Pagination$1 {
     this.infiniteScrollEl.disabled = false;
   }
   async clearResults() {
-    this.page = 0;
+    this.page = 1;
     this.results = [];
     this.infiniteScrollEl.disabled = false;
   }
@@ -39978,7 +39978,7 @@ class Pagination$1 {
     if (!this.disablePageCheck &&
       ((_a = window === null || window === void 0 ? void 0 : window.location) === null || _a === void 0 ? void 0 : _a.pathname) !== this.initailizedOnPath)
       return;
-    if (options.page || options.page === 0) {
+    if (options.page || options.page === 1) {
       this.page = options.page;
     }
     if (options.next) {
@@ -39988,7 +39988,7 @@ class Pagination$1 {
     if (this.query || this.query === "") {
       this.paramData.query = this.query;
     }
-    if (this.page === 0) {
+    if (this.page === 1) {
       this.paramData.next = null;
       this.paramData.back = null;
     }

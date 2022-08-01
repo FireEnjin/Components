@@ -29,7 +29,7 @@
 | `nextKey`              | `next-key`               |             | `string`                        | `"id"`                   |
 | `orderBy`              | `order-by`               |             | `string`                        | `undefined`              |
 | `orderDirection`       | `order-direction`        |             | `string`                        | `undefined`              |
-| `page`                 | `page`                   |             | `number`                        | `0`                      |
+| `page`                 | `page`                   |             | `number`                        | `1`                      |
 | `pageCountKey`         | `page-count-key`         |             | `string`                        | `undefined`              |
 | `pageKey`              | `page-key`               |             | `string`                        | `undefined`              |
 | `query`                | `query`                  |             | `string`                        | `undefined`              |
