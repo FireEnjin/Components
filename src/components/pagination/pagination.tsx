@@ -40,8 +40,9 @@ export class Pagination implements ComponentInterface {
   @Prop() orderDirection?: string;
   @Prop() dataPropsMap: any;
   @Prop() display: "list" | "grid" = "list";
-  @Prop({ mutable: true }) page? = 1;
+  @Prop({ mutable: true }) page? = 0;
   @Prop({ mutable: true }) results: any[] = [];
+  @Prop() beforeFetch: (fetchParams?: any) => Promise<any>;
   @Prop() groupBy: string;
   @Prop() loadingSpinner = "bubbles";
   @Prop() loadingText = "Loading more data...";
@@ -128,7 +129,7 @@ export class Pagination implements ComponentInterface {
         console.log("Error getting results", event.detail, this.resultsKey);
       }
       try {
-        if (this.page === 1) {
+        if (this.page === 0) {
           this.results = [];
         }
         this.page = this.pageKey
@@ -227,7 +228,7 @@ export class Pagination implements ComponentInterface {
 
   @Method()
   async clearResults() {
-    this.page = 1;
+    this.page = 0;
     this.results = [];
     this.infiniteScrollEl.disabled = false;
   }
@@ -247,7 +248,7 @@ export class Pagination implements ComponentInterface {
       window?.location?.pathname !== this.initailizedOnPath
     )
       return;
-    if (options.page || options.page === 1) {
+    if (options.page || options.page === 0) {
       this.page = options.page;
     }
 
@@ -268,7 +269,7 @@ export class Pagination implements ComponentInterface {
       this.paramData.query = this.query;
     }
 
-    if (this.page === 1) {
+    if (this.page === 0) {
       this.paramData.next = null;
       this.paramData.back = null;
     }
@@ -281,15 +282,19 @@ export class Pagination implements ComponentInterface {
       this.paramData.next = this.results[this.results.length - 1][this.nextKey];
     }
 
+    const fetchParams = {
+      ...(this.fetchParams ? this.fetchParams : {}),
+      data: { ...(this.fetchData ? this.fetchData : {}), ...this.paramData },
+    };
+
     this.fireenjinFetch.emit({
       name: this.name,
       endpoint: this.endpoint,
       dataPropsMap: this.dataPropsMap ? this.dataPropsMap : null,
       disableFetch: this.disableFetch,
-      params: {
-        ...(this.fetchParams ? this.fetchParams : {}),
-        data: { ...(this.fetchData ? this.fetchData : {}), ...this.paramData },
-      },
+      params: this.beforeFetch
+        ? await this.beforeFetch(fetchParams)
+        : fetchParams,
     });
   }
 
