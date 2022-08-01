@@ -1,6 +1,5 @@
 import { FireEnjinTriggerInput } from "@fireenjin/sdk";
 import {
-  Build,
   Component,
   ComponentInterface,
   Event,
@@ -10,8 +9,6 @@ import {
   Listen,
   Method,
   Prop,
-  State,
-  Watch,
 } from "@stencil/core";
 import { FilterControl } from "../../typings";
 
@@ -35,15 +32,6 @@ export class SearchBar implements ComponentInterface {
   })
   showFilter = true;
 
-  @State() currentFilters: {
-    [filterKey: string]: FilterControl;
-  } = {};
-
-  @Watch("filters")
-  onFilterChange() {
-    this.updateCurrentFilters();
-  }
-
   @Listen("fireenjinTrigger", { target: "document" })
   async onTrigger(event) {
     if (event?.detail?.name === "set" && event?.detail?.payload?.name) {
@@ -55,7 +43,6 @@ export class SearchBar implements ComponentInterface {
           value: event?.detail?.payload?.value || null,
         };
         this.filters[i] = controlData;
-        this.currentFilters[control.name] = controlData;
         this.filters = [...this.filters];
         if (this.paginationEl && !this.paginationEl?.disableFetch)
           this.paginationEl.fetchData = {
@@ -106,14 +93,13 @@ export class SearchBar implements ComponentInterface {
         ...control,
         value: null,
       };
-      delete this.currentFilters[clearingControl.name];
       if (fetchData[control.name]) delete fetchData[control.name];
       this.filters = [...this.filters];
       if (!this.paginationEl?.clearParamData) continue;
       await this.paginationEl.clearParamData(control.name);
     }
     const paramData = {};
-    for (const filter of Object.values(this.currentFilters)) {
+    for (const filter of this.filters) {
       paramData[filter.name] = filter.value;
     }
     this.fireenjinTrigger.emit({
@@ -134,16 +120,6 @@ export class SearchBar implements ComponentInterface {
       await this.paginationEl.getResults(options);
   }
 
-  @Method()
-  async updateCurrentFilters() {
-    if (!this.filters) return;
-    for (const control of this.filters) {
-      if (!control?.value || this.currentFilters[control.name]) continue;
-      this.currentFilters[control.name] = control;
-      this.currentFilters = { ...this.currentFilters };
-    }
-  }
-
   getLabelForValue(control: FilterControl, value: any) {
     for (const option of control?.options || []) {
       if (option?.value !== value) continue;
@@ -162,11 +138,6 @@ export class SearchBar implements ComponentInterface {
     return label;
   }
 
-  componentDidLoad() {
-    if (!Build?.isBrowser) return;
-    this.updateCurrentFilters();
-  }
-
   render() {
     return (
       <Host>
@@ -177,7 +148,7 @@ export class SearchBar implements ComponentInterface {
               this.filters?.length &&
               this.filters.map((control) => (
                 <ion-chip
-                  outline={!this.currentFilters?.[control?.name]?.value}
+                  outline={!this.filters?.[control?.name]?.value}
                   onClick={(event) =>
                     this.fireenjinTrigger.emit({
                       event,
@@ -192,7 +163,7 @@ export class SearchBar implements ComponentInterface {
                   {control?.label && (
                     <ion-label>{this.getControlLabel(control)}</ion-label>
                   )}
-                  {this.currentFilters?.[control?.name]?.value && (
+                  {control?.value && (
                     <ion-icon
                       name="close-circle"
                       onClick={(event) => this.clearFilter(event, control)}
@@ -212,12 +183,8 @@ export class SearchBar implements ComponentInterface {
             style={{ color: "var(--ion-text-color)" }}
           >
             <ion-icon name="funnel" slot="icon-only" />
-            {Object.keys(this.currentFilters)?.length && (
-              <ion-badge slot="end">
-                {this.currentFilters
-                  ? Object.keys(this.currentFilters).length
-                  : 0}
-              </ion-badge>
+            {this.filters?.length && (
+              <ion-badge slot="end">{this.filters?.length || 0}</ion-badge>
             )}
           </ion-button>
         )}

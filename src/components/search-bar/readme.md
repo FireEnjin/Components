@@ -45,16 +45,6 @@ Type: `Promise<void>`
 
 
 
-### `updateCurrentFilters() => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
 
 ## Dependencies
 

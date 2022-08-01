@@ -46704,10 +46704,6 @@ class SearchBar {
     this.displayMode = "grid";
     this.disabled = false;
     this.showFilter = true;
-    this.currentFilters = {};
-  }
-  onFilterChange() {
-    this.updateCurrentFilters();
   }
   async onTrigger(event) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
@@ -46717,7 +46713,6 @@ class SearchBar {
           continue;
         const controlData = Object.assign(Object.assign({}, control), { value: ((_g = (_f = event === null || event === void 0 ? void 0 : event.detail) === null || _f === void 0 ? void 0 : _f.payload) === null || _g === void 0 ? void 0 : _g.value) || null });
         this.filters[i] = controlData;
-        this.currentFilters[control.name] = controlData;
         this.filters = [...this.filters];
         if (this.paginationEl && !((_h = this.paginationEl) === null || _h === void 0 ? void 0 : _h.disableFetch))
           this.paginationEl.fetchData = Object.assign(Object.assign({}, (((_j = this.paginationEl) === null || _j === void 0 ? void 0 : _j.fetchData) || {})), { [control.name]: (_l = (_k = event === null || event === void 0 ? void 0 : event.detail) === null || _k === void 0 ? void 0 : _k.payload) === null || _l === void 0 ? void 0 : _l.value });
@@ -46757,7 +46752,6 @@ class SearchBar {
         control.name !== clearingControl.name)
         continue;
       this.filters[i] = Object.assign(Object.assign({}, control), { value: null });
-      delete this.currentFilters[clearingControl.name];
       if (fetchData[control.name])
         delete fetchData[control.name];
       this.filters = [...this.filters];
@@ -46766,7 +46760,7 @@ class SearchBar {
       await this.paginationEl.clearParamData(control.name);
     }
     const paramData = {};
-    for (const filter of Object.values(this.currentFilters)) {
+    for (const filter of this.filters) {
       paramData[filter.name] = filter.value;
     }
     this.fireenjinTrigger.emit({
@@ -46787,16 +46781,6 @@ class SearchBar {
     if ((_e = this.paginationEl) === null || _e === void 0 ? void 0 : _e.getResults)
       await this.paginationEl.getResults(options);
   }
-  async updateCurrentFilters() {
-    if (!this.filters)
-      return;
-    for (const control of this.filters) {
-      if (!(control === null || control === void 0 ? void 0 : control.value) || this.currentFilters[control.name])
-        continue;
-      this.currentFilters[control.name] = control;
-      this.currentFilters = Object.assign({}, this.currentFilters);
-    }
-  }
   getLabelForValue(control, value) {
     for (const option of (control === null || control === void 0 ? void 0 : control.options) || []) {
       if ((option === null || option === void 0 ? void 0 : option.value) !== value)
@@ -46813,31 +46797,21 @@ class SearchBar {
       : control.label;
     return label;
   }
-  componentDidLoad() {
-    if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
-      return;
-    this.updateCurrentFilters();
-  }
   render() {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     return (hAsync(Host, null, hAsync("div", { class: "search-bar-wrapper" }, hAsync("ion-searchbar", { disabled: this.disabled }), hAsync("div", { class: "chip-bowl" }, this.showFilter &&
       ((_a = this.filters) === null || _a === void 0 ? void 0 : _a.length) &&
       this.filters.map((control) => {
-        var _a, _b, _c, _d;
-        return (hAsync("ion-chip", { outline: !((_b = (_a = this.currentFilters) === null || _a === void 0 ? void 0 : _a[control === null || control === void 0 ? void 0 : control.name]) === null || _b === void 0 ? void 0 : _b.value), onClick: (event) => this.fireenjinTrigger.emit({
+        var _a, _b;
+        return (hAsync("ion-chip", { outline: !((_b = (_a = this.filters) === null || _a === void 0 ? void 0 : _a[control === null || control === void 0 ? void 0 : control.name]) === null || _b === void 0 ? void 0 : _b.value), onClick: (event) => this.fireenjinTrigger.emit({
             event,
             name: "filter",
             payload: {
               control,
             },
-          }) }, (control === null || control === void 0 ? void 0 : control.icon) && hAsync("ion-icon", { name: control.icon }), (control === null || control === void 0 ? void 0 : control.label) && (hAsync("ion-label", null, this.getControlLabel(control))), ((_d = (_c = this.currentFilters) === null || _c === void 0 ? void 0 : _c[control === null || control === void 0 ? void 0 : control.name]) === null || _d === void 0 ? void 0 : _d.value) && (hAsync("ion-icon", { name: "close-circle", onClick: (event) => this.clearFilter(event, control) }))));
-      }))), ((_b = this.filters) === null || _b === void 0 ? void 0 : _b.length) && (hAsync("ion-button", { onClick: () => (this.showFilter = !this.showFilter), class: "filter-button", size: "small", fill: "clear", shape: "round", style: { color: "var(--ion-text-color)" } }, hAsync("ion-icon", { name: "funnel", slot: "icon-only" }), ((_c = Object.keys(this.currentFilters)) === null || _c === void 0 ? void 0 : _c.length) && (hAsync("ion-badge", { slot: "end" }, this.currentFilters
-      ? Object.keys(this.currentFilters).length
-      : 0))))));
+          }) }, (control === null || control === void 0 ? void 0 : control.icon) && hAsync("ion-icon", { name: control.icon }), (control === null || control === void 0 ? void 0 : control.label) && (hAsync("ion-label", null, this.getControlLabel(control))), (control === null || control === void 0 ? void 0 : control.value) && (hAsync("ion-icon", { name: "close-circle", onClick: (event) => this.clearFilter(event, control) }))));
+      }))), ((_b = this.filters) === null || _b === void 0 ? void 0 : _b.length) && (hAsync("ion-button", { onClick: () => (this.showFilter = !this.showFilter), class: "filter-button", size: "small", fill: "clear", shape: "round", style: { color: "var(--ion-text-color)" } }, hAsync("ion-icon", { name: "funnel", slot: "icon-only" }), ((_c = this.filters) === null || _c === void 0 ? void 0 : _c.length) && (hAsync("ion-badge", { slot: "end" }, ((_d = this.filters) === null || _d === void 0 ? void 0 : _d.length) || 0))))));
   }
-  static get watchers() { return {
-    "filters": ["onFilterChange"]
-  }; }
   static get style() { return searchBarCss; }
   static get cmpMeta() { return {
     "$flags$": 0,
@@ -46850,10 +46824,8 @@ class SearchBar {
       "disabled": [4],
       "beforeGetResults": [8, "before-get-results"],
       "showFilter": [1028, "show-filter"],
-      "currentFilters": [32],
       "togglePaginationDisplay": [64],
-      "clearFilter": [64],
-      "updateCurrentFilters": [64]
+      "clearFilter": [64]
     },
     "$listeners$": [[4, "fireenjinTrigger", "onTrigger"], [0, "ionChange", "onChange"]],
     "$lazyBundleId$": "-",
