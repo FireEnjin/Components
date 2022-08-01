@@ -39841,7 +39841,7 @@ class Pagination$1 {
     this.disablePageCheck = false;
     this.disableFetch = false;
     this.display = "list";
-    this.page = 1;
+    this.page = 0;
     this.results = [];
     this.loadingSpinner = "bubbles";
     this.loadingText = "Loading more data...";
@@ -39883,7 +39883,7 @@ class Pagination$1 {
         console.log("Error getting results", event.detail, this.resultsKey);
       }
       try {
-        if (this.page === 1) {
+        if (this.page === 0) {
           this.results = [];
         }
         this.page = this.pageKey
@@ -39969,7 +39969,7 @@ class Pagination$1 {
     this.infiniteScrollEl.disabled = false;
   }
   async clearResults() {
-    this.page = 1;
+    this.page = 0;
     this.results = [];
     this.infiniteScrollEl.disabled = false;
   }
@@ -39978,7 +39978,7 @@ class Pagination$1 {
     if (!this.disablePageCheck &&
       ((_a = window === null || window === void 0 ? void 0 : window.location) === null || _a === void 0 ? void 0 : _a.pathname) !== this.initailizedOnPath)
       return;
-    if (options.page || options.page === 1) {
+    if (options.page || options.page === 0) {
       this.page = options.page;
     }
     if (options.next) {
@@ -39988,7 +39988,7 @@ class Pagination$1 {
     if (this.query || this.query === "") {
       this.paramData.query = this.query;
     }
-    if (this.page === 1) {
+    if (this.page === 0) {
       this.paramData.next = null;
       this.paramData.back = null;
     }
@@ -39997,12 +39997,15 @@ class Pagination$1 {
       ((_c = this.results[this.results.length - 1]) === null || _c === void 0 ? void 0 : _c[this.nextKey])) {
       this.paramData.next = this.results[this.results.length - 1][this.nextKey];
     }
+    const fetchParams = Object.assign(Object.assign({}, (this.fetchParams ? this.fetchParams : {})), { data: Object.assign(Object.assign({}, (this.fetchData ? this.fetchData : {})), this.paramData) });
     this.fireenjinFetch.emit({
       name: this.name,
       endpoint: this.endpoint,
       dataPropsMap: this.dataPropsMap ? this.dataPropsMap : null,
       disableFetch: this.disableFetch,
-      params: Object.assign(Object.assign({}, (this.fetchParams ? this.fetchParams : {})), { data: Object.assign(Object.assign({}, (this.fetchData ? this.fetchData : {})), this.paramData) }),
+      params: this.beforeFetch
+        ? await this.beforeFetch(fetchParams)
+        : fetchParams,
     });
   }
   componentWillLoad() {
@@ -40072,6 +40075,7 @@ class Pagination$1 {
       "display": [1],
       "page": [1026],
       "results": [1040],
+      "beforeFetch": [16],
       "groupBy": [1, "group-by"],
       "loadingSpinner": [1, "loading-spinner"],
       "loadingText": [1, "loading-text"],
@@ -46787,7 +46791,7 @@ class SearchBar {
     if (!this.filters)
       return;
     for (const control of this.filters) {
-      if (!(control === null || control === void 0 ? void 0 : control.value))
+      if (!(control === null || control === void 0 ? void 0 : control.value) || this.currentFilters[control.name])
         continue;
       this.currentFilters[control.name] = control;
       this.currentFilters = Object.assign({}, this.currentFilters);

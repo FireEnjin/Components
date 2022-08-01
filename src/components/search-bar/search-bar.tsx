@@ -138,7 +138,7 @@ export class SearchBar implements ComponentInterface {
   async updateCurrentFilters() {
     if (!this.filters) return;
     for (const control of this.filters) {
-      if (!control?.value) continue;
+      if (!control?.value || this.currentFilters[control.name]) continue;
       this.currentFilters[control.name] = control;
       this.currentFilters = { ...this.currentFilters };
     }
