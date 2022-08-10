@@ -5,7 +5,6 @@ const { namespace } = require("./package.json");
 
 export const config: Config = {
   namespace,
-  taskQueue: "async",
   plugins: [],
   rollupPlugins: {
     // after: [nodePolyfills()],
