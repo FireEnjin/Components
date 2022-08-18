@@ -31,7 +31,7 @@ export class Radios implements ComponentInterface {
   @Prop() disabled = false;
   @Prop() allowEmptySelection = false;
   @Prop() lines: "full" | "inset" | "none" = "none";
-  @Prop() labelPosition?: "stacked" | "fixed" | "floating" = "stacked";
+  @Prop() labelPosition?: any = "stacked";
   @Prop() endpoint?: string;
   @Prop() orderBy?: string;
   @Prop() dataPropsMap?: any;
@@ -95,9 +95,7 @@ export class Radios implements ComponentInterface {
           value={this.value}
           allowEmptySelection={this.allowEmptySelection}
         >
-          <ion-list-header position={this.labelPosition}>
-            {this.label}
-          </ion-list-header>
+          <ion-list-header>{this.label}</ion-list-header>
           {(this.options ? this.options : []).map((option) =>
             this.optionEl ? (
               this.optionEl(option)
@@ -119,7 +117,7 @@ export class Radios implements ComponentInterface {
               this.optionEl(result)
             ) : (
               <ion-item lines={this.lines}>
-                <ion-label>
+                <ion-label position={this.labelPosition}>
                   {result?.label || result?.name || result?.value || result?.id}
                 </ion-label>
                 <ion-radio
