@@ -91,19 +91,12 @@ export class Pagination implements ComponentInterface {
   } = {};
 
   @Debounce(1000)
+  @Watch("fetchData")
+  @Watch("orderBy")
   @Watch("query")
   onQuery() {
     this.infiniteScrollEl.disabled = false;
     this.results = [];
-    this.getResults({
-      page: 0,
-    });
-  }
-
-  @Watch("orderBy")
-  onOrderBy() {
-    this.results = [];
-    this.infiniteScrollEl.disabled = false;
     this.getResults({
       page: 0,
     });

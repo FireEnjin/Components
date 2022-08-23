@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 /*!
- Stencil Mock Doc v2.17.3 | MIT Licensed | https://stenciljs.com
+ Stencil Mock Doc v2.17.4 | MIT Licensed | https://stenciljs.com
  */
 const CONTENT_REF_ID = 'r';
 const ORG_LOCATION_ID = 'o';
@@ -38886,13 +38886,6 @@ class Pagination$1 {
       page: 0,
     });
   }
-  onOrderBy() {
-    this.results = [];
-    this.infiniteScrollEl.disabled = false;
-    this.getResults({
-      page: 0,
-    });
-  }
   onDisplay() {
     this.infiniteScrollEl.disabled = false;
     setTimeout(async () => {
@@ -39079,8 +39072,9 @@ class Pagination$1 {
     return (hAsync("div", { class: "pagination" }, this.disableVirtualScroll ? (hAsync("div", null, this.renderResults())) : (hAsync("ion-virtual-scroll", { items: this.results, approxItemHeight: this.approxItemHeight, renderItem: this.renderItem, ref: (el) => (this.virtualScrollEl = el) }, (this.listEl || this.gridEl) && this.renderResults())), hAsync("ion-infinite-scroll", { style: { display: "block" }, ref: (el) => (this.infiniteScrollEl = el) }, hAsync("ion-infinite-scroll-content", { "loading-spinner": this.loadingSpinner, "loading-text": this.loadingText }))));
   }
   static get watchers() { return {
+    "fetchData": ["onQuery"],
+    "orderBy": ["onQuery"],
     "query": ["onQuery"],
-    "orderBy": ["onOrderBy"],
     "display": ["onDisplay"]
   }; }
   static get style() { return paginationCss; }
