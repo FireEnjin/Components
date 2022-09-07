@@ -71,7 +71,7 @@ export class SelectTags implements ComponentInterface {
     back?: string;
   } = {};
 
-  @Listen("fireenjinSuccess", { target: "body" })
+  @Listen("fireenjinSuccess")
   async onSuccess(event) {
     if (event.detail.name === "selectTags") {
       try {

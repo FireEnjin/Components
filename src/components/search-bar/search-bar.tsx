@@ -41,7 +41,7 @@ export class SearchBar implements ComponentInterface {
     }
   }
 
-  @Listen("fireenjinTrigger", { target: "document" })
+  @Listen("fireenjinTrigger")
   async onTrigger(event) {
     if (
       event?.detail?.name === "set" &&

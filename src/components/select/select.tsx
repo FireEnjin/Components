@@ -99,7 +99,7 @@ export class Select implements ComponentInterface {
 
   @State() results: any[] = [];
 
-  @Listen("fireenjinSuccess", { target: "body" })
+  @Listen("fireenjinSuccess")
   onSuccess(event) {
     if (
       event?.detail?.name !== "select" ||

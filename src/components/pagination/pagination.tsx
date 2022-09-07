@@ -110,7 +110,7 @@ export class Pagination implements ComponentInterface {
     }, 2000);
   }
 
-  @Listen("fireenjinSuccess", { target: "body" })
+  @Listen("fireenjinSuccess")
   async onSuccess(event) {
     if (event.detail.name === this.name) {
       let results = [];

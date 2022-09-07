@@ -86,7 +86,7 @@ export class InputPhoto implements ComponentInterface {
   @Event() fireenjinUpload: EventEmitter<FireEnjinUploadEvent>;
   @Event() ionInput: EventEmitter;
 
-  @Listen("fireenjinSuccess", { target: "body" })
+  @Listen("fireenjinSuccess")
   onSuccess(event) {
     if (event.detail.endpoint !== "upload" || event.detail.name !== this.name)
       return false;

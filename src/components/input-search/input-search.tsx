@@ -85,7 +85,7 @@ export class InputSearch implements ComponentInterface {
     await this.setValidationClass();
   }
 
-  @Listen("fireenjinSuccess", { target: "body" })
+  @Listen("fireenjinSuccess")
   async onSuccess(event) {
     if (event?.detail?.endpoint !== this.endpoint || !event?.detail?.data)
       return;
