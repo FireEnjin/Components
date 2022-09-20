@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 /*!
- Stencil Mock Doc v2.17.4 | MIT Licensed | https://stenciljs.com
+ Stencil Mock Doc v2.18.0 | MIT Licensed | https://stenciljs.com
  */
 const CONTENT_REF_ID = 'r';
 const ORG_LOCATION_ID = 'o';
@@ -283,7 +283,7 @@ const proxyElements = new WeakMap();
 const upgradedElements = new WeakSet();
 function connectNode(ownerDocument, node) {
   node.ownerDocument = ownerDocument;
-  if (node.nodeType === 1 /* ELEMENT_NODE */) {
+  if (node.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */) {
     if (ownerDocument != null && node.nodeName.includes('-')) {
       const win = ownerDocument.defaultView;
       if (win != null && typeof node.connectedCallback === 'function' && node.isConnected) {
@@ -319,7 +319,7 @@ function fireConnectedCallback(node) {
   }
 }
 function disconnectNode(node) {
-  if (node.nodeType === 1 /* ELEMENT_NODE */) {
+  if (node.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */) {
     if (node.nodeName.includes('-') === true && typeof node.disconnectedCallback === 'function') {
       if (tempDisableCallbacks.has(node.ownerDocument) === false) {
         try {
@@ -635,7 +635,7 @@ class MockEvent {
     let currentElement = this.target;
     while (currentElement) {
       composedPath.push(currentElement);
-      if (!currentElement.parentElement && currentElement.nodeName === "#document" /* DOCUMENT_NODE */) {
+      if (!currentElement.parentElement && currentElement.nodeName === "#document" /* NODE_NAMES.DOCUMENT_NODE */) {
         // the current element doesn't have a parent, but we've detected it's our root document node. push the window
         // object associated with the document onto the path
         composedPath.push(currentElement.defaultView);
@@ -757,7 +757,7 @@ function triggerEventListener(elm, ev) {
   if (ev.bubbles === false) {
     return;
   }
-  if (elm.nodeName === "#document" /* DOCUMENT_NODE */) {
+  if (elm.nodeName === "#document" /* NODE_NAMES.DOCUMENT_NODE */) {
     triggerEventListener(elm.defaultView, ev);
   }
   else {
@@ -830,7 +830,7 @@ function serializeNodeToHtml(elm, opts = {}) {
   return output.text.join('');
 }
 function serializeToHtml(node, opts, output, isShadowRoot) {
-  if (node.nodeType === 1 /* ELEMENT_NODE */ || isShadowRoot) {
+  if (node.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */ || isShadowRoot) {
     const tagName = isShadowRoot ? 'mock:shadow-root' : getTagName(node);
     if (tagName === 'body') {
       output.isWithinBody = true;
@@ -947,7 +947,7 @@ function serializeToHtml(node, opts, output, isShadowRoot) {
         if (opts.newLines &&
           (node.childNodes.length === 0 ||
             (node.childNodes.length === 1 &&
-              node.childNodes[0].nodeType === 3 /* TEXT_NODE */ &&
+              node.childNodes[0].nodeType === 3 /* NODE_TYPES.TEXT_NODE */ &&
               node.childNodes[0].nodeValue.trim() === ''))) {
           output.text.push('\n');
           output.currentLineWidth = 0;
@@ -962,7 +962,7 @@ function serializeToHtml(node, opts, output, isShadowRoot) {
         const childNodeLength = childNodes.length;
         if (childNodeLength > 0) {
           if (childNodeLength === 1 &&
-            childNodes[0].nodeType === 3 /* TEXT_NODE */ &&
+            childNodes[0].nodeType === 3 /* NODE_TYPES.TEXT_NODE */ &&
             (typeof childNodes[0].nodeValue !== 'string' || childNodes[0].nodeValue.trim() === '')) ;
           else {
             const isWithinWhitespaceSensitiveNode = opts.newLines || opts.indentSpaces > 0 ? isWithinWhitespaceSensitive(node) : false;
@@ -1001,7 +1001,7 @@ function serializeToHtml(node, opts, output, isShadowRoot) {
       output.isWithinBody = false;
     }
   }
-  else if (node.nodeType === 3 /* TEXT_NODE */) {
+  else if (node.nodeType === 3 /* NODE_TYPES.TEXT_NODE */) {
     let textContent = node.nodeValue;
     if (typeof textContent === 'string') {
       const trimmedTextContent = textContent.trim();
@@ -1048,7 +1048,7 @@ function serializeToHtml(node, opts, output, isShadowRoot) {
         let textContentLength = textContent.length;
         if (textContentLength > 0) {
           // this text node has text content
-          const parentTagName = node.parentNode != null && node.parentNode.nodeType === 1 /* ELEMENT_NODE */
+          const parentTagName = node.parentNode != null && node.parentNode.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */
             ? node.parentNode.nodeName
             : null;
           if (NON_ESCAPABLE_CONTENT.has(parentTagName)) {
@@ -1103,7 +1103,7 @@ function serializeToHtml(node, opts, output, isShadowRoot) {
       }
     }
   }
-  else if (node.nodeType === 8 /* COMMENT_NODE */) {
+  else if (node.nodeType === 8 /* NODE_TYPES.COMMENT_NODE */) {
     const nodeValue = node.nodeValue;
     if (opts.removeHtmlComments) {
       const isHydrateAnnotation = nodeValue.startsWith(CONTENT_REF_ID + '.') ||
@@ -1128,7 +1128,7 @@ function serializeToHtml(node, opts, output, isShadowRoot) {
     output.text.push('<!--' + nodeValue + '-->');
     output.currentLineWidth += nodeValue.length + 7;
   }
-  else if (node.nodeType === 10 /* DOCUMENT_TYPE_NODE */) {
+  else if (node.nodeType === 10 /* NODE_TYPES.DOCUMENT_TYPE_NODE */) {
     output.text.push('<!doctype html>');
   }
 }
@@ -1287,7 +1287,7 @@ function getParser(ownerDocument) {
   }
   const treeAdapter = {
     createDocument() {
-      const doc = ownerDocument.createElement("#document" /* DOCUMENT_NODE */);
+      const doc = ownerDocument.createElement("#document" /* NODE_NAMES.DOCUMENT_NODE */);
       doc['x-mode'] = 'no-quirks';
       return doc;
     },
@@ -1329,7 +1329,7 @@ function getParser(ownerDocument) {
       return templateElement.content;
     },
     setDocumentType(doc, name, publicId, systemId) {
-      let doctypeNode = doc.childNodes.find((n) => n.nodeType === 10 /* DOCUMENT_TYPE_NODE */);
+      let doctypeNode = doc.childNodes.find((n) => n.nodeType === 10 /* NODE_TYPES.DOCUMENT_TYPE_NODE */);
       if (doctypeNode == null) {
         doctypeNode = ownerDocument.createDocumentTypeNode();
         doc.insertBefore(doctypeNode, doc.firstChild);
@@ -1350,7 +1350,7 @@ function getParser(ownerDocument) {
     },
     insertText(parentNode, text) {
       const lastChild = parentNode.lastChild;
-      if (lastChild != null && lastChild.nodeType === 3 /* TEXT_NODE */) {
+      if (lastChild != null && lastChild.nodeType === 3 /* NODE_TYPES.TEXT_NODE */) {
         lastChild.nodeValue += text;
       }
       else {
@@ -1359,7 +1359,7 @@ function getParser(ownerDocument) {
     },
     insertTextBefore(parentNode, text, referenceNode) {
       const prevNode = parentNode.childNodes[parentNode.childNodes.indexOf(referenceNode) - 1];
-      if (prevNode != null && prevNode.nodeType === 3 /* TEXT_NODE */) {
+      if (prevNode != null && prevNode.nodeType === 3 /* NODE_TYPES.TEXT_NODE */) {
         prevNode.nodeValue += text;
       }
       else {
@@ -1421,16 +1421,16 @@ function getParser(ownerDocument) {
       return doctypeNode['x-systemId'];
     },
     isTextNode(node) {
-      return node.nodeType === 3 /* TEXT_NODE */;
+      return node.nodeType === 3 /* NODE_TYPES.TEXT_NODE */;
     },
     isCommentNode(node) {
-      return node.nodeType === 8 /* COMMENT_NODE */;
+      return node.nodeType === 8 /* NODE_TYPES.COMMENT_NODE */;
     },
     isDocumentTypeNode(node) {
-      return node.nodeType === 10 /* DOCUMENT_TYPE_NODE */;
+      return node.nodeType === 10 /* NODE_TYPES.DOCUMENT_TYPE_NODE */;
     },
     isElementNode(node) {
-      return node.nodeType === 1 /* ELEMENT_NODE */;
+      return node.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */;
     },
   };
   parseOptions = {
@@ -1450,7 +1450,7 @@ class MockNode {
     this.childNodes = [];
   }
   appendChild(newNode) {
-    if (newNode.nodeType === 11 /* DOCUMENT_FRAGMENT_NODE */) {
+    if (newNode.nodeType === 11 /* NODE_TYPES.DOCUMENT_FRAGMENT_NODE */) {
       const nodes = newNode.childNodes.slice();
       for (const child of nodes) {
         this.appendChild(child);
@@ -1474,7 +1474,9 @@ class MockNode {
     const firstChild = this.firstChild;
     items.forEach((item) => {
       const isNode = typeof item === 'object' && item !== null && 'nodeType' in item;
-      this.insertBefore(isNode ? item : this.ownerDocument.createTextNode(String(item)), firstChild);
+      if (firstChild) {
+        this.insertBefore(isNode ? item : this.ownerDocument.createTextNode(String(item)), firstChild);
+      }
     });
   }
   cloneNode(deep) {
@@ -1489,7 +1491,7 @@ class MockNode {
     return this.childNodes[0] || null;
   }
   insertBefore(newNode, referenceNode) {
-    if (newNode.nodeType === 11 /* DOCUMENT_FRAGMENT_NODE */) {
+    if (newNode.nodeType === 11 /* NODE_TYPES.DOCUMENT_FRAGMENT_NODE */) {
       for (let i = 0, ii = newNode.childNodes.length; i < ii; i++) {
         insertBefore(this, newNode.childNodes[i], referenceNode);
       }
@@ -1502,11 +1504,11 @@ class MockNode {
   get isConnected() {
     let node = this;
     while (node != null) {
-      if (node.nodeType === 9 /* DOCUMENT_NODE */) {
+      if (node.nodeType === 9 /* NODE_TYPES.DOCUMENT_NODE */) {
         return true;
       }
       node = node.parentNode;
-      if (node != null && node.nodeType === 11 /* DOCUMENT_FRAGMENT_NODE */) {
+      if (node != null && node.nodeType === 11 /* NODE_TYPES.DOCUMENT_FRAGMENT_NODE */) {
         node = node.host;
       }
     }
@@ -1526,7 +1528,8 @@ class MockNode {
     return null;
   }
   get nodeValue() {
-    return this._nodeValue;
+    var _a;
+    return (_a = this._nodeValue) !== null && _a !== void 0 ? _a : '';
   }
   set nodeValue(value) {
     this._nodeValue = value;
@@ -1558,7 +1561,7 @@ class MockNode {
     const index = this.childNodes.indexOf(childNode);
     if (index > -1) {
       this.childNodes.splice(index, 1);
-      if (this.nodeType === 1 /* ELEMENT_NODE */) {
+      if (this.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */) {
         const wasConnected = this.isConnected;
         childNode.parentNode = null;
         if (wasConnected === true) {
@@ -1588,7 +1591,8 @@ class MockNode {
     return null;
   }
   get textContent() {
-    return this._nodeValue;
+    var _a;
+    return (_a = this._nodeValue) !== null && _a !== void 0 ? _a : '';
   }
   set textContent(value) {
     this._nodeValue = String(value);
@@ -1610,8 +1614,10 @@ class MockNodeList {
 }
 class MockElement extends MockNode {
   constructor(ownerDocument, nodeName) {
-    super(ownerDocument, 1 /* ELEMENT_NODE */, typeof nodeName === 'string' ? nodeName : null, null);
+    super(ownerDocument, 1 /* NODE_TYPES.ELEMENT_NODE */, typeof nodeName === 'string' ? nodeName : null, null);
     this.namespaceURI = null;
+    this.__shadowRoot = null;
+    this.__attributeMap = null;
   }
   addEventListener(type, handler) {
     addEventListener(this, type, handler);
@@ -1638,7 +1644,9 @@ class MockElement extends MockNode {
   }
   get attributes() {
     if (this.__attributeMap == null) {
-      this.__attributeMap = createAttributeProxy(false);
+      const attrMap = createAttributeProxy(false);
+      this.__attributeMap = attrMap;
+      return attrMap;
     }
     return this.__attributeMap;
   }
@@ -1646,10 +1654,10 @@ class MockElement extends MockNode {
     this.__attributeMap = attrs;
   }
   get children() {
-    return this.childNodes.filter((n) => n.nodeType === 1 /* ELEMENT_NODE */);
+    return this.childNodes.filter((n) => n.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */);
   }
   get childElementCount() {
-    return this.childNodes.filter((n) => n.nodeType === 1 /* ELEMENT_NODE */).length;
+    return this.childNodes.filter((n) => n.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */).length;
   }
   get className() {
     return this.getAttributeNS(null, 'class') || '';
@@ -1665,6 +1673,7 @@ class MockElement extends MockNode {
   }
   cloneNode(_deep) {
     // implemented on MockElement.prototype from within element.ts
+    // @ts-ignore - implemented on MockElement.prototype from within element.ts
     return null;
   }
   closest(selector) {
@@ -1754,7 +1763,8 @@ class MockElement extends MockNode {
     });
   }
   set innerHTML(html) {
-    if (NON_ESCAPABLE_CONTENT.has(this.nodeName) === true) {
+    var _a;
+    if (NON_ESCAPABLE_CONTENT.has((_a = this.nodeName) !== null && _a !== void 0 ? _a : '') === true) {
       setTextContent(this, html);
     }
     else {
@@ -1866,9 +1876,9 @@ class MockElement extends MockNode {
   get nextElementSibling() {
     const parentElement = this.parentElement;
     if (parentElement != null &&
-      (parentElement.nodeType === 1 /* ELEMENT_NODE */ ||
-        parentElement.nodeType === 11 /* DOCUMENT_FRAGMENT_NODE */ ||
-        parentElement.nodeType === 9 /* DOCUMENT_NODE */)) {
+      (parentElement.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */ ||
+        parentElement.nodeType === 11 /* NODE_TYPES.DOCUMENT_FRAGMENT_NODE */ ||
+        parentElement.nodeType === 9 /* NODE_TYPES.DOCUMENT_NODE */)) {
       const children = parentElement.children;
       const index = children.indexOf(this) + 1;
       return parentElement.children[index] || null;
@@ -1885,9 +1895,9 @@ class MockElement extends MockNode {
   get previousElementSibling() {
     const parentElement = this.parentElement;
     if (parentElement != null &&
-      (parentElement.nodeType === 1 /* ELEMENT_NODE */ ||
-        parentElement.nodeType === 11 /* DOCUMENT_FRAGMENT_NODE */ ||
-        parentElement.nodeType === 9 /* DOCUMENT_NODE */)) {
+      (parentElement.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */ ||
+        parentElement.nodeType === 11 /* NODE_TYPES.DOCUMENT_FRAGMENT_NODE */ ||
+        parentElement.nodeType === 9 /* NODE_TYPES.DOCUMENT_NODE */)) {
       const children = parentElement.children;
       const index = children.indexOf(this) - 1;
       return parentElement.children[index] || null;
@@ -2020,7 +2030,8 @@ class MockElement extends MockNode {
     this.setAttributeNS(null, 'tabindex', value);
   }
   get tagName() {
-    return this.nodeName;
+    var _a;
+    return (_a = this.nodeName) !== null && _a !== void 0 ? _a : '';
   }
   set tagName(value) {
     this.nodeName = value;
@@ -2335,10 +2346,11 @@ function getElementsByClassName(elm, classNames, foundElms) {
   }
 }
 function getElementsByTagName(elm, tagName, foundElms) {
+  var _a;
   const children = elm.children;
   for (let i = 0, ii = children.length; i < ii; i++) {
     const childElm = children[i];
-    if (tagName === '*' || childElm.nodeName.toLowerCase() === tagName) {
+    if (tagName === '*' || ((_a = childElm.nodeName) !== null && _a !== void 0 ? _a : '').toLowerCase() === tagName) {
       foundElms.push(childElm);
     }
     getElementsByTagName(childElm, tagName, foundElms);
@@ -2377,14 +2389,17 @@ class MockHTMLElement extends MockElement {
     this.namespaceURI = 'http://www.w3.org/1999/xhtml';
   }
   get tagName() {
-    return this.nodeName;
+    var _a;
+    return (_a = this.nodeName) !== null && _a !== void 0 ? _a : '';
   }
   set tagName(value) {
     this.nodeName = value;
   }
   get attributes() {
     if (this.__attributeMap == null) {
-      this.__attributeMap = createAttributeProxy(true);
+      const attrMap = createAttributeProxy(true);
+      this.__attributeMap = attrMap;
+      return attrMap;
     }
     return this.__attributeMap;
   }
@@ -2394,7 +2409,7 @@ class MockHTMLElement extends MockElement {
 }
 class MockTextNode extends MockNode {
   constructor(ownerDocument, text) {
-    super(ownerDocument, 3 /* TEXT_NODE */, "#text" /* TEXT_NODE */, text);
+    super(ownerDocument, 3 /* NODE_TYPES.TEXT_NODE */, "#text" /* NODE_NAMES.TEXT_NODE */, text);
   }
   cloneNode(_deep) {
     return new MockTextNode(null, this.nodeValue);
@@ -2416,7 +2431,7 @@ class MockTextNode extends MockNode {
       const text = [];
       for (let i = 0, ii = this.parentNode.childNodes.length; i < ii; i++) {
         const childNode = this.parentNode.childNodes[i];
-        if (childNode.nodeType === 3 /* TEXT_NODE */) {
+        if (childNode.nodeType === 3 /* NODE_TYPES.TEXT_NODE */) {
           text.push(childNode.nodeValue);
         }
       }
@@ -2428,10 +2443,10 @@ class MockTextNode extends MockNode {
 function getTextContent(childNodes, text) {
   for (let i = 0, ii = childNodes.length; i < ii; i++) {
     const childNode = childNodes[i];
-    if (childNode.nodeType === 3 /* TEXT_NODE */) {
+    if (childNode.nodeType === 3 /* NODE_TYPES.TEXT_NODE */) {
       text.push(childNode.nodeValue);
     }
-    else if (childNode.nodeType === 1 /* ELEMENT_NODE */) {
+    else if (childNode.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */) {
       getTextContent(childNode.childNodes, text);
     }
   }
@@ -2446,7 +2461,7 @@ function setTextContent(elm, text) {
 
 class MockComment extends MockNode {
   constructor(ownerDocument, data) {
-    super(ownerDocument, 8 /* COMMENT_NODE */, "#comment" /* COMMENT_NODE */, data);
+    super(ownerDocument, 8 /* NODE_TYPES.COMMENT_NODE */, "#comment" /* NODE_NAMES.COMMENT_NODE */, data);
   }
   cloneNode(_deep) {
     return new MockComment(null, this.nodeValue);
@@ -2462,8 +2477,8 @@ class MockComment extends MockNode {
 class MockDocumentFragment extends MockHTMLElement {
   constructor(ownerDocument) {
     super(ownerDocument, null);
-    this.nodeName = "#document-fragment" /* DOCUMENT_FRAGMENT_NODE */;
-    this.nodeType = 11 /* DOCUMENT_FRAGMENT_NODE */;
+    this.nodeName = "#document-fragment" /* NODE_NAMES.DOCUMENT_FRAGMENT_NODE */;
+    this.nodeType = 11 /* NODE_TYPES.DOCUMENT_FRAGMENT_NODE */;
   }
   getElementById(id) {
     return getElementById(this, id);
@@ -2473,9 +2488,9 @@ class MockDocumentFragment extends MockHTMLElement {
     if (deep) {
       for (let i = 0, ii = this.childNodes.length; i < ii; i++) {
         const childNode = this.childNodes[i];
-        if (childNode.nodeType === 1 /* ELEMENT_NODE */ ||
-          childNode.nodeType === 3 /* TEXT_NODE */ ||
-          childNode.nodeType === 8 /* COMMENT_NODE */) {
+        if (childNode.nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */ ||
+          childNode.nodeType === 3 /* NODE_TYPES.TEXT_NODE */ ||
+          childNode.nodeType === 8 /* NODE_TYPES.COMMENT_NODE */) {
           const clonedChildNode = this.childNodes[i].cloneNode(true);
           cloned.appendChild(clonedChildNode);
         }
@@ -2488,7 +2503,7 @@ class MockDocumentFragment extends MockHTMLElement {
 class MockDocumentTypeNode extends MockHTMLElement {
   constructor(ownerDocument) {
     super(ownerDocument, '!DOCTYPE');
-    this.nodeType = 10 /* DOCUMENT_TYPE_NODE */;
+    this.nodeType = 10 /* NODE_TYPES.DOCUMENT_TYPE_NODE */;
     this.setAttribute('html', '');
   }
 }
@@ -3633,6 +3648,7 @@ class MockNavigator {
 class MockPerformance {
   constructor() {
     this.timeOrigin = Date.now();
+    this.eventCounts = new Map();
   }
   addEventListener() {
     //
@@ -4522,8 +4538,8 @@ function resetWindowDimensions(win) {
 class MockDocument extends MockHTMLElement {
   constructor(html = null, win = null) {
     super(null, null);
-    this.nodeName = "#document" /* DOCUMENT_NODE */;
-    this.nodeType = 9 /* DOCUMENT_NODE */;
+    this.nodeName = "#document" /* NODE_NAMES.DOCUMENT_NODE */;
+    this.nodeType = 9 /* NODE_TYPES.DOCUMENT_NODE */;
     this.defaultView = win;
     this.cookie = '';
     this.referrer = '';
@@ -4597,7 +4613,7 @@ class MockDocument extends MockHTMLElement {
   }
   set documentElement(documentElement) {
     for (let i = this.childNodes.length - 1; i >= 0; i--) {
-      if (this.childNodes[i].nodeType !== 10 /* DOCUMENT_TYPE_NODE */) {
+      if (this.childNodes[i].nodeType !== 10 /* NODE_TYPES.DOCUMENT_TYPE_NODE */) {
         this.childNodes[i].remove();
       }
     }
@@ -4668,7 +4684,7 @@ class MockDocument extends MockHTMLElement {
     return new MockAttr(attrName, '', namespaceURI);
   }
   createElement(tagName) {
-    if (tagName === "#document" /* DOCUMENT_NODE */) {
+    if (tagName === "#document" /* NODE_NAMES.DOCUMENT_NODE */) {
       const doc = new MockDocument(false);
       doc.nodeName = tagName;
       doc.parentNode = null;
@@ -4737,11 +4753,11 @@ function resetDocument(doc) {
       }
     }
     try {
-      doc.nodeName = "#document" /* DOCUMENT_NODE */;
+      doc.nodeName = "#document" /* NODE_NAMES.DOCUMENT_NODE */;
     }
     catch (e) { }
     try {
-      doc.nodeType = 9 /* DOCUMENT_NODE */;
+      doc.nodeType = 9 /* NODE_TYPES.DOCUMENT_NODE */;
     }
     catch (e) { }
     try {
@@ -4791,7 +4807,7 @@ function getElementsByName(elm, elmName, foundElms = []) {
 function setOwnerDocument(elm, ownerDocument) {
   for (let i = 0, ii = elm.childNodes.length; i < ii; i++) {
     elm.childNodes[i].ownerDocument = ownerDocument;
-    if (elm.childNodes[i].nodeType === 1 /* ELEMENT_NODE */) {
+    if (elm.childNodes[i].nodeType === 1 /* NODE_TYPES.ELEMENT_NODE */) {
       setOwnerDocument(elm.childNodes[i], ownerDocument);
     }
   }
@@ -27349,7 +27365,7 @@ var registerWrapper = function registerWrapper(stripe, startTime) {
 
   stripe._registerWrapper({
     name: 'stripe-js',
-    version: "1.35.0",
+    version: "1.36.0",
     startTime: startTime
   });
 };
@@ -28249,10 +28265,9 @@ class InputAddress {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
   async loadGoogleMaps(options) {
-    var _a;
     if (window === null || window === void 0 ? void 0 : window.google)
       return window.google;
-    if ((_a = window) === null || _a === void 0 ? void 0 : _a._dk_google_maps_loader_cb) {
+    if (window === null || window === void 0 ? void 0 : window._dk_google_maps_loader_cb) {
       await this.sleep(200);
       return this.loadGoogleMaps();
     }
@@ -28845,7 +28860,7 @@ class InputPhoto {
       "photoUrl": [32],
       "triggerFileInput": [64]
     },
-    "$listeners$": [[16, "fireenjinSuccess", "onSuccess"]],
+    "$listeners$": [[0, "fireenjinSuccess", "onSuccess"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
@@ -30239,7 +30254,7 @@ class InputSearch {
       "closePopover": [64],
       "openPopover": [64]
     },
-    "$listeners$": [[0, "ionBlur", "onBlur"], [16, "fireenjinSuccess", "onSuccess"]],
+    "$listeners$": [[0, "ionBlur", "onBlur"], [0, "fireenjinSuccess", "onSuccess"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
@@ -31873,6 +31888,7 @@ function requiredArgs(required, args) {
   }
 }
 
+function _typeof$1(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof$1 = function _typeof(obj) { return typeof obj; }; } else { _typeof$1 = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof$1(obj); }
 /**
  * @name toDate
  * @category Common Helpers
@@ -31908,7 +31924,7 @@ function toDate(argument) {
   requiredArgs(1, arguments);
   var argStr = Object.prototype.toString.call(argument); // Clone the date
 
-  if (argument instanceof Date || typeof argument === 'object' && argStr === '[object Date]') {
+  if (argument instanceof Date || _typeof$1(argument) === 'object' && argStr === '[object Date]') {
     // Prevent the date to lose the milliseconds when passed to new Date() in IE10
     return new Date(argument.getTime());
   } else if (typeof argument === 'number' || argStr === '[object Number]') {
@@ -31973,6 +31989,7 @@ function getTimezoneOffsetInMilliseconds(date) {
   return date.getTime() - utcDate.getTime();
 }
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 /**
  * @name isDate
  * @category Common Helpers
@@ -32008,7 +32025,7 @@ function getTimezoneOffsetInMilliseconds(date) {
 
 function isDate(value) {
   requiredArgs(1, arguments);
-  return value instanceof Date || typeof value === 'object' && Object.prototype.toString.call(value) === '[object Date]';
+  return value instanceof Date || _typeof(value) === 'object' && Object.prototype.toString.call(value) === '[object Date]';
 }
 
 /**
@@ -32246,7 +32263,7 @@ function addLeadingZeros(number, targetLength) {
 
 var formatters$1 = {
   // Year
-  y: function (date, token) {
+  y: function y(date, token) {
     // From http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_tokens
     // | Year     |     y | yy |   yyy |  yyyy | yyyyy |
     // |----------|-------|----|-------|-------|-------|
@@ -32261,16 +32278,16 @@ var formatters$1 = {
     return addLeadingZeros(token === 'yy' ? year % 100 : year, token.length);
   },
   // Month
-  M: function (date, token) {
+  M: function M(date, token) {
     var month = date.getUTCMonth();
     return token === 'M' ? String(month + 1) : addLeadingZeros(month + 1, 2);
   },
   // Day of the month
-  d: function (date, token) {
+  d: function d(date, token) {
     return addLeadingZeros(date.getUTCDate(), token.length);
   },
   // AM or PM
-  a: function (date, token) {
+  a: function a(date, token) {
     var dayPeriodEnumValue = date.getUTCHours() / 12 >= 1 ? 'pm' : 'am';
 
     switch (token) {
@@ -32290,23 +32307,23 @@ var formatters$1 = {
     }
   },
   // Hour [1-12]
-  h: function (date, token) {
+  h: function h(date, token) {
     return addLeadingZeros(date.getUTCHours() % 12 || 12, token.length);
   },
   // Hour [0-23]
-  H: function (date, token) {
+  H: function H(date, token) {
     return addLeadingZeros(date.getUTCHours(), token.length);
   },
   // Minute
-  m: function (date, token) {
+  m: function m(date, token) {
     return addLeadingZeros(date.getUTCMinutes(), token.length);
   },
   // Second
-  s: function (date, token) {
+  s: function s(date, token) {
     return addLeadingZeros(date.getUTCSeconds(), token.length);
   },
   // Fraction of second
-  S: function (date, token) {
+  S: function S(date, token) {
     var numberOfDigits = token.length;
     var milliseconds = date.getUTCMilliseconds();
     var fractionalSeconds = Math.floor(milliseconds * Math.pow(10, numberOfDigits - 3));
@@ -32372,7 +32389,7 @@ var dayPeriodEnum = {
  */
 var formatters = {
   // Era
-  G: function (date, token, localize) {
+  G: function G(date, token, localize) {
     var era = date.getUTCFullYear() > 0 ? 1 : 0;
 
     switch (token) {
@@ -32399,7 +32416,7 @@ var formatters = {
     }
   },
   // Year
-  y: function (date, token, localize) {
+  y: function y(date, token, localize) {
     // Ordinal number
     if (token === 'yo') {
       var signedYear = date.getUTCFullYear(); // Returns 1 for 1 BC (which is year 0 in JavaScript)
@@ -32413,7 +32430,7 @@ var formatters = {
     return formatters$1.y(date, token);
   },
   // Local week-numbering year
-  Y: function (date, token, localize, options) {
+  Y: function Y(date, token, localize, options) {
     var signedWeekYear = getUTCWeekYear(date, options); // Returns 1 for 1 BC (which is year 0 in JavaScript)
 
     var weekYear = signedWeekYear > 0 ? signedWeekYear : 1 - signedWeekYear; // Two digit year
@@ -32434,7 +32451,7 @@ var formatters = {
     return addLeadingZeros(weekYear, token.length);
   },
   // ISO week-numbering year
-  R: function (date, token) {
+  R: function R(date, token) {
     var isoWeekYear = getUTCISOWeekYear(date); // Padding
 
     return addLeadingZeros(isoWeekYear, token.length);
@@ -32448,12 +32465,12 @@ var formatters = {
   // | BC 2 |   2 |  -1 |
   // Also `yy` always returns the last two digits of a year,
   // while `uu` pads single digit years to 2 characters and returns other years unchanged.
-  u: function (date, token) {
+  u: function u(date, token) {
     var year = date.getUTCFullYear();
     return addLeadingZeros(year, token.length);
   },
   // Quarter
-  Q: function (date, token, localize) {
+  Q: function Q(date, token, localize) {
     var quarter = Math.ceil((date.getUTCMonth() + 1) / 3);
 
     switch (token) {
@@ -32495,7 +32512,7 @@ var formatters = {
     }
   },
   // Stand-alone quarter
-  q: function (date, token, localize) {
+  q: function q(date, token, localize) {
     var quarter = Math.ceil((date.getUTCMonth() + 1) / 3);
 
     switch (token) {
@@ -32537,7 +32554,7 @@ var formatters = {
     }
   },
   // Month
-  M: function (date, token, localize) {
+  M: function M(date, token, localize) {
     var month = date.getUTCMonth();
 
     switch (token) {
@@ -32575,7 +32592,7 @@ var formatters = {
     }
   },
   // Stand-alone month
-  L: function (date, token, localize) {
+  L: function L(date, token, localize) {
     var month = date.getUTCMonth();
 
     switch (token) {
@@ -32617,7 +32634,7 @@ var formatters = {
     }
   },
   // Local week of year
-  w: function (date, token, localize, options) {
+  w: function w(date, token, localize, options) {
     var week = getUTCWeek(date, options);
 
     if (token === 'wo') {
@@ -32629,7 +32646,7 @@ var formatters = {
     return addLeadingZeros(week, token.length);
   },
   // ISO week of year
-  I: function (date, token, localize) {
+  I: function I(date, token, localize) {
     var isoWeek = getUTCISOWeek(date);
 
     if (token === 'Io') {
@@ -32641,7 +32658,7 @@ var formatters = {
     return addLeadingZeros(isoWeek, token.length);
   },
   // Day of the month
-  d: function (date, token, localize) {
+  d: function d(date, token, localize) {
     if (token === 'do') {
       return localize.ordinalNumber(date.getUTCDate(), {
         unit: 'date'
@@ -32651,7 +32668,7 @@ var formatters = {
     return formatters$1.d(date, token);
   },
   // Day of year
-  D: function (date, token, localize) {
+  D: function D(date, token, localize) {
     var dayOfYear = getUTCDayOfYear(date);
 
     if (token === 'Do') {
@@ -32663,7 +32680,7 @@ var formatters = {
     return addLeadingZeros(dayOfYear, token.length);
   },
   // Day of week
-  E: function (date, token, localize) {
+  E: function E(date, token, localize) {
     var dayOfWeek = date.getUTCDay();
 
     switch (token) {
@@ -32700,7 +32717,7 @@ var formatters = {
     }
   },
   // Local day of week
-  e: function (date, token, localize, options) {
+  e: function e(date, token, localize, options) {
     var dayOfWeek = date.getUTCDay();
     var localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
 
@@ -32749,7 +32766,7 @@ var formatters = {
     }
   },
   // Stand-alone local day of week
-  c: function (date, token, localize, options) {
+  c: function c(date, token, localize, options) {
     var dayOfWeek = date.getUTCDay();
     var localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
 
@@ -32798,7 +32815,7 @@ var formatters = {
     }
   },
   // ISO day of week
-  i: function (date, token, localize) {
+  i: function i(date, token, localize) {
     var dayOfWeek = date.getUTCDay();
     var isoDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek;
 
@@ -32848,7 +32865,7 @@ var formatters = {
     }
   },
   // AM or PM
-  a: function (date, token, localize) {
+  a: function a(date, token, localize) {
     var hours = date.getUTCHours();
     var dayPeriodEnumValue = hours / 12 >= 1 ? 'pm' : 'am';
 
@@ -32881,7 +32898,7 @@ var formatters = {
     }
   },
   // AM, PM, midnight, noon
-  b: function (date, token, localize) {
+  b: function b(date, token, localize) {
     var hours = date.getUTCHours();
     var dayPeriodEnumValue;
 
@@ -32922,7 +32939,7 @@ var formatters = {
     }
   },
   // in the morning, in the afternoon, in the evening, at night
-  B: function (date, token, localize) {
+  B: function B(date, token, localize) {
     var hours = date.getUTCHours();
     var dayPeriodEnumValue;
 
@@ -32960,7 +32977,7 @@ var formatters = {
     }
   },
   // Hour [1-12]
-  h: function (date, token, localize) {
+  h: function h(date, token, localize) {
     if (token === 'ho') {
       var hours = date.getUTCHours() % 12;
       if (hours === 0) hours = 12;
@@ -32972,7 +32989,7 @@ var formatters = {
     return formatters$1.h(date, token);
   },
   // Hour [0-23]
-  H: function (date, token, localize) {
+  H: function H(date, token, localize) {
     if (token === 'Ho') {
       return localize.ordinalNumber(date.getUTCHours(), {
         unit: 'hour'
@@ -32982,7 +32999,7 @@ var formatters = {
     return formatters$1.H(date, token);
   },
   // Hour [0-11]
-  K: function (date, token, localize) {
+  K: function K(date, token, localize) {
     var hours = date.getUTCHours() % 12;
 
     if (token === 'Ko') {
@@ -32994,7 +33011,7 @@ var formatters = {
     return addLeadingZeros(hours, token.length);
   },
   // Hour [1-24]
-  k: function (date, token, localize) {
+  k: function k(date, token, localize) {
     var hours = date.getUTCHours();
     if (hours === 0) hours = 24;
 
@@ -33007,7 +33024,7 @@ var formatters = {
     return addLeadingZeros(hours, token.length);
   },
   // Minute
-  m: function (date, token, localize) {
+  m: function m(date, token, localize) {
     if (token === 'mo') {
       return localize.ordinalNumber(date.getUTCMinutes(), {
         unit: 'minute'
@@ -33017,7 +33034,7 @@ var formatters = {
     return formatters$1.m(date, token);
   },
   // Second
-  s: function (date, token, localize) {
+  s: function s(date, token, localize) {
     if (token === 'so') {
       return localize.ordinalNumber(date.getUTCSeconds(), {
         unit: 'second'
@@ -33027,11 +33044,11 @@ var formatters = {
     return formatters$1.s(date, token);
   },
   // Fraction of second
-  S: function (date, token) {
+  S: function S(date, token) {
     return formatters$1.S(date, token);
   },
   // Timezone (ISO-8601. If offset is 0, output is always `'Z'`)
-  X: function (date, token, _localize, options) {
+  X: function X(date, token, _localize, options) {
     var originalDate = options._originalDate || date;
     var timezoneOffset = originalDate.getTimezoneOffset();
 
@@ -33063,7 +33080,7 @@ var formatters = {
     }
   },
   // Timezone (ISO-8601. If offset is 0, output is `'+00:00'` or equivalent)
-  x: function (date, token, _localize, options) {
+  x: function x(date, token, _localize, options) {
     var originalDate = options._originalDate || date;
     var timezoneOffset = originalDate.getTimezoneOffset();
 
@@ -33091,7 +33108,7 @@ var formatters = {
     }
   },
   // Timezone (GMT)
-  O: function (date, token, _localize, options) {
+  O: function O(date, token, _localize, options) {
     var originalDate = options._originalDate || date;
     var timezoneOffset = originalDate.getTimezoneOffset();
 
@@ -33109,7 +33126,7 @@ var formatters = {
     }
   },
   // Timezone (specific non-location)
-  z: function (date, token, _localize, options) {
+  z: function z(date, token, _localize, options) {
     var originalDate = options._originalDate || date;
     var timezoneOffset = originalDate.getTimezoneOffset();
 
@@ -33127,13 +33144,13 @@ var formatters = {
     }
   },
   // Seconds timestamp
-  t: function (date, token, _localize, options) {
+  t: function t(date, token, _localize, options) {
     var originalDate = options._originalDate || date;
     var timestamp = Math.floor(originalDate.getTime() / 1000);
     return addLeadingZeros(timestamp, token.length);
   },
   // Milliseconds timestamp
-  T: function (date, token, _localize, options) {
+  T: function T(date, token, _localize, options) {
     var originalDate = options._originalDate || date;
     var timestamp = originalDate.getTime();
     return addLeadingZeros(timestamp, token.length);
@@ -33172,7 +33189,7 @@ function formatTimezone(offset, dirtyDelimiter) {
   return sign + hours + delimiter + minutes;
 }
 
-var dateLongFormatter = function (pattern, formatLong) {
+var dateLongFormatter = function dateLongFormatter(pattern, formatLong) {
   switch (pattern) {
     case 'P':
       return formatLong.date({
@@ -33197,7 +33214,7 @@ var dateLongFormatter = function (pattern, formatLong) {
   }
 };
 
-var timeLongFormatter = function (pattern, formatLong) {
+var timeLongFormatter = function timeLongFormatter(pattern, formatLong) {
   switch (pattern) {
     case 'p':
       return formatLong.time({
@@ -33222,7 +33239,7 @@ var timeLongFormatter = function (pattern, formatLong) {
   }
 };
 
-var dateTimeLongFormatter = function (pattern, formatLong) {
+var dateTimeLongFormatter = function dateTimeLongFormatter(pattern, formatLong) {
   var matchResult = pattern.match(/(P+)(p+)?/) || [];
   var datePattern = matchResult[1];
   var timePattern = matchResult[2];
@@ -33352,7 +33369,7 @@ var formatDistanceLocale = {
   }
 };
 
-var formatDistance = function (token, count, options) {
+var formatDistance = function formatDistance(token, count, options) {
   var result;
   var tokenValue = formatDistanceLocale[token];
 
@@ -33427,7 +33444,7 @@ var formatRelativeLocale = {
   other: 'P'
 };
 
-var formatRelative = function (token, _date, _baseDate, _options) {
+var formatRelative = function formatRelative(token, _date, _baseDate, _options) {
   return formatRelativeLocale[token];
 };
 
@@ -33544,7 +33561,7 @@ var formattingDayPeriodValues = {
   }
 };
 
-var ordinalNumber = function (dirtyNumber, _options) {
+var ordinalNumber = function ordinalNumber(dirtyNumber, _options) {
   var number = Number(dirtyNumber); // If ordinal numbers depend on context, for example,
   // if they are different for different grammatical genders,
   // use `options.unit`.
@@ -33579,7 +33596,7 @@ var localize = {
   quarter: buildLocalizeFn({
     values: quarterValues,
     defaultWidth: 'wide',
-    argumentCallback: function (quarter) {
+    argumentCallback: function argumentCallback(quarter) {
       return quarter - 1;
     }
   }),
@@ -33723,7 +33740,7 @@ var match = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern,
     parsePattern: parseOrdinalNumberPattern,
-    valueCallback: function (value) {
+    valueCallback: function valueCallback(value) {
       return parseInt(value, 10);
     }
   }),
@@ -33738,7 +33755,7 @@ var match = {
     defaultMatchWidth: 'wide',
     parsePatterns: parseQuarterPatterns,
     defaultParseWidth: 'any',
-    valueCallback: function (index) {
+    valueCallback: function valueCallback(index) {
       return index + 1;
     }
   }),
@@ -39118,7 +39135,7 @@ class Pagination$1 {
       "clearResults": [64],
       "getResults": [64]
     },
-    "$listeners$": [[16, "fireenjinSuccess", "onSuccess"], [0, "ionInfinite", "onInfiniteScroll"], [9, "resize", "onResize"], [16, "ionRouteDidChange", "getResults"]],
+    "$listeners$": [[0, "fireenjinSuccess", "onSuccess"], [0, "ionInfinite", "onInfiniteScroll"], [9, "resize", "onResize"], [16, "ionRouteDidChange", "getResults"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
@@ -42354,7 +42371,7 @@ class Radios {
       "mode": [1],
       "results": [32]
     },
-    "$listeners$": [[16, "fireenjinSuccess", "onSuccess"]],
+    "$listeners$": [[0, "fireenjinSuccess", "onSuccess"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
@@ -45647,7 +45664,7 @@ class SearchBar {
       "fetchData": [32],
       "clearFilter": [64]
     },
-    "$listeners$": [[4, "fireenjinTrigger", "onTrigger"], [0, "ionChange", "onChange"]],
+    "$listeners$": [[0, "fireenjinTrigger", "onTrigger"], [0, "ionChange", "onChange"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
@@ -46698,7 +46715,7 @@ class Select$1 {
       "lines": [1],
       "results": [32]
     },
-    "$listeners$": [[16, "fireenjinSuccess", "onSuccess"]],
+    "$listeners$": [[0, "fireenjinSuccess", "onSuccess"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
@@ -47552,7 +47569,7 @@ class SelectTags {
       "removeValue": [64],
       "updateOptionsForValue": [64]
     },
-    "$listeners$": [[16, "fireenjinSuccess", "onSuccess"], [0, "keydown", "onKeyDown"]],
+    "$listeners$": [[0, "fireenjinSuccess", "onSuccess"], [0, "keydown", "onKeyDown"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
