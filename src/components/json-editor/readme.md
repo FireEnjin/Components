@@ -54,27 +54,7 @@ Type: `Promise<void>`
 
 
 
-### `get() => Promise<Content>`
-
-
-
-#### Returns
-
-Type: `Promise<Content>`
-
-
-
 ### `refresh() => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `scrollToPath(path: JSONPath) => Promise<void>`
 
 
 
@@ -121,16 +101,6 @@ Type: `Promise<void>`
 #### Returns
 
 Type: `Promise<void>`
-
-
-
-### `validate() => Promise<any>`
-
-
-
-#### Returns
-
-Type: `Promise<any>`
 
 
 

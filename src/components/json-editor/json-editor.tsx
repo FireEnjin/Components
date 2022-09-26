@@ -66,11 +66,6 @@ export class JsonEditor implements ComponentInterface {
   }
 
   @Method()
-  async get() {
-    return this.editor.get();
-  }
-
-  @Method()
   async set(content: Content) {
     if (!content?.text && !content?.json) return;
     this.editor.set(content as any);
@@ -92,11 +87,6 @@ export class JsonEditor implements ComponentInterface {
   }
 
   @Method()
-  async destroy() {
-    return this.editor.destroy();
-  }
-
-  @Method()
   async expand(callback: any) {
     return this.editor.expand(callback);
   }
@@ -107,13 +97,8 @@ export class JsonEditor implements ComponentInterface {
   }
 
   @Method()
-  async scrollToPath(path: JSONPath) {
-    return this.editor.scrollTo(path);
-  }
-
-  @Method()
-  async validate() {
-    return this.editor.validate() as any;
+  async destroy() {
+    return this.editor.destroy();
   }
 
   componentDidLoad() {
