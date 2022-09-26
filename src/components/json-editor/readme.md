@@ -74,13 +74,13 @@ Type: `Promise<void>`
 
 
 
-### `scrollToPath(path: any) => Promise<any>`
+### `scrollToPath(path: any) => Promise<void>`
 
 
 
 #### Returns
 
-Type: `Promise<any>`
+Type: `Promise<void>`
 
 
 
@@ -124,7 +124,7 @@ Type: `Promise<void>`
 
 
 
-### `validateEditor() => Promise<any>`
+### `validate() => Promise<any>`
 
 
 

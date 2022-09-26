@@ -31457,7 +31457,7 @@ class JsonEditor {
   async scrollToPath(path) {
     return this.editor.scrollTo(path);
   }
-  async validateEditor() {
+  async validate() {
     return this.editor.validate();
   }
   componentDidLoad() {
@@ -31518,7 +31518,7 @@ class JsonEditor {
       "setFocus": [64],
       "destroy": [64],
       "scrollToPath": [64],
-      "validateEditor": [64]
+      "validate": [64]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",

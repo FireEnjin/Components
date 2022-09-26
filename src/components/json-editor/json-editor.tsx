@@ -11,11 +11,7 @@ import {
   State,
   Watch,
 } from "@stencil/core";
-import {
-  JSONEditor,
-  JSONEditorPropsOptional,
-  JSONPath,
-} from "vanilla-jsoneditor";
+import { JSONEditor, JSONEditorPropsOptional } from "vanilla-jsoneditor";
 
 declare interface Content {
   json?: any;
@@ -107,13 +103,13 @@ export class JsonEditor implements ComponentInterface {
   }
 
   @Method()
-  async scrollToPath(path: JSONPath) {
+  async scrollToPath(path: any) {
     return this.editor.scrollTo(path);
   }
 
   @Method()
-  async validateEditor() {
-    return this.editor.validate();
+  async validate() {
+    return this.editor.validate() as any;
   }
 
   componentDidLoad() {
