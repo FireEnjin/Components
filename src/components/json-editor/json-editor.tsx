@@ -59,10 +59,6 @@ export class JsonEditor implements ComponentInterface {
       this.valueType = "object";
     }
     this.set(this.content);
-    this.ionInput.emit({
-      name: this.name,
-      value: value,
-    });
   }
 
   @Method()
@@ -134,9 +130,11 @@ export class JsonEditor implements ComponentInterface {
           this.content = updatedContent;
           this.value =
             this.content[this.valueType === "string" ? "text" : "json"];
-        },
-        onBlur: () => {
           this.ionChange.emit({
+            name: this.name,
+            value: this.value,
+          });
+          this.ionInput.emit({
             name: this.name,
             value: this.value,
           });
