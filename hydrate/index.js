@@ -31428,6 +31428,9 @@ class JsonEditor {
     }
     this.set(this.content);
   }
+  async getEditor() {
+    return this.editor;
+  }
   async set(content) {
     if (!(content === null || content === void 0 ? void 0 : content.text) && !(content === null || content === void 0 ? void 0 : content.json))
       return;
@@ -31450,6 +31453,12 @@ class JsonEditor {
   }
   async destroy() {
     return this.editor.destroy();
+  }
+  async scrollToPath(path) {
+    return this.editor.scrollTo(path);
+  }
+  async validateEditor() {
+    return this.editor.validate();
   }
   componentDidLoad() {
     if (!(Build === null || Build === void 0 ? void 0 : Build.isBrowser))
@@ -31500,13 +31509,16 @@ class JsonEditor {
       "options": [8],
       "content": [32],
       "valueType": [32],
+      "getEditor": [64],
       "set": [64],
       "update": [64],
       "updateOptions": [64],
       "refresh": [64],
       "expand": [64],
       "setFocus": [64],
-      "destroy": [64]
+      "destroy": [64],
+      "scrollToPath": [64],
+      "validateEditor": [64]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",

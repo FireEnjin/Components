@@ -54,6 +54,16 @@ Type: `Promise<void>`
 
 
 
+### `getEditor() => Promise<JSONEditor>`
+
+
+
+#### Returns
+
+Type: `Promise<JsonEditor>`
+
+
+
 ### `refresh() => Promise<void>`
 
 
@@ -61,6 +71,16 @@ Type: `Promise<void>`
 #### Returns
 
 Type: `Promise<void>`
+
+
+
+### `scrollToPath(path: any) => Promise<any>`
+
+
+
+#### Returns
+
+Type: `Promise<any>`
 
 
 
@@ -101,6 +121,16 @@ Type: `Promise<void>`
 #### Returns
 
 Type: `Promise<void>`
+
+
+
+### `validateEditor() => Promise<any>`
+
+
+
+#### Returns
+
+Type: `Promise<any>`
 
 
 

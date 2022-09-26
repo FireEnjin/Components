@@ -106,6 +106,16 @@ export class JsonEditor implements ComponentInterface {
     return this.editor.destroy();
   }
 
+  @Method()
+  async scrollToPath(path: JSONPath) {
+    return this.editor.scrollTo(path);
+  }
+
+  @Method()
+  async validateEditor() {
+    return this.editor.validate();
+  }
+
   componentDidLoad() {
     if (!Build?.isBrowser) return;
     this.editor = new JSONEditor({
