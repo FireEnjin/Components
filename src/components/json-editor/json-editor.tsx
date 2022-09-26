@@ -13,10 +13,14 @@ import {
 } from "@stencil/core";
 import {
   JSONEditor,
-  Content,
   JSONEditorPropsOptional,
   JSONPath,
 } from "vanilla-jsoneditor";
+
+declare interface Content {
+  json?: any;
+  text?: string;
+}
 
 @Component({
   tag: "fireenjin-json-editor",
@@ -68,11 +72,13 @@ export class JsonEditor implements ComponentInterface {
 
   @Method()
   async set(content: Content) {
-    return this.editor.set(content);
+    if (!content?.text && !content?.json) return;
+    this.editor.set(content as any);
   }
+
   @Method()
   async update(content: Content) {
-    return this.editor.update(content);
+    return this.editor.update(content as any);
   }
 
   @Method()
