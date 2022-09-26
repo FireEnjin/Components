@@ -66,6 +66,11 @@ export class JsonEditor implements ComponentInterface {
   }
 
   @Method()
+  async getEditor() {
+    return this.editor;
+  }
+
+  @Method()
   async set(content: Content) {
     if (!content?.text && !content?.json) return;
     this.editor.set(content as any);
