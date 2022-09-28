@@ -14979,14 +14979,17 @@ class Form {
     }
   }
   async onInput(event) {
-    var _a;
+    var _a, _b, _c, _d;
     if (event &&
       event.target &&
       event.target.name &&
       !event.target.name.startsWith("ion-")) {
-      this.setByPath(this.formData, event.target.name, ((_a = this.filterData) === null || _a === void 0 ? void 0 : _a.length)
-        ? await this.setFilteredValue(event.target.name, event.target.value)
-        : event.target.value);
+      const value = typeof ((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.checked) === "boolean"
+        ? event.detail.checked
+        : ((_b = event === null || event === void 0 ? void 0 : event.detail) === null || _b === void 0 ? void 0 : _b.value) || ((_c = event === null || event === void 0 ? void 0 : event.target) === null || _c === void 0 ? void 0 : _c.value);
+      this.setByPath(this.formData, event.target.name, ((_d = this.filterData) === null || _d === void 0 ? void 0 : _d.length)
+        ? await this.setFilteredValue(event.target.name, value)
+        : value);
       if (this.componentIsLoaded && !this.hasChanged) {
         this.hasChanged = true;
       }
@@ -15246,7 +15249,7 @@ class Form {
       "setFormData": [64],
       "fetchData": [64]
     },
-    "$listeners$": [[0, "keydown", "handleKeyDown"], [0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onInput"], [0, "fireenjinSuccess", "onSuccess"], [0, "fireenjinError", "onError"]],
+    "$listeners$": [[0, "keydown", "handleKeyDown"], [0, "ionInput", "onInput"], [0, "ionChange", "onInput"], [0, "ionSelect", "onInput"], [0, "input", "onInput"], [0, "change", "onInput"], [0, "fireenjinSuccess", "onSuccess"], [0, "fireenjinError", "onError"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
