@@ -20,7 +20,6 @@ declare interface Content {
 @Component({
   tag: "fireenjin-json-editor",
   styleUrl: "json-editor.css",
-  scoped: true,
 })
 export class JsonEditor implements ComponentInterface {
   editor: JSONEditor;
@@ -48,16 +47,7 @@ export class JsonEditor implements ComponentInterface {
   @Watch("value")
   onValueChange(value, lastValue) {
     if (value === lastValue) return;
-    if (typeof value === "string") {
-      this.content = {
-        text: value,
-      };
-      this.valueType = "string";
-    } else {
-      this.content = { json: value };
-      this.valueType = "object";
-    }
-    this.set(this.content);
+    this.setValue(value);
   }
 
   @Method()
@@ -111,9 +101,23 @@ export class JsonEditor implements ComponentInterface {
     return this.editor.validate() as any;
   }
 
+  setValue(value) {
+    if (typeof value === "string") {
+      this.content = {
+        text: value,
+      };
+      this.valueType = "string";
+    } else {
+      this.content = { json: value };
+      this.valueType = "object";
+    }
+    this.set(this.content);
+  }
+
   componentDidLoad() {
     if (!Build?.isBrowser) return;
-    let value: any;
+    let value: any = this.value;
+    if (this.value) this.setValue(this.value);
     this.editor = new JSONEditor({
       target: this.jsonEditorEl,
       props: {
