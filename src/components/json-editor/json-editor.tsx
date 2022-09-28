@@ -8,7 +8,6 @@ import {
   EventEmitter,
   Prop,
   Method,
-  State,
   Watch,
 } from "@stencil/core";
 import { JSONEditor, JSONEditorPropsOptional } from "vanilla-jsoneditor";
@@ -21,16 +20,19 @@ declare interface Content {
 @Component({
   tag: "fireenjin-json-editor",
   styleUrl: "json-editor.css",
+  scoped: true,
 })
 export class JsonEditor implements ComponentInterface {
   editor: JSONEditor;
   jsonEditorEl: any;
+  content: Content;
+  valueType: "string" | "object" = "string";
 
   @Event() ionInput: EventEmitter;
   @Event() ionChange: EventEmitter;
 
   @Prop() name = "json";
-  @Prop() value: any;
+  @Prop({ mutable: true }) value: any;
   @Prop() mode?: "tree" | "text" = "tree";
   @Prop() mainMenuBar = true;
   @Prop() navigationBar = true;
@@ -42,9 +44,6 @@ export class JsonEditor implements ComponentInterface {
   @Prop() escapeUnicodeCharacters = false;
   @Prop() validator: any;
   @Prop() options: any = {};
-
-  @State() content: Content;
-  @State() valueType: "string" | "object" = "string";
 
   @Watch("value")
   onValueChange(value, lastValue) {
@@ -114,6 +113,7 @@ export class JsonEditor implements ComponentInterface {
 
   componentDidLoad() {
     if (!Build?.isBrowser) return;
+    let value: any;
     this.editor = new JSONEditor({
       target: this.jsonEditorEl,
       props: {
@@ -128,17 +128,19 @@ export class JsonEditor implements ComponentInterface {
         escapeControlCharacters: this.escapeControlCharacters,
         escapeUnicodeCharacters: this.escapeUnicodeCharacters,
         validator: this.validator,
+        onBlur: () => {
+          this.value = value;
+        },
         onChange: (updatedContent) => {
           this.content = updatedContent;
-          this.value =
-            this.content[this.valueType === "string" ? "text" : "json"];
+          value = this.content[this.valueType === "string" ? "text" : "json"];
           this.ionChange.emit({
             name: this.name,
-            value: this.value,
+            value,
           });
           this.ionInput.emit({
             name: this.name,
-            value: this.value,
+            value,
           });
         },
         ...(this.options || {}),

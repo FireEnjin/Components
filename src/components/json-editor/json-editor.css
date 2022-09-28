@@ -1,4 +1,4 @@
-fireenjin-json-editor {
+:host {
   --jse-theme-color: var(--ion-color-primary);
   --jse-theme-color-highlight: var(--ion-color-primary-tint);
   --jse-error-color: var(--ion-color-danger);
