@@ -166,6 +166,8 @@ export class Form implements ComponentInterface {
   @Listen("ionInput")
   @Listen("ionChange")
   @Listen("ionSelect")
+  @Listen("input")
+  @Listen("change")
   async onInput(event) {
     if (
       event &&
@@ -173,12 +175,16 @@ export class Form implements ComponentInterface {
       event.target.name &&
       !event.target.name.startsWith("ion-")
     ) {
+      const value =
+        typeof event?.detail?.checked === "boolean"
+          ? event.detail.checked
+          : event?.detail?.value || event?.target?.value;
       this.setByPath(
         this.formData,
         event.target.name,
         this.filterData?.length
-          ? await this.setFilteredValue(event.target.name, event.target.value)
-          : event.target.value
+          ? await this.setFilteredValue(event.target.name, value)
+          : value
       );
       if (this.componentIsLoaded && !this.hasChanged) {
         this.hasChanged = true;
