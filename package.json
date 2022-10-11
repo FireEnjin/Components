@@ -28,10 +28,12 @@
   },
   "scripts": {
     "build": "mitosis build",
-    "start": "npm run watch",
     "env": "fireenjin env",
+    "pollen": "pollen",
+    "postbuild": "pollen",
     "presets": "fireenjin presets",
     "presets:watch": "fireenjin presets watch",
+    "start": "npm run watch",
     "watch": "npm-watch"
   },
   "dependencies": {
@@ -63,6 +65,8 @@
     "jest": "^27.5.1",
     "jest-fetch-mock": "^3.0.3",
     "npm-watch": "^0.7.0",
+    "pollen-css": "^4.6.1",
+    "postcss": "^8.4.17",
     "prettier": "^2.5.0",
     "ts-jest": "^27.1.3",
     "typescript": "^4.8.4"
