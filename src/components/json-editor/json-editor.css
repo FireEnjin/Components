@@ -1,6 +1,0 @@
-fireenjin-json-editor {
-  --jse-theme-color: var(--ion-color-primary);
-  --jse-theme-color-highlight: var(--ion-color-primary-tint);
-  --jse-error-color: var(--ion-color-danger);
-  --jse-warning-color: var(--ion-color-warning);
-}
