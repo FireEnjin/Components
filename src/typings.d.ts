@@ -3,6 +3,7 @@ import { Color, SelectCompareFn, SelectInterface } from "@ionic/core";
 export type FieldOption = {
   label?: string;
   value?: any;
+  checked?: boolean;
   disabled?: boolean;
   payload?: any;
   slot?: string;

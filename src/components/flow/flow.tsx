@@ -418,6 +418,15 @@ export class flow {
           labelPosition={field?.labelPosition}
         />
       );
+    } else if (field?.type === "checklist") {
+      return (
+        <fireenjin-checklist
+          name={field?.name}
+          value={field?.value}
+          options={field?.options || []}
+          disabled={field?.disabled}
+        />
+      );
     } else {
       return (
         <fireenjin-input

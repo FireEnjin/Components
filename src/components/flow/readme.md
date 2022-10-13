@@ -254,6 +254,7 @@ Type: `Promise<void>`
 - [fireenjin-select](../select)
 - [fireenjin-radios](../radios)
 - [fireenjin-input-search](../input-search)
+- [fireenjin-checklist](../checklist)
 - [fireenjin-input](../input)
 - [fireenjin-form](../form)
 - ion-slides
@@ -271,6 +272,7 @@ graph TD;
   fireenjin-flow --> fireenjin-select
   fireenjin-flow --> fireenjin-radios
   fireenjin-flow --> fireenjin-input-search
+  fireenjin-flow --> fireenjin-checklist
   fireenjin-flow --> fireenjin-input
   fireenjin-flow --> fireenjin-form
   fireenjin-flow --> ion-slides
@@ -330,6 +332,10 @@ graph TD;
   fireenjin-input-search --> ion-icon
   fireenjin-input-search --> ion-label
   fireenjin-input-search --> ion-input
+  fireenjin-checklist --> ion-list
+  fireenjin-checklist --> ion-item
+  fireenjin-checklist --> ion-checkbox
+  fireenjin-checklist --> ion-label
   fireenjin-input --> ion-input
   fireenjin-input --> ion-item
   fireenjin-input --> ion-icon
