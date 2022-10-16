@@ -30,6 +30,7 @@ export class flow {
     onClick?: (event) => void;
     disabled?: boolean;
     shape?: "round";
+    size?: "default" | "small" | "large";
   } = {
     label: "Next",
     color: "primary",
@@ -49,6 +50,7 @@ export class flow {
     onClick?: (event) => void;
     disabled?: boolean;
     shape?: "round";
+    size?: "default" | "small" | "large";
   } = {
     label: "Back",
     color: "medium",
@@ -68,6 +70,7 @@ export class flow {
     onClick?: (event) => void;
     disabled?: boolean;
     shape?: "round";
+    size?: "default" | "small" | "large";
   } = {
     label: "Save",
     fill: "solid",
@@ -536,6 +539,7 @@ export class flow {
               disabled={!!this.prevButton?.disabled}
               color={this.prevButton?.color}
               fill={this.prevButton?.fill}
+              size={this.prevButton?.size}
               onClick={(event) =>
                 typeof this.prevButton?.onClick === "function"
                   ? this.prevButton.onClick(event)
@@ -557,6 +561,7 @@ export class flow {
               disabled={!!this.nextButton?.disabled}
               color={this.nextButton?.color}
               fill={this.nextButton?.fill}
+              size={this.nextButton?.size}
               onClick={(event) =>
                 typeof this.nextButton?.onClick === "function"
                   ? this.nextButton.onClick(event)
@@ -604,6 +609,7 @@ export class flow {
               color={this.saveButton?.color}
               fill={this.saveButton?.fill}
               type="submit"
+              size={this.saveButton?.size}
             >
               {this.saveButton?.icon && (
                 <ion-icon
