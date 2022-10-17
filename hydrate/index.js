@@ -51474,6 +51474,7 @@ const flowCss = "fireenjin-flow .flow-controls{display:flex;justify-content:spac
 class flow {
   constructor(hostRef) {
     registerInstance(this, hostRef);
+    this.currentIndex = 0;
     /**
      * The data from the form being filled out
      */
@@ -51554,9 +51555,9 @@ class flow {
     this.slideNext();
   }
   async onSlideChange() {
-    const currentIndex = await this.getActiveIndex();
-    this.currentStep = this.steps[currentIndex];
-    if (currentIndex === this.steps.length) {
+    this.currentIndex = await this.getActiveIndex();
+    this.currentStep = this.steps[this.currentIndex];
+    if (this.currentIndex === this.steps.length) {
       this.hideControls = true;
       if (!this.askConfirmation)
         this.formEl.submit();
@@ -51564,7 +51565,7 @@ class flow {
     else {
       this.hideControls = false;
     }
-    if (currentIndex === 0 && this.prevButton) {
+    if (this.currentIndex === 0 && this.prevButton) {
       this.prevButton = Object.assign(Object.assign({}, this.prevButton), { disabled: true });
     }
     else {
@@ -51639,14 +51640,30 @@ class flow {
     this.formEl.submit(event, options);
   }
   async checkStepValidity() {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    for (const field of (((_a = this.currentStep) === null || _a === void 0 ? void 0 : _a.fields) || []).filter((field) => field === null || field === void 0 ? void 0 : field.required)) {
-      return !(((_c = (_b = this.formEl) === null || _b === void 0 ? void 0 : _b.formData) === null || _c === void 0 ? void 0 : _c[field === null || field === void 0 ? void 0 : field.name]) === undefined ||
-        ((_e = (_d = this.formEl) === null || _d === void 0 ? void 0 : _d.formData) === null || _e === void 0 ? void 0 : _e[field === null || field === void 0 ? void 0 : field.name]) === null ||
-        (typeof ((_g = (_f = this.formEl) === null || _f === void 0 ? void 0 : _f.formData) === null || _g === void 0 ? void 0 : _g[field === null || field === void 0 ? void 0 : field.name]) === "string" &&
-          ((_k = (_j = (_h = this.formEl) === null || _h === void 0 ? void 0 : _h.formData) === null || _j === void 0 ? void 0 : _j[field === null || field === void 0 ? void 0 : field.name]) === null || _k === void 0 ? void 0 : _k.length) <= 0));
-    }
-    return true;
+    let response = true;
+    await new Promise((resolve, reject) => {
+      try {
+        const requiredEls = document.querySelectorAll(`ion-slide:nth-of-type(${this.currentIndex + 1}) [required]`);
+        if (!requiredEls.length)
+          resolve(true);
+        (requiredEls || []).forEach((el, index) => {
+          var _a;
+          if ((typeof (el === null || el === void 0 ? void 0 : el.reportValidity) === "function" &&
+            !(el === null || el === void 0 ? void 0 : el.reportValidity())) ||
+            (typeof (el === null || el === void 0 ? void 0 : el.checkValidity) === "function" && !(el === null || el === void 0 ? void 0 : el.checkValidity())) ||
+            el.value === null ||
+            (typeof el.value === "string" && ((_a = el.value) === null || _a === void 0 ? void 0 : _a.length) <= 0))
+            response = false;
+          if (index === requiredEls.length - 1)
+            resolve(response);
+        });
+      }
+      catch (e) {
+        console.log(e);
+        reject();
+      }
+    });
+    return response;
   }
   componentWillLoad() {
     if (this.prevButton)

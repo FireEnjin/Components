@@ -18,6 +18,7 @@ export class flow {
   slidesEl: HTMLIonSlidesElement;
   formEl: HTMLFireenjinFormElement;
   currentStep: Step;
+  currentIndex = 0;
   /**
    * The name of the form used for ID and name
    */
@@ -179,15 +180,15 @@ export class flow {
 
   @Listen("ionSlideDidChange")
   async onSlideChange() {
-    const currentIndex = await this.getActiveIndex();
-    this.currentStep = this.steps[currentIndex];
-    if (currentIndex === this.steps.length) {
+    this.currentIndex = await this.getActiveIndex();
+    this.currentStep = this.steps[this.currentIndex];
+    if (this.currentIndex === this.steps.length) {
       this.hideControls = true;
       if (!this.askConfirmation) this.formEl.submit();
     } else {
       this.hideControls = false;
     }
-    if (currentIndex === 0 && this.prevButton) {
+    if (this.currentIndex === 0 && this.prevButton) {
       this.prevButton = { ...this.prevButton, disabled: true };
     } else {
       this.prevButton = { ...this.prevButton, disabled: false };
@@ -300,18 +301,31 @@ export class flow {
 
   @Method()
   async checkStepValidity() {
-    for (const field of (this.currentStep?.fields || []).filter(
-      (field) => field?.required
-    )) {
-      return !(
-        this.formEl?.formData?.[field?.name] === undefined ||
-        this.formEl?.formData?.[field?.name] === null ||
-        (typeof this.formEl?.formData?.[field?.name] === "string" &&
-          this.formEl?.formData?.[field?.name]?.length <= 0)
-      );
-    }
+    let response = true;
+    await new Promise((resolve, reject) => {
+      try {
+        const requiredEls = document.querySelectorAll(
+          `ion-slide:nth-of-type(${this.currentIndex + 1}) [required]`
+        );
+        if (!requiredEls.length) resolve(true);
+        (requiredEls || []).forEach((el: any, index) => {
+          if (
+            (typeof el?.reportValidity === "function" &&
+              !el?.reportValidity()) ||
+            (typeof el?.checkValidity === "function" && !el?.checkValidity()) ||
+            el.value === null ||
+            (typeof el.value === "string" && el.value?.length <= 0)
+          )
+            response = false;
+          if (index === requiredEls.length - 1) resolve(response);
+        });
+      } catch (e) {
+        console.log(e);
+        reject();
+      }
+    });
 
-    return true;
+    return response;
   }
 
   componentWillLoad() {
