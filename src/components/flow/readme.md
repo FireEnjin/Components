@@ -54,6 +54,16 @@ Type: `Promise<void>`
 
 
 
+### `checkStepValidity() => Promise<boolean>`
+
+
+
+#### Returns
+
+Type: `Promise<boolean>`
+
+
+
 ### `getActiveIndex() => Promise<number>`
 
 

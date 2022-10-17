@@ -32,6 +32,7 @@ export default {
               name: "test",
               label: "Testing",
               labelPosition: "stacked",
+              required: true,
               placeholder: "wee",
             },
           ],

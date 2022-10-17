@@ -17,7 +17,7 @@ declare interface Step {
 export class flow {
   slidesEl: HTMLIonSlidesElement;
   formEl: HTMLFireenjinFormElement;
-  currentStep;
+  currentStep: Step;
   /**
    * The name of the form used for ID and name
    */
@@ -236,6 +236,8 @@ export class flow {
 
   @Method()
   async slideNext(speed?: number, runCallbacks?: boolean) {
+    console.log(await this.checkStepValidity());
+    if (!this.disableRequiredCheck && !(await this.checkStepValidity())) return;
     return this.slidesEl.slideNext(speed, runCallbacks);
   }
 
@@ -294,6 +296,22 @@ export class flow {
   @Method()
   async submit(event?: any, options?: any) {
     this.formEl.submit(event, options);
+  }
+
+  @Method()
+  async checkStepValidity() {
+    for (const field of (this.currentStep?.fields || []).filter(
+      (field) => field?.required
+    )) {
+      return !(
+        this.formEl?.formData?.[field?.name] === undefined ||
+        this.formEl?.formData?.[field?.name] === null ||
+        (typeof this.formEl?.formData?.[field?.name] === "string" &&
+          this.formEl?.formData?.[field?.name]?.length <= 0)
+      );
+    }
+
+    return true;
   }
 
   componentWillLoad() {
@@ -615,6 +633,11 @@ export class flow {
               fill={this.saveButton?.fill}
               type="submit"
               size={this.saveButton?.size}
+              onClick={(event) =>
+                typeof this.saveButton?.onClick === "function"
+                  ? this.saveButton.onClick(event)
+                  : null
+              }
             >
               {this.saveButton?.icon && (
                 <ion-icon
