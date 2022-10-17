@@ -2,6 +2,14 @@ import { Color } from "@ionic/core";
 import { Component, h, Listen, Method, Prop } from "@stencil/core";
 import { Field } from "../../typings";
 
+declare interface Step {
+  beforeHTML?: string;
+  fields?: Field[];
+  afterHTML?: string;
+  component?: string;
+  componentProps?: any;
+}
+
 @Component({
   tag: "fireenjin-flow",
   styleUrl: "flow.css",
@@ -9,6 +17,7 @@ import { Field } from "../../typings";
 export class flow {
   slidesEl: HTMLIonSlidesElement;
   formEl: HTMLFireenjinFormElement;
+  currentStep;
   /**
    * The name of the form used for ID and name
    */
@@ -155,17 +164,12 @@ export class flow {
   @Prop() slidesOptions: any = { autoHeight: true, allowTouchMove: false };
   @Prop() pager = false;
   @Prop() scrollbar = false;
-  @Prop() steps: {
-    beforeHTML?: string;
-    fields?: Field[];
-    afterHTML?: string;
-    component?: string;
-    componentProps?: any;
-  }[] = [];
+  @Prop() steps: Step[] = [];
   @Prop() googleMapsKey: string;
   @Prop() stripeKey: string;
   @Prop() stripeElements: any;
   @Prop() askConfirmation = false;
+  @Prop() disableRequiredCheck = false;
 
   @Listen("keydown")
   async onKeydown(event) {
@@ -176,6 +180,7 @@ export class flow {
   @Listen("ionSlideDidChange")
   async onSlideChange() {
     const currentIndex = await this.getActiveIndex();
+    this.currentStep = this.steps[currentIndex];
     if (currentIndex === this.steps.length) {
       this.hideControls = true;
       if (!this.askConfirmation) this.formEl.submit();
