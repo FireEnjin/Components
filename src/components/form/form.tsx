@@ -128,6 +128,10 @@ export class Form implements ComponentInterface {
    */
   // @Prop() filterData?: (string | ((value: any) => Promise<any> | any))[];
   @Prop() filterData?: any;
+  /**
+   * The localStorage key name to store as
+   */
+  @Prop() cacheKey: string;
 
   /**
    * Emitted on load with endpoint
@@ -186,6 +190,7 @@ export class Form implements ComponentInterface {
           ? await this.setFilteredValue(event.target.name, value)
           : value
       );
+      if (this.cacheKey) this.saveCache();
       if (this.componentIsLoaded && !this.hasChanged) {
         this.hasChanged = true;
       }
@@ -204,8 +209,10 @@ export class Form implements ComponentInterface {
           ? this.fetchKey.split(".").reduce((o, i) => o[i], event.detail.data)
           : event?.detail?.data
       );
+      if (this.cacheKey) this.restoreCache();
     }
     if ([this.endpoint, this.fetch].includes(event?.detail?.endpoint)) {
+      if (this.cacheKey) this.clearCache();
       this.loading = false;
     }
   }
@@ -215,6 +222,30 @@ export class Form implements ComponentInterface {
     if (this.endpoint === event?.detail?.endpoint) {
       this.loading = false;
     }
+  }
+
+  /**
+   * Clear the cache for the saved form
+   */
+  @Method()
+  async clearCache() {
+    localStorage.removeItem(this.cacheKey);
+  }
+
+  /**
+   * Save the formData to the local cache
+   */
+  @Method()
+  async saveCache() {
+    localStorage.setItem(this.cacheKey, JSON.stringify(this.formData));
+  }
+
+  /**
+   * Restore the formData from the local cache
+   */
+  @Method()
+  async restoreCache() {
+    this.setFormData(JSON.parse(localStorage.getItem(this.cacheKey)));
   }
 
   /**
@@ -428,6 +459,7 @@ export class Form implements ComponentInterface {
       if (!this.disableLoader) this.loading = true;
     }
     if (this.formData) this.setFormData(this.formData);
+    if (this.cacheKey) this.restoreCache();
     this.componentIsLoaded = true;
   }
 

@@ -16410,6 +16410,8 @@ class Form {
       this.setByPath(this.formData, event.target.name, ((_d = this.filterData) === null || _d === void 0 ? void 0 : _d.length)
         ? await this.setFilteredValue(event.target.name, value)
         : value);
+      if (this.cacheKey)
+        this.saveCache();
       if (this.componentIsLoaded && !this.hasChanged) {
         this.hasChanged = true;
       }
@@ -16423,8 +16425,12 @@ class Form {
       await this.setFormData(this.fetchKey
         ? this.fetchKey.split(".").reduce((o, i) => o[i], event.detail.data)
         : (_d = event === null || event === void 0 ? void 0 : event.detail) === null || _d === void 0 ? void 0 : _d.data);
+      if (this.cacheKey)
+        this.restoreCache();
     }
     if ([this.endpoint, this.fetch].includes((_e = event === null || event === void 0 ? void 0 : event.detail) === null || _e === void 0 ? void 0 : _e.endpoint)) {
+      if (this.cacheKey)
+        this.clearCache();
       this.loading = false;
     }
   }
@@ -16433,6 +16439,24 @@ class Form {
     if (this.endpoint === ((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.endpoint)) {
       this.loading = false;
     }
+  }
+  /**
+   * Clear the cache for the saved form
+   */
+  async clearCache() {
+    localStorage.removeItem(this.cacheKey);
+  }
+  /**
+   * Save the formData to the local cache
+   */
+  async saveCache() {
+    localStorage.setItem(this.cacheKey, JSON.stringify(this.formData));
+  }
+  /**
+   * Restore the formData from the local cache
+   */
+  async restoreCache() {
+    this.setFormData(JSON.parse(localStorage.getItem(this.cacheKey)));
   }
   /**
    * Emit fireenjinSubmit event with form data
@@ -16626,6 +16650,8 @@ class Form {
     }
     if (this.formData)
       this.setFormData(this.formData);
+    if (this.cacheKey)
+      this.restoreCache();
     this.componentIsLoaded = true;
   }
   render() {
@@ -16662,6 +16688,10 @@ class Form {
       "fetchDataMap": [8, "fetch-data-map"],
       "fetchKey": [1, "fetch-key"],
       "filterData": [8, "filter-data"],
+      "cacheKey": [1, "cache-key"],
+      "clearCache": [64],
+      "saveCache": [64],
+      "restoreCache": [64],
       "submit": [64],
       "reset": [64],
       "checkFormValidity": [64],
@@ -53549,7 +53579,7 @@ class flow {
   }
   render() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6;
-    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: null, resetButton: null, documentId: this.documentId, endpoint: this.endpoint, hideControls: this.hideControls, filterData: this.filterData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: true, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap, fetchKey: this.fetchKey }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => {
+    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: null, resetButton: null, documentId: this.documentId, endpoint: this.endpoint, hideControls: this.hideControls, filterData: this.filterData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: true, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap, fetchKey: this.fetchKey, cacheKey: this.cacheKey }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => {
       const StepComponent = (step === null || step === void 0 ? void 0 : step.component) || null;
       return (hAsync("ion-slide", null, hAsync("div", null, (step === null || step === void 0 ? void 0 : step.beforeHTML) && hAsync("div", { innerHTML: step.beforeHTML }), StepComponent && (hAsync(StepComponent, Object.assign({}, ((step === null || step === void 0 ? void 0 : step.componentProps) || {})))), ((step === null || step === void 0 ? void 0 : step.fields) || []).map((field) => [
         (field === null || field === void 0 ? void 0 : field.beforeHTML) && hAsync("div", { innerHTML: field.beforeHTML }),
@@ -53614,6 +53644,7 @@ class flow {
       "stripeElements": [8, "stripe-elements"],
       "askConfirmation": [4, "ask-confirmation"],
       "disableRequiredCheck": [4, "disable-required-check"],
+      "cacheKey": [1, "cache-key"],
       "getActiveIndex": [64],
       "getSwiper": [64],
       "isBeginning": [64],

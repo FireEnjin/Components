@@ -11,6 +11,7 @@
 | -------------------- | ---------------------- | ---------------------------------------------------------------------- | ---------------------------------------------- | ----------- |
 | `action`             | `action`               | The action to use for the form                                         | `string`                                       | `undefined` |
 | `beforeSubmit`       | --                     | A method that runs before form submission to allow editing of formData | `(data: any, options?: any) => Promise<any>`   | `undefined` |
+| `cacheKey`           | `cache-key`            | The localStorage key name to store as                                  | `string`                                       | `undefined` |
 | `confirmExit`        | `confirm-exit`         | Confirm leaving the page when the form is filled                       | `boolean`                                      | `false`     |
 | `disableEnterButton` | `disable-enter-button` | Should the enter button binding be disabled                            | `boolean`                                      | `false`     |
 | `disableLoader`      | `disable-loader`       | Should the form disable the loader on submit                           | `boolean`                                      | `false`     |
@@ -58,6 +59,16 @@ Type: `Promise<boolean>`
 
 
 
+### `clearCache() => Promise<void>`
+
+Clear the cache for the saved form
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `fetchData() => Promise<void>`
 
 
@@ -85,6 +96,26 @@ Emit fireenjinReset event with form data
 #### Returns
 
 Type: `Promise<boolean>`
+
+
+
+### `restoreCache() => Promise<void>`
+
+Restore the formData from the local cache
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `saveCache() => Promise<void>`
+
+Save the formData to the local cache
+
+#### Returns
+
+Type: `Promise<void>`
 
 
 

@@ -171,6 +171,7 @@ export class flow {
   @Prop() stripeElements: any;
   @Prop() askConfirmation = false;
   @Prop() disableRequiredCheck = false;
+  @Prop() cacheKey: string;
 
   @Listen("keydown")
   async onKeydown(event) {
@@ -531,6 +532,7 @@ export class flow {
         fetchParams={this.fetchParams}
         fetchDataMap={this.fetchDataMap}
         fetchKey={this.fetchKey}
+        cacheKey={this.cacheKey}
       >
         <ion-slides
           ref={(el) => (this.slidesEl = el)}
