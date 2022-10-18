@@ -1,5 +1,13 @@
 import { Color } from "@ionic/core";
-import { Component, Element, h, Listen, Method, Prop } from "@stencil/core";
+import {
+  Component,
+  Element,
+  h,
+  Listen,
+  Method,
+  Prop,
+  State,
+} from "@stencil/core";
 import { Field } from "../../typings";
 
 declare interface Step {
@@ -174,6 +182,8 @@ export class flow {
   @Prop() disableRequiredCheck = false;
   @Prop() cacheKey: string;
 
+  @State() showSuccess = false;
+
   @Listen("keydown")
   async onKeydown(event) {
     if (event?.key !== "Enter" || this.disableEnterButton) return;
@@ -195,6 +205,18 @@ export class flow {
     } else {
       this.prevButton = { ...this.prevButton, disabled: false };
     }
+  }
+
+  @Listen("fireenjinSubmit")
+  onSubmit(event) {
+    if (event?.detail?.endpoint !== this.endpoint) return;
+    this.showSuccess = false;
+  }
+
+  @Listen("fireenjinSuccess")
+  onSuccess(event) {
+    if (event?.detail?.endpoint !== this.endpoint) return;
+    this.showSuccess = true;
   }
 
   @Method()
@@ -561,15 +583,23 @@ export class flow {
             );
           })}
           <ion-slide>
-            {this.askConfirmation ? (
-              <div class="flow-confirmation">
-                <slot name="confirmation" />
-              </div>
-            ) : (
-              <div class="flow-success">
-                <slot name="success" />
-              </div>
-            )}
+            <div
+              class="flow-confirmation"
+              style={{
+                display:
+                  this.askConfirmation && !this.showSuccess ? "block" : "none",
+              }}
+            >
+              <slot name="confirmation" />
+            </div>
+            <div
+              class="flow-success"
+              style={{
+                display: this.showSuccess ? "block" : "none",
+              }}
+            >
+              <slot name="success" />
+            </div>
           </ion-slide>
         </ion-slides>
         {!this.hideControls && (
@@ -620,7 +650,7 @@ export class flow {
             </ion-button>
           </div>
         )}
-        {this.hideControls && this.askConfirmation && (
+        {this.hideControls && this.askConfirmation && !this.showSuccess && (
           <div class="flow-controls control-confirmation">
             <ion-button
               expand={this.prevButton?.expand}

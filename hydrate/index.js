@@ -53430,6 +53430,7 @@ class flow {
     this.steps = [];
     this.askConfirmation = false;
     this.disableRequiredCheck = false;
+    this.showSuccess = false;
   }
   async onKeydown(event) {
     if ((event === null || event === void 0 ? void 0 : event.key) !== "Enter" || this.disableEnterButton)
@@ -53453,6 +53454,18 @@ class flow {
     else {
       this.prevButton = Object.assign(Object.assign({}, this.prevButton), { disabled: false });
     }
+  }
+  onSubmit(event) {
+    var _a;
+    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.endpoint) !== this.endpoint)
+      return;
+    this.showSuccess = false;
+  }
+  onSuccess(event) {
+    var _a;
+    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.endpoint) !== this.endpoint)
+      return;
+    this.showSuccess = true;
   }
   async getActiveIndex() {
     return this.slidesEl.getActiveIndex();
@@ -53525,7 +53538,7 @@ class flow {
     let response = true;
     await new Promise((resolve, reject) => {
       try {
-        const requiredEls = document.querySelectorAll(`ion-slide:nth-of-type(${this.currentIndex + 1}) [required]`);
+        const requiredEls = this.flowEl.querySelectorAll(`ion-slide:nth-of-type(${this.currentIndex + 1}) [required]`);
         if (!requiredEls.length)
           resolve(true);
         (requiredEls || []).forEach((el, index) => {
@@ -53586,7 +53599,11 @@ class flow {
         this.renderField(field),
         (field === null || field === void 0 ? void 0 : field.afterHTML) && hAsync("div", { innerHTML: field.afterHTML }),
       ])), (step === null || step === void 0 ? void 0 : step.afterHTML) && hAsync("div", { innerHTML: step.afterHTML })));
-    }), hAsync("ion-slide", null, this.askConfirmation ? (hAsync("div", { class: "flow-confirmation" }, hAsync("slot", { name: "confirmation" }))) : (hAsync("div", { class: "flow-success" }, hAsync("slot", { name: "success" }))))), !this.hideControls && (hAsync("div", { class: "flow-controls control-pager" }, hAsync("ion-button", { expand: (_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.expand, disabled: !!((_b = this.prevButton) === null || _b === void 0 ? void 0 : _b.disabled), color: (_c = this.prevButton) === null || _c === void 0 ? void 0 : _c.color, fill: (_d = this.prevButton) === null || _d === void 0 ? void 0 : _d.fill, size: (_e = this.prevButton) === null || _e === void 0 ? void 0 : _e.size, onClick: (event) => {
+    }), hAsync("ion-slide", null, hAsync("div", { class: "flow-confirmation", style: {
+        display: this.askConfirmation && !this.showSuccess ? "block" : "none",
+      } }, hAsync("slot", { name: "confirmation" })), hAsync("div", { class: "flow-success", style: {
+        display: this.showSuccess ? "block" : "none",
+      } }, hAsync("slot", { name: "success" })))), !this.hideControls && (hAsync("div", { class: "flow-controls control-pager" }, hAsync("ion-button", { expand: (_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.expand, disabled: !!((_b = this.prevButton) === null || _b === void 0 ? void 0 : _b.disabled), color: (_c = this.prevButton) === null || _c === void 0 ? void 0 : _c.color, fill: (_d = this.prevButton) === null || _d === void 0 ? void 0 : _d.fill, size: (_e = this.prevButton) === null || _e === void 0 ? void 0 : _e.size, onClick: (event) => {
         var _a;
         return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
           ? this.prevButton.onClick(event)
@@ -53596,7 +53613,7 @@ class flow {
         return typeof ((_a = this.nextButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
           ? this.nextButton.onClick(event)
           : this.slideNext();
-      } }, ((_p = this.nextButton) === null || _p === void 0 ? void 0 : _p.icon) && (hAsync("ion-icon", { slot: ((_q = this.nextButton) === null || _q === void 0 ? void 0 : _q.iconSlot) || "end", name: this.nextButton.icon })), ((_r = this.nextButton) === null || _r === void 0 ? void 0 : _r.label) && (hAsync("ion-label", null, this.nextButton.label))))), this.hideControls && this.askConfirmation && (hAsync("div", { class: "flow-controls control-confirmation" }, hAsync("ion-button", { expand: (_s = this.prevButton) === null || _s === void 0 ? void 0 : _s.expand, disabled: !!((_t = this.prevButton) === null || _t === void 0 ? void 0 : _t.disabled), color: (_u = this.prevButton) === null || _u === void 0 ? void 0 : _u.color, fill: (_v = this.prevButton) === null || _v === void 0 ? void 0 : _v.fill, onClick: (event) => {
+      } }, ((_p = this.nextButton) === null || _p === void 0 ? void 0 : _p.icon) && (hAsync("ion-icon", { slot: ((_q = this.nextButton) === null || _q === void 0 ? void 0 : _q.iconSlot) || "end", name: this.nextButton.icon })), ((_r = this.nextButton) === null || _r === void 0 ? void 0 : _r.label) && (hAsync("ion-label", null, this.nextButton.label))))), this.hideControls && this.askConfirmation && !this.showSuccess && (hAsync("div", { class: "flow-controls control-confirmation" }, hAsync("ion-button", { expand: (_s = this.prevButton) === null || _s === void 0 ? void 0 : _s.expand, disabled: !!((_t = this.prevButton) === null || _t === void 0 ? void 0 : _t.disabled), color: (_u = this.prevButton) === null || _u === void 0 ? void 0 : _u.color, fill: (_v = this.prevButton) === null || _v === void 0 ? void 0 : _v.fill, onClick: (event) => {
         var _a;
         return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
           ? this.prevButton.onClick(event)
@@ -53608,6 +53625,7 @@ class flow {
           : null;
       } }, ((_4 = this.saveButton) === null || _4 === void 0 ? void 0 : _4.icon) && (hAsync("ion-icon", { slot: ((_5 = this.saveButton) === null || _5 === void 0 ? void 0 : _5.iconSlot) || "end", name: this.saveButton.icon })), ((_6 = this.saveButton) === null || _6 === void 0 ? void 0 : _6.label) && (hAsync("ion-label", null, this.saveButton.label)))))));
   }
+  get flowEl() { return getElement(this); }
   static get style() { return flowCss; }
   static get cmpMeta() { return {
     "$flags$": 4,
@@ -53645,6 +53663,7 @@ class flow {
       "askConfirmation": [4, "ask-confirmation"],
       "disableRequiredCheck": [4, "disable-required-check"],
       "cacheKey": [1, "cache-key"],
+      "showSuccess": [32],
       "getActiveIndex": [64],
       "getSwiper": [64],
       "isBeginning": [64],
@@ -53667,7 +53686,7 @@ class flow {
       "submit": [64],
       "checkStepValidity": [64]
     },
-    "$listeners$": [[0, "keydown", "onKeydown"], [0, "ionSlideDidChange", "onSlideChange"]],
+    "$listeners$": [[0, "keydown", "onKeydown"], [0, "ionSlideDidChange", "onSlideChange"], [0, "fireenjinSubmit", "onSubmit"], [0, "fireenjinSuccess", "onSuccess"]],
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
   }; }
