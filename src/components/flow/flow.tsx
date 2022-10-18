@@ -1,5 +1,5 @@
 import { Color } from "@ionic/core";
-import { Component, h, Listen, Method, Prop } from "@stencil/core";
+import { Component, Element, h, Listen, Method, Prop } from "@stencil/core";
 import { Field } from "../../typings";
 
 declare interface Step {
@@ -19,6 +19,7 @@ export class flow {
   formEl: HTMLFireenjinFormElement;
   currentStep: Step;
   currentIndex = 0;
+  @Element() flowEl: HTMLFireenjinFlowElement;
   /**
    * The name of the form used for ID and name
    */
@@ -305,7 +306,7 @@ export class flow {
     let response = true;
     await new Promise((resolve, reject) => {
       try {
-        const requiredEls = document.querySelectorAll(
+        const requiredEls = this.flowEl.querySelectorAll(
           `ion-slide:nth-of-type(${this.currentIndex + 1}) [required]`
         );
         if (!requiredEls.length) resolve(true);
