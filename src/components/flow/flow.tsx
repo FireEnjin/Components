@@ -584,21 +584,25 @@ export class flow {
           })}
           <ion-slide>
             <div>
+              <slot />
               <div
                 class="flow-confirmation"
                 style={{
-                  display:
-                    this.askConfirmation && !this.showSuccess
-                      ? "block"
-                      : "none",
+                  transition: "all ease 0.5s",
+                  height:
+                    this.askConfirmation && !this.showSuccess ? "auto" : "0",
+                  opacity:
+                    this.askConfirmation && !this.showSuccess ? "1" : "0",
                 }}
               >
-                <slot name="confirm" />
+                <slot name="confirmation" />
               </div>
               <div
                 class="flow-success"
                 style={{
-                  display: this.showSuccess ? "block" : "none",
+                  transition: "all ease 0.5s",
+                  height: this.showSuccess ? "auto" : "0",
+                  opacity: this.showSuccess ? "1" : "0",
                 }}
               >
                 <slot name="success" />
