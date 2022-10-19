@@ -583,22 +583,26 @@ export class flow {
             );
           })}
           <ion-slide>
-            <div
-              class="flow-confirmation"
-              style={{
-                display:
-                  this.askConfirmation && !this.showSuccess ? "block" : "none",
-              }}
-            >
-              <slot name="confirmation" />
-            </div>
-            <div
-              class="flow-success"
-              style={{
-                display: this.showSuccess ? "block" : "none",
-              }}
-            >
-              <slot name="success" />
+            <div>
+              <div
+                class="flow-confirmation"
+                style={{
+                  display:
+                    this.askConfirmation && !this.showSuccess
+                      ? "block"
+                      : "none",
+                }}
+              >
+                <slot name="confirmation" />
+              </div>
+              <div
+                class="flow-success"
+                style={{
+                  display: this.showSuccess ? "block" : "none",
+                }}
+              >
+                <slot name="success" />
+              </div>
             </div>
           </ion-slide>
         </ion-slides>
