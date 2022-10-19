@@ -53603,7 +53603,9 @@ class flow {
         display: this.askConfirmation && !this.showSuccess ? "block" : "none",
       } }, hAsync("slot", { name: "confirmation" })), hAsync("div", { class: "flow-success", style: {
         display: this.showSuccess ? "block" : "none",
-      } }, hAsync("slot", { name: "success" })))), !this.hideControls && (hAsync("div", { class: "flow-controls control-pager" }, hAsync("ion-button", { expand: (_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.expand, disabled: !!((_b = this.prevButton) === null || _b === void 0 ? void 0 : _b.disabled), color: (_c = this.prevButton) === null || _c === void 0 ? void 0 : _c.color, fill: (_d = this.prevButton) === null || _d === void 0 ? void 0 : _d.fill, size: (_e = this.prevButton) === null || _e === void 0 ? void 0 : _e.size, onClick: (event) => {
+      } }, hAsync("slot", { name: "success" })))), hAsync("div", { class: "flow-controls control-pager", style: {
+        display: this.hideControls ? "none" : "flex",
+      } }, hAsync("ion-button", { expand: (_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.expand, disabled: !!((_b = this.prevButton) === null || _b === void 0 ? void 0 : _b.disabled), color: (_c = this.prevButton) === null || _c === void 0 ? void 0 : _c.color, fill: (_d = this.prevButton) === null || _d === void 0 ? void 0 : _d.fill, size: (_e = this.prevButton) === null || _e === void 0 ? void 0 : _e.size, onClick: (event) => {
         var _a;
         return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
           ? this.prevButton.onClick(event)
@@ -53613,7 +53615,11 @@ class flow {
         return typeof ((_a = this.nextButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
           ? this.nextButton.onClick(event)
           : this.slideNext();
-      } }, ((_p = this.nextButton) === null || _p === void 0 ? void 0 : _p.icon) && (hAsync("ion-icon", { slot: ((_q = this.nextButton) === null || _q === void 0 ? void 0 : _q.iconSlot) || "end", name: this.nextButton.icon })), ((_r = this.nextButton) === null || _r === void 0 ? void 0 : _r.label) && (hAsync("ion-label", null, this.nextButton.label))))), this.hideControls && this.askConfirmation && !this.showSuccess && (hAsync("div", { class: "flow-controls control-confirmation" }, hAsync("ion-button", { expand: (_s = this.prevButton) === null || _s === void 0 ? void 0 : _s.expand, disabled: !!((_t = this.prevButton) === null || _t === void 0 ? void 0 : _t.disabled), color: (_u = this.prevButton) === null || _u === void 0 ? void 0 : _u.color, fill: (_v = this.prevButton) === null || _v === void 0 ? void 0 : _v.fill, onClick: (event) => {
+      } }, ((_p = this.nextButton) === null || _p === void 0 ? void 0 : _p.icon) && (hAsync("ion-icon", { slot: ((_q = this.nextButton) === null || _q === void 0 ? void 0 : _q.iconSlot) || "end", name: this.nextButton.icon })), ((_r = this.nextButton) === null || _r === void 0 ? void 0 : _r.label) && (hAsync("ion-label", null, this.nextButton.label)))), hAsync("div", { class: "flow-controls control-confirmation", style: {
+        display: this.hideControls && this.askConfirmation && !this.showSuccess
+          ? "flex"
+          : "none",
+      } }, hAsync("ion-button", { expand: (_s = this.prevButton) === null || _s === void 0 ? void 0 : _s.expand, disabled: !!((_t = this.prevButton) === null || _t === void 0 ? void 0 : _t.disabled), color: (_u = this.prevButton) === null || _u === void 0 ? void 0 : _u.color, fill: (_v = this.prevButton) === null || _v === void 0 ? void 0 : _v.fill, onClick: (event) => {
         var _a;
         return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
           ? this.prevButton.onClick(event)
@@ -53623,7 +53629,7 @@ class flow {
         return typeof ((_a = this.saveButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
           ? this.saveButton.onClick(event)
           : null;
-      } }, ((_4 = this.saveButton) === null || _4 === void 0 ? void 0 : _4.icon) && (hAsync("ion-icon", { slot: ((_5 = this.saveButton) === null || _5 === void 0 ? void 0 : _5.iconSlot) || "end", name: this.saveButton.icon })), ((_6 = this.saveButton) === null || _6 === void 0 ? void 0 : _6.label) && (hAsync("ion-label", null, this.saveButton.label)))))));
+      } }, ((_4 = this.saveButton) === null || _4 === void 0 ? void 0 : _4.icon) && (hAsync("ion-icon", { slot: ((_5 = this.saveButton) === null || _5 === void 0 ? void 0 : _5.iconSlot) || "end", name: this.saveButton.icon })), ((_6 = this.saveButton) === null || _6 === void 0 ? void 0 : _6.label) && (hAsync("ion-label", null, this.saveButton.label))))));
   }
   get flowEl() { return getElement(this); }
   static get style() { return flowCss; }

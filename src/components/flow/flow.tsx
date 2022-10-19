@@ -602,102 +602,111 @@ export class flow {
             </div>
           </ion-slide>
         </ion-slides>
-        {!this.hideControls && (
-          <div class="flow-controls control-pager">
-            <ion-button
-              expand={this.prevButton?.expand}
-              disabled={!!this.prevButton?.disabled}
-              color={this.prevButton?.color}
-              fill={this.prevButton?.fill}
-              size={this.prevButton?.size}
-              onClick={(event) =>
-                typeof this.prevButton?.onClick === "function"
-                  ? this.prevButton.onClick(event)
-                  : this.slidePrev()
-              }
-            >
-              {this.prevButton?.icon && (
-                <ion-icon
-                  slot={this.prevButton?.iconSlot || "start"}
-                  name={this.prevButton.icon}
-                />
-              )}
-              {this.prevButton?.label && (
-                <ion-label>{this.prevButton.label}</ion-label>
-              )}
-            </ion-button>
-            <ion-button
-              expand={this.nextButton?.expand}
-              disabled={!!this.nextButton?.disabled}
-              color={this.nextButton?.color}
-              fill={this.nextButton?.fill}
-              size={this.nextButton?.size}
-              onClick={(event) =>
-                typeof this.nextButton?.onClick === "function"
-                  ? this.nextButton.onClick(event)
-                  : this.slideNext()
-              }
-            >
-              {this.nextButton?.icon && (
-                <ion-icon
-                  slot={this.nextButton?.iconSlot || "end"}
-                  name={this.nextButton.icon}
-                />
-              )}
-              {this.nextButton?.label && (
-                <ion-label>{this.nextButton.label}</ion-label>
-              )}
-            </ion-button>
-          </div>
-        )}
-        {this.hideControls && this.askConfirmation && !this.showSuccess && (
-          <div class="flow-controls control-confirmation">
-            <ion-button
-              expand={this.prevButton?.expand}
-              disabled={!!this.prevButton?.disabled}
-              color={this.prevButton?.color}
-              fill={this.prevButton?.fill}
-              onClick={(event) =>
-                typeof this.prevButton?.onClick === "function"
-                  ? this.prevButton.onClick(event)
-                  : this.slidePrev()
-              }
-            >
-              {this.prevButton?.icon && (
-                <ion-icon
-                  slot={this.prevButton?.iconSlot || "start"}
-                  name={this.prevButton.icon}
-                />
-              )}
-              {this.prevButton?.label && (
-                <ion-label>{this.prevButton.label}</ion-label>
-              )}
-            </ion-button>
-            <ion-button
-              expand={this.saveButton?.expand}
-              disabled={!!this.saveButton?.disabled}
-              color={this.saveButton?.color}
-              fill={this.saveButton?.fill}
-              type="submit"
-              size={this.saveButton?.size}
-              onClick={(event) =>
-                typeof this.saveButton?.onClick === "function"
-                  ? this.saveButton.onClick(event)
-                  : null
-              }
-            >
-              {this.saveButton?.icon && (
-                <ion-icon
-                  slot={this.saveButton?.iconSlot || "end"}
-                  name={this.saveButton.icon}
-                />
-              )}
-              {this.saveButton?.label && (
-                <ion-label>{this.saveButton.label}</ion-label>
-              )}
-            </ion-button>
-          </div>
-        )}
+        <div
+          class="flow-controls control-pager"
+          style={{
+            display: this.hideControls ? "none" : "flex",
+          }}
+        >
+          <ion-button
+            expand={this.prevButton?.expand}
+            disabled={!!this.prevButton?.disabled}
+            color={this.prevButton?.color}
+            fill={this.prevButton?.fill}
+            size={this.prevButton?.size}
+            onClick={(event) =>
+              typeof this.prevButton?.onClick === "function"
+                ? this.prevButton.onClick(event)
+                : this.slidePrev()
+            }
+          >
+            {this.prevButton?.icon && (
+              <ion-icon
+                slot={this.prevButton?.iconSlot || "start"}
+                name={this.prevButton.icon}
+              />
+            )}
+            {this.prevButton?.label && (
+              <ion-label>{this.prevButton.label}</ion-label>
+            )}
+          </ion-button>
+          <ion-button
+            expand={this.nextButton?.expand}
+            disabled={!!this.nextButton?.disabled}
+            color={this.nextButton?.color}
+            fill={this.nextButton?.fill}
+            size={this.nextButton?.size}
+            onClick={(event) =>
+              typeof this.nextButton?.onClick === "function"
+                ? this.nextButton.onClick(event)
+                : this.slideNext()
+            }
+          >
+            {this.nextButton?.icon && (
+              <ion-icon
+                slot={this.nextButton?.iconSlot || "end"}
+                name={this.nextButton.icon}
+              />
+            )}
+            {this.nextButton?.label && (
+              <ion-label>{this.nextButton.label}</ion-label>
+            )}
+          </ion-button>
+        </div>
+        <div
+          class="flow-controls control-confirmation"
+          style={{
+            display:
+              this.hideControls && this.askConfirmation && !this.showSuccess
+                ? "flex"
+                : "none",
+          }}
+        >
+          <ion-button
+            expand={this.prevButton?.expand}
+            disabled={!!this.prevButton?.disabled}
+            color={this.prevButton?.color}
+            fill={this.prevButton?.fill}
+            onClick={(event) =>
+              typeof this.prevButton?.onClick === "function"
+                ? this.prevButton.onClick(event)
+                : this.slidePrev()
+            }
+          >
+            {this.prevButton?.icon && (
+              <ion-icon
+                slot={this.prevButton?.iconSlot || "start"}
+                name={this.prevButton.icon}
+              />
+            )}
+            {this.prevButton?.label && (
+              <ion-label>{this.prevButton.label}</ion-label>
+            )}
+          </ion-button>
+          <ion-button
+            expand={this.saveButton?.expand}
+            disabled={!!this.saveButton?.disabled}
+            color={this.saveButton?.color}
+            fill={this.saveButton?.fill}
+            type="submit"
+            size={this.saveButton?.size}
+            onClick={(event) =>
+              typeof this.saveButton?.onClick === "function"
+                ? this.saveButton.onClick(event)
+                : null
+            }
+          >
+            {this.saveButton?.icon && (
+              <ion-icon
+                slot={this.saveButton?.iconSlot || "end"}
+                name={this.saveButton.icon}
+              />
+            )}
+            {this.saveButton?.label && (
+              <ion-label>{this.saveButton.label}</ion-label>
+            )}
+          </ion-button>
+        </div>
       </fireenjin-form>
     );
   }

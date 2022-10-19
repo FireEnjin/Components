@@ -18,6 +18,7 @@ export default {
     name: "Default",
     props: {
       endpoint: "addUser",
+      askConfirmation: true,
       steps: [
         {
           fields: [
