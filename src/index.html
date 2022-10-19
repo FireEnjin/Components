@@ -57,12 +57,37 @@
   </head>
 
   <body>
-    <fireenjin-docs-gallery></fireenjin-docs-gallery>
+    <!-- <fireenjin-docs-gallery></fireenjin-docs-gallery> -->
+    <fireenjin-flow class="expand" endpoint="addUser" ask-confirmation="true">
+      <div slot="confirmation">
+        <h1>Confirm and Submit Payment</h1>
+      </div>
+      <div slot="success">
+        <h1>Success asd!</h1>
+      </div>
+    </fireenjin-flow>
     <script>
       document.addEventListener("ionChange", function (event) {
         console.log(event);
       });
       document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector("fireenjin-flow").steps = [
+          {
+            beforeHTML: "testing",
+            fields: [
+              {
+                label: "wee",
+                labelPosition: "stacked",
+                inputMode: "decimal",
+                placeholder: "0",
+                required: true,
+                name: "amount",
+                type: "number",
+                value: null,
+              },
+            ],
+          },
+        ];
         var firebaseConfig = {
           apiKey: "AIzaSyAz5C9TRxQ9bUkTwVaD6Yc-Iisw57UslPM",
           authDomain: "fireenjin-live.firebaseapp.com",
@@ -93,11 +118,12 @@
       document.addEventListener("fireenjinSubmit", function (event) {
         console.log(event);
         setTimeout(() => {
-          document.body.dispatchEvent(
+          event.target.dispatchEvent(
             new CustomEvent("fireenjinSuccess", {
+              bubbles: true,
               detail: {
                 name: "select",
-                endpoint: "addUser",
+                endpoint: event?.detail?.endpoint,
                 target: event.target,
                 data: {
                   addUser: {

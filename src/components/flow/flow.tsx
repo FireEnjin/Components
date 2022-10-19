@@ -593,7 +593,7 @@ export class flow {
                       : "none",
                 }}
               >
-                <slot name="confirmation" />
+                <slot name="confirm" />
               </div>
               <div
                 class="flow-success"
