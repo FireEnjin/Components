@@ -53428,9 +53428,9 @@ class flow {
     this.pager = false;
     this.scrollbar = false;
     this.steps = [];
-    this.askConfirmation = false;
     this.disableRequiredCheck = false;
     this.showSuccess = false;
+    this.showSave = false;
   }
   async onKeydown(event) {
     if ((event === null || event === void 0 ? void 0 : event.key) !== "Enter" || this.disableEnterButton)
@@ -53440,13 +53440,13 @@ class flow {
   async onSlideChange() {
     this.currentIndex = await this.getActiveIndex();
     this.currentStep = this.steps[this.currentIndex];
-    if (this.currentIndex === this.steps.length) {
+    if (this.currentIndex === this.steps.length - 1) {
       this.hideControls = true;
-      if (!this.askConfirmation)
-        this.formEl.submit();
+      this.showSave = true;
     }
     else {
       this.hideControls = false;
+      this.showSave = false;
     }
     if (this.currentIndex === 0 && this.prevButton) {
       this.prevButton = Object.assign(Object.assign({}, this.prevButton), { disabled: true });
@@ -53592,22 +53592,18 @@ class flow {
   }
   render() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6;
-    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: null, resetButton: null, documentId: this.documentId, endpoint: this.endpoint, hideControls: this.hideControls, filterData: this.filterData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: true, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap, fetchKey: this.fetchKey, cacheKey: this.cacheKey }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar }, (this.steps || []).map((step) => {
+    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: null, resetButton: null, documentId: this.documentId, endpoint: this.endpoint, hideControls: this.hideControls, filterData: this.filterData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: true, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap, fetchKey: this.fetchKey, cacheKey: this.cacheKey }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar, style: {
+        transition: "all ease 0.5s",
+        height: !this.showSuccess ? "auto" : "0",
+        opacity: !this.showSuccess ? "1" : "0",
+      } }, (this.steps || []).map((step) => {
       const StepComponent = (step === null || step === void 0 ? void 0 : step.component) || null;
       return (hAsync("ion-slide", null, hAsync("div", null, (step === null || step === void 0 ? void 0 : step.beforeHTML) && hAsync("div", { innerHTML: step.beforeHTML }), StepComponent && (hAsync(StepComponent, Object.assign({}, ((step === null || step === void 0 ? void 0 : step.componentProps) || {})))), ((step === null || step === void 0 ? void 0 : step.fields) || []).map((field) => [
         (field === null || field === void 0 ? void 0 : field.beforeHTML) && hAsync("div", { innerHTML: field.beforeHTML }),
         this.renderField(field),
         (field === null || field === void 0 ? void 0 : field.afterHTML) && hAsync("div", { innerHTML: field.afterHTML }),
       ])), (step === null || step === void 0 ? void 0 : step.afterHTML) && hAsync("div", { innerHTML: step.afterHTML })));
-    }), hAsync("ion-slide", null, hAsync("div", null, hAsync("slot", null), hAsync("div", { class: "flow-confirmation", style: {
-        transition: "all ease 0.5s",
-        height: this.askConfirmation && !this.showSuccess ? "auto" : "0",
-        opacity: this.askConfirmation && !this.showSuccess ? "1" : "0",
-      } }, hAsync("slot", { name: "confirmation" })), hAsync("div", { class: "flow-success", style: {
-        transition: "all ease 0.5s",
-        height: this.showSuccess ? "auto" : "0",
-        opacity: this.showSuccess ? "1" : "0",
-      } }, hAsync("slot", { name: "success" }))))), hAsync("div", { class: "flow-controls control-pager", style: {
+    })), hAsync("div", { class: "flow-controls control-pager", style: {
         display: this.hideControls ? "none" : "flex",
       } }, hAsync("ion-button", { expand: (_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.expand, disabled: !!((_b = this.prevButton) === null || _b === void 0 ? void 0 : _b.disabled), color: (_c = this.prevButton) === null || _c === void 0 ? void 0 : _c.color, fill: (_d = this.prevButton) === null || _d === void 0 ? void 0 : _d.fill, size: (_e = this.prevButton) === null || _e === void 0 ? void 0 : _e.size, onClick: (event) => {
         var _a;
@@ -53620,9 +53616,7 @@ class flow {
           ? this.nextButton.onClick(event)
           : this.slideNext();
       } }, ((_p = this.nextButton) === null || _p === void 0 ? void 0 : _p.icon) && (hAsync("ion-icon", { slot: ((_q = this.nextButton) === null || _q === void 0 ? void 0 : _q.iconSlot) || "end", name: this.nextButton.icon })), ((_r = this.nextButton) === null || _r === void 0 ? void 0 : _r.label) && (hAsync("ion-label", null, this.nextButton.label)))), hAsync("div", { class: "flow-controls control-confirmation", style: {
-        display: this.hideControls && this.askConfirmation && !this.showSuccess
-          ? "flex"
-          : "none",
+        display: this.showSave && !this.showSuccess ? "flex" : "none",
       } }, hAsync("ion-button", { expand: (_s = this.prevButton) === null || _s === void 0 ? void 0 : _s.expand, disabled: !!((_t = this.prevButton) === null || _t === void 0 ? void 0 : _t.disabled), color: (_u = this.prevButton) === null || _u === void 0 ? void 0 : _u.color, fill: (_v = this.prevButton) === null || _v === void 0 ? void 0 : _v.fill, onClick: (event) => {
         var _a;
         return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
@@ -53633,7 +53627,11 @@ class flow {
         return typeof ((_a = this.saveButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
           ? this.saveButton.onClick(event)
           : null;
-      } }, ((_4 = this.saveButton) === null || _4 === void 0 ? void 0 : _4.icon) && (hAsync("ion-icon", { slot: ((_5 = this.saveButton) === null || _5 === void 0 ? void 0 : _5.iconSlot) || "end", name: this.saveButton.icon })), ((_6 = this.saveButton) === null || _6 === void 0 ? void 0 : _6.label) && (hAsync("ion-label", null, this.saveButton.label))))));
+      } }, ((_4 = this.saveButton) === null || _4 === void 0 ? void 0 : _4.icon) && (hAsync("ion-icon", { slot: ((_5 = this.saveButton) === null || _5 === void 0 ? void 0 : _5.iconSlot) || "end", name: this.saveButton.icon })), ((_6 = this.saveButton) === null || _6 === void 0 ? void 0 : _6.label) && (hAsync("ion-label", null, this.saveButton.label)))), hAsync("div", { class: "flow-success", style: {
+        transition: "all ease 0.5s",
+        height: this.showSuccess ? "auto" : "0",
+        opacity: this.showSuccess ? "1" : "0",
+      } }, hAsync("slot", null))));
   }
   get flowEl() { return getElement(this); }
   static get style() { return flowCss; }
@@ -53670,10 +53668,10 @@ class flow {
       "googleMapsKey": [1, "google-maps-key"],
       "stripeKey": [1, "stripe-key"],
       "stripeElements": [8, "stripe-elements"],
-      "askConfirmation": [4, "ask-confirmation"],
       "disableRequiredCheck": [4, "disable-required-check"],
       "cacheKey": [1, "cache-key"],
       "showSuccess": [32],
+      "showSave": [32],
       "getActiveIndex": [64],
       "getSwiper": [64],
       "isBeginning": [64],

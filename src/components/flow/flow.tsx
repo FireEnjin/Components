@@ -178,11 +178,11 @@ export class flow {
   @Prop() googleMapsKey: string;
   @Prop() stripeKey: string;
   @Prop() stripeElements: any;
-  @Prop() askConfirmation = false;
   @Prop() disableRequiredCheck = false;
   @Prop() cacheKey: string;
 
   @State() showSuccess = false;
+  @State() showSave = false;
 
   @Listen("keydown")
   async onKeydown(event) {
@@ -194,11 +194,12 @@ export class flow {
   async onSlideChange() {
     this.currentIndex = await this.getActiveIndex();
     this.currentStep = this.steps[this.currentIndex];
-    if (this.currentIndex === this.steps.length) {
+    if (this.currentIndex === this.steps.length - 1) {
       this.hideControls = true;
-      if (!this.askConfirmation) this.formEl.submit();
+      this.showSave = true;
     } else {
       this.hideControls = false;
+      this.showSave = false;
     }
     if (this.currentIndex === 0 && this.prevButton) {
       this.prevButton = { ...this.prevButton, disabled: true };
@@ -562,6 +563,11 @@ export class flow {
           pager={this.pager}
           options={this.slidesOptions}
           scrollbar={this.scrollbar}
+          style={{
+            transition: "all ease 0.5s",
+            height: !this.showSuccess ? "auto" : "0",
+            opacity: !this.showSuccess ? "1" : "0",
+          }}
         >
           {(this.steps || []).map((step) => {
             const StepComponent = step?.component || null;
@@ -582,33 +588,6 @@ export class flow {
               </ion-slide>
             );
           })}
-          <ion-slide>
-            <div>
-              <slot />
-              <div
-                class="flow-confirmation"
-                style={{
-                  transition: "all ease 0.5s",
-                  height:
-                    this.askConfirmation && !this.showSuccess ? "auto" : "0",
-                  opacity:
-                    this.askConfirmation && !this.showSuccess ? "1" : "0",
-                }}
-              >
-                <slot name="confirmation" />
-              </div>
-              <div
-                class="flow-success"
-                style={{
-                  transition: "all ease 0.5s",
-                  height: this.showSuccess ? "auto" : "0",
-                  opacity: this.showSuccess ? "1" : "0",
-                }}
-              >
-                <slot name="success" />
-              </div>
-            </div>
-          </ion-slide>
         </ion-slides>
         <div
           class="flow-controls control-pager"
@@ -664,10 +643,7 @@ export class flow {
         <div
           class="flow-controls control-confirmation"
           style={{
-            display:
-              this.hideControls && this.askConfirmation && !this.showSuccess
-                ? "flex"
-                : "none",
+            display: this.showSave && !this.showSuccess ? "flex" : "none",
           }}
         >
           <ion-button
@@ -714,6 +690,16 @@ export class flow {
               <ion-label>{this.saveButton.label}</ion-label>
             )}
           </ion-button>
+        </div>
+        <div
+          class="flow-success"
+          style={{
+            transition: "all ease 0.5s",
+            height: this.showSuccess ? "auto" : "0",
+            opacity: this.showSuccess ? "1" : "0",
+          }}
+        >
+          <slot />
         </div>
       </fireenjin-form>
     );
