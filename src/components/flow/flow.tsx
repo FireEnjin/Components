@@ -534,10 +534,6 @@ export class flow {
   render() {
     return (
       <fireenjin-form
-        class={{
-          "is-finished": this.showSuccess,
-          "ask-confirmation": this.askConfirmation,
-        }}
         ref={(el) => (this.formEl = el)}
         name={this.name}
         formData={this.formData}
@@ -581,14 +577,36 @@ export class flow {
                     this.renderField(field),
                     field?.afterHTML && <div innerHTML={field.afterHTML} />,
                   ])}
-                  {step?.afterHTML && <div innerHTML={step.afterHTML} />}
                 </div>
+                {step?.afterHTML && <div innerHTML={step.afterHTML} />}
               </ion-slide>
             );
           })}
           <ion-slide>
-            <div class="ion-text-left">
+            <div>
               <slot />
+              <div
+                class="flow-confirmation"
+                style={{
+                  transition: "all ease 0.5s",
+                  height:
+                    this.askConfirmation && !this.showSuccess ? "auto" : "0",
+                  opacity:
+                    this.askConfirmation && !this.showSuccess ? "1" : "0",
+                }}
+              >
+                <slot name="confirmation" />
+              </div>
+              <div
+                class="flow-success"
+                style={{
+                  transition: "all ease 0.5s",
+                  height: this.showSuccess ? "auto" : "0",
+                  opacity: this.showSuccess ? "1" : "0",
+                }}
+              >
+                <slot name="success" />
+              </div>
             </div>
           </ion-slide>
         </ion-slides>
