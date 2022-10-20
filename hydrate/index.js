@@ -53599,7 +53599,7 @@ class flow {
         this.renderField(field),
         (field === null || field === void 0 ? void 0 : field.afterHTML) && hAsync("div", { innerHTML: field.afterHTML }),
       ])), (step === null || step === void 0 ? void 0 : step.afterHTML) && hAsync("div", { innerHTML: step.afterHTML })));
-    }), hAsync("ion-slide", null, hAsync("div", null, hAsync("slot", null), hAsync("div", { class: "flow-confirmation", style: {
+    })), hAsync("div", { class: "confirm-success" }, hAsync("slot", null), hAsync("div", { class: "flow-confirmation", style: {
         transition: "all ease 0.5s",
         height: this.askConfirmation && !this.showSuccess ? "auto" : "0",
         opacity: this.askConfirmation && !this.showSuccess ? "1" : "0",
@@ -53607,7 +53607,7 @@ class flow {
         transition: "all ease 0.5s",
         height: this.showSuccess ? "auto" : "0",
         opacity: this.showSuccess ? "1" : "0",
-      } }, hAsync("slot", { name: "success" }))))), hAsync("div", { class: "flow-controls control-pager", style: {
+      } }, hAsync("slot", { name: "success" }))), hAsync("div", { class: "flow-controls control-pager", style: {
         display: this.hideControls ? "none" : "flex",
       } }, hAsync("ion-button", { expand: (_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.expand, disabled: !!((_b = this.prevButton) === null || _b === void 0 ? void 0 : _b.disabled), color: (_c = this.prevButton) === null || _c === void 0 ? void 0 : _c.color, fill: (_d = this.prevButton) === null || _d === void 0 ? void 0 : _d.fill, size: (_e = this.prevButton) === null || _e === void 0 ? void 0 : _e.size, onClick: (event) => {
         var _a;

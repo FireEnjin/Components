@@ -582,34 +582,30 @@ export class flow {
               </ion-slide>
             );
           })}
-          <ion-slide>
-            <div>
-              <slot />
-              <div
-                class="flow-confirmation"
-                style={{
-                  transition: "all ease 0.5s",
-                  height:
-                    this.askConfirmation && !this.showSuccess ? "auto" : "0",
-                  opacity:
-                    this.askConfirmation && !this.showSuccess ? "1" : "0",
-                }}
-              >
-                <slot name="confirmation" />
-              </div>
-              <div
-                class="flow-success"
-                style={{
-                  transition: "all ease 0.5s",
-                  height: this.showSuccess ? "auto" : "0",
-                  opacity: this.showSuccess ? "1" : "0",
-                }}
-              >
-                <slot name="success" />
-              </div>
-            </div>
-          </ion-slide>
         </ion-slides>
+        <div class="confirm-success">
+          <slot />
+          <div
+            class="flow-confirmation"
+            style={{
+              transition: "all ease 0.5s",
+              height: this.askConfirmation && !this.showSuccess ? "auto" : "0",
+              opacity: this.askConfirmation && !this.showSuccess ? "1" : "0",
+            }}
+          >
+            <slot name="confirmation" />
+          </div>
+          <div
+            class="flow-success"
+            style={{
+              transition: "all ease 0.5s",
+              height: this.showSuccess ? "auto" : "0",
+              opacity: this.showSuccess ? "1" : "0",
+            }}
+          >
+            <slot name="success" />
+          </div>
+        </div>
         <div
           class="flow-controls control-pager"
           style={{
