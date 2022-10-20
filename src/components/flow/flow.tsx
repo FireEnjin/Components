@@ -581,8 +581,8 @@ export class flow {
                     this.renderField(field),
                     field?.afterHTML && <div innerHTML={field.afterHTML} />,
                   ])}
+                  {step?.afterHTML && <div innerHTML={step.afterHTML} />}
                 </div>
-                {step?.afterHTML && <div innerHTML={step.afterHTML} />}
               </ion-slide>
             );
           })}
