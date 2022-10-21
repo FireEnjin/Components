@@ -255,12 +255,5 @@
     "pageGutter": "5vw",
     "pageMain": "2 / 3",
     "page": "minmax(var(--grid-page-gutter), 1fr) minmax(0, var(--grid-page-width)) minmax(var(--grid-page-gutter), 1fr)"
-  },
-  "wee": {
-    "0": "var(--scale-0)/1.3 var(--font-sans)",
-    "1": "var(--scale-1)/1.5 var(--font-sans)",
-    "2": "var(--scale-2)/1.4 var(--font-sans)",
-    "3": "var(--scale-3)/1.2 var(--font-sans)",
-    "4": "var(--scale-4)/1.1 var(--font-sans)"
   }
 }
