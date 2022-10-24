@@ -112,6 +112,7 @@ export type Field = {
 
 export type Step = {
   beforeHTML?: string;
+  name?: string;
   fields?: Field[];
   afterHTML?: string;
   component?: string;
