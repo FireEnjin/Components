@@ -16052,6 +16052,355 @@ class FabList {
   }; }
 }
 
+const flowCss = "fireenjin-flow .flow-controls{display:flex;justify-content:space-between}";
+
+class Flow {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    this.currentIndex = 0;
+    /**
+     * The data from the form being filled out
+     */
+    this.formData = {};
+    /**
+     * The next button for the slider
+     */
+    this.nextButton = {
+      label: "Next",
+      color: "primary",
+      fill: "clear",
+      icon: "chevron-forward-circle-outline",
+    };
+    /**
+     * The prev button for the slider
+     */
+    this.prevButton = {
+      label: "Back",
+      color: "medium",
+      fill: "clear",
+      icon: "chevron-back-circle-outline",
+    };
+    /**
+     * The save button for the flow
+     */
+    this.saveButton = {
+      label: "Save",
+      fill: "solid",
+      color: "primary",
+      icon: "checkmark-circle-outline",
+    };
+    /**
+     * Should the form controls be hidden?
+     */
+    this.hideControls = false;
+    /**
+     * The data to exclude from the form submit event
+     */
+    this.excludeData = [];
+    /**
+     * Should the form disable the loader on submit
+     */
+    this.disableLoader = false;
+    /**
+     * Is the component currently loading
+     */
+    this.loading = false;
+    /**
+     * Should the enter button binding be disabled
+     */
+    this.disableEnterButton = false;
+    /**
+     * Confirm leaving the page when the form is filled
+     */
+    this.confirmExit = false;
+    /**
+     * Has the form fields been changed
+     */
+    this.hasChanged = false;
+    /**
+     * The HTTP method to use when submitting the form
+     */
+    this.method = "post";
+    /**
+     * A list of options for SwiperJS
+     * @link https://swiperjs.com/swiper-api#parameters
+     */
+    this.slidesOptions = { autoHeight: true, allowTouchMove: false };
+    this.pager = false;
+    this.scrollbar = false;
+    this.steps = [];
+    this.disableRequiredCheck = false;
+    this.showSuccess = false;
+    this.showSave = false;
+  }
+  async onKeydown(event) {
+    if ((event === null || event === void 0 ? void 0 : event.key) !== "Enter" || this.disableEnterButton)
+      return;
+    this.slideNext();
+  }
+  async onSlideChange() {
+    this.currentIndex = await this.getActiveIndex();
+    this.currentStep = this.steps[this.currentIndex];
+    if (this.currentIndex === this.steps.length - 1) {
+      this.hideControls = true;
+      this.showSave = true;
+    }
+    else {
+      this.hideControls = false;
+      this.showSave = false;
+    }
+    if (this.currentIndex === 0 && this.prevButton) {
+      this.prevButton = Object.assign(Object.assign({}, this.prevButton), { disabled: true });
+    }
+    else {
+      this.prevButton = Object.assign(Object.assign({}, this.prevButton), { disabled: false });
+    }
+  }
+  onSubmit(event) {
+    var _a;
+    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.endpoint) !== this.endpoint)
+      return;
+    this.showSuccess = false;
+  }
+  onSuccess(event) {
+    var _a;
+    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.endpoint) !== this.endpoint)
+      return;
+    this.showSuccess = true;
+  }
+  async getActiveIndex() {
+    return this.slidesEl.getActiveIndex();
+  }
+  async getSwiper() {
+    return this.slidesEl.getSwiper();
+  }
+  async isBeginning() {
+    return this.slidesEl.isBeginning();
+  }
+  async isEnd() {
+    return this.slidesEl.isEnd();
+  }
+  async length() {
+    return this.slidesEl.length();
+  }
+  async lockSwipeToNext(lock) {
+    return this.slidesEl.lockSwipeToNext(lock);
+  }
+  async lockSwipeToPrev(lock) {
+    return this.slidesEl.lockSwipeToPrev(lock);
+  }
+  async lockSwipes(lock) {
+    return this.slidesEl.lockSwipes(lock);
+  }
+  async slideNext(speed, runCallbacks) {
+    console.log(await this.checkStepValidity());
+    if (!this.disableRequiredCheck && !(await this.checkStepValidity()))
+      return;
+    return this.slidesEl.slideNext(speed, runCallbacks);
+  }
+  async slidePrev(speed, runCallbacks) {
+    if (this.hideControls)
+      this.hideControls = false;
+    return this.slidesEl.slidePrev(speed, runCallbacks);
+  }
+  async slideTo(index, speed, runCallbacks) {
+    return this.slidesEl.slideTo(index, speed, runCallbacks);
+  }
+  async startAutoplay() {
+    return this.slidesEl.startAutoplay();
+  }
+  async stopAutoplay() {
+    return this.slidesEl.stopAutoplay();
+  }
+  async update() {
+    return this.slidesEl.update();
+  }
+  async updateAutoHeight(speed) {
+    return this.slidesEl.updateAutoHeight(speed);
+  }
+  async reportFormValidity() {
+    this.formEl.reportFormValidity();
+  }
+  async setFormData(data) {
+    this.formEl.setFormData(data);
+  }
+  async checkFormValidity(reportValidity) {
+    this.formEl.checkFormValidity(reportValidity);
+  }
+  async reset(event) {
+    this.formEl.reset(event);
+    if (this.prevButton)
+      this.prevButton.disabled = true;
+  }
+  async submit(event, options) {
+    this.formEl.submit(event, options);
+  }
+  async checkStepValidity() {
+    let response = true;
+    await new Promise((resolve, reject) => {
+      try {
+        const requiredEls = this.flowEl.querySelectorAll(`ion-slide:nth-of-type(${this.currentIndex + 1}) [required]`);
+        if (!requiredEls.length)
+          resolve(true);
+        (requiredEls || []).forEach((el, index) => {
+          var _a;
+          if ((typeof (el === null || el === void 0 ? void 0 : el.reportValidity) === "function" &&
+            !(el === null || el === void 0 ? void 0 : el.reportValidity())) ||
+            (typeof (el === null || el === void 0 ? void 0 : el.checkValidity) === "function" && !(el === null || el === void 0 ? void 0 : el.checkValidity())) ||
+            el.value === null ||
+            (typeof el.value === "string" && ((_a = el.value) === null || _a === void 0 ? void 0 : _a.length) <= 0))
+            response = false;
+          if (index === requiredEls.length - 1)
+            resolve(response);
+        });
+      }
+      catch (e) {
+        console.log(e);
+        reject();
+      }
+    });
+    return response;
+  }
+  componentWillLoad() {
+    if (this.prevButton)
+      this.prevButton.disabled = true;
+  }
+  renderField(field) {
+    if ((field === null || field === void 0 ? void 0 : field.type) === "file") {
+      return (hAsync("fireenjin-input-file", { path: field === null || field === void 0 ? void 0 : field.path, icon: field === null || field === void 0 ? void 0 : field.icon, label: field === null || field === void 0 ? void 0 : field.label, fileName: field === null || field === void 0 ? void 0 : field.fileName, name: field === null || field === void 0 ? void 0 : field.name, accept: field === null || field === void 0 ? void 0 : field.accept, defaultValue: field === null || field === void 0 ? void 0 : field.defaultValue, value: field === null || field === void 0 ? void 0 : field.value, documentId: field === null || field === void 0 ? void 0 : field.documentId, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, uploadData: field === null || field === void 0 ? void 0 : field.uploadData, disabled: !!(field === null || field === void 0 ? void 0 : field.disabled) }));
+    }
+    else if ((field === null || field === void 0 ? void 0 : field.type) === "photo") {
+      return (hAsync("fireenjin-input-photo", { path: field === null || field === void 0 ? void 0 : field.path, fileName: field === null || field === void 0 ? void 0 : field.fileName, name: field === null || field === void 0 ? void 0 : field.name, value: field === null || field === void 0 ? void 0 : field.value, documentId: field === null || field === void 0 ? void 0 : field.documentId, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), fallback: field === null || field === void 0 ? void 0 : field.fallback, showButton: !!(field === null || field === void 0 ? void 0 : field.showButton), buttonText: field === null || field === void 0 ? void 0 : field.buttonText, initials: field === null || field === void 0 ? void 0 : field.initials, multiple: !!(field === null || field === void 0 ? void 0 : field.multiple), resize: !!(field === null || field === void 0 ? void 0 : field.resize), loading: !!(field === null || field === void 0 ? void 0 : field.loading) }));
+    }
+    else if ((field === null || field === void 0 ? void 0 : field.type) === "address") {
+      return (hAsync("fireenjin-input-address", { googleMapsKey: (field === null || field === void 0 ? void 0 : field.googleMapsKey) || this.googleMapsKey, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, value: field === null || field === void 0 ? void 0 : field.value, label: field === null || field === void 0 ? void 0 : field.label, required: !!(field === null || field === void 0 ? void 0 : field.required), name: field === null || field === void 0 ? void 0 : field.name, lines: field === null || field === void 0 ? void 0 : field.lines, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition }));
+    }
+    else if ((field === null || field === void 0 ? void 0 : field.type) === "select") {
+      return (hAsync("fireenjin-select", { disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), cancelText: field === null || field === void 0 ? void 0 : field.cancelText, okText: field === null || field === void 0 ? void 0 : field.okText, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, name: field === null || field === void 0 ? void 0 : field.name, selectedText: field === null || field === void 0 ? void 0 : field.selectedText, multiple: !!(field === null || field === void 0 ? void 0 : field.multiple), interface: field === null || field === void 0 ? void 0 : field.interface, interfaceOptions: field === null || field === void 0 ? void 0 : field.interfaceOptions, compareWith: field === null || field === void 0 ? void 0 : field.compareWith, value: field === null || field === void 0 ? void 0 : field.value, icon: field === null || field === void 0 ? void 0 : field.icon, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, header: field === null || field === void 0 ? void 0 : field.header, subHeader: field === null || field === void 0 ? void 0 : field.subHeader, message: field === null || field === void 0 ? void 0 : field.message, orderBy: field === null || field === void 0 ? void 0 : field.orderBy, dataPropsMap: field === null || field === void 0 ? void 0 : field.dataPropsMap, optionEl: field === null || field === void 0 ? void 0 : field.optionEl, limit: field === null || field === void 0 ? void 0 : field.limit, params: field === null || field === void 0 ? void 0 : field.params, query: field === null || field === void 0 ? void 0 : field.query, label: field === null || field === void 0 ? void 0 : field.label, options: field === null || field === void 0 ? void 0 : field.options, required: !!(field === null || field === void 0 ? void 0 : field.required), resultsKey: field === null || field === void 0 ? void 0 : field.resultsKey, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition, lines: field === null || field === void 0 ? void 0 : field.lines }));
+    }
+    else if ((field === null || field === void 0 ? void 0 : field.type) === "radios") {
+      return (hAsync("fireenjin-radios", { disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), name: field === null || field === void 0 ? void 0 : field.name, value: field === null || field === void 0 ? void 0 : field.value, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, orderBy: field === null || field === void 0 ? void 0 : field.orderBy, dataPropsMap: field === null || field === void 0 ? void 0 : field.dataPropsMap, optionEl: field === null || field === void 0 ? void 0 : field.optionEl, limit: field === null || field === void 0 ? void 0 : field.limit, params: field === null || field === void 0 ? void 0 : field.params, query: field === null || field === void 0 ? void 0 : field.query, label: field === null || field === void 0 ? void 0 : field.label, options: field === null || field === void 0 ? void 0 : field.options, required: !!(field === null || field === void 0 ? void 0 : field.required), resultsKey: field === null || field === void 0 ? void 0 : field.resultsKey, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition, lines: field === null || field === void 0 ? void 0 : field.lines }));
+    }
+    else if ((field === null || field === void 0 ? void 0 : field.type) === "search") {
+      return (hAsync("fireenjin-input-search", { name: field === null || field === void 0 ? void 0 : field.name, label: field === null || field === void 0 ? void 0 : field.label, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, value: field === null || field === void 0 ? void 0 : field.value, required: !!(field === null || field === void 0 ? void 0 : field.required), autofocus: !!(field === null || field === void 0 ? void 0 : field.autofocus), disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), endpoint: field === null || field === void 0 ? void 0 : field.endpoint, dataPropsMap: field === null || field === void 0 ? void 0 : field.dataPropsMap, template: field === null || field === void 0 ? void 0 : field.template, searchParams: field === null || field === void 0 ? void 0 : field.searchParams, iconEnd: field === null || field === void 0 ? void 0 : field.iconRight, iconStart: field === null || field === void 0 ? void 0 : field.iconLeft, results: field === null || field === void 0 ? void 0 : field.results, resultsKey: field === null || field === void 0 ? void 0 : field.resultsKey, lines: field === null || field === void 0 ? void 0 : field.lines, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition }));
+    }
+    else if ((field === null || field === void 0 ? void 0 : field.type) === "checklist") {
+      return (hAsync("fireenjin-checklist", { name: field === null || field === void 0 ? void 0 : field.name, value: field === null || field === void 0 ? void 0 : field.value, options: (field === null || field === void 0 ? void 0 : field.options) || [], disabled: field === null || field === void 0 ? void 0 : field.disabled }));
+    }
+    else {
+      return (hAsync("fireenjin-input", { type: (field === null || field === void 0 ? void 0 : field.type) || "text", stripeKey: (field === null || field === void 0 ? void 0 : field.stripeKey) || this.stripeKey, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, label: field === null || field === void 0 ? void 0 : field.label, value: field === null || field === void 0 ? void 0 : field.value, required: !!(field === null || field === void 0 ? void 0 : field.required), name: field === null || field === void 0 ? void 0 : field.name, autocomplete: field === null || field === void 0 ? void 0 : field.autocomplete, autocapitalize: field === null || field === void 0 ? void 0 : field.autocapitalize, autocorrect: field === null || field === void 0 ? void 0 : field.autocorrect, autofocus: field === null || field === void 0 ? void 0 : field.autofocus, minlength: field === null || field === void 0 ? void 0 : field.minlength, maxlength: field === null || field === void 0 ? void 0 : field.maxlength, disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), info: field === null || field === void 0 ? void 0 : field.info, edit: !!(field === null || field === void 0 ? void 0 : field.edit), min: field === null || field === void 0 ? void 0 : field.min, max: field === null || field === void 0 ? void 0 : field.max, iconLeft: field === null || field === void 0 ? void 0 : field.iconLeft, iconRight: field === null || field === void 0 ? void 0 : field.iconRight, silence: field === null || field === void 0 ? void 0 : field.silence, step: field === null || field === void 0 ? void 0 : field.step, actionOptions: field === null || field === void 0 ? void 0 : field.actionOptions, pattern: field === null || field === void 0 ? void 0 : field.pattern, clearInput: field === null || field === void 0 ? void 0 : field.clearInput, multiple: !!(field === null || field === void 0 ? void 0 : field.multiple), readOnly: !!(field === null || field === void 0 ? void 0 : field.readOnly), spellCheck: !!(field === null || field === void 0 ? void 0 : field.spellCheck), inputMode: field === null || field === void 0 ? void 0 : field.inputMode, stripeElements: (field === null || field === void 0 ? void 0 : field.stripeElements) || this.stripeElements, lines: field === null || field === void 0 ? void 0 : field.lines, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition }));
+    }
+  }
+  render() {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6;
+    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: null, resetButton: null, documentId: this.documentId, endpoint: this.endpoint, hideControls: this.hideControls, filterData: this.filterData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: true, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap, fetchKey: this.fetchKey, cacheKey: this.cacheKey }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar, style: {
+        transition: "all ease 0.5s",
+        height: !this.showSuccess ? "auto" : "0",
+        opacity: !this.showSuccess ? "1" : "0",
+      } }, (this.steps || []).map((step) => {
+      const StepComponent = (step === null || step === void 0 ? void 0 : step.component) || null;
+      return (hAsync("ion-slide", null, hAsync("div", null, (step === null || step === void 0 ? void 0 : step.beforeHTML) && hAsync("div", { innerHTML: step.beforeHTML }), StepComponent && (hAsync(StepComponent, Object.assign({}, ((step === null || step === void 0 ? void 0 : step.componentProps) || {})))), ((step === null || step === void 0 ? void 0 : step.fields) || []).map((field) => [
+        (field === null || field === void 0 ? void 0 : field.beforeHTML) && hAsync("div", { innerHTML: field.beforeHTML }),
+        this.renderField(field),
+        (field === null || field === void 0 ? void 0 : field.afterHTML) && hAsync("div", { innerHTML: field.afterHTML }),
+      ])), (step === null || step === void 0 ? void 0 : step.afterHTML) && hAsync("div", { innerHTML: step.afterHTML })));
+    })), hAsync("div", { class: "flow-controls control-pager", style: {
+        display: this.hideControls ? "none" : "flex",
+      } }, hAsync("ion-button", { expand: (_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.expand, disabled: !!((_b = this.prevButton) === null || _b === void 0 ? void 0 : _b.disabled), color: (_c = this.prevButton) === null || _c === void 0 ? void 0 : _c.color, fill: (_d = this.prevButton) === null || _d === void 0 ? void 0 : _d.fill, size: (_e = this.prevButton) === null || _e === void 0 ? void 0 : _e.size, onClick: (event) => {
+        var _a;
+        return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
+          ? this.prevButton.onClick(event)
+          : this.slidePrev();
+      } }, ((_f = this.prevButton) === null || _f === void 0 ? void 0 : _f.icon) && (hAsync("ion-icon", { slot: ((_g = this.prevButton) === null || _g === void 0 ? void 0 : _g.iconSlot) || "start", name: this.prevButton.icon })), ((_h = this.prevButton) === null || _h === void 0 ? void 0 : _h.label) && (hAsync("ion-label", null, this.prevButton.label))), hAsync("ion-button", { expand: (_j = this.nextButton) === null || _j === void 0 ? void 0 : _j.expand, disabled: !!((_k = this.nextButton) === null || _k === void 0 ? void 0 : _k.disabled), color: (_l = this.nextButton) === null || _l === void 0 ? void 0 : _l.color, fill: (_m = this.nextButton) === null || _m === void 0 ? void 0 : _m.fill, size: (_o = this.nextButton) === null || _o === void 0 ? void 0 : _o.size, onClick: (event) => {
+        var _a;
+        return typeof ((_a = this.nextButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
+          ? this.nextButton.onClick(event)
+          : this.slideNext();
+      } }, ((_p = this.nextButton) === null || _p === void 0 ? void 0 : _p.icon) && (hAsync("ion-icon", { slot: ((_q = this.nextButton) === null || _q === void 0 ? void 0 : _q.iconSlot) || "end", name: this.nextButton.icon })), ((_r = this.nextButton) === null || _r === void 0 ? void 0 : _r.label) && (hAsync("ion-label", null, this.nextButton.label)))), hAsync("div", { class: "flow-controls control-confirmation", style: {
+        display: this.showSave && !this.showSuccess ? "flex" : "none",
+      } }, hAsync("ion-button", { expand: (_s = this.prevButton) === null || _s === void 0 ? void 0 : _s.expand, disabled: !!((_t = this.prevButton) === null || _t === void 0 ? void 0 : _t.disabled), color: (_u = this.prevButton) === null || _u === void 0 ? void 0 : _u.color, fill: (_v = this.prevButton) === null || _v === void 0 ? void 0 : _v.fill, onClick: (event) => {
+        var _a;
+        return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
+          ? this.prevButton.onClick(event)
+          : this.slidePrev();
+      } }, ((_w = this.prevButton) === null || _w === void 0 ? void 0 : _w.icon) && (hAsync("ion-icon", { slot: ((_x = this.prevButton) === null || _x === void 0 ? void 0 : _x.iconSlot) || "start", name: this.prevButton.icon })), ((_y = this.prevButton) === null || _y === void 0 ? void 0 : _y.label) && (hAsync("ion-label", null, this.prevButton.label))), hAsync("ion-button", { expand: (_z = this.saveButton) === null || _z === void 0 ? void 0 : _z.expand, disabled: !!((_0 = this.saveButton) === null || _0 === void 0 ? void 0 : _0.disabled), color: (_1 = this.saveButton) === null || _1 === void 0 ? void 0 : _1.color, fill: (_2 = this.saveButton) === null || _2 === void 0 ? void 0 : _2.fill, type: "submit", size: (_3 = this.saveButton) === null || _3 === void 0 ? void 0 : _3.size, onClick: (event) => {
+        var _a;
+        return typeof ((_a = this.saveButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
+          ? this.saveButton.onClick(event)
+          : null;
+      } }, ((_4 = this.saveButton) === null || _4 === void 0 ? void 0 : _4.icon) && (hAsync("ion-icon", { slot: ((_5 = this.saveButton) === null || _5 === void 0 ? void 0 : _5.iconSlot) || "end", name: this.saveButton.icon })), ((_6 = this.saveButton) === null || _6 === void 0 ? void 0 : _6.label) && (hAsync("ion-label", null, this.saveButton.label)))), hAsync("div", { class: "flow-success", style: {
+        transition: "all ease 0.5s",
+        height: this.showSuccess ? "auto" : "0",
+        opacity: this.showSuccess ? "1" : "0",
+      } }, hAsync("slot", null))));
+  }
+  get flowEl() { return getElement(this); }
+  static get style() { return flowCss; }
+  static get cmpMeta() { return {
+    "$flags$": 4,
+    "$tagName$": "fireenjin-flow",
+    "$members$": {
+      "name": [1],
+      "formData": [1032, "form-data"],
+      "nextButton": [16],
+      "prevButton": [16],
+      "saveButton": [16],
+      "hideControls": [1028, "hide-controls"],
+      "endpoint": [1],
+      "documentId": [1, "document-id"],
+      "excludeData": [16],
+      "beforeSubmit": [16],
+      "disableLoader": [4, "disable-loader"],
+      "loading": [1028],
+      "disableEnterButton": [4, "disable-enter-button"],
+      "confirmExit": [4, "confirm-exit"],
+      "hasChanged": [1028, "has-changed"],
+      "method": [1],
+      "action": [1],
+      "fetch": [8],
+      "fetchParams": [8, "fetch-params"],
+      "fetchDataMap": [8, "fetch-data-map"],
+      "fetchKey": [1, "fetch-key"],
+      "filterData": [8, "filter-data"],
+      "slidesOptions": [8, "slides-options"],
+      "pager": [4],
+      "scrollbar": [4],
+      "steps": [16],
+      "googleMapsKey": [1, "google-maps-key"],
+      "stripeKey": [1, "stripe-key"],
+      "stripeElements": [8, "stripe-elements"],
+      "disableRequiredCheck": [4, "disable-required-check"],
+      "cacheKey": [1, "cache-key"],
+      "showSuccess": [32],
+      "showSave": [32],
+      "getActiveIndex": [64],
+      "getSwiper": [64],
+      "isBeginning": [64],
+      "isEnd": [64],
+      "length": [64],
+      "lockSwipeToNext": [64],
+      "lockSwipeToPrev": [64],
+      "lockSwipes": [64],
+      "slideNext": [64],
+      "slidePrev": [64],
+      "slideTo": [64],
+      "startAutoplay": [64],
+      "stopAutoplay": [64],
+      "update": [64],
+      "updateAutoHeight": [64],
+      "reportFormValidity": [64],
+      "setFormData": [64],
+      "checkFormValidity": [64],
+      "reset": [64],
+      "submit": [64],
+      "checkStepValidity": [64]
+    },
+    "$listeners$": [[0, "keydown", "onKeydown"], [0, "ionSlideDidChange", "onSlideChange"], [0, "fireenjinSubmit", "onSubmit"], [0, "fireenjinSuccess", "onSuccess"]],
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": []
+  }; }
+}
+
 /*!
  * (C) Ionic http://ionicframework.com - MIT License
  */
@@ -53351,355 +53700,6 @@ const VirtualProxy = ({ dom }, children, utils) => {
   });
 };
 
-const flowCss = "fireenjin-flow .flow-controls{display:flex;justify-content:space-between}";
-
-class flow {
-  constructor(hostRef) {
-    registerInstance(this, hostRef);
-    this.currentIndex = 0;
-    /**
-     * The data from the form being filled out
-     */
-    this.formData = {};
-    /**
-     * The next button for the slider
-     */
-    this.nextButton = {
-      label: "Next",
-      color: "primary",
-      fill: "clear",
-      icon: "chevron-forward-circle-outline",
-    };
-    /**
-     * The prev button for the slider
-     */
-    this.prevButton = {
-      label: "Back",
-      color: "medium",
-      fill: "clear",
-      icon: "chevron-back-circle-outline",
-    };
-    /**
-     * The save button for the flow
-     */
-    this.saveButton = {
-      label: "Save",
-      fill: "solid",
-      color: "primary",
-      icon: "checkmark-circle-outline",
-    };
-    /**
-     * Should the form controls be hidden?
-     */
-    this.hideControls = false;
-    /**
-     * The data to exclude from the form submit event
-     */
-    this.excludeData = [];
-    /**
-     * Should the form disable the loader on submit
-     */
-    this.disableLoader = false;
-    /**
-     * Is the component currently loading
-     */
-    this.loading = false;
-    /**
-     * Should the enter button binding be disabled
-     */
-    this.disableEnterButton = false;
-    /**
-     * Confirm leaving the page when the form is filled
-     */
-    this.confirmExit = false;
-    /**
-     * Has the form fields been changed
-     */
-    this.hasChanged = false;
-    /**
-     * The HTTP method to use when submitting the form
-     */
-    this.method = "post";
-    /**
-     * A list of options for SwiperJS
-     * @link https://swiperjs.com/swiper-api#parameters
-     */
-    this.slidesOptions = { autoHeight: true, allowTouchMove: false };
-    this.pager = false;
-    this.scrollbar = false;
-    this.steps = [];
-    this.disableRequiredCheck = false;
-    this.showSuccess = false;
-    this.showSave = false;
-  }
-  async onKeydown(event) {
-    if ((event === null || event === void 0 ? void 0 : event.key) !== "Enter" || this.disableEnterButton)
-      return;
-    this.slideNext();
-  }
-  async onSlideChange() {
-    this.currentIndex = await this.getActiveIndex();
-    this.currentStep = this.steps[this.currentIndex];
-    if (this.currentIndex === this.steps.length - 1) {
-      this.hideControls = true;
-      this.showSave = true;
-    }
-    else {
-      this.hideControls = false;
-      this.showSave = false;
-    }
-    if (this.currentIndex === 0 && this.prevButton) {
-      this.prevButton = Object.assign(Object.assign({}, this.prevButton), { disabled: true });
-    }
-    else {
-      this.prevButton = Object.assign(Object.assign({}, this.prevButton), { disabled: false });
-    }
-  }
-  onSubmit(event) {
-    var _a;
-    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.endpoint) !== this.endpoint)
-      return;
-    this.showSuccess = false;
-  }
-  onSuccess(event) {
-    var _a;
-    if (((_a = event === null || event === void 0 ? void 0 : event.detail) === null || _a === void 0 ? void 0 : _a.endpoint) !== this.endpoint)
-      return;
-    this.showSuccess = true;
-  }
-  async getActiveIndex() {
-    return this.slidesEl.getActiveIndex();
-  }
-  async getSwiper() {
-    return this.slidesEl.getSwiper();
-  }
-  async isBeginning() {
-    return this.slidesEl.isBeginning();
-  }
-  async isEnd() {
-    return this.slidesEl.isEnd();
-  }
-  async length() {
-    return this.slidesEl.length();
-  }
-  async lockSwipeToNext(lock) {
-    return this.slidesEl.lockSwipeToNext(lock);
-  }
-  async lockSwipeToPrev(lock) {
-    return this.slidesEl.lockSwipeToPrev(lock);
-  }
-  async lockSwipes(lock) {
-    return this.slidesEl.lockSwipes(lock);
-  }
-  async slideNext(speed, runCallbacks) {
-    console.log(await this.checkStepValidity());
-    if (!this.disableRequiredCheck && !(await this.checkStepValidity()))
-      return;
-    return this.slidesEl.slideNext(speed, runCallbacks);
-  }
-  async slidePrev(speed, runCallbacks) {
-    if (this.hideControls)
-      this.hideControls = false;
-    return this.slidesEl.slidePrev(speed, runCallbacks);
-  }
-  async slideTo(index, speed, runCallbacks) {
-    return this.slidesEl.slideTo(index, speed, runCallbacks);
-  }
-  async startAutoplay() {
-    return this.slidesEl.startAutoplay();
-  }
-  async stopAutoplay() {
-    return this.slidesEl.stopAutoplay();
-  }
-  async update() {
-    return this.slidesEl.update();
-  }
-  async updateAutoHeight(speed) {
-    return this.slidesEl.updateAutoHeight(speed);
-  }
-  async reportFormValidity() {
-    this.formEl.reportFormValidity();
-  }
-  async setFormData(data) {
-    this.formEl.setFormData(data);
-  }
-  async checkFormValidity(reportValidity) {
-    this.formEl.checkFormValidity(reportValidity);
-  }
-  async reset(event) {
-    this.formEl.reset(event);
-    if (this.prevButton)
-      this.prevButton.disabled = true;
-  }
-  async submit(event, options) {
-    this.formEl.submit(event, options);
-  }
-  async checkStepValidity() {
-    let response = true;
-    await new Promise((resolve, reject) => {
-      try {
-        const requiredEls = this.flowEl.querySelectorAll(`ion-slide:nth-of-type(${this.currentIndex + 1}) [required]`);
-        if (!requiredEls.length)
-          resolve(true);
-        (requiredEls || []).forEach((el, index) => {
-          var _a;
-          if ((typeof (el === null || el === void 0 ? void 0 : el.reportValidity) === "function" &&
-            !(el === null || el === void 0 ? void 0 : el.reportValidity())) ||
-            (typeof (el === null || el === void 0 ? void 0 : el.checkValidity) === "function" && !(el === null || el === void 0 ? void 0 : el.checkValidity())) ||
-            el.value === null ||
-            (typeof el.value === "string" && ((_a = el.value) === null || _a === void 0 ? void 0 : _a.length) <= 0))
-            response = false;
-          if (index === requiredEls.length - 1)
-            resolve(response);
-        });
-      }
-      catch (e) {
-        console.log(e);
-        reject();
-      }
-    });
-    return response;
-  }
-  componentWillLoad() {
-    if (this.prevButton)
-      this.prevButton.disabled = true;
-  }
-  renderField(field) {
-    if ((field === null || field === void 0 ? void 0 : field.type) === "file") {
-      return (hAsync("fireenjin-input-file", { path: field === null || field === void 0 ? void 0 : field.path, icon: field === null || field === void 0 ? void 0 : field.icon, label: field === null || field === void 0 ? void 0 : field.label, fileName: field === null || field === void 0 ? void 0 : field.fileName, name: field === null || field === void 0 ? void 0 : field.name, accept: field === null || field === void 0 ? void 0 : field.accept, defaultValue: field === null || field === void 0 ? void 0 : field.defaultValue, value: field === null || field === void 0 ? void 0 : field.value, documentId: field === null || field === void 0 ? void 0 : field.documentId, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, uploadData: field === null || field === void 0 ? void 0 : field.uploadData, disabled: !!(field === null || field === void 0 ? void 0 : field.disabled) }));
-    }
-    else if ((field === null || field === void 0 ? void 0 : field.type) === "photo") {
-      return (hAsync("fireenjin-input-photo", { path: field === null || field === void 0 ? void 0 : field.path, fileName: field === null || field === void 0 ? void 0 : field.fileName, name: field === null || field === void 0 ? void 0 : field.name, value: field === null || field === void 0 ? void 0 : field.value, documentId: field === null || field === void 0 ? void 0 : field.documentId, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), fallback: field === null || field === void 0 ? void 0 : field.fallback, showButton: !!(field === null || field === void 0 ? void 0 : field.showButton), buttonText: field === null || field === void 0 ? void 0 : field.buttonText, initials: field === null || field === void 0 ? void 0 : field.initials, multiple: !!(field === null || field === void 0 ? void 0 : field.multiple), resize: !!(field === null || field === void 0 ? void 0 : field.resize), loading: !!(field === null || field === void 0 ? void 0 : field.loading) }));
-    }
-    else if ((field === null || field === void 0 ? void 0 : field.type) === "address") {
-      return (hAsync("fireenjin-input-address", { googleMapsKey: (field === null || field === void 0 ? void 0 : field.googleMapsKey) || this.googleMapsKey, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, value: field === null || field === void 0 ? void 0 : field.value, label: field === null || field === void 0 ? void 0 : field.label, required: !!(field === null || field === void 0 ? void 0 : field.required), name: field === null || field === void 0 ? void 0 : field.name, lines: field === null || field === void 0 ? void 0 : field.lines, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition }));
-    }
-    else if ((field === null || field === void 0 ? void 0 : field.type) === "select") {
-      return (hAsync("fireenjin-select", { disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), cancelText: field === null || field === void 0 ? void 0 : field.cancelText, okText: field === null || field === void 0 ? void 0 : field.okText, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, name: field === null || field === void 0 ? void 0 : field.name, selectedText: field === null || field === void 0 ? void 0 : field.selectedText, multiple: !!(field === null || field === void 0 ? void 0 : field.multiple), interface: field === null || field === void 0 ? void 0 : field.interface, interfaceOptions: field === null || field === void 0 ? void 0 : field.interfaceOptions, compareWith: field === null || field === void 0 ? void 0 : field.compareWith, value: field === null || field === void 0 ? void 0 : field.value, icon: field === null || field === void 0 ? void 0 : field.icon, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, header: field === null || field === void 0 ? void 0 : field.header, subHeader: field === null || field === void 0 ? void 0 : field.subHeader, message: field === null || field === void 0 ? void 0 : field.message, orderBy: field === null || field === void 0 ? void 0 : field.orderBy, dataPropsMap: field === null || field === void 0 ? void 0 : field.dataPropsMap, optionEl: field === null || field === void 0 ? void 0 : field.optionEl, limit: field === null || field === void 0 ? void 0 : field.limit, params: field === null || field === void 0 ? void 0 : field.params, query: field === null || field === void 0 ? void 0 : field.query, label: field === null || field === void 0 ? void 0 : field.label, options: field === null || field === void 0 ? void 0 : field.options, required: !!(field === null || field === void 0 ? void 0 : field.required), resultsKey: field === null || field === void 0 ? void 0 : field.resultsKey, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition, lines: field === null || field === void 0 ? void 0 : field.lines }));
-    }
-    else if ((field === null || field === void 0 ? void 0 : field.type) === "radios") {
-      return (hAsync("fireenjin-radios", { disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), name: field === null || field === void 0 ? void 0 : field.name, value: field === null || field === void 0 ? void 0 : field.value, endpoint: field === null || field === void 0 ? void 0 : field.endpoint, orderBy: field === null || field === void 0 ? void 0 : field.orderBy, dataPropsMap: field === null || field === void 0 ? void 0 : field.dataPropsMap, optionEl: field === null || field === void 0 ? void 0 : field.optionEl, limit: field === null || field === void 0 ? void 0 : field.limit, params: field === null || field === void 0 ? void 0 : field.params, query: field === null || field === void 0 ? void 0 : field.query, label: field === null || field === void 0 ? void 0 : field.label, options: field === null || field === void 0 ? void 0 : field.options, required: !!(field === null || field === void 0 ? void 0 : field.required), resultsKey: field === null || field === void 0 ? void 0 : field.resultsKey, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition, lines: field === null || field === void 0 ? void 0 : field.lines }));
-    }
-    else if ((field === null || field === void 0 ? void 0 : field.type) === "search") {
-      return (hAsync("fireenjin-input-search", { name: field === null || field === void 0 ? void 0 : field.name, label: field === null || field === void 0 ? void 0 : field.label, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, value: field === null || field === void 0 ? void 0 : field.value, required: !!(field === null || field === void 0 ? void 0 : field.required), autofocus: !!(field === null || field === void 0 ? void 0 : field.autofocus), disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), endpoint: field === null || field === void 0 ? void 0 : field.endpoint, dataPropsMap: field === null || field === void 0 ? void 0 : field.dataPropsMap, template: field === null || field === void 0 ? void 0 : field.template, searchParams: field === null || field === void 0 ? void 0 : field.searchParams, iconEnd: field === null || field === void 0 ? void 0 : field.iconRight, iconStart: field === null || field === void 0 ? void 0 : field.iconLeft, results: field === null || field === void 0 ? void 0 : field.results, resultsKey: field === null || field === void 0 ? void 0 : field.resultsKey, lines: field === null || field === void 0 ? void 0 : field.lines, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition }));
-    }
-    else if ((field === null || field === void 0 ? void 0 : field.type) === "checklist") {
-      return (hAsync("fireenjin-checklist", { name: field === null || field === void 0 ? void 0 : field.name, value: field === null || field === void 0 ? void 0 : field.value, options: (field === null || field === void 0 ? void 0 : field.options) || [], disabled: field === null || field === void 0 ? void 0 : field.disabled }));
-    }
-    else {
-      return (hAsync("fireenjin-input", { type: (field === null || field === void 0 ? void 0 : field.type) || "text", stripeKey: (field === null || field === void 0 ? void 0 : field.stripeKey) || this.stripeKey, placeholder: field === null || field === void 0 ? void 0 : field.placeholder, label: field === null || field === void 0 ? void 0 : field.label, value: field === null || field === void 0 ? void 0 : field.value, required: !!(field === null || field === void 0 ? void 0 : field.required), name: field === null || field === void 0 ? void 0 : field.name, autocomplete: field === null || field === void 0 ? void 0 : field.autocomplete, autocapitalize: field === null || field === void 0 ? void 0 : field.autocapitalize, autocorrect: field === null || field === void 0 ? void 0 : field.autocorrect, autofocus: field === null || field === void 0 ? void 0 : field.autofocus, minlength: field === null || field === void 0 ? void 0 : field.minlength, maxlength: field === null || field === void 0 ? void 0 : field.maxlength, disabled: !!(field === null || field === void 0 ? void 0 : field.disabled), info: field === null || field === void 0 ? void 0 : field.info, edit: !!(field === null || field === void 0 ? void 0 : field.edit), min: field === null || field === void 0 ? void 0 : field.min, max: field === null || field === void 0 ? void 0 : field.max, iconLeft: field === null || field === void 0 ? void 0 : field.iconLeft, iconRight: field === null || field === void 0 ? void 0 : field.iconRight, silence: field === null || field === void 0 ? void 0 : field.silence, step: field === null || field === void 0 ? void 0 : field.step, actionOptions: field === null || field === void 0 ? void 0 : field.actionOptions, pattern: field === null || field === void 0 ? void 0 : field.pattern, clearInput: field === null || field === void 0 ? void 0 : field.clearInput, multiple: !!(field === null || field === void 0 ? void 0 : field.multiple), readOnly: !!(field === null || field === void 0 ? void 0 : field.readOnly), spellCheck: !!(field === null || field === void 0 ? void 0 : field.spellCheck), inputMode: field === null || field === void 0 ? void 0 : field.inputMode, stripeElements: (field === null || field === void 0 ? void 0 : field.stripeElements) || this.stripeElements, lines: field === null || field === void 0 ? void 0 : field.lines, labelPosition: field === null || field === void 0 ? void 0 : field.labelPosition }));
-    }
-  }
-  render() {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6;
-    return (hAsync("fireenjin-form", { ref: (el) => (this.formEl = el), name: this.name, formData: this.formData, submitButton: null, resetButton: null, documentId: this.documentId, endpoint: this.endpoint, hideControls: this.hideControls, filterData: this.filterData, beforeSubmit: this.beforeSubmit, disableLoader: this.disableLoader, loading: this.loading, disableEnterButton: true, confirmExit: this.confirmExit, hasChanged: this.hasChanged, method: this.method, action: this.action, fetch: this.fetch, fetchParams: this.fetchParams, fetchDataMap: this.fetchDataMap, fetchKey: this.fetchKey, cacheKey: this.cacheKey }, hAsync("ion-slides", { ref: (el) => (this.slidesEl = el), pager: this.pager, options: this.slidesOptions, scrollbar: this.scrollbar, style: {
-        transition: "all ease 0.5s",
-        height: !this.showSuccess ? "auto" : "0",
-        opacity: !this.showSuccess ? "1" : "0",
-      } }, (this.steps || []).map((step) => {
-      const StepComponent = (step === null || step === void 0 ? void 0 : step.component) || null;
-      return (hAsync("ion-slide", null, hAsync("div", null, (step === null || step === void 0 ? void 0 : step.beforeHTML) && hAsync("div", { innerHTML: step.beforeHTML }), StepComponent && (hAsync(StepComponent, Object.assign({}, ((step === null || step === void 0 ? void 0 : step.componentProps) || {})))), ((step === null || step === void 0 ? void 0 : step.fields) || []).map((field) => [
-        (field === null || field === void 0 ? void 0 : field.beforeHTML) && hAsync("div", { innerHTML: field.beforeHTML }),
-        this.renderField(field),
-        (field === null || field === void 0 ? void 0 : field.afterHTML) && hAsync("div", { innerHTML: field.afterHTML }),
-      ])), (step === null || step === void 0 ? void 0 : step.afterHTML) && hAsync("div", { innerHTML: step.afterHTML })));
-    })), hAsync("div", { class: "flow-controls control-pager", style: {
-        display: this.hideControls ? "none" : "flex",
-      } }, hAsync("ion-button", { expand: (_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.expand, disabled: !!((_b = this.prevButton) === null || _b === void 0 ? void 0 : _b.disabled), color: (_c = this.prevButton) === null || _c === void 0 ? void 0 : _c.color, fill: (_d = this.prevButton) === null || _d === void 0 ? void 0 : _d.fill, size: (_e = this.prevButton) === null || _e === void 0 ? void 0 : _e.size, onClick: (event) => {
-        var _a;
-        return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
-          ? this.prevButton.onClick(event)
-          : this.slidePrev();
-      } }, ((_f = this.prevButton) === null || _f === void 0 ? void 0 : _f.icon) && (hAsync("ion-icon", { slot: ((_g = this.prevButton) === null || _g === void 0 ? void 0 : _g.iconSlot) || "start", name: this.prevButton.icon })), ((_h = this.prevButton) === null || _h === void 0 ? void 0 : _h.label) && (hAsync("ion-label", null, this.prevButton.label))), hAsync("ion-button", { expand: (_j = this.nextButton) === null || _j === void 0 ? void 0 : _j.expand, disabled: !!((_k = this.nextButton) === null || _k === void 0 ? void 0 : _k.disabled), color: (_l = this.nextButton) === null || _l === void 0 ? void 0 : _l.color, fill: (_m = this.nextButton) === null || _m === void 0 ? void 0 : _m.fill, size: (_o = this.nextButton) === null || _o === void 0 ? void 0 : _o.size, onClick: (event) => {
-        var _a;
-        return typeof ((_a = this.nextButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
-          ? this.nextButton.onClick(event)
-          : this.slideNext();
-      } }, ((_p = this.nextButton) === null || _p === void 0 ? void 0 : _p.icon) && (hAsync("ion-icon", { slot: ((_q = this.nextButton) === null || _q === void 0 ? void 0 : _q.iconSlot) || "end", name: this.nextButton.icon })), ((_r = this.nextButton) === null || _r === void 0 ? void 0 : _r.label) && (hAsync("ion-label", null, this.nextButton.label)))), hAsync("div", { class: "flow-controls control-confirmation", style: {
-        display: this.showSave && !this.showSuccess ? "flex" : "none",
-      } }, hAsync("ion-button", { expand: (_s = this.prevButton) === null || _s === void 0 ? void 0 : _s.expand, disabled: !!((_t = this.prevButton) === null || _t === void 0 ? void 0 : _t.disabled), color: (_u = this.prevButton) === null || _u === void 0 ? void 0 : _u.color, fill: (_v = this.prevButton) === null || _v === void 0 ? void 0 : _v.fill, onClick: (event) => {
-        var _a;
-        return typeof ((_a = this.prevButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
-          ? this.prevButton.onClick(event)
-          : this.slidePrev();
-      } }, ((_w = this.prevButton) === null || _w === void 0 ? void 0 : _w.icon) && (hAsync("ion-icon", { slot: ((_x = this.prevButton) === null || _x === void 0 ? void 0 : _x.iconSlot) || "start", name: this.prevButton.icon })), ((_y = this.prevButton) === null || _y === void 0 ? void 0 : _y.label) && (hAsync("ion-label", null, this.prevButton.label))), hAsync("ion-button", { expand: (_z = this.saveButton) === null || _z === void 0 ? void 0 : _z.expand, disabled: !!((_0 = this.saveButton) === null || _0 === void 0 ? void 0 : _0.disabled), color: (_1 = this.saveButton) === null || _1 === void 0 ? void 0 : _1.color, fill: (_2 = this.saveButton) === null || _2 === void 0 ? void 0 : _2.fill, type: "submit", size: (_3 = this.saveButton) === null || _3 === void 0 ? void 0 : _3.size, onClick: (event) => {
-        var _a;
-        return typeof ((_a = this.saveButton) === null || _a === void 0 ? void 0 : _a.onClick) === "function"
-          ? this.saveButton.onClick(event)
-          : null;
-      } }, ((_4 = this.saveButton) === null || _4 === void 0 ? void 0 : _4.icon) && (hAsync("ion-icon", { slot: ((_5 = this.saveButton) === null || _5 === void 0 ? void 0 : _5.iconSlot) || "end", name: this.saveButton.icon })), ((_6 = this.saveButton) === null || _6 === void 0 ? void 0 : _6.label) && (hAsync("ion-label", null, this.saveButton.label)))), hAsync("div", { class: "flow-success", style: {
-        transition: "all ease 0.5s",
-        height: this.showSuccess ? "auto" : "0",
-        opacity: this.showSuccess ? "1" : "0",
-      } }, hAsync("slot", null))));
-  }
-  get flowEl() { return getElement(this); }
-  static get style() { return flowCss; }
-  static get cmpMeta() { return {
-    "$flags$": 4,
-    "$tagName$": "fireenjin-flow",
-    "$members$": {
-      "name": [1],
-      "formData": [1032, "form-data"],
-      "nextButton": [16],
-      "prevButton": [16],
-      "saveButton": [16],
-      "hideControls": [1028, "hide-controls"],
-      "endpoint": [1],
-      "documentId": [1, "document-id"],
-      "excludeData": [16],
-      "beforeSubmit": [16],
-      "disableLoader": [4, "disable-loader"],
-      "loading": [1028],
-      "disableEnterButton": [4, "disable-enter-button"],
-      "confirmExit": [4, "confirm-exit"],
-      "hasChanged": [1028, "has-changed"],
-      "method": [1],
-      "action": [1],
-      "fetch": [8],
-      "fetchParams": [8, "fetch-params"],
-      "fetchDataMap": [8, "fetch-data-map"],
-      "fetchKey": [1, "fetch-key"],
-      "filterData": [8, "filter-data"],
-      "slidesOptions": [8, "slides-options"],
-      "pager": [4],
-      "scrollbar": [4],
-      "steps": [16],
-      "googleMapsKey": [1, "google-maps-key"],
-      "stripeKey": [1, "stripe-key"],
-      "stripeElements": [8, "stripe-elements"],
-      "disableRequiredCheck": [4, "disable-required-check"],
-      "cacheKey": [1, "cache-key"],
-      "showSuccess": [32],
-      "showSave": [32],
-      "getActiveIndex": [64],
-      "getSwiper": [64],
-      "isBeginning": [64],
-      "isEnd": [64],
-      "length": [64],
-      "lockSwipeToNext": [64],
-      "lockSwipeToPrev": [64],
-      "lockSwipes": [64],
-      "slideNext": [64],
-      "slidePrev": [64],
-      "slideTo": [64],
-      "startAutoplay": [64],
-      "stopAutoplay": [64],
-      "update": [64],
-      "updateAutoHeight": [64],
-      "reportFormValidity": [64],
-      "setFormData": [64],
-      "checkFormValidity": [64],
-      "reset": [64],
-      "submit": [64],
-      "checkStepValidity": [64]
-    },
-    "$listeners$": [[0, "keydown", "onKeydown"], [0, "ionSlideDidChange", "onSlideChange"], [0, "fireenjinSubmit", "onSubmit"], [0, "fireenjinSuccess", "onSuccess"]],
-    "$lazyBundleId$": "-",
-    "$attrsToReflect$": []
-  }; }
-}
-
 registerComponents([
   Accordion,
   AccordionGroup,
@@ -53732,6 +53732,7 @@ registerComponents([
   Fab,
   FabButton,
   FabList,
+  Flow,
   Footer,
   Form,
   Graph,
@@ -53830,7 +53831,6 @@ registerComponents([
   Toolbar,
   ToolbarTitle,
   VirtualScroll,
-  flow,
 ]);
 
 /*!

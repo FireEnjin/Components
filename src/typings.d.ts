@@ -110,6 +110,14 @@ export type Field = {
   results?: any;
 };
 
+export type Step = {
+  beforeHTML?: string;
+  fields?: Field[];
+  afterHTML?: string;
+  component?: string;
+  componentProps?: any;
+};
+
 export type FilterControl = {
   resultsKey?: string;
   name: string;

@@ -31,10 +31,10 @@
 | `loading`              | `loading`                | Is the component currently loading                                     | `boolean`                                                                                                                                                                                                                                                            | `false`                                                                                                         |
 | `method`               | `method`                 | The HTTP method to use when submitting the form                        | `string`                                                                                                                                                                                                                                                             | `"post"`                                                                                                        |
 | `name`                 | `name`                   | The name of the form used for ID and name                              | `string`                                                                                                                                                                                                                                                             | `undefined`                                                                                                     |
-| `nextButton`           | --                       | The next button for the slider                                         | `{ expand?: "block" \| "full"; label?: string; color?: Color; fill?: "default" \| "clear" \| "outline" \| "solid"; icon?: string; iconSlot?: string; onClick?: (event: any) => void; disabled?: boolean; shape?: "round"; size?: "default" \| "small" \| "large"; }` | `{     label: "Next",     color: "primary",     fill: "clear",     icon: "chevron-forward-circle-outline",   }` |
+| `nextButton`           | --                       | The next button for the slider                                         | `{ expand?: "block" \| "full"; label?: string; color?: Color; fill?: "clear" \| "outline" \| "solid" \| "default"; icon?: string; iconSlot?: string; onClick?: (event: any) => void; disabled?: boolean; shape?: "round"; size?: "default" \| "small" \| "large"; }` | `{     label: "Next",     color: "primary",     fill: "clear",     icon: "chevron-forward-circle-outline",   }` |
 | `pager`                | `pager`                  |                                                                        | `boolean`                                                                                                                                                                                                                                                            | `false`                                                                                                         |
-| `prevButton`           | --                       | The prev button for the slider                                         | `{ expand?: "block" \| "full"; label?: string; color?: Color; fill?: "default" \| "clear" \| "outline" \| "solid"; icon?: string; iconSlot?: string; onClick?: (event: any) => void; disabled?: boolean; shape?: "round"; size?: "default" \| "small" \| "large"; }` | `{     label: "Back",     color: "medium",     fill: "clear",     icon: "chevron-back-circle-outline",   }`     |
-| `saveButton`           | --                       | The save button for the flow                                           | `{ expand?: "block" \| "full"; label?: string; color?: Color; fill?: "default" \| "clear" \| "outline" \| "solid"; icon?: string; iconSlot?: string; onClick?: (event: any) => void; disabled?: boolean; shape?: "round"; size?: "default" \| "small" \| "large"; }` | `{     label: "Save",     fill: "solid",     color: "primary",     icon: "checkmark-circle-outline",   }`       |
+| `prevButton`           | --                       | The prev button for the slider                                         | `{ expand?: "block" \| "full"; label?: string; color?: Color; fill?: "clear" \| "outline" \| "solid" \| "default"; icon?: string; iconSlot?: string; onClick?: (event: any) => void; disabled?: boolean; shape?: "round"; size?: "default" \| "small" \| "large"; }` | `{     label: "Back",     color: "medium",     fill: "clear",     icon: "chevron-back-circle-outline",   }`     |
+| `saveButton`           | --                       | The save button for the flow                                           | `{ expand?: "block" \| "full"; label?: string; color?: Color; fill?: "clear" \| "outline" \| "solid" \| "default"; icon?: string; iconSlot?: string; onClick?: (event: any) => void; disabled?: boolean; shape?: "round"; size?: "default" \| "small" \| "large"; }` | `{     label: "Save",     fill: "solid",     color: "primary",     icon: "checkmark-circle-outline",   }`       |
 | `scrollbar`            | `scrollbar`              |                                                                        | `boolean`                                                                                                                                                                                                                                                            | `false`                                                                                                         |
 | `slidesOptions`        | `slides-options`         | A list of options for SwiperJS                                         | `any`                                                                                                                                                                                                                                                                | `{ autoHeight: true, allowTouchMove: false }`                                                                   |
 | `steps`                | --                       |                                                                        | `Step[]`                                                                                                                                                                                                                                                             | `[]`                                                                                                            |
@@ -64,13 +64,13 @@ Type: `Promise<boolean>`
 
 
 
-### `getActiveIndex() => Promise<number>`
+### `getActiveIndex() => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<number>`
+Type: `Promise<any>`
 
 
 
@@ -84,63 +84,63 @@ Type: `Promise<any>`
 
 
 
-### `isBeginning() => Promise<boolean>`
+### `isBeginning() => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<boolean>`
+Type: `Promise<any>`
 
 
 
-### `isEnd() => Promise<boolean>`
-
-
-
-#### Returns
-
-Type: `Promise<boolean>`
-
-
-
-### `length() => Promise<number>`
+### `isEnd() => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<number>`
+Type: `Promise<any>`
 
 
 
-### `lockSwipeToNext(lock: boolean) => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `lockSwipeToPrev(lock: boolean) => Promise<void>`
+### `length() => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
-### `lockSwipes(lock: boolean) => Promise<void>`
+### `lockSwipeToNext(lock: boolean) => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
+
+
+
+### `lockSwipeToPrev(lock: boolean) => Promise<any>`
+
+
+
+#### Returns
+
+Type: `Promise<any>`
+
+
+
+### `lockSwipes(lock: boolean) => Promise<any>`
+
+
+
+#### Returns
+
+Type: `Promise<any>`
 
 
 
@@ -174,53 +174,53 @@ Type: `Promise<void>`
 
 
 
-### `slideNext(speed?: number, runCallbacks?: boolean) => Promise<void>`
+### `slideNext(speed?: number, runCallbacks?: boolean) => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
-### `slidePrev(speed?: number, runCallbacks?: boolean) => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `slideTo(index: number, speed?: number, runCallbacks?: boolean) => Promise<void>`
+### `slidePrev(speed?: number, runCallbacks?: boolean) => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
-### `startAutoplay() => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `stopAutoplay() => Promise<void>`
+### `slideTo(index: number, speed?: number, runCallbacks?: boolean) => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
+
+
+
+### `startAutoplay() => Promise<any>`
+
+
+
+#### Returns
+
+Type: `Promise<any>`
+
+
+
+### `stopAutoplay() => Promise<any>`
+
+
+
+#### Returns
+
+Type: `Promise<any>`
 
 
 
@@ -234,23 +234,23 @@ Type: `Promise<void>`
 
 
 
-### `update() => Promise<void>`
+### `update() => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
-### `updateAutoHeight(speed?: number) => Promise<void>`
+### `updateAutoHeight(speed?: number) => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 

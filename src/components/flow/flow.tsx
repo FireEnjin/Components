@@ -8,22 +8,14 @@ import {
   Prop,
   State,
 } from "@stencil/core";
-import { Field } from "../../typings";
-
-declare interface Step {
-  beforeHTML?: string;
-  fields?: Field[];
-  afterHTML?: string;
-  component?: string;
-  componentProps?: any;
-}
+import { Field, Step } from "../../typings";
 
 @Component({
   tag: "fireenjin-flow",
   styleUrl: "flow.css",
 })
-export class flow {
-  slidesEl: HTMLIonSlidesElement;
+export class Flow {
+  slidesEl: any;
   formEl: HTMLFireenjinFormElement;
   currentStep: Step;
   currentIndex = 0;
