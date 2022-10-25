@@ -9,7 +9,7 @@ import {
   useStore,
 } from "@builder.io/qwik";
 export const Form = component$((props) => {
-  const state = useStore({ formData: {} });
+  const state = useStore({ formData: {}, hasChanged: false });
   useClientEffect$(() => {
     const setByPath = function (obj, path, value) {
       const pList = path.split(".");
@@ -53,8 +53,8 @@ export const Form = component$((props) => {
             : value
         );
         if (props.cacheKey) await saveCache();
-        if (!props?.hasChanged) {
-          props.hasChanged = true;
+        if (!state?.hasChanged) {
+          state.hasChanged = true;
         }
       }
     };

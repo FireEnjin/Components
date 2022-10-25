@@ -67,10 +67,6 @@ export default function Form(
      */
     confirmExit?: boolean;
     /**
-     * Has the form fields been changed
-     */
-    hasChanged?: boolean;
-    /**
      * The HTTP method to use when submitting the form
      */
     method?: "post" | "get" | "dialog";
@@ -119,12 +115,18 @@ export default function Form(
     disableEnterButton: false,
     disableReset: false,
     confirmExit: false,
-    hasChanged: false,
     method: "post",
   }
 ) {
   const state = useStore({
+    /**
+     * The data collected for form submission
+     */
     formData: {},
+    /**
+     * Has the form fields been changed
+     */
+    hasChanged: false,
   });
 
   onMount(() => {
@@ -172,8 +174,8 @@ export default function Form(
             : value
         );
         if (props.cacheKey) await saveCache();
-        if (!props?.hasChanged) {
-          props.hasChanged = true;
+        if (!state?.hasChanged) {
+          state.hasChanged = true;
         }
       }
     };
