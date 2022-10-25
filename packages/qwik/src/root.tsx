@@ -12,8 +12,10 @@ export default () => {
         <title>Qwik Blank App</title>
       </head>
       <body>
-        <Form />
-        <Button color="red">Weeeeeeeeeee</Button>
+        <Form>
+          <input name="test" value="test" />
+          <Button color="red">Weeeeeeeeeee</Button>
+        </Form>
       </body>
     </>
   );
