@@ -16,6 +16,9 @@ export default () => {
           <input name="test" value="test" />
           <Button color="red">Weeeeeeeeeee</Button>
         </Form>
+        <Form>
+          <input name="silent" />
+        </Form>
       </body>
     </>
   );

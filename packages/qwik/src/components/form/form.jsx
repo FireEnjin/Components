@@ -41,7 +41,7 @@ export const Form = component$((props) => {
       return newValue;
     };
     const onInput = async function (event) {
-      console.log(event);
+      console.log(event, state.formData);
       if (!event?.target?.name?.startsWith?.("ion-")) {
         const value =
           typeof event?.detail?.checked === "boolean"
@@ -60,11 +60,13 @@ export const Form = component$((props) => {
         }
       }
     };
-    if (formRef?.addEventListener) {
+    const ref =
+      (formRef?.addEventListener && formRef) ||
+      (formRef?.current?.addEventListener && formRef.current);
+    if (ref?.addEventListener)
       ["ionInput", "ionChange", "ionSelect", "input", "change"].map(
-        (eventName) => formRef.addEventListener(eventName, onInput)
+        (eventName) => ref.addEventListener(eventName, onInput)
       );
-    }
   });
   return (
     <form ref={formRef} action={props?.action} method={props?.method}>
