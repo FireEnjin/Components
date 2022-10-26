@@ -1,4 +1,4 @@
-import { onMount, useStore } from "@builder.io/mitosis";
+import { onMount, useRef, useStore } from "@builder.io/mitosis";
 
 export default function Form(
   props: {
@@ -118,6 +118,7 @@ export default function Form(
     method: "post",
   }
 ) {
+  const formRef = useRef<HTMLFormElement>(null);
   const state = useStore({
     /**
      * The data collected for form submission
@@ -179,15 +180,15 @@ export default function Form(
         }
       }
     };
-    if (document?.addEventListener) {
+    if (formRef?.addEventListener) {
       ["ionInput", "ionChange", "ionSelect", "input", "change"].map(
-        (eventName) => document.addEventListener(eventName, onInput)
+        (eventName) => formRef.addEventListener(eventName, onInput)
       );
     }
   });
 
   return (
-    <form action={props?.action} method={props?.method}>
+    <form ref={formRef} action={props?.action} method={props?.method}>
       {props.children}
     </form>
   );

@@ -6,9 +6,11 @@ import {
   component$,
   h,
   useClientEffect$,
+  useRef,
   useStore,
 } from "@builder.io/qwik";
 export const Form = component$((props) => {
+  const formRef = useRef();
   const state = useStore({ formData: {}, hasChanged: false });
   useClientEffect$(() => {
     const setByPath = function (obj, path, value) {
@@ -58,14 +60,14 @@ export const Form = component$((props) => {
         }
       }
     };
-    if (document?.addEventListener) {
+    if (formRef?.addEventListener) {
       ["ionInput", "ionChange", "ionSelect", "input", "change"].map(
-        (eventName) => document.addEventListener(eventName, onInput)
+        (eventName) => formRef.addEventListener(eventName, onInput)
       );
     }
   });
   return (
-    <form action={props?.action} method={props?.method}>
+    <form ref={formRef} action={props?.action} method={props?.method}>
       <Slot></Slot>
     </form>
   );
