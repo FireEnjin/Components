@@ -1,4 +1,4 @@
-import { onMount, useRef, useStore } from "@builder.io/mitosis";
+import { onMount, onUnMount, useRef, useStore } from "@builder.io/mitosis";
 
 export default function Form(
   props: {
@@ -100,6 +100,10 @@ export default function Form(
      */
     cacheKey?: string;
     /**
+     * The list of events to listen for input from
+     */
+    eventListeners?: string[];
+    /**
      * The slot (innerHTML) of the component
      */
     children?: any;
@@ -116,6 +120,7 @@ export default function Form(
     disableReset: false,
     confirmExit: false,
     method: "post",
+    eventListeners: ["ionInput", "ionChange", "ionSelect", "input", "change"],
   }
 ) {
   const formRef = useRef<HTMLFormElement>(null);
@@ -128,65 +133,83 @@ export default function Form(
      * Has the form fields been changed
      */
     hasChanged: false,
+    /**
+     * The list of events to listen for input from
+     */
+    eventListeners: ["ionInput", "ionChange", "ionSelect", "input", "change"],
+    onInput(event) {
+      void (async function () {
+        const saveCache = async function () {
+          localStorage.setItem(
+            props?.cacheKey,
+            JSON.stringify(props?.formData)
+          );
+        };
+        const setFilteredValue = async function (key, value) {
+          let newValue = value;
+          for (const filter of typeof props?.filterData === "string"
+            ? props?.filterData.split(",")
+            : props?.filterData) {
+            if (typeof filter !== "function") continue;
+            const filterName =
+              Object.getOwnPropertyDescriptors(filter)?.name?.value;
+            if (!filterName || filterName !== key) continue;
+            newValue = await filter(value);
+          }
+          return newValue;
+        };
+        const setByPath = function (obj, path, value) {
+          const pList = path.split(".");
+          const len = pList.length;
+          for (let i = 0; i < len - 1; i++) {
+            const elem = pList[i];
+            if (!obj[elem]) obj[elem] = {};
+            obj = obj[elem];
+          }
+
+          obj[pList[len - 1]] = value;
+
+          return obj;
+        };
+        console.log(event, state.formData);
+        if (!event?.target?.name?.startsWith?.("ion-")) {
+          const value =
+            typeof event?.detail?.checked === "boolean"
+              ? event.detail.checked
+              : event?.detail?.value || event?.target?.value;
+          state.formData = setByPath(
+            state?.formData || {},
+            event?.target?.name,
+            props?.filterData?.length
+              ? await setFilteredValue(event?.target?.name, value)
+              : value
+          );
+          if (props.cacheKey) await saveCache();
+          if (!state?.hasChanged) {
+            state.hasChanged = true;
+          }
+        }
+      })();
+    },
   });
 
   onMount(() => {
-    const setByPath = function (obj, path, value) {
-      const pList = path.split(".");
-      const len = pList.length;
-      for (let i = 0; i < len - 1; i++) {
-        const elem = pList[i];
-        if (!obj[elem]) obj[elem] = {};
-        obj = obj[elem];
-      }
-
-      obj[pList[len - 1]] = value;
-
-      return obj;
-    };
-    const saveCache = async function () {
-      localStorage.setItem(props?.cacheKey, JSON.stringify(props?.formData));
-    };
-    const setFilteredValue = async function (key, value) {
-      let newValue = value;
-      for (const filter of typeof props?.filterData === "string"
-        ? props?.filterData.split(",")
-        : props?.filterData) {
-        if (typeof filter !== "function") continue;
-        const filterName =
-          Object.getOwnPropertyDescriptors(filter)?.name?.value;
-        if (!filterName || filterName !== key) continue;
-        newValue = await filter(value);
-      }
-      return newValue;
-    };
-    const onInput = async function (event) {
-      console.log(event, state.formData);
-      if (!event?.target?.name?.startsWith?.("ion-")) {
-        const value =
-          typeof event?.detail?.checked === "boolean"
-            ? event.detail.checked
-            : event?.detail?.value || event?.target?.value;
-        state.formData = setByPath(
-          state?.formData || {},
-          event?.target?.name,
-          props?.filterData?.length
-            ? await setFilteredValue(event?.target?.name, value)
-            : value
-        );
-        if (props.cacheKey) await saveCache();
-        if (!state?.hasChanged) {
-          state.hasChanged = true;
-        }
-      }
-    };
     const ref =
       (formRef?.addEventListener && formRef) ||
       (formRef?.current?.addEventListener && formRef.current);
     if (ref?.addEventListener)
-      ["ionInput", "ionChange", "ionSelect", "input", "change"].map(
-        (eventName) => ref.addEventListener(eventName, onInput)
+      state.eventListeners.map((eventName) =>
+        ref.addEventListener(eventName, state.onInput.bind(this))
       );
+  });
+
+  onUnMount(() => {
+    const ref =
+      (formRef?.addEventListener && formRef) ||
+      (formRef?.current?.addEventListener && formRef.current);
+    (props?.eventListeners || []).map((eventName) =>
+      ref.removeEventListener(eventName, state.onInput.bind(this))
+    );
   });
 
   return (

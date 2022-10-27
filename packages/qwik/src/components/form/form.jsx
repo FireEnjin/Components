@@ -5,25 +5,13 @@ import {
   Slot,
   component$,
   h,
+  useCleanup$,
   useClientEffect$,
   useRef,
   useStore,
 } from "@builder.io/qwik";
-export const Form = component$((props) => {
-  const formRef = useRef();
-  const state = useStore({ formData: {}, hasChanged: false });
-  useClientEffect$(() => {
-    const setByPath = function (obj, path, value) {
-      const pList = path.split(".");
-      const len = pList.length;
-      for (let i = 0; i < len - 1; i++) {
-        const elem = pList[i];
-        if (!obj[elem]) obj[elem] = {};
-        obj = obj[elem];
-      }
-      obj[pList[len - 1]] = value;
-      return obj;
-    };
+export const onInput = function onInput(props, state, formRef, event) {
+  void (async function () {
     const saveCache = async function () {
       localStorage.setItem(props?.cacheKey, JSON.stringify(props?.formData));
     };
@@ -40,33 +28,66 @@ export const Form = component$((props) => {
       }
       return newValue;
     };
-    const onInput = async function (event) {
-      console.log(event, state.formData);
-      if (!event?.target?.name?.startsWith?.("ion-")) {
-        const value =
-          typeof event?.detail?.checked === "boolean"
-            ? event.detail.checked
-            : event?.detail?.value || event?.target?.value;
-        state.formData = setByPath(
-          state?.formData || {},
-          event?.target?.name,
-          props?.filterData?.length
-            ? await setFilteredValue(event?.target?.name, value)
-            : value
-        );
-        if (props.cacheKey) await saveCache();
-        if (!state?.hasChanged) {
-          state.hasChanged = true;
-        }
+    const setByPath = function (obj, path, value) {
+      const pList = path.split(".");
+      const len = pList.length;
+      for (let i = 0; i < len - 1; i++) {
+        const elem = pList[i];
+        if (!obj[elem]) obj[elem] = {};
+        obj = obj[elem];
       }
+      obj[pList[len - 1]] = value;
+      return obj;
     };
+    console.log(event, state.formData);
+    if (!event?.target?.name?.startsWith?.("ion-")) {
+      const value =
+        typeof event?.detail?.checked === "boolean"
+          ? event.detail.checked
+          : event?.detail?.value || event?.target?.value;
+      state.formData = setByPath(
+        state?.formData || {},
+        event?.target?.name,
+        props?.filterData?.length
+          ? await setFilteredValue(event?.target?.name, value)
+          : value
+      );
+      if (props.cacheKey) await saveCache();
+      if (!state?.hasChanged) {
+        state.hasChanged = true;
+      }
+    }
+  })();
+};
+export const Form = component$((props) => {
+  const formRef = useRef();
+  const state = useStore({
+    eventListeners: ["ionInput", "ionChange", "ionSelect", "input", "change"],
+    formData: {},
+    hasChanged: false,
+  });
+  useClientEffect$(() => {
     const ref =
       (formRef?.addEventListener && formRef) ||
       (formRef?.current?.addEventListener && formRef.current);
     if (ref?.addEventListener)
-      ["ionInput", "ionChange", "ionSelect", "input", "change"].map(
-        (eventName) => ref.addEventListener(eventName, onInput)
+      state.eventListeners.map((eventName) =>
+        ref.addEventListener(
+          eventName,
+          onInput.bind(null, props, state, formRef).bind(this)
+        )
       );
+  });
+  useCleanup$(() => {
+    const ref =
+      (formRef?.addEventListener && formRef) ||
+      (formRef?.current?.addEventListener && formRef.current);
+    (props?.eventListeners || []).map((eventName) =>
+      ref.removeEventListener(
+        eventName,
+        onInput.bind(null, props, state, formRef).bind(this)
+      )
+    );
   });
   return (
     <form ref={formRef} action={props?.action} method={props?.method}>
