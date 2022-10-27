@@ -59,6 +59,17 @@ export const onInput = function onInput(props, state, formRef, event) {
     }
   })();
 };
+export const submit = function submit(props, state, formRef, event) {
+  (event?.target || document).dispatchEvent(
+    new CustomEvent("fireenjinSubmit", {
+      bubbles: true,
+      detail: {
+        event,
+        data: state?.formData || null,
+      },
+    })
+  );
+};
 export const Form = component$((props) => {
   const formRef = useRef();
   const state = useStore({
@@ -67,6 +78,8 @@ export const Form = component$((props) => {
     hasChanged: false,
   });
   useClientEffect$(() => {
+    if (props.formData) state.formData = props.formData;
+    if (props.eventListeners) state.eventListeners = props.eventListeners;
     const ref =
       (formRef?.addEventListener && formRef) ||
       (formRef?.current?.addEventListener && formRef.current);
@@ -90,8 +103,18 @@ export const Form = component$((props) => {
     );
   });
   return (
-    <form ref={formRef} action={props?.action} method={props?.method}>
+    <form
+      preventdefault:submit=""
+      ref={formRef}
+      onSubmit$={(event) => {
+        event.preventDefault();
+        submit(props, state, formRef, event);
+      }}
+      action={props?.action}
+      method={props?.method}
+    >
       <Slot></Slot>
+      <button type="submit">Save</button>
     </form>
   );
 });

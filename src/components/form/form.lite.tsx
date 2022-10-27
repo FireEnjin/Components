@@ -191,9 +191,22 @@ export default function Form(
         }
       })();
     },
+    submit(event) {
+      (event?.target || document).dispatchEvent(
+        new CustomEvent("fireenjinSubmit", {
+          bubbles: true,
+          detail: {
+            event,
+            data: state?.formData || null,
+          },
+        })
+      );
+    },
   });
 
   onMount(() => {
+    if (props.formData) state.formData = props.formData;
+    if (props.eventListeners) state.eventListeners = props.eventListeners;
     const ref =
       (formRef?.addEventListener && formRef) ||
       (formRef?.current?.addEventListener && formRef.current);
@@ -213,8 +226,17 @@ export default function Form(
   });
 
   return (
-    <form ref={formRef} action={props?.action} method={props?.method}>
+    <form
+      ref={formRef}
+      onSubmit={(event) => {
+        event.preventDefault();
+        state.submit(event);
+      }}
+      action={props?.action}
+      method={props?.method}
+    >
       {props.children}
+      <button type="submit">Save</button>
     </form>
   );
 }
