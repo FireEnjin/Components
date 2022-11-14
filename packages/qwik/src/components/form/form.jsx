@@ -65,6 +65,7 @@ export const submit = function submit(props, state, formRef, event) {
       bubbles: true,
       detail: {
         event,
+        endpoint: props?.action,
         data: state?.formData || null,
       },
     })

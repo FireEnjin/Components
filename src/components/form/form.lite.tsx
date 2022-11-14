@@ -197,6 +197,7 @@ export default function Form(
           bubbles: true,
           detail: {
             event,
+            endpoint: props?.action,
             data: state?.formData || null,
           },
         })
