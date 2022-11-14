@@ -58,68 +58,74 @@
 
   <body>
     <!-- <fireenjin-docs-gallery></fireenjin-docs-gallery> -->
-    <fireenjin-flow endpoint="addUser" ask-confirmation="true">
+    <!-- <fireenjin-flow endpoint="addUser" ask-confirmation="true">
       <div>
         <h1>Success asd!</h1>
       </div>
-    </fireenjin-flow>
+    </fireenjin-flow> -->
+    <fireenjin-input-logic></fireenjin-input-logic>
     <script>
       document.addEventListener("ionChange", function (event) {
         console.log(event);
       });
       document.addEventListener("DOMContentLoaded", function () {
-        document.querySelector("fireenjin-flow").steps = [
-          {
-            beforeHTML: "testing",
-            fields: [
-              {
-                label: "wee",
-                labelPosition: "stacked",
-                inputMode: "decimal",
-                placeholder: "0",
-                required: true,
-                name: "amount",
-                type: "number",
-                value: null,
-              },
-              {
-                label: "wee",
-                labelPosition: "stacked",
-                inputMode: "decimal",
-                placeholder: "0",
-                required: true,
-                name: "amount",
-                type: "number",
-                value: null,
-              },
-            ],
+        document.querySelector("fireenjin-input-logic").variables = {
+          test: {
+            label: "Testing",
           },
-          {
-            beforeHTML: "testing",
-            fields: [
-              {
-                label: "wee",
-                labelPosition: "stacked",
-                inputMode: "decimal",
-                placeholder: "0",
-                required: true,
-                name: "amount",
-                type: "number",
-                value: null,
-              },
-              {
-                label: "wee",
-                labelPosition: "stacked",
-                inputMode: "decimal",
-                placeholder: "0",
-                required: true,
-                name: "amount",
-                type: "number",
-                value: null,
-              },
-            ],
-          },
-        ];
+        };
+        // document.querySelector("fireenjin-flow").steps = [
+        //   {
+        //     beforeHTML: "testing",
+        //     fields: [
+        //       {
+        //         label: "wee",
+        //         labelPosition: "stacked",
+        //         inputMode: "decimal",
+        //         placeholder: "0",
+        //         required: true,
+        //         name: "amount",
+        //         type: "number",
+        //         value: null,
+        //       },
+        //       {
+        //         label: "wee",
+        //         labelPosition: "stacked",
+        //         inputMode: "decimal",
+        //         placeholder: "0",
+        //         required: true,
+        //         name: "amount",
+        //         type: "number",
+        //         value: null,
+        //       },
+        //     ],
+        //   },
+        //   {
+        //     beforeHTML: "testing",
+        //     fields: [
+        //       {
+        //         label: "wee",
+        //         labelPosition: "stacked",
+        //         inputMode: "decimal",
+        //         placeholder: "0",
+        //         required: true,
+        //         name: "amount",
+        //         type: "number",
+        //         value: null,
+        //       },
+        //       {
+        //         label: "wee",
+        //         labelPosition: "stacked",
+        //         inputMode: "decimal",
+        //         placeholder: "0",
+        //         required: true,
+        //         name: "amount",
+        //         type: "number",
+        //         value: null,
+        //       },
+        //     ],
+        //   },
+        // ];
         var firebaseConfig = {
           apiKey: "AIzaSyAz5C9TRxQ9bUkTwVaD6Yc-Iisw57UslPM",
           authDomain: "fireenjin-live.firebaseapp.com",
