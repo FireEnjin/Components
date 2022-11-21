@@ -18,7 +18,7 @@
 | `name`          | `name`           |             | `string`                                        | `undefined` |
 | `placeholder`   | `placeholder`    |             | `string`                                        | `undefined` |
 | `presets`       | --               |             | `(string \| { label?: string; value: any; })[]` | `undefined` |
-| `required`      | `required`       |             | `boolean`                                       | `undefined` |
+| `required`      | `required`       |             | `boolean`                                       | `false`     |
 | `step`          | `step`           |             | `string`                                        | `"0.01"`    |
 | `value`         | `value`          |             | `any`                                           | `undefined` |
 

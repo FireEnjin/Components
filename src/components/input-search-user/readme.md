@@ -21,7 +21,7 @@
 | `mode`          | `mode`           |             | `"inline" \| "popover"`              | `"inline"`       |
 | `name`          | `name`           |             | `string`                             | `undefined`      |
 | `placeholder`   | `placeholder`    |             | `string`                             | `"Search Users"` |
-| `required`      | `required`       |             | `boolean`                            | `undefined`      |
+| `required`      | `required`       |             | `boolean`                            | `false`          |
 | `results`       | --               |             | `any[]`                              | `[]`             |
 | `template`      | --               |             | `(result: any) => any`               | `undefined`      |
 | `value`         | `value`          |             | `any`                                | `undefined`      |

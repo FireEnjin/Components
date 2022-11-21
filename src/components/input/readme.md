@@ -33,7 +33,7 @@
 | `pattern`        | `pattern`        |             | `any`                                | `undefined` |
 | `placeholder`    | `placeholder`    |             | `any`                                | `undefined` |
 | `readOnly`       | `read-only`      |             | `boolean`                            | `false`     |
-| `required`       | `required`       |             | `any`                                | `undefined` |
+| `required`       | `required`       |             | `boolean`                            | `false`     |
 | `silence`        | `silence`        |             | `boolean`                            | `undefined` |
 | `spellCheck`     | `spell-check`    |             | `boolean`                            | `false`     |
 | `step`           | `step`           |             | `string`                             | `undefined` |

@@ -24,7 +24,7 @@
 | `params`              | `params`                |             | `any`                                                                                                                                            | `undefined` |
 | `query`               | `query`                 |             | `string`                                                                                                                                         | `undefined` |
 | `radioSlot`           | `radio-slot`            |             | `string`                                                                                                                                         | `"start"`   |
-| `required`            | `required`              |             | `any`                                                                                                                                            | `undefined` |
+| `required`            | `required`              |             | `boolean`                                                                                                                                        | `false`     |
 | `resultsKey`          | `results-key`           |             | `string`                                                                                                                                         | `undefined` |
 | `value`               | `value`                 |             | `any`                                                                                                                                            | `undefined` |
 
