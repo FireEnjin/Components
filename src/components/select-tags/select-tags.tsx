@@ -34,7 +34,7 @@ export class SelectTags implements ComponentInterface {
   @Prop() placeholder = "Select Tags";
   @Prop({ mutable: true }) value: any;
   @Prop({ mutable: true }) options: { label: string; value: any }[] = [];
-  @Prop() required = false;
+  @Prop({ reflect: true }) required = false;
   @Prop() duplicates = false;
   @Prop() disabled = false;
   @Prop() allowAdding: boolean | "custom" = false;

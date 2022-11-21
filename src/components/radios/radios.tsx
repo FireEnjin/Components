@@ -25,7 +25,7 @@ export class Radios implements ComponentInterface {
     mutable: true,
   })
   value: any;
-  @Prop() required: any;
+  @Prop({ reflect: true }) required = false;
   @Prop() options: FieldOption[];
   @Prop() name: string;
   @Prop() disabled = false;

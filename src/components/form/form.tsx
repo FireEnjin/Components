@@ -304,7 +304,7 @@ export class Form implements ComponentInterface {
   @Method()
   async checkFormValidity(reportValidity = true) {
     let isValid = true;
-    const inputEls = [].slice.call(this.formEl.querySelectorAll("[value]"));
+    const inputEls = [].slice.call(this.formEl.querySelectorAll("[required]"));
     for (const inputEl of inputEls) {
       try {
         if (

@@ -92,7 +92,10 @@ export class Select implements ComponentInterface {
     disabled?: boolean;
     payload?: any;
   }[] = [];
-  @Prop() required = false;
+  @Prop({
+    reflect: true,
+  })
+  required = false;
   @Prop() resultsKey?: string;
   @Prop() labelPosition?: "stacked" | "fixed" | "floating";
   @Prop() lines: "full" | "inset" | "none";

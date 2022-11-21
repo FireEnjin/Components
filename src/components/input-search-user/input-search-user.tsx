@@ -20,7 +20,7 @@ export class InputSearchUser implements ComponentInterface {
   @Prop() label: string;
   @Prop() placeholder: string = "Search Users";
   @Prop({ mutable: true }) value: any;
-  @Prop() required: boolean;
+  @Prop({ reflect: true }) required = false;
   @Prop() autofocus: boolean;
   @Prop() disableSearch = false;
   @Prop() disabled: boolean;
