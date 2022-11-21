@@ -20,7 +20,7 @@ export class InputSearchUser implements ComponentInterface {
   @Prop() label: string;
   @Prop() placeholder: string = "Search Users";
   @Prop({ mutable: true }) value: any;
-  @Prop({ reflect: true }) required = false;
+  @Prop() required = false;
   @Prop() autofocus: boolean;
   @Prop() disableSearch = false;
   @Prop() disabled: boolean;
@@ -35,6 +35,7 @@ export class InputSearchUser implements ComponentInterface {
   @Prop() lines: "full" | "inset" | "none";
   @Prop() labelPosition?: "stacked" | "fixed" | "floating";
   @Prop() selectKey = "id";
+  @Prop() pattern: any;
 
   @Event() ionInput: EventEmitter;
   @Event() fireenjinSelectUser: EventEmitter;
@@ -96,6 +97,20 @@ export class InputSearchUser implements ComponentInterface {
       >
         <slot name="start" />
         <slot name="end" />
+        <input
+          style={{
+            opacity: "0",
+            height: "0",
+            width: "0",
+            float: "left",
+            margin: "0",
+            padding: "0",
+          }}
+          type="text"
+          pattern={this.pattern}
+          value={this.value}
+          required={this.required}
+        />
       </fireenjin-input-search>
     );
   }

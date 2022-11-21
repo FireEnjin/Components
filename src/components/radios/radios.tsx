@@ -25,7 +25,8 @@ export class Radios implements ComponentInterface {
     mutable: true,
   })
   value: any;
-  @Prop({ reflect: true }) required = false;
+  @Prop() required = false;
+  @Prop() pattern: any;
   @Prop() options: FieldOption[];
   @Prop() name: string;
   @Prop() disabled = false;
@@ -137,6 +138,20 @@ export class Radios implements ComponentInterface {
             )
           )}
         </ion-radio-group>
+        <input
+          style={{
+            opacity: "0",
+            height: "0",
+            width: "0",
+            float: "left",
+            margin: "0",
+            padding: "0",
+          }}
+          type="text"
+          pattern={this.pattern}
+          value={this.value}
+          required={this.required}
+        />
       </ion-list>
     );
   }

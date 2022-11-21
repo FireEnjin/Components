@@ -33343,6 +33343,7 @@ class InputSearchUser {
     this.lines = undefined;
     this.labelPosition = undefined;
     this.selectKey = "id";
+    this.pattern = undefined;
   }
   async selectUser(event, user) {
     this.value = user[this.selectKey];
@@ -33367,7 +33368,14 @@ class InputSearchUser {
         limit: this.limit ? this.limit : null,
       }, results: this.results, placeholder: this.placeholder, value: this.value, template: (result) => (hAsync("ion-item", { onClick: (event) => this.selectUser(event, result), style: {
           cursor: "pointer",
-        } }, hAsync("ion-label", null, hAsync("h2", null, result.firstName ? result.firstName : "", " ", result.lastName ? result.lastName : ""), hAsync("p", null, result.email ? result.email : "No email on file")), hAsync("ion-icon", { name: "checkmark-circle" }))) }, hAsync("slot", { name: "start" }), hAsync("slot", { name: "end" })));
+        } }, hAsync("ion-label", null, hAsync("h2", null, result.firstName ? result.firstName : "", " ", result.lastName ? result.lastName : ""), hAsync("p", null, result.email ? result.email : "No email on file")), hAsync("ion-icon", { name: "checkmark-circle" }))) }, hAsync("slot", { name: "start" }), hAsync("slot", { name: "end" }), hAsync("input", { style: {
+        opacity: "0",
+        height: "0",
+        width: "0",
+        float: "left",
+        margin: "0",
+        padding: "0",
+      }, type: "text", pattern: this.pattern, value: this.value, required: this.required })));
   }
   static get style() { return inputSearchUserCss; }
   static get cmpMeta() { return {
@@ -33378,7 +33386,7 @@ class InputSearchUser {
       "label": [1],
       "placeholder": [1],
       "value": [1032],
-      "required": [516],
+      "required": [4],
       "autofocus": [4],
       "disableSearch": [4, "disable-search"],
       "disabled": [4],
@@ -33392,11 +33400,12 @@ class InputSearchUser {
       "results": [16],
       "lines": [1],
       "labelPosition": [1, "label-position"],
-      "selectKey": [1, "select-key"]
+      "selectKey": [1, "select-key"],
+      "pattern": [8]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",
-    "$attrsToReflect$": [["required", "required"]]
+    "$attrsToReflect$": []
   }; }
 }
 
@@ -45887,6 +45896,7 @@ class Radios {
     this.label = undefined;
     this.value = undefined;
     this.required = false;
+    this.pattern = undefined;
     this.options = undefined;
     this.name = undefined;
     this.disabled = false;
@@ -45942,7 +45952,14 @@ class Radios {
     return;
   }
   render() {
-    return (hAsync("ion-list", null, hAsync("ion-radio-group", { name: this.name, value: this.value, allowEmptySelection: this.allowEmptySelection }, hAsync("ion-list-header", null, this.label), (this.options ? this.options : []).map((option) => this.optionEl ? (this.optionEl(option)) : (hAsync("ion-item", { lines: this.lines }, hAsync("ion-label", null, (option === null || option === void 0 ? void 0 : option.label) || (option === null || option === void 0 ? void 0 : option.value)), hAsync("ion-radio", { mode: this.mode, color: (option === null || option === void 0 ? void 0 : option.color) || this.color, disabled: this.disabled || option.disabled, slot: (option === null || option === void 0 ? void 0 : option.slot) || this.radioSlot, value: (option === null || option === void 0 ? void 0 : option.value) || null })))), (this.results ? this.results : []).map((result) => this.optionEl ? (this.optionEl(result)) : (hAsync("ion-item", { lines: this.lines }, hAsync("ion-label", { position: this.labelPosition }, (result === null || result === void 0 ? void 0 : result.label) || (result === null || result === void 0 ? void 0 : result.name) || (result === null || result === void 0 ? void 0 : result.value) || (result === null || result === void 0 ? void 0 : result.id)), hAsync("ion-radio", { mode: this.mode, color: (result === null || result === void 0 ? void 0 : result.color) || this.color, disabled: this.disabled || (result === null || result === void 0 ? void 0 : result.disabled), slot: (result === null || result === void 0 ? void 0 : result.slot) || this.radioSlot, value: (result === null || result === void 0 ? void 0 : result.value) || (result === null || result === void 0 ? void 0 : result.id) || null })))))));
+    return (hAsync("ion-list", null, hAsync("ion-radio-group", { name: this.name, value: this.value, allowEmptySelection: this.allowEmptySelection }, hAsync("ion-list-header", null, this.label), (this.options ? this.options : []).map((option) => this.optionEl ? (this.optionEl(option)) : (hAsync("ion-item", { lines: this.lines }, hAsync("ion-label", null, (option === null || option === void 0 ? void 0 : option.label) || (option === null || option === void 0 ? void 0 : option.value)), hAsync("ion-radio", { mode: this.mode, color: (option === null || option === void 0 ? void 0 : option.color) || this.color, disabled: this.disabled || option.disabled, slot: (option === null || option === void 0 ? void 0 : option.slot) || this.radioSlot, value: (option === null || option === void 0 ? void 0 : option.value) || null })))), (this.results ? this.results : []).map((result) => this.optionEl ? (this.optionEl(result)) : (hAsync("ion-item", { lines: this.lines }, hAsync("ion-label", { position: this.labelPosition }, (result === null || result === void 0 ? void 0 : result.label) || (result === null || result === void 0 ? void 0 : result.name) || (result === null || result === void 0 ? void 0 : result.value) || (result === null || result === void 0 ? void 0 : result.id)), hAsync("ion-radio", { mode: this.mode, color: (result === null || result === void 0 ? void 0 : result.color) || this.color, disabled: this.disabled || (result === null || result === void 0 ? void 0 : result.disabled), slot: (result === null || result === void 0 ? void 0 : result.slot) || this.radioSlot, value: (result === null || result === void 0 ? void 0 : result.value) || (result === null || result === void 0 ? void 0 : result.id) || null }))))), hAsync("input", { style: {
+        opacity: "0",
+        height: "0",
+        width: "0",
+        float: "left",
+        margin: "0",
+        padding: "0",
+      }, type: "text", pattern: this.pattern, value: this.value, required: this.required })));
   }
   static get style() { return radiosCss; }
   static get cmpMeta() { return {
@@ -45951,7 +45968,8 @@ class Radios {
     "$members$": {
       "label": [1],
       "value": [1032],
-      "required": [516],
+      "required": [4],
+      "pattern": [8],
       "options": [16],
       "name": [1],
       "disabled": [4],
@@ -45973,7 +45991,7 @@ class Radios {
     },
     "$listeners$": [[0, "ionChange", "onChange"], [0, "fireenjinSuccess", "onSuccess"]],
     "$lazyBundleId$": "-",
-    "$attrsToReflect$": [["required", "required"]]
+    "$attrsToReflect$": []
   }; }
 }
 
@@ -51231,7 +51249,14 @@ class SelectTags {
   render() {
     return (hAsync("ion-item", { ref: (el) => (this.itemEl = el), lines: this.lines }, this.label && (hAsync("ion-label", { position: this.labelPosition }, this.label)), this.allowAdding && (hAsync("ion-input", { ref: (el) => (this.inputEl = el), value: this.query })), hAsync("div", { class: "options-wrapper" }, hAsync("fireenjin-chip-bar", null, this.allowAdding && (hAsync("ion-chip", { class: "add-tag", onClick: (event) => { var _a; return this.addTag((_a = this.inputEl) === null || _a === void 0 ? void 0 : _a.value, event); } }, "Add", hAsync("ion-icon", { name: this.addIcon }))), (this.options || []).map((option) => (hAsync("ion-chip", { outline: !(this.value || []).includes(option === null || option === void 0 ? void 0 : option.value), onClick: (event) => (this.value || []).includes(option === null || option === void 0 ? void 0 : option.value)
         ? this.removeValue(option === null || option === void 0 ? void 0 : option.value, event)
-        : this.addValue(option === null || option === void 0 ? void 0 : option.value, event) }, (option === null || option === void 0 ? void 0 : option.label) || "", (this.value || []).includes(option === null || option === void 0 ? void 0 : option.value) && (hAsync("ion-icon", { name: "close-circle" })))))))));
+        : this.addValue(option === null || option === void 0 ? void 0 : option.value, event) }, (option === null || option === void 0 ? void 0 : option.label) || "", (this.value || []).includes(option === null || option === void 0 ? void 0 : option.value) && (hAsync("ion-icon", { name: "close-circle" }))))))), hAsync("input", { style: {
+        opacity: "0",
+        height: "0",
+        width: "0",
+        float: "left",
+        margin: "0",
+        padding: "0",
+      }, type: "text", value: this.value, required: this.required })));
   }
   static get style() { return selectTagsCss; }
   static get cmpMeta() { return {
@@ -51244,7 +51269,7 @@ class SelectTags {
       "placeholder": [1],
       "value": [1032],
       "options": [1040],
-      "required": [516],
+      "required": [4],
       "duplicates": [4],
       "disabled": [4],
       "allowAdding": [8, "allow-adding"],
@@ -51275,7 +51300,7 @@ class SelectTags {
     },
     "$listeners$": [[0, "fireenjinSuccess", "onSuccess"], [0, "keydown", "onKeyDown"]],
     "$lazyBundleId$": "-",
-    "$attrsToReflect$": [["required", "required"]]
+    "$attrsToReflect$": []
   }; }
 }
 

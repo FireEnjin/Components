@@ -20,6 +20,7 @@
 | `lines`         | `lines`          |             | `"full" \| "inset" \| "none"`        | `undefined`      |
 | `mode`          | `mode`           |             | `"inline" \| "popover"`              | `"inline"`       |
 | `name`          | `name`           |             | `string`                             | `undefined`      |
+| `pattern`       | `pattern`        |             | `any`                                | `undefined`      |
 | `placeholder`   | `placeholder`    |             | `string`                             | `"Search Users"` |
 | `required`      | `required`       |             | `boolean`                            | `false`          |
 | `results`       | --               |             | `any[]`                              | `[]`             |

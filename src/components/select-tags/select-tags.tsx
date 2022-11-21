@@ -34,7 +34,7 @@ export class SelectTags implements ComponentInterface {
   @Prop() placeholder = "Select Tags";
   @Prop({ mutable: true }) value: any;
   @Prop({ mutable: true }) options: { label: string; value: any }[] = [];
-  @Prop({ reflect: true }) required = false;
+  @Prop() required = false;
   @Prop() duplicates = false;
   @Prop() disabled = false;
   @Prop() allowAdding: boolean | "custom" = false;
@@ -293,6 +293,19 @@ export class SelectTags implements ComponentInterface {
             ))}
           </fireenjin-chip-bar>
         </div>
+        <input
+          style={{
+            opacity: "0",
+            height: "0",
+            width: "0",
+            float: "left",
+            margin: "0",
+            padding: "0",
+          }}
+          type="text"
+          value={this.value}
+          required={this.required}
+        />
       </ion-item>
     );
   }
