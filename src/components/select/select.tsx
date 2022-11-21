@@ -73,7 +73,7 @@ export class Select implements ComponentInterface {
   /**
    * the value of the select.
    */
-  @Prop({ mutable: true }) value?: any | null;
+  @Prop({ mutable: true }) value?: any;
   @Prop() icon?: string;
   @Prop() endpoint?: string;
   @Prop() header?: string;
@@ -86,21 +86,25 @@ export class Select implements ComponentInterface {
   @Prop() params?: any;
   @Prop() query?: string;
   @Prop() label: string;
+  @Prop() pattern: any;
   @Prop({ mutable: true }) options: {
     label?: string;
     value?: any;
     disabled?: boolean;
     payload?: any;
   }[] = [];
-  @Prop({
-    reflect: true,
-  })
-  required = false;
+  @Prop() required = false;
   @Prop() resultsKey?: string;
   @Prop() labelPosition?: "stacked" | "fixed" | "floating";
   @Prop() lines: "full" | "inset" | "none";
 
   @State() results: any[] = [];
+
+  @Listen("ionChange")
+  onChange(event) {
+    if (event?.target?.name !== this.name) return;
+    this.value = event.target?.value || null;
+  }
 
   @Listen("fireenjinSuccess")
   onSuccess(event) {
@@ -221,6 +225,20 @@ export class Select implements ComponentInterface {
               )
             )}
           </ion-select>
+          <input
+            style={{
+              opacity: "0",
+              height: "0",
+              width: "0",
+              float: "left",
+              margin: "0",
+              padding: "0",
+            }}
+            type="text"
+            pattern={this.pattern}
+            value={this.value}
+            required={this.required}
+          />
         </ion-item>
       </Host>
     );

@@ -35,7 +35,7 @@ export class Input implements ComponentInterface {
   @Prop() placeholder: any;
   @Prop() label: string;
   @Prop({ mutable: true }) value: any;
-  @Prop({ reflect: true }) required = false;
+  @Prop() required = false;
   @Prop() name: string;
   @Prop() autocomplete: "on" | "off" = "off";
   @Prop() autocapitalize: string;

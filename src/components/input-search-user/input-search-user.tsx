@@ -34,12 +34,13 @@ export class InputSearchUser implements ComponentInterface {
   @Prop() results: any[] = [];
   @Prop() lines: "full" | "inset" | "none";
   @Prop() labelPosition?: "stacked" | "fixed" | "floating";
+  @Prop() selectKey = "id";
 
   @Event() ionInput: EventEmitter;
   @Event() fireenjinSelectUser: EventEmitter;
 
   async selectUser(event, user) {
-    this.value = user.email;
+    this.value = user[this.selectKey];
     this.fireenjinSelectUser.emit({
       event,
       user,

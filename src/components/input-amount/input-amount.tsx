@@ -22,7 +22,7 @@ export class InputAmount implements ComponentInterface {
   @Prop() label: string;
   @Prop() placeholder: string;
   @Prop({ mutable: true }) value: any;
-  @Prop({ reflect: true }) required = false;
+  @Prop() required = false;
   @Prop() presets: ({ label?: string; value: any } | string)[];
   @Prop() decimal: boolean;
   @Prop() autofocus: boolean;

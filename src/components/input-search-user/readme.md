@@ -23,6 +23,7 @@
 | `placeholder`   | `placeholder`    |             | `string`                             | `"Search Users"` |
 | `required`      | `required`       |             | `boolean`                            | `false`          |
 | `results`       | --               |             | `any[]`                              | `[]`             |
+| `selectKey`     | `select-key`     |             | `string`                             | `"id"`           |
 | `template`      | --               |             | `(result: any) => any`               | `undefined`      |
 | `value`         | `value`          |             | `any`                                | `undefined`      |
 

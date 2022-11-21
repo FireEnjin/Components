@@ -331,6 +331,7 @@ export class Flow {
               !el?.reportValidity()) ||
             (typeof el?.checkValidity === "function" && !el?.checkValidity()) ||
             el.value === null ||
+            el.value === undefined ||
             (typeof el.value === "string" && el.value?.length <= 0)
           )
             response = false;

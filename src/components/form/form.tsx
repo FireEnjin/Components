@@ -323,8 +323,8 @@ export class Form implements ComponentInterface {
           }
           isValid = false;
         }
-      } catch {
-        console.log(`${inputEl?.name} input not able to be validated!`);
+      } catch (error) {
+        console.log(`${inputEl?.name} input not able to be validated!`, error);
       }
     }
 

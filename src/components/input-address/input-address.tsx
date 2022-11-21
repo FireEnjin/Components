@@ -47,7 +47,7 @@ export class InputAddress implements ComponentInterface {
   /**
    * Whether the address input is required
    */
-  @Prop({ reflect: true }) required = false;
+  @Prop() required = false;
   /**
    * The name attribute of the input
    */

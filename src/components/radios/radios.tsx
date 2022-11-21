@@ -46,6 +46,12 @@ export class Radios implements ComponentInterface {
 
   @State() results: any[] = [];
 
+  @Listen("ionChange")
+  onChange(event) {
+    if (event?.target?.name !== this.name) return;
+    this.value = event?.target?.value || null;
+  }
+
   @Listen("fireenjinSuccess")
   onSuccess(event) {
     if (

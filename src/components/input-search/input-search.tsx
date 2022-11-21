@@ -27,7 +27,7 @@ export class InputSearch implements ComponentInterface {
   @Prop() label: string;
   @Prop() placeholder: string;
   @Prop({ mutable: true }) value: any;
-  @Prop({ reflect: true }) required = false;
+  @Prop() required = false;
   @Prop() autofocus: boolean;
   @Prop() disabled: boolean;
   @Prop() endpoint: string;
