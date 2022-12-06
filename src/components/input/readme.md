@@ -136,6 +136,7 @@ graph TD;
   fireenjin-input --> ion-item
   fireenjin-input --> ion-icon
   fireenjin-input --> ion-label
+  ion-input --> ion-icon
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note

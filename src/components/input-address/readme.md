@@ -57,6 +57,7 @@ graph TD;
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
+  ion-input --> ion-icon
   fireenjin-input-state --> ion-select
   fireenjin-input-state --> ion-select-option
   ion-select --> ion-select-popover

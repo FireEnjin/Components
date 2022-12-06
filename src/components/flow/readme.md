@@ -309,6 +309,7 @@ graph TD;
   fireenjin-input-address --> ion-col
   fireenjin-input-address --> fireenjin-input-state
   fireenjin-input-address --> ion-button
+  ion-input --> ion-icon
   fireenjin-input-state --> ion-select
   fireenjin-input-state --> ion-select-option
   ion-select --> ion-select-popover

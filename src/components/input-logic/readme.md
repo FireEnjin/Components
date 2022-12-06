@@ -111,6 +111,7 @@ graph TD;
   ion-alert --> ion-backdrop
   ion-chip --> ion-ripple-effect
   ion-button --> ion-ripple-effect
+  ion-input --> ion-icon
   style fireenjin-input-logic fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

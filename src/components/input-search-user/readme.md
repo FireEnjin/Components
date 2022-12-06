@@ -60,6 +60,7 @@ graph TD;
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
+  ion-input --> ion-icon
   style fireenjin-input-search-user fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
