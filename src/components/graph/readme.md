@@ -7,13 +7,13 @@
 
 ## Properties
 
-| Property   | Attribute | Description                      | Type                                                                                                             | Default     |
-| ---------- | --------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------- |
-| `datasets` | --        | The dataset to render graph with | `ChartDataset<keyof ChartTypeRegistry, (number \| ScatterDataPoint \| [number, number] \| BubbleDataPoint)[]>[]` | `[]`        |
-| `labels`   | --        | The labels for the graph         | `string[]`                                                                                                       | `[]`        |
-| `name`     | `name`    | The title of the graph           | `string`                                                                                                         | `undefined` |
-| `options`  | `options` | Options to configure Chart.js    | `any`                                                                                                            | `undefined` |
-| `type`     | `type`    | The type of graph to generate    | `"bar" \| "bubble" \| "doughnut" \| "line" \| "pie" \| "polarArea" \| "radar" \| "scatter"`                      | `"bar"`     |
+| Property   | Attribute | Description                      | Type                                                                                                  | Default     |
+| ---------- | --------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------- |
+| `datasets` | --        | The dataset to render graph with | `ChartDataset<keyof ChartTypeRegistry, (number \| Point \| [number, number] \| BubbleDataPoint)[]>[]` | `[]`        |
+| `labels`   | --        | The labels for the graph         | `string[]`                                                                                            | `[]`        |
+| `name`     | `name`    | The title of the graph           | `string`                                                                                              | `undefined` |
+| `options`  | `options` | Options to configure Chart.js    | `any`                                                                                                 | `undefined` |
+| `type`     | `type`    | The type of graph to generate    | `"bar" \| "bubble" \| "doughnut" \| "line" \| "pie" \| "polarArea" \| "radar" \| "scatter"`           | `"bar"`     |
 
 
 ## Events
