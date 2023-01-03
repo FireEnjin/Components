@@ -28,6 +28,7 @@ export class SelectTags implements ComponentInterface {
   @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
   @Event() fireenjinTrigger: EventEmitter<FireEnjinTriggerInput>;
 
+  @Prop() tagsToLowercase = false;
   @Prop() disableFetch = false;
   @Prop() name = "tags";
   @Prop() label;
@@ -95,7 +96,9 @@ export class SelectTags implements ComponentInterface {
       this.allowAdding &&
       event.target?.value?.length >= 1
     ) {
-      const value = event.target.value.toLocaleLowerCase();
+      const value = this.tagsToLowercase
+        ? event.target.value.toLocaleLowerCase()
+        : event.target.value;
       this.addTag(value, event);
     }
   }
