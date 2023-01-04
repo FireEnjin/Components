@@ -140,7 +140,7 @@ export class SelectTags implements ComponentInterface {
   @Method()
   async addTag(tag: string, event?: any) {
     if (!tag?.length) return;
-    const value = tag.toLocaleLowerCase();
+    const value = this.tagsToLowercase ? tag.toLocaleLowerCase() : tag;
     if (!value.length) return;
     this.fireenjinTrigger.emit({
       name: "newTag",
