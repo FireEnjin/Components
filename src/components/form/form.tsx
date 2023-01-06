@@ -167,6 +167,7 @@ export class Form implements ComponentInterface {
     }
   }
 
+  @Listen("fireenjinCodeChange")
   @Listen("ionInput")
   @Listen("ionChange")
   @Listen("ionSelect")
