@@ -1,8 +1,8 @@
 import "pollen-css";
-import { Button } from "./components/button/button";
 import { Form } from "./components/form/form";
 
 import "./global.css";
+import Input from "./components/input/input";
 
 export default () => {
   return (
@@ -11,12 +11,19 @@ export default () => {
         <meta charSet="utf-8" />
         <title>Qwik Blank App</title>
       </head>
-      <body>
+      <body
+        window:onLoad$={() =>
+          document.addEventListener("fireenjinSubmit", function (event) {
+            console.log(event);
+          })
+        }
+      >
         <Form>
-          <input name="test" value="test" />
+          <Input name="test" labelPosition="stacked" value="test" />
+          <Input placeholder="wee" name="wee" label="Testing" />
         </Form>
         <Form>
-          <input name="silent" />
+          <input value="wee" />
         </Form>
       </body>
     </>
