@@ -23,8 +23,10 @@ export const Button = component$((props) => {
   );
 });
 export default Button;
-export const STYLES = `.a-Button { 
-text-decoration: none;
-font-weight: bold;
-color: white;
-padding: 15px; }`;
+export const STYLES = `
+.a-Button {
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+  padding: 15px;
+}`;

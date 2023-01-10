@@ -192,6 +192,7 @@ export default function Form(
       })();
     },
     submit(event) {
+      console.log("submit");
       (event?.target || document).dispatchEvent(
         new CustomEvent("fireenjinSubmit", {
           bubbles: true,

@@ -60,6 +60,7 @@ export const onInput = function onInput(props, state, formRef, event) {
   })();
 };
 export const submit = function submit(props, state, formRef, event) {
+  console.log("submit");
   (event?.target || document).dispatchEvent(
     new CustomEvent("fireenjinSubmit", {
       bubbles: true,
