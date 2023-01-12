@@ -445,8 +445,11 @@ export class Form implements ComponentInterface {
     const pList = path.split(".");
     const len = pList.length;
     for (let i = 0; i < len - 1; i++) {
-      const elem = pList[i];
-      if (!obj[elem]) obj[elem] = {};
+      const elemIsArray = pList[i].charAt(0) === "[";
+      const elem = elemIsArray
+        ? parseInt(pList[i].slice(1, pList[i].length - 1))
+        : pList[i];
+      if (!obj[elem]) obj[elem] = elemIsArray ? [] : {};
       obj = obj[elem];
     }
 
