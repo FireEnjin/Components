@@ -1,4 +1,5 @@
 import { FireEnjinFetchEvent, FireEnjinSubmitEvent } from "@fireenjin/sdk";
+import dots from "dot-notes";
 import {
   Component,
   ComponentInterface,
@@ -442,18 +443,7 @@ export class Form implements ComponentInterface {
   }
 
   setByPath(obj, path, value) {
-    const pList = path.split(".");
-    const len = pList.length;
-    for (let i = 0; i < len - 1; i++) {
-      const elemIsArray = pList[i].charAt(0) === "[";
-      const elem = elemIsArray
-        ? parseInt(pList[i].slice(1, pList[i].length - 1))
-        : pList[i];
-      if (!obj[elem]) obj[elem] = elemIsArray ? [] : {};
-      obj = obj[elem];
-    }
-
-    obj[pList[len - 1]] = value;
+    return dots.create(obj, path, value);
   }
 
   componentDidLoad() {
