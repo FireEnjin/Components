@@ -1,4 +1,4 @@
-import { useRef, useStore } from "@builder.io/mitosis";
+import { useMetadata, useRef, useStore } from "@builder.io/mitosis";
 
 export default function Input(
   props: {
@@ -140,6 +140,9 @@ export default function Input(
     width?: string | number;
   } = {}
 ) {
+  useMetadata({
+    tagName: "fireenjin-input",
+  });
   const inputRef = useRef<HTMLInputElement>(null);
   const state = useStore({
     onChange(event) {

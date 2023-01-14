@@ -1,8 +1,13 @@
+import { useMetadata } from "@builder.io/mitosis";
+
 export default function Button(props: {
   href?: string;
   color?: string;
   children: any;
 }) {
+  useMetadata({
+    tagName: "fireenjin-button",
+  });
   return (
     <a
       css={{

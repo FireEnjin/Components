@@ -1,4 +1,10 @@
-import { onMount, onUnMount, useRef, useStore } from "@builder.io/mitosis";
+import {
+  onMount,
+  onUnMount,
+  useMetadata,
+  useRef,
+  useStore,
+} from "@builder.io/mitosis";
 
 export default function Form(
   props: {
@@ -130,6 +136,9 @@ export default function Form(
     ],
   }
 ) {
+  useMetadata({
+    tagName: "fireenjin-form",
+  });
   const formRef = useRef<HTMLFormElement>(null);
   const state = useStore({
     /**

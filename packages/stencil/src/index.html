@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>FireEnjin: Components</title>
+
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta
+      name="description"
+      content="This is the component set for Fire Enjin."
+    />
+    <meta name="theme-color" content="#ffffff" />
+
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="FireEnjin Components" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <meta http-equiv="x-ua-compatible" content="IE=Edge" />
+    <script
+      type="module"
+      src="https://unpkg.com/@fireenjin/docs@latest/dist/fireenjin-docs/fireenjin-docs.esm.js"
+    ></script>
+    <script type="module" src="/build/fireenjin.esm.js"></script>
+    <script nomodule src="/build/fireenjin.js"></script>
+
+    <link href="/build/fireenjin.css" rel="stylesheet" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/icon/apple-touch-icon.png"
+    />
+    <link rel="icon" type="image/x-icon" href="/assets/icon/favicon.ico" />
+
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-firestore.js"></script>
+    <style>
+      body {
+        display: block;
+
+        overflow: auto;
+        position: initial;
+      }
+      fireenjin-render-template {
+        display: block;
+        height: 300px;
+        width: 300px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <fireenjin-docs-gallery></fireenjin-docs-gallery>
+    <!-- <fireenjin-flow endpoint="addUser" ask-confirmation="true">
+      <div>
+        <h1>Success asd!</h1>
+      </div>
+    </fireenjin-flow> -->
+    <!-- <fireenjin-input-logic></fireenjin-input-logic> -->
+    <script>
+      document.addEventListener("ionChange", function (event) {
+        console.log(event);
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector("fireenjin-input-logic").variables = {
+          test: {
+            label: "Testing",
+          },
+        };
+        // document.querySelector("fireenjin-flow").steps = [
+        //   {
+        //     beforeHTML: "testing",
+        //     fields: [
+        //       {
+        //         label: "wee",
+        //         labelPosition: "stacked",
+        //         inputMode: "decimal",
+        //         placeholder: "0",
+        //         required: true,
+        //         name: "amount",
+        //         type: "number",
+        //         value: null,
+        //       },
+        //       {
+        //         label: "wee",
+        //         labelPosition: "stacked",
+        //         inputMode: "decimal",
+        //         placeholder: "0",
+        //         required: true,
+        //         name: "amount",
+        //         type: "number",
+        //         value: null,
+        //       },
+        //     ],
+        //   },
+        //   {
+        //     beforeHTML: "testing",
+        //     fields: [
+        //       {
+        //         label: "wee",
+        //         labelPosition: "stacked",
+        //         inputMode: "decimal",
+        //         placeholder: "0",
+        //         required: true,
+        //         name: "amount",
+        //         type: "number",
+        //         value: null,
+        //       },
+        //       {
+        //         label: "wee",
+        //         labelPosition: "stacked",
+        //         inputMode: "decimal",
+        //         placeholder: "0",
+        //         required: true,
+        //         name: "amount",
+        //         type: "number",
+        //         value: null,
+        //       },
+        //     ],
+        //   },
+        // ];
+        var firebaseConfig = {
+          apiKey: "AIzaSyAz5C9TRxQ9bUkTwVaD6Yc-Iisw57UslPM",
+          authDomain: "fireenjin-live.firebaseapp.com",
+          databaseURL: "https://fireenjin-live.firebaseio.com",
+          projectId: "fireenjin-live",
+          storageBucket: "fireenjin-live.appspot.com",
+          messagingSenderId: "756564610596",
+          appId: "1:756564610596:web:4fdf5a6ddfd319a93392b1",
+          measurementId: "G-Q0ZHGFCQFN",
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        document.body.dispatchEvent(
+          new CustomEvent("fireenjinSuccess", {
+            detail: {
+              name: "select",
+              endpoint: "addUser",
+              target: document,
+              data: {
+                addUser: {
+                  id: "test",
+                },
+              },
+            },
+          })
+        );
+      });
+      document.addEventListener("fireenjinSubmit", function (event) {
+        console.log(event);
+        setTimeout(() => {
+          event.target.dispatchEvent(
+            new CustomEvent("fireenjinSuccess", {
+              bubbles: true,
+              detail: {
+                name: "select",
+                endpoint: event?.detail?.endpoint,
+                target: event.target,
+                data: {
+                  addUser: {
+                    id: "test",
+                  },
+                },
+              },
+            })
+          );
+        }, 2000);
+      });
+      document.addEventListener("fireenjinUpload", function (event) {
+        console.log(event);
+      });
+      document.addEventListener("fireenjinFetch", function (event) {
+        console.log(event);
+        if (event?.detail?.endpoint === "listLocations") {
+          setTimeout(() => {
+            document.body.dispatchEvent(
+              new CustomEvent("fireenjinSuccess", {
+                detail: {
+                  name: "selectTags",
+                  endpoint: "listLocations",
+                  target: event.target,
+                  data: {
+                    results: [
+                      {
+                        id: "kQs2TZlebsel1c5yQnWM",
+                        type: "corporate",
+                        name: "St. Louis",
+                        photo:
+                          "https://firebasestorage.googleapis.com/v0/b/ftms-ca85b.appspot.com/o/undefined%2F2021-05-02T10%3A18%3A17.118Z.jpeg?alt=media&token=af30d334-68e6-4cc9-97a6-cedf247125e5",
+                        phone: null,
+                        address: null,
+                        tags: null,
+                      },
+                      {
+                        id: "jRNPVFGmnxeStVDHFbsa",
+                        type: "franchise",
+                        name: "Chicago",
+                        photo:
+                          "https://firebasestorage.googleapis.com/v0/b/ftms-ca85b.appspot.com/o/undefined%2F2021-05-02T10%3A07%3A21.450Z.png?alt=media&token=bff053e9-2093-4cd6-b4d2-67a3abbabc44",
+                        phone: null,
+                        address: null,
+                        tags: null,
+                      },
+                      {
+                        id: "UymVZ9A2UM6bEDlOM98z",
+                        type: null,
+                        name: "Robert",
+                        photo: "/assets/svg/ft-buildings.svg",
+                        phone: "+13143133351",
+                        address: null,
+                        tags: null,
+                      },
+                      {
+                        id: "TGjRNPVFDHFbsamnxeSt",
+                        type: "corporate",
+                        name: "St. Louis",
+                        photo: "/assets/svg/ft-buildings.svg",
+                        phone: null,
+                        address: null,
+                        tags: null,
+                      },
+                      {
+                        id: "HGN99S2cpfFjdaMlsGPU",
+                        type: "franchise",
+                        name: "Jeffco",
+                        photo: null,
+                        phone: null,
+                        address: null,
+                        tags: null,
+                      },
+                      {
+                        id: "D4FPVbsajRNSFGmnxet5",
+                        type: "corporate",
+                        name: "Southern Illinois",
+                        photo: null,
+                        phone: null,
+                        address: null,
+                        tags: null,
+                      },
+                    ],
+                  },
+                },
+              })
+            );
+          }, 2000);
+        } else if (event?.detail?.endpoint === "findUser") {
+          setTimeout(() => {
+            event.target.dispatchEvent(
+              new CustomEvent("fireenjinSuccess", {
+                detail: {
+                  event,
+                  name: "user",
+                  endpoint: "findUser",
+                  target: event.target,
+                  data: {
+                    user: {
+                      id: "test",
+                      firstName: "Bob",
+                      lastName: "Johnson",
+                      photo:
+                        "https://firebasestorage.googleapis.com/v0/b/ftms-ca85b.appspot.com/o/undefined%2F2021-05-02T10%3A18%3A17.118Z.jpeg?alt=media&token=af30d334-68e6-4cc9-97a6-cedf247125e5",
+                      phone: null,
+                      address: null,
+                      tags: null,
+                    },
+                  },
+                },
+              })
+            );
+          }, 5000);
+        }
+      });
+    </script>
+    <script src="/presets.js"></script>
+  </body>
+</html>

@@ -39,8 +39,12 @@
   "scripts": {
     "build": "mitosis build",
     "build:qwik": "cd packages/qwik && npm run build",
+    "build:stencil": "npm run task:stencil && npm run copy:stencil && cd packages/stencil && npm run build",
+    "compile:stencil": "mitosis compile -t stencil",
+    "task:stencil": "node tasks/stencil.js",
     "copy": "fireenjin copy",
     "copy:qwik": "npm run copy ./output/qwik/src/components/ ./packages/qwik/src/components",
+    "copy:stencil": "npm run copy ./output/stencil/src/components/ ./packages/stencil/src/components",
     "env": "fireenjin env",
     "pollen": "pollen",
     "postbuild": "pollen",
@@ -48,6 +52,7 @@
     "presets:watch": "fireenjin presets watch",
     "start": "run-p watch start:qwik",
     "start:qwik": "cd packages/qwik && npm run start",
+    "start:stencil": "cd packages/stencil && npm run start",
     "watch": "npm-watch"
   },
   "dependencies": {
@@ -75,6 +80,7 @@
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
     "eslint": "^8.31.0",
+    "glob": "^8.0.3",
     "husky": "^8.0.3",
     "jest": "^29.3.1",
     "jest-fetch-mock": "^3.0.3",
