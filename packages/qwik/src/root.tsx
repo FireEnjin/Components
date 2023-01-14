@@ -19,8 +19,12 @@ export default () => {
         }
       >
         <Form>
-          <Input name="test" labelPosition="stacked" value="test" />
-          <Input placeholder="wee" name="wee" label="Testing" />
+          <Input
+            name="test.users.0.name"
+            labelPosition="stacked"
+            value="test"
+          />
+          <Input placeholder="wee" name="test.users.1.name" label="Testing" />
         </Form>
         <Form>
           <input value="wee" />

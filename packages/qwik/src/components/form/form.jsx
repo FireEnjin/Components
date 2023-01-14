@@ -32,20 +32,19 @@ export const onInput = function onInput(props, state, formRef, event) {
       const pList = path.split(".");
       const len = pList.length;
       for (let i = 0; i < len - 1; i++) {
+        const nextElemIsArray = !isNaN(parseInt(pList[i + 1]));
         const elem = pList[i];
-        if (!obj[elem]) obj[elem] = {};
+        if (!obj[elem]) obj[elem] = nextElemIsArray ? [] : {};
         obj = obj[elem];
       }
       obj[pList[len - 1]] = value;
-      return obj;
     };
-    console.log(event, state.formData);
     if (!event?.target?.name?.startsWith?.("ion-")) {
       const value =
         typeof event?.detail?.checked === "boolean"
           ? event.detail.checked
           : event?.detail?.value || event?.target?.value;
-      state.formData = setByPath(
+      setByPath(
         state?.formData || {},
         event?.target?.name,
         props?.filterData?.length
@@ -60,7 +59,6 @@ export const onInput = function onInput(props, state, formRef, event) {
   })();
 };
 export const submit = function submit(props, state, formRef, event) {
-  console.log("submit");
   (event?.target || document).dispatchEvent(
     new CustomEvent("fireenjinSubmit", {
       bubbles: true,
@@ -75,7 +73,14 @@ export const submit = function submit(props, state, formRef, event) {
 export const Form = component$((props) => {
   const formRef = useRef();
   const state = useStore({
-    eventListeners: ["ionInput", "ionChange", "ionSelect", "input", "change"],
+    eventListeners: [
+      "ionInput",
+      "ionChange",
+      "ionSelect",
+      "input",
+      "change",
+      "fireenjinCodeChange",
+    ],
     formData: {},
     hasChanged: false,
   });
