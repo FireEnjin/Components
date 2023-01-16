@@ -13,7 +13,7 @@ import {
   State,
   Build,
 } from "@stencil/core";
-import Debounce from "debounce-decorator";
+import { debounce } from "typescript-debounce-decorator";
 
 @Component({
   tag: "fireenjin-pagination",
@@ -90,7 +90,7 @@ export class Pagination implements ComponentInterface {
     back?: string;
   } = {};
 
-  @Debounce(1000)
+  @debounce(1000)
   @Watch("fetchData")
   @Watch("orderBy")
   @Watch("query")

@@ -8,7 +8,7 @@ import {
   Listen,
   Method,
 } from "@stencil/core";
-import Debounce from "debounce-decorator";
+import { debounce } from "typescript-debounce-decorator";
 import { popoverController, TextFieldTypes } from "@ionic/core";
 import pathToValue from "../../helpers/pathToValue";
 import { FireEnjinFetchEvent } from "@fireenjin/sdk";
@@ -108,7 +108,7 @@ export class InputSearch implements ComponentInterface {
     }
   }
 
-  @Debounce(1000)
+  @debounce(1000)
   onInput(event) {
     if (this.disableSearch || event?.target?.value?.length <= 1) return;
     this.fireenjinFetch.emit({
