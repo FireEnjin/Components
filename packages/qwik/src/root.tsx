@@ -3,6 +3,7 @@ import { Form } from "./components/form/form";
 
 import "./global.css";
 import Input from "./components/input/input";
+import Button from "./components/button/button";
 
 export default () => {
   return (
@@ -19,6 +20,10 @@ export default () => {
         }
       >
         <Form>
+          <Button color="red" size="large" radius="full">
+            <b>teswt</b>
+            <div>Wee</div>
+          </Button>
           <Input
             name="test.users.0.name"
             labelPosition="stacked"

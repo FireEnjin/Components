@@ -35,22 +35,22 @@
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@builder.io/qwik": "0.10.0",
-    "@builder.io/qwik-city": "0.0.111",
-    "@fireenjin/sdk": "^1.2.63",
-    "@types/eslint": "8.4.6",
+    "@builder.io/qwik": "0.16.2",
+    "@builder.io/qwik-city": "0.0.128",
+    "@fireenjin/sdk": "^1.2.65",
+    "@types/eslint": "8.4.10",
     "@types/node": "latest",
-    "@typescript-eslint/eslint-plugin": "5.37.0",
-    "@typescript-eslint/parser": "5.37.0",
-    "eslint": "8.23.1",
+    "@typescript-eslint/eslint-plugin": "5.48.1",
+    "@typescript-eslint/parser": "5.48.1",
+    "eslint": "8.32.0",
     "eslint-plugin-qwik": "latest",
-    "node-fetch": "3.2.10",
-    "np": "7.6.2",
-    "pollen-css": "^4.6.1",
-    "postcss": "^8.4.17",
-    "prettier": "2.7.1",
-    "typescript": "4.8.3",
-    "vite": "3.1.1",
-    "vite-tsconfig-paths": "3.5.0"
+    "node-fetch": "3.3.0",
+    "np": "7.6.3",
+    "pollen-css": "^4.6.2",
+    "postcss": "^8.4.21",
+    "prettier": "2.8.3",
+    "typescript": "4.9.4",
+    "vite": "4.0.4",
+    "vite-tsconfig-paths": "4.0.3"
   }
 }
