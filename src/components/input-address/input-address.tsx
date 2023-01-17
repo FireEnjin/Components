@@ -251,6 +251,7 @@ export class InputAddress implements ComponentInterface {
           ref={(el) => (this.autocompleteFieldEl = el)}
           class="autocomplete-field"
           type="text"
+          name={`${this.name}.full`}
           placeholder={this.placeholder}
           value={value.full}
           autocomplete="off"
