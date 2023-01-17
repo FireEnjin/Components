@@ -21,17 +21,37 @@ export default function Form(
      */
     submitButton?: string;
     /**
+     * What size is the submit button
+     */
+    submitButtonSize?: string;
+    /**
      * What color the submit button is
      */
     submitButtonColor?: string;
     /**
      * What fill option to use for the submit button
      */
-    submitButtonFill?: "clear" | "outline" | "solid" | "default";
+    submitButtonFill?: "outline" | "solid" | "default";
+    /**
+     * The radius of the submit button
+     */
+    submitButtonRadius?:
+      | "xs"
+      | "sm"
+      | "md"
+      | "lg"
+      | "xl"
+      | "100"
+      | "full"
+      | "none";
     /**
      * What the reset button says
      */
     resetButton?: string;
+    /**
+     * What size is the resete button
+     */
+    resetButtonSize?: string;
     /**
      * What color the reset button is
      */
@@ -39,7 +59,19 @@ export default function Form(
     /**
      * What fill option to use for the reset button
      */
-    resetButtonFill?: "clear" | "outline" | "solid" | "default";
+    resetButtonFill?: "outline" | "solid" | "default";
+    /**
+     * The radius of the reset button
+     */
+    resetButtonRadius?:
+      | "xs"
+      | "sm"
+      | "md"
+      | "lg"
+      | "xl"
+      | "100"
+      | "full"
+      | "none";
     /**
      * Should the form controls be hidden?
      */
@@ -117,8 +149,12 @@ export default function Form(
     formData: {},
     submitButton: "Save",
     submitButtonFill: "solid",
+    submitButtonColor: "blue",
+    submitButtonRadius: "md",
     resetButton: "Cancel",
-    resetButtonFill: "clear",
+    resetButtonFill: "solid",
+    resetButtonColor: "grey",
+    resetButtonRadius: "md",
     hideControls: false,
     disableLoader: false,
     loading: false,
@@ -141,6 +177,38 @@ export default function Form(
   });
   const formRef = useRef<HTMLFormElement>(null);
   const state = useStore({
+    /**
+     * The submit button text to show
+     */
+    submitButton: "Save",
+    /**
+     * The fill style of the submit button
+     */
+    submitButtonFill: "solid",
+    /**
+     * The color of the submit button
+     */
+    submitButtonColor: "blue",
+    /**
+     * The radius of the submit button
+     */
+    submitButtonRadius: "md",
+    /**
+     * The reset button text to show
+     */
+    resetButton: "Clear",
+    /**
+     * The fill style of the reset button
+     */
+    resetButtonFill: "solid",
+    /**
+     * The color of the reset button
+     */
+    resetButtonColor: "grey",
+    /**
+     * The radius of the reset button
+     */
+    resetButtonRadius: "md",
     /**
      * The data collected for form submission
      */
@@ -192,6 +260,7 @@ export default function Form(
           }
 
           obj[pList[len - 1]] = value;
+          return obj;
         };
         if (!event?.target?.name?.startsWith?.("ion-")) {
           const value =
@@ -229,6 +298,14 @@ export default function Form(
   onMount(() => {
     if (props.formData) state.formData = props.formData;
     if (props.eventListeners) state.eventListeners = props.eventListeners;
+    state.submitButton = props?.submitButton ?? "Save";
+    state.submitButtonColor = props?.submitButtonColor || "blue";
+    state.submitButtonFill = props?.submitButtonFill || "solid";
+    state.submitButtonRadius = props?.submitButtonRadius || "md";
+    state.resetButton = props?.resetButton ?? "Clear";
+    state.resetButtonColor = props?.resetButtonColor || "grey";
+    state.resetButtonFill = props?.resetButtonFill || "solid";
+    state.resetButtonRadius = props?.submitButtonRadius || "md";
     const ref =
       (formRef?.addEventListener && formRef) ||
       (formRef?.current?.addEventListener && formRef.current);
@@ -258,7 +335,103 @@ export default function Form(
       method={props?.method}
     >
       {props.children}
-      <button type="submit">Save</button>
+      {!props.hideControls && (
+        <div
+          class="form-controls"
+          style={{ display: "flex", justifyContent: "space-between" }}
+        >
+          {state.resetButton && (
+            <button
+              type="reset"
+              style={{
+                cursor: "pointer",
+                fontFamily: "inherit",
+                fontSize:
+                  (props?.resetButtonSize === "large" && "2rem") ||
+                  (props?.resetButtonSize === "small" && "1.1rem") ||
+                  "1.2rem",
+                textDecoration: "none",
+                color:
+                  state.resetButtonFill !== "solid"
+                    ? `var(--color-${state.resetButtonColor})`
+                    : "#ffffff",
+                display: "inline-flex",
+                gap: "8px",
+                alignItems: "center",
+                border:
+                  state.resetButtonFill === "outline"
+                    ? `1px solid var(--color-${state.resetButtonColor})`
+                    : "none",
+                background:
+                  state.resetButtonFill !== "solid"
+                    ? "none"
+                    : `var(--color-${state.resetButtonColor})`,
+                padding:
+                  (props?.resetButtonSize === "large" &&
+                    "var(--size-2) var(--size-5)") ||
+                  (props?.resetButtonSize === "small" &&
+                    "var(--size-px) var(--size-2)") ||
+                  "var(--size-1) var(--size-4)",
+                borderRadius:
+                  (state?.resetButtonRadius === "none" && "none") ||
+                  `var(--radius-${state?.resetButtonRadius || ""})`,
+                boxShadow:
+                  (state.resetButtonFill !== "solid" && "none") ||
+                  (props?.resetButtonSize === "large" && "var(--shadow-md)") ||
+                  (props?.resetButtonSize === "small" && "var(--shadow-xs)") ||
+                  "var(--shadow-sm)",
+              }}
+            >
+              {state.resetButton}
+            </button>
+          )}
+          {state.submitButton && (
+            <button
+              style={{
+                cursor: "pointer",
+                fontFamily: "inherit",
+                fontSize:
+                  (props?.submitButtonSize === "large" && "2rem") ||
+                  (props?.submitButtonSize === "small" && "1.1rem") ||
+                  "1.2rem",
+                textDecoration: "none",
+                color:
+                  state.submitButtonFill !== "solid"
+                    ? `var(--color-${state.submitButtonColor})`
+                    : "#ffffff",
+                display: "inline-flex",
+                gap: "8px",
+                alignItems: "center",
+                border:
+                  state.submitButtonFill === "outline"
+                    ? `1px solid var(--color-${state.submitButtonColor})`
+                    : "none",
+                background:
+                  state.submitButtonFill !== "solid"
+                    ? "none"
+                    : `var(--color-${state.submitButtonColor})`,
+                padding:
+                  (props?.submitButtonSize === "large" &&
+                    "var(--size-2) var(--size-5)") ||
+                  (props?.submitButtonSize === "small" &&
+                    "var(--size-px) var(--size-2)") ||
+                  "var(--size-1) var(--size-4)",
+                borderRadius:
+                  (state?.submitButtonRadius === "none" && "none") ||
+                  `var(--radius-${state?.submitButtonRadius || ""})`,
+                boxShadow:
+                  (state.submitButtonFill !== "solid" && "none") ||
+                  (props?.submitButtonSize === "large" && "var(--shadow-md)") ||
+                  (props?.submitButtonSize === "small" && "var(--shadow-xs)") ||
+                  "var(--shadow-sm)",
+              }}
+              type="submit"
+            >
+              {state.submitButton}
+            </button>
+          )}
+        </div>
+      )}
     </form>
   );
 }
