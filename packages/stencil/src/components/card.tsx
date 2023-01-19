@@ -16,34 +16,28 @@ Could not replace Node {
 import { Component, Prop, h, State, Fragment } from "@stencil/core";
 
 @Component({
-  tag: "fireenjin-button",
+  tag: "fireenjin-card",
 })
 export default class Button {
-  @Prop() target: any;
-  @Prop() title: any;
-  @Prop() href: any;
   @Prop() size: any;
   @Prop() children: any;
   @Prop() color: any;
   @Prop() fill: any;
   @Prop() radius: any;
 
-  @State() color = "blue";
+  @State() color = "#ffffff";
   @State() fill = "solid";
   @State() radius = "md";
 
   componentDidLoad() {
-    this.color = this.color || "blue";
+    this.color = this.color || "#ffffff";
     this.fill = this.fill || "solid";
     this.radius = this.radius || "md";
   }
 
   render() {
     return (
-      <a
-        target={this.target}
-        title={this.title}
-        href={this.href}
+      <div
         style={{
           fontFamily: "inherit",
           fontSize:
@@ -51,17 +45,25 @@ export default class Button {
             (this.size === "small" && "1.1rem") ||
             "1.2rem",
           textDecoration: "none",
-          color:
-            this.fill !== "solid" ? `var(--color-${this.color})` : "#ffffff",
+          color: "inherit",
           display: "inline-flex",
           gap: "8px",
           alignItems: "center",
           border:
             this.fill === "outline"
-              ? `1px solid var(--color-${this.color})`
+              ? `1px solid ${
+                  this.color
+                    ? ((this.color.includes("#") || this.color.includes("(")) &&
+                        this.color) ||
+                      `var(--color-${this.color})`
+                    : "#ffffff"
+                }`
               : "none",
-          background:
-            this.fill !== "solid" ? "none" : `var(--color-${this.color})`,
+          background: this.color
+            ? ((this.color.includes("#") || this.color.includes("(")) &&
+                this.color) ||
+              `var(--color-${this.color})`
+            : "#ffffff",
           padding:
             (this.size === "large" && "var(--size-2) var(--size-5)") ||
             (this.size === "small" && "var(--size-px) var(--size-2)") ||
@@ -77,7 +79,7 @@ export default class Button {
         }}
       >
         {this.children}
-      </a>
+      </div>
     );
   }
 }

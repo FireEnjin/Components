@@ -1,3 +1,5 @@
+import Button from "../button/button.lite";
+
 import { Component, Prop, h, State, Fragment } from "@stencil/core";
 
 @Component({
@@ -6,9 +8,18 @@ import { Component, Prop, h, State, Fragment } from "@stencil/core";
 export default class Form {
   @Prop() cacheKey: any;
   @Prop() children: any;
+  @Prop() hideControls: any;
   @Prop() formData: any;
   @Prop() eventListeners: any;
 
+  @State() submitButton = "Save";
+  @State() submitButtonFill = "solid";
+  @State() submitButtonColor = "blue";
+  @State() submitButtonRadius = "md";
+  @State() resetButton = "Clear";
+  @State() resetButtonFill = "solid";
+  @State() resetButtonColor = "grey";
+  @State() resetButtonRadius = "md";
   @State() formData = {};
   @State() hasChanged = false;
   @State() eventListeners = [
@@ -48,6 +59,7 @@ export default class Form {
           obj = obj[elem];
         }
         obj[pList[len - 1]] = value;
+        return obj;
       };
       if (!event?.target?.name?.startsWith?.("ion-")) {
         const value =
@@ -84,6 +96,14 @@ export default class Form {
   componentDidLoad() {
     if (this.formData) this.formData = this.formData;
     if (this.eventListeners) this.eventListeners = this.eventListeners;
+    this.submitButton = this.submitButton ?? "Save";
+    this.submitButtonColor = this.submitButtonColor || "blue";
+    this.submitButtonFill = this.submitButtonFill || "solid";
+    this.submitButtonRadius = this.submitButtonRadius || "md";
+    this.resetButton = this.resetButton ?? "Clear";
+    this.resetButtonColor = this.resetButtonColor || "grey";
+    this.resetButtonFill = this.resetButtonFill || "solid";
+    this.resetButtonRadius = this.submitButtonRadius || "md";
     const ref =
       (formRef?.addEventListener && formRef) ||
       (formRef?.current?.addEventListener && formRef.current);
@@ -114,7 +134,40 @@ export default class Form {
       >
         {this.children}
 
-        <button type="submit">Save</button>
+        {!this.hideControls ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              {this.resetButton ? (
+                <>
+                  <Button
+                    color={this.resetButtonColor}
+                    fill={this.resetButtonFill}
+                    radius={this.resetButtonRadius}
+                  >
+                    {this.resetButton}
+                  </Button>
+                </>
+              ) : null}
+
+              {this.submitButton ? (
+                <>
+                  <Button
+                    color={this.submitButtonColor}
+                    fill={this.submitButtonFill}
+                    radius={this.submitButtonRadius}
+                  >
+                    {this.submitButton}
+                  </Button>
+                </>
+              ) : null}
+            </div>
+          </>
+        ) : null}
       </form>
     );
   }

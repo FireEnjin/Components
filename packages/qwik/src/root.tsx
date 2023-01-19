@@ -4,6 +4,7 @@ import { Form } from "./components/form/form";
 import "./global.css";
 import Input from "./components/input/input";
 import Button from "./components/button/button";
+import Card from "./components/card/card";
 
 export default () => {
   return (
@@ -19,21 +20,23 @@ export default () => {
           })
         }
       >
-        <Form>
-          <Button color="red" size="large" radius="full">
-            <b>teswt</b>
-            <div>Wee</div>
-          </Button>
-          <Input
-            name="test.users.0.name"
-            labelPosition="stacked"
-            value="test"
-          />
-          <Input placeholder="wee" name="test.users.1.name" label="Testing" />
-        </Form>
-        <Form>
-          <input value="wee" />
-        </Form>
+        <Card color="rgba(255,255,255,0.6)">
+          <Form>
+            <Button color="rgba(0,0,0,0.9)" size="large" radius="full">
+              <b>teswt</b>
+              <div>Wee</div>
+            </Button>
+            <Input
+              name="test.users.0.name"
+              labelPosition="stacked"
+              value="test"
+            />
+            <Input placeholder="wee" name="test.users.1.name" label="Testing" />
+          </Form>
+          <Form>
+            <input value="wee" />
+          </Form>
+        </Card>
       </body>
     </>
   );

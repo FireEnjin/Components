@@ -1,31 +1,26 @@
-import { useMetadata, useStore, onMount } from "@builder.io/mitosis";
+import { useMetadata, useStore, onMount, Slot } from "@builder.io/mitosis";
 
 export default function Button(props: {
   color?: string;
-  href?: string;
-  title?: string;
   fill?: "outline" | "solid" | "none";
   radius?: "xs" | "sm" | "md" | "lg" | "xl" | "100" | "full" | "none";
   size?: "large" | "small";
-  target?: string;
   children?: any;
 }) {
   useMetadata({
-    tagName: "fireenjin-button",
+    tagName: "fireenjin-card",
     isAttachedToShadowDom: true,
   });
-  const state = useStore({ color: "blue", fill: "solid", radius: "md" });
+  const state = useStore({ color: "#ffffff", fill: "solid", radius: "md" });
 
   onMount(() => {
-    state.color = props.color || "blue";
+    state.color = props.color || "#ffffff";
     state.fill = props.fill || "solid";
     state.radius = props.radius || "md";
   });
+
   return (
-    <a
-      target={props.target}
-      title={props.title}
-      href={props.href}
+    <div
       style={{
         fontFamily: "inherit",
         fontSize:
@@ -33,14 +28,7 @@ export default function Button(props: {
           (props.size === "small" && "1.1rem") ||
           "1.2rem",
         textDecoration: "none",
-        color:
-          state.fill !== "solid"
-            ? state.color
-              ? ((state.color.includes("#") || state.color.includes("(")) &&
-                  state.color) ||
-                `var(--color-${state.color})`
-              : "transparent"
-            : "#ffffff",
+        color: "inherit",
         display: "inline-flex",
         gap: "8px",
         alignItems: "center",
@@ -54,16 +42,11 @@ export default function Button(props: {
                   : "#ffffff"
               }`
             : "none",
-        background:
-          state.fill !== "solid"
-            ? "none"
-            : `${
-                state.color
-                  ? ((state.color.includes("#") || state.color.includes("(")) &&
-                      state.color) ||
-                    `var(--color-${state.color})`
-                  : "#ffffff"
-              }`,
+        background: state.color
+          ? ((state.color.includes("#") || state.color.includes("(")) &&
+              state.color) ||
+            `var(--color-${state.color})`
+          : "#ffffff",
         padding:
           (props.size === "large" && "var(--size-2) var(--size-5)") ||
           (props.size === "small" && "var(--size-px) var(--size-2)") ||
@@ -79,6 +62,6 @@ export default function Button(props: {
       }}
     >
       {props.children}
-    </a>
+    </div>
   );
 }

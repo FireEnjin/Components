@@ -9,17 +9,14 @@ import {
   useStore,
 } from "@builder.io/qwik";
 export const Button = component$((props) => {
-  const state = useStore({ color: "blue", fill: "solid", radius: "md" });
+  const state = useStore({ color: "#ffffff", fill: "solid", radius: "md" });
   useClientEffect$(() => {
-    state.color = props.color || "blue";
+    state.color = props.color || "#ffffff";
     state.fill = props.fill || "solid";
     state.radius = props.radius || "md";
   });
   return (
-    <a
-      target={props.target}
-      title={props.title}
-      href={props.href}
+    <div
       style={{
         fontFamily: "inherit",
         fontSize:
@@ -27,14 +24,7 @@ export const Button = component$((props) => {
           (props.size === "small" && "1.1rem") ||
           "1.2rem",
         textDecoration: "none",
-        color:
-          state.fill !== "solid"
-            ? state.color
-              ? ((state.color.includes("#") || state.color.includes("(")) &&
-                  state.color) ||
-                `var(--color-${state.color})`
-              : "transparent"
-            : "#ffffff",
+        color: "inherit",
         display: "inline-flex",
         gap: "8px",
         alignItems: "center",
@@ -48,16 +38,11 @@ export const Button = component$((props) => {
                   : "#ffffff"
               }`
             : "none",
-        background:
-          state.fill !== "solid"
-            ? "none"
-            : `${
-                state.color
-                  ? ((state.color.includes("#") || state.color.includes("(")) &&
-                      state.color) ||
-                    `var(--color-${state.color})`
-                  : "#ffffff"
-              }`,
+        background: state.color
+          ? ((state.color.includes("#") || state.color.includes("(")) &&
+              state.color) ||
+            `var(--color-${state.color})`
+          : "#ffffff",
         padding:
           (props.size === "large" && "var(--size-2) var(--size-5)") ||
           (props.size === "small" && "var(--size-px) var(--size-2)") ||
@@ -73,7 +58,7 @@ export const Button = component$((props) => {
       }}
     >
       <Slot></Slot>
-    </a>
+    </div>
   );
 });
 export default Button;
