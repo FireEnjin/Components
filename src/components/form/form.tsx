@@ -45,6 +45,10 @@ export class Form implements ComponentInterface {
    */
   @Prop() submitButtonFill: "clear" | "outline" | "solid" | "default" = "solid";
   /**
+   * What shape is the submit button
+   */
+  @Prop() submitButtonShape?: "round";
+  /**
    * What the reset button says
    */
   @Prop() resetButton = "Cancel";
@@ -56,6 +60,10 @@ export class Form implements ComponentInterface {
    * What fill option to use for the reset button
    */
   @Prop() resetButtonFill: "clear" | "outline" | "solid" | "default" = "clear";
+  /**
+   * What shape is the reset button
+   */
+  @Prop() resetButtonShape?: "round";
   /**
    * Should the form controls be hidden?
    */
