@@ -37,6 +37,10 @@ export class Form implements ComponentInterface {
    */
   @Prop() submitButton = "Save";
   /**
+   * What size is the reset button
+   */
+  @Prop() submitButtonButtonSize: "default" | "large" | "small";
+  /**
    * What color the submit button is
    */
   @Prop() submitButtonColor = "primary";
@@ -52,6 +56,10 @@ export class Form implements ComponentInterface {
    * What the reset button says
    */
   @Prop() resetButton = "Cancel";
+  /**
+   * What size is the reset button
+   */
+  @Prop() resetButtonSize: "default" | "large" | "small";
   /**
    * What color the reset button is
    */
@@ -498,6 +506,8 @@ export class Form implements ComponentInterface {
                     fill={this.resetButtonFill}
                     color={this.resetButtonColor}
                     innerHTML={this.resetButton}
+                    shape={this.resetButtonShape}
+                    size={this.resetButtonSize}
                   ></ion-button>
                 ) : null}
               </ion-col>
@@ -508,7 +518,9 @@ export class Form implements ComponentInterface {
                     type="submit"
                     color={this.submitButtonColor}
                     fill={this.submitButtonFill}
+                    size={this.submitButtonSize}
                     innerHTML={this.submitButton}
+                    shape={this.submitButtonShape}
                   />
                 ) : null}
               </ion-col>
