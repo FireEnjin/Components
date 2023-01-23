@@ -51,6 +51,7 @@
     "postbuild": "pollen",
     "presets": "fireenjin presets",
     "presets:watch": "fireenjin presets watch",
+    "publish:qwik": "npm run build:qwik:release && cd packages/qwik && npm publish",
     "start": "run-p watch start:qwik",
     "start:qwik": "cd packages/qwik && npm run start",
     "start:stencil": "cd packages/stencil && npm run start",
