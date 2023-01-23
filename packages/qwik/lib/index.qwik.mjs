@@ -1,15 +1,15 @@
 import { componentQrl, inlinedQrl, useStore, useClientEffectQrl, useLexicalScope, Slot, _IMMUTABLE, _wrapSignal, useRef, useCleanupQrl, useStylesScopedQrl } from "@builder.io/qwik";
 import { jsx, jsxs } from "@builder.io/qwik/jsx-runtime";
 const global = "";
-const Button$1 = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
+const Button = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
   const state = useStore({
-    color: "blue",
     fill: "solid",
-    radius: "md"
+    radius: "md",
+    theme: "blue"
   });
   useClientEffectQrl(inlinedQrl(() => {
     const [props2, state2] = useLexicalScope();
-    state2.color = props2.color || "blue";
+    state2.theme = props2.theme || "blue";
     state2.fill = props2.fill || "solid";
     state2.radius = props2.radius || "md";
   }, "Button_component_useClientEffect_fjdI3gikD7E", [
@@ -30,12 +30,12 @@ const Button$1 = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
       fontFamily: "inherit",
       fontSize: props.size === "large" && "2rem" || props.size === "small" && "1.1rem" || "1.2rem",
       textDecoration: "none",
-      color: state.fill !== "solid" ? state.color ? (state.color.includes("#") || state.color.includes("(")) && state.color || `var(--color-${state.color})` : "transparent" : "#ffffff",
+      color: state.fill !== "solid" ? state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "transparent" : "#ffffff",
       display: "inline-flex",
       gap: "8px",
       alignItems: "center",
-      border: state.fill === "outline" ? `1px solid ${state.color ? (state.color.includes("#") || state.color.includes("(")) && state.color || `var(--color-${state.color})` : "#ffffff"}` : "none",
-      background: state.fill !== "solid" ? "none" : `${state.color ? (state.color.includes("#") || state.color.includes("(")) && state.color || `var(--color-${state.color})` : "#ffffff"}`,
+      border: state.fill === "outline" ? `1px solid ${state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "#ffffff"}` : "none",
+      background: state.fill !== "solid" ? "none" : `${state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "#ffffff"}`,
       padding: props.size === "large" && "var(--size-2) var(--size-5)" || props.size === "small" && "var(--size-px) var(--size-2)" || "var(--size-1) var(--size-4)",
       borderRadius: state.radius === "none" && "none" || `var(--radius-${state.radius || ""})`,
       boxShadow: state.fill !== "solid" && "none" || props.size === "large" && "var(--shadow-md)" || props.size === "small" && "var(--shadow-xs)" || "var(--shadow-sm)"
@@ -50,13 +50,13 @@ const Button$1 = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
 }, "Button_component_0c0eZeZK1vk"));
 const Card = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
   const state = useStore({
-    color: "#ffffff",
     fill: "solid",
-    radius: "md"
+    radius: "md",
+    theme: "#ffffff"
   });
   useClientEffectQrl(inlinedQrl(() => {
     const [props2, state2] = useLexicalScope();
-    state2.color = props2.color || "#ffffff";
+    state2.theme = props2.theme || "#ffffff";
     state2.fill = props2.fill || "solid";
     state2.radius = props2.radius || "md";
   }, "Card_component_useClientEffect_BhyQjBz6ofU", [
@@ -71,12 +71,16 @@ const Card = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
       color: "inherit",
       display: "inline-flex",
       gap: "8px",
-      alignItems: "center"
+      alignItems: "center",
+      border: state.fill === "outline" ? `1px solid ${state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "#ffffff"}` : "none",
+      background: state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "#ffffff",
+      padding: props.size === "large" && "var(--size-2) var(--size-5)" || props.size === "small" && "var(--size-px) var(--size-2)" || "var(--size-1) var(--size-4)",
+      borderRadius: state.radius === "none" && "none" || `var(--radius-${state.radius || ""})`,
+      boxShadow: state.fill !== "solid" && "none" || props.size === "large" && "var(--shadow-md)" || props.size === "small" && "var(--shadow-xs)" || "var(--shadow-sm)"
     },
     children: /* @__PURE__ */ jsx(Slot, {}, "D7_0")
   });
 }, "Card_component_dZ4OrT0UOZM"));
-Button;
 const onInput = function onInput2(props, state, formRef, event) {
   (async function() {
     const saveCache = async function() {
@@ -141,13 +145,13 @@ const Form = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
     formData: {},
     hasChanged: false,
     resetButton: "Clear",
-    resetButtonColor: "grey",
     resetButtonFill: "solid",
     resetButtonRadius: "md",
+    resetButtonTheme: "grey",
     submitButton: "Save",
-    submitButtonColor: "blue",
     submitButtonFill: "solid",
-    submitButtonRadius: "md"
+    submitButtonRadius: "md",
+    submitButtonTheme: "blue"
   });
   useClientEffectQrl(inlinedQrl(() => {
     const [formRef2, props2, state2] = useLexicalScope();
@@ -156,11 +160,11 @@ const Form = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
     if (props2.eventListeners)
       state2.eventListeners = props2.eventListeners;
     state2.submitButton = props2?.submitButton ?? "Save";
-    state2.submitButtonColor = props2?.submitButtonColor || "blue";
+    state2.submitButtonTheme = props2?.submitButtonTheme || "blue";
     state2.submitButtonFill = props2?.submitButtonFill || "solid";
     state2.submitButtonRadius = props2?.submitButtonRadius || "md";
     state2.resetButton = props2?.resetButton ?? "Clear";
-    state2.resetButtonColor = props2?.resetButtonColor || "grey";
+    state2.resetButtonTheme = props2?.resetButtonTheme || "grey";
     state2.resetButtonFill = props2?.resetButtonFill || "solid";
     state2.resetButtonRadius = props2?.submitButtonRadius || "md";
     const ref = formRef2?.addEventListener && formRef2 || formRef2?.current?.addEventListener && formRef2.current;
@@ -203,9 +207,9 @@ const Form = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
           justifyContent: "space-between"
         },
         children: [
-          state.resetButton ? /* @__PURE__ */ jsx(Button$1, {
-            get color() {
-              return state.resetButtonColor;
+          state.resetButton ? /* @__PURE__ */ jsx(Button, {
+            get theme() {
+              return state.resetButtonTheme;
             },
             get fill() {
               return state.resetButtonFill;
@@ -215,14 +219,14 @@ const Form = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
             },
             children: _wrapSignal(state, "resetButton"),
             [_IMMUTABLE]: {
-              color: _wrapSignal(state, "resetButtonColor"),
+              theme: _wrapSignal(state, "resetButtonTheme"),
               fill: _wrapSignal(state, "resetButtonFill"),
               radius: _wrapSignal(state, "resetButtonRadius")
             }
           }, "S9_1") : null,
-          state.submitButton ? /* @__PURE__ */ jsx(Button$1, {
-            get color() {
-              return state.submitButtonColor;
+          state.submitButton ? /* @__PURE__ */ jsx(Button, {
+            get theme() {
+              return state.submitButtonTheme;
             },
             get fill() {
               return state.submitButtonFill;
@@ -232,7 +236,7 @@ const Form = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
             },
             children: _wrapSignal(state, "submitButton"),
             [_IMMUTABLE]: {
-              color: _wrapSignal(state, "submitButtonColor"),
+              theme: _wrapSignal(state, "submitButtonTheme"),
               fill: _wrapSignal(state, "submitButtonFill"),
               radius: _wrapSignal(state, "submitButtonRadius")
             }
@@ -318,7 +322,7 @@ const STYLES = `
   border: var(--input-hover-border, var(--input-border, none));
 }`;
 export {
-  Button$1 as Button,
+  Button,
   Card,
   Form,
   Input

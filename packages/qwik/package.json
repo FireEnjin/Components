@@ -1,6 +1,6 @@
 {
   "name": "@fireenjin/components-qwik",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "The Qwik component set for FireEnjin",
   "main": "./lib/index.qwik.cjs",
   "qwik": "./lib/index.qwik.mjs",
@@ -25,6 +25,7 @@
     "build": "qwik build",
     "build.lib": "vite build --mode lib",
     "build.types": "tsc --emitDeclarationOnly",
+    "build.release": "npm run build.lib && npm run build.types",
     "dev": "vite --mode ssr",
     "dev.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
     "fmt": "prettier --write .",

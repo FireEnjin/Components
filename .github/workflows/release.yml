@@ -18,9 +18,9 @@ jobs:
         run: npm ci
       - name: Install Qwik Dependencies
         working-directory: ./packages/qwik
-        run: npm install
+        run: npm ci
       - name: Build Qwik
-        run: npm run build:qwik
+        run: npm run build:qwik:release
       - name: Release Qwik
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
