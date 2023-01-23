@@ -1,6 +1,6 @@
 import { useMetadata, useStore, onMount } from "@builder.io/mitosis";
 
-export default function Button(props: {
+export default function Card(props: {
   theme?: string;
   fill?: "outline" | "solid" | "none";
   radius?: "xs" | "sm" | "md" | "lg" | "xl" | "100" | "full" | "none";

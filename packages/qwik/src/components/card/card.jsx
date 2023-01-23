@@ -8,7 +8,7 @@ import {
   useClientEffect$,
   useStore,
 } from "@builder.io/qwik";
-export const Button = component$((props) => {
+export const Card = component$((props) => {
   const state = useStore({ 
     color: "#ffffff", 
     fill: "solid", 
