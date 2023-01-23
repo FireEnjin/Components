@@ -86,23 +86,23 @@ export const Form = component$((props) => {
     formData: {},
     hasChanged: false,
     resetButton: "Clear",
-    resetButtonColor: "grey",
     resetButtonFill: "solid",
     resetButtonRadius: "md",
+    resetButtonTheme: "grey",
     submitButton: "Save",
-    submitButtonColor: "blue",
     submitButtonFill: "solid",
     submitButtonRadius: "md",
+    submitButtonTheme: "blue",
   });
   useClientEffect$(() => {
     if (props.formData) state.formData = props.formData;
     if (props.eventListeners) state.eventListeners = props.eventListeners;
     state.submitButton = props?.submitButton ?? "Save";
-    state.submitButtonColor = props?.submitButtonColor || "blue";
+    state.submitButtonTheme = props?.submitButtonTheme || "blue";
     state.submitButtonFill = props?.submitButtonFill || "solid";
     state.submitButtonRadius = props?.submitButtonRadius || "md";
     state.resetButton = props?.resetButton ?? "Clear";
-    state.resetButtonColor = props?.resetButtonColor || "grey";
+    state.resetButtonTheme = props?.resetButtonTheme || "grey";
     state.resetButtonFill = props?.resetButtonFill || "solid";
     state.resetButtonRadius = props?.submitButtonRadius || "md";
     const ref =
@@ -149,7 +149,7 @@ export const Form = component$((props) => {
         >
           {state.resetButton ? (
             <Button
-              color={state.resetButtonColor}
+              theme={state.resetButtonTheme}
               fill={state.resetButtonFill}
               radius={state.resetButtonRadius}
             >
@@ -158,7 +158,7 @@ export const Form = component$((props) => {
           ) : null}
           {state.submitButton ? (
             <Button
-              color={state.submitButtonColor}
+              theme={state.submitButtonTheme}
               fill={state.submitButtonFill}
               radius={state.submitButtonRadius}
             >

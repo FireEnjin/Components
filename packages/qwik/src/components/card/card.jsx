@@ -9,12 +9,9 @@ import {
   useStore,
 } from "@builder.io/qwik";
 export const Card = component$((props) => {
-  const state = useStore({ 
-    color: "#ffffff", 
-    fill: "solid", 
-    radius: "md" });
+  const state = useStore({ fill: "solid", radius: "md", theme: "#ffffff" });
   useClientEffect$(() => {
-    state.color = props.color || "#ffffff";
+    state.theme = props.theme || "#ffffff";
     state.fill = props.fill || "solid";
     state.radius = props.radius || "md";
   });
@@ -31,37 +28,37 @@ export const Card = component$((props) => {
         display: "inline-flex",
         gap: "8px",
         alignItems: "center",
-        // border:
-        //   state.fill === "outline"
-        //     ? `1px solid ${
-        //         state.color
-        //           ? ((state.color.includes("#") || state.color.includes("(")) &&
-        //               state.color) ||
-        //             `var(--color-${state.color})`
-        //           : "#ffffff"
-        //       }`
-        //     : "none",
-        // background: state.color
-        //   ? ((state.color.includes("#") || state.color.includes("(")) &&
-        //       state.color) ||
-        //     `var(--color-${state.color})`
-        //   : "#ffffff",
-        // padding:
-        //   (props.size === "large" && "var(--size-2) var(--size-5)") ||
-        //   (props.size === "small" && "var(--size-px) var(--size-2)") ||
-        //   "var(--size-1) var(--size-4)",
-        // borderRadius:
-        //   (state.radius === "none" && "none") ||
-        //   `var(--radius-${state.radius || ""})`,
-        // boxShadow:
-        //   (state.fill !== "solid" && "none") ||
-        //   (props.size === "large" && "var(--shadow-md)") ||
-        //   (props.size === "small" && "var(--shadow-xs)") ||
-        //   "var(--shadow-sm)",
+        border:
+          state.fill === "outline"
+            ? `1px solid ${
+                state.theme
+                  ? ((state.theme.includes("#") || state.theme.includes("(")) &&
+                      state.theme) ||
+                    `var(--color-${state.theme})`
+                  : "#ffffff"
+              }`
+            : "none",
+        background: state.theme
+          ? ((state.theme.includes("#") || state.theme.includes("(")) &&
+              state.theme) ||
+            `var(--color-${state.theme})`
+          : "#ffffff",
+        padding:
+          (props.size === "large" && "var(--size-2) var(--size-5)") ||
+          (props.size === "small" && "var(--size-px) var(--size-2)") ||
+          "var(--size-1) var(--size-4)",
+        borderRadius:
+          (state.radius === "none" && "none") ||
+          `var(--radius-${state.radius || ""})`,
+        boxShadow:
+          (state.fill !== "solid" && "none") ||
+          (props.size === "large" && "var(--shadow-md)") ||
+          (props.size === "small" && "var(--shadow-xs)") ||
+          "var(--shadow-sm)",
       }}
     >
       <Slot></Slot>
     </div>
   );
 });
-export default Button;
+export default Card;

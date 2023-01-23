@@ -9,9 +9,9 @@ import {
   useStore,
 } from "@builder.io/qwik";
 export const Button = component$((props) => {
-  const state = useStore({ color: "blue", fill: "solid", radius: "md" });
+  const state = useStore({ fill: "solid", radius: "md", theme: "blue" });
   useClientEffect$(() => {
-    state.color = props.color || "blue";
+    state.theme = props.theme || "blue";
     state.fill = props.fill || "solid";
     state.radius = props.radius || "md";
   });
@@ -29,10 +29,10 @@ export const Button = component$((props) => {
         textDecoration: "none",
         color:
           state.fill !== "solid"
-            ? state.color
-              ? ((state.color.includes("#") || state.color.includes("(")) &&
-                  state.color) ||
-                `var(--color-${state.color})`
+            ? state.theme
+              ? ((state.theme.includes("#") || state.theme.includes("(")) &&
+                  state.theme) ||
+                `var(--color-${state.theme})`
               : "transparent"
             : "#ffffff",
         display: "inline-flex",
@@ -41,10 +41,10 @@ export const Button = component$((props) => {
         border:
           state.fill === "outline"
             ? `1px solid ${
-                state.color
-                  ? ((state.color.includes("#") || state.color.includes("(")) &&
-                      state.color) ||
-                    `var(--color-${state.color})`
+                state.theme
+                  ? ((state.theme.includes("#") || state.theme.includes("(")) &&
+                      state.theme) ||
+                    `var(--color-${state.theme})`
                   : "#ffffff"
               }`
             : "none",
@@ -52,10 +52,10 @@ export const Button = component$((props) => {
           state.fill !== "solid"
             ? "none"
             : `${
-                state.color
-                  ? ((state.color.includes("#") || state.color.includes("(")) &&
-                      state.color) ||
-                    `var(--color-${state.color})`
+                state.theme
+                  ? ((state.theme.includes("#") || state.theme.includes("(")) &&
+                      state.theme) ||
+                    `var(--color-${state.theme})`
                   : "#ffffff"
               }`,
         padding:

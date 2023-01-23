@@ -12,7 +12,6 @@ export default function Button(props: {
 }) {
   useMetadata({
     tagName: "fireenjin-button",
-    isAttachedToShadowDom: true,
   });
   const state = useStore({
     theme: "blue",
