@@ -29,7 +29,7 @@ export default function Form(
     /**
      * What color the submit button is
      */
-    submitButtonColor?: string;
+    submitButtonTheme?: string;
     /**
      * What fill option to use for the submit button
      */
@@ -57,7 +57,7 @@ export default function Form(
     /**
      * What color the reset button is
      */
-    resetButtonColor?: string;
+    resetButtonTheme?: string;
     /**
      * What fill option to use for the reset button
      */
@@ -151,11 +151,11 @@ export default function Form(
     formData: {},
     submitButton: "Save",
     submitButtonFill: "solid",
-    submitButtonColor: "blue",
+    submitButtonTheme: "blue",
     submitButtonRadius: "md",
     resetButton: "Cancel",
     resetButtonFill: "solid",
-    resetButtonColor: "grey",
+    resetButtonTheme: "grey",
     resetButtonRadius: "md",
     hideControls: false,
     disableLoader: false,
@@ -188,9 +188,9 @@ export default function Form(
      */
     submitButtonFill: "solid" as "outline" | "solid" | "none",
     /**
-     * The color of the submit button
+     * The theme of the submit button
      */
-    submitButtonColor: "blue",
+    submitButtonTheme: "blue",
     /**
      * The radius of the submit button
      */
@@ -212,9 +212,9 @@ export default function Form(
      */
     resetButtonFill: "solid" as "outline" | "solid" | "none",
     /**
-     * The color of the reset button
+     * The theme of the reset button
      */
-    resetButtonColor: "grey",
+    resetButtonTheme: "grey",
     /**
      * The radius of the reset button
      */
@@ -317,11 +317,11 @@ export default function Form(
     if (props.formData) state.formData = props.formData;
     if (props.eventListeners) state.eventListeners = props.eventListeners;
     state.submitButton = props?.submitButton ?? "Save";
-    state.submitButtonColor = props?.submitButtonColor || "blue";
+    state.submitButtonTheme = props?.submitButtonTheme || "blue";
     state.submitButtonFill = props?.submitButtonFill || "solid";
     state.submitButtonRadius = props?.submitButtonRadius || "md";
     state.resetButton = props?.resetButton ?? "Clear";
-    state.resetButtonColor = props?.resetButtonColor || "grey";
+    state.resetButtonTheme = props?.resetButtonTheme || "grey";
     state.resetButtonFill = props?.resetButtonFill || "solid";
     state.resetButtonRadius = props?.submitButtonRadius || "md";
     const ref =
@@ -360,7 +360,7 @@ export default function Form(
         >
           <Show when={state.resetButton}>
             <Button
-              color={state.resetButtonColor}
+              theme={state.resetButtonTheme}
               fill={state.resetButtonFill}
               radius={state.resetButtonRadius}
             >
@@ -369,7 +369,7 @@ export default function Form(
           </Show>
           <Show when={state.submitButton}>
             <Button
-              color={state.submitButtonColor}
+              theme={state.submitButtonTheme}
               fill={state.submitButtonFill}
               radius={state.submitButtonRadius}
             >

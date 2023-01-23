@@ -9,7 +9,10 @@ import {
   useStore,
 } from "@builder.io/qwik";
 export const Button = component$((props) => {
-  const state = useStore({ color: "#ffffff", fill: "solid", radius: "md" });
+  const state = useStore({ 
+    color: "#ffffff", 
+    fill: "solid", 
+    radius: "md" });
   useClientEffect$(() => {
     state.color = props.color || "#ffffff";
     state.fill = props.fill || "solid";
@@ -28,33 +31,33 @@ export const Button = component$((props) => {
         display: "inline-flex",
         gap: "8px",
         alignItems: "center",
-        border:
-          state.fill === "outline"
-            ? `1px solid ${
-                state.color
-                  ? ((state.color.includes("#") || state.color.includes("(")) &&
-                      state.color) ||
-                    `var(--color-${state.color})`
-                  : "#ffffff"
-              }`
-            : "none",
-        background: state.color
-          ? ((state.color.includes("#") || state.color.includes("(")) &&
-              state.color) ||
-            `var(--color-${state.color})`
-          : "#ffffff",
-        padding:
-          (props.size === "large" && "var(--size-2) var(--size-5)") ||
-          (props.size === "small" && "var(--size-px) var(--size-2)") ||
-          "var(--size-1) var(--size-4)",
-        borderRadius:
-          (state.radius === "none" && "none") ||
-          `var(--radius-${state.radius || ""})`,
-        boxShadow:
-          (state.fill !== "solid" && "none") ||
-          (props.size === "large" && "var(--shadow-md)") ||
-          (props.size === "small" && "var(--shadow-xs)") ||
-          "var(--shadow-sm)",
+        // border:
+        //   state.fill === "outline"
+        //     ? `1px solid ${
+        //         state.color
+        //           ? ((state.color.includes("#") || state.color.includes("(")) &&
+        //               state.color) ||
+        //             `var(--color-${state.color})`
+        //           : "#ffffff"
+        //       }`
+        //     : "none",
+        // background: state.color
+        //   ? ((state.color.includes("#") || state.color.includes("(")) &&
+        //       state.color) ||
+        //     `var(--color-${state.color})`
+        //   : "#ffffff",
+        // padding:
+        //   (props.size === "large" && "var(--size-2) var(--size-5)") ||
+        //   (props.size === "small" && "var(--size-px) var(--size-2)") ||
+        //   "var(--size-1) var(--size-4)",
+        // borderRadius:
+        //   (state.radius === "none" && "none") ||
+        //   `var(--radius-${state.radius || ""})`,
+        // boxShadow:
+        //   (state.fill !== "solid" && "none") ||
+        //   (props.size === "large" && "var(--shadow-md)") ||
+        //   (props.size === "small" && "var(--shadow-xs)") ||
+        //   "var(--shadow-sm)",
       }}
     >
       <Slot></Slot>

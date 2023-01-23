@@ -1,7 +1,7 @@
 import { useMetadata, useStore, onMount } from "@builder.io/mitosis";
 
 export default function Button(props: {
-  color?: string;
+  theme?: string;
   href?: string;
   title?: string;
   fill?: "outline" | "solid" | "none";
@@ -14,10 +14,14 @@ export default function Button(props: {
     tagName: "fireenjin-button",
     isAttachedToShadowDom: true,
   });
-  const state = useStore({ color: "blue", fill: "solid", radius: "md" });
+  const state = useStore({
+    theme: "blue",
+    fill: "solid",
+    radius: "md",
+  });
 
   onMount(() => {
-    state.color = props.color || "blue";
+    state.theme = props.theme || "blue";
     state.fill = props.fill || "solid";
     state.radius = props.radius || "md";
   });
@@ -35,10 +39,10 @@ export default function Button(props: {
         textDecoration: "none",
         color:
           state.fill !== "solid"
-            ? state.color
-              ? ((state.color.includes("#") || state.color.includes("(")) &&
-                  state.color) ||
-                `var(--color-${state.color})`
+            ? state.theme
+              ? ((state.theme.includes("#") || state.theme.includes("(")) &&
+                  state.theme) ||
+                `var(--color-${state.theme})`
               : "transparent"
             : "#ffffff",
         display: "inline-flex",
@@ -47,10 +51,10 @@ export default function Button(props: {
         border:
           state.fill === "outline"
             ? `1px solid ${
-                state.color
-                  ? ((state.color.includes("#") || state.color.includes("(")) &&
-                      state.color) ||
-                    `var(--color-${state.color})`
+                state.theme
+                  ? ((state.theme.includes("#") || state.theme.includes("(")) &&
+                      state.theme) ||
+                    `var(--color-${state.theme})`
                   : "#ffffff"
               }`
             : "none",
@@ -58,10 +62,10 @@ export default function Button(props: {
           state.fill !== "solid"
             ? "none"
             : `${
-                state.color
-                  ? ((state.color.includes("#") || state.color.includes("(")) &&
-                      state.color) ||
-                    `var(--color-${state.color})`
+                state.theme
+                  ? ((state.theme.includes("#") || state.theme.includes("(")) &&
+                      state.theme) ||
+                    `var(--color-${state.theme})`
                   : "#ffffff"
               }`,
         padding:

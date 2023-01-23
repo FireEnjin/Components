@@ -1,7 +1,7 @@
-import { useMetadata, useStore, onMount, Slot } from "@builder.io/mitosis";
+import { useMetadata, useStore, onMount } from "@builder.io/mitosis";
 
 export default function Button(props: {
-  color?: string;
+  theme?: string;
   fill?: "outline" | "solid" | "none";
   radius?: "xs" | "sm" | "md" | "lg" | "xl" | "100" | "full" | "none";
   size?: "large" | "small";
@@ -11,10 +11,14 @@ export default function Button(props: {
     tagName: "fireenjin-card",
     isAttachedToShadowDom: true,
   });
-  const state = useStore({ color: "#ffffff", fill: "solid", radius: "md" });
+  const state = useStore({
+    theme: "#ffffff",
+    fill: "solid",
+    radius: "md",
+  });
 
   onMount(() => {
-    state.color = props.color || "#ffffff";
+    state.theme = props.theme || "#ffffff";
     state.fill = props.fill || "solid";
     state.radius = props.radius || "md";
   });
@@ -35,17 +39,17 @@ export default function Button(props: {
         border:
           state.fill === "outline"
             ? `1px solid ${
-                state.color
-                  ? ((state.color.includes("#") || state.color.includes("(")) &&
-                      state.color) ||
-                    `var(--color-${state.color})`
+                state.theme
+                  ? ((state.theme.includes("#") || state.theme.includes("(")) &&
+                      state.theme) ||
+                    `var(--color-${state.theme})`
                   : "#ffffff"
               }`
             : "none",
-        background: state.color
-          ? ((state.color.includes("#") || state.color.includes("(")) &&
-              state.color) ||
-            `var(--color-${state.color})`
+        background: state.theme
+          ? ((state.theme.includes("#") || state.theme.includes("(")) &&
+              state.theme) ||
+            `var(--color-${state.theme})`
           : "#ffffff",
         padding:
           (props.size === "large" && "var(--size-2) var(--size-5)") ||
