@@ -14,8 +14,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 18
-      - name: Install dependencies
-        run: npm install --verbose
+      - name: Install Dependencies
+        run: npm ci
+      - name: Install Qwik Dependencies
+        working-directory: ./packages/qwik
+        run: npm install
       - name: Build Qwik
         run: npm run build:qwik
       - name: Release Qwik
