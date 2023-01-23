@@ -20,9 +20,9 @@ export default () => {
           })
         }
       >
-        <Card color="rgba(255,255,255,0.6)">
+        <Card theme="rgba(255,255,255,0.6)">
           <Form>
-            <Button color="rgba(0,0,0,0.9)" size="large" radius="full">
+            <Button theme="rgba(0,0,0,0.9)" size="large" radius="full">
               <b>teswt</b>
               <div>Wee</div>
             </Button>

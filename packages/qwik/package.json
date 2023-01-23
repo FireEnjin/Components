@@ -1,6 +1,6 @@
 {
   "name": "@fireenjin/components-qwik",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "The Qwik component set for FireEnjin",
   "main": "./lib/index.qwik.cjs",
   "qwik": "./lib/index.qwik.mjs",
@@ -40,8 +40,8 @@
     "@fireenjin/sdk": "^1.2.65",
     "@types/eslint": "8.4.10",
     "@types/node": "latest",
-    "@typescript-eslint/eslint-plugin": "5.48.1",
-    "@typescript-eslint/parser": "5.48.1",
+    "@typescript-eslint/eslint-plugin": "5.48.2",
+    "@typescript-eslint/parser": "5.48.2",
     "eslint": "8.32.0",
     "eslint-plugin-qwik": "latest",
     "node-fetch": "3.3.0",
@@ -51,6 +51,6 @@
     "prettier": "2.8.3",
     "typescript": "4.9.4",
     "vite": "4.0.4",
-    "vite-tsconfig-paths": "4.0.3"
+    "vite-tsconfig-paths": "4.0.5"
   }
 }
