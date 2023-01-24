@@ -1,5 +1,6 @@
 import { componentQrl, inlinedQrl, useStore, useClientEffectQrl, useLexicalScope, Slot, _IMMUTABLE, _wrapSignal, useRef, useCleanupQrl, useStylesScopedQrl } from "@builder.io/qwik";
 import { jsx, jsxs } from "@builder.io/qwik/jsx-runtime";
+const pollen = "";
 const global = "";
 const Button = /* @__PURE__ */ componentQrl(inlinedQrl((props) => {
   const state = useStore({

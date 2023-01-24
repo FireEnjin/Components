@@ -1,3 +1,4 @@
+import Button from "./components/button/button";
 import "./global.css";
 
 export default () => {
@@ -13,7 +14,11 @@ export default () => {
             console.log(event);
           })
         }
-      ></body>
+      >
+        <Button theme="green" radius="full">
+          Test
+        </Button>
+      </body>
     </>
   );
 };

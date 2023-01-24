@@ -44,6 +44,7 @@
     "compile:stencil": "mitosis compile -t stencil",
     "task:stencil": "node tasks/stencil.js",
     "copy": "fireenjin copy",
+    "copy:css:qwik": "npm run copy ./output/fireenjin.css ./packages/qwik/src/fireenjin.css",
     "copy:qwik": "npm run copy ./output/qwik/src/components/ ./packages/qwik/src/components",
     "copy:stencil": "npm run copy ./output/stencil/src/components/ ./packages/stencil/src/components",
     "env": "fireenjin env",

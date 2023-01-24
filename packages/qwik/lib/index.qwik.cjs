@@ -2,6 +2,7 @@
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const qwik = require("@builder.io/qwik");
 const jsxRuntime = require("@builder.io/qwik/jsx-runtime");
+const pollen = "";
 const global = "";
 const Button = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
   const state = qwik.useStore({
