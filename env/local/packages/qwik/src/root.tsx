@@ -1,3 +1,4 @@
+import Button from "./components/button/button";
 import "./global.css";
 
 export default () => {
@@ -5,9 +6,10 @@ export default () => {
     <>
       <head>
         <meta charSet="utf-8" />
-        <title>FireEnjin - Components</title>
+        <title>Qwik Blank App</title>
       </head>
-      <body></body>
+      <body>
+      </body>
     </>
   );
 };

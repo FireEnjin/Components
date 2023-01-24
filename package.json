@@ -39,7 +39,7 @@
   "scripts": {
     "build": "mitosis build",
     "build:qwik": "npm run build && cd packages/qwik && npm run build",
-    "build:qwik:release": "npm run build && cd packages/qwik && npm run build.release",
+    "build:qwik:release": "npm run build && npm run env release && cd packages/qwik && npm run build.release",
     "build:stencil": "npm run task:stencil && npm run copy:stencil && cd packages/stencil && npm run build",
     "compile:stencil": "mitosis compile -t stencil",
     "task:stencil": "node tasks/stencil.js",
