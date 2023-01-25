@@ -94,7 +94,7 @@ export class Select implements ComponentInterface {
     payload?: any;
   }[] = [];
   @Prop() required = false;
-  @Prop() resultsKey?: string;
+  @Prop() resultsKey? = "results";
   @Prop() labelPosition?: "stacked" | "fixed" | "floating";
   @Prop() lines: "full" | "inset" | "none";
 
@@ -113,12 +113,7 @@ export class Select implements ComponentInterface {
       event.detail.endpoint !== this.endpoint
     )
       return;
-    this.results = event?.detail?.data?.results
-      ? event.detail.data.results
-      : [];
-    setTimeout(() => {
-      this.value = this.value;
-    }, 200);
+    this.results = event?.detail?.data?.[this.resultsKey] || [];
   }
 
   fetchData() {
@@ -126,11 +121,7 @@ export class Select implements ComponentInterface {
     this.fireenjinFetch.emit({
       name: "select",
       endpoint: this.endpoint,
-      dataPropsMap: this.dataPropsMap
-        ? this.dataPropsMap
-        : this.resultsKey
-        ? { [this.resultsKey]: "results" }
-        : null,
+      dataPropsMap: this.dataPropsMap || null,
       params: {
         data: {
           ...(this.query ? { query: this.query } : {}),
