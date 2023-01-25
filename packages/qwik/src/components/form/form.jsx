@@ -41,7 +41,10 @@ export const onInput = function onInput(props, state, formRef, event) {
       obj[pList[len - 1]] = value;
       return obj;
     };
-    if (!event?.target?.name?.startsWith?.("ion-")) {
+    if (
+      event?.target?.name?.length &&
+      !event?.target?.name?.startsWith?.("ion-")
+    ) {
       const value =
         typeof event?.detail?.checked === "boolean"
           ? event.detail.checked
@@ -149,6 +152,7 @@ export const Form = component$((props) => {
         >
           {state.resetButton ? (
             <Button
+              type="reset"
               theme={state.resetButtonTheme}
               fill={state.resetButtonFill}
               radius={state.resetButtonRadius}
@@ -158,6 +162,7 @@ export const Form = component$((props) => {
           ) : null}
           {state.submitButton ? (
             <Button
+              type="submit"
               theme={state.submitButtonTheme}
               fill={state.submitButtonFill}
               radius={state.submitButtonRadius}

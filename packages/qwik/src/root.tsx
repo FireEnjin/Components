@@ -1,3 +1,4 @@
+import Form from "./components/form/form";
 import "./global.css";
 
 export default () => {
@@ -7,7 +8,11 @@ export default () => {
         <meta charSet="utf-8" />
         <title>FireEnjin - Components</title>
       </head>
-      <body></body>
+      <body>
+        <Form endpoint="test">
+          <input name="i.am.nested.deeply.4.hi" value="woo" />
+        </Form>
+      </body>
     </>
   );
 };

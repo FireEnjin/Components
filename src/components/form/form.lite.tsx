@@ -280,7 +280,10 @@ export default function Form(
           obj[pList[len - 1]] = value;
           return obj;
         };
-        if (!event?.target?.name?.startsWith?.("ion-")) {
+        if (
+          event?.target?.name?.length &&
+          !event?.target?.name?.startsWith?.("ion-")
+        ) {
           const value =
             typeof event?.detail?.checked === "boolean"
               ? event.detail.checked
@@ -360,6 +363,7 @@ export default function Form(
         >
           <Show when={state.resetButton}>
             <Button
+              type="reset"
               theme={state.resetButtonTheme}
               fill={state.resetButtonFill}
               radius={state.resetButtonRadius}
@@ -369,6 +373,7 @@ export default function Form(
           </Show>
           <Show when={state.submitButton}>
             <Button
+              type="submit"
               theme={state.submitButtonTheme}
               fill={state.submitButtonFill}
               radius={state.submitButtonRadius}
