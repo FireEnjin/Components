@@ -33,10 +33,12 @@
 | `resetButtonColor`   | `reset-button-color`   | What color the reset button is                                         | `string`                                       | `"dark"`    |
 | `resetButtonFill`    | `reset-button-fill`    | What fill option to use for the reset button                           | `"clear" \| "default" \| "outline" \| "solid"` | `"clear"`   |
 | `resetButtonShape`   | `reset-button-shape`   | What shape is the reset button                                         | `"round"`                                      | `undefined` |
+| `resetButtonSize`    | `reset-button-size`    | What size is the reset button                                          | `"default" \| "large" \| "small"`              | `undefined` |
 | `submitButton`       | `submit-button`        | What the save button says                                              | `string`                                       | `"Save"`    |
 | `submitButtonColor`  | `submit-button-color`  | What color the submit button is                                        | `string`                                       | `"primary"` |
 | `submitButtonFill`   | `submit-button-fill`   | What fill option to use for the submit button                          | `"clear" \| "default" \| "outline" \| "solid"` | `"solid"`   |
 | `submitButtonShape`  | `submit-button-shape`  | What shape is the submit button                                        | `"round"`                                      | `undefined` |
+| `submitButtonSize`   | `submit-button-size`   | What size is the reset button                                          | `"default" \| "large" \| "small"`              | `undefined` |
 
 
 ## Events

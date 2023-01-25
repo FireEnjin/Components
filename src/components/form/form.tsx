@@ -39,7 +39,7 @@ export class Form implements ComponentInterface {
   /**
    * What size is the reset button
    */
-  @Prop() submitButtonButtonSize: "default" | "large" | "small";
+  @Prop() submitButtonSize: "default" | "large" | "small";
   /**
    * What color the submit button is
    */
