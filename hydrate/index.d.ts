@@ -141,24 +141,25 @@ export interface HydrateFactoryOptions extends SerializeDocumentOptions {
 	destroyDocument: boolean;
 }
 export interface Diagnostic {
-	level: "error" | "warn" | "info" | "log" | "debug";
-	type: string;
+	absFilePath?: string | undefined;
+	code?: string;
+	columnNumber?: number | undefined;
+	debugText?: string;
 	header?: string;
 	language?: string;
+	level: "error" | "warn" | "info" | "log" | "debug";
+	lineNumber?: number | undefined;
+	lines: PrintLine[];
 	messageText: string;
-	debugText?: string;
-	code?: string;
-	absFilePath?: string;
-	relFilePath?: string;
-	lineNumber?: number;
-	columnNumber?: number;
-	lines?: {
-		lineIndex: number;
-		lineNumber: number;
-		text?: string;
-		errorCharStart: number;
-		errorLength?: number;
-	}[];
+	relFilePath?: string | undefined;
+	type: string;
+}
+export interface PrintLine {
+	lineIndex: number;
+	lineNumber: number;
+	text?: string;
+	errorCharStart: number;
+	errorLength?: number;
 }
 export interface HydrateResults {
 	buildId: string;
