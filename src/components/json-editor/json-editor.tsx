@@ -12,7 +12,7 @@ import {
 } from "@stencil/core";
 import { JSONEditor, JSONEditorPropsOptional } from "vanilla-jsoneditor";
 
-declare interface Content {
+export interface Content {
   json?: any;
   text?: string;
 }
