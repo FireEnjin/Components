@@ -330,7 +330,6 @@ graph TD;
   ion-alert --> ion-ripple-effect
   ion-alert --> ion-backdrop
   fireenjin-select --> ion-item
-  fireenjin-select --> ion-icon
   fireenjin-select --> ion-label
   fireenjin-select --> ion-select
   fireenjin-select --> ion-select-option

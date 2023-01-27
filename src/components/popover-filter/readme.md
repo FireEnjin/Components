@@ -35,7 +35,6 @@ graph TD;
   fireenjin-form --> ion-button
   ion-button --> ion-ripple-effect
   fireenjin-select --> ion-item
-  fireenjin-select --> ion-icon
   fireenjin-select --> ion-label
   fireenjin-select --> ion-select
   fireenjin-select --> ion-select-option

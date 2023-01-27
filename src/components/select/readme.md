@@ -15,7 +15,6 @@
 | `disabled`         | `disabled`          | If `true`, the user cannot interact with the select.                                                                                                                                                                                                                                                                                                      | `boolean`                                                               | `false`     |
 | `endpoint`         | `endpoint`          |                                                                                                                                                                                                                                                                                                                                                           | `string`                                                                | `undefined` |
 | `header`           | `header`            |                                                                                                                                                                                                                                                                                                                                                           | `string`                                                                | `undefined` |
-| `icon`             | `icon`              |                                                                                                                                                                                                                                                                                                                                                           | `string`                                                                | `undefined` |
 | `interface`        | `interface`         | The interface the select should use: `action-sheet`, `popover` or `alert`.                                                                                                                                                                                                                                                                                | `"action-sheet" \| "alert" \| "popover"`                                | `"alert"`   |
 | `interfaceOptions` | `interface-options` | Any additional options that the `alert`, `action-sheet` or `popover` interface can take. See the [ion-alert docs](../alert), the [ion-action-sheet docs](../action-sheet) and the [ion-popover docs](../popover) for the create options for each interface.  Note: `interfaceOptions` will not override `inputs` or `buttons` with the `alert` interface. | `any`                                                                   | `{}`        |
 | `label`            | `label`             |                                                                                                                                                                                                                                                                                                                                                           | `string`                                                                | `undefined` |
@@ -58,7 +57,6 @@
 ### Depends on
 
 - ion-item
-- ion-icon
 - ion-label
 - ion-select
 - ion-select-option
@@ -67,7 +65,6 @@
 ```mermaid
 graph TD;
   fireenjin-select --> ion-item
-  fireenjin-select --> ion-icon
   fireenjin-select --> ion-label
   fireenjin-select --> ion-select
   fireenjin-select --> ion-select-option
