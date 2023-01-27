@@ -74,7 +74,6 @@ export class Select implements ComponentInterface {
    * the value of the select.
    */
   @Prop({ mutable: true }) value?: any;
-  @Prop() icon?: string;
   @Prop() endpoint?: string;
   @Prop() header?: string;
   @Prop() subHeader?: string;
@@ -142,7 +141,9 @@ export class Select implements ComponentInterface {
     return (
       <Host>
         <ion-item lines={this.lines}>
-          {this.icon && <ion-icon slot="start" name={this.icon} />}
+          <div slot="start">
+            <slot name="start" />
+          </div>
           {this.label && (
             <ion-label position={this.labelPosition}>{this.label}</ion-label>
           )}
@@ -215,6 +216,7 @@ export class Select implements ComponentInterface {
                 </ion-select-option>
               )
             )}
+            <slot />
           </ion-select>
           <input
             style={{
@@ -230,6 +232,9 @@ export class Select implements ComponentInterface {
             value={this.value}
             required={this.required}
           />
+          <div slot="end">
+            <slot name="end" />
+          </div>
         </ion-item>
       </Host>
     );
