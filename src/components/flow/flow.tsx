@@ -414,7 +414,6 @@ export class Flow {
           interfaceOptions={field?.interfaceOptions}
           compareWith={field?.compareWith}
           value={field?.value}
-          icon={field?.icon}
           endpoint={field?.endpoint}
           header={field?.header}
           subHeader={field?.subHeader}

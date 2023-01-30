@@ -10,6 +10,7 @@ import {
   State,
   h,
   Build,
+  Watch,
 } from "@stencil/core";
 
 @Component({
@@ -61,6 +62,16 @@ export class InputAddress implements ComponentInterface {
   @Event() ionInput: EventEmitter;
   @Event() fireenjinAddressMode: EventEmitter;
   @Event() fireenjinUpdateAutoHeight: EventEmitter;
+
+  @Watch("value")
+  onValueChange() {
+    if (typeof this.value !== "string") return;
+    this.value = { full: this.value };
+    this.ionInput.emit({
+      name: this.name,
+      value: this.value,
+    });
+  }
 
   @Listen("ionChange")
   onChange() {

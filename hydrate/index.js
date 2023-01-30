@@ -4942,7 +4942,7 @@ function hydrateFactory($stencilWindow, $stencilHydrateOpts, $stencilHydrateResu
   /*hydrateAppClosure start*/
 
 
-var _appFactoryEntry = require('./@app-factory-entry-81b2e81b.js');
+var _appFactoryEntry = require('./@app-factory-entry-06db7708.js');
 require('process');
 
 
