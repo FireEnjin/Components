@@ -114,6 +114,7 @@ export type Step = {
   beforeHTML?: string;
   name?: string;
   fields?: Field[];
+  innerHTML?: string;
   afterHTML?: string;
   component?: string;
   componentProps?: any;

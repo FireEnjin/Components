@@ -570,6 +570,7 @@ export class Flow {
                   {StepComponent && (
                     <StepComponent {...(step?.componentProps || {})} />
                   )}
+                  {step?.innerHTML && <div innerHTML={step?.innerHTML} />}
                   {(step?.fields || []).map((field) => [
                     field?.beforeHTML && <div innerHTML={field.beforeHTML} />,
                     this.renderField(field),
