@@ -83,6 +83,10 @@ ion-button ion-icon {
   --padding-start: 17px;
 }
 
+.manual-fields ion-select {
+  --padding-start: 8px;
+}
+
 .manual-fields ion-grid floodbot-state-autocomplete,
 .manual-fields ion-grid ion-input {
   display: block;

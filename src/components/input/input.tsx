@@ -488,7 +488,7 @@ export class Input implements ComponentInterface {
             />
           </div>
         )}
-        {this.iconRight && <ion-icon name={this.iconRight} slot="start" />}
+        {this.iconRight && <ion-icon name={this.iconRight} slot="end" />}
       </ion-item>
     );
   }

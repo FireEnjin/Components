@@ -302,6 +302,7 @@ graph TD;
   fireenjin-input-photo --> ion-icon
   ion-button --> ion-ripple-effect
   fireenjin-input-address --> ion-item
+  fireenjin-input-address --> ion-icon
   fireenjin-input-address --> ion-label
   fireenjin-input-address --> ion-input
   fireenjin-input-address --> ion-grid
@@ -309,6 +310,7 @@ graph TD;
   fireenjin-input-address --> ion-col
   fireenjin-input-address --> fireenjin-input-state
   fireenjin-input-address --> ion-button
+  fireenjin-input-address --> ion-buttons
   ion-input --> ion-icon
   fireenjin-input-state --> ion-select
   fireenjin-input-state --> ion-select-option

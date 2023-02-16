@@ -55,6 +55,8 @@ export class InputAddress implements ComponentInterface {
   @Prop() name: string;
   @Prop() lines: "full" | "inset" | "none";
   @Prop() labelPosition?: "stacked" | "fixed" | "floating";
+  @Prop() iconLeft: string;
+  @Prop() iconRight: string;
 
   @State() place: any;
   @State() manualEntry = false;
@@ -196,6 +198,7 @@ export class InputAddress implements ComponentInterface {
     const value = this.value ? this.value : {};
     return [
       <ion-item lines={this.lines} class={{ "is-hidden": !this.manualEntry }}>
+        {this.iconLeft && <ion-icon name={this.iconLeft} slot="start" />}
         <ion-label position={this.labelPosition}>{this.label}</ion-label>
         <div class="manual-fields">
           <ion-input
@@ -247,16 +250,18 @@ export class InputAddress implements ComponentInterface {
             </ion-row>
           </ion-grid>
         </div>
-        <ion-button
-          fill="clear"
-          color="primary"
-          onClick={() => this.toggleManualEntry()}
-          slot="end"
-        >
-          Search
-        </ion-button>
+        <div slot="end">
+          <ion-button
+            fill="clear"
+            color="primary"
+            onClick={() => this.toggleManualEntry()}
+          >
+            Search {this.iconRight && <ion-icon name={this.iconRight} />}
+          </ion-button>
+        </div>
       </ion-item>,
       <ion-item class={{ "is-hidden": this.manualEntry }}>
+        {this.iconLeft && <ion-icon name={this.iconLeft} slot="start" />}
         <ion-label position="stacked">{this.label}</ion-label>
         <ion-input
           ref={(el) => (this.autocompleteFieldEl = el)}
@@ -268,14 +273,16 @@ export class InputAddress implements ComponentInterface {
           autocomplete="off"
           required={this.required && !this.manualEntry}
         />
-        <ion-button
-          fill="clear"
-          color="primary"
-          onClick={() => this.toggleManualEntry()}
-          slot="end"
-        >
-          Manual
-        </ion-button>
+        <ion-buttons style={{ margin: "0" }} slot="end">
+          <ion-button
+            fill="clear"
+            color="primary"
+            onClick={() => this.toggleManualEntry()}
+            slot="end"
+          >
+            Manual {this.iconRight && <ion-icon name={this.iconRight} />}
+          </ion-button>
+        </ion-buttons>
       </ion-item>,
     ];
   }

@@ -366,6 +366,7 @@ export class Flow {
           endpoint={field?.endpoint}
           uploadData={field?.uploadData}
           disabled={!!field?.disabled}
+          innerHTML={field.innerHTML}
         />
       );
     } else if (field?.type === "photo") {
@@ -385,6 +386,7 @@ export class Flow {
           multiple={!!field?.multiple}
           resize={!!field?.resize}
           loading={!!field?.loading}
+          innerHTML={field.innerHTML}
         />
       );
     } else if (field?.type === "address") {
@@ -398,6 +400,7 @@ export class Flow {
           name={field?.name}
           lines={field?.lines}
           labelPosition={field?.labelPosition}
+          innerHTML={field.innerHTML}
         />
       );
     } else if (field?.type === "select") {
@@ -430,6 +433,7 @@ export class Flow {
           resultsKey={field?.resultsKey}
           labelPosition={field?.labelPosition}
           lines={field?.lines}
+          innerHTML={field.innerHTML}
         />
       );
     } else if (field?.type === "radios") {
@@ -451,6 +455,7 @@ export class Flow {
           resultsKey={field?.resultsKey}
           labelPosition={field?.labelPosition}
           lines={field?.lines}
+          innerHTML={field.innerHTML}
         />
       );
     } else if (field?.type === "search") {
@@ -473,6 +478,7 @@ export class Flow {
           resultsKey={field?.resultsKey}
           lines={field?.lines}
           labelPosition={field?.labelPosition}
+          innerHTML={field.innerHTML}
         />
       );
     } else if (field?.type === "checklist") {
@@ -482,6 +488,7 @@ export class Flow {
           value={field?.value}
           options={field?.options || []}
           disabled={field?.disabled}
+          innerHTML={field.innerHTML}
         />
       );
     } else {
@@ -505,8 +512,6 @@ export class Flow {
           edit={!!field?.edit}
           min={field?.min}
           max={field?.max}
-          iconLeft={field?.iconLeft}
-          iconRight={field?.iconRight}
           silence={field?.silence}
           step={field?.step}
           actionOptions={field?.actionOptions}
@@ -519,6 +524,7 @@ export class Flow {
           stripeElements={field?.stripeElements || this.stripeElements}
           lines={field?.lines}
           labelPosition={field?.labelPosition}
+          innerHTML={field.innerHTML}
         />
       );
     }

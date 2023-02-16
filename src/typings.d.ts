@@ -41,6 +41,7 @@ export type Field = {
   compareWith?: string | SelectCompareFn | null;
   options?: FieldOption[];
   beforeHTML?: string;
+  innerHTML?: string;
   afterHTML?: string;
   path?: string;
   fileName?: string;
