@@ -11,7 +11,7 @@
 | `iconLeft`      | `icon-left`       |                                          | `string`                             | `undefined` |
 | `iconRight`     | `icon-right`      |                                          | `string`                             | `undefined` |
 | `label`         | `label`           | The label of the input field             | `string`                             | `undefined` |
-| `labelPosition` | `label-position`  |                                          | `"fixed" \| "floating" \| "stacked"` | `undefined` |
+| `labelPosition` | `label-position`  |                                          | `"fixed" \| "floating" \| "stacked"` | `"stacked"` |
 | `lines`         | `lines`           |                                          | `"full" \| "inset" \| "none"`        | `undefined` |
 | `name`          | `name`            | The name attribute of the input          | `string`                             | `undefined` |
 | `placeholder`   | `placeholder`     | The placeholder text for the input field | `string`                             | `undefined` |

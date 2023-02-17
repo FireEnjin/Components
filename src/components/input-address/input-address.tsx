@@ -16,7 +16,7 @@ import {
 @Component({
   tag: "fireenjin-input-address",
   styleUrl: "input-address.css",
-  shadow: true,
+  scoped: true,
 })
 export class InputAddress implements ComponentInterface {
   google: google;
@@ -54,7 +54,7 @@ export class InputAddress implements ComponentInterface {
    */
   @Prop() name: string;
   @Prop() lines: "full" | "inset" | "none";
-  @Prop() labelPosition?: "stacked" | "fixed" | "floating";
+  @Prop() labelPosition?: "stacked" | "fixed" | "floating" = "stacked";
   @Prop() iconLeft: string;
   @Prop() iconRight: string;
 
@@ -198,57 +198,65 @@ export class InputAddress implements ComponentInterface {
     const value = this.value ? this.value : {};
     return [
       <ion-item lines={this.lines} class={{ "is-hidden": !this.manualEntry }}>
-        {this.iconLeft && <ion-icon name={this.iconLeft} slot="start" />}
-        <ion-label position={this.labelPosition}>{this.label}</ion-label>
-        <div class="manual-fields">
-          <ion-input
-            ref={(el) => (this.streetInputEl = el)}
-            type="text"
-            name={this.name + ".street"}
-            placeholder="Street Address"
-            value={value.street}
-            required={this.required && this.manualEntry}
+        {this.iconLeft && (
+          <ion-icon
+            style={{ marginTop: "auto", marginBottom: "auto" }}
+            name={this.iconLeft}
+            slot="start"
           />
-          <ion-input
-            ref={(el) => (this.unitInputEl = el)}
-            type="text"
-            name={this.name + ".unit"}
-            placeholder="Street Address 2"
-            value={value.unit}
-          />
-          <ion-input
-            ref={(el) => (this.cityInputEl = el)}
-            type="text"
-            name={this.name + ".city"}
-            placeholder="City"
-            value={value.city}
-            required={this.required && this.manualEntry}
-          />
-          <ion-grid>
-            <ion-row>
-              <ion-col size="6">
-                <fireenjin-input-state
-                  ref={(el) => (this.stateSelectEl = el)}
-                  name={this.name + ".state"}
-                  value={value.state}
-                  placeholder="State"
-                />
-              </ion-col>
-              <ion-col size="6">
-                <ion-input
-                  ref={(el) => (this.zipInputEl = el)}
-                  class="zip-input"
-                  type="tel"
-                  name={this.name + ".zip"}
-                  min="0"
-                  max="999999"
-                  value={value.zip}
-                  placeholder="Zip Code"
-                  required={this.required && this.manualEntry}
-                />
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+        )}
+        <div style={{ width: "100%" }}>
+          <ion-label position={this.labelPosition}>{this.label}</ion-label>
+          <div class="manual-fields">
+            <ion-input
+              ref={(el) => (this.streetInputEl = el)}
+              type="text"
+              name={this.name + ".street"}
+              placeholder="Street Address"
+              value={value.street}
+              required={this.required && this.manualEntry}
+            />
+            <ion-input
+              ref={(el) => (this.unitInputEl = el)}
+              type="text"
+              name={this.name + ".unit"}
+              placeholder="Street Address 2"
+              value={value.unit}
+            />
+            <ion-input
+              ref={(el) => (this.cityInputEl = el)}
+              type="text"
+              name={this.name + ".city"}
+              placeholder="City"
+              value={value.city}
+              required={this.required && this.manualEntry}
+            />
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6">
+                  <fireenjin-input-state
+                    ref={(el) => (this.stateSelectEl = el)}
+                    name={this.name + ".state"}
+                    value={value.state}
+                    placeholder="State"
+                  />
+                </ion-col>
+                <ion-col size="6">
+                  <ion-input
+                    ref={(el) => (this.zipInputEl = el)}
+                    class="zip-input"
+                    type="tel"
+                    name={this.name + ".zip"}
+                    min="0"
+                    max="999999"
+                    value={value.zip}
+                    placeholder="Zip Code"
+                    required={this.required && this.manualEntry}
+                  />
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
         </div>
         <div slot="end">
           <ion-button
@@ -256,13 +264,20 @@ export class InputAddress implements ComponentInterface {
             color="primary"
             onClick={() => this.toggleManualEntry()}
           >
-            Search {this.iconRight && <ion-icon name={this.iconRight} />}
+            Search
+            {this.iconRight && <ion-icon slot="end" name={this.iconRight} />}
           </ion-button>
         </div>
       </ion-item>,
       <ion-item class={{ "is-hidden": this.manualEntry }}>
-        {this.iconLeft && <ion-icon name={this.iconLeft} slot="start" />}
-        <ion-label position="stacked">{this.label}</ion-label>
+        {this.iconLeft && (
+          <ion-icon
+            name={this.iconLeft}
+            style={{ marginTop: "auto" }}
+            slot="start"
+          />
+        )}
+        <ion-label position={this.labelPosition}>{this.label}</ion-label>
         <ion-input
           ref={(el) => (this.autocompleteFieldEl = el)}
           class="autocomplete-field"
@@ -280,7 +295,8 @@ export class InputAddress implements ComponentInterface {
             onClick={() => this.toggleManualEntry()}
             slot="end"
           >
-            Manual {this.iconRight && <ion-icon name={this.iconRight} />}
+            Manual
+            {this.iconRight && <ion-icon slot="end" name={this.iconRight} />}
           </ion-button>
         </ion-buttons>
       </ion-item>,
