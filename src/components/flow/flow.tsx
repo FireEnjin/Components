@@ -571,7 +571,11 @@ export class Flow {
             const StepComponent = step?.component || null;
             return (
               <ion-slide>
-                <div>
+                <div
+                  style={{
+                    width: "100%",
+                  }}
+                >
                   {step?.beforeHTML && <div innerHTML={step.beforeHTML} />}
                   {StepComponent && (
                     <StepComponent {...(step?.componentProps || {})} />
