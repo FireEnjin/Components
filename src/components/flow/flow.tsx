@@ -86,7 +86,6 @@ export class Flow {
     label: "Save",
     fill: "solid",
     color: "primary",
-    icon: "checkmark-circle-outline",
   };
   /**
    * Should the form controls be hidden?
@@ -656,6 +655,7 @@ export class Flow {
             disabled={!!this.prevButton?.disabled}
             color={this.prevButton?.color}
             fill={this.prevButton?.fill}
+            size={this.prevButton?.size}
             shape={this.prevButton?.shape}
             onClick={(event) =>
               typeof this.prevButton?.onClick === "function"
@@ -674,13 +674,13 @@ export class Flow {
             )}
           </ion-button>
           <ion-button
-            expand={this.saveButton?.expand}
+            expand={this.saveButton?.expand || this.nextButton?.expand}
             disabled={!!this.saveButton?.disabled}
-            color={this.saveButton?.color}
-            fill={this.saveButton?.fill}
-            shape={this.nextButton?.shape}
+            color={this.saveButton?.color || this.nextButton?.color}
+            fill={this.saveButton?.fill || this.nextButton?.fill}
+            shape={this.nextButton?.shape ?? this.nextButton?.shape}
             type="submit"
-            size={this.saveButton?.size}
+            size={this.saveButton?.size || this.nextButton?.size}
             onClick={(event) =>
               typeof this.saveButton?.onClick === "function"
                 ? this.saveButton.onClick(event)
