@@ -1,0 +1,186 @@
+<div class="input-wrapper" data-el="div-1">
+  <template data-el="show">
+    <label data-el="label-1">
+      <template data-el="div-2"><!-- props.label --></template>
+    </label>
+  </template>
+
+  <input
+    class="input"
+    data-el="input-1"
+    data-dom-state="input-2"
+    data-ref="undefined-inputRef"
+  />
+</div>
+<style>
+  .input {
+    display: var(--input-display, block);
+    background: var(--input-background, transparent);
+    border: var(--input-border, none);
+    box-shadow: var(--input-box-shadow, none);
+  }
+  .input:active {
+    border: var(--input-active-border, var(--input-border, none));
+  }
+  .input:focus {
+    border: var(--input-focus-border, var(--input-border, none));
+    border-color: inherit;
+    webkit-box-shadow: var(
+      --input-focus-box-shadow,
+      var(--input-box-shadow, none)
+    );
+    box-shadow: var(--input-focus-box-shadow, var(--input-box-shadow, none));
+    outline: var(--input-focus-outline, var(--input-border, none));
+  }
+  .input:hover {
+    border: var(--input-hover-border, var(--input-border, none));
+  }
+</style>
+<script>
+  (() => {
+    const state = {
+      onChange(event) {
+        console.log("change", event);
+      },
+      onInput(event) {
+        console.log("input", event);
+      },
+      value: props?.value,
+    };
+    let props = {};
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll("[data-el='div-1']").forEach((el) => {
+        Object.assign(el.style, {
+          display: props?.labelPosition !== "stacked" ? "flex" : "block",
+        });
+      });
+
+      document.querySelectorAll("[data-el='show']").forEach((el) => {
+        const whenCondition = props?.label;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll("[data-el='label-1']").forEach((el) => {
+        el.setAttribute("for", props?.for || props?.name || props?.label);
+      });
+
+      document.querySelectorAll("[data-el='div-2']").forEach((el) => {
+        renderTextNode(el, props.label);
+      });
+
+      document.querySelectorAll("[data-el='input-1']").forEach((el) => {
+        el.setAttribute("id", props?.for || props?.name || props?.label);
+
+        el.setAttribute("name", props?.name);
+
+        el.setAttribute("accept", props?.accept);
+
+        el.value = props?.value;
+
+        el.setAttribute("checked", props?.checked);
+
+        el.setAttribute("form", props?.form);
+
+        el.setAttribute("formaction", props?.formaction);
+
+        el.setAttribute("formenctype", props?.formenctype);
+
+        el.setAttribute("formmethod", props?.formmethod);
+
+        el.setAttribute("formnovalidate", props?.formnovalidate);
+
+        el.setAttribute("formtarget", props?.formtarget);
+
+        el.setAttribute("height", props?.height);
+
+        el.setAttribute("alt", props?.alt);
+
+        el.setAttribute("list", props?.list);
+
+        el.setAttribute("max", props?.max);
+
+        el.setAttribute("min", props?.min);
+
+        el.setAttribute("maxlength", props?.maxlength);
+
+        el.setAttribute("multiple", props?.multiple);
+
+        el.setAttribute("pattern", props?.pattern);
+
+        el.setAttribute("placeholder", props?.placeholder);
+
+        el.setAttribute("readonly", props?.readonly);
+
+        el.setAttribute("size", props?.size);
+
+        el.setAttribute("src", props?.src);
+
+        el.setAttribute("step", props?.step);
+
+        el.setAttribute("type", props?.type || "text");
+
+        el.setAttribute("width", props?.width);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    function showContent(el) {
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLTemplateElement/content
+      // grabs the content of a node that is between <template> tags
+      // iterates through child nodes to register all content including text elements
+      // attaches the content after the template
+
+      const elementFragment = el.content.cloneNode(true);
+      const children = Array.from(elementFragment.childNodes);
+      children.forEach((child) => {
+        if (el?.scope) {
+          child.scope = el.scope;
+        }
+        if (el?.context) {
+          child.context = el.context;
+        }
+        nodesToDestroy.push(child);
+      });
+      el.after(elementFragment);
+    }
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>

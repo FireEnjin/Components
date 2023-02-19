@@ -1,0 +1,86 @@
+<div data-el="div-1">
+  <slot></slot>
+</div>
+<script>
+  (() => {
+    const state = { theme: "#ffffff", fill: "solid", radius: "md" };
+    let props = {};
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll("[data-el='div-1']").forEach((el) => {
+        Object.assign(el.style, {
+          fontFamily: "inherit",
+          fontSize:
+            (props.size === "large" && "2rem") ||
+            (props.size === "small" && "1.1rem") ||
+            "1.2rem",
+          textDecoration: "none",
+          color: "inherit",
+          display: "inline-flex",
+          gap: "8px",
+          alignItems: "center",
+          border:
+            state.fill === "outline"
+              ? `1px solid ${
+                  state.theme
+                    ? ((state.theme.includes("#") ||
+                        state.theme.includes("(")) &&
+                        state.theme) ||
+                      `var(--color-${state.theme})`
+                    : "#ffffff"
+                }`
+              : "none",
+          background: state.theme
+            ? ((state.theme.includes("#") || state.theme.includes("(")) &&
+                state.theme) ||
+              `var(--color-${state.theme})`
+            : "#ffffff",
+          padding:
+            (props.size === "large" && "var(--size-2) var(--size-5)") ||
+            (props.size === "small" && "var(--size-px) var(--size-2)") ||
+            "var(--size-1) var(--size-4)",
+          borderRadius:
+            (state.radius === "none" && "none") ||
+            `var(--radius-${state.radius || ""})`,
+          boxShadow:
+            (state.fill !== "solid" && "none") ||
+            (props.size === "large" && "var(--shadow-md)") ||
+            (props.size === "small" && "var(--shadow-xs)") ||
+            "var(--shadow-sm)",
+        });
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // onMount
+    state.theme = props.theme || "#ffffff";
+    update();
+    state.fill = props.fill || "solid";
+    update();
+    state.radius = props.radius || "md";
+    update();
+  })();
+</script>

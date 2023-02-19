@@ -622,6 +622,7 @@ export class Flow {
             color={this.nextButton?.color}
             fill={this.nextButton?.fill}
             size={this.nextButton?.size}
+            shape={this.nextButton?.shape}
             onClick={(event) =>
               typeof this.nextButton?.onClick === "function"
                 ? this.nextButton.onClick(event)
@@ -650,6 +651,7 @@ export class Flow {
             disabled={!!this.prevButton?.disabled}
             color={this.prevButton?.color}
             fill={this.prevButton?.fill}
+            shape={this.prevButton?.shape}
             onClick={(event) =>
               typeof this.prevButton?.onClick === "function"
                 ? this.prevButton.onClick(event)
