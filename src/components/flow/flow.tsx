@@ -596,6 +596,7 @@ export class Flow {
         >
           <ion-button
             expand={this.prevButton?.expand}
+            shape={this.prevButton?.shape}
             disabled={!!this.prevButton?.disabled}
             color={this.prevButton?.color}
             fill={this.prevButton?.fill}
@@ -673,6 +674,7 @@ export class Flow {
             disabled={!!this.saveButton?.disabled}
             color={this.saveButton?.color}
             fill={this.saveButton?.fill}
+            shape={this.nextButton?.shape}
             type="submit"
             size={this.saveButton?.size}
             onClick={(event) =>
