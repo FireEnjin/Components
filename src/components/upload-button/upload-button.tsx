@@ -12,7 +12,7 @@ import {
   h,
 } from "@stencil/core";
 import openFileSelect from "../../helpers/openFileSelect";
-import { FireEnjinUploadEvent } from "@fireenjin/sdk";
+import { FireEnjinUploadEvent, FireEnjinSubmitEvent } from "@fireenjin/sdk";
 
 @Component({
   tag: "fireenjin-upload-button",
@@ -21,6 +21,7 @@ import { FireEnjinUploadEvent } from "@fireenjin/sdk";
 export class UploadButton {
   buttonEl: HTMLIonButtonElement;
   @Event() fireenjinUpload: EventEmitter<FireEnjinUploadEvent>;
+  @Event() fireenjinSubmit: EventEmitter<FireEnjinSubmitEvent>;
   @Event() ionChange: EventEmitter;
 
   @Prop() path: string;
@@ -42,13 +43,15 @@ export class UploadButton {
   @Prop() showClear = false;
   @Prop() accept: string;
   @Prop() required = false;
+  @Prop() autoSubmit = false;
+  @Prop() submitEndpoint?: string;
 
   @State() uploading = false;
   @State() complete = false;
 
   @Listen("fireenjinSuccess")
   async onSuccess(event) {
-    console.log(event);
+    if (event?.detail?.name?.includes?.("autosubmit-")) return;
     this.uploading = false;
     this.clearProgressBar();
     this.value = await getDownloadURL(event?.detail?.data?.ref);
@@ -58,6 +61,15 @@ export class UploadButton {
       value: this.value,
       event,
     });
+    if (this.autoSubmit)
+      this.fireenjinSubmit.emit({
+        event,
+        endpoint: this.submitEndpoint || this.endpoint,
+        name: `autosubmit-${this.name}`,
+        data: {
+          [this.name]: this.value,
+        },
+      });
   }
 
   @Listen("fireenjinError")
