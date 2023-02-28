@@ -45,6 +45,7 @@ export class UploadButton {
   @Prop() required = false;
   @Prop() autoSubmit = false;
   @Prop() submitEndpoint?: string;
+  @Prop() documentId?: string;
 
   @State() uploading = false;
   @State() complete = false;
@@ -66,6 +67,7 @@ export class UploadButton {
         event,
         endpoint: this.submitEndpoint || this.endpoint,
         name: `autosubmit-${this.name}`,
+        id: this.documentId,
         data: {
           [this.name]: this.value,
         },
