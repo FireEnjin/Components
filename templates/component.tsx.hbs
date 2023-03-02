@@ -1,0 +1,15 @@
+import { useMetadata, useStore, onMount } from "@builder.io/mitosis";
+
+export default function {{nameFromPathPascal name}}(props: { children?: any }) {
+  useMetadata({
+    tagName: "{{namespace}}{{dashCase name}}",
+  });
+
+  const state = useStore({});
+
+  onMount(() => {
+    // On Load
+  });
+
+  return <span>{props.children}{{innerHTML}}</span>;
+}
