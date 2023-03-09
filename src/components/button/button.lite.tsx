@@ -25,6 +25,7 @@ export default function Button(props: {
     state.fill = props.fill || "solid";
     state.radius = props.radius || "md";
   });
+
   return (
     <span>
       <Show when={props.type}>

@@ -18,9 +18,11 @@ export const onInput = function onInput(props, state, formRef, event) {
     };
     const setFilteredValue = async function (key, value) {
       let newValue = value;
-      for (const filter of typeof props?.filterData === "string"
-        ? props?.filterData.split(",")
-        : props?.filterData) {
+      const filters =
+        (typeof props?.filterData === "string"
+          ? props?.filterData?.split?.(",")
+          : props?.filterData) || [];
+      for (const filter of filters) {
         if (typeof filter !== "function") continue;
         const filterName =
           Object.getOwnPropertyDescriptors(filter)?.name?.value;
@@ -75,9 +77,9 @@ export const submit = function submit(props, state, formRef, event) {
     })
   );
 };
-export const Form = component$((props) => {
+export const Form = component$((props: any) => {
   const formRef = useRef();
-  const state = useStore({
+  const state = useStore<any>({
     eventListeners: [
       "ionInput",
       "ionChange",
@@ -108,9 +110,7 @@ export const Form = component$((props) => {
     state.resetButtonTheme = props?.resetButtonTheme || "grey";
     state.resetButtonFill = props?.resetButtonFill || "solid";
     state.resetButtonRadius = props?.submitButtonRadius || "md";
-    const ref =
-      (formRef?.addEventListener && formRef) ||
-      (formRef?.current?.addEventListener && formRef.current);
+    const ref = formRef?.current;
     if (ref?.addEventListener)
       state.eventListeners.map((eventName) =>
         ref.addEventListener(
@@ -120,22 +120,20 @@ export const Form = component$((props) => {
       );
   });
   useCleanup$(() => {
-    const ref =
-      (formRef?.addEventListener && formRef) ||
-      (formRef?.current?.addEventListener && formRef.current);
-    (props?.eventListeners || []).map((eventName) =>
-      ref.removeEventListener(
-        eventName,
-        onInput.bind(null, props, state, formRef).bind(this)
-      )
-    );
+    const ref = formRef?.current;
+    if (ref) {
+      (props?.eventListeners || []).map((eventName) =>
+        ref.removeEventListener(
+          eventName,
+          onInput.bind(null, props, state, formRef).bind(this)
+        )
+      );
+    }
   });
   return (
     <form
-      preventdefault:submit=""
       ref={formRef}
       onSubmit$={(event) => {
-        event.preventDefault();
         submit(props, state, formRef, event);
       }}
       action={props?.action}

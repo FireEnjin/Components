@@ -177,7 +177,7 @@ export default function Form(
   useMetadata({
     tagName: "fireenjin-form",
   });
-  const formRef = useRef<HTMLFormElement>(null);
+  const formRef = useRef<HTMLFormElement>();
   const state = useStore({
     /**
      * The submit button text to show
@@ -256,9 +256,11 @@ export default function Form(
         };
         const setFilteredValue = async function (key, value) {
           let newValue = value;
-          for (const filter of typeof props?.filterData === "string"
-            ? props?.filterData.split(",")
-            : props?.filterData) {
+          const filters =
+            (typeof props?.filterData === "string"
+              ? props?.filterData?.split?.(",")
+              : props?.filterData) || [];
+          for (const filter of filters) {
             if (typeof filter !== "function") continue;
             const filterName =
               Object.getOwnPropertyDescriptors(filter)?.name?.value;
@@ -327,9 +329,7 @@ export default function Form(
     state.resetButtonTheme = props?.resetButtonTheme || "grey";
     state.resetButtonFill = props?.resetButtonFill || "solid";
     state.resetButtonRadius = props?.submitButtonRadius || "md";
-    const ref =
-      (formRef?.addEventListener && formRef) ||
-      (formRef?.current?.addEventListener && formRef.current);
+    const ref = formRef?.current;
     if (ref?.addEventListener)
       state.eventListeners.map((eventName) =>
         ref.addEventListener(eventName, state.onInput.bind(this))
@@ -337,19 +337,18 @@ export default function Form(
   });
 
   onUnMount(() => {
-    const ref =
-      (formRef?.addEventListener && formRef) ||
-      (formRef?.current?.addEventListener && formRef.current);
-    (props?.eventListeners || []).map((eventName) =>
-      ref.removeEventListener(eventName, state.onInput.bind(this))
-    );
+    const ref = formRef?.current;
+    if (ref) {
+      (props?.eventListeners || []).map((eventName) =>
+        ref.removeEventListener(eventName, state.onInput.bind(this))
+      );
+    }
   });
 
   return (
     <form
       ref={formRef}
       onSubmit={(event) => {
-        event.preventDefault();
         state.submit(event);
       }}
       action={props?.action}

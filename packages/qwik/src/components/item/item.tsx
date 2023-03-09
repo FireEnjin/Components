@@ -7,7 +7,10 @@ import {
   h,
   useClientEffect$,
 } from "@builder.io/qwik";
-export const Item = component$((props) => {
+export interface ItemProps {
+  children?: any;
+}
+export const Item = component$((props: ItemProps) => {
   useClientEffect$(() => {});
   return (
     <li class="item-wrapper">

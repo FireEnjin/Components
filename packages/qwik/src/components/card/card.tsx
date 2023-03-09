@@ -8,8 +8,19 @@ import {
   useClientEffect$,
   useStore,
 } from "@builder.io/qwik";
-export const Card = component$((props) => {
-  const state = useStore({ fill: "solid", radius: "md", theme: "#ffffff" });
+export interface CardProps {
+  theme?: string;
+  fill?: "outline" | "solid" | "none";
+  radius?: "xs" | "sm" | "md" | "lg" | "xl" | "100" | "full" | "none";
+  size?: "large" | "small";
+  children?: any;
+}
+export const Card = component$((props: CardProps) => {
+  const state = useStore<any>({
+    fill: "solid",
+    radius: "md",
+    theme: "#ffffff",
+  });
   useClientEffect$(() => {
     state.theme = props.theme || "#ffffff";
     state.fill = props.fill || "solid";

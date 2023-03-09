@@ -14,10 +14,10 @@ export const onChange = function onChange(props, state, inputRef, event) {
 export const onInput = function onInput(props, state, inputRef, event) {
   console.log("input", event);
 };
-export const Input = component$((props) => {
+export const Input = component$((props: any) => {
   useStylesScoped$(STYLES);
   const inputRef = useRef();
-  const state = useStore({ value: props?.value });
+  const state = useStore<any>({ value: props?.value });
   return (
     <div
       class="input-wrapper"
@@ -26,7 +26,7 @@ export const Input = component$((props) => {
       }}
     >
       {props?.label ? (
-        <label htmlFor={props?.for || props?.name || props?.label}>
+        <label data-for={props?.for || props?.name || props?.label}>
           {props.label}
         </label>
       ) : null}
@@ -38,22 +38,22 @@ export const Input = component$((props) => {
         value={props?.value}
         checked={props?.checked}
         form={props?.form}
-        formaction={props?.formaction}
-        formenctype={props?.formenctype}
-        formmethod={props?.formmethod}
-        formnovalidate={props?.formnovalidate}
-        formtarget={props?.formtarget}
+        formAction={props?.formaction}
+        formEncType={props?.formenctype}
+        formMethod={props?.formmethod}
+        formNoValidate={props?.formnovalidate}
+        formTarget={props?.formtarget}
         height={props?.height}
         alt={props?.alt}
         list={props?.list}
         max={props?.max}
         min={props?.min}
-        maxlength={props?.maxlength}
+        maxLength={props?.maxlength}
         multiple={props?.multiple}
         pattern={props?.pattern}
         ref={inputRef}
         placeholder={props?.placeholder}
-        readonly={props?.readonly}
+        readOnly={props?.readonly}
         size={props?.size}
         src={props?.src}
         step={props?.step}

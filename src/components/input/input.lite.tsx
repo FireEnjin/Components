@@ -160,7 +160,7 @@ export default function Input(
       style={{ display: props?.labelPosition !== "stacked" ? "flex" : "block" }}
     >
       {props?.label && (
-        <label for={props?.for || props?.name || props?.label}>
+        <label data-for={props?.for || props?.name || props?.label}>
           {props.label}
         </label>
       )}
@@ -192,22 +192,22 @@ export default function Input(
         value={props?.value}
         checked={props?.checked}
         form={props?.form}
-        formaction={props?.formaction}
-        formenctype={props?.formenctype}
-        formmethod={props?.formmethod}
-        formnovalidate={props?.formnovalidate}
-        formtarget={props?.formtarget}
+        formAction={props?.formaction}
+        formEncType={props?.formenctype}
+        formMethod={props?.formmethod}
+        formNoValidate={props?.formnovalidate}
+        formTarget={props?.formtarget}
         height={props?.height}
         alt={props?.alt}
         list={props?.list}
         max={props?.max}
         min={props?.min}
-        maxlength={props?.maxlength}
+        maxLength={props?.maxlength}
         multiple={props?.multiple}
         pattern={props?.pattern}
         ref={inputRef}
         placeholder={props?.placeholder}
-        readonly={props?.readonly}
+        readOnly={props?.readonly}
         size={props?.size}
         src={props?.src}
         step={props?.step}

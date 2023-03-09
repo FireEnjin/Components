@@ -8,8 +8,19 @@ import {
   useClientEffect$,
   useStore,
 } from "@builder.io/qwik";
-export const Button = component$((props) => {
-  const state = useStore({ fill: "solid", radius: "md", theme: "blue" });
+export interface ButtonProps {
+  theme?: string;
+  href?: string;
+  type?: "submit" | "reset" | "button";
+  title?: string;
+  fill?: "outline" | "solid" | "none";
+  radius?: "xs" | "sm" | "md" | "lg" | "xl" | "100" | "full" | "none";
+  size?: "large" | "small";
+  target?: string;
+  children?: any;
+}
+export const Button = component$((props: ButtonProps) => {
+  const state = useStore<any>({ fill: "solid", radius: "md", theme: "blue" });
   useClientEffect$(() => {
     state.theme = props.theme || "blue";
     state.fill = props.fill || "solid";

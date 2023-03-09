@@ -4,65 +4,98 @@ const qwik = require("@builder.io/qwik");
 const jsxRuntime = require("@builder.io/qwik/jsx-runtime");
 const pollen = "";
 const global = "";
-const Button = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
+const Button = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
+  qwik._jsxBranch();
+  qwik._jsxBranch();
   const state = qwik.useStore({
     fill: "solid",
     radius: "md",
     theme: "blue"
   });
-  qwik.useClientEffectQrl(qwik.inlinedQrl(() => {
+  qwik.useClientEffectQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
     const [props2, state2] = qwik.useLexicalScope();
     state2.theme = props2.theme || "blue";
     state2.fill = props2.fill || "solid";
     state2.radius = props2.radius || "md";
-  }, "Button_component_useClientEffect_fjdI3gikD7E", [
+  }, "Button_component_useClientEffect_eGSH29J1J2g", [
     props,
     state
   ]));
-  return /* @__PURE__ */ jsxRuntime.jsx("a", {
-    get target() {
-      return props.target;
-    },
-    get title() {
-      return props.title;
-    },
-    get href() {
-      return props.href;
-    },
-    style: {
-      fontFamily: "inherit",
-      fontSize: props.size === "large" && "2rem" || props.size === "small" && "1.1rem" || "1.2rem",
-      textDecoration: "none",
-      color: state.fill !== "solid" ? state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "transparent" : "#ffffff",
-      display: "inline-flex",
-      gap: "8px",
-      alignItems: "center",
-      border: state.fill === "outline" ? `1px solid ${state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "#ffffff"}` : "none",
-      background: state.fill !== "solid" ? "none" : `${state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "#ffffff"}`,
-      padding: props.size === "large" && "var(--size-2) var(--size-5)" || props.size === "small" && "var(--size-px) var(--size-2)" || "var(--size-1) var(--size-4)",
-      borderRadius: state.radius === "none" && "none" || `var(--radius-${state.radius || ""})`,
-      boxShadow: state.fill !== "solid" && "none" || props.size === "large" && "var(--shadow-md)" || props.size === "small" && "var(--shadow-xs)" || "var(--shadow-sm)"
-    },
-    children: /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "Tv_0"),
-    [qwik._IMMUTABLE]: {
-      target: qwik._wrapSignal(props, "target"),
-      title: qwik._wrapSignal(props, "title"),
-      href: qwik._wrapSignal(props, "href")
-    }
-  });
-}, "Button_component_0c0eZeZK1vk"));
-const Card = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
+  return /* @__PURE__ */ jsxRuntime.jsxs("span", {
+    children: [
+      props.type ? /* @__PURE__ */ jsxRuntime.jsx("button", {
+        get title() {
+          return props.title;
+        },
+        get type() {
+          return props.type;
+        },
+        style: {
+          fontFamily: "inherit",
+          fontSize: props.size === "large" && "2rem" || props.size === "small" && "1.1rem" || "1.2rem",
+          textDecoration: "none",
+          color: state.fill !== "solid" ? state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "transparent" : "#ffffff",
+          display: "inline-flex",
+          gap: "8px",
+          alignItems: "center",
+          border: state.fill === "outline" ? `1px solid ${state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "#ffffff"}` : "none",
+          background: state.fill !== "solid" ? "none" : `${state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "#ffffff"}`,
+          padding: props.size === "large" && "var(--size-2) var(--size-5)" || props.size === "small" && "var(--size-px) var(--size-2)" || "var(--size-1) var(--size-4)",
+          borderRadius: state.radius === "none" && "none" || `var(--radius-${state.radius || ""})`,
+          boxShadow: state.fill !== "solid" && "none" || props.size === "large" && "var(--shadow-md)" || props.size === "small" && "var(--shadow-xs)" || "var(--shadow-sm)"
+        },
+        children: /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "4e_0"),
+        [qwik._IMMUTABLE]: {
+          title: qwik._wrapProp(props, "title"),
+          type: qwik._wrapProp(props, "type")
+        }
+      }) : null,
+      !props.type ? /* @__PURE__ */ jsxRuntime.jsx("a", {
+        get href() {
+          return props.href;
+        },
+        get target() {
+          return props.target;
+        },
+        get title() {
+          return props.title;
+        },
+        style: {
+          fontFamily: "inherit",
+          fontSize: props.size === "large" && "2rem" || props.size === "small" && "1.1rem" || "1.2rem",
+          textDecoration: "none",
+          color: state.fill !== "solid" ? state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "transparent" : "#ffffff",
+          display: "inline-flex",
+          gap: "8px",
+          alignItems: "center",
+          border: state.fill === "outline" ? `1px solid ${state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "#ffffff"}` : "none",
+          background: state.fill !== "solid" ? "none" : `${state.theme ? (state.theme.includes("#") || state.theme.includes("(")) && state.theme || `var(--color-${state.theme})` : "#ffffff"}`,
+          padding: props.size === "large" && "var(--size-2) var(--size-5)" || props.size === "small" && "var(--size-px) var(--size-2)" || "var(--size-1) var(--size-4)",
+          borderRadius: state.radius === "none" && "none" || `var(--radius-${state.radius || ""})`,
+          boxShadow: state.fill !== "solid" && "none" || props.size === "large" && "var(--shadow-md)" || props.size === "small" && "var(--shadow-xs)" || "var(--shadow-sm)"
+        },
+        children: /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "4e_1"),
+        [qwik._IMMUTABLE]: {
+          href: qwik._wrapProp(props, "href"),
+          target: qwik._wrapProp(props, "target"),
+          title: qwik._wrapProp(props, "title")
+        }
+      }) : null
+    ]
+  }, "4e_2");
+}, "Button_component_jwTrOIKffNo"));
+const Card = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   const state = qwik.useStore({
     fill: "solid",
     radius: "md",
     theme: "#ffffff"
   });
-  qwik.useClientEffectQrl(qwik.inlinedQrl(() => {
+  qwik.useClientEffectQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
     const [props2, state2] = qwik.useLexicalScope();
     state2.theme = props2.theme || "#ffffff";
     state2.fill = props2.fill || "solid";
     state2.radius = props2.radius || "md";
-  }, "Card_component_useClientEffect_BhyQjBz6ofU", [
+  }, "Card_component_useClientEffect_bzglMgs8FMU", [
     props,
     state
   ]));
@@ -81,9 +114,9 @@ const Card = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
       borderRadius: state.radius === "none" && "none" || `var(--radius-${state.radius || ""})`,
       boxShadow: state.fill !== "solid" && "none" || props.size === "large" && "var(--shadow-md)" || props.size === "small" && "var(--shadow-xs)" || "var(--shadow-sm)"
     },
-    children: /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "D7_0")
-  });
-}, "Card_component_dZ4OrT0UOZM"));
+    children: /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "1Z_0")
+  }, "1Z_1");
+}, "Card_component_fcVV86NUvws"));
 const onInput = function onInput2(props, state, formRef, event) {
   (async function() {
     const saveCache = async function() {
@@ -91,7 +124,8 @@ const onInput = function onInput2(props, state, formRef, event) {
     };
     const setFilteredValue = async function(key, value) {
       let newValue = value;
-      for (const filter of typeof props?.filterData === "string" ? props?.filterData.split(",") : props?.filterData) {
+      const filters = (typeof props?.filterData === "string" ? props?.filterData?.split?.(",") : props?.filterData) || [];
+      for (const filter of filters) {
         if (typeof filter !== "function")
           continue;
         const filterName = Object.getOwnPropertyDescriptors(filter)?.name?.value;
@@ -114,7 +148,7 @@ const onInput = function onInput2(props, state, formRef, event) {
       obj[pList[len - 1]] = value;
       return obj;
     };
-    if (!event?.target?.name?.startsWith?.("ion-")) {
+    if (event?.target?.name?.length && !event?.target?.name?.startsWith?.("ion-")) {
       const value = typeof event?.detail?.checked === "boolean" ? event.detail.checked : event?.detail?.value || event?.target?.value;
       setByPath(state?.formData || {}, event?.target?.name, props?.filterData?.length ? await setFilteredValue(event?.target?.name, value) : value);
       if (props.cacheKey)
@@ -134,7 +168,9 @@ const submit = function submit2(props, state, formRef, event) {
     }
   }));
 };
-const Form = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
+const Form = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
+  qwik._jsxBranch();
+  qwik._jsxBranch();
   const formRef = qwik.useRef();
   const state = qwik.useStore({
     eventListeners: [
@@ -156,7 +192,7 @@ const Form = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
     submitButtonRadius: "md",
     submitButtonTheme: "blue"
   });
-  qwik.useClientEffectQrl(qwik.inlinedQrl(() => {
+  qwik.useClientEffectQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
     const [formRef2, props2, state2] = qwik.useLexicalScope();
     if (props2.formData)
       state2.formData = props2.formData;
@@ -170,31 +206,30 @@ const Form = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
     state2.resetButtonTheme = props2?.resetButtonTheme || "grey";
     state2.resetButtonFill = props2?.resetButtonFill || "solid";
     state2.resetButtonRadius = props2?.submitButtonRadius || "md";
-    const ref = formRef2?.addEventListener && formRef2 || formRef2?.current?.addEventListener && formRef2.current;
+    const ref = formRef2?.current;
     if (ref?.addEventListener)
       state2.eventListeners.map((eventName) => ref.addEventListener(eventName, onInput.bind(null, props2, state2, formRef2).bind(void 0)));
-  }, "Form_component_useClientEffect_7zbnHAft35s", [
+  }, "Form_component_useClientEffect_ovQspWult0Q", [
     formRef,
     props,
     state
   ]));
-  qwik.useCleanupQrl(qwik.inlinedQrl(() => {
+  qwik.useCleanupQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
     const [formRef2, props2, state2] = qwik.useLexicalScope();
-    const ref = formRef2?.addEventListener && formRef2 || formRef2?.current?.addEventListener && formRef2.current;
-    (props2?.eventListeners || []).map((eventName) => ref.removeEventListener(eventName, onInput.bind(null, props2, state2, formRef2).bind(void 0)));
-  }, "Form_component_useCleanup_3kjfgNnuUGs", [
+    const ref = formRef2?.current;
+    if (ref)
+      (props2?.eventListeners || []).map((eventName) => ref.removeEventListener(eventName, onInput.bind(null, props2, state2, formRef2).bind(void 0)));
+  }, "Form_component_useCleanup_2kQsJPLKJU4", [
     formRef,
     props,
     state
   ]));
   return /* @__PURE__ */ jsxRuntime.jsxs("form", {
-    "preventdefault:submit": "",
     ref: formRef,
-    onSubmit$: qwik.inlinedQrl((event) => {
+    onSubmit$: /* @__PURE__ */ qwik.inlinedQrl((event) => {
       const [formRef2, props2, state2] = qwik.useLexicalScope();
-      event.preventDefault();
       submit(props2, state2, formRef2, event);
-    }, "Form_component_form_onSubmit_mLmcrPc0uLA", [
+    }, "Form_component_form_onSubmit_k2bBtMKRO4w", [
       formRef,
       props,
       state
@@ -202,7 +237,7 @@ const Form = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
     action: props?.action,
     method: props?.method,
     children: [
-      /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "S9_0"),
+      /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "bB_0"),
       !props.hideControls ? /* @__PURE__ */ jsxRuntime.jsxs("div", {
         class: "form-controls",
         style: {
@@ -211,6 +246,7 @@ const Form = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
         },
         children: [
           state.resetButton ? /* @__PURE__ */ jsxRuntime.jsx(Button, {
+            type: "reset",
             get theme() {
               return state.resetButtonTheme;
             },
@@ -222,12 +258,14 @@ const Form = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
             },
             children: qwik._wrapSignal(state, "resetButton"),
             [qwik._IMMUTABLE]: {
-              theme: qwik._wrapSignal(state, "resetButtonTheme"),
-              fill: qwik._wrapSignal(state, "resetButtonFill"),
-              radius: qwik._wrapSignal(state, "resetButtonRadius")
+              type: qwik._IMMUTABLE,
+              theme: qwik._wrapProp(state, "resetButtonTheme"),
+              fill: qwik._wrapProp(state, "resetButtonFill"),
+              radius: qwik._wrapProp(state, "resetButtonRadius")
             }
-          }, "S9_1") : null,
+          }, "bB_1") : null,
           state.submitButton ? /* @__PURE__ */ jsxRuntime.jsx(Button, {
+            type: "submit",
             get theme() {
               return state.submitButtonTheme;
             },
@@ -239,24 +277,19 @@ const Form = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
             },
             children: qwik._wrapSignal(state, "submitButton"),
             [qwik._IMMUTABLE]: {
-              theme: qwik._wrapSignal(state, "submitButtonTheme"),
-              fill: qwik._wrapSignal(state, "submitButtonFill"),
-              radius: qwik._wrapSignal(state, "submitButtonRadius")
+              type: qwik._IMMUTABLE,
+              theme: qwik._wrapProp(state, "submitButtonTheme"),
+              fill: qwik._wrapProp(state, "submitButtonFill"),
+              radius: qwik._wrapProp(state, "submitButtonRadius")
             }
-          }, "S9_2") : null
-        ],
-        [qwik._IMMUTABLE]: {
-          children: false
-        }
+          }, "bB_2") : null
+        ]
       }) : null
-    ],
-    [qwik._IMMUTABLE]: {
-      children: false
-    }
-  });
-}, "Form_component_xe7wWdy1GII"));
-const Input = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
-  qwik.useStylesScopedQrl(qwik.inlinedQrl(STYLES, "Input_component_useStylesScoped_8UvyXfp0K18"));
+    ]
+  }, "bB_3");
+}, "Form_component_CwLNmA5ArhY"));
+const Input = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
+  qwik.useStylesScopedQrl(/* @__PURE__ */ qwik.inlinedQrl(STYLES, "Input_component_useStylesScoped_jMAqgF0O2b0"));
   const inputRef = qwik.useRef();
   qwik.useStore({
     value: props?.value
@@ -268,7 +301,7 @@ const Input = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
     },
     children: [
       props?.label ? /* @__PURE__ */ jsxRuntime.jsx("label", {
-        htmlFor: props?.for || props?.name || props?.label,
+        "data-for": props?.for || props?.name || props?.label,
         children: qwik._wrapSignal(props, "label")
       }) : null,
       /* @__PURE__ */ jsxRuntime.jsx("input", {
@@ -279,34 +312,31 @@ const Input = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
         value: props?.value,
         checked: props?.checked,
         form: props?.form,
-        formaction: props?.formaction,
-        formenctype: props?.formenctype,
-        formmethod: props?.formmethod,
-        formnovalidate: props?.formnovalidate,
-        formtarget: props?.formtarget,
+        formAction: props?.formaction,
+        formEncType: props?.formenctype,
+        formMethod: props?.formmethod,
+        formNoValidate: props?.formnovalidate,
+        formTarget: props?.formtarget,
         height: props?.height,
         alt: props?.alt,
         list: props?.list,
         max: props?.max,
         min: props?.min,
-        maxlength: props?.maxlength,
+        maxLength: props?.maxlength,
         multiple: props?.multiple,
         pattern: props?.pattern,
         ref: inputRef,
         placeholder: props?.placeholder,
-        readonly: props?.readonly,
+        readOnly: props?.readonly,
         size: props?.size,
         src: props?.src,
         step: props?.step,
         type: props?.type || "text",
         width: props?.width
       })
-    ],
-    [qwik._IMMUTABLE]: {
-      children: false
-    }
-  });
-}, "Input_component_at0piJamTdg"));
+    ]
+  }, "Ju_0");
+}, "Input_component_rRnC5C5yQfA"));
 const STYLES = `
 .input-Input {
   display: var(--input-display, block);
