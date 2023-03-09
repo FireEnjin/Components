@@ -225,6 +225,7 @@ const Form = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((
     state
   ]));
   return /* @__PURE__ */ jsxRuntime.jsxs("form", {
+    "preventdefault:submit": true,
     ref: formRef,
     onSubmit$: /* @__PURE__ */ qwik.inlinedQrl((event) => {
       const [formRef2, props2, state2] = qwik.useLexicalScope();

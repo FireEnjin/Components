@@ -132,8 +132,10 @@ export const Form = component$((props: any) => {
   });
   return (
     <form
+      preventdefault:submit
       ref={formRef}
       onSubmit$={(event) => {
+        
         submit(props, state, formRef, event);
       }}
       action={props?.action}

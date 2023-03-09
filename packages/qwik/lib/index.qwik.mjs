@@ -223,6 +223,7 @@ const Form = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => 
     state
   ]));
   return /* @__PURE__ */ jsxs("form", {
+    "preventdefault:submit": true,
     ref: formRef,
     onSubmit$: /* @__PURE__ */ inlinedQrl((event) => {
       const [formRef2, props2, state2] = useLexicalScope();

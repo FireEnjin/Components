@@ -1,6 +1,6 @@
 {
   "name": "@fireenjin/components-qwik",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "The Qwik component set for FireEnjin",
   "main": "./lib/index.qwik.cjs",
   "qwik": "./lib/index.qwik.mjs",

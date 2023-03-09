@@ -349,6 +349,7 @@ export default function Form(
     <form
       ref={formRef}
       onSubmit={(event) => {
+        event.preventDefault();
         state.submit(event);
       }}
       action={props?.action}
