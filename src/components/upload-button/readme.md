@@ -28,6 +28,7 @@
 | `required`       | `required`        |             | `boolean`                                                                                                                                        | `false`          |
 | `shape`          | `shape`           |             | `"round"`                                                                                                                                        | `"round"`        |
 | `showClear`      | `show-clear`      |             | `boolean`                                                                                                                                        | `false`          |
+| `showFileName`   | `show-file-name`  |             | `boolean`                                                                                                                                        | `false`          |
 | `showLink`       | `show-link`       |             | `boolean`                                                                                                                                        | `false`          |
 | `submitEndpoint` | `submit-endpoint` |             | `string`                                                                                                                                         | `undefined`      |
 | `value`          | `value`           |             | `any`                                                                                                                                            | `undefined`      |

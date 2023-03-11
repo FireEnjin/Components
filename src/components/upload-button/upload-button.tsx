@@ -46,6 +46,7 @@ export class UploadButton {
   @Prop() autoSubmit = false;
   @Prop() submitEndpoint?: string;
   @Prop() documentId?: string;
+  @Prop() showFileName = false;
 
   @State() uploading = false;
   @State() complete = false;
@@ -56,7 +57,7 @@ export class UploadButton {
     this.uploading = false;
     this.clearProgressBar();
     this.value = await getDownloadURL(event?.detail?.data?.ref);
-    this.label = event?.detail?.data?.metadata?.name;
+    if (this.showFileName) this.label = event?.detail?.data?.metadata?.name;
     this.ionChange.emit({
       name: this.name,
       value: this.value,
