@@ -598,6 +598,12 @@ export class Flow {
           }}
         >
           <ion-button
+            style={
+              !this.prevButton && {
+                opacity: "0",
+                pointerEvents: "none",
+              }
+            }
             expand={this.prevButton?.expand}
             shape={this.prevButton?.shape}
             disabled={!!this.prevButton?.disabled}
@@ -621,6 +627,12 @@ export class Flow {
             )}
           </ion-button>
           <ion-button
+            style={
+              !this.nextButton && {
+                opacity: "0",
+                pointerEvents: "none",
+              }
+            }
             expand={this.nextButton?.expand}
             disabled={!!this.nextButton?.disabled}
             color={this.nextButton?.color}
@@ -651,6 +663,12 @@ export class Flow {
           }}
         >
           <ion-button
+            style={
+              !this.prevButton && {
+                opacity: "0",
+                pointerEvents: "none",
+              }
+            }
             expand={this.prevButton?.expand}
             disabled={!!this.prevButton?.disabled}
             color={this.prevButton?.color}
@@ -674,6 +692,12 @@ export class Flow {
             )}
           </ion-button>
           <ion-button
+            style={
+              !this.saveButton && {
+                opacity: "0",
+                pointerEvents: "none",
+              }
+            }
             expand={this.saveButton?.expand || this.nextButton?.expand}
             disabled={!!this.saveButton?.disabled}
             color={this.saveButton?.color || this.nextButton?.color}
