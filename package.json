@@ -51,7 +51,6 @@
     "@fireenjin/cli": "^1.1.5",
     "@fireenjin/docs": "^1.0.18",
     "@stencil/core": "^3.2.0",
-    "@stencil/eslint-plugin": "^0.4.0",
     "@types/cleave.js": "^1.4.7",
     "@types/jest": "^29.5.0",
     "husky": "^8.0.3",
