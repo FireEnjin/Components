@@ -77,8 +77,7 @@ export class UploadButton {
   }
 
   @Listen("fireenjinError")
-  onError(event) {
-    console.log(event);
+  onError() {
     this.uploading = false;
     this.clearProgressBar();
   }
@@ -92,6 +91,7 @@ export class UploadButton {
   async clear() {
     this.clearProgressBar();
     this.value = null;
+    this.label = null;
     this.ionChange.emit({
       name: this.name,
       value: this.value,
@@ -99,7 +99,6 @@ export class UploadButton {
   }
 
   clearProgressBar() {
-    this.label = null;
     this.buttonEl.style.background = "transparent";
   }
 
