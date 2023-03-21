@@ -36,6 +36,7 @@ export class UploadButton {
   @Prop() multiple = false;
   @Prop() endpoint = "upload";
   @Prop() name = "file";
+  @Prop() size: "small" | "large" | "default" | undefined;
   @Prop() disabled = false;
   @Prop({ mutable: true }) value: any;
   @Prop({ mutable: true }) label: string;
@@ -154,6 +155,7 @@ export class UploadButton {
           ref={(el) => (this.buttonEl = el)}
           fill={this.fill}
           expand={this.expand}
+          size={this.size}
           shape={this.shape}
           color={this.color}
           onClick={(event) => this.uploadFiles(event)}

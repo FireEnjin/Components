@@ -30,6 +30,7 @@
 | `showClear`      | `show-clear`      |             | `boolean`                                                                                                                                        | `false`          |
 | `showFileName`   | `show-file-name`  |             | `boolean`                                                                                                                                        | `false`          |
 | `showLink`       | `show-link`       |             | `boolean`                                                                                                                                        | `false`          |
+| `size`           | `size`            |             | `"default" \| "large" \| "small"`                                                                                                                | `undefined`      |
 | `submitEndpoint` | `submit-endpoint` |             | `string`                                                                                                                                         | `undefined`      |
 | `value`          | `value`           |             | `any`                                                                                                                                            | `undefined`      |
 
