@@ -1,4 +1,5 @@
 import { useMetadata, useStore, Show } from "@builder.io/mitosis";
+import Item from "../item/item.lite";
 
 export default function List(props: {
   ordered?: boolean;
@@ -17,7 +18,7 @@ export default function List(props: {
             "list-style-type": `${props.listType ? props.listType : "decimal"}`,
           }}
         >
-          {props.children}
+          <Item>{props.children}</Item>
         </ol>
       </Show>
       <Show when={!props.ordered}>
@@ -26,7 +27,7 @@ export default function List(props: {
             "list-style-type": `${props.listType ? props.listType : "none"}`,
           }}
         >
-          {props.children}
+          <Item>{props.children}</Item>
         </ul>
       </Show>
     </span>

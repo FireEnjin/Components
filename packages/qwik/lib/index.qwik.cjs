@@ -4,15 +4,13 @@ const qwik = require("@builder.io/qwik");
 const jsxRuntime = require("@builder.io/qwik/jsx-runtime");
 const pollen = "";
 const global = "";
-const Button = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
-  qwik._jsxBranch();
-  qwik._jsxBranch();
+const Button = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
   const state = qwik.useStore({
     fill: "solid",
     radius: "md",
     theme: "blue"
   });
-  qwik.useClientEffectQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+  qwik.useClientEffectQrl(qwik.inlinedQrl(() => {
     const [props2, state2] = qwik.useLexicalScope();
     state2.theme = props2.theme || "blue";
     state2.fill = props2.fill || "solid";
@@ -46,8 +44,8 @@ const Button = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl
         },
         children: /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "4e_0"),
         [qwik._IMMUTABLE]: {
-          title: qwik._wrapProp(props, "title"),
-          type: qwik._wrapProp(props, "type")
+          title: qwik._wrapSignal(props, "title"),
+          type: qwik._wrapSignal(props, "type")
         }
       }) : null,
       !props.type ? /* @__PURE__ */ jsxRuntime.jsx("a", {
@@ -76,21 +74,24 @@ const Button = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl
         },
         children: /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "4e_1"),
         [qwik._IMMUTABLE]: {
-          href: qwik._wrapProp(props, "href"),
-          target: qwik._wrapProp(props, "target"),
-          title: qwik._wrapProp(props, "title")
+          href: qwik._wrapSignal(props, "href"),
+          target: qwik._wrapSignal(props, "target"),
+          title: qwik._wrapSignal(props, "title")
         }
       }) : null
-    ]
-  }, "4e_2");
+    ],
+    [qwik._IMMUTABLE]: {
+      children: false
+    }
+  });
 }, "Button_component_jwTrOIKffNo"));
-const Card = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
+const Card = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
   const state = qwik.useStore({
     fill: "solid",
     radius: "md",
     theme: "#ffffff"
   });
-  qwik.useClientEffectQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+  qwik.useClientEffectQrl(qwik.inlinedQrl(() => {
     const [props2, state2] = qwik.useLexicalScope();
     state2.theme = props2.theme || "#ffffff";
     state2.fill = props2.fill || "solid";
@@ -115,7 +116,7 @@ const Card = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((
       boxShadow: state.fill !== "solid" && "none" || props.size === "large" && "var(--shadow-md)" || props.size === "small" && "var(--shadow-xs)" || "var(--shadow-sm)"
     },
     children: /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "1Z_0")
-  }, "1Z_1");
+  });
 }, "Card_component_fcVV86NUvws"));
 const onInput = function onInput2(props, state, formRef, event) {
   (async function() {
@@ -168,9 +169,7 @@ const submit = function submit2(props, state, formRef, event) {
     }
   }));
 };
-const Form = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
-  qwik._jsxBranch();
-  qwik._jsxBranch();
+const Form = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
   const formRef = qwik.useRef();
   const state = qwik.useStore({
     eventListeners: [
@@ -192,7 +191,7 @@ const Form = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((
     submitButtonRadius: "md",
     submitButtonTheme: "blue"
   });
-  qwik.useClientEffectQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+  qwik.useClientEffectQrl(qwik.inlinedQrl(() => {
     const [formRef2, props2, state2] = qwik.useLexicalScope();
     if (props2.formData)
       state2.formData = props2.formData;
@@ -214,7 +213,7 @@ const Form = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((
     props,
     state
   ]));
-  qwik.useCleanupQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+  qwik.useCleanupQrl(qwik.inlinedQrl(() => {
     const [formRef2, props2, state2] = qwik.useLexicalScope();
     const ref = formRef2?.current;
     if (ref)
@@ -227,7 +226,7 @@ const Form = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((
   return /* @__PURE__ */ jsxRuntime.jsxs("form", {
     "preventdefault:submit": true,
     ref: formRef,
-    onSubmit$: /* @__PURE__ */ qwik.inlinedQrl((event) => {
+    onSubmit$: qwik.inlinedQrl((event) => {
       const [formRef2, props2, state2] = qwik.useLexicalScope();
       submit(props2, state2, formRef2, event);
     }, "Form_component_form_onSubmit_k2bBtMKRO4w", [
@@ -260,9 +259,9 @@ const Form = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((
             children: qwik._wrapSignal(state, "resetButton"),
             [qwik._IMMUTABLE]: {
               type: qwik._IMMUTABLE,
-              theme: qwik._wrapProp(state, "resetButtonTheme"),
-              fill: qwik._wrapProp(state, "resetButtonFill"),
-              radius: qwik._wrapProp(state, "resetButtonRadius")
+              theme: qwik._wrapSignal(state, "resetButtonTheme"),
+              fill: qwik._wrapSignal(state, "resetButtonFill"),
+              radius: qwik._wrapSignal(state, "resetButtonRadius")
             }
           }, "bB_1") : null,
           state.submitButton ? /* @__PURE__ */ jsxRuntime.jsx(Button, {
@@ -279,18 +278,24 @@ const Form = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((
             children: qwik._wrapSignal(state, "submitButton"),
             [qwik._IMMUTABLE]: {
               type: qwik._IMMUTABLE,
-              theme: qwik._wrapProp(state, "submitButtonTheme"),
-              fill: qwik._wrapProp(state, "submitButtonFill"),
-              radius: qwik._wrapProp(state, "submitButtonRadius")
+              theme: qwik._wrapSignal(state, "submitButtonTheme"),
+              fill: qwik._wrapSignal(state, "submitButtonFill"),
+              radius: qwik._wrapSignal(state, "submitButtonRadius")
             }
           }, "bB_2") : null
-        ]
+        ],
+        [qwik._IMMUTABLE]: {
+          children: false
+        }
       }) : null
-    ]
-  }, "bB_3");
+    ],
+    [qwik._IMMUTABLE]: {
+      children: false
+    }
+  });
 }, "Form_component_CwLNmA5ArhY"));
-const Input = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
-  qwik.useStylesScopedQrl(/* @__PURE__ */ qwik.inlinedQrl(STYLES, "Input_component_useStylesScoped_jMAqgF0O2b0"));
+const Input = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
+  qwik.useStylesScopedQrl(qwik.inlinedQrl(STYLES, "Input_component_useStylesScoped_jMAqgF0O2b0"));
   const inputRef = qwik.useRef();
   qwik.useStore({
     value: props?.value
@@ -335,8 +340,11 @@ const Input = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl(
         type: props?.type || "text",
         width: props?.width
       })
-    ]
-  }, "Ju_0");
+    ],
+    [qwik._IMMUTABLE]: {
+      children: false
+    }
+  });
 }, "Input_component_rRnC5C5yQfA"));
 const STYLES = `
 .input-Input {
@@ -355,7 +363,78 @@ const STYLES = `
 }.input-Input:hover {
   border: var(--input-hover-border, var(--input-border, none));
 }`;
+const Item = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
+  qwik.useClientEffectQrl(qwik.inlinedQrl(() => {
+  }, "Item_component_useClientEffect_CuVdIvRb5BE"));
+  return /* @__PURE__ */ jsxRuntime.jsx("li", {
+    class: "item-wrapper",
+    children: /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "bk_0")
+  });
+}, "Item_component_rPrm2UPpz18"));
+const List = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
+  return /* @__PURE__ */ jsxRuntime.jsxs("span", {
+    children: [
+      props.ordered ? /* @__PURE__ */ jsxRuntime.jsx("ol", {
+        style: {
+          "list-style-type": `${props.listType ? props.listType : "decimal"}`
+        },
+        children: /* @__PURE__ */ jsxRuntime.jsx(Item, {
+          children: /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "mt_0")
+        }, "mt_1")
+      }) : null,
+      !props.ordered ? /* @__PURE__ */ jsxRuntime.jsx("ul", {
+        style: {
+          "list-style-type": `${props.listType ? props.listType : "none"}`
+        },
+        children: /* @__PURE__ */ jsxRuntime.jsx(Item, {
+          children: /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "mt_2")
+        }, "mt_3")
+      }) : null
+    ],
+    [qwik._IMMUTABLE]: {
+      children: false
+    }
+  });
+}, "List_component_wBF3tdF4TP8"));
+const Checkbox = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
+  qwik.useClientEffectQrl(qwik.inlinedQrl(() => {
+  }, "Checkbox_component_useClientEffect_KYg64ip0DDY"));
+  return /* @__PURE__ */ jsxRuntime.jsxs(Item, {
+    children: [
+      /* @__PURE__ */ jsxRuntime.jsx("input", {
+        type: "checkbox"
+      }),
+      /* @__PURE__ */ jsxRuntime.jsx("label", {
+        children: qwik._wrapSignal(props, "label")
+      }),
+      /* @__PURE__ */ jsxRuntime.jsx(qwik.Slot, {}, "Je_0")
+    ]
+  }, "Je_1");
+}, "Checkbox_component_oMcBk8lYh3c"));
+const Checklist = /* @__PURE__ */ qwik.componentQrl(qwik.inlinedQrl((props) => {
+  const state = qwik.useStore({
+    theme: `blue`
+  });
+  qwik.useClientEffectQrl(qwik.inlinedQrl(() => {
+    const [props2, state2] = qwik.useLexicalScope();
+    state2.theme = props2.theme || `blue`;
+  }, "Checklist_component_useClientEffect_x77026zjhQM", [
+    props,
+    state
+  ]));
+  return /* @__PURE__ */ jsxRuntime.jsx(Checkbox, {
+    get label() {
+      return props.label;
+    },
+    [qwik._IMMUTABLE]: {
+      label: qwik._wrapSignal(props, "label")
+    }
+  }, "tS_0");
+}, "Checklist_component_LqOpoSjwNPE"));
 exports.Button = Button;
 exports.Card = Card;
+exports.Checkbox = Checkbox;
+exports.Checklist = Checklist;
 exports.Form = Form;
 exports.Input = Input;
+exports.List = List;
