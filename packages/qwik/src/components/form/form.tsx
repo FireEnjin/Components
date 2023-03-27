@@ -132,7 +132,7 @@ export const Form = component$((props: any) => {
   });
   return (
     <form
-      preventdefault:submit=""
+      // preventdefault:submit=""
       ref={formRef}
       onSubmit$={(event) => {
         event.preventDefault();
