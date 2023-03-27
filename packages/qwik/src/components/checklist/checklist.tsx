@@ -11,6 +11,7 @@ import {
 export interface ChecklistProps {
   theme?: string;
   label?: string;
+  data: [];
 }
 export const Checklist = component$((props: ChecklistProps) => {
   const state = useStore<any>({ theme: `blue` });
