@@ -66,6 +66,10 @@ export class Input implements ComponentInterface {
   } = {};
   @Prop() lines: "full" | "inset" | "none";
   @Prop() labelPosition?: "stacked" | "fixed" | "floating";
+  @Prop() counter = false;
+  @Prop() clearOnEdit = false;
+  @Prop() counterFormatter?: (inputLength: number, maxLength: number) => string;
+  @Prop() debounce: number;
 
   @Event() ionChange: EventEmitter;
   @Event() ionInput: EventEmitter;
@@ -422,6 +426,9 @@ export class Input implements ComponentInterface {
           readonly={this.readOnly}
           multiple={this.multiple}
           clearInput={this.clearInput}
+          counter={this.counter}
+          debounce={this.debounce}
+          counterFormatter={this.counterFormatter}
           inputMode={this.inputMode}
           helperText={this.helperText}
           errorText={this.errorText}
