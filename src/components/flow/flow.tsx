@@ -507,7 +507,10 @@ export class Flow {
           minlength={field?.minlength}
           maxlength={field?.maxlength}
           disabled={!!field?.disabled}
-          info={field?.info}
+          helperText={field?.helperText}
+          errorText={field?.errorText}
+          counter={!!field?.counter}
+          counterFormatter={field?.counterFormatter}
           edit={!!field?.edit}
           min={field?.min}
           max={field?.max}

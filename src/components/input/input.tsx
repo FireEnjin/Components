@@ -70,6 +70,7 @@ export class Input implements ComponentInterface {
   @Prop() clearOnEdit = false;
   @Prop() counterFormatter?: (inputLength: number, maxLength: number) => string;
   @Prop() debounce: number;
+  @Prop() fill: "solid" | "outline";
 
   @Event() ionChange: EventEmitter;
   @Event() ionInput: EventEmitter;
@@ -420,6 +421,7 @@ export class Input implements ComponentInterface {
 
       return (
         <ion-input
+          fill={this.fill}
           type={inputType}
           name={this.name}
           spellcheck={this.spellCheck}

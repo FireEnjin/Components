@@ -58,7 +58,11 @@ export type Field = {
   googleMapsKey?: string;
   minlength?: number;
   maxlength?: number;
-  info?: string;
+  helperText?: string;
+  errorText?: string;
+  debounce?: number;
+  counter?: boolean;
+  counterFormatter?: (inputLength: number, maxLength: number) => string;
   edit?: boolean;
   min?: string;
   max?: string;
