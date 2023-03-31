@@ -17,9 +17,10 @@
 | `clearInput`     | `clear-input`    |             | `boolean`                            | `false`     |
 | `disabled`       | `disabled`       |             | `boolean`                            | `undefined` |
 | `edit`           | `edit`           |             | `boolean`                            | `undefined` |
+| `errorText`      | `error-text`     |             | `string`                             | `undefined` |
+| `helperText`     | `helper-text`    |             | `string`                             | `undefined` |
 | `iconLeft`       | `icon-left`      |             | `string`                             | `undefined` |
 | `iconRight`      | `icon-right`     |             | `string`                             | `undefined` |
-| `info`           | `info`           |             | `string`                             | `undefined` |
 | `inputMode`      | `input-mode`     |             | `string`                             | `"text"`    |
 | `label`          | `label`          |             | `string`                             | `undefined` |
 | `labelPosition`  | `label-position` |             | `"fixed" \| "floating" \| "stacked"` | `undefined` |

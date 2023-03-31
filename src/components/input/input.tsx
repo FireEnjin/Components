@@ -44,7 +44,8 @@ export class Input implements ComponentInterface {
   @Prop() minlength: number;
   @Prop() maxlength: number;
   @Prop() disabled: boolean;
-  @Prop() info: string;
+  @Prop() helperText: string;
+  @Prop() errorText: string;
   @Prop() edit: boolean;
   @Prop() min: string;
   @Prop() max: string;
@@ -71,7 +72,6 @@ export class Input implements ComponentInterface {
   @Event() ionBlur: EventEmitter;
   @Event() ionFocus: EventEmitter;
 
-  @State() showInfo: boolean;
   @State() passwordVisible = false;
   @State() cleave: any;
   @State() input: HTMLInputElement;
@@ -423,6 +423,8 @@ export class Input implements ComponentInterface {
           multiple={this.multiple}
           clearInput={this.clearInput}
           inputMode={this.inputMode}
+          helperText={this.helperText}
+          errorText={this.errorText}
           pattern={
             this.pattern
               ? this.pattern
@@ -470,7 +472,6 @@ export class Input implements ComponentInterface {
         class={{
           "input-password item-input": this.inputType === "password",
           "input-card": this.inputType === "card",
-          "has-info-bubble": !!this.info,
         }}
       >
         {this.iconLeft && <ion-icon name={this.iconLeft} slot="start" />}
