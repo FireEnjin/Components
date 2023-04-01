@@ -284,7 +284,7 @@ export class InputAddress implements ComponentInterface {
             display: "flex",
             gap: "0.5rem",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "baseline",
           }}
         >
           <ion-input
