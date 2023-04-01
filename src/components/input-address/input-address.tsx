@@ -278,16 +278,35 @@ export class InputAddress implements ComponentInterface {
           />
         )}
         <ion-label position={this.labelPosition}>{this.label}</ion-label>
-        <ion-input
-          ref={(el) => (this.autocompleteFieldEl = el)}
-          class="autocomplete-field"
-          type="text"
-          name={`${this.name}.full`}
-          placeholder={this.placeholder}
-          value={value.full}
-          autocomplete="off"
-          required={this.required && !this.manualEntry}
-        />
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            gap: "0.5rem",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ion-input
+            style={{ display: "block", width: "100%" }}
+            ref={(el) => (this.autocompleteFieldEl = el)}
+            class="autocomplete-field"
+            type="text"
+            name={`${this.name}.full`}
+            placeholder={this.placeholder}
+            value={value.full}
+            autocomplete="off"
+            required={this.required && !this.manualEntry}
+          />
+          <ion-input
+            style={{ maxWidth: "100px" }}
+            ref={(el) => (this.unitInputEl = el)}
+            type="text"
+            name={this.name + ".unit"}
+            placeholder="Unit"
+            value={value.unit}
+          />
+        </div>
         <ion-buttons style={{ margin: "0" }} slot="end">
           <ion-button
             fill="clear"
