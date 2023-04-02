@@ -11,7 +11,8 @@
   "collection:main": "dist/collection/index.js",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
-    "dist/"
+    "dist/",
+    "hydrate/"
   ],
   "scripts": {
     "build": "stencil build",
@@ -35,7 +36,7 @@
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
-    "@ionic/core": "6.7.1",
+    "@ionic/core": "^6.7.1",
     "@stripe/stripe-js": "^1.52.0",
     "chart.js": "^4.2.1",
     "cleave.js": "^1.6.0",
