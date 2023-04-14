@@ -57,62 +57,7 @@
   </head>
 
   <body>
-    <fireenjin-form>
-      <fireenjin-web>
-        <div
-          style="display: flex; justify-content: space-between; padding: 2rem"
-        >
-          <span
-            style="margin: auto"
-            data-start="winner,loser"
-            data-options='{"color": "red"}'
-            data-options-winner='{"color": "green"}'
-            >???</span
-          >
-        </div>
-        <div
-          style="display: flex; justify-content: space-between; padding: 2rem"
-        >
-          <span style="margin: auto" data-end="winner"> CJ </span>
-          <span style="margin: auto" data-end="loser"> Bobby </span>
-        </div>
-        <div
-          data-start="round-2"
-          style="display: flex; justify-content: space-between; padding: 2rem"
-        >
-          <span style="margin: auto">???</span>
-        </div>
-        <div
-          style="display: flex; justify-content: space-between; padding: 2rem"
-        >
-          <span style="margin: auto" data-end="loser"> CJ </span>
-          <span style="margin: auto" data-end="loser2"> Bobby </span>
-        </div>
-      </fireenjin-web>
-      <!-- <fireenjin-docs-gallery></fireenjin-docs-gallery> -->
-      <fireenjin-input
-        type="card"
-        label="Card"
-        stripe-key="pk_test_HaVQgiY2OEUENQJhaDkuoOTV"
-      />
-      <fireenjin-input-address
-        name="primary"
-        label="Primary Address"
-        google-maps-key="AIzaSyAz5C9TRxQ9bUkTwVaD6Yc-Iisw57UslPM"
-      ></fireenjin-input-address>
-      <fireenjin-input-address
-        name="secondary"
-        label="Secondary Address"
-        google-maps-key="AIzaSyAz5C9TRxQ9bUkTwVaD6Yc-Iisw57UslPM"
-      ></fireenjin-input-address>
-      <fireenjin-toggle name="isFranchise" />
-    </fireenjin-form>
-    <!-- <fireenjin-flow endpoint="addUser" ask-confirmation="true">
-      <div>
-        <h1>Success asd!</h1>
-      </div>
-    </fireenjin-flow> -->
-    <!-- <fireenjin-input-logic></fireenjin-input-logic> -->
+    <fireenjin-docs-gallery></fireenjin-docs-gallery>
     <script>
       document.addEventListener("ionChange", function (event) {
         console.log(event);
