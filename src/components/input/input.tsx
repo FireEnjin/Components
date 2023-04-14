@@ -298,7 +298,7 @@ export class Input implements ComponentInterface {
       console.log("Stripe Key prop is required to create card field.");
       return false;
     }
-    if (!Stripe) await loadScript("https://js.stripe.com/v3/");
+    if (!window?.Stripe) await loadScript("https://js.stripe.com/v3/");
     this.stripe = Stripe(this.stripeKey);
     const elements = this.stripe.elements({
       fonts: this.stripeElements.fonts
