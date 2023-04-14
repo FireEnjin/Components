@@ -19,6 +19,16 @@
 
 ## Methods
 
+### `clearLines() => Promise<any[]>`
+
+
+
+#### Returns
+
+Type: `Promise<any[]>`
+
+
+
 ### `createConnectionList() => Promise<[any, any, any?][]>`
 
 
@@ -26,6 +36,26 @@
 #### Returns
 
 Type: `Promise<[any, any, any?][]>`
+
+
+
+### `createLines() => Promise<any[]>`
+
+
+
+#### Returns
+
+Type: `Promise<any[]>`
+
+
+
+### `update() => Promise<any[]>`
+
+
+
+#### Returns
+
+Type: `Promise<any[]>`
 
 
 

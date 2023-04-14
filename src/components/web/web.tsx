@@ -1,4 +1,12 @@
-import { Component, Element, Host, Method, Prop, h } from "@stencil/core";
+import {
+  Component,
+  Element,
+  Host,
+  Method,
+  Prop,
+  Watch,
+  h,
+} from "@stencil/core";
 import loadScript from "../../helpers/loadScript";
 
 @Component({
@@ -21,6 +29,43 @@ export class web {
 
   capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  @Watch("options")
+  async optionsChanged() {
+    return this.update();
+  }
+
+  @Method()
+  async update() {
+    await this.clearLines();
+    await this.createLines();
+
+    return this.lines;
+  }
+
+  @Method()
+  async createLines() {
+    for (const connection of (await this.createConnectionList()) || []) {
+      const [start, end, options] =
+        typeof this.createConnectionFn === "function"
+          ? await this.createConnectionFn(connection)
+          : connection;
+      this.lines.push(
+        new (window as any).LeaderLine(start, end, options || this.options)
+      );
+    }
+
+    return this.lines;
+  }
+
+  @Method()
+  async clearLines() {
+    this.connections = [];
+    this.lines.forEach((line) => line.remove());
+    this.lines = [];
+
+    return this.lines;
   }
 
   @Method()
@@ -54,15 +99,7 @@ export class web {
   async componentDidLoad() {
     if (!(window as any).LeaderLine)
       await loadScript("./build/assets/leader-line.js");
-    for (const connection of (await this.createConnectionList()) || []) {
-      const [start, end, options] =
-        typeof this.createConnectionFn === "function"
-          ? await this.createConnectionFn(connection)
-          : connection;
-      this.lines.push(
-        new (window as any).LeaderLine(start, end, options || this.options)
-      );
-    }
+    await this.createLines();
   }
 
   render() {
