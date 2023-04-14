@@ -36,7 +36,7 @@
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
-    "@ionic/core": "^6.7.1",
+    "@ionic/core": "^6.7.3",
     "chart.js": "^4.2.1",
     "cleave.js": "^1.6.0",
     "clipboard": "^2.0.11",
