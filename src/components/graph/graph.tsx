@@ -25,6 +25,7 @@ import {
   PointElement,
   LinearScale,
   Title,
+  Tooltip,
 } from "chart.js";
 
 @Component({
@@ -210,7 +211,8 @@ export class Graph implements ComponentInterface {
       LineElement,
       PointElement,
       LinearScale,
-      Title
+      Title,
+      Tooltip
     );
   }
 
