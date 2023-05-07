@@ -47,7 +47,7 @@
     "leader-line": "^1.0.7",
     "lodash": "^4.17.21",
     "typescript-debounce-decorator": "^0.0.18",
-    "vanilla-jsoneditor": "^0.17.2"
+    "vanilla-jsoneditor": "^0.17.3"
   },
   "devDependencies": {
     "@fireenjin/cli": "^1.1.5",
