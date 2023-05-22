@@ -140,6 +140,7 @@ export class InputAmount implements ComponentInterface {
           placeholder={this.placeholder}
           required={this.required}
           autofocus={this.autofocus}
+          name={this.name}
           value={this.formattedValue}
         />
       </ion-item>
