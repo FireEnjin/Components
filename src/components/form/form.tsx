@@ -465,7 +465,7 @@ export class Form implements ComponentInterface {
     const pList = path.split(".");
     const len = pList.length;
     for (let i = 0; i < len - 1; i++) {
-      const nextElemIsArray = !this.isNumeric(pList[i + 1]);
+      const nextElemIsArray = this.isNumeric(pList[i + 1]);
       const elem = pList[i];
       if (!obj[elem]) obj[elem] = nextElemIsArray ? [] : {};
       obj = obj[elem];
