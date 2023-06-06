@@ -299,7 +299,7 @@ export class Input implements ComponentInterface {
       return false;
     }
     if (!window?.Stripe) await loadScript("https://js.stripe.com/v3/");
-    this.stripe = Stripe(this.stripeKey);
+    if (!this.stripe?.elements) this.stripe = Stripe(this.stripeKey);
     const elements = this.stripe.elements({
       fonts: this.stripeElements.fonts
         ? this.stripeElements.fonts

@@ -190,21 +190,17 @@ export class Form implements ComponentInterface {
   @Listen("input")
   @Listen("change")
   async onInput(event) {
-    if (
-      event &&
-      event.target &&
-      event.target.name &&
-      !event.target.name.startsWith("ion-")
-    ) {
+    const name = event?.detail?.name || event?.target?.name;
+    if (name && !name.startsWith("ion-")) {
       const value =
         typeof event?.detail?.checked === "boolean"
           ? event.detail.checked
           : event?.detail?.value || event?.target?.value;
       this.setByPath(
         this.formData,
-        event.target.name,
+        name,
         this.filterData?.length
-          ? await this.setFilteredValue(event.target.name, value)
+          ? await this.setFilteredValue(name, value)
           : value
       );
       if (this.cacheKey) this.saveCache();
