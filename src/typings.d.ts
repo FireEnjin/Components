@@ -10,32 +10,68 @@ export type FieldOption = {
   color?: Color;
 };
 
-export type Control = {
-  name: string;
-  icon?: string;
-  label?: string;
+export interface Control {
+  /**
+   * The label to show next to the button
+   */
+  label: string;
+  /**
+   * The value of the field
+   */
   value?: any;
-  header?: string;
-  subHeader?: string;
-  message?: string;
-  optionEl?: (result: any) => any;
-  endpoint?: string;
-  query?: string;
-  limit?: number;
-  orderBy?: string;
-  dataPropsMap?: any;
-  params?: any;
+  /**
+   * The icon to use in the button
+   */
+  icon?: string;
+  /**
+   * The color from the theme to make the button
+   */
+  color?: Color;
+  /**
+   * The link to use for the button
+   */
+  href?: string;
+  /**
+   * The check if detail icon will display
+   */
+  detail?: boolean;
+  /**
+   * The icon used when detail is set true
+   */
+  detailIcon?: string;
+  /**
+   * The name of the input
+   */
+  name?: string;
+  /**
+   * The type of event to fire when a options are selected
+   */
+  type?: "set" | "move" | "select" = "set";
+  /**
+   * The functionality to run when the button is clicked
+   */
+  onClick?: (event: any) => any;
+  /**
+   * Can you check the controls
+   */
+  checkable?: boolean;
+  /**
+   * Can you select multiple
+   */
   multiple?: boolean;
-  disabled?: boolean;
-  cancelText?: string;
-  okText?: string;
-  placeholder?: string;
-  selectedText?: string;
-  interface?: SelectInterface;
-  interfaceOptions?: any;
-  compareWith?: string | SelectCompareFn | null;
-  options?: FieldOption[];
-};
+  /**
+   * Is the checkbox or radio checked
+   */
+  checked?: boolean;
+  /**
+   * Should we hide the checkbox or radio for this item?
+   */
+  hideCheckable?: boolean;
+  /**
+   * Should we show the clear button
+   */
+  showClear?: boolean;
+}
 
 export type Field = {
   compareWith?: string | SelectCompareFn | null;
