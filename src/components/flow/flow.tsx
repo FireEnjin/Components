@@ -25,6 +25,10 @@ export class Flow {
    */
   @Prop() name: string;
   /**
+   * Allow null to be accepted as required value
+   */
+  @Prop() allowNullRequired = false;
+  /**
    * The data from the form being filled out
    */
   @Prop({ mutable: true }) formData: any = {};
@@ -318,24 +322,29 @@ export class Flow {
   @Method()
   async checkStepValidity() {
     let response = true;
-    await new Promise((resolve, reject) => {
+    await new Promise(async (resolve, reject) => {
       try {
         const requiredEls = this.flowEl.querySelectorAll(
           `ion-slide:nth-of-type(${this.currentIndex + 1}) [required]`
         );
         if (!requiredEls.length) resolve(true);
-        (requiredEls || []).forEach((el: any, index) => {
+        for (let i = 0; i < requiredEls.length; i++) {
+          const el: any = requiredEls[i];
           if (
             (typeof el?.reportValidity === "function" &&
-              !el?.reportValidity()) ||
-            (typeof el?.checkValidity === "function" && !el?.checkValidity()) ||
-            el.value === null ||
+              !(await el?.reportValidity())) ||
+            (typeof el?.checkValidity === "function" &&
+              !(await el?.checkValidity())) ||
+            ((this.allowNullRequired ||
+              el?.allowNull ||
+              el?.dataset?.allowNull) &&
+              el.value === null) ||
             el.value === undefined ||
             (typeof el.value === "string" && el.value?.length <= 0)
           )
             response = false;
-          if (index === requiredEls.length - 1) resolve(response);
-        });
+          if (i === requiredEls.length - 1) resolve(response);
+        }
       } catch (e) {
         console.log(e);
         reject();
