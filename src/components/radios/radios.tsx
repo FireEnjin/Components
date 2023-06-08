@@ -102,7 +102,7 @@ export class Radios implements ComponentInterface {
           value={this.value}
           allowEmptySelection={this.allowEmptySelection}
         >
-          <ion-list-header>{this.label}</ion-list-header>
+          {this.label && <ion-list-header>{this.label}</ion-list-header>}
           {(this.options ? this.options : []).map((option) =>
             this.optionEl ? (
               this.optionEl(option)
