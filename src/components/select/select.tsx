@@ -141,7 +141,16 @@ export class Select implements ComponentInterface {
     return (
       <Host>
         <ion-item lines={this.lines}>
-          <div slot="start">
+          <div
+            slot="start"
+            style={{
+              marginRight: "0.5rem",
+              display: "flex",
+              justifyContent: "center",
+              minHeight: "60px",
+              alignItems: "center",
+            }}
+          >
             <slot name="start" />
           </div>
           {this.label && (
@@ -232,7 +241,16 @@ export class Select implements ComponentInterface {
             value={this.value}
             required={this.required}
           />
-          <div slot="end">
+          <div
+            slot="end"
+            style={{
+              marginLeft: "0.5rem",
+              display: "flex",
+              justifyContent: "space-between",
+              minHeight: "60px",
+              alignItems: "center",
+            }}
+          >
             <slot name="end" />
           </div>
         </ion-item>
