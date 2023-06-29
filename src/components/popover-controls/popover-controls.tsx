@@ -45,6 +45,14 @@ export class PopoverControls {
    * Should we show the clear button
    */
   @Prop() showClear = false;
+  /**
+   * Should the popover close on selection?
+   */
+  @Prop() closeOnSelect = false;
+  /**
+   * Should the popover close on clear?
+   */
+  @Prop() closeOnClear = true;
 
   onChange(event) {
     if (
@@ -103,6 +111,7 @@ export class PopoverControls {
                       value: undefined,
                     },
                   }) &&
+                  this.closeOnClear &&
                   this.fireenjinTrigger.emit({ event, name: "closePopover" })
                 }
               >
@@ -128,19 +137,22 @@ export class PopoverControls {
               }
               if (typeof control?.onClick !== "function") return;
               control.onClick(event);
-              this.fireenjinTrigger.emit({ event, name: "closePopover" });
+              if (this.closeOnSelect)
+                this.fireenjinTrigger.emit({ event, name: "closePopover" });
             }}
           >
-            {this.checkable && this.multiple && (
+            {this.checkable && this.multiple && !control?.hideCheckable && (
               <ion-checkbox
                 style={{ marginRight: "0.5rem" }}
                 onIonChange={(event) => this.onChange(event)}
                 value={control?.value}
-                checked={this.value?.includes?.(control?.value)}
+                checked={
+                  control?.checked || this.value?.includes?.(control?.value)
+                }
                 slot="start"
               />
             )}
-            {this.checkable && !this.multiple && (
+            {this.checkable && !this.multiple && !control?.hideCheckable && (
               <ion-radio
                 style={{ marginRight: "0.5rem" }}
                 value={control?.value}
