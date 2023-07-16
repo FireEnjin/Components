@@ -46,7 +46,7 @@ export interface Control {
   /**
    * The type of event to fire when a options are selected
    */
-  type?: "set" | "move" | "select" = "set";
+  type?: "set" | "move" | "select";
   /**
    * The functionality to run when the button is clicked
    */
