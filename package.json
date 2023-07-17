@@ -36,7 +36,7 @@
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
-    "@ionic/core": "^6.7.4",
+    "@ionic/core": "^7.1.3",
     "chart.js": "^4.3.0",
     "cleave.js": "^1.6.0",
     "clipboard": "^2.0.11",
@@ -51,7 +51,7 @@
   "devDependencies": {
     "@fireenjin/cli": "^1.1.5",
     "@fireenjin/docs": "^1.0.19",
-    "@stencil/core": "^3.4.1",
+    "@stencil/core": "^4.0.1",
     "@types/cleave.js": "^1.4.7",
     "@types/jest": "^29.5.3",
     "@types/stripe-v3": "^3.1.29",

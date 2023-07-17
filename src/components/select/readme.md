@@ -51,7 +51,6 @@
 
 ### Used by
 
- - [fireenjin-flow](../flow)
  - [fireenjin-input-path](../input-path)
  - [fireenjin-popover-filter](../popover-filter)
 
@@ -76,6 +75,7 @@ graph TD;
   ion-select --> ion-popover
   ion-select --> ion-action-sheet
   ion-select --> ion-alert
+  ion-select --> ion-icon
   ion-select-popover --> ion-item
   ion-select-popover --> ion-checkbox
   ion-select-popover --> ion-label
@@ -89,7 +89,6 @@ graph TD;
   ion-action-sheet --> ion-ripple-effect
   ion-alert --> ion-ripple-effect
   ion-alert --> ion-backdrop
-  fireenjin-flow --> fireenjin-select
   fireenjin-input-path --> fireenjin-select
   fireenjin-popover-filter --> fireenjin-select
   style fireenjin-select fill:#f9f,stroke:#333,stroke-width:4px

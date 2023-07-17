@@ -269,8 +269,6 @@ Type: `Promise<any>`
 - [fireenjin-checklist](../checklist)
 - [fireenjin-input](../input)
 - [fireenjin-form](../form)
-- ion-slides
-- ion-slide
 - ion-button
 - ion-icon
 - ion-label
@@ -287,8 +285,6 @@ graph TD;
   fireenjin-flow --> fireenjin-checklist
   fireenjin-flow --> fireenjin-input
   fireenjin-flow --> fireenjin-form
-  fireenjin-flow --> ion-slides
-  fireenjin-flow --> ion-slide
   fireenjin-flow --> ion-button
   fireenjin-flow --> ion-icon
   fireenjin-flow --> ion-label
@@ -319,6 +315,7 @@ graph TD;
   ion-select --> ion-popover
   ion-select --> ion-action-sheet
   ion-select --> ion-alert
+  ion-select --> ion-icon
   ion-select-popover --> ion-item
   ion-select-popover --> ion-checkbox
   ion-select-popover --> ion-label

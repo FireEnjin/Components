@@ -148,7 +148,6 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [fireenjin-flow](../flow)
  - [fireenjin-popover-filter](../popover-filter)
 
 ### Depends on
@@ -166,7 +165,6 @@ graph TD;
   fireenjin-form --> ion-col
   fireenjin-form --> ion-button
   ion-button --> ion-ripple-effect
-  fireenjin-flow --> fireenjin-form
   fireenjin-popover-filter --> fireenjin-form
   style fireenjin-form fill:#f9f,stroke:#333,stroke-width:4px
 ```

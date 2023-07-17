@@ -30,10 +30,6 @@
 
 ## Dependencies
 
-### Used by
-
- - [fireenjin-flow](../flow)
-
 ### Depends on
 
 - ion-item
@@ -70,6 +66,7 @@ graph TD;
   ion-select --> ion-popover
   ion-select --> ion-action-sheet
   ion-select --> ion-alert
+  ion-select --> ion-icon
   ion-select-popover --> ion-item
   ion-select-popover --> ion-checkbox
   ion-select-popover --> ion-label
@@ -84,7 +81,6 @@ graph TD;
   ion-alert --> ion-ripple-effect
   ion-alert --> ion-backdrop
   ion-button --> ion-ripple-effect
-  fireenjin-flow --> fireenjin-input-address
   style fireenjin-input-address fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
