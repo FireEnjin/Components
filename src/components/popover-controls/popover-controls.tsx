@@ -136,7 +136,7 @@ export class PopoverControls {
                 if (radios) radios.value = control?.value || null;
               }
               if (typeof control?.onClick !== "function") return;
-              control.onClick(event);
+              control.onClick(event, control);
               if (this.closeOnSelect)
                 this.fireenjinTrigger.emit({ event, name: "closePopover" });
             }}

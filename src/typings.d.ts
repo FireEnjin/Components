@@ -50,7 +50,7 @@ export interface Control {
   /**
    * The functionality to run when the button is clicked
    */
-  onClick?: (event: any) => any;
+  onClick?: (event: any, control?: Control) => any;
   /**
    * Can you check the controls
    */
