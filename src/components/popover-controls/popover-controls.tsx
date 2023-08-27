@@ -92,7 +92,8 @@ export class PopoverControls {
             {this.icon && (
               <ion-icon
                 style={{ marginRight: "0.5rem" }}
-                name={this.icon}
+                name={this.icon.includes("/") ? this.icon : null}
+                src={this.icon.includes("/") ? null : this.icon}
                 slot="start"
               />
             )}
