@@ -215,7 +215,7 @@ export class InputLogic {
         </ion-select>
       </ion-item-divider>,
       <ion-item>
-        <fireenjin-chip-bar>
+        <fireenjin-chip-bar style={{ display: "flex", alignItems: "center" }}>
           {(this.statements || []).map((statement, index) => (
             <ion-chip>
               <ion-label innerHTML={JSON.stringify(statement)} />
