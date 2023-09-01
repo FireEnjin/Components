@@ -1,4 +1,4 @@
-import { Component, h, Method, Prop, State } from "@stencil/core";
+import { Component, h, Method, Prop, State, Watch } from "@stencil/core";
 import { debounce } from "typescript-debounce-decorator";
 import { Control } from "../../typings";
 
@@ -32,6 +32,7 @@ export class InputLogic {
     "%",
   ];
   @Prop() name = "logic";
+  @Prop() label = "Statements";
   @Prop()
   operations?: { [key: string]: any } = {
     var: { var: "" },
@@ -88,10 +89,19 @@ export class InputLogic {
   @Prop() variables: {
     [key: string]: Partial<Control>;
   } = {};
+  @Prop({ mutable: true }) showCode = false;
+  @Prop() allowAdding = false;
+  @Prop() placeholder = "No statements added yet";
 
   @State() selectedOperation: any = this.operations[this.selectedOperator];
   @State() statements: any[] = [];
   @State() manualEdit = true;
+  @State() showAddForm = false;
+
+  @Watch("value")
+  onValueChange() {
+    this.statements = this.value[this.joinBy] || [];
+  }
 
   @Method()
   async addStatment(statement: any) {
@@ -143,6 +153,7 @@ export class InputLogic {
 
   componentDidLoad() {
     setTimeout(() => {
+      this.onValueChange();
       this.manualEdit = false;
     }, 1000);
   }
@@ -155,13 +166,23 @@ export class InputLogic {
     );
     return [
       <fireenjin-code-editor
+        style={{
+          opacity: this.showCode ? "1" : "0",
+          height: this.showCode ? "auto" : "0",
+          minHeight: this.showCode ? "50px" : "0",
+        }}
         autoExpand
         value={JSON.stringify(this.value, null, 4)}
         language="json"
         name={this.name}
       />,
       <ion-item-divider>
-        <ion-label>Statements</ion-label>
+        <ion-buttons style={{ marginRight: "0.3rem" }} slot="start">
+          <ion-button onClick={() => (this.showCode = !this.showCode)}>
+            <ion-icon slot="icon-only" name="code" />
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{this.label}</ion-label>
         <ion-select
           slot="end"
           name="join"
@@ -190,201 +211,217 @@ export class InputLogic {
             </ion-chip>
           ))}
           {!this.statements?.length && (
-            <ion-label>Add Statements to Fire Action</ion-label>
+            <ion-label>{this.placeholder}</ion-label>
           )}
         </div>
+        <ion-chip
+          slot="end"
+          class="add-button"
+          color="primary"
+          onClick={async () => {
+            if (!this.showAddForm) {
+              this.showAddForm = true;
+            } else {
+              await this.updateSelectedOperation();
+              this.addStatment(this.selectedOperation);
+              this.showAddForm = false;
+            }
+          }}
+        >
+          <ion-label>Add</ion-label>
+          <ion-icon name="add-circle" />
+        </ion-chip>
       </ion-item>,
-      <ion-item>
-        <ion-grid>
-          <ion-row>
-            <ion-col
+      this.showAddForm && (
+        <ion-item>
+          <ion-grid>
+            <ion-row>
+              <ion-col
+                style={{
+                  maxWidth: "50px",
+                }}
+              >
+                <ion-button fill="clear" id="select-type">
+                  <ion-icon
+                    slot="icon-only"
+                    name={
+                      this.selectedType === "number"
+                        ? "calculator"
+                        : this.selectedType === "string"
+                        ? "pencil"
+                        : this.selectedType === "variable"
+                        ? "list-circle"
+                        : "color-wand"
+                    }
+                  />
+                </ion-button>
+                <ion-popover
+                  keep-contents-mounted="true"
+                  trigger="select-type"
+                  dismissOnSelect
+                >
+                  <ion-content>
+                    <ion-list>
+                      <ion-item
+                        href="#"
+                        detail
+                        onClick={() => (this.selectedType = null)}
+                      >
+                        Auto
+                      </ion-item>
+                      <ion-item
+                        href="#"
+                        detail
+                        onClick={() => (this.selectedType = "string")}
+                      >
+                        String
+                      </ion-item>
+                      <ion-item
+                        href="#"
+                        detail
+                        onClick={() => (this.selectedType = "number")}
+                      >
+                        Number
+                      </ion-item>
+                      <ion-item
+                        href="#"
+                        detail
+                        onClick={() => (this.selectedType = "variable")}
+                      >
+                        Variable
+                      </ion-item>
+                    </ion-list>
+                  </ion-content>
+                </ion-popover>
+              </ion-col>
+              <ion-col>
+                <ion-input
+                  ref={(el) => (this.leftInputEl = el)}
+                  style={{
+                    minWidth: "200px",
+                    display:
+                      this.selectedType === "variable" ? "none" : "block",
+                  }}
+                  placeholder="Left Value"
+                  onIonChange={async (event: any) => {
+                    try {
+                      this.leftSide =
+                        typeof event?.target?.value !== "undefined"
+                          ? JSON.parse(event.target.value)
+                          : null;
+                    } catch (e) {
+                      console.log("Error parsing as JSON: ", e);
+                      this.leftSide = event?.target?.value || null;
+                    }
+                    await this.updateSelectedOperation();
+                  }}
+                />
+                <ion-select
+                  interface="action-sheet"
+                  interfaceOptions={{
+                    header: "Select Variable",
+                  }}
+                  onIonChange={(event: any) => {
+                    try {
+                      this.leftSide =
+                        typeof event?.target?.value !== "undefined"
+                          ? JSON.parse(event.target.value)
+                          : null;
+                    } catch (e) {
+                      console.log("Error parsing as JSON: ", e);
+                      this.leftSide = event?.target?.value || null;
+                    }
+                  }}
+                  style={{
+                    minWidth: "200px",
+                    display: this.selectedType === "variable" ? "flex" : "none",
+                  }}
+                  placeholder="Select Variable"
+                >
+                  {Object.entries(this.variables || {}).map(
+                    ([key, control]) => (
+                      <ion-select-option value={`{"var":"${key}"}`}>
+                        {control?.label || key}
+                      </ion-select-option>
+                    )
+                  )}
+                </ion-select>
+              </ion-col>
+              <ion-col style={{ minWidth: "160px" }}>
+                <ion-select
+                  name="operator"
+                  interface="popover"
+                  value={this.selectedOperator}
+                  onIonChange={(event: any) => {
+                    this.selectedOperator = event.target.value;
+                    this.selectedOperation =
+                      this.operations[this.selectedOperator];
+                  }}
+                >
+                  {Object.keys(this.operations || {})
+                    .filter((value) =>
+                      this.comparableOperations.includes(value)
+                    )
+                    .map((value) => (
+                      <ion-select-option value={value}>
+                        {value}
+                      </ion-select-option>
+                    ))}
+                </ion-select>
+              </ion-col>
+              <ion-col>
+                <ion-input
+                  type={this.selectedType === "number" ? "number" : "text"}
+                  ref={(el) => (this.rightInputEl = el)}
+                  onIonChange={async (event: any) => {
+                    try {
+                      this.rightSide =
+                        typeof event?.target?.value !== "undefined"
+                          ? JSON.parse(event.target.value)
+                          : null;
+                    } catch (e) {
+                      console.log("Error parsing as JSON: ", e);
+                      this.rightSide = event?.target?.value || null;
+                    }
+                    await this.updateSelectedOperation();
+                  }}
+                  placeholder="Right Value"
+                />
+              </ion-col>
+            </ion-row>
+            <ion-row
               style={{
-                maxWidth: "50px",
+                opacity: this.manualEdit ? "1" : "0",
+                height: this.manualEdit ? "auto" : "0",
               }}
             >
-              <ion-button fill="clear" id="select-type">
-                <ion-icon
-                  slot="icon-only"
-                  name={
-                    this.selectedType === "number"
-                      ? "calculator"
-                      : this.selectedType === "string"
-                      ? "pencil"
-                      : this.selectedType === "variable"
-                      ? "code"
-                      : "bulb"
-                  }
+              <ion-col>
+                <fireenjin-code-editor
+                  onFireenjinCodeChange={(event) => {
+                    if (
+                      !this.manualEdit ||
+                      event?.detail?.value === selectedOperationJSON
+                    )
+                      return;
+                    try {
+                      this.selectedOperation = JSON.parse(event.detail.value);
+                      this.leftAndRightFromSelectedOperation();
+                    } catch (e) {
+                      console.log(
+                        "Error parsing selected operation as JSON: ",
+                        e
+                      );
+                    }
+                  }}
+                  autoExpand
+                  value={selectedOperationJSON}
+                  language="json"
                 />
-              </ion-button>
-              <ion-popover
-                keep-contents-mounted="true"
-                trigger="select-type"
-                dismissOnSelect
-              >
-                <ion-content>
-                  <ion-list>
-                    <ion-item
-                      href="#"
-                      detail
-                      onClick={() => (this.selectedType = null)}
-                    >
-                      Auto
-                    </ion-item>
-                    <ion-item
-                      href="#"
-                      detail
-                      onClick={() => (this.selectedType = "string")}
-                    >
-                      String
-                    </ion-item>
-                    <ion-item
-                      href="#"
-                      detail
-                      onClick={() => (this.selectedType = "number")}
-                    >
-                      Number
-                    </ion-item>
-                    <ion-item
-                      href="#"
-                      detail
-                      onClick={() => (this.selectedType = "variable")}
-                    >
-                      Variable
-                    </ion-item>
-                  </ion-list>
-                </ion-content>
-              </ion-popover>
-            </ion-col>
-            <ion-col>
-              <ion-input
-                ref={(el) => (this.leftInputEl = el)}
-                style={{
-                  minWidth: "200px",
-                  display: this.selectedType === "variable" ? "none" : "block",
-                }}
-                placeholder="Left Value"
-                onIonChange={async (event: any) => {
-                  try {
-                    this.leftSide =
-                      typeof event?.target?.value !== "undefined"
-                        ? JSON.parse(event.target.value)
-                        : null;
-                  } catch (e) {
-                    console.log("Error parsing as JSON: ", e);
-                    this.leftSide = event?.target?.value || null;
-                  }
-                  await this.updateSelectedOperation();
-                }}
-              />
-              <ion-select
-                onIonChange={(event: any) => {
-                  try {
-                    this.leftSide =
-                      typeof event?.target?.value !== "undefined"
-                        ? JSON.parse(event.target.value)
-                        : null;
-                  } catch (e) {
-                    console.log("Error parsing as JSON: ", e);
-                    this.leftSide = event?.target?.value || null;
-                  }
-                }}
-                style={{
-                  minWidth: "200px",
-                  display: this.selectedType === "variable" ? "flex" : "none",
-                }}
-                placeholder="Select Variable"
-              >
-                {Object.entries(this.variables || {}).map(([key, control]) => (
-                  <ion-select-option value={`{"var":"${key}"}`}>
-                    {control?.label || key}
-                  </ion-select-option>
-                ))}
-              </ion-select>
-            </ion-col>
-            <ion-col style={{ minWidth: "160px" }}>
-              <ion-select
-                name="operator"
-                interface="popover"
-                value={this.selectedOperator}
-                onIonChange={(event: any) => {
-                  this.selectedOperator = event.target.value;
-                  this.selectedOperation =
-                    this.operations[this.selectedOperator];
-                }}
-              >
-                {Object.keys(this.operations || {})
-                  .filter((value) => this.comparableOperations.includes(value))
-                  .map((value) => (
-                    <ion-select-option value={value}>{value}</ion-select-option>
-                  ))}
-              </ion-select>
-            </ion-col>
-            <ion-col>
-              <ion-input
-                type={this.selectedType === "number" ? "number" : "text"}
-                ref={(el) => (this.rightInputEl = el)}
-                onIonChange={async (event: any) => {
-                  try {
-                    this.rightSide =
-                      typeof event?.target?.value !== "undefined"
-                        ? JSON.parse(event.target.value)
-                        : null;
-                  } catch (e) {
-                    console.log("Error parsing as JSON: ", e);
-                    this.rightSide = event?.target?.value || null;
-                  }
-                  await this.updateSelectedOperation();
-                }}
-                placeholder="Right Value"
-              />
-            </ion-col>
-            <ion-col>
-              <ion-button fill="clear" onClick={() => this.toggleManualEdit()}>
-                <ion-icon slot="icon-only" name="create" />
-              </ion-button>
-              <ion-button
-                color="primary"
-                onClick={async () => {
-                  await this.updateSelectedOperation();
-                  this.addStatment(this.selectedOperation);
-                }}
-              >
-                <ion-icon slot="icon-only" name="add-circle" />
-              </ion-button>
-            </ion-col>
-          </ion-row>
-          <ion-row
-            style={{
-              opacity: this.manualEdit ? "1" : "0",
-              height: this.manualEdit ? "auto" : "0",
-            }}
-          >
-            <ion-col>
-              <fireenjin-code-editor
-                onFireenjinCodeChange={(event) => {
-                  if (
-                    !this.manualEdit ||
-                    event?.detail?.value === selectedOperationJSON
-                  )
-                    return;
-                  try {
-                    this.selectedOperation = JSON.parse(event.detail.value);
-                    this.leftAndRightFromSelectedOperation();
-                  } catch (e) {
-                    console.log(
-                      "Error parsing selected operation as JSON: ",
-                      e
-                    );
-                  }
-                }}
-                autoExpand
-                value={selectedOperationJSON}
-                language="json"
-              />
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>,
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      ),
     ];
   }
 }
