@@ -67,6 +67,7 @@ Type: `Promise<void>`
 - ion-select
 - ion-select-option
 - ion-item
+- [fireenjin-chip-bar](../chip-bar)
 - ion-chip
 - ion-grid
 - ion-row
@@ -87,6 +88,7 @@ graph TD;
   fireenjin-input-logic --> ion-select
   fireenjin-input-logic --> ion-select-option
   fireenjin-input-logic --> ion-item
+  fireenjin-input-logic --> fireenjin-chip-bar
   fireenjin-input-logic --> ion-chip
   fireenjin-input-logic --> ion-grid
   fireenjin-input-logic --> ion-row

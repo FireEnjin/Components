@@ -1,4 +1,12 @@
-import { Component, h, Method, Prop, State, Watch } from "@stencil/core";
+import {
+  Component,
+  h,
+  Listen,
+  Method,
+  Prop,
+  State,
+  Watch,
+} from "@stencil/core";
 import { debounce } from "typescript-debounce-decorator";
 import { Control } from "../../typings";
 
@@ -98,6 +106,12 @@ export class InputLogic {
   @State() manualEdit = true;
   @State() showAddForm = false;
 
+  @Listen("fireenjinCodeBlur")
+  async onCodeBlur(event) {
+    if (event?.target?.name !== this.name) return;
+    this.value = event?.detail?.value;
+  }
+
   @Watch("value")
   onValueChange() {
     this.statements = this.value[this.joinBy] || [];
@@ -172,6 +186,7 @@ export class InputLogic {
           minHeight: this.showCode ? "50px" : "0",
         }}
         autoExpand
+        outputObject
         value={JSON.stringify(this.value, null, 4)}
         language="json"
         name={this.name}
@@ -200,7 +215,7 @@ export class InputLogic {
         </ion-select>
       </ion-item-divider>,
       <ion-item>
-        <div>
+        <fireenjin-chip-bar>
           {(this.statements || []).map((statement, index) => (
             <ion-chip>
               <ion-label innerHTML={JSON.stringify(statement)} />
@@ -213,7 +228,7 @@ export class InputLogic {
           {!this.statements?.length && (
             <ion-label>{this.placeholder}</ion-label>
           )}
-        </div>
+        </fireenjin-chip-bar>
         <ion-chip
           slot="end"
           class="add-button"
