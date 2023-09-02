@@ -337,7 +337,7 @@ export class Input implements ComponentInterface {
       this.itemEl.classList.remove("item-has-focus", "item-input");
       this.ionBlur.emit({
         event,
-        name: this.name ? this.name : "card",
+        name: this.name,
         value:
           this.cardValidity && this.cardValidity.card
             ? this.cardValidity.card
@@ -358,7 +358,7 @@ export class Input implements ComponentInterface {
       this.cardValidity = event;
       const eventPayload = {
         event,
-        name: this.name ? this.name : "card",
+        name: this.name,
         value: event.card,
         validity:
           this.cardValidity &&
@@ -375,7 +375,7 @@ export class Input implements ComponentInterface {
       this.itemEl.classList.add("item-has-focus", "item-input");
       this.ionFocus.emit({
         event,
-        name: this.name ? this.name : "card",
+        name: this.name,
         validity:
           this.cardValidity &&
           !this.cardValidity.empty &&
