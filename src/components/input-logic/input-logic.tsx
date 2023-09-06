@@ -113,7 +113,8 @@ export class InputLogic {
   }
 
   @Watch("value")
-  onValueChange() {
+  onValueChange(value) {
+    if (this.value === value) return;
     this.statements = this.value[this.joinBy] || [];
   }
 
@@ -167,7 +168,7 @@ export class InputLogic {
 
   componentDidLoad() {
     setTimeout(() => {
-      this.onValueChange();
+      this.onValueChange(this.value);
       this.manualEdit = false;
     }, 1000);
   }
@@ -402,6 +403,14 @@ export class InputLogic {
                   }}
                   placeholder="Right Value"
                 />
+              </ion-col>
+              <ion-col style={{ maxWidth: "50px" }}>
+                <ion-button
+                  fill="clear"
+                  onClick={() => this.toggleManualEdit()}
+                >
+                  <ion-icon slot="icon-only" name="create" />
+                </ion-button>
               </ion-col>
             </ion-row>
             <ion-row
