@@ -114,7 +114,8 @@ export class InputLogic {
 
   @Watch("value")
   onValueChange(value) {
-    if (this.value === value) return;
+    if (this.value === value && this.statements === this.value?.[this.joinBy])
+      return;
     this.statements = this.value[this.joinBy] || [];
   }
 
@@ -168,6 +169,7 @@ export class InputLogic {
 
   componentDidLoad() {
     setTimeout(() => {
+      this.joinBy = Object?.keys?.(this.value)?.[0] === "or" ? "or" : "and";
       this.onValueChange(this.value);
       this.manualEdit = false;
     }, 1000);

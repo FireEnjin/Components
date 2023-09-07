@@ -2,7 +2,7 @@ import { ComponentPresets } from "@fireenjin/docs";
 
 export default {
   default: {
-    name: "Default",
+    name: "Default d",
     props: {
       variables: {
         title: {
