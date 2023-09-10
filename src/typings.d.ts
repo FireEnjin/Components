@@ -14,7 +14,7 @@ export interface Control {
   /**
    * The label to show above the field
    */
-  label: string;
+  label?: string;
   /**
    * The description of the control
    */
