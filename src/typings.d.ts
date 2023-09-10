@@ -18,7 +18,7 @@ export interface Control {
   /**
    * The description of the control
    */
-  description: string;
+  description?: string;
   /**
    * The value of the field
    */
