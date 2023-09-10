@@ -7,7 +7,7 @@ export default {
       variables: {
         title: {
           label: "Title",
-          value: "title",
+          description: "This is a description of the field",
         },
       },
       value: {

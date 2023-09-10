@@ -76,6 +76,7 @@ Type: `Promise<void>`
 - ion-content
 - ion-list
 - ion-input
+- [fireenjin-select](../select)
 
 ### Graph
 ```mermaid
@@ -97,6 +98,7 @@ graph TD;
   fireenjin-input-logic --> ion-content
   fireenjin-input-logic --> ion-list
   fireenjin-input-logic --> ion-input
+  fireenjin-input-logic --> fireenjin-select
   ion-button --> ion-ripple-effect
   ion-select --> ion-select-popover
   ion-select --> ion-popover
@@ -120,6 +122,15 @@ graph TD;
   ion-alert --> ion-backdrop
   ion-chip --> ion-ripple-effect
   ion-input --> ion-icon
+  fireenjin-select --> ion-label
+  fireenjin-select --> ion-item
+  fireenjin-select --> ion-popover
+  fireenjin-select --> ion-content
+  fireenjin-select --> ion-list
+  fireenjin-select --> ion-item-divider
+  fireenjin-select --> ion-select
+  fireenjin-select --> ion-select-option
+  fireenjin-select --> ion-icon
   style fireenjin-input-logic fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

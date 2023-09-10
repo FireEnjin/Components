@@ -12,9 +12,13 @@ export type FieldOption = {
 
 export interface Control {
   /**
-   * The label to show next to the button
+   * The label to show above the field
    */
   label: string;
+  /**
+   * The description of the control
+   */
+  description: string;
   /**
    * The value of the field
    */

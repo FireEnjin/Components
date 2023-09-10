@@ -55,7 +55,7 @@ export class Select implements ComponentInterface {
   /**
    * The interface the select should use: `action-sheet`, `popover` or `alert`.
    */
-  @Prop() interface: SelectInterface = "alert";
+  @Prop() interface: SelectInterface | "custom" | "select";
   /**
    * Any additional options that the `alert`, `action-sheet` or `popover` interface
    * can take. See the [ion-alert docs](../alert), the
@@ -81,6 +81,7 @@ export class Select implements ComponentInterface {
   @Prop() orderBy?: string;
   @Prop() dataPropsMap?: any;
   @Prop() optionEl?: (result: any) => any;
+  @Prop() selectedOptionEl?: (result: any) => any;
   @Prop() limit = 15;
   @Prop() params?: any;
   @Prop() query?: string;
@@ -91,11 +92,13 @@ export class Select implements ComponentInterface {
     value?: any;
     disabled?: boolean;
     payload?: any;
+    [key: string]: any;
   }[] = [];
   @Prop() required = false;
   @Prop() resultsKey? = "results";
   @Prop() labelPosition?: "stacked" | "fixed" | "floating";
   @Prop() lines: "full" | "inset" | "none";
+  @Prop() trigger?: string = "fireenjin-custom-select";
 
   @State() results: any[] = [];
 
@@ -132,6 +135,19 @@ export class Select implements ComponentInterface {
     });
   }
 
+  renderSelectedOption() {
+    const option = this.options?.find?.((opt) => opt?.value === this.value);
+    return option ? (
+      this.selectedOptionEl ? (
+        this.selectedOptionEl(option)
+      ) : (
+        <ion-label>{option?.label}</ion-label>
+      )
+    ) : (
+      <ion-label>{this.placeholder || "Select an Option"}</ion-label>
+    );
+  }
+
   componentWillLoad() {
     if (!Build.isBrowser) return;
     this.fetchData();
@@ -140,14 +156,14 @@ export class Select implements ComponentInterface {
   render() {
     return (
       <Host>
-        <ion-item lines={this.lines}>
+        <ion-item lines={this.lines} id={this.trigger}>
           <div
             slot="start"
             style={{
               marginRight: "0.5rem",
               display: "flex",
               justifyContent: "center",
-              minHeight: "60px",
+              minHeight: "var(--min-height, 45px)",
               alignItems: "center",
             }}
           >
@@ -156,77 +172,132 @@ export class Select implements ComponentInterface {
           {this.label && (
             <ion-label position={this.labelPosition}>{this.label}</ion-label>
           )}
-          {/* <select
-            title={this.placeholder || this.name}
-            disabled={this.disabled}
-            multiple={this.multiple}
-            name={this.name}
-            required={this.required}
-            onChange={(event) => this.ionChange.emit({
-              event,
-              name: this.name,
-              value: this.value
-            })}
-          >
-            <slot />
-
-            {this.options.map((option) => (
-              <option
-                selected={
-                  this.multiple
-                    ? this.value && this.value.indexOf(option.value) >= 0
-                    : option.value + "" === this.value + ""
-                }
-                value={option.value}
-              >
-                {option.label}
-              </option>
-            ))}
-          </select> */}
-          <ion-select
-            disabled={this.disabled}
-            selectedText={this.selectedText}
-            interface={this.interface}
-            compareWith={this.compareWith}
-            name={this.name}
-            value={this.value}
-            okText={this.okText}
-            multiple={this.multiple}
-            cancelText={this.cancelText}
-            placeholder={this.placeholder}
-            interfaceOptions={
-              this.interfaceOptions
-                ? this.interfaceOptions
-                : {
-                    header: this.header,
-                    subHeader: this.subHeader,
-                    message: this.message,
+          {this.interface === "select" ? (
+            <select
+              title={this.placeholder || this.name}
+              disabled={this.disabled}
+              multiple={this.multiple}
+              name={this.name}
+              required={this.required}
+              onChange={(event) =>
+                this.ionChange.emit({
+                  event,
+                  name: this.name,
+                  value: this.value,
+                })
+              }
+            >
+              <slot />
+              {(this.options || []).map((option) => (
+                <option
+                  selected={
+                    this.multiple
+                      ? this.value && this.value.indexOf(option.value) >= 0
+                      : option.value + "" === this.value + ""
                   }
-            }
-          >
-            {(this.options ? this.options : []).map((option) =>
-              this.optionEl ? (
-                this.optionEl(option)
-              ) : (
-                <ion-select-option
                   value={option.value}
-                  disabled={option.disabled}
                 >
                   {option.label}
-                </ion-select-option>
-              )
-            )}
-            {(this.results ? this.results : []).map((result) =>
-              this.optionEl ? (
-                this.optionEl(result)
-              ) : (
-                <ion-select-option value={result.id}>
-                  {result.name}
-                </ion-select-option>
-              )
-            )}
-            <slot />
-          </ion-select>
+                </option>
+              ))}
+            </select>
+          ) : this.interface === "custom" ? (
+            <div class="custom-select" style={{ cursor: "pointer" }}>
+              {this.renderSelectedOption()}
+              <slot />
+              <ion-popover
+                dismissOnSelect
+                onClick={(event) => {
+                  this.value =
+                    event?.target?.closest?.("[value]")?.value ||
+                    event?.target?.closest?.("[data-value]")?.dataset?.value;
+                  this.ionChange.emit({
+                    name: this.name,
+                    value: this.value,
+                    event,
+                  });
+                }}
+                trigger={this.trigger}
+              >
+                <ion-content>
+                  <ion-list>
+                    {this.interfaceOptions?.header ? (
+                      <ion-item-divider>
+                        {this.interfaceOptions?.header}
+                      </ion-item-divider>
+                    ) : null}
+                    {(this.options ? this.options : []).map((option) =>
+                      this.optionEl ? (
+                        this.optionEl(option)
+                      ) : (
+                        <ion-item
+                          value={option.value}
+                          disabled={option.disabled}
+                          detail
+                        >
+                          {option.label}
+                        </ion-item>
+                      )
+                    )}
+                    {(this.results ? this.results : []).map((result) =>
+                      this.optionEl ? (
+                        this.optionEl(result)
+                      ) : (
+                        <ion-item detail value={result.id}>
+                          {result.name}
+                        </ion-item>
+                      )
+                    )}
+                  </ion-list>
+                </ion-content>
+              </ion-popover>
+            </div>
+          ) : (
+            <ion-select
+              disabled={this.disabled}
+              selectedText={this.selectedText}
+              interface={this.interface}
+              compareWith={this.compareWith}
+              name={this.name}
+              value={this.value}
+              okText={this.okText}
+              multiple={this.multiple}
+              cancelText={this.cancelText}
+              placeholder={this.placeholder}
+              interfaceOptions={
+                this.interfaceOptions
+                  ? this.interfaceOptions
+                  : {
+                      header: this.header,
+                      subHeader: this.subHeader,
+                      message: this.message,
+                    }
+              }
+            >
+              {(this.options ? this.options : []).map((option) =>
+                this.optionEl ? (
+                  this.optionEl(option)
+                ) : (
+                  <ion-select-option
+                    value={option.value}
+                    disabled={option.disabled}
+                  >
+                    {option.label}
+                  </ion-select-option>
+                )
+              )}
+              {(this.results ? this.results : []).map((result) =>
+                this.optionEl ? (
+                  this.optionEl(result)
+                ) : (
+                  <ion-select-option value={result.id}>
+                    {result.name}
+                  </ion-select-option>
+                )
+              )}
+              <slot />
+            </ion-select>
+          )}
           <input
             style={{
               opacity: "0",
@@ -241,18 +312,22 @@ export class Select implements ComponentInterface {
             value={this.value}
             required={this.required}
           />
-          <div
-            slot="end"
-            style={{
-              marginLeft: "0.5rem",
-              display: "flex",
-              justifyContent: "space-between",
-              minHeight: "60px",
-              alignItems: "center",
-            }}
-          >
-            <slot name="end" />
-          </div>
+          {this.interface === "custom" ? (
+            <ion-icon name="chevron-down" slot="end" />
+          ) : (
+            <div
+              slot="end"
+              style={{
+                marginLeft: "0.5rem",
+                display: "flex",
+                justifyContent: "space-between",
+                minHeight: "var(--min-height, 45px)",
+                alignItems: "center",
+              }}
+            >
+              <slot name="end" />
+            </div>
+          )}
         </ion-item>
       </Host>
     );

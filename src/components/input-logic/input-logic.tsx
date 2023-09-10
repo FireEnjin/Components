@@ -334,8 +334,9 @@ export class InputLogic {
                     await this.updateSelectedOperation();
                   }}
                 />
-                <ion-select
-                  interface="action-sheet"
+                <fireenjin-select
+                  lines="none"
+                  interface="custom"
                   interfaceOptions={{
                     header: "Select Variable",
                   }}
@@ -355,15 +356,28 @@ export class InputLogic {
                     display: this.selectedType === "variable" ? "flex" : "none",
                   }}
                   placeholder="Select Variable"
-                >
-                  {Object.entries(this.variables || {}).map(
-                    ([key, control]) => (
-                      <ion-select-option value={`{"var":"${key}"}`}>
-                        {control?.label || key}
-                      </ion-select-option>
-                    )
+                  options={Object.entries(this.variables || {}).map(
+                    ([key, control]) => ({
+                      ...control,
+                      label: control?.label || key,
+                      value: control?.value || `{"var":"${key}"}`,
+                    })
                   )}
-                </ion-select>
+                  optionEl={(option: Partial<Control>) => (
+                    <ion-item
+                      data-value={option?.value}
+                      detail
+                      style={{ cursor: "pointer" }}
+                    >
+                      <ion-label>
+                        <h2>{option.label}</h2>
+                        {option?.description ? (
+                          <small>{option.description}</small>
+                        ) : null}
+                      </ion-label>
+                    </ion-item>
+                  )}
+                />
               </ion-col>
               <ion-col style={{ minWidth: "160px" }}>
                 <ion-select

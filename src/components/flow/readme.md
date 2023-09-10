@@ -332,10 +332,15 @@ graph TD;
   ion-action-sheet --> ion-ripple-effect
   ion-alert --> ion-ripple-effect
   ion-alert --> ion-backdrop
-  fireenjin-select --> ion-item
   fireenjin-select --> ion-label
+  fireenjin-select --> ion-item
+  fireenjin-select --> ion-popover
+  fireenjin-select --> ion-content
+  fireenjin-select --> ion-list
+  fireenjin-select --> ion-item-divider
   fireenjin-select --> ion-select
   fireenjin-select --> ion-select-option
+  fireenjin-select --> ion-icon
   fireenjin-radios --> ion-list
   fireenjin-radios --> ion-radio-group
   fireenjin-radios --> ion-list-header

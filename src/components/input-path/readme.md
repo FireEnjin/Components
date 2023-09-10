@@ -85,10 +85,16 @@ graph TD;
   ion-input --> ion-icon
   ion-chip --> ion-ripple-effect
   ion-button --> ion-ripple-effect
-  fireenjin-select --> ion-item
   fireenjin-select --> ion-label
+  fireenjin-select --> ion-item
+  fireenjin-select --> ion-popover
+  fireenjin-select --> ion-content
+  fireenjin-select --> ion-list
+  fireenjin-select --> ion-item-divider
   fireenjin-select --> ion-select
   fireenjin-select --> ion-select-option
+  fireenjin-select --> ion-icon
+  ion-popover --> ion-backdrop
   ion-select --> ion-select-popover
   ion-select --> ion-popover
   ion-select --> ion-action-sheet
@@ -100,7 +106,6 @@ graph TD;
   ion-select-popover --> ion-radio
   ion-select-popover --> ion-list
   ion-select-popover --> ion-list-header
-  ion-popover --> ion-backdrop
   ion-action-sheet --> ion-backdrop
   ion-action-sheet --> ion-icon
   ion-action-sheet --> ion-ripple-effect
