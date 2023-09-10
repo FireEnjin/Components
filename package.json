@@ -10,9 +10,6 @@
   "types": "dist/types/components.d.ts",
   "collection:main": "dist/collection/index.js",
   "collection": "dist/collection/collection-manifest.json",
-  "engines": {
-    "node": "18"
-  },
   "files": [
     "dist/",
     "hydrate/"
