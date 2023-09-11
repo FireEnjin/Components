@@ -18,6 +18,8 @@ import {
   styleUrl: "select.css",
 })
 export class Select implements ComponentInterface {
+  popoverEl: HTMLIonPopoverElement;
+
   @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
   @Event() ionChange: EventEmitter<{
     event;
@@ -156,7 +158,17 @@ export class Select implements ComponentInterface {
   render() {
     return (
       <Host>
-        <ion-item lines={this.lines} id={this.trigger}>
+        <ion-item
+          lines={this.lines}
+          id={this.trigger}
+          onClick={
+            this.interface === "custom"
+              ? (event) => {
+                  this.popoverEl.present(event);
+                }
+              : null
+          }
+        >
           <div
             slot="start"
             style={{
@@ -206,6 +218,7 @@ export class Select implements ComponentInterface {
               {this.renderSelectedOption()}
               <slot />
               <ion-popover
+                ref={(el) => (this.popoverEl = el)}
                 dismissOnSelect
                 onClick={(event) => {
                   this.value =

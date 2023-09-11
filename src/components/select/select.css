@@ -6,6 +6,7 @@ fireenjin-select ion-icon {
 
 fireenjin-select ion-item {
   width: 100%;
+  cursor: pointer;
 }
 
 fireenjin-select select {
@@ -18,6 +19,5 @@ fireenjin-select select {
 }
 
 fireenjin-select .custom-select {
-  cursor: pointer;
   width: 100%;
 }
