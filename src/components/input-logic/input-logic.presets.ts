@@ -10,18 +10,7 @@ export default {
           description: "This is a description of the field",
         },
       },
-      value: {
-        and: [
-          {
-            "==": [
-              {
-                var: "title",
-              },
-              "test",
-            ],
-          },
-        ],
-      },
+      value: true,
     },
   },
 } as ComponentPresets;
