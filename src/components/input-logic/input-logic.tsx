@@ -110,7 +110,10 @@ export class InputLogic {
   @Listen("fireenjinCodeBlur")
   async onCodeBlur(event) {
     if (event?.target?.name !== this.name) return;
-    this.value = event?.detail?.value;
+    this.value =
+      typeof event?.detail?.value === "string"
+        ? JSON.parse(event.detail.value)
+        : event.detail.value;
   }
 
   @Watch("value")
@@ -193,14 +196,10 @@ export class InputLogic {
 
   componentDidLoad() {
     if (!this.value) this.value = this.constructStatmentChain();
+    if (typeof this.value === "string") this.value = JSON.parse(this.value);
     setTimeout(() => {
-      const valueStr = this.value ? JSON.stringify(this.value) : "";
-      if (this.value)
-        this.joinBy = valueStr.includes(`"and"`)
-          ? "and"
-          : valueStr.includes(`"or"`)
-          ? "or"
-          : null;
+      if (this.value.if[0].and) this.joinBy = "and";
+      if (this.value.if[0].or) this.joinBy = "or";
       if (this.value) this.onValueChange(this.value);
       this.manualEdit = false;
     }, 1000);
@@ -221,7 +220,11 @@ export class InputLogic {
         }}
         autoExpand
         outputObject={this.outputObject}
-        value={JSON.stringify(this.value, null, 4)}
+        value={
+          typeof this.value === "string"
+            ? this.value
+            : JSON.stringify(this.value, null, 4)
+        }
         language="json"
         name={this.name}
       />,
