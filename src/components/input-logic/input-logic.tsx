@@ -100,6 +100,7 @@ export class InputLogic {
   @Prop({ mutable: true }) showCode = false;
   @Prop() allowAdding = false;
   @Prop() placeholder = "No statements added yet";
+  @Prop() outputObject = false;
 
   @State() selectedOperation: any = this.operations[this.selectedOperator];
   @State() statements: any[] = [];
@@ -219,7 +220,7 @@ export class InputLogic {
           minHeight: this.showCode ? "50px" : "0",
         }}
         autoExpand
-        outputObject
+        outputObject={this.outputObject}
         value={JSON.stringify(this.value, null, 4)}
         language="json"
         name={this.name}
