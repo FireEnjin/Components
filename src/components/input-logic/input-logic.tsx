@@ -14,6 +14,7 @@ import { Control } from "../../typings";
   tag: "fireenjin-input-logic",
 })
 export class InputLogic {
+  selectEl: HTMLIonSelectElement;
   popoverEl: any;
   leftInputEl: any;
   rightInputEl: any;
@@ -89,9 +90,8 @@ export class InputLogic {
     substr: { substr: ["", 0] },
     log: { log: "" },
   };
-  @Prop({ mutable: true }) joinBy: "and" | "or" = "and";
-  @Prop({ mutable: true }) value: any =
-    this.joinBy === "and" ? this.operations.and : this.operations.or;
+  @Prop({ mutable: true }) joinBy?: "and" | "or" = null;
+  @Prop({ mutable: true }) value: any;
   @Prop({ mutable: true }) selectedOperator: string = "==";
   @Prop() selectedType?: "string" | "number" | "variable";
   @Prop() variables: {
@@ -114,25 +114,21 @@ export class InputLogic {
 
   @Watch("value")
   onValueChange(value) {
-    if (this.value === value && this.statements === this.value?.[this.joinBy])
-      return;
-    this.statements = this.value[this.joinBy] || [];
+    const statements = this.getStatementsFromValue(value);
+    if (this.value === value && this.statements === statements) return;
+    this.statements = statements;
   }
 
   @Method()
   async addStatment(statement: any) {
     this.statements = [...this.statements, statement];
-    this.value = {
-      [this.joinBy]: this.statements,
-    };
+    this.value = this.constructStatmentChain();
   }
 
   @Method()
   async removeStatement(index: number) {
     this.statements = this.statements.filter((_statement, i) => i !== index);
-    this.value = {
-      [this.joinBy]: this.statements,
-    };
+    this.value = this.constructStatmentChain();
   }
 
   @Method()
@@ -167,10 +163,44 @@ export class InputLogic {
     this.rightInputEl.value = this.rightSide;
   }
 
+  getStatementsFromValue(value: any) {
+    let statements = [];
+    if (this.joinBy === "and") {
+      statements = value?.if?.[0]?.and || [];
+    } else if (this.joinBy === "or") {
+      statements = value?.if?.[0]?.or || [];
+    }
+
+    return statements;
+  }
+
+  constructStatmentChain() {
+    let statement = { ...this.operations?.if };
+    if (this.joinBy === "and") {
+      const and = { ...this.operations?.and };
+      and.and = this.statements;
+      statement.if[0] = and;
+    } else if (this.joinBy === "or") {
+      const or = { ...this.operations?.or };
+      or.or = this.statements;
+      statement.if[0] = or;
+    } else {
+      statement = this.statements;
+    }
+    return statement;
+  }
+
   componentDidLoad() {
+    if (!this.value) this.value = this.constructStatmentChain();
     setTimeout(() => {
-      this.joinBy = Object?.keys?.(this.value)?.[0] === "or" ? "or" : "and";
-      this.onValueChange(this.value);
+      const valueStr = this.value ? JSON.stringify(this.value) : "";
+      if (this.value)
+        this.joinBy = valueStr.includes(`"and"`)
+          ? "and"
+          : valueStr.includes(`"or"`)
+          ? "or"
+          : null;
+      if (this.value) this.onValueChange(this.value);
       this.manualEdit = false;
     }, 1000);
   }
@@ -196,26 +226,35 @@ export class InputLogic {
       />,
       <ion-item-divider>
         <ion-buttons style={{ marginRight: "0.3rem" }} slot="start">
-          <ion-button onClick={() => (this.showCode = !this.showCode)}>
+          <ion-button
+            shape="round"
+            fill="outline"
+            onClick={() => (this.showCode = !this.showCode)}
+          >
             <ion-icon slot="icon-only" name="code" />
           </ion-button>
         </ion-buttons>
         <ion-label>{this.label}</ion-label>
-        <ion-select
-          slot="end"
-          name="join"
-          interface="popover"
-          value={this.joinBy}
-          onIonChange={(event: any) => {
-            this.joinBy = event.target.value;
-            this.value = {
-              [this.joinBy]: this.statements,
-            };
-          }}
-        >
-          <ion-select-option>and</ion-select-option>
-          <ion-select-option>or</ion-select-option>
-        </ion-select>
+        <span slot="end" style={{ display: "flex", alignItems: "center" }}>
+          <ion-label>Join by:</ion-label>
+          <ion-chip class="join-select" onClick={() => this.selectEl.click()}>
+            <ion-select
+              ref={(el) => (this.selectEl = el)}
+              style={{ paddingLeft: "4px", pointerEvents: "none" }}
+              name="join"
+              interface="popover"
+              value={this.joinBy}
+              onIonChange={(event: any) => {
+                this.joinBy = event.target.value;
+                this.value = this.constructStatmentChain();
+              }}
+            >
+              <ion-select-option value="and">And</ion-select-option>
+              <ion-select-option value="or">Or</ion-select-option>
+              <ion-select-option value={null}>None</ion-select-option>
+            </ion-select>
+          </ion-chip>
+        </span>
       </ion-item-divider>,
       <ion-item>
         <fireenjin-chip-bar style={{ display: "flex", alignItems: "center" }}>

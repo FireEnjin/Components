@@ -10,7 +10,24 @@ export default {
           description: "This is a description of the field",
         },
       },
-      value: true,
+      value: {
+        if: [
+          {
+            and: [
+              {
+                "==": [
+                  {
+                    var: "title",
+                  },
+                  "test",
+                ],
+              },
+            ],
+          },
+          true,
+          false,
+        ],
+      },
     },
   },
 } as ComponentPresets;
