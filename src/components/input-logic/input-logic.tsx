@@ -198,8 +198,8 @@ export class InputLogic {
     if (!this.value) this.value = this.constructStatmentChain();
     if (typeof this.value === "string") this.value = JSON.parse(this.value);
     setTimeout(() => {
-      if (this.value.if[0].and) this.joinBy = "and";
-      if (this.value.if[0].or) this.joinBy = "or";
+      if (this.value?.if?.[0]?.and) this.joinBy = "and";
+      if (this.value?.if?.[0]?.or) this.joinBy = "or";
       if (this.value) this.onValueChange(this.value);
       this.manualEdit = false;
     }, 1000);
