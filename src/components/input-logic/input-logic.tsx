@@ -109,7 +109,7 @@ export class InputLogic {
 
   @Listen("fireenjinCodeBlur")
   async onCodeBlur(event) {
-    if (event?.target?.name !== this.name) return;
+    if (event?.target?.name !== this.name || !this.value) return;
     this.value =
       typeof event?.detail?.value === "string"
         ? JSON.parse(event.detail.value)
@@ -125,6 +125,7 @@ export class InputLogic {
 
   @Method()
   async addStatment(statement: any) {
+    console.log(statement);
     this.statements = [...this.statements, statement];
     this.value = this.constructStatmentChain();
   }
@@ -168,7 +169,7 @@ export class InputLogic {
   }
 
   getStatementsFromValue(value: any) {
-    let statements = [];
+    let statements = value || [];
     if (this.joinBy === "and") {
       statements = value?.if?.[0]?.and || [];
     } else if (this.joinBy === "or") {
