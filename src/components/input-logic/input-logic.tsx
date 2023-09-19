@@ -110,23 +110,26 @@ export class InputLogic {
   @Listen("fireenjinCodeBlur")
   async onCodeBlur(event) {
     if (event?.target?.name !== this.name || !this.value) return;
-    this.value =
-      typeof event?.detail?.value === "string"
-        ? JSON.parse(event.detail.value)
-        : event.detail.value;
+    const value = event?.detail?.value;
+    this.statements = this.getStatementsFromValue(value);
+    this.value = typeof value === "string" ? JSON.parse(value) : value;
   }
 
   @Watch("value")
   onValueChange(value) {
-    const statements = this.getStatementsFromValue(value);
+    const statements = this.getStatementsFromValue(
+      typeof value === "string" ? JSON.parse(value) : value
+    );
     if (this.value === value && this.statements === statements) return;
     this.statements = statements;
   }
 
   @Method()
   async addStatment(statement: any) {
-    console.log(statement);
-    this.statements = [...this.statements, statement];
+    this.statements = [
+      ...this.statements,
+      typeof statement === "string" ? JSON.parse(statement) : statement,
+    ];
     this.value = this.constructStatmentChain();
   }
 
@@ -196,8 +199,8 @@ export class InputLogic {
   }
 
   componentDidLoad() {
-    if (!this.value) this.value = this.constructStatmentChain();
     if (typeof this.value === "string") this.value = JSON.parse(this.value);
+    if (!this.value) this.value = this.constructStatmentChain();
     setTimeout(() => {
       if (this.value?.if?.[0]?.and) this.joinBy = "and";
       if (this.value?.if?.[0]?.or) this.joinBy = "or";
@@ -263,7 +266,7 @@ export class InputLogic {
       </ion-item-divider>,
       <ion-item>
         <fireenjin-chip-bar style={{ display: "flex", alignItems: "center" }}>
-          {(this.statements || []).map((statement, index) => (
+          {(this.statements || [])?.map?.((statement, index) => (
             <ion-chip>
               <ion-label innerHTML={JSON.stringify(statement)} />
               <ion-icon

@@ -10,7 +10,7 @@ export default {
           description: "This is a description of the field",
         },
       },
-      value: {
+      value: JSON.stringify({
         if: [
           {
             and: [
@@ -27,7 +27,7 @@ export default {
           true,
           false,
         ],
-      },
+      }),
     },
   },
 } as ComponentPresets;
