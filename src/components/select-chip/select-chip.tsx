@@ -10,13 +10,17 @@ export class SelectChip {
   @Event() ionChange: EventEmitter;
   @Event() ionInput: EventEmitter;
 
+  @Prop() color?: Color;
+  @Prop() outline = false;
+  @Prop() disabled = false;
   @Prop() icon?: string;
-  @Prop() selectIcon?: "chevron-down-circle";
+  @Prop() selectIcon? = "chevron-down-circle";
   @Prop() multiple? = false;
   @Prop() showBackdrop? = false;
   @Prop() name: string;
   @Prop({ mutable: true }) value: string;
   @Prop({ mutable: true }) label?: string;
+  @Prop() selectedText? = "Selected";
   @Prop() options?: {
     name?: string;
     image?: string;
@@ -52,6 +56,7 @@ export class SelectChip {
           data,
           event,
         });
+        if (this.multiple) this.popoverEl.dismiss();
 
         return data;
       },
@@ -84,10 +89,33 @@ export class SelectChip {
   }
 
   render() {
+    const selectedOption =
+      this.value &&
+      !this.multiple &&
+      this.options?.find((opt) => `${opt?.value}` === `${this.value}`);
     return (
-      <fireenjin-chip onClick={(event) => this.openFilterPopover(event)}>
-        {this.icon ? <ion-icon name={this.icon} /> : null}
-        <ion-label>{this.label}</ion-label>
+      <fireenjin-chip
+        color={this.color}
+        outline={this.outline}
+        disabled={this.disabled}
+        onClick={(event) => this.openFilterPopover(event)}
+        class={{
+          "has-value": !!(this.multiple ? this.value?.length : this.value),
+        }}
+      >
+        {this.icon && !selectedOption?.image ? (
+          <ion-icon name={selectedOption?.icon || this.icon} />
+        ) : null}
+        {selectedOption?.image ? (
+          <fireenjin-avatar size="20px" src={selectedOption.image} />
+        ) : null}
+        <ion-label>
+          {(this.value &&
+            this.multiple &&
+            `${this.value?.length} ${this.selectedText}`) ||
+            (this.value && (selectedOption?.label || selectedOption?.value)) ||
+            this.label}
+        </ion-label>
         <ion-icon name={this.selectIcon} />
       </fireenjin-chip>
     );

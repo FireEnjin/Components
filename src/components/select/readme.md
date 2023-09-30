@@ -56,7 +56,6 @@
  - [fireenjin-flow](../flow)
  - [fireenjin-input-logic](../input-logic)
  - [fireenjin-input-path](../input-path)
- - [fireenjin-popover-filter](../popover-filter)
 
 ### Depends on
 
@@ -105,7 +104,6 @@ graph TD;
   fireenjin-flow --> fireenjin-select
   fireenjin-input-logic --> fireenjin-select
   fireenjin-input-path --> fireenjin-select
-  fireenjin-popover-filter --> fireenjin-select
   style fireenjin-select fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

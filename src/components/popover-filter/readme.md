@@ -7,10 +7,19 @@
 
 ## Properties
 
-| Property   | Attribute | Description | Type        | Default     |
-| ---------- | --------- | ----------- | ----------- | ----------- |
-| `controls` | --        |             | `Control[]` | `undefined` |
-| `label`    | `label`   |             | `string`    | `undefined` |
+| Property       | Attribute       | Description | Type                                                                                                                                                                                                                                                                                                                                                                                                                  | Default     |
+| -------------- | --------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `beforeChange` | --              |             | `(value: any, options?: { name: string; multiple: boolean; }) => any`                                                                                                                                                                                                                                                                                                                                                 | `undefined` |
+| `beforeSubmit` | --              |             | `(data: any, value?: string[]) => any`                                                                                                                                                                                                                                                                                                                                                                                | `undefined` |
+| `enableLoader` | `enable-loader` |             | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                             | `false`     |
+| `hideControls` | `hide-controls` |             | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                             | `false`     |
+| `icon`         | `icon`          |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                              | `undefined` |
+| `label`        | `label`         |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                              | `"Filter"`  |
+| `multiple`     | `multiple`      |             | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                             | `false`     |
+| `name`         | `name`          |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                              | `"filter"`  |
+| `options`      | --              |             | `{ name?: string; image?: string; label?: string; color?: Color; checked?: boolean; icon?: string; value?: string; header?: string; subHeader?: string; message?: string; optionEl?: (result: any) => HTMLIonSelectOptionElement; placeholder?: string; endpoint?: string; query?: string; limit?: number; orderBy?: string; dataPropsMap?: string; params?: any; options?: { label: string; value: string; }[]; }[]` | `undefined` |
+| `submitButton` | `submit-button` |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                              | `"Filter"`  |
+| `value`        | `value`         |             | `any`                                                                                                                                                                                                                                                                                                                                                                                                                 | `undefined` |
 
 
 ## Dependencies
@@ -19,50 +28,34 @@
 
 - ion-content
 - [fireenjin-form](../form)
+- ion-list
 - ion-item-divider
-- [fireenjin-select](../select)
+- ion-item
+- ion-checkbox
+- ion-label
+- ion-icon
+- [fireenjin-avatar](../avatar)
 
 ### Graph
 ```mermaid
 graph TD;
   fireenjin-popover-filter --> ion-content
   fireenjin-popover-filter --> fireenjin-form
+  fireenjin-popover-filter --> ion-list
   fireenjin-popover-filter --> ion-item-divider
-  fireenjin-popover-filter --> fireenjin-select
+  fireenjin-popover-filter --> ion-item
+  fireenjin-popover-filter --> ion-checkbox
+  fireenjin-popover-filter --> ion-label
+  fireenjin-popover-filter --> ion-icon
+  fireenjin-popover-filter --> fireenjin-avatar
   fireenjin-form --> ion-grid
   fireenjin-form --> ion-row
   fireenjin-form --> ion-col
   fireenjin-form --> ion-button
   ion-button --> ion-ripple-effect
-  fireenjin-select --> ion-label
-  fireenjin-select --> ion-item
-  fireenjin-select --> ion-popover
-  fireenjin-select --> ion-content
-  fireenjin-select --> ion-list
-  fireenjin-select --> ion-item-divider
-  fireenjin-select --> ion-select
-  fireenjin-select --> ion-select-option
-  fireenjin-select --> ion-icon
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
-  ion-popover --> ion-backdrop
-  ion-select --> ion-select-popover
-  ion-select --> ion-popover
-  ion-select --> ion-action-sheet
-  ion-select --> ion-alert
-  ion-select-popover --> ion-item
-  ion-select-popover --> ion-checkbox
-  ion-select-popover --> ion-label
-  ion-select-popover --> ion-radio-group
-  ion-select-popover --> ion-radio
-  ion-select-popover --> ion-list
-  ion-select-popover --> ion-list-header
-  ion-action-sheet --> ion-backdrop
-  ion-action-sheet --> ion-icon
-  ion-action-sheet --> ion-ripple-effect
-  ion-alert --> ion-ripple-effect
-  ion-alert --> ion-backdrop
   style fireenjin-popover-filter fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -16,6 +16,23 @@
 | `src`      | `src`      |             | `string` | `undefined` |
 
 
+## Dependencies
+
+### Used by
+
+ - [fireenjin-list-header](../list-header)
+ - [fireenjin-popover-filter](../popover-filter)
+ - [fireenjin-select-chip](../select-chip)
+
+### Graph
+```mermaid
+graph TD;
+  fireenjin-list-header --> fireenjin-avatar
+  fireenjin-popover-filter --> fireenjin-avatar
+  fireenjin-select-chip --> fireenjin-avatar
+  style fireenjin-avatar fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

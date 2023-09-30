@@ -1,0 +1,9 @@
+fireenjin-chip {
+  display: inline-block;
+}
+
+fireenjin-chip ion-chip {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}

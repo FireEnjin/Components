@@ -9,7 +9,7 @@ import {
 } from "@stencil/core";
 
 @Component({
-  tag: "trackmygiving-popover-filter",
+  tag: "fireenjin-popover-filter",
   styleUrl: "popover-filter.css",
 })
 export class PopoverFilter implements ComponentInterface {
@@ -96,6 +96,7 @@ export class PopoverFilter implements ComponentInterface {
   componentDidLoad() {
     if (!Build?.isBrowser) return;
     if (this.value) {
+      console.log(this.value);
       this.formEl.formData.value = this.value;
     }
   }
@@ -140,7 +141,9 @@ export class PopoverFilter implements ComponentInterface {
                       slot="start"
                       checked={
                         (this.multiple &&
-                          (this.value || []).includes(control?.value)) ||
+                          (this.value || []).includes(
+                            `${control?.value || ""}`
+                          )) ||
                         control.value === this.value ||
                         control.checked
                       }
@@ -163,7 +166,7 @@ export class PopoverFilter implements ComponentInterface {
                       />
                     )}
                     {control?.image && (
-                      <trackmygiving-avatar
+                      <fireenjin-avatar
                         size="2rem"
                         src={control?.image}
                         initials={(control?.label || control?.value).charAt(0)}

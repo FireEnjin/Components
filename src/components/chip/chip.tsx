@@ -3,6 +3,7 @@ import { Component, Prop, h } from "@stencil/core";
 
 @Component({
   tag: "fireenjin-chip",
+  styleUrl: "chip.css",
 })
 export class Chip {
   @Prop() color?: Color;
