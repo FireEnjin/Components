@@ -21,6 +21,8 @@ export class SelectChip {
   @Prop({ mutable: true }) value: string;
   @Prop({ mutable: true }) label?: string;
   @Prop() selectedText? = "Selected";
+  @Prop() disableSelectedCount = false;
+  @Prop() placeholder?: string;
   @Prop() options?: {
     name?: string;
     image?: string;
@@ -112,8 +114,12 @@ export class SelectChip {
         <ion-label>
           {(this.value &&
             this.multiple &&
-            `${this.value?.length} ${this.selectedText}`) ||
+            this.value?.length &&
+            `${this.disableSelectedCount ? "" : this.value?.length + " "}${
+              this.selectedText
+            }`) ||
             (this.value && (selectedOption?.label || selectedOption?.value)) ||
+            this.placeholder ||
             this.label}
         </ion-label>
         <ion-icon name={this.selectIcon} />
