@@ -95,10 +95,7 @@ export class PopoverFilter implements ComponentInterface {
 
   componentDidLoad() {
     if (!Build?.isBrowser) return;
-    if (this.value) {
-      console.log(this.value);
-      this.formEl.formData.value = this.value;
-    }
+    if (this.value) this.formEl.formData.value = this.value;
   }
 
   render() {
@@ -125,7 +122,9 @@ export class PopoverFilter implements ComponentInterface {
           submitButtonShape="round"
         >
           <ion-list lines="full" class="ion-no-padding">
-            {this.label && <ion-item-divider>{this.label}</ion-item-divider>}
+            {this.label ? (
+              <fireenjin-list-header label={this.label} icon={this.icon} />
+            ) : null}
             {this.options?.length
               ? this.options.map((control) => (
                   <ion-item
