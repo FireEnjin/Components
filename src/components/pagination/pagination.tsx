@@ -39,7 +39,7 @@ export class Pagination implements ComponentInterface {
   @Prop() orderBy?: string;
   @Prop() orderDirection?: string;
   @Prop() dataPropsMap: any;
-  @Prop() display: "list" | "grid" = "list";
+  @Prop() display?: "list" | "grid";
   @Prop({ mutable: true }) page? = 0;
   @Prop({ mutable: true }) results: any[] = [];
   @Prop() beforeFetch: (fetchParams?: any) => Promise<any>;
@@ -234,7 +234,7 @@ export class Pagination implements ComponentInterface {
       next?: boolean;
       limit?: number;
       paramData?: any;
-    } = {}
+    } = {},
   ) {
     if (
       !this.disablePageCheck &&
@@ -341,11 +341,11 @@ export class Pagination implements ComponentInterface {
               <ion-col innerHTML={this.gridEl({ result }, null, null) as any} />
             ) : (
               <ion-col>{this.gridEl({ result }, null, null)}</ion-col>
-            )
+            ),
           )}
         </ion-row>
       </ion-grid>
-    ) : this.listEl ? (
+    ) : this.display === "list" ? (
       <ion-card>
         <ion-list>
           {this.results.map((result) =>
@@ -353,7 +353,7 @@ export class Pagination implements ComponentInterface {
               <div innerHTML={this.listEl({ result }, null, null) as any} />
             ) : (
               this.listEl({ result }, null, null)
-            )
+            ),
           )}
         </ion-list>
       </ion-card>
@@ -374,7 +374,8 @@ export class Pagination implements ComponentInterface {
             renderItem={this.renderItem}
             ref={(el) => (this.virtualScrollEl = el)}
           >
-            {(this.listEl || this.gridEl) && this.renderResults()}
+            {this.renderResults()}
+            <slot />
           </ion-virtual-scroll>
         )}
         <ion-infinite-scroll

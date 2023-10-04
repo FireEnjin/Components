@@ -23,6 +23,7 @@ export class SelectChip {
   @Prop() selectedText? = "Selected";
   @Prop() disableSelectedCount = false;
   @Prop() placeholder?: string;
+  @Prop() disableBackgroundDismiss? = false;
   @Prop() options?: {
     name?: string;
     image?: string;
@@ -84,6 +85,7 @@ export class SelectChip {
       event,
       translucent: true,
       showBackdrop: this.showBackdrop,
+      backdropDismiss: !this.disableBackgroundDismiss,
       component: "fireenjin-popover-filter",
       componentProps,
     });

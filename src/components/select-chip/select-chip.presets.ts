@@ -3,17 +3,17 @@ import { ComponentPresets } from "@fireenjin/docs";
 const options = [
   {
     label: "User 1",
-    value: 1,
+    value: "1",
     image: "https://picsum.photos/200?random=1",
   },
   {
     label: "User 2",
-    value: 2,
+    value: "2",
     image: "https://picsum.photos/200?random=2",
   },
   {
     label: "User 3",
-    value: 3,
+    value: "3",
     image: "https://picsum.photos/200?random=3",
   },
 ];

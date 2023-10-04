@@ -17,6 +17,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [fireenjin-popover-filter](../popover-filter)
+
 ### Depends on
 
 - ion-item-divider
@@ -31,6 +35,7 @@ graph TD;
   fireenjin-list-header --> ion-label
   fireenjin-list-header --> ion-icon
   fireenjin-list-header --> fireenjin-avatar
+  fireenjin-popover-filter --> fireenjin-list-header
   style fireenjin-list-header fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

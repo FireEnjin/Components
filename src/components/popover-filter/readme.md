@@ -29,7 +29,7 @@
 - ion-content
 - [fireenjin-form](../form)
 - ion-list
-- ion-item-divider
+- [fireenjin-list-header](../list-header)
 - ion-item
 - ion-checkbox
 - ion-label
@@ -42,7 +42,7 @@ graph TD;
   fireenjin-popover-filter --> ion-content
   fireenjin-popover-filter --> fireenjin-form
   fireenjin-popover-filter --> ion-list
-  fireenjin-popover-filter --> ion-item-divider
+  fireenjin-popover-filter --> fireenjin-list-header
   fireenjin-popover-filter --> ion-item
   fireenjin-popover-filter --> ion-checkbox
   fireenjin-popover-filter --> ion-label
@@ -53,6 +53,10 @@ graph TD;
   fireenjin-form --> ion-col
   fireenjin-form --> ion-button
   ion-button --> ion-ripple-effect
+  fireenjin-list-header --> ion-item-divider
+  fireenjin-list-header --> ion-label
+  fireenjin-list-header --> ion-icon
+  fireenjin-list-header --> fireenjin-avatar
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
