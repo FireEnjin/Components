@@ -66,7 +66,7 @@ export class SelectTimeslot {
   @Prop() lines: "full" | "none" | undefined = "full";
   @Prop() duration: number;
   @Prop() durationLabel = "min";
-  @Prop() label: string = "Select Timeslot";
+  @Prop() label: string;
 
   @State() timeslots: string[] = [];
   @State() selectedDate = new Date();
