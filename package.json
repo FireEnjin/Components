@@ -46,7 +46,7 @@
     "json-formatter-js": "^2.3.4",
     "leader-line": "^1.0.7",
     "typescript-debounce-decorator": "^0.0.18",
-    "vanilla-jsoneditor": "^0.18.7"
+    "vanilla-jsoneditor": "^0.18.8"
   },
   "devDependencies": {
     "@fireenjin/cli": "^1.1.10",

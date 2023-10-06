@@ -16,7 +16,7 @@
 | `disableFetch`         | `disable-fetch`          |             | `boolean`                             | `false`                  |
 | `disablePageCheck`     | `disable-page-check`     |             | `boolean`                             | `false`                  |
 | `disableVirtualScroll` | `disable-virtual-scroll` |             | `boolean`                             | `false`                  |
-| `display`              | `display`                |             | `"grid" \| "list"`                    | `"list"`                 |
+| `display`              | `display`                |             | `"grid" \| "list"`                    | `undefined`              |
 | `endpoint`             | `endpoint`               |             | `string`                              | `undefined`              |
 | `fetchData`            | `fetch-data`             |             | `any`                                 | `undefined`              |
 | `fetchParams`          | `fetch-params`           |             | `any`                                 | `undefined`              |
