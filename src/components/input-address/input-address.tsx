@@ -134,6 +134,7 @@ export class InputAddress implements ComponentInterface {
 
       this.google.maps.event.addListener(autocomplete, "place_changed", () => {
         this.place = autocomplete.getPlace();
+        console.log(this.place);
         if (!this.value) {
           this.value = {};
         }
