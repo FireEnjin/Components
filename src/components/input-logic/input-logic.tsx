@@ -101,6 +101,10 @@ export class InputLogic {
   @Prop() allowAdding = false;
   @Prop() placeholder = "No statements added yet";
   @Prop() outputObject = false;
+  @Prop() variablePopoverOptions: any = {
+    header: "Select Variable",
+    cssClass: "variable-options",
+  };
 
   @State() selectedOperation: any = this.operations[this.selectedOperator];
   @State() statements: any[] = [];
@@ -118,7 +122,7 @@ export class InputLogic {
   @Watch("value")
   onValueChange(value) {
     const statements = this.getStatementsFromValue(
-      typeof value === "string" ? JSON.parse(value) : value
+      typeof value === "string" ? JSON.parse(value) : value,
     );
     if (this.value === value && this.statements === statements) return;
     this.statements = statements;
@@ -213,7 +217,7 @@ export class InputLogic {
     const selectedOperationJSON = JSON.stringify(
       this.selectedOperation,
       null,
-      4
+      4,
     );
     return [
       <fireenjin-code-editor
@@ -384,9 +388,7 @@ export class InputLogic {
                 <fireenjin-select
                   lines="none"
                   interface="custom"
-                  interfaceOptions={{
-                    header: "Select Variable",
-                  }}
+                  interfaceOptions={this.variablePopoverOptions}
                   onIonChange={(event: any) => {
                     try {
                       this.leftSide =
@@ -408,7 +410,7 @@ export class InputLogic {
                       ...control,
                       label: control?.label || key,
                       value: control?.value || `{"var":"${key}"}`,
-                    })
+                    }),
                   )}
                   optionEl={(option: Partial<Control>) => (
                     <ion-item
@@ -416,7 +418,7 @@ export class InputLogic {
                       detail
                       style={{ cursor: "pointer" }}
                     >
-                      <ion-label>
+                      <ion-label class="ion-text-wrap">
                         <h2>{option.label}</h2>
                         {option?.description ? (
                           <small>{option.description}</small>
@@ -439,7 +441,7 @@ export class InputLogic {
                 >
                   {Object.keys(this.operations || {})
                     .filter((value) =>
-                      this.comparableOperations.includes(value)
+                      this.comparableOperations.includes(value),
                     )
                     .map((value) => (
                       <ion-select-option value={value}>
@@ -496,7 +498,7 @@ export class InputLogic {
                     } catch (e) {
                       console.log(
                         "Error parsing selected operation as JSON: ",
-                        e
+                        e,
                       );
                     }
                   }}

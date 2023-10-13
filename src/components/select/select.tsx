@@ -219,7 +219,8 @@ export class Select implements ComponentInterface {
               <slot />
               <ion-popover
                 ref={(el) => (this.popoverEl = el)}
-                dismissOnSelect
+                dismissOnSelect={this.interfaceOptions?.dismissOnSelect || true}
+                class={this.interfaceOptions?.cssClass || null}
                 onClick={(event) => {
                   this.value =
                     event?.target?.closest?.("[value]")?.value ||
@@ -250,7 +251,7 @@ export class Select implements ComponentInterface {
                         >
                           {option.label}
                         </ion-item>
-                      )
+                      ),
                     )}
                     {(this.results ? this.results : []).map((result) =>
                       this.optionEl ? (
@@ -259,7 +260,7 @@ export class Select implements ComponentInterface {
                         <ion-item detail value={result.id}>
                           {result.name}
                         </ion-item>
-                      )
+                      ),
                     )}
                   </ion-list>
                 </ion-content>
@@ -297,7 +298,7 @@ export class Select implements ComponentInterface {
                   >
                     {option.label}
                   </ion-select-option>
-                )
+                ),
               )}
               {(this.results ? this.results : []).map((result) =>
                 this.optionEl ? (
@@ -306,7 +307,7 @@ export class Select implements ComponentInterface {
                   <ion-select-option value={result.id}>
                     {result.name}
                   </ion-select-option>
-                )
+                ),
               )}
               <slot />
             </ion-select>
