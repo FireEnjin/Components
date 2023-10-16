@@ -148,6 +148,10 @@ export class Form implements ComponentInterface {
    * The localStorage key name to store as
    */
   @Prop() cacheKey: string;
+  /**
+   * The Stencil Store to bind to
+   */
+  @Prop() store: { state: any; key: string };
 
   /**
    * Emitted on load with endpoint
@@ -201,7 +205,7 @@ export class Form implements ComponentInterface {
         name,
         this.filterData?.length
           ? await this.setFilteredValue(name, value)
-          : value
+          : value,
       );
       if (this.cacheKey) this.saveCache();
       if (this.componentIsLoaded && !this.hasChanged) {
@@ -220,7 +224,7 @@ export class Form implements ComponentInterface {
       await this.setFormData(
         this.fetchKey
           ? this.fetchKey.split(".").reduce((o, i) => o[i], event.detail.data)
-          : event?.detail?.data
+          : event?.detail?.data,
       );
       if (this.cacheKey) this.restoreCache();
     }
@@ -270,7 +274,7 @@ export class Form implements ComponentInterface {
     event?,
     options = {
       manual: false,
-    }
+    },
   ) {
     if (event) event.preventDefault();
     await this.checkFormValidity();
@@ -279,6 +283,8 @@ export class Form implements ComponentInterface {
       this.beforeSubmit && typeof this.beforeSubmit === "function"
         ? await this.beforeSubmit(this.formData, options)
         : this.formData;
+    if (this.store?.state && this.store?.key)
+      this.setByPath(this.store.state, this.store.key, this.formData);
     this.fireenjinSubmit.emit({
       event,
       id: this.documentId,
@@ -328,7 +334,7 @@ export class Form implements ComponentInterface {
                     ignoreInvalid: true,
                   },
                 }
-              : null
+              : null,
           ))
         ) {
           if (isValid && reportValidity) {
@@ -477,6 +483,8 @@ export class Form implements ComponentInterface {
       this.fetchData();
       if (!this.disableLoader) this.loading = true;
     }
+    if (this.store?.state && this.store?.key)
+      this.formData = { ...this.getByPath(this.store.state, this.store.key) };
     if (this.formData) this.setFormData(this.formData);
     if (this.cacheKey) this.restoreCache();
     this.componentIsLoaded = true;
