@@ -52,6 +52,7 @@
     "@fireenjin/cli": "^1.1.10",
     "@fireenjin/docs": "^1.0.19",
     "@stencil/core": "^3.4.1",
+    "@stencil/store": "^2.0.10",
     "@types/cleave.js": "^1.4.8",
     "@types/jest": "^29.5.5",
     "@types/stripe-v3": "^3.1.30",

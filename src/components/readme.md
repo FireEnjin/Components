@@ -9,30 +9,28 @@
 
 ### Depends on
 
-- ion-content
-- [fireenjin-pagination](pagination)
-- ion-item
+- [fireenjin-form](form)
+- [fireenjin-input](input)
 
 ### Graph
 ```mermaid
 graph TD;
-  fireenjin-renderer --> ion-content
-  fireenjin-renderer --> fireenjin-pagination
-  fireenjin-renderer --> ion-item
-  fireenjin-pagination --> ion-grid
-  fireenjin-pagination --> ion-row
-  fireenjin-pagination --> ion-col
-  fireenjin-pagination --> ion-card
-  fireenjin-pagination --> ion-list
-  fireenjin-pagination --> ion-virtual-scroll
-  fireenjin-pagination --> ion-infinite-scroll
-  fireenjin-pagination --> ion-infinite-scroll-content
-  ion-card --> ion-ripple-effect
-  ion-infinite-scroll-content --> ion-spinner
+  fireenjin-app --> fireenjin-form
+  fireenjin-app --> fireenjin-input
+  fireenjin-form --> ion-grid
+  fireenjin-form --> ion-row
+  fireenjin-form --> ion-col
+  fireenjin-form --> ion-button
+  ion-button --> ion-ripple-effect
+  fireenjin-input --> ion-input
+  fireenjin-input --> ion-item
+  fireenjin-input --> ion-icon
+  fireenjin-input --> ion-label
+  ion-input --> ion-icon
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
-  style fireenjin-renderer fill:#f9f,stroke:#333,stroke-width:4px
+  style fireenjin-app fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

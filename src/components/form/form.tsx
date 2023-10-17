@@ -10,6 +10,7 @@ import {
   Prop,
   h,
   Build,
+  Watch,
 } from "@stencil/core";
 
 @Component({
@@ -180,6 +181,18 @@ export class Form implements ComponentInterface {
     name: string;
   }>;
 
+  @Watch("formData")
+  onFormDataChange(newValue, oldValue) {
+    if (
+      JSON.stringify(this.orderObjectKeys(newValue)) ===
+      JSON.stringify(this.orderObjectKeys(oldValue))
+    )
+      return;
+    if (this.store?.state && this.store?.key)
+      this.formData = { ...this.getByPath(this.store.state, this.store.key) };
+    if (this.formData) this.setFormData(this.formData);
+  }
+
   @Listen("keydown")
   handleKeyDown(ev: KeyboardEvent) {
     if (ev.key === "Enter" && this.disableEnterButton) {
@@ -195,23 +208,20 @@ export class Form implements ComponentInterface {
   @Listen("change")
   async onInput(event) {
     const name = event?.detail?.name || event?.target?.name;
-    if (name && !name.startsWith("ion-")) {
-      const value =
-        typeof event?.detail?.checked === "boolean"
-          ? event.detail.checked
-          : event?.detail?.value || event?.target?.value;
-      this.setByPath(
-        this.formData,
-        name,
-        this.filterData?.length
-          ? await this.setFilteredValue(name, value)
-          : value,
-      );
-      if (this.cacheKey) this.saveCache();
-      if (this.componentIsLoaded && !this.hasChanged) {
-        this.hasChanged = true;
-      }
-    }
+    if (!name || name.startsWith("ion-")) return;
+    const value =
+      typeof event?.detail?.checked === "boolean"
+        ? event.detail.checked
+        : event?.detail?.value || event?.target?.value;
+    this.setByPath(
+      this.formData,
+      name,
+      this.filterData?.length
+        ? await this.setFilteredValue(name, value)
+        : value,
+    );
+    if (this.cacheKey) this.saveCache();
+    if (this.componentIsLoaded && !this.hasChanged) this.hasChanged = true;
   }
 
   @Listen("fireenjinSuccess")
@@ -387,6 +397,15 @@ export class Form implements ComponentInterface {
         id: this.documentId,
       },
     });
+  }
+
+  orderObjectKeys(unordered: any) {
+    return Object.keys(unordered)
+      .sort()
+      .reduce((obj, key) => {
+        obj[key] = unordered[key];
+        return obj;
+      }, {});
   }
 
   async setFilteredValue(key: string, value: any) {
