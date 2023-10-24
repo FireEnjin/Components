@@ -1,4 +1,5 @@
-import { FireEnjinUploadEvent } from "@fireenjin/sdk";
+import { FireEnjinSubmitEvent, FireEnjinUploadEvent } from "@fireenjin/sdk";
+import { getDownloadURL } from "firebase/storage";
 import {
   Component,
   ComponentInterface,
@@ -79,18 +80,39 @@ export class InputPhoto implements ComponentInterface {
    * Resize photos before uploading
    */
   @Prop() resize = false;
-
+  /**
+   * Should the uploader auto submit the photo on change
+   */
+  @Prop() autoSubmit = false;
+  @Prop() submitEndpoint?: string;
   @Prop({ mutable: true }) loading: boolean;
   @State() photoUrl: string;
 
   @Event() fireenjinUpload: EventEmitter<FireEnjinUploadEvent>;
+  @Event() fireenjinSubmit: EventEmitter<FireEnjinSubmitEvent>;
   @Event() ionInput: EventEmitter;
+  @Event() ionChange: EventEmitter;
 
   @Listen("fireenjinSuccess")
-  onSuccess(event) {
-    if (event.detail.endpoint !== "upload" || event.detail.name !== this.name)
-      return false;
+  async onSuccess(event) {
+    if (event.detail.name !== this.name) return false;
     this.loading = false;
+    this.value = await getDownloadURL(event?.detail?.data?.ref);
+    this.ionChange.emit({
+      name: this.name,
+      value: this.value,
+      event,
+    });
+    if (this.autoSubmit)
+      this.fireenjinSubmit.emit({
+        event,
+        endpoint: this.submitEndpoint || this.endpoint,
+        name: `autosubmit-${this.name}`,
+        id: this.documentId,
+        data: {
+          [this.name]: this.value,
+        },
+      });
   }
 
   @Watch("value")
@@ -111,6 +133,10 @@ export class InputPhoto implements ComponentInterface {
       : null;
     if (this.value) {
       this.ionInput.emit({
+        name: this.name,
+        value: this.value,
+      });
+      this.ionChange.emit({
         name: this.name,
         value: this.value,
       });
