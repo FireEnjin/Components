@@ -241,17 +241,14 @@ export class Form implements ComponentInterface {
           ? this.fetchKey.split(".").reduce((o, i) => o[i], event.detail.data)
           : event?.detail?.data,
       );
-      if (this.cacheKey) this.restoreCache();
-    }
-    if ([this.endpoint, this.fetch].includes(event?.detail?.endpoint)) {
-      if (this.cacheKey) this.clearCache();
+      if (this.cacheKey || this.collection) this.restoreCache();
       this.loading = false;
     }
   }
 
   @Listen("fireenjinError")
   async onError(event) {
-    if (this.endpoint === event?.detail?.endpoint) {
+    if ([this.endpoint, this.fetch].includes(event?.detail?.endpoint)) {
       this.loading = false;
     }
   }
@@ -315,6 +312,7 @@ export class Form implements ComponentInterface {
     this.fireenjinSubmit.emit({
       event,
       id: this.documentId,
+      collection: this.collection,
       endpoint: this.endpoint,
       data: this.filterData?.length ? await this.filterFormData(data) : data,
       name: this.name,
@@ -410,6 +408,7 @@ export class Form implements ComponentInterface {
       collection: this.collection || null,
       dataPropsMap: this.fetchDataMap || null,
       method: "get",
+      id: this.documentId,
       params: {
         ...(this.fetchParams ? this.fetchParams : {}),
         id: this.documentId,
@@ -522,8 +521,8 @@ export class Form implements ComponentInterface {
     }
     if (this.store?.state && this.store?.key)
       this.formData = { ...this.getByPath(this.store.state, this.store.key) };
+    if (this.cacheKey || this.collection) this.restoreCache();
     if (this.formData) this.setFormData(this.formData);
-    if (this.cacheKey) this.restoreCache();
     this.componentIsLoaded = true;
   }
 
