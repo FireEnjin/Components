@@ -12,6 +12,7 @@ import {
   Build,
   Watch,
 } from "@stencil/core";
+import localforage from "localforage";
 
 @Component({
   tag: "fireenjin-form",
@@ -125,6 +126,10 @@ export class Form implements ComponentInterface {
    */
   @Prop() action: string;
   /**
+   * The collection to use for cache and firestore
+   */
+  @Prop() collection: string;
+  /**
    * Emit the fetch event emitted when component loads
    */
   @Prop() fetch: string | boolean;
@@ -146,7 +151,7 @@ export class Form implements ComponentInterface {
   // @Prop() filterData?: (string | ((value: any) => Promise<any> | any))[];
   @Prop() filterData?: any;
   /**
-   * The localStorage key name to store as
+   * The localforage key name to store as
    */
   @Prop() cacheKey: string;
   /**
@@ -256,7 +261,7 @@ export class Form implements ComponentInterface {
    */
   @Method()
   async clearCache() {
-    localStorage.removeItem(this.cacheKey);
+    return localforage.removeItem(this.cacheKey || this.collection);
   }
 
   /**
@@ -264,7 +269,14 @@ export class Form implements ComponentInterface {
    */
   @Method()
   async saveCache() {
-    localStorage.setItem(this.cacheKey, JSON.stringify(this.formData));
+    const data =
+      this.collection && this.documentId
+        ? {
+            ...(((await localforage?.getItem?.(this.collection)) as any) || {}),
+            [this.documentId]: this.formData,
+          }
+        : this.formData;
+    return localforage.setItem(this.cacheKey || this.collection, data);
   }
 
   /**
@@ -272,7 +284,12 @@ export class Form implements ComponentInterface {
    */
   @Method()
   async restoreCache() {
-    this.setFormData(JSON.parse(localStorage.getItem(this.cacheKey)));
+    const cacheData = await localforage.getItem(
+      this.cacheKey || this.collection,
+    );
+    return this.setFormData(
+      this.cacheKey ? cacheData : cacheData?.[this.documentId],
+    );
   }
 
   /**
@@ -390,6 +407,7 @@ export class Form implements ComponentInterface {
     this.fireenjinFetch.emit({
       endpoint: typeof this.fetch === "string" ? this.fetch : this.endpoint,
       name: this.name || null,
+      collection: this.collection || null,
       dataPropsMap: this.fetchDataMap || null,
       method: "get",
       params: {
