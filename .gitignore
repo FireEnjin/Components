@@ -15,6 +15,7 @@ storybook-static
 log.txt
 *.sublime-project
 *.sublime-workspace
+/components/
 
 .stencil/
 .idea/

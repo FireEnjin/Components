@@ -1,0 +1,9 @@
+{
+    "name": "@fireenjin/components/components",
+    "version": "0.0.0",
+    "description": "A collection of web components",
+    "main": "./index.js",
+    "types": "./custom-elements.d.ts",
+    "private": true,
+    "sideEffects": false
+}

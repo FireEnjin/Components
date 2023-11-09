@@ -35,5 +35,17 @@ export const config: Config = {
       type: "docs-json",
       file: "www/core.json",
     },
+    {
+      type: "dist-custom-elements",
+      dir: "components",
+      copy: [
+        {
+          src: "../custom-elements",
+          dest: "components",
+          warn: true,
+        },
+      ],
+      includeGlobalScripts: false,
+    },
   ],
 };
