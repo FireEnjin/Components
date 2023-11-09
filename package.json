@@ -12,7 +12,8 @@
   "collection": "dist/collection/collection-manifest.json",
   "files": [
     "dist/",
-    "hydrate/"
+    "hydrate/",
+    "components"
   ],
   "scripts": {
     "build": "stencil build",
