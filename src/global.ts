@@ -42,3 +42,5 @@ export type {
   Step,
   FilterControl,
 } from "./typings";
+
+export * from "./components";
