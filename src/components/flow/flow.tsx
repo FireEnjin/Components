@@ -8,7 +8,7 @@ import {
   Prop,
   State,
 } from "@stencil/core";
-import { Field, Step } from "../../typings";
+import { Field, Step } from "../..";
 
 @Component({
   tag: "fireenjin-flow",
@@ -325,7 +325,7 @@ export class Flow {
     await new Promise(async (resolve, reject) => {
       try {
         const requiredEls = this.flowEl.querySelectorAll(
-          `ion-slide:nth-of-type(${this.currentIndex + 1}) [required]`
+          `ion-slide:nth-of-type(${this.currentIndex + 1}) [required]`,
         );
         if (!requiredEls.length) resolve(true);
         for (let i = 0; i < requiredEls.length; i++) {

@@ -1,5 +1,10 @@
 import "@ionic/core";
-export {
+export type {
+  FieldOption,
+  Control,
+  Field,
+  Step,
+  FilterControl,
   FireEnjinEvent,
   FireEnjinErrorEvent,
   FireEnjinModel,
@@ -34,11 +39,4 @@ export {
   FireEnjinSubscriptionCallback,
   FireEnjinSubscriptionEvent,
   FireEnjinUploadData,
-} from "@fireenjin/sdk";
-export type {
-  FieldOption,
-  Control,
-  Field,
-  Step,
-  FilterControl,
-} from "./typings";
+} from "./index";

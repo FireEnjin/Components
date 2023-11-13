@@ -8,7 +8,7 @@ import {
   Watch,
 } from "@stencil/core";
 import { debounce } from "typescript-debounce-decorator";
-import { Control } from "../../typings";
+import { Control } from "../..";
 
 @Component({
   tag: "fireenjin-input-logic",

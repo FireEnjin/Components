@@ -12,7 +12,7 @@ import {
   State,
   Watch,
 } from "@stencil/core";
-import { FilterControl } from "../../typings";
+import { FilterControl } from "../..";
 
 @Component({
   tag: "fireenjin-search-bar",

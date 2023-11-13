@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, h, Prop } from "@stencil/core";
-import { FieldOption } from "../../typings";
+import { FieldOption } from "../..";
 
 @Component({
   tag: "fireenjin-checklist",
@@ -30,7 +30,7 @@ export class Checklist {
                   (this.value || []).includes(option?.value)
                 )
                   this.value = this.value.filter(
-                    (value) => option?.value !== value
+                    (value) => option?.value !== value,
                   );
 
                 this.ionChange.emit({

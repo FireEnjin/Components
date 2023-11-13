@@ -11,7 +11,7 @@ import {
   h,
   Build,
 } from "@stencil/core";
-import { FieldOption } from "../../typings";
+import { FieldOption } from "../..";
 
 @Component({
   tag: "fireenjin-radios",
@@ -117,7 +117,7 @@ export class Radios implements ComponentInterface {
                   value={option?.value || null}
                 />
               </ion-item>
-            )
+            ),
           )}
           {(this.results ? this.results : []).map((result) =>
             this.optionEl ? (
@@ -135,7 +135,7 @@ export class Radios implements ComponentInterface {
                   value={result?.value || result?.id || null}
                 />
               </ion-item>
-            )
+            ),
           )}
         </ion-radio-group>
         <input

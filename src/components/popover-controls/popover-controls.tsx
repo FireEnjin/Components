@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Prop, h } from "@stencil/core";
-import { Control } from "../../typings";
+import { Control } from "../..";
 
 @Component({
   tag: "fireenjin-popover-controls",
