@@ -33,7 +33,7 @@
     "presets:watch": "fireenjin presets watch"
   },
   "dependencies": {
-    "@fireenjin/sdk": "^1.4.34",
+    "@fireenjin/sdk": "^1.4.35",
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
@@ -48,7 +48,7 @@
     "leader-line": "^1.0.7",
     "localforage": "^1.10.0",
     "typescript-debounce-decorator": "^0.0.18",
-    "vanilla-jsoneditor": "^0.18.12"
+    "vanilla-jsoneditor": "^0.18.13"
   },
   "devDependencies": {
     "@fireenjin/cli": "^1.1.12",

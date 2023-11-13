@@ -17,9 +17,9 @@
 
 ## Events
 
-| Event              | Description | Type                                 |
-| ------------------ | ----------- | ------------------------------------ |
-| `fireenjinTrigger` |             | `CustomEvent<FireEnjinTriggerInput>` |
+| Event              | Description | Type                                      |
+| ------------------ | ----------- | ----------------------------------------- |
+| `fireenjinTrigger` |             | `CustomEvent<FireEnjinTriggerInput<any>>` |
 
 
 ## Methods
