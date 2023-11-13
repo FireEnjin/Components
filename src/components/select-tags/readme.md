@@ -41,7 +41,7 @@
 | Event              | Description | Type                                                     |
 | ------------------ | ----------- | -------------------------------------------------------- |
 | `fireenjinFetch`   |             | `CustomEvent<FireEnjinFetchEvent>`                       |
-| `fireenjinTrigger` |             | `CustomEvent<FireEnjinTriggerInput<any>>`                |
+| `fireenjinTrigger` |             | `CustomEvent<FireEnjinTriggerInput>`                     |
 | `ionChange`        |             | `CustomEvent<{ event: any; name: string; value: any; }>` |
 
 

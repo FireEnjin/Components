@@ -1,5 +1,5 @@
 import "@ionic/core";
-export type {
+export {
   FireEnjinEvent,
   FireEnjinErrorEvent,
   FireEnjinModel,
@@ -42,5 +42,3 @@ export type {
   Step,
   FilterControl,
 } from "./typings";
-
-export * from "./components";
