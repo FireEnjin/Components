@@ -72,6 +72,7 @@ export class Pagination implements ComponentInterface {
   @Prop() removeDuplicates = false;
   @Prop() fetchParams: any;
   @Prop() nextKey = "id";
+  @Prop() disableInfiniteScroll = false;
 
   @State() paramData: {
     query?: string;
@@ -378,15 +379,17 @@ export class Pagination implements ComponentInterface {
             <slot />
           </ion-virtual-scroll>
         )}
-        <ion-infinite-scroll
-          style={{ display: "block" }}
-          ref={(el) => (this.infiniteScrollEl = el)}
-        >
-          <ion-infinite-scroll-content
-            loading-spinner={this.loadingSpinner}
-            loading-text={this.loadingText}
-          ></ion-infinite-scroll-content>
-        </ion-infinite-scroll>
+        {this.disableInfiniteScroll && (
+          <ion-infinite-scroll
+            style={{ display: "block" }}
+            ref={(el) => (this.infiniteScrollEl = el)}
+          >
+            <ion-infinite-scroll-content
+              loading-spinner={this.loadingSpinner}
+              loading-text={this.loadingText}
+            ></ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        )}
       </div>
     );
   }
