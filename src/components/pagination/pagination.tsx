@@ -379,7 +379,7 @@ export class Pagination implements ComponentInterface {
             <slot />
           </ion-virtual-scroll>
         )}
-        {this.disableInfiniteScroll && (
+        {!this.disableInfiniteScroll && (
           <ion-infinite-scroll
             style={{ display: "block" }}
             ref={(el) => (this.infiniteScrollEl = el)}
