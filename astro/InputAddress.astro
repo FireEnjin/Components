@@ -1,0 +1,74 @@
+---
+interface Props {
+  /**
+   * The Google Maps API Key
+   */
+  googleMapsKey?: string;
+  /**
+   * The placeholder text for the input field
+   */
+  placeholder?: string;
+  /**
+   * The value of the input field
+   */
+  value?: any;
+  /**
+   * The label of the input field
+   */
+  label?: string;
+  /**
+   * Whether the address input is required
+   */
+  required?: boolean;
+  /**
+   * The name attribute of the input
+   */
+  name?: string;
+  /**
+   * Lines to display on item
+   */
+  lines?: "full" | "inset" | "none";
+  /**
+   * The position of the label
+   */
+  labelPosition?: "stacked" | "fixed" | "floating";
+  /**
+   * Icon to show at the left
+   */
+  iconLeft?: string;
+  /**
+   * Icon to show at the right
+   */
+  iconRight?: string;
+}
+
+const {
+  googleMapsKey,
+  placeholder,
+  iconLeft,
+  iconRight,
+  label,
+  labelPosition,
+  lines,
+  name,
+  required,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-input-address
+  google-maps-key={googleMapsKey}
+  placeholder={placeholder}
+  icon-left={iconLeft}
+  icon-right={iconRight}
+  label={label}
+  label-position={labelPosition}
+  lines={lines}
+  name={name}
+  required={required}
+  value={value}></fireenjin-input-address>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-input-address.js";
+  defineCustomElement();
+</script>

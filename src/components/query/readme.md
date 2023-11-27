@@ -10,6 +10,7 @@
 | Property       | Attribute        | Description | Type                  | Default     |
 | -------------- | ---------------- | ----------- | --------------------- | ----------- |
 | `dataPropsMap` | `data-props-map` |             | `any`                 | `undefined` |
+| `documentId`   | `document-id`    |             | `string`              | `undefined` |
 | `endpoint`     | `endpoint`       |             | `string`              | `undefined` |
 | `error`        | --               |             | `(data: any) => void` | `undefined` |
 | `name`         | `name`           |             | `string`              | `undefined` |

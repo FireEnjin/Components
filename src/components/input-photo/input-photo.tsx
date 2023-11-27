@@ -86,6 +86,7 @@ export class InputPhoto implements ComponentInterface {
   @Prop() autoSubmit = false;
   @Prop() submitEndpoint?: string;
   @Prop({ mutable: true }) loading: boolean;
+
   @State() photoUrl: string;
 
   @Event() fireenjinUpload: EventEmitter<FireEnjinUploadEvent>;

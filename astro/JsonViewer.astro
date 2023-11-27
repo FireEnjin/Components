@@ -1,0 +1,16 @@
+---
+interface Props {
+  watcher?: boolean;
+  openDepth?: number;
+}
+
+const { watcher, openDepth } = Astro.props;
+---
+
+<fireenjin-json-viewer watcher={watcher} open-depth={openDepth}
+></fireenjin-json-viewer>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-json-viewer.js";
+  defineCustomElement();
+</script>

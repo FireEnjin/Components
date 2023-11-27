@@ -1,0 +1,14 @@
+---
+interface Props {}
+
+const {} = Astro.props;
+---
+
+<fireenjin-chip-bar>
+  <slot />
+</fireenjin-chip-bar>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-chip-bar.js";
+  defineCustomElement();
+</script>

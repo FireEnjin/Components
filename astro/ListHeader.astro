@@ -1,0 +1,24 @@
+---
+interface Props {
+  label?: string;
+  icon?: string;
+  image?: string;
+  imageSize?: string;
+}
+
+const { label, icon, image, imageSize } = Astro.props;
+---
+
+<fireenjin-list-header
+  label={label}
+  icon={icon}
+  image={image}
+  image-size={imageSize}
+>
+  <slot />
+</fireenjin-list-header>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-list-header.js";
+  defineCustomElement();
+</script>

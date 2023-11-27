@@ -1,0 +1,131 @@
+---
+interface Props {
+  stripeKey?: string;
+  type?: string;
+  placeholder?: string;
+  label?: string;
+  value?: any;
+  required?: boolean;
+  name?: string;
+  autocomplete?: "on" | "off";
+  autocapitalize?: string;
+  autocorrect?: "on" | "off";
+  autofocus?: boolean;
+  minlength?: number;
+  maxlength?: number;
+  disabled?: boolean;
+  helperText?: string;
+  errorText?: string;
+  edit?: boolean;
+  min?: string;
+  max?: string;
+  iconLeft?: string;
+  iconRight?: string;
+  silence?: boolean;
+  step?: string;
+  actionOptions?: any;
+  pattern?: any;
+  clearInput?: boolean;
+  multiple?: boolean;
+  readOnly?: boolean;
+  spellCheck?: boolean;
+  inputMode?: string;
+  stripeElements?: {
+    style?: any;
+    fonts?: any[];
+  };
+  lines?: "full" | "inset" | "none";
+  labelPosition?: "stacked" | "fixed" | "floating";
+  counter?: boolean;
+  clearOnEdit?: boolean;
+  counterFormatter?: (inputLength: number, maxLength: number) => string;
+  debounce?: number;
+  fill?: "solid" | "outline" | "clear";
+}
+
+const {
+  stripeKey,
+  actionOptions,
+  autocapitalize,
+  autocomplete,
+  autocorrect,
+  autofocus,
+  clearInput,
+  clearOnEdit,
+  counter,
+  counterFormatter,
+  debounce,
+  disabled,
+  edit,
+  errorText,
+  fill,
+  helperText,
+  iconLeft,
+  iconRight,
+  inputMode,
+  label,
+  labelPosition,
+  lines,
+  max,
+  maxlength,
+  min,
+  minlength,
+  multiple,
+  name,
+  pattern,
+  placeholder,
+  readOnly,
+  required,
+  silence,
+  spellCheck,
+  step,
+  stripeElements,
+  type,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-input
+  stripe-key={stripeKey}
+  type={type}
+  placeholder={placeholder}
+  label={label}
+  value={value}
+  required={required}
+  name={name}
+  autocomplete={autocomplete}
+  autocapitalize={autocapitalize}
+  autocorrect={autocorrect}
+  autofocus={autofocus}
+  minlength={minlength}
+  maxlength={maxlength}
+  disabled={disabled}
+  helper-text={helperText}
+  error-text={errorText}
+  edit={edit}
+  min={min}
+  max={max}
+  icon-left={iconLeft}
+  icon-right={iconRight}
+  silence={silence}
+  step={step}
+  action-options={actionOptions}
+  pattern={pattern}
+  clear-input={clearInput}
+  multiple={multiple}
+  read-only={readOnly}
+  spell-check={spellCheck}
+  input-mode={inputMode}
+  stripe-elements={stripeElements}
+  lines={lines}
+  label-position={labelPosition}
+  counter={counter}
+  clear-on-edit={clearOnEdit}
+  counter-formatter={counterFormatter}
+  debounce={debounce}
+  fill={fill}></fireenjin-input>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-input.js";
+  defineCustomElement();
+</script>

@@ -1,0 +1,94 @@
+---
+interface Props {
+  tagsToLowercase?: boolean;
+  disableFetch?: boolean;
+  name?: string;
+  label?: string;
+  placeholder?: string;
+  value?: any;
+  options?: any[];
+  required?: boolean;
+  duplicates?: boolean;
+  disabled?: boolean;
+  allowAdding?: boolean | "custom";
+  endpoint?: string;
+  resultsKey?: string;
+  limit?: number;
+  orderBy?: string;
+  orderDirection?: string;
+  dataPropsMap?: any;
+  page?: number;
+  results?: any[];
+  fetchData?: any;
+  query?: string;
+  lines?: "full" | "inset" | "none";
+  labelPosition?: "stacked" | "fixed" | "floating";
+  addPrompt?: string;
+  addIcon?: string;
+}
+
+const {
+  addIcon,
+  addPrompt,
+  allowAdding,
+  dataPropsMap,
+  disableFetch,
+  disabled,
+  duplicates,
+  endpoint,
+  fetchData,
+  label,
+  labelPosition,
+  limit,
+  lines,
+  name,
+  options,
+  orderBy,
+  orderDirection,
+  page,
+  placeholder,
+  query,
+  required,
+  results,
+  resultsKey,
+  tagsToLowercase,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-select-tags
+  add-icon={addIcon}
+  add-prompt={addPrompt}
+  allow-adding={allowAdding}
+  data-props-map={typeof dataPropsMap === "string"
+    ? dataPropsMap
+    : JSON.stringify(dataPropsMap)}
+  disable-fetch={disableFetch}
+  disabled={disabled}
+  duplicates={duplicates}
+  endpoint={endpoint}
+  fetch-data={typeof fetchData === "string"
+    ? fetchData
+    : JSON.stringify(fetchData)}
+  label={label}
+  label-position={labelPosition}
+  limit={limit}
+  lines={lines}
+  name={name}
+  order-by={orderBy}
+  order-direction={orderDirection}
+  page={page}
+  placeholder={placeholder}
+  query={query}
+  required={required}
+  results={typeof results === "string" ? results : JSON.stringify(results)}
+  results-key={resultsKey}
+  tags-to-lowercase={tagsToLowercase}
+  value={typeof value === "string" ? value : JSON.stringify(value)}
+  options={typeof options === "string" ? options : JSON.stringify(options)}
+></fireenjin-select-tags>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-select-tags.js";
+  defineCustomElement();
+</script>

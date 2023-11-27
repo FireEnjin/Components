@@ -1,0 +1,33 @@
+---
+interface Props {
+  endpoint?: string;
+  documentId?: string;
+  name?: string;
+  dataPropsMap?: any;
+  params?: any;
+  error?: (data: any) => void;
+  success?: (data: any) => void;
+}
+
+const { documentId, dataPropsMap, endpoint, error, name, params, success } =
+  Astro.props;
+---
+
+<fireenjin-query
+  document-id={documentId}
+  data-props-map={typeof dataPropsMap === "string"
+    ? dataPropsMap
+    : JSON.stringify(dataPropsMap)}
+  endpoint={endpoint}
+  name={name}
+  params={typeof params === "string" ? params : JSON.stringify(params)}
+  error={error}
+  success={success}
+>
+  <slot />
+</fireenjin-query>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-query.js";
+  defineCustomElement();
+</script>

@@ -1,0 +1,41 @@
+---
+interface Props {
+  /**
+   * The Google Maps API Key
+   */
+  googleMapsKey?: string;
+  /**
+   * Google Maps options
+   */
+  options?: any;
+  /**
+   * Should the map be visible?
+   */
+  visible?: boolean;
+  /**
+   * A list of markers to put onto the map
+   */
+  markers?: {
+    position: {
+      lat: number;
+      lng: number;
+    };
+    name: string;
+    icon: string;
+    payload?: any;
+  }[];
+}
+
+const { googleMapsKey, markers, options, visible } = Astro.props;
+---
+
+<fireenjin-map
+  google-maps-key={googleMapsKey}
+  markers={JSON.stringify(markers)}
+  options={JSON.stringify(options)}
+  visible={visible}></fireenjin-map>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-map.js";
+  defineCustomElement();
+</script>

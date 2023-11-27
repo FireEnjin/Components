@@ -1,0 +1,17 @@
+---
+interface Props {
+  hash?: boolean;
+  selected?: string;
+}
+
+const { hash, selected } = Astro.props;
+---
+
+<fireenjin-tabs hash={hash} selected={selected}>
+  <slot />
+</fireenjin-tabs>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-tabs.js";
+  defineCustomElement();
+</script>

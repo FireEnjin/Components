@@ -1,0 +1,89 @@
+---
+interface Props {
+  path?: string;
+  fileName?: string;
+  color?: string;
+  placeholder?: string;
+  iconEnd?: string;
+  iconStart?: string;
+  fill?: string;
+  expand?: string;
+  shape?: "round";
+  multiple?: boolean;
+  endpoint?: string;
+  name?: string;
+  size?: "small" | "large" | "default" | undefined;
+  disabled?: boolean;
+  value?: any;
+  label?: string;
+  showLink?: boolean;
+  showClear?: boolean;
+  accept?: string;
+  required?: boolean;
+  autoSubmit?: boolean;
+  submitEndpoint?: string;
+  documentId?: string;
+  showFIleName?: boolean;
+}
+
+const {
+  accept,
+  autoSubmit,
+  color,
+  disabled,
+  documentId,
+  endpoint,
+  expand,
+  fileName,
+  fill,
+  iconEnd,
+  iconStart,
+  label,
+  multiple,
+  name,
+  path,
+  placeholder,
+  required,
+  shape,
+  showClear,
+  showFIleName,
+  showLink,
+  size,
+  submitEndpoint,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-upload-button
+  accept={accept}
+  auto-submit={autoSubmit}
+  color={color}
+  disabled={disabled}
+  document-id={documentId}
+  endpoint={endpoint}
+  expand={expand}
+  file-name={fileName}
+  fill={fill}
+  icon-end={iconEnd}
+  icon-start={iconStart}
+  label={label}
+  multiple={multiple}
+  name={name}
+  path={path}
+  placeholder={placeholder}
+  required={required}
+  shape={shape}
+  show-clear={showClear}
+  show-file-name={showFIleName}
+  show-link={showLink}
+  size={size}
+  submit-endpoint={submitEndpoint}
+  value={value}
+>
+  <slot />
+</fireenjin-upload-button>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-upload-button.js";
+  defineCustomElement();
+</script>

@@ -1,0 +1,74 @@
+---
+interface Props {
+  name?: string;
+  label?: string;
+  placeholder?: string;
+  value?: any;
+  required?: boolean;
+  autofocus?: boolean;
+  disabled?: boolean;
+  endpoint?: string;
+  dataPropsMap?: any;
+  template?: (result: any) => any;
+  type?: string;
+  searchParams?: any;
+  disableSearch?: boolean;
+  mode?: "popover" | "inline";
+  iconEnd?: string;
+  iconStart?: string;
+  results?: any[];
+  resultsKey?: string;
+  lines?: "full" | "inset" | "none";
+  labelPosition?: "stacked" | "fixed" | "floating";
+}
+
+const {
+  autofocus,
+  dataPropsMap,
+  disableSearch,
+  disabled,
+  endpoint,
+  iconEnd,
+  iconStart,
+  label,
+  labelPosition,
+  lines,
+  mode,
+  name,
+  placeholder,
+  required,
+  results,
+  resultsKey,
+  searchParams,
+  template,
+  type,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-input-search
+  name={name}
+  data-props-map={dataPropsMap}
+  label={label}
+  placeholder={placeholder}
+  value={value}
+  required={required}
+  autofocus={autofocus}
+  disabled={disabled}
+  endpoint={endpoint}
+  template={template}
+  type={type}
+  search-params={searchParams}
+  disable-search={disableSearch}
+  mode={mode}
+  icon-end={iconEnd}
+  icon-start={iconStart}
+  results={results}
+  results-key={resultsKey}
+  lines={lines}
+  label-position={labelPosition}></fireenjin-input-search>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-input-search.js";
+  defineCustomElement();
+</script>

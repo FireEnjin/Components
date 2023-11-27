@@ -1,0 +1,17 @@
+---
+interface Props {
+  tab?: string;
+  selected?: boolean;
+}
+
+const { tab, selected } = Astro.props;
+---
+
+<fireenjin-tab tab={tab} selected={selected}>
+  <slot />
+</fireenjin-tab>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-tab.js";
+  defineCustomElement();
+</script>

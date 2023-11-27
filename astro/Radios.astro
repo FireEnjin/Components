@@ -1,0 +1,78 @@
+---
+import type { FieldOption } from "../../../components/dist/types";
+import type { Mode } from "../../../components/dist/types/components";
+interface Props {
+  required?: boolean;
+  pattern?: any;
+  options?: FieldOption[];
+  name?: string;
+  disabled?: boolean;
+  allowEmptySelection?: boolean;
+  lines?: "full" | "inset" | "none";
+  labelPosition?: "stacked" | "fixed" | "floating";
+  endpoint?: string;
+  orderBy?: string;
+  dataPropsMap?: any;
+  optionEl?: (result?: any) => any;
+  limit?: number;
+  params?: any;
+  query?: string;
+  resultsKey?: string;
+  radioSlot?: string;
+  color?: string;
+  mode?: Mode;
+}
+
+const {
+  allowEmptySelection,
+  color,
+  dataPropsMap,
+  disabled,
+  endpoint,
+  labelPosition,
+  limit,
+  lines,
+  mode,
+  name,
+  optionEl,
+  options,
+  orderBy,
+  params,
+  pattern,
+  query,
+  radioSlot,
+  required,
+  resultsKey,
+} = Astro.props;
+---
+
+<fireenjin-radios
+  mode={mode}
+  required={required}
+  pattern={pattern}
+  options={typeof options === "string" ? options : JSON.stringify(options)}
+  name={name}
+  disabled={disabled}
+  allow-empty-selection={allowEmptySelection}
+  lines={lines}
+  label-position={labelPosition}
+  endpoint={endpoint}
+  order-by={orderBy}
+  data-props-map={typeof dataPropsMap === "string"
+    ? dataPropsMap
+    : JSON.stringify(dataPropsMap)}
+  option-el={optionEl}
+  limit={limit}
+  params={typeof params === "string" ? params : JSON.stringify(params)}
+  query={query}
+  results-key={resultsKey}
+  radio-slot={radioSlot}
+  color={color}
+>
+  <slot />
+</fireenjin-radios>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-radios.js";
+  defineCustomElement();
+</script>

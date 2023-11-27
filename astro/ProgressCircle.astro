@@ -1,0 +1,17 @@
+---
+interface Props {
+  percent?: number;
+  radius?: number;
+  stroke?: number;
+}
+
+const { percent, radius, stroke } = Astro.props;
+---
+
+<fireenjin-progress-circle percent={percent} radius={radius} stroke={stroke}
+></fireenjin-progress-circle>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-progress-circle.js";
+  defineCustomElement();
+</script>

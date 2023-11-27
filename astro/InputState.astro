@@ -1,0 +1,17 @@
+---
+interface Props {
+  name?: string;
+  placeholder?: string;
+  value?: string;
+}
+
+const { name, placeholder, value } = Astro.props;
+---
+
+<fireenjin-input-state name={name} placeholder={placeholder} value={value}
+></fireenjin-input-state>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-input-state.js";
+  defineCustomElement();
+</script>

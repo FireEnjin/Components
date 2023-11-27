@@ -1,0 +1,111 @@
+---
+import type { FunctionalComponent } from "../../../components/dist/types/stencil-public-runtime";
+interface Props {
+  gridEl?: FunctionalComponent<any>;
+  listEl?: FunctionalComponent<any>;
+  disablePageCheck?: boolean;
+  disableFetch?: boolean;
+  approxItemHeight?: number;
+  endpoint?: string;
+  query?: string;
+  fetchData?: any;
+  limit?: number;
+  orderBy?: string;
+  orderDirection?: string;
+  dataPropsMap?: any;
+  display?: "list" | "grid";
+  page?: number;
+  results?: any[];
+  beforeFetch?: (fetchParams: any) => Promise<any>;
+  groupBy?: string;
+  loadingSpinner?: string;
+  loadingText?: string;
+  resultsKey?: string;
+  pageKey?: string;
+  pageCountKey?: string;
+  resultCountKey?: string;
+  name?: string;
+  collection?: string;
+  renderItem?: (item: any, i: number) => any;
+  disableVirtualScroll?: boolean;
+  removeDuplicates?: boolean;
+  fetchParams?: any;
+  nextKey?: string;
+  disableInfiniteScroll?: boolean;
+}
+
+const {
+  approxItemHeight,
+  beforeFetch,
+  collection,
+  dataPropsMap,
+  disableFetch,
+  disableInfiniteScroll,
+  disablePageCheck,
+  disableVirtualScroll,
+  display,
+  endpoint,
+  fetchData,
+  fetchParams,
+  gridEl,
+  groupBy,
+  limit,
+  listEl,
+  loadingSpinner,
+  loadingText,
+  name,
+  nextKey,
+  orderBy,
+  orderDirection,
+  page,
+  pageCountKey,
+  pageKey,
+  query,
+  removeDuplicates,
+  renderItem,
+  resultCountKey,
+  results,
+  resultsKey,
+} = Astro.props;
+---
+
+<fireenjin-pagination
+  approx-item-height={approxItemHeight}
+  before-fetch={beforeFetch}
+  collection={collection}
+  data-props-map={JSON.stringify(dataPropsMap)}
+  disable-fetch={disableFetch}
+  disable-infinite-scroll={disableInfiniteScroll}
+  disable-page-check={disablePageCheck}
+  disable-virtual-scroll={disableVirtualScroll}
+  display={display}
+  endpoint={endpoint}
+  fetch-data={JSON.stringify(fetchData)}
+  fetch-params={JSON.stringify(fetchParams)}
+  grid-el={gridEl}
+  group-by={groupBy}
+  limit={limit}
+  list-el={listEl}
+  loading-spinner={loadingSpinner}
+  loading-text={loadingText}
+  name={name}
+  next-key={nextKey}
+  order-by={orderBy}
+  order-direction={orderDirection}
+  page={page}
+  page-count-key={pageCountKey}
+  page-key={pageKey}
+  query={query}
+  remove-duplicates={removeDuplicates}
+  render-item={renderItem}
+  result-count-key={resultCountKey}
+  results={JSON.stringify(results)}
+  results-key={resultsKey}
+>
+  <slot />
+</fireenjin-pagination>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-pagination.js";
+  defineCustomElement();
+</script>

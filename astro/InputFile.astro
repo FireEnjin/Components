@@ -1,0 +1,53 @@
+---
+interface Props {
+  path?: string;
+  icon?: string;
+  label?: string;
+  fileName?: string;
+  name?: string;
+  accept?: string;
+  defaultValue?: any;
+  value?: any;
+  type?: string;
+  documentId?: string;
+  disabled?: boolean;
+  endpoint?: string;
+  uploadData?: any;
+}
+
+const {
+  accept,
+  defaultValue,
+  disabled,
+  documentId,
+  endpoint,
+  fileName,
+  icon,
+  label,
+  name,
+  path,
+  type,
+  uploadData,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-input-file
+  accept={accept}
+  default-value={defaultValue}
+  disabled={disabled}
+  document-id={documentId}
+  endpoint={endpoint}
+  file-name={fileName}
+  icon={icon}
+  label={label}
+  name={name}
+  path={path}
+  type={type}
+  upload-data={uploadData}
+  value={value}></fireenjin-input-file>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-input-file.js";
+  defineCustomElement();
+</script>

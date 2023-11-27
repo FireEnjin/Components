@@ -1,0 +1,84 @@
+---
+import type { Control } from "../../../components/dist/types";
+interface Props {
+  el?: any;
+  /**
+   * The icon to display in the header label
+   */
+  icon?: string;
+  /**
+   * The label to display at the top of the popover
+   */
+  label?: string;
+  /**
+   * The type of event to fire when a options are selected
+   */
+  type?: "set" | "move" | "select";
+  /**
+   * The name of the input
+   */
+  name?: string;
+  /**
+   * The value of the input
+   */
+  value?: any;
+  /**
+   * Can you check the controls
+   */
+  checkable?: boolean;
+  /**
+   * Can you select multiple
+   */
+  multiple?: boolean;
+  /**
+   * The list of buttons to show when the material button is clicked
+   */
+  controls?: Control[];
+  /**
+   * Should we show the clear button
+   */
+  showClear?: boolean;
+  /**
+   * Should the popover close on selection?
+   */
+  closeOnSelect?: boolean;
+  /**
+   * Should the popover close on clear?
+   */
+  closeOnClear?: boolean;
+}
+
+const {
+  checkable,
+  closeOnClear,
+  closeOnSelect,
+  controls,
+  el,
+  icon,
+  label,
+  multiple,
+  name,
+  showClear,
+  type,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-popover-controls
+  el={el}
+  icon={icon}
+  label={label}
+  type={type}
+  name={name}
+  value={value}
+  checkable={checkable}
+  multiple={multiple}
+  controls={controls}
+  show-clear={showClear}
+  close-on-select={closeOnSelect}
+  close-on-clear={closeOnClear}></fireenjin-popover-controls>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-popover-controls.js";
+  defineCustomElement();
+</script>

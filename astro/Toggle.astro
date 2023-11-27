@@ -1,0 +1,31 @@
+---
+interface Props {
+  label?: string;
+  name?: string;
+  value?: boolean;
+  color?: string;
+  labelPosition?: "stacked" | "fixed" | "floating";
+  disabled?: boolean;
+  lines?: "full" | "inset" | "none";
+}
+
+const { color, disabled, label, labelPosition, lines, name, value } =
+  Astro.props;
+---
+
+<fireenjin-toggle
+  color={color}
+  disabled={disabled}
+  label={label}
+  label-position={labelPosition}
+  lines={lines}
+  name={name}
+  value={value}
+>
+  <slot />
+</fireenjin-toggle>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-toggle.js";
+  defineCustomElement();
+</script>

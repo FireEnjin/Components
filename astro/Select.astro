@@ -1,0 +1,117 @@
+---
+import type { SelectCompareFn } from "@ionic/core";
+interface Props {
+  disabled?: boolean;
+  cancelText?: string;
+  okText?: string;
+  placeholder?: string;
+  name?: string;
+  selectedText?: string;
+  multiple?: boolean;
+  interface?: string;
+  interfaceOptions?: any;
+  compareWith?: string | SelectCompareFn | null;
+  value?: any;
+  endpoint?: string;
+  header?: string;
+  subHeader?: string;
+  message?: string;
+  orderBy?: string;
+  dataPropsMap?: any;
+  optionEl?: (result?: any) => any;
+  selectedOptionEl?: (result?: any) => any;
+  limit?: number;
+  params?: any;
+  query?: string;
+  label?: string;
+  pattern?: any;
+  options?: {
+    label?: string;
+    value?: any;
+    disabled?: boolean;
+    payload?: any;
+    [key: string]: any;
+  }[];
+  required?: boolean;
+  resultsKey?: string;
+  labelPosition?: "stacked" | "fixed" | "floating";
+  lines?: "full" | "inset" | "none";
+  trigger?: string;
+}
+
+const {
+  cancelText,
+  compareWith,
+  dataPropsMap,
+  disabled,
+  endpoint,
+  header,
+  interface: iface,
+  interfaceOptions,
+  label,
+  labelPosition,
+  limit,
+  lines,
+  message,
+  multiple,
+  name,
+  okText,
+  optionEl,
+  options,
+  orderBy,
+  params,
+  pattern,
+  placeholder,
+  query,
+  required,
+  resultsKey,
+  selectedOptionEl,
+  selectedText,
+  subHeader,
+  trigger,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-select
+  interface={iface}
+  interface-options={typeof interfaceOptions === "string"
+    ? interfaceOptions
+    : JSON.stringify(interfaceOptions)}
+  label={label}
+  label-position={labelPosition}
+  lines={lines}
+  trigger={trigger}
+  value={value}
+  name={name}
+  placeholder={placeholder}
+  disabled={disabled}
+  required={required}
+  pattern={pattern}
+  multiple={multiple}
+  ok-text={okText}
+  cancel-text={cancelText}
+  selected-text={selectedText}
+  header={header}
+  sub-header={subHeader}
+  message={message}
+  options={typeof options === "string" ? options : JSON.stringify(options)}
+  option-el={optionEl}
+  selected-option-el={selectedOptionEl}
+  compare-with={compareWith}
+  data-props-map={typeof dataPropsMap === "string"
+    ? dataPropsMap
+    : JSON.stringify(dataPropsMap)}
+  endpoint={endpoint}
+  params={typeof params === "string" ? params : JSON.stringify(params)}
+  query={query}
+  order-by={orderBy}
+  limit={limit}
+  results-key={resultsKey}
+>
+</fireenjin-select>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-select.js";
+  defineCustomElement();
+</script>

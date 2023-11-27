@@ -1,0 +1,42 @@
+---
+import type {
+  ChartDataset,
+  ChartTypeRegistry,
+} from "../../../components/dist/types/components";
+interface Props {
+  /**
+   * Options to configure Chart.js
+   */
+  options?: any;
+  /**
+   * The dataset to render graph with
+   */
+  datasets?: ChartDataset[];
+  /**
+   * The labels for the graph
+   */
+  labels?: string[];
+  /**
+   * The title of the graph
+   */
+  name?: string;
+  /**
+   * The type of graph to generate
+   */
+  type?: keyof ChartTypeRegistry;
+}
+
+const { options, datasets, labels, name, type } = Astro.props;
+---
+
+<fireenjin-graph
+  options={JSON.stringify(options)}
+  datasets={JSON.stringify(datasets)}
+  labels={JSON.stringify(labels)}
+  name={name}
+  type={type}></fireenjin-graph>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-graph.js";
+  defineCustomElement();
+</script>

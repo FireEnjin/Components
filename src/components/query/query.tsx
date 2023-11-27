@@ -18,6 +18,7 @@ export class Query {
   @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
 
   @Prop() endpoint: string;
+  @Prop() documentId: string;
   @Prop() name: string;
   @Prop() dataPropsMap: any;
   @Prop() params: any = {};
@@ -56,6 +57,7 @@ export class Query {
     this.fireenjinFetch.emit({
       name: this.name,
       endpoint: this.endpoint,
+      id: this.documentId,
       dataPropsMap: this.dataPropsMap ? this.dataPropsMap : null,
       params: this.params || {},
     });

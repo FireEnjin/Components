@@ -1,0 +1,83 @@
+---
+interface Props {
+  color?: string;
+  outline?: boolean;
+  disabled?: boolean;
+  icon?: string;
+  selectIcon?: string;
+  multiple?: boolean;
+  showBackdrop?: boolean;
+  name?: string;
+  value?: any;
+  label?: string;
+  selectedText?: string;
+  disableSelectedCount?: boolean;
+  placeholder?: string;
+  disableBackgroundDismiss?: boolean;
+  options?: {
+    name?: string;
+    image?: string;
+    label?: string;
+    color?: string;
+    checked?: boolean;
+    icon?: string;
+    value?: string;
+    header?: string;
+    subHeader?: string;
+    message?: string;
+    optionEl?: (result: any) => HTMLIonSelectOptionElement;
+    placeholder?: string;
+    endpoint?: string;
+    query?: string;
+    limit?: number;
+    orderBy?: string;
+    dataPropsMap?: string;
+    params?: any;
+    options?: {
+      label: string;
+      value: string;
+    }[];
+  }[];
+}
+
+const {
+  color,
+  disableBackgroundDismiss,
+  disableSelectedCount,
+  disabled,
+  icon,
+  label,
+  multiple,
+  name,
+  options,
+  outline,
+  placeholder,
+  selectIcon,
+  selectedText,
+  showBackdrop,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-select-chip
+  color={color}
+  outline={outline}
+  disabled={disabled}
+  icon={icon}
+  select-icon={selectIcon}
+  multiple={multiple}
+  show-backdrop={showBackdrop}
+  name={name}
+  value={value}
+  label={label}
+  selected-text={selectedText}
+  disable-selected-count={disableSelectedCount}
+  placeholder={placeholder}
+  disable-background-dismiss={disableBackgroundDismiss}
+  options={typeof options === "string" ? options : JSON.stringify(options)}
+></fireenjin-select-chip>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-select-chip.js";
+  defineCustomElement();
+</script>

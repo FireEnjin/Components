@@ -12,6 +12,7 @@ import {
   FunctionalComponent,
   State,
   Build,
+  Element,
 } from "@stencil/core";
 import { debounce } from "typescript-debounce-decorator";
 
@@ -24,6 +25,8 @@ export class Pagination implements ComponentInterface {
   infiniteScrollEl: HTMLIonInfiniteScrollElement;
   resizeInterval: NodeJS.Timeout;
   initailizedOnPath: string;
+
+  @Element() el: HTMLElement;
 
   @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
 
@@ -333,11 +336,11 @@ export class Pagination implements ComponentInterface {
     }
   }
 
-  renderResults() {
+  renderResults(results: any[]) {
     return this.display === "grid" ? (
       <ion-grid>
         <ion-row>
-          {this.results.map((result) =>
+          {results.map((result) =>
             typeof this.gridEl({ result }, null, null) === "string" ? (
               <ion-col innerHTML={this.gridEl({ result }, null, null) as any} />
             ) : (
@@ -349,7 +352,7 @@ export class Pagination implements ComponentInterface {
     ) : this.display === "list" ? (
       <ion-card>
         <ion-list>
-          {this.results.map((result) =>
+          {results.map((result) =>
             typeof this.listEl({ result }, null, null) === "string" ? (
               <div innerHTML={this.listEl({ result }, null, null) as any} />
             ) : (
@@ -359,23 +362,29 @@ export class Pagination implements ComponentInterface {
         </ion-list>
       </ion-card>
     ) : (
-      this.results.map((result, i) => this.renderItem(result, i))
+      results.map((result, i) => this.renderItem(result, i))
     );
   }
 
   render() {
+    const results =
+      (typeof this.results === "string" && JSON.parse(this.results)) ||
+      (this.el.getAttribute("results") &&
+        JSON.parse(this.el.getAttribute("results"))) ||
+      this.results ||
+      [];
     return (
       <div class="pagination">
         {this.disableVirtualScroll ? (
-          <div>{this.renderResults()}</div>
+          <div>{this.renderResults(results)}</div>
         ) : (
           <ion-virtual-scroll
-            items={this.results}
+            items={results}
             approxItemHeight={this.approxItemHeight}
             renderItem={this.renderItem}
             ref={(el) => (this.virtualScrollEl = el)}
           >
-            {this.renderResults()}
+            {this.renderResults(results)}
             <slot />
           </ion-virtual-scroll>
         )}

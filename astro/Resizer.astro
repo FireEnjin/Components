@@ -1,0 +1,49 @@
+---
+interface Props {
+  /**
+   * The resize direction
+   */
+  direction?:
+    | "top"
+    | "right"
+    | "bottom"
+    | "left"
+    | "topRight"
+    | "bottomRight"
+    | "bottomLeft"
+    | "topLeft";
+  /**
+   * The styles to replace
+   */
+  replaceStyles?: any;
+  /**
+   * A callback fired when resize starts
+   */
+  resizeStart?: (
+    e: any,
+    dir:
+      | "top"
+      | "right"
+      | "bottom"
+      | "left"
+      | "topRight"
+      | "bottomRight"
+      | "bottomLeft"
+      | "topLeft"
+  ) => void;
+}
+
+const { direction, replaceStyles, resizeStart } = Astro.props;
+---
+
+<fireenjin-resizer
+  direction={direction}
+  replace-styles={typeof replaceStyles === "string"
+    ? replaceStyles
+    : JSON.stringify(replaceStyles)}
+  resize-start={resizeStart}></fireenjin-resizer>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-resizer.js";
+  defineCustomElement();
+</script>

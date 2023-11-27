@@ -1,0 +1,74 @@
+---
+interface Props {
+  /**
+   * Language locale to use for calendar
+   */
+  locales?: string;
+  /**
+   * The year to set the calendar to
+   */
+  year?: number;
+  /**
+   * The maximum date that can be selected in Y-m-d format
+   */
+  max?: string;
+  /**
+   * The minimum date that can be selected in Y-m-d format
+   */
+  min?: string;
+  /**
+   * The month to set the calendar to
+   */
+  month?: number;
+  /**
+   * Should the calendar be used to select a date range
+   */
+  range?: boolean;
+  /**
+   * A list of available dates to select
+   */
+  available?: string[];
+  /**
+   * The end date to select Y-m-d
+   */
+  endDate?: string;
+  /**
+   * The start date to select Y-m-d
+   */
+  startDate?: string;
+  /**
+   * The title to use when showing the year selection view
+   */
+  yearsTitle?: string;
+}
+
+const {
+  locales,
+  year,
+  available,
+  endDate,
+  max,
+  min,
+  month,
+  range,
+  startDate,
+  yearsTitle,
+} = Astro.props;
+---
+
+<fireenjin-calendar
+  locales={locales}
+  year={year}
+  available={available}
+  end-date={endDate}
+  max={max}
+  min={min}
+  month={month}
+  range={range}
+  start-date={startDate}
+  years-title={yearsTitle}></fireenjin-calendar>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-calendar.js";
+  defineCustomElement();
+</script>

@@ -1,0 +1,47 @@
+---
+interface Props {
+  name?: string;
+  value?: any;
+  label?: string;
+  labelPosition?: "stacked" | "fixed" | "floating";
+  disabled?: boolean;
+  typeOptions?: any[];
+  partOptions?: any[];
+  addIcon?: string;
+  addColor?: string;
+  deleteColor?: string;
+  deleteIcon?: string;
+}
+
+const {
+  addColor,
+  addIcon,
+  deleteColor,
+  deleteIcon,
+  disabled,
+  label,
+  labelPosition,
+  name,
+  partOptions,
+  typeOptions,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-input-path
+  name={name}
+  value={value}
+  label={label}
+  label-position={labelPosition}
+  disabled={disabled}
+  type-options={JSON.stringify(typeOptions)}
+  part-options={JSON.stringify(partOptions)}
+  add-icon={addIcon}
+  add-color={addColor}
+  delete-icon={deleteIcon}
+  delete-color={deleteColor}></fireenjin-input-path>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-input-path.js";
+  defineCustomElement();
+</script>

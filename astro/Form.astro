@@ -1,0 +1,209 @@
+---
+interface Props {
+  /**
+   * The name of the form used for ID and name
+   */
+  name?: string;
+  /**
+   * The data from the form being filled out
+   */
+  formData?: any;
+  /**
+   * What the save button says
+   */
+  submitButton?: string;
+  /**
+   * What size is the reset button
+   */
+  submitButtonSize?: "default" | "large" | "small";
+  /**
+   * What color the submit button is
+   */
+  submitButtonColor?: string;
+  /**
+   * What fill option to use for the submit button
+   */
+  submitButtonFill?: "clear" | "outline" | "solid" | "default";
+  /**
+   * What shape is the submit button
+   */
+  submitButtonShape?: "round";
+  /**
+   * What the reset button says
+   */
+  resetButton?: string;
+  /**
+   * What size is the reset button
+   */
+  resetButtonSize?: "default" | "large" | "small";
+  /**
+   * What color the reset button is
+   */
+  resetButtonColor?: string;
+  /**
+   * What fill option to use for the reset button
+   */
+  resetButtonFill?: "clear" | "outline" | "solid" | "default";
+  /**
+   * What shape is the reset button
+   */
+  resetButtonShape?: "round";
+  /**
+   * Should the form controls be hidden?
+   */
+  hideControls?: boolean;
+  /**
+   * The endpoint that form submission should link to
+   */
+  endpoint?: string;
+  /**
+   * The id of the document being edited
+   */
+  documentId?: string;
+  /**
+   * A method that runs before form submission to allow editing of formData
+   */
+  beforeSubmit?: (data: any, options?: any) => Promise<any>;
+  /**
+   * Should the form disable the loader on submit
+   */
+  disableLoader?: boolean;
+  /**
+   * Is the component currently loading
+   */
+  loading?: boolean;
+  /**
+   * Should the enter button binding be disabled
+   */
+  disableEnterButton?: boolean;
+  /**
+   * Should the form disable reset
+   */
+  disableReset?: boolean;
+  /**
+   * Confirm leaving the page when the form is filled
+   */
+  confirmExit?: boolean;
+  /**
+   * Has the form fields been changed
+   */
+  hasChanged?: boolean;
+  /**
+   * The HTTP method to use when submitting the form
+   */
+  method?: string;
+  /**
+   * The action to use for the form
+   */
+  action?: string;
+  /**
+   * The collection to use for cache and firestore
+   */
+  collection?: string;
+  /**
+   * Emit the fetch event emitted when component loads
+   */
+  fetch?: string;
+  /**
+   * The fetch params
+   */
+  fetchParams?: any;
+  /**
+   * The map to bind data from fetch response to form data
+   */
+  fetchDataMap?: any;
+  /**
+   * The result key to use for formData
+   */
+  fetchKey?: string;
+  /**
+   * A comma separated list or array of items to filter out for submission
+   */
+  filterData?: any;
+  /**
+   * The localforage key name to store as
+   */
+  cacheKey?: string;
+  /**
+   * The Stencil Store to bind to
+   */
+  store?: { state: any; key: string };
+}
+
+const {
+  name,
+  formData,
+  submitButton,
+  submitButtonSize,
+  submitButtonColor,
+  action,
+  beforeSubmit,
+  cacheKey,
+  collection,
+  confirmExit,
+  disableEnterButton,
+  disableLoader,
+  disableReset,
+  documentId,
+  endpoint,
+  fetch,
+  fetchDataMap,
+  fetchKey,
+  fetchParams,
+  filterData,
+  hasChanged,
+  hideControls,
+  loading,
+  method,
+  resetButton,
+  resetButtonColor,
+  resetButtonFill,
+  resetButtonShape,
+  resetButtonSize,
+  store,
+  submitButtonFill,
+  submitButtonShape,
+} = Astro.props;
+---
+
+<fireenjin-form
+  name={name}
+  form-data={JSON.stringify(formData)}
+  submit-button={submitButton}
+  submit-button-size={submitButtonSize}
+  submit-button-color={submitButtonColor}
+  submit-button-fill={submitButtonFill}
+  submit-button-shape={submitButtonShape}
+  reset-button={resetButton}
+  reset-button-size={resetButtonSize}
+  reset-button-color={resetButtonColor}
+  reset-button-fill={resetButtonFill}
+  reset-button-shape={resetButtonShape}
+  hide-controls={hideControls}
+  endpoint={endpoint}
+  document-id={documentId}
+  before-submit={beforeSubmit}
+  disable-loader={disableLoader}
+  loading={loading}
+  disable-enter-button={disableEnterButton}
+  disable-reset={disableReset}
+  confirm-exit={confirmExit}
+  has-changed={hasChanged}
+  method={method}
+  action={action}
+  collection={collection}
+  fetch={fetch}
+  fetch-params={fetchParams}
+  fetch-data-map={fetchDataMap}
+  fetch-key={fetchKey}
+  filter-data={filterData}
+  cache-key={cacheKey}
+  store={store}
+>
+  <slot />
+</fireenjin-form>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-form.js";
+  defineCustomElement();
+</script>

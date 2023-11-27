@@ -1,0 +1,19 @@
+---
+interface Props {
+  href?: string;
+  color?: string;
+  outline?: boolean;
+  disabled?: boolean;
+}
+
+const { color, href, outline, disabled } = Astro.props;
+---
+
+<fireenjin-chip href={href} color={color} outline={outline} disabled={disabled}>
+  <slot />
+</fireenjin-chip>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-chip.js";
+  defineCustomElement();
+</script>

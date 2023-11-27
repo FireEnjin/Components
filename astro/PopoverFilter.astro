@@ -1,0 +1,77 @@
+---
+import type { Control } from "../../../components/dist/types";
+interface Props {
+  label?: string;
+  icon?: string;
+  name?: string;
+  options?: {
+    name?: string;
+    image?: string;
+    label?: string;
+    color?: string;
+    checked?: boolean;
+    icon?: string;
+    value?: string;
+    header?: string;
+    subHeader?: string;
+    message?: string;
+    optionEl?: (result: any) => HTMLIonSelectOptionElement;
+    placeholder?: string;
+    endpoint?: string;
+    query?: string;
+    limit?: number;
+    orderBy?: string;
+    dataPropsMap?: string;
+    params?: any;
+    options?: {
+      label: string;
+      value: string;
+    }[];
+  }[];
+  beforeSubmit?: (data?: any, value?: string[]) => any;
+  beforeChange?: (
+    value?: any,
+    options?: {
+      name: string;
+      multiple: boolean;
+    }
+  ) => any;
+  enableLoader?: boolean;
+  hideControls?: boolean;
+  multiple?: boolean;
+  value?: any;
+  submitButton?: string;
+}
+
+const {
+  beforeChange,
+  beforeSubmit,
+  enableLoader,
+  hideControls,
+  multiple,
+  icon,
+  label,
+  name,
+  options,
+  submitButton,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-popover-filter
+  label={label}
+  icon={icon}
+  name={name}
+  options={typeof options !== "string" ? JSON.stringify(options) : options}
+  before-submit={beforeSubmit}
+  before-change={beforeChange}
+  enable-loader={enableLoader}
+  hide-controls={hideControls}
+  multiple={multiple}
+  value={value}
+  submit-button={submitButton}></fireenjin-popover-filter>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-popover-filter.js";
+  defineCustomElement();
+</script>

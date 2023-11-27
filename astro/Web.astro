@@ -1,0 +1,31 @@
+---
+interface Props {
+  lines?: any[];
+  startKey?: string;
+  endKey?: string;
+  optionsKey?: string;
+  options?: any;
+  createConnectionFn?: (
+    connection: [any, any, any?]
+  ) => Promise<[any, any, any?]>;
+}
+
+const { createConnectionFn, endKey, lines, options, optionsKey, startKey } =
+  Astro.props;
+---
+
+<fireenjin-web
+  create-connection-fn={createConnectionFn}
+  end-key={endKey}
+  lines={typeof lines === "string" ? lines : JSON.stringify(lines)}
+  options={typeof options === "string" ? options : JSON.stringify(options)}
+  options-key={optionsKey}
+  start-key={startKey}
+>
+  <slot />
+</fireenjin-web>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-web.js";
+  defineCustomElement();
+</script>

@@ -1,0 +1,54 @@
+---
+interface Props {
+  name?: string;
+  value?: any;
+  mode?: "tree" | "text";
+  mainMenuBar?: boolean;
+  navigationBar?: boolean;
+  statusBar?: boolean;
+  readOnly?: boolean;
+  indentation?: number | string;
+  tabSize?: number | string;
+  escapeControlCharacters?: boolean;
+  escapeUnicodeCharacters?: boolean;
+  validator?: any;
+  options?: any;
+}
+
+const {
+  name,
+  escapeControlCharacters,
+  escapeUnicodeCharacters,
+  indentation,
+  mainMenuBar,
+  mode,
+  navigationBar,
+  options,
+  readOnly,
+  statusBar,
+  tabSize,
+  validator,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-json-editor
+  name={name}
+  escape-control-characters={escapeControlCharacters}
+  escape-unicode-characters={escapeUnicodeCharacters}
+  indentation={indentation}
+  main-menu-bar={mainMenuBar}
+  mode={mode}
+  navigation-bar={navigationBar}
+  options={JSON.stringify(options)}
+  read-only={readOnly}
+  status-bar={statusBar}
+  tab-size={tabSize}
+  validator={JSON.stringify(validator)}
+  value={typeof value === "string" ? JSON.stringify(value) : value}
+></fireenjin-json-editor>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-json-editor.js";
+  defineCustomElement();
+</script>

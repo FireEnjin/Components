@@ -1,0 +1,23 @@
+---
+interface Props {
+  src?: string;
+  color?: string;
+  size?: string;
+  initials?: string;
+  fallback?: string;
+}
+
+const { color, fallback, initials, size, src } = Astro.props;
+---
+
+<fireenjin-avatar
+  src={src}
+  color={color}
+  fallback={fallback}
+  initials={initials}
+  size={size}></fireenjin-avatar>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-avatar.js";
+  defineCustomElement();
+</script>

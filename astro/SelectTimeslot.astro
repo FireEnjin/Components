@@ -1,0 +1,77 @@
+---
+interface Props {
+  nextButton?: string;
+  nextButtonSize?: "default" | "large" | "small";
+  nextButtonColor?: string;
+  nextButtonExpand?: "full" | "block" | undefined;
+  nextButtonFill?: "clear" | "outline" | "solid" | "default";
+  nextButtonShape?: "round";
+  previousButton?: string;
+  previousButtonSize?: "default" | "large" | "small";
+  previousButtonColor?: string;
+  previousButtonFill?: "clear" | "outline" | "solid" | "default";
+  previousButtonExpand?: "full" | "block" | undefined;
+  previousButtonShape?: "round";
+  hideControls?: boolean;
+  name?: string;
+  value?: string;
+  lines?: "full" | "inset" | "none";
+  duration?: number;
+  durationLabel?: string;
+  label?: string;
+  controlsPosition?: "top" | "bottom";
+  valueToString?: boolean;
+}
+
+const {
+  controlsPosition,
+  duration,
+  durationLabel,
+  hideControls,
+  label,
+  lines,
+  name,
+  nextButton,
+  nextButtonColor,
+  nextButtonExpand,
+  nextButtonFill,
+  nextButtonShape,
+  nextButtonSize,
+  previousButton,
+  previousButtonColor,
+  previousButtonExpand,
+  previousButtonFill,
+  previousButtonShape,
+  previousButtonSize,
+  value,
+  valueToString,
+} = Astro.props;
+---
+
+<fireenjin-select-timeslot
+  controls-position={controlsPosition}
+  duration={duration}
+  duration-label={durationLabel}
+  hide-controls={hideControls}
+  label={label}
+  lines={lines}
+  name={name}
+  next-button={nextButton}
+  next-button-color={nextButtonColor}
+  next-button-expand={nextButtonExpand}
+  next-button-fill={nextButtonFill}
+  next-button-shape={nextButtonShape}
+  next-button-size={nextButtonSize}
+  previous-button={previousButton}
+  previous-button-color={previousButtonColor}
+  previous-button-expand={previousButtonExpand}
+  previous-button-fill={previousButtonFill}
+  previous-button-shape={previousButtonShape}
+  previous-button-size={previousButtonSize}
+  value={value}
+  value-to-string={valueToString}></fireenjin-select-timeslot>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-select-timeslot.js";
+  defineCustomElement();
+</script>

@@ -1,0 +1,53 @@
+---
+interface Props {
+  lines?: string;
+  label?: string;
+  labelPosition?: string;
+  pin?: boolean;
+  debounce?: number;
+  color?: string;
+  disabled?: boolean;
+  min?: number;
+  max?: number;
+  step?: string | number;
+  pinFormatter?: (value: number) => string;
+  name?: string;
+  value?: string | number;
+}
+
+const {
+  lines,
+  color,
+  debounce,
+  disabled,
+  label,
+  labelPosition,
+  max,
+  min,
+  name,
+  pin,
+  pinFormatter,
+  step,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-input-percent
+  lines={lines}
+  label={label}
+  label-position={labelPosition}
+  pin={pin}
+  debounce={debounce}
+  color={color}
+  disabled={disabled}
+  min={min}
+  max={max}
+  step={step}
+  pin-formatter={pinFormatter}
+  name={name}
+  value={value}></fireenjin-input-percent>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-input-percent.js";
+  defineCustomElement();
+</script>

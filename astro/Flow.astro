@@ -1,0 +1,240 @@
+---
+interface Props {
+  /**
+   * The name of the form used for ID and name
+   */
+  name?: string;
+  /**
+   * Allow null to be accepted as required value
+   */
+  allowNullRequired?: boolean;
+  /**
+   * The data from the form being filled out
+   */
+  formData?: any;
+  /**
+   * The next button for the slider
+   */
+  nextButton?: {
+    expand?: "block" | "full";
+    label?: string;
+    color?: string;
+    fill?: "clear" | "outline" | "solid" | "default";
+    icon?: string;
+    iconSlot?: string;
+    onClick?: (event?: any) => void;
+    disabled?: boolean;
+    shape?: "round";
+    size?: "default" | "small" | "large";
+  };
+  /**
+   * The prev button for the slider
+   */
+  prevButton?: {
+    expand?: "block" | "full";
+    label?: string;
+    color?: string;
+    fill?: "clear" | "outline" | "solid" | "default";
+    icon?: string;
+    iconSlot?: string;
+    onClick?: (event?: any) => void;
+    disabled?: boolean;
+    shape?: "round";
+    size?: "default" | "small" | "large";
+  };
+  /**
+   * The save button for the flow
+   */
+  saveButton?: {
+    expand?: "block" | "full";
+    label?: string;
+    color?: string;
+    fill?: "clear" | "outline" | "solid" | "default";
+    icon?: string;
+    iconSlot?: string;
+    onClick?: (event?: any) => void;
+    disabled?: boolean;
+    shape?: "round";
+    size?: "default" | "small" | "large";
+  };
+  /**
+   * Should the form controls be hidden?
+   */
+  hideControls?: boolean;
+  /**
+   * The endpoint that form submission should link to
+   */
+  endpoint?: string;
+  /**
+   * The id of the document being edited
+   */
+  documentId?: string;
+  /**
+   * The data to exclude from the form submit event
+   */
+  excludeData?: string[];
+  /**
+   * A method that runs before form submission to allow editing of formData
+   */
+  beforeSubmit: (data: any, options?: any) => Promise<any>;
+  /**
+   * Should the form disable the loader on submit
+   */
+  disableLoader?: boolean;
+  /**
+   * Is the component currently loading
+   */
+  loading?: boolean;
+  /**
+   * Should the enter button binding be disabled
+   */
+  disableEnterButton?: boolean;
+  /**
+   * Confirm leaving the page when the form is filled
+   */
+  confirmExit?: boolean;
+  /**
+   * Has the form fields been changed
+   */
+  hasChanged?: boolean;
+  /**
+   * The HTTP method to use when submitting the form
+   */
+  method?: string;
+  /**
+   * The action to use for the form
+   */
+  action?: string;
+  /**
+   * Emit the fetch event emitted when component loads
+   */
+  fetch?: string | boolean;
+  /**
+   * The fetch params
+   */
+  fetchParams?: any;
+  /**
+   * The map to bind data from fetch response to form data
+   */
+  fetchDataMap?: any;
+  /**
+   * The result key to use for formData
+   */
+  fetchKey?: string;
+  /**
+   * A comma separated list or array of items to filter out for submission
+   */
+  filterData?: any;
+  /**
+   * A list of options for SwiperJS
+   * @link https://swiperjs.com/swiper-api#parameters
+   */
+  slidesOptions?: any;
+  /**
+   * Should the pager be shown
+   */
+  pager?: boolean;
+  /**
+   * Should the scrollbar be shown
+   */
+  scrollbar?: string;
+  /**
+   * A list of steps in the flow
+   */
+  steps?: any[];
+  /**
+   * The Google Maps Key to use for this flow
+   */
+  googleMapsKey?: string;
+  /**
+   * The Stripe Key to use for this flow
+   */
+  stripeKey?: string;
+  /**
+   * The Stripe elements library to pass to flow
+   */
+  stripeElements?: any;
+  /**
+   * Disable the form requirements
+   */
+  disableRequiredCheck?: boolean;
+  /**
+   * The key used for local storage
+   */
+  cacheKey?: string;
+}
+
+const {
+  name,
+  beforeSubmit,
+  action,
+  allowNullRequired,
+  cacheKey,
+  confirmExit,
+  disableEnterButton,
+  disableLoader,
+  disableRequiredCheck,
+  documentId,
+  endpoint,
+  excludeData,
+  fetch,
+  fetchDataMap,
+  fetchKey,
+  fetchParams,
+  filterData,
+  formData,
+  googleMapsKey,
+  hasChanged,
+  hideControls,
+  loading,
+  method,
+  nextButton,
+  pager,
+  prevButton,
+  saveButton,
+  scrollbar,
+  slidesOptions,
+  steps,
+  stripeElements,
+  stripeKey,
+} = Astro.props;
+---
+
+<fireenjin-flow
+  name={name}
+  before-submit={beforeSubmit}
+  action={action}
+  allow-null-required={allowNullRequired}
+  cache-key={cacheKey}
+  confirm-exit={confirmExit}
+  disable-enter-button={disableEnterButton}
+  disable-loader={disableLoader}
+  disable-required-check={disableRequiredCheck}
+  document-id={documentId}
+  endpoint={endpoint}
+  exclude-data={excludeData}
+  fetch={fetch}
+  fetch-data-map={fetchDataMap}
+  fetch-key={fetchKey}
+  fetch-params={fetchParams}
+  filter-data={filterData}
+  form-data={formData}
+  google-maps-key={googleMapsKey}
+  has-changed={hasChanged}
+  hide-controls={hideControls}
+  loading={loading}
+  method={method}
+  next-button={nextButton}
+  pager={pager}
+  prev-button={prevButton}
+  save-button={saveButton}
+  scrollbar={scrollbar}
+  slides-options={slidesOptions}
+  steps={steps}
+  stripe-elements={stripeElements}
+  stripe-key={stripeKey}></fireenjin-flow>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-flow.js";
+  defineCustomElement();
+</script>

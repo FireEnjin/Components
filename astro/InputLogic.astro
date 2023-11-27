@@ -1,0 +1,57 @@
+---
+import type { Control } from "../../../components/dist/types";
+interface Props {
+  name?: string;
+  label?: string;
+  operations?: any;
+  joinBy?: "and" | "or";
+  vaue?: any;
+  selectedOperator?: string;
+  selectedType?: "string" | "number" | "variable";
+  variables?: {
+    [key: string]: Partial<Control>;
+  };
+  showCode?: boolean;
+  allowAdding?: boolean;
+  placeholder?: string;
+  outputObject?: boolean;
+  variablePopoverOptions?: any;
+}
+
+const {
+  allowAdding,
+  joinBy,
+  label,
+  name,
+  operations,
+  outputObject,
+  placeholder,
+  selectedOperator,
+  selectedType,
+  showCode,
+  variablePopoverOptions,
+  variables,
+  vaue,
+} = Astro.props;
+---
+
+<fireenjin-input-logic
+  name={name}
+  label={label}
+  operations={JSON.stringify(operations)}
+  join-by={joinBy}
+  value={vaue}
+  selected-operator={selectedOperator}
+  selected-type={selectedType}
+  variables={JSON.stringify(variables)}
+  show-code={showCode}
+  allow-adding={allowAdding}
+  placeholder={placeholder}
+  output-object={outputObject}
+  variable-popover-options={JSON.stringify(variablePopoverOptions)}
+></fireenjin-input-logic>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-input-logic.js";
+  defineCustomElement();
+</script>

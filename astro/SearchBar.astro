@@ -1,0 +1,33 @@
+---
+import type { FilterControl } from "../../../components";
+interface Props {
+  filters?: FilterControl[];
+  paginationEl?: any;
+  modeToggle?: boolean;
+  disabled?: boolean;
+  beforeGetResults?: any;
+  showFilter?: boolean;
+}
+
+const {
+  beforeGetResults,
+  disabled,
+  filters,
+  modeToggle,
+  paginationEl,
+  showFilter,
+} = Astro.props;
+---
+
+<fireenjin-search-bar
+  beforeGetResults={beforeGetResults}
+  disabled={disabled}
+  filters={typeof filters === "string" ? filters : JSON.stringify(filters)}
+  modeToggle={modeToggle}
+  paginationEl={paginationEl}
+  showFilter={showFilter}></fireenjin-search-bar>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-search-bar.js";
+  defineCustomElement();
+</script>

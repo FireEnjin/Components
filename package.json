@@ -11,9 +11,10 @@
   "collection:main": "dist/collection/index.js",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
-    "dist/",
-    "hydrate/",
-    "components"
+    "./astro/",
+    "./dist/",
+    "./hydrate/",
+    "./components/"
   ],
   "scripts": {
     "build": "stencil build",

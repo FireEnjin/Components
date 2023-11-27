@@ -1,0 +1,21 @@
+---
+interface Props {
+  disabled?: boolean;
+  name?: string;
+  maxRating?: number;
+  value?: string;
+}
+
+const { disabled, maxRating, name, value } = Astro.props;
+---
+
+<fireenjin-star-rating
+  disabled={disabled}
+  max-rating={maxRating}
+  name={name}
+  value={value}></fireenjin-star-rating>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-star-rating.js";
+  defineCustomElement();
+</script>

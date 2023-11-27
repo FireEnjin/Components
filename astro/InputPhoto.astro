@@ -1,0 +1,119 @@
+---
+interface Props {
+  color?: string;
+  /**
+   * Is the uploader disabled
+   */
+  disabled?: boolean;
+  /**
+   * A link to the photo to display
+   */
+  value?: string;
+  /**
+   * The storage path to upload the file to
+   */
+  path?: string;
+  /**
+   * The fallback image to use if photo isn't set
+   */
+  fallback?: string;
+  /**
+   * The name to use when emitting field change event
+   */
+  name?: string;
+  /**
+   * The filename to use for the uploaded file
+   */
+  fileName?: string;
+  /**
+   * Should the photo uploader show the button
+   */
+  showButton?: boolean;
+  /**
+   * Text to display on the photo upload button
+   */
+  buttonText?: string;
+  /**
+   * The type of photo being uploaded
+   */
+  type?: string;
+  /**
+   * The ID of the document the photo is tied to
+   */
+  documentId?: string;
+  /**
+   * The endpoint to upload to
+   */
+  endpoint?: string;
+  /**
+   * Initials to display if no photo is set
+   */
+  initials?: string;
+  /**
+   * Allow uploading multiple
+   */
+  multiple?: boolean;
+  /**
+   * Resize photos before uploading
+   */
+  resize?: boolean;
+  /**
+   * Should the uploader auto submit the photo on change
+   */
+  autoSubmit?: boolean;
+  /**
+   * An endpoint to submit to
+   */
+  submitEndpoint?: string;
+  /**
+   * Show the loader
+   */
+  loading?: boolean;
+}
+
+const {
+  color,
+  autoSubmit,
+  buttonText,
+  disabled,
+  documentId,
+  endpoint,
+  fallback,
+  fileName,
+  initials,
+  loading,
+  multiple,
+  name,
+  path,
+  resize,
+  showButton,
+  submitEndpoint,
+  type,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-input-photo
+  color={color}
+  auto-submit={autoSubmit}
+  button-text={buttonText}
+  disabled={disabled}
+  document-id={documentId}
+  endpoint={endpoint}
+  fallback={fallback}
+  file-name={fileName}
+  initials={initials}
+  loading={loading}
+  multiple={multiple}
+  name={name}
+  path={path}
+  resize={resize}
+  show-button={showButton}
+  submit-endpoint={submitEndpoint}
+  type={type}
+  value={value}></fireenjin-input-photo>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-input-photo.js";
+  defineCustomElement();
+</script>

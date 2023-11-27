@@ -1,0 +1,50 @@
+---
+import type { Board } from "../../../components/dist/types/components";
+interface Props {
+  boardId?: string;
+  options?: {
+    element?: string;
+    gutter?: string;
+    boards?: Board[];
+    widthBoard?: string;
+    responsivePercentage?: boolean;
+    dragItems?: boolean;
+    dragBoards?: boolean;
+    itemAddOptions?: {
+      enabled?: boolean;
+      content?: string;
+      class?: string;
+      footer?: boolean | string;
+    };
+    itemHandleOptions?: {
+      enabled?: boolean;
+      handleClass?: string;
+      customCssHandler?: string;
+      customCssIconHandler?: string;
+      customHandler?: string;
+    };
+    click?: (el: any) => void;
+    context?: (el: any, event: any) => void;
+    dragEl?: (el: any, source: any) => void;
+    dragendEl?: (el: any) => void;
+    dropEl?: (el: any, target: any, source: any, sibling: any) => void;
+    dragBoard?: (el: any, source: any) => void;
+    dragendBoard?: (el: any) => void;
+    buttonClick?: (el: any, boardId: any) => void;
+    propagationHandlers?: string[];
+  };
+  disableResponsive?: boolean;
+}
+
+const { boardId, disableResponsive, options } = Astro.props;
+---
+
+<fireenjin-kanban
+  board-id={boardId}
+  disable-responsive={disableResponsive}
+  options={JSON.stringify(options)}></fireenjin-kanban>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-kanban.js";
+  defineCustomElement();
+</script>

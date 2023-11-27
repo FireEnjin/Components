@@ -26,6 +26,7 @@ export class ListHeader implements ComponentInterface {
           }}
         >
           {this.label}
+          <slot />
         </ion-label>
         {this.icon && (
           <ion-icon

@@ -439,7 +439,7 @@ export class Form implements ComponentInterface {
   }
 
   async mapFormData(dataMap, data) {
-    let newData = data ? data : {};
+    let newData = (typeof data === "string" && JSON.parse(data)) || data || {};
     if (dataMap) {
       const dataKeys = Object.keys(dataMap);
       for (const key of dataKeys) {

@@ -1,0 +1,23 @@
+---
+interface Props {
+  facebookAppId?: string;
+  url?: string;
+  text?: string;
+  subject?: string;
+  lines?: "full" | "inset" | "none";
+}
+
+const { facebookAppId, lines, subject, text, url } = Astro.props;
+---
+
+<fireenjin-share
+  facebook-app-id={facebookAppId}
+  lines={lines}
+  subject={subject}
+  text={text}
+  url={url}></fireenjin-share>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-share.js";
+  defineCustomElement();
+</script>

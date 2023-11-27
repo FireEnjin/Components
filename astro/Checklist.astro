@@ -1,0 +1,29 @@
+---
+interface Props {
+  name?: string;
+  options?: {
+    label?: string;
+    value?: any;
+    checked?: boolean;
+    disabled?: boolean;
+    payload?: any;
+    slot?: string;
+    color?: string;
+  }[];
+  value?: any[];
+  disabled?: boolean;
+}
+
+const { name, options, value, disabled } = Astro.props;
+---
+
+<fireenjin-checklist
+  options={JSON.stringify(options)}
+  name={name}
+  value={JSON.stringify(value)}
+  disabled={disabled}></fireenjin-checklist>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-checklist.js";
+  defineCustomElement();
+</script>

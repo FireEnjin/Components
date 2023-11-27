@@ -1,0 +1,53 @@
+---
+interface Props {
+  name?: string;
+  label?: string;
+  placeholder?: string;
+  value?: any;
+  required?: boolean;
+  presets?: ({ label?: string; value: any } | string)[];
+  decimal?: boolean;
+  disabled?: boolean;
+  min?: string;
+  max?: string;
+  step?: string;
+  lines?: "full" | "inset" | "none";
+  labelPosition?: "stacked" | "fixed" | "floating";
+}
+
+const {
+  name,
+  decimal,
+  disabled,
+  label,
+  labelPosition,
+  lines,
+  max,
+  min,
+  placeholder,
+  presets,
+  required,
+  step,
+  value,
+} = Astro.props;
+---
+
+<fireenjin-input-amount
+  name={name}
+  label={label}
+  placeholder={placeholder}
+  value={value}
+  required={required}
+  presets={JSON.stringify(presets)}
+  decimal={decimal}
+  disabled={disabled}
+  min={min}
+  max={max}
+  step={step}
+  lines={lines}
+  label-position={labelPosition}></fireenjin-input-amount>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-input-amount.js";
+  defineCustomElement();
+</script>

@@ -1,0 +1,31 @@
+---
+interface Props {
+  type?: string;
+  name?: string;
+  resolveTime?: number;
+  input?: string;
+  output?: string;
+  createdAt?: string;
+  lines?: "full" | "inset" | "none";
+}
+
+const { createdAt, input, lines, name, output, resolveTime, type } =
+  Astro.props;
+---
+
+<fireenjin-log-item
+  type={type}
+  name={name}
+  resolve-time={resolveTime}
+  input={input}
+  output={output}
+  created-at={createdAt}
+  lines={lines}
+>
+  <slot />
+</fireenjin-log-item>
+
+<script>
+  import { defineCustomElement } from "@fireenjin/components/components/fireenjin-log-item.js";
+  defineCustomElement();
+</script>
