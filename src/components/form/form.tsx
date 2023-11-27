@@ -300,7 +300,7 @@ export class Form implements ComponentInterface {
       manual: false,
     },
   ) {
-    if (event) event.preventDefault();
+    if (event && this.endpoint && !this.action) event.preventDefault();
     await this.checkFormValidity();
     this.loading = !this.disableLoader;
     const data =
