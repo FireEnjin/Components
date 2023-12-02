@@ -232,6 +232,7 @@ export class Form implements ComponentInterface {
   @Listen("fireenjinSuccess")
   async onSuccess(event) {
     if (
+      this.fetch &&
       [this.endpoint, this.fetch].includes(event?.detail?.endpoint) &&
       event?.detail?.event?.type === "fireenjinFetch"
     ) {
@@ -241,6 +242,8 @@ export class Form implements ComponentInterface {
           : event?.detail?.data,
       );
       if (this.cacheKey || this.collection) this.restoreCache();
+      this.loading = false;
+    } else if ([this.endpoint, this.fetch].includes(event?.detail?.endpoint)) {
       this.loading = false;
     }
   }
