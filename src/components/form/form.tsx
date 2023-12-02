@@ -232,7 +232,6 @@ export class Form implements ComponentInterface {
   @Listen("fireenjinSuccess")
   async onSuccess(event) {
     if (
-      this.fetch &&
       [this.endpoint, this.fetch].includes(event?.detail?.endpoint) &&
       event?.detail?.event?.type === "fireenjinFetch"
     ) {
