@@ -112,6 +112,10 @@ export class Flow {
    */
   @Prop() beforeSubmit: (data: any, options?: any) => Promise<any>;
   /**
+   * A method that runs before slide
+   */
+  @Prop() beforeSlide: (data: any) => Promise<any>;
+  /**
    * Should the form disable the loader on submit
    */
   @Prop() disableLoader = false;
@@ -257,19 +261,51 @@ export class Flow {
 
   @Method()
   async slideNext(speed?: number, runCallbacks?: boolean) {
-    console.log(await this.checkStepValidity());
+    if (
+      typeof this.beforeSlide === "function" &&
+      !(await this.beforeSlide({
+        currentIndex: this.currentIndex,
+        currentStep: this.currentStep,
+        formData: this.formData,
+        steps: this.steps,
+        direction: "next",
+      }))
+    )
+      return;
     if (!this.disableRequiredCheck && !(await this.checkStepValidity())) return;
     return this.slidesEl.slideNext(speed, runCallbacks);
   }
 
   @Method()
   async slidePrev(speed?: number, runCallbacks?: boolean) {
+    if (
+      typeof this.beforeSlide === "function" &&
+      !(await this.beforeSlide({
+        currentIndex: this.currentIndex,
+        currentStep: this.currentStep,
+        formData: this.formData,
+        steps: this.steps,
+        direction: "prev",
+      }))
+    )
+      return;
     if (this.hideControls) this.hideControls = false;
     return this.slidesEl.slidePrev(speed, runCallbacks);
   }
 
   @Method()
   async slideTo(index: number, speed?: number, runCallbacks?: boolean) {
+    if (
+      typeof this.beforeSlide === "function" &&
+      !(await this.beforeSlide({
+        currentIndex: this.currentIndex,
+        currentStep: this.currentStep,
+        formData: this.formData,
+        steps: this.steps,
+        direction: "to",
+      }))
+    )
+      return;
     return this.slidesEl.slideTo(index, speed, runCallbacks);
   }
 

@@ -19,6 +19,7 @@ import {
 export class InputAmount implements ComponentInterface {
   inputEl: HTMLIonInputElement;
   itemEl: HTMLIonItemElement;
+  input: HTMLInputElement;
 
   @Prop() name: string;
   @Prop() label: string;
@@ -66,9 +67,7 @@ export class InputAmount implements ComponentInterface {
       );
     }
 
-    return this.inputEl?.getInputElement
-      ? (await this.inputEl?.getInputElement?.())?.checkValidity?.()
-      : false;
+    return this.input?.checkValidity ? this.input?.checkValidity?.() : false;
   }
 
   @Method()
@@ -78,8 +77,8 @@ export class InputAmount implements ComponentInterface {
 
   @Method()
   async reportValidity() {
-    const isValid = this.inputEl?.getInputElement
-      ? (await this.inputEl?.getInputElement?.())?.reportValidity?.()
+    const isValid = this.input?.reportValidity
+      ? this.input?.reportValidity?.()
       : true;
     this.inputEl.classList[isValid ? "remove" : "add"]("invalid");
     await this.setValidationClass();
@@ -94,9 +93,7 @@ export class InputAmount implements ComponentInterface {
     if (classList.indexOf("valid") >= 0) {
       this.itemEl.classList.remove("valid");
     }
-    const isValid = (
-      await this.inputEl?.getInputElement?.()
-    )?.checkValidity?.();
+    const isValid = this.input?.checkValidity?.();
     if (
       !options ||
       !options.ignoreInvalid ||
@@ -156,6 +153,9 @@ export class InputAmount implements ComponentInterface {
   componentDidLoad() {
     if (!Build?.isBrowser) return;
     this.formattedValue = this.formatCurrency(this.value);
+    setTimeout(() => {
+      this.input = this.inputEl.querySelector("input");
+    }, 100);
   }
 
   selectPreset(preset: { label?: string; value: any } | string) {
