@@ -4,6 +4,7 @@ import {
   Event,
   EventEmitter,
   Listen,
+  Method,
   Prop,
   State,
   Watch,
@@ -17,6 +18,7 @@ import {
 })
 export class InputAmount implements ComponentInterface {
   inputEl: HTMLIonInputElement;
+  itemEl: HTMLIonItemElement;
 
   @Prop() name: string;
   @Prop() label: string;
@@ -49,6 +51,61 @@ export class InputAmount implements ComponentInterface {
     this.formattedValue = this.formatCurrency(this.value);
   }
 
+  @Method()
+  async checkValidity(options?: {
+    setValidationClass?: boolean;
+    validationClassOptions?: {
+      ignoreInvalid?: boolean;
+    };
+  }) {
+    if (this.required || (options && options.setValidationClass)) {
+      await this.setValidationClass(
+        options && options.validationClassOptions
+          ? options.validationClassOptions
+          : null,
+      );
+    }
+
+    return this.inputEl?.getInputElement
+      ? (await this.inputEl?.getInputElement?.())?.checkValidity?.()
+      : false;
+  }
+
+  @Method()
+  async clear() {
+    this.inputEl.querySelector("ion-input").value = null;
+  }
+
+  @Method()
+  async reportValidity() {
+    const isValid = this.inputEl?.getInputElement
+      ? (await this.inputEl?.getInputElement?.())?.reportValidity?.()
+      : true;
+    this.inputEl.classList[isValid ? "remove" : "add"]("invalid");
+    await this.setValidationClass();
+    return isValid;
+  }
+
+  async setValidationClass(options?: { ignoreInvalid?: boolean }) {
+    const classList = Object.values(this.itemEl.classList);
+    if (classList.indexOf("invalid") >= 0) {
+      this.itemEl.classList.remove("invalid");
+    }
+    if (classList.indexOf("valid") >= 0) {
+      this.itemEl.classList.remove("valid");
+    }
+    const isValid = (
+      await this.inputEl?.getInputElement?.()
+    )?.checkValidity?.();
+    if (
+      !options ||
+      !options.ignoreInvalid ||
+      (options && options.ignoreInvalid && isValid)
+    ) {
+      this.itemEl.classList.add(isValid ? "valid" : "invalid");
+    }
+  }
+
   formatCurrency(amount: any) {
     if (!amount || isNaN(parseFloat(amount))) {
       this.value = null;
@@ -56,7 +113,7 @@ export class InputAmount implements ComponentInterface {
       return null;
     }
     const formattedAmount = Number(
-      parseFloat((amount + "").replace(",", "")).toFixed(2)
+      parseFloat((amount + "").replace(",", "")).toFixed(2),
     );
     const formatter = new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -71,7 +128,7 @@ export class InputAmount implements ComponentInterface {
           (span.textContent + "")
             .replace(",", "")
             .replace("$", "")
-            .replace(" ", "")
+            .replace(" ", ""),
         ).toFixed(2)
       ) {
         span.classList.add("selected");
@@ -103,13 +160,13 @@ export class InputAmount implements ComponentInterface {
 
   selectPreset(preset: { label?: string; value: any } | string) {
     this.formattedValue = this.formatCurrency(
-      typeof preset === "string" ? preset : preset?.value ? preset.value : 0
+      typeof preset === "string" ? preset : preset?.value ? preset.value : 0,
     );
   }
 
   render() {
     return (
-      <ion-item lines={this.lines}>
+      <ion-item ref={(el) => (this.itemEl = el)} lines={this.lines}>
         <ion-icon name="logo-usd" slot="start" />
         {this.label && (
           <ion-label position={this.labelPosition}>{this.label}</ion-label>
