@@ -120,7 +120,7 @@ export class Form implements ComponentInterface {
   /**
    * The HTTP method to use when submitting the form
    */
-  @Prop() method: string = "post";
+  @Prop() method: string;
   /**
    * The action to use for the form
    */
@@ -302,7 +302,8 @@ export class Form implements ComponentInterface {
       manual: false,
     },
   ) {
-    if (event && this.endpoint && !this.action) event.preventDefault();
+    if (event && this.endpoint && !this.action && !this.method)
+      event.preventDefault();
     await this.checkFormValidity();
     this.loading = !this.disableLoader;
     const data =

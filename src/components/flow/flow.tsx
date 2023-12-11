@@ -141,7 +141,7 @@ export class Flow {
   /**
    * The HTTP method to use when submitting the form
    */
-  @Prop() method: string = "post";
+  @Prop() method: string;
   /**
    * The action to use for the form
    */

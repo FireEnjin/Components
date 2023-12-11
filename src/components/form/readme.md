@@ -28,7 +28,7 @@
 | `hasChanged`         | `has-changed`          | Has the form fields been changed                                       | `boolean`                                      | `false`     |
 | `hideControls`       | `hide-controls`        | Should the form controls be hidden?                                    | `boolean`                                      | `false`     |
 | `loading`            | `loading`              | Is the component currently loading                                     | `boolean`                                      | `false`     |
-| `method`             | `method`               | The HTTP method to use when submitting the form                        | `string`                                       | `"post"`    |
+| `method`             | `method`               | The HTTP method to use when submitting the form                        | `string`                                       | `undefined` |
 | `name`               | `name`                 | The name of the form used for ID and name                              | `string`                                       | `undefined` |
 | `resetButton`        | `reset-button`         | What the reset button says                                             | `string`                                       | `"Cancel"`  |
 | `resetButtonColor`   | `reset-button-color`   | What color the reset button is                                         | `string`                                       | `"dark"`    |
