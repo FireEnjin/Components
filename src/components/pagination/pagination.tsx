@@ -1,4 +1,4 @@
-import { FireEnjinFetchEvent } from "@fireenjin/sdk";
+import { FireEnjinFetchEvent, FireEnjinTriggerInput } from "@fireenjin/sdk";
 import {
   Component,
   ComponentInterface,
@@ -29,6 +29,7 @@ export class Pagination implements ComponentInterface {
   @Element() el: HTMLElement;
 
   @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
+  @Event() fireenjinTrigger: EventEmitter<FireEnjinTriggerInput>;
 
   @Prop() gridEl: FunctionalComponent<any>;
   @Prop() listEl: FunctionalComponent<any>;
@@ -220,6 +221,12 @@ export class Pagination implements ComponentInterface {
     } else {
       this.results = [...this.results, ...results];
     }
+    this.fireenjinTrigger.emit({
+      name: "paginationResults",
+      data: {
+        results: this.results,
+      },
+    });
     this.infiniteScrollEl.disabled = false;
   }
 
