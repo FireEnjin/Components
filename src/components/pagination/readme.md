@@ -38,7 +38,7 @@
 | `removeDuplicates`      | `remove-duplicates`       |             | `boolean`                             | `false`                  |
 | `renderItem`            | --                        |             | `(item: any, i: number) => any`       | `undefined`              |
 | `resultCountKey`        | `result-count-key`        |             | `string`                              | `undefined`              |
-| `results`               | --                        |             | `any[]`                               | `[]`                     |
+| `results`               | `results`                 |             | `any`                                 | `[]`                     |
 | `resultsKey`            | `results-key`             |             | `string`                              | `undefined`              |
 
 

@@ -23,7 +23,7 @@ import { debounce } from "typescript-debounce-decorator";
 export class Pagination implements ComponentInterface {
   virtualScrollEl: HTMLIonVirtualScrollElement;
   infiniteScrollEl: HTMLIonInfiniteScrollElement;
-  resizeInterval: NodeJS.Timeout;
+  resizeInterval: any;
   initailizedOnPath: string;
 
   @Element() el: HTMLElement;
@@ -45,7 +45,7 @@ export class Pagination implements ComponentInterface {
   @Prop() dataPropsMap: any;
   @Prop() display?: "list" | "grid";
   @Prop({ mutable: true }) page? = 0;
-  @Prop({ mutable: true }) results: any[] = [];
+  @Prop({ mutable: true }) results: any = [];
   @Prop() beforeFetch: (fetchParams?: any) => Promise<any>;
   @Prop() groupBy: string;
   @Prop() loadingSpinner = "bubbles";
