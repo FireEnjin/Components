@@ -21,6 +21,7 @@ import { debounce } from "typescript-debounce-decorator";
   styleUrl: "pagination.css",
 })
 export class Pagination implements ComponentInterface {
+  paginationEl: HTMLElement;
   virtualScrollEl: HTMLIonVirtualScrollElement;
   infiniteScrollEl: HTMLIonInfiniteScrollElement;
   resizeInterval: any;
@@ -77,6 +78,7 @@ export class Pagination implements ComponentInterface {
   @Prop() fetchParams: any;
   @Prop() nextKey = "id";
   @Prop() disableInfiniteScroll = false;
+  @Prop() fillScreen = false;
 
   @State() paramData: {
     query?: string;
@@ -155,6 +157,17 @@ export class Pagination implements ComponentInterface {
         setTimeout(() => {
           window.dispatchEvent(new window.Event("resize"));
         }, 200);
+      }
+      if (
+        !this.infiniteScrollEl?.disabled &&
+        this.fillScreen &&
+        this.elementIsVisibleInViewport(
+          this.paginationEl?.querySelector?.("[data-result-id]:last-of-type"),
+        )
+      ) {
+        this.getResults({
+          next: true,
+        });
       }
     }
   }
@@ -343,15 +356,31 @@ export class Pagination implements ComponentInterface {
     }
   }
 
+  elementIsVisibleInViewport(el, partiallyVisible = false) {
+    if (!el?.getBoundingClientRect) return false;
+    const { top, left, bottom, right } = el.getBoundingClientRect();
+    const { innerHeight, innerWidth } = window;
+    return partiallyVisible
+      ? ((top > 0 && top < innerHeight) ||
+          (bottom > 0 && bottom < innerHeight)) &&
+          ((left > 0 && left < innerWidth) || (right > 0 && right < innerWidth))
+      : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
+  }
+
   renderResults(results: any[]) {
     return this.display === "grid" ? (
       <ion-grid>
         <ion-row>
-          {results.map((result) =>
+          {results.map((result, index) =>
             typeof this.gridEl({ result }, null, null) === "string" ? (
-              <ion-col innerHTML={this.gridEl({ result }, null, null) as any} />
+              <ion-col
+                data-result-id={result?.id || index}
+                innerHTML={this.gridEl({ result }, null, null) as any}
+              />
             ) : (
-              <ion-col>{this.gridEl({ result }, null, null)}</ion-col>
+              <ion-col data-result-id={result?.id || index}>
+                {this.gridEl({ result }, null, null)}
+              </ion-col>
             ),
           )}
         </ion-row>
@@ -359,11 +388,16 @@ export class Pagination implements ComponentInterface {
     ) : this.display === "list" ? (
       <ion-card>
         <ion-list>
-          {results.map((result) =>
+          {results.map((result, index) =>
             typeof this.listEl({ result }, null, null) === "string" ? (
-              <div innerHTML={this.listEl({ result }, null, null) as any} />
+              <div
+                data-result-id={result?.id || index}
+                innerHTML={this.listEl({ result }, null, null) as any}
+              />
             ) : (
-              this.listEl({ result }, null, null)
+              <div data-result-id={result?.id || index}>
+                {this.listEl({ result }, null, null)}
+              </div>
             ),
           )}
         </ion-list>
@@ -381,7 +415,7 @@ export class Pagination implements ComponentInterface {
       this.results ||
       [];
     return (
-      <div class="pagination">
+      <div class="pagination" ref={(el) => (this.paginationEl = el)}>
         {this.disableVirtualScroll ? (
           <div>{this.renderResults(results)}</div>
         ) : (

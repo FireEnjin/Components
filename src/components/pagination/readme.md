@@ -21,6 +21,7 @@
 | `endpoint`              | `endpoint`                |             | `string`                              | `undefined`              |
 | `fetchData`             | `fetch-data`              |             | `any`                                 | `undefined`              |
 | `fetchParams`           | `fetch-params`            |             | `any`                                 | `undefined`              |
+| `fillScreen`            | `fill-screen`             |             | `boolean`                             | `false`                  |
 | `gridEl`                | --                        |             | `FunctionalComponent<any>`            | `undefined`              |
 | `groupBy`               | `group-by`                |             | `string`                              | `undefined`              |
 | `limit`                 | `limit`                   |             | `number`                              | `undefined`              |
