@@ -200,6 +200,15 @@ export type Step = {
   componentProps?: any;
 };
 
+export interface VariableField {
+  type?: string;
+  label?: string;
+  description?: string;
+  fields?: VariableField[];
+  value?: string;
+  group?: string;
+}
+
 export type FilterControl = {
   resultsKey?: string;
   name: string;

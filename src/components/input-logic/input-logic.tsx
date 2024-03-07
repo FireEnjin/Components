@@ -8,7 +8,7 @@ import {
   Watch,
 } from "@stencil/core";
 import { debounce } from "typescript-debounce-decorator";
-import { Control } from "../..";
+import { Control, VariableField } from "../..";
 
 @Component({
   tag: "fireenjin-input-logic",
@@ -94,9 +94,7 @@ export class InputLogic {
   @Prop({ mutable: true }) value: any;
   @Prop({ mutable: true }) selectedOperator: string = "==";
   @Prop() selectedType?: "string" | "number" | "variable";
-  @Prop() variables: {
-    [key: string]: Partial<Control>;
-  } = {};
+  @Prop() variables: VariableField[] = [];
   @Prop({ mutable: true }) showCode = false;
   @Prop() allowAdding = false;
   @Prop() placeholder = "No statements added yet";
@@ -317,10 +315,10 @@ export class InputLogic {
                       this.selectedType === "number"
                         ? "calculator"
                         : this.selectedType === "string"
-                        ? "pencil"
-                        : this.selectedType === "variable"
-                        ? "list-circle"
-                        : "color-wand"
+                          ? "pencil"
+                          : this.selectedType === "variable"
+                            ? "list-circle"
+                            : "color-wand"
                     }
                   />
                 </ion-button>
@@ -405,13 +403,10 @@ export class InputLogic {
                     display: this.selectedType === "variable" ? "flex" : "none",
                   }}
                   placeholder="Select Variable"
-                  options={Object.entries(this.variables || {}).map(
-                    ([key, control]) => ({
-                      ...control,
-                      label: control?.label || key,
-                      value: control?.value || `{"var":"${key}"}`,
-                    }),
-                  )}
+                  options={(this.variables || []).map(({ label, value }) => ({
+                    label: label || value,
+                    value: `{"var":"${value}"}`,
+                  }))}
                   optionEl={(option: Partial<Control>) => (
                     <ion-item
                       data-value={option?.value}
