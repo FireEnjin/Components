@@ -48,7 +48,7 @@ export class PopoverFilter implements ComponentInterface {
     options?: {
       name: string;
       multiple: boolean;
-    }
+    },
   ) => any;
   @Prop() enableLoader = false;
   @Prop() hideControls = false;
@@ -76,11 +76,11 @@ export class PopoverFilter implements ComponentInterface {
       ? event?.detail?.checked
         ? [...(this.formEl?.formData?.value || []), event?.target?.name]
         : (this.formEl?.formData?.value || []).filter(
-            (val) => val !== event?.target?.name
+            (val) => val !== event?.target?.name,
           )
       : event?.detail?.checked
-      ? event?.target?.name
-      : null;
+        ? event?.target?.name
+        : null;
     this.formEl.formData.value = value;
     if (typeof this.beforeChange === "function")
       this.beforeChange(value, {
@@ -108,7 +108,7 @@ export class PopoverFilter implements ComponentInterface {
         <fireenjin-form
           ref={(el) => (this.formEl = el)}
           disableLoader={!this.enableLoader}
-          name="filter"
+          name={this.name}
           beforeSubmit={(data) => {
             if (typeof this.beforeSubmit === "function") {
               this.beforeSubmit(data, data?.value);
@@ -141,7 +141,7 @@ export class PopoverFilter implements ComponentInterface {
                       checked={
                         (this.multiple &&
                           (this.value || []).includes(
-                            `${control?.value || ""}`
+                            `${control?.value || ""}`,
                           )) ||
                         control.value === this.value ||
                         control.checked
