@@ -1,6 +1,7 @@
-import { FireEnjinTriggerInput } from "@fireenjin/sdk";
+import type { FireEnjinTriggerInput } from "@fireenjin/sdk";
 import { Component, Event, EventEmitter, Method, Prop, h } from "@stencil/core";
-import Handsontable from "handsontable";
+import loadScript from "../../helpers/loadScript";
+// import Handsontable from "handsontable";
 
 @Component({
   tag: "fireenjin-spreadsheet",
@@ -8,14 +9,12 @@ import Handsontable from "handsontable";
 })
 export class Spreadsheet {
   containerEl: HTMLDivElement;
-  hot: Handsontable;
+  hot: any;
 
   @Event() fireenjinTrigger: EventEmitter<FireEnjinTriggerInput>;
 
   @Prop() data: any;
-  @Prop() columns?:
-    | Handsontable.ColumnSettings[]
-    | ((index: number) => Handsontable.ColumnSettings);
+  @Prop() columns?: any[] | ((index: number) => any);
   @Prop() height = 450;
   @Prop() colWidths?:
     | string
@@ -27,15 +26,18 @@ export class Spreadsheet {
     | ((index: number) => string | number);
   @Prop() colHeaders?: boolean | string[] | ((index: number) => string) = true;
   @Prop() rowHeaders?: boolean | string[] | ((index: number) => string) = true;
-  @Prop() options?: Handsontable.GridSettings;
+  @Prop() options?: any;
 
   @Method()
   async getInstance() {
     return this.hot;
   }
 
-  componentDidLoad() {
-    this.hot = new Handsontable(this.containerEl, {
+  async componentDidLoad() {
+    await loadScript(
+      "https://unpkg.com/handsontable@14.2.0/dist/handsontable.min.js",
+    );
+    this.hot = new (window as any).Handsontable(this.containerEl, {
       data: this.data,
       height: this.height,
       colWidths: this.colWidths,
