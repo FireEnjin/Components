@@ -368,7 +368,7 @@ export class Pagination implements ComponentInterface {
   }
 
   renderResults(results: any[]) {
-    return this.display === "grid" ? (
+    return this.display === "grid" && this.gridEl ? (
       <ion-grid>
         <ion-row>
           {results.map((result, index) =>
@@ -402,6 +402,12 @@ export class Pagination implements ComponentInterface {
           )}
         </ion-list>
       </ion-card>
+    ) : this.display === "grid" && this.renderItem ? (
+      <ion-grid>
+        <ion-row>
+          {results.map((result, i) => this.renderItem(result, i))}
+        </ion-row>
+      </ion-grid>
     ) : (
       results.map((result, i) => this.renderItem(result, i))
     );
