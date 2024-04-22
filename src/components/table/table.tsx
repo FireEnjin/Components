@@ -1,6 +1,15 @@
-import { Component, Event, EventEmitter, Listen, Prop, h } from "@stencil/core";
+import {
+  Component,
+  Event,
+  EventEmitter,
+  Listen,
+  Method,
+  Prop,
+  State,
+  h,
+} from "@stencil/core";
 import pathToValue from "../../helpers/pathToValue";
-import { FireEnjinSubmitEvent } from "@fireenjin/sdk";
+import { FireEnjinFetchEvent, FireEnjinSubmitEvent } from "@fireenjin/sdk";
 import valueToPath from "../../helpers/valueToPath";
 import { debounce } from "typescript-debounce-decorator";
 
@@ -28,24 +37,49 @@ export class Table {
       | "photo";
     options?: any;
   }[];
-  @Prop() edit = false;
-  @Prop() showDelete = false;
-  @Prop() deleteEndpoint: string;
+  @Prop() fetch?: boolean | string;
+  @Prop() fetchParams?: any;
+  @Prop() edit? = false;
+  @Prop() showDelete? = false;
+  @Prop() deleteEndpoint?: string;
   @Prop() deleteButtonAttrs: any = {
     fill: "clear",
     color: "danger",
     size: "small",
   };
+  @Prop() resultsKey?: string;
   @Prop() endpoint?: string;
   @Prop() editEndpoint?: string;
   @Prop() rowId = "id";
+  @Prop({ mutable: true }) loading = false;
 
+  @State() error: string;
+
+  @Event() fireenjinFetch: EventEmitter<FireEnjinFetchEvent>;
   @Event() fireenjinSubmit: EventEmitter<FireEnjinSubmitEvent>;
+
+  @Listen("fireenjinError")
+  onError(event) {
+    if (
+      this.fetch &&
+      [this.fetch, this.endpoint].includes(event?.detail?.endpoint)
+    ) {
+      this.loading = false;
+      this.error = event?.detail?.error?.message;
+    }
+  }
+
+  @Listen("fireenjinSuccess")
+  onSuccess(event) {
+    if ([this.fetch, this.endpoint].includes(event?.detail?.endpoint)) {
+      this.rows = pathToValue(event?.detail?.data || {}, this.resultsKey);
+      this.loading = false;
+    }
+  }
 
   @Listen("ionChange")
   @debounce(1000)
   onChange(event) {
-    console.log(event);
     const closestTrEl = event.target.closest("tr");
     if (this.endpoint && closestTrEl?.dataset?.id) {
       const data = {};
@@ -58,6 +92,20 @@ export class Table {
     }
   }
 
+  @Method()
+  async fetchData({
+    endpoint,
+    params,
+  }: { endpoint?: string; params?: any } = {}) {
+    this.loading = true;
+    this.fireenjinFetch.emit({
+      endpoint:
+        endpoint ||
+        (typeof this.fetch === "string" ? this.fetch : this.endpoint),
+      params: params || this.fetchParams,
+    });
+  }
+
   deleteRow(event: Event, row: any) {
     event.preventDefault();
     event.stopPropagation();
@@ -68,9 +116,14 @@ export class Table {
       });
   }
 
+  componentDidLoad() {
+    if (this.fetch) this.fetchData();
+  }
+
   render() {
     return (
       <div class="table-responsive">
+        {this.error && <ion-text color="danger">{this.error}</ion-text>}
         <table class="table">
           <thead>
             <tr>
@@ -79,7 +132,11 @@ export class Table {
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody
+            class={{
+              "is-loading": this.loading,
+            }}
+          >
             {(this.rows || []).map((row) => (
               <tr data-id={row?.[this.rowId]}>
                 {(this.columns || []).map((column) => (

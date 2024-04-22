@@ -9,12 +9,16 @@
 
 | Property            | Attribute             | Description | Type                                                                                                                                                                                                         | Default                                                            |
 | ------------------- | --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| `columns`           | --                    |             | `{ label?: string; name?: string; key?: string; placeholder?: string; disabled?: boolean; type?: "string" \| "number" \| "boolean" \| "file" \| "phone" \| "tel" \| "select" \| "photo"; options?: any; }[]` | `undefined`                                                        |
+| `columns`           | --                    |             | `{ label?: string; name?: string; key?: string; placeholder?: string; disabled?: boolean; type?: "string" \| "number" \| "boolean" \| "select" \| "file" \| "photo" \| "phone" \| "tel"; options?: any; }[]` | `undefined`                                                        |
 | `deleteButtonAttrs` | `delete-button-attrs` |             | `any`                                                                                                                                                                                                        | `{     fill: "clear",     color: "danger",     size: "small",   }` |
 | `deleteEndpoint`    | `delete-endpoint`     |             | `string`                                                                                                                                                                                                     | `undefined`                                                        |
 | `edit`              | `edit`                |             | `boolean`                                                                                                                                                                                                    | `false`                                                            |
 | `editEndpoint`      | `edit-endpoint`       |             | `string`                                                                                                                                                                                                     | `undefined`                                                        |
 | `endpoint`          | `endpoint`            |             | `string`                                                                                                                                                                                                     | `undefined`                                                        |
+| `fetch`             | `fetch`               |             | `boolean \| string`                                                                                                                                                                                          | `undefined`                                                        |
+| `fetchParams`       | `fetch-params`        |             | `any`                                                                                                                                                                                                        | `undefined`                                                        |
+| `loading`           | `loading`             |             | `boolean`                                                                                                                                                                                                    | `false`                                                            |
+| `resultsKey`        | `results-key`         |             | `string`                                                                                                                                                                                                     | `undefined`                                                        |
 | `rowId`             | `row-id`              |             | `string`                                                                                                                                                                                                     | `"id"`                                                             |
 | `rows`              | --                    |             | `any[]`                                                                                                                                                                                                      | `undefined`                                                        |
 | `showDelete`        | `show-delete`         |             | `boolean`                                                                                                                                                                                                    | `false`                                                            |
@@ -24,13 +28,28 @@
 
 | Event             | Description | Type                                |
 | ----------------- | ----------- | ----------------------------------- |
+| `fireenjinFetch`  |             | `CustomEvent<FireEnjinFetchEvent>`  |
 | `fireenjinSubmit` |             | `CustomEvent<FireEnjinSubmitEvent>` |
+
+
+## Methods
+
+### `fetchData({ endpoint, params, }?: { endpoint?: string; params?: any; }) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
 
 
 ## Dependencies
 
 ### Depends on
 
+- ion-text
 - [fireenjin-select](../select)
 - [fireenjin-toggle](../toggle)
 - [fireenjin-input-photo](../input-photo)
@@ -42,6 +61,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  fireenjin-table --> ion-text
   fireenjin-table --> fireenjin-select
   fireenjin-table --> fireenjin-toggle
   fireenjin-table --> fireenjin-input-photo
