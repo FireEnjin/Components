@@ -6,5 +6,5 @@
  * @returns The value of the path in the object
  */
 export default function pathToValue(obj: any, path: string) {
-  return path.split(".").reduce((o, i) => o[i], obj);
+  return path.split(".").reduce((o, i) => o?.[i], obj);
 }

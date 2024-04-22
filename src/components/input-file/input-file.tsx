@@ -163,15 +163,15 @@ export class InputFile implements ComponentInterface {
               {this.dragOver
                 ? "Drop File Here"
                 : this.label
-                ? this.label
-                : "Upload a File"}
+                  ? this.label
+                  : "Upload a File"}
             </h2>
             <p>
               {this.selectedFile
                 ? this.selectedFile
                 : this.defaultValue
-                ? this.defaultValue
-                : "Select a letterhead"}
+                  ? this.defaultValue
+                  : "Select a File"}
             </p>
           </div>
         </ion-item>

@@ -127,6 +127,7 @@ Type: `Promise<void>`
 ### Used by
 
  - [fireenjin-flow](../flow)
+ - [fireenjin-table](../table)
 
 ### Depends on
 
@@ -147,6 +148,7 @@ graph TD;
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
   fireenjin-flow --> fireenjin-input
+  fireenjin-table --> fireenjin-input
   style fireenjin-input fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

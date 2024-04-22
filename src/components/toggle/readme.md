@@ -20,6 +20,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [fireenjin-table](../table)
+
 ### Depends on
 
 - ion-item
@@ -36,6 +40,7 @@ graph TD;
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
   ion-toggle --> ion-icon
+  fireenjin-table --> fireenjin-toggle
   style fireenjin-toggle fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

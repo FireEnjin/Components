@@ -56,6 +56,7 @@
  - [fireenjin-flow](../flow)
  - [fireenjin-input-logic](../input-logic)
  - [fireenjin-input-path](../input-path)
+ - [fireenjin-table](../table)
 
 ### Depends on
 
@@ -104,6 +105,7 @@ graph TD;
   fireenjin-flow --> fireenjin-select
   fireenjin-input-logic --> fireenjin-select
   fireenjin-input-path --> fireenjin-select
+  fireenjin-table --> fireenjin-select
   style fireenjin-select fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

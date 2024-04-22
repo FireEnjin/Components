@@ -48,6 +48,7 @@ Type: `Promise<any>`
 ### Used by
 
  - [fireenjin-flow](../flow)
+ - [fireenjin-table](../table)
 
 ### Depends on
 
@@ -66,6 +67,7 @@ graph TD;
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
   fireenjin-flow --> fireenjin-input-file
+  fireenjin-table --> fireenjin-input-file
   style fireenjin-input-file fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
