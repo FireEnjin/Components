@@ -13,7 +13,7 @@ import loadScript from "../../helpers/loadScript";
 export interface Board {
   id?: string;
   title: string;
-  class?: string[];
+  class?: string;
   dragTo?: string[];
   item: {
     id?: string;
@@ -31,7 +31,6 @@ export interface Board {
 })
 export class Kanban implements ComponentInterface {
   kanban: any;
-  hostEl: any;
 
   @Prop() boardId = "fireenjin-kanban";
   @Prop() options?: {
@@ -136,6 +135,10 @@ export class Kanban implements ComponentInterface {
   }
 
   render() {
-    return <Host ref={(el) => (this.hostEl = el)} id={this.boardId} />;
+    return (
+      <Host>
+        <div id={this.boardId} />
+      </Host>
+    );
   }
 }
