@@ -12,6 +12,7 @@ import {
   Build,
   Watch,
 } from "@stencil/core";
+import { FireEnjinTriggerInput } from "@fireenjin/sdk";
 
 @Component({
   tag: "fireenjin-input-address",
@@ -53,15 +54,32 @@ export class InputAddress implements ComponentInterface {
    * The name attribute of the input
    */
   @Prop() name: string;
+  /**
+   * Line style to use for ion-item
+   */
   @Prop() lines: "full" | "inset" | "none";
+  /**
+   * Label position to use for ion-item
+   */
   @Prop() labelPosition?: "stacked" | "fixed" | "floating" = "stacked";
-  @Prop() iconLeft: string;
-  @Prop() iconRight: string;
+  /**
+   * The icon to show at the left
+   */
+  @Prop() iconLeft?: string;
+  /**
+   * The icon to show at the right
+   */
+  @Prop() iconRight?: string;
+  /**
+   * Disable manual/search toggle
+   */
+  @Prop() disableToggle = false;
 
   @State() place: any;
   @State() manualEntry = false;
 
   @Event() ionInput: EventEmitter;
+  @Event() fireenjinTrigger: EventEmitter<FireEnjinTriggerInput>;
   @Event() fireenjinAddressMode: EventEmitter;
   @Event() fireenjinUpdateAutoHeight: EventEmitter;
 
@@ -134,7 +152,6 @@ export class InputAddress implements ComponentInterface {
 
       this.google.maps.event.addListener(autocomplete, "place_changed", () => {
         this.place = autocomplete.getPlace();
-        console.log(this.place);
         if (!this.value) {
           this.value = {};
         }
@@ -167,6 +184,14 @@ export class InputAddress implements ComponentInterface {
 
           if (index === this.place.address_components.length - 1) {
             setTimeout(() => {
+              this.fireenjinTrigger.emit({
+                name: "address-autocomplete",
+                payload: {
+                  place: this.place,
+                  value: this.value,
+                  name: this.name,
+                },
+              });
               this.ionInput.emit({
                 name: this.name,
                 value: this.value,
@@ -259,16 +284,18 @@ export class InputAddress implements ComponentInterface {
             </ion-grid>
           </div>
         </div>
-        <div slot="end">
-          <ion-button
-            fill="clear"
-            color="primary"
-            onClick={() => this.toggleManualEntry()}
-          >
-            Search
-            {this.iconRight && <ion-icon slot="end" name={this.iconRight} />}
-          </ion-button>
-        </div>
+        {!this.disableToggle && (
+          <ion-buttons slot="end">
+            <ion-button
+              fill="clear"
+              color="primary"
+              onClick={() => this.toggleManualEntry()}
+            >
+              Search
+              {this.iconRight && <ion-icon slot="end" name={this.iconRight} />}
+            </ion-button>
+          </ion-buttons>
+        )}
       </ion-item>,
       <ion-item class={{ "is-hidden": this.manualEntry }}>
         {this.iconLeft && (
@@ -308,17 +335,19 @@ export class InputAddress implements ComponentInterface {
             value={value.unit}
           />
         </div>
-        <ion-buttons style={{ margin: "0" }} slot="end">
-          <ion-button
-            fill="clear"
-            color="primary"
-            onClick={() => this.toggleManualEntry()}
-            slot="end"
-          >
-            Manual
-            {this.iconRight && <ion-icon slot="end" name={this.iconRight} />}
-          </ion-button>
-        </ion-buttons>
+        {!this.disableToggle && (
+          <ion-buttons style={{ margin: "0" }} slot="end">
+            <ion-button
+              fill="clear"
+              color="primary"
+              onClick={() => this.toggleManualEntry()}
+              slot="end"
+            >
+              Manual
+              {this.iconRight && <ion-icon slot="end" name={this.iconRight} />}
+            </ion-button>
+          </ion-buttons>
+        )}
       </ion-item>,
     ];
   }

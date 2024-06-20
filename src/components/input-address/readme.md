@@ -7,12 +7,13 @@
 
 | Property        | Attribute         | Description                              | Type                                 | Default     |
 | --------------- | ----------------- | ---------------------------------------- | ------------------------------------ | ----------- |
+| `disableToggle` | `disable-toggle`  | Disable manual/search toggle             | `boolean`                            | `false`     |
 | `googleMapsKey` | `google-maps-key` | The Google Maps API Key                  | `string`                             | `undefined` |
-| `iconLeft`      | `icon-left`       |                                          | `string`                             | `undefined` |
-| `iconRight`     | `icon-right`      |                                          | `string`                             | `undefined` |
+| `iconLeft`      | `icon-left`       | The icon to show at the left             | `string`                             | `undefined` |
+| `iconRight`     | `icon-right`      | The icon to show at the right            | `string`                             | `undefined` |
 | `label`         | `label`           | The label of the input field             | `string`                             | `undefined` |
-| `labelPosition` | `label-position`  |                                          | `"fixed" \| "floating" \| "stacked"` | `"stacked"` |
-| `lines`         | `lines`           |                                          | `"full" \| "inset" \| "none"`        | `undefined` |
+| `labelPosition` | `label-position`  | Label position to use for ion-item       | `"fixed" \| "floating" \| "stacked"` | `"stacked"` |
+| `lines`         | `lines`           | Line style to use for ion-item           | `"full" \| "inset" \| "none"`        | `undefined` |
 | `name`          | `name`            | The name attribute of the input          | `string`                             | `undefined` |
 | `placeholder`   | `placeholder`     | The placeholder text for the input field | `string`                             | `undefined` |
 | `required`      | `required`        | Whether the address input is required    | `boolean`                            | `false`     |
@@ -21,11 +22,12 @@
 
 ## Events
 
-| Event                       | Description | Type               |
-| --------------------------- | ----------- | ------------------ |
-| `fireenjinAddressMode`      |             | `CustomEvent<any>` |
-| `fireenjinUpdateAutoHeight` |             | `CustomEvent<any>` |
-| `ionInput`                  |             | `CustomEvent<any>` |
+| Event                       | Description | Type                                      |
+| --------------------------- | ----------- | ----------------------------------------- |
+| `fireenjinAddressMode`      |             | `CustomEvent<any>`                        |
+| `fireenjinTrigger`          |             | `CustomEvent<FireEnjinTriggerInput<any>>` |
+| `fireenjinUpdateAutoHeight` |             | `CustomEvent<any>`                        |
+| `ionInput`                  |             | `CustomEvent<any>`                        |
 
 
 ## Dependencies
@@ -44,8 +46,8 @@
 - ion-row
 - ion-col
 - [fireenjin-input-state](../input-state)
-- ion-button
 - ion-buttons
+- ion-button
 
 ### Graph
 ```mermaid
@@ -58,8 +60,8 @@ graph TD;
   fireenjin-input-address --> ion-row
   fireenjin-input-address --> ion-col
   fireenjin-input-address --> fireenjin-input-state
-  fireenjin-input-address --> ion-button
   fireenjin-input-address --> ion-buttons
+  fireenjin-input-address --> ion-button
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
