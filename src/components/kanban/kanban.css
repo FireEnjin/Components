@@ -1,11 +1,10 @@
-fireenjin-kanban {
-  overflow-x: auto;
-}
-
 .kanban-container {
   position: relative;
   box-sizing: border-box;
-  width: auto;
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
 }
 
 .kanban-container * {
@@ -21,7 +20,6 @@ fireenjin-kanban {
 .kanban-board {
   position: relative;
   float: left;
-  background: var(--ion-background-color, #fff);
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -179,4 +177,6 @@ fireenjin-kanban {
 
 fireenjin-kanban {
   position: relative;
+  display: block;
+  width: 100%;
 }

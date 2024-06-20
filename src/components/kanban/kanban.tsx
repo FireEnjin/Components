@@ -6,9 +6,8 @@ import {
   State,
   h,
   Host,
-  getAssetPath,
 } from "@stencil/core";
-import loadScript from "../../helpers/loadScript";
+import tsKanban from "./tsKanban";
 
 export interface Board {
   id?: string;
@@ -27,7 +26,6 @@ export interface Board {
 @Component({
   tag: "fireenjin-kanban",
   styleUrl: "kanban.css",
-  assetsDirs: ["assets"],
 })
 export class Kanban implements ComponentInterface {
   kanban: any;
@@ -124,9 +122,7 @@ export class Kanban implements ComponentInterface {
   }
 
   async componentDidLoad() {
-    if (!(window as any)?.jKanban)
-      await loadScript(getAssetPath("./assets/jkanban.js"));
-    this.kanban = new (window as any).jKanban({
+    this.kanban = new tsKanban({
       element: `#${this.boardId}`,
       responsivePercentage: !this.disableResponsive,
       ...(this.options || {}),
@@ -135,10 +131,6 @@ export class Kanban implements ComponentInterface {
   }
 
   render() {
-    return (
-      <Host>
-        <div id={this.boardId} />
-      </Host>
-    );
+    return <Host id={this.boardId} />;
   }
 }
