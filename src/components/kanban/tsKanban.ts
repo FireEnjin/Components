@@ -68,15 +68,15 @@ export default class tsKanban {
       dragItems: true,
       itemAddOptions: this.__DEFAULT_ITEM_ADD_OPTIONS,
       itemHandleOptions: this.__DEFAULT_ITEM_HANDLE_OPTIONS,
-      dragEl: (el, source) => {},
-      dragendEl: (el) => {},
-      dropEl: (el, target, source, sibling) => {},
-      dragBoard: (el, source) => {},
-      dragendBoard: (el) => {},
-      dropBoard: (el, target, source, sibling) => {},
-      click: (el) => {},
-      context: (el, e) => {},
-      buttonClick: (el, boardId) => {},
+      dragEl: (_el, _source) => {},
+      dragendEl: (_el) => {},
+      dropEl: (_el, _target, _source, _sibling) => {},
+      dragBoard: (_el, _source) => {},
+      dragendBoard: (_el) => {},
+      dropBoard: (_el, _target, _source, _sibling) => {},
+      click: (_el) => {},
+      context: (_el, _e) => {},
+      buttonClick: (_el, _boardId) => {},
       propagationHandlers: [],
     };
 
@@ -146,7 +146,7 @@ export default class tsKanban {
       .on("cancel", () => {
         this.enableAllBoards();
       })
-      .on("over", (el: any, source: any) => {
+      .on("over", (_el: any, source: any) => {
         if (this.lastSource === source) return;
         this.lastSource = source;
         source.scrollIntoView({
