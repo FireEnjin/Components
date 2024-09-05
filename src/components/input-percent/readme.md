@@ -13,15 +13,15 @@
 | `debounce`      | `debounce`       |             | `number`                                                                                                                                         | `300`                                              |
 | `disabled`      | `disabled`       |             | `boolean`                                                                                                                                        | `false`                                            |
 | `label`         | `label`          |             | `string`                                                                                                                                         | `"Percent"`                                        |
-| `labelPosition` | `label-position` |             | `string`                                                                                                                                         | `"stacked"`                                        |
-| `lines`         | `lines`          |             | `string`                                                                                                                                         | `"none"`                                           |
+| `labelPosition` | `label-position` |             | `"fixed" \| "floating" \| "stacked"`                                                                                                             | `"stacked"`                                        |
+| `lines`         | `lines`          |             | `"full" \| "inset" \| "none"`                                                                                                                    | `"none"`                                           |
 | `max`           | `max`            |             | `number`                                                                                                                                         | `1`                                                |
 | `min`           | `min`            |             | `number`                                                                                                                                         | `0`                                                |
 | `name`          | `name`           |             | `string`                                                                                                                                         | `"percent"`                                        |
 | `pin`           | `pin`            |             | `boolean`                                                                                                                                        | `true`                                             |
 | `pinFormatter`  | --               |             | `(value: number) => string`                                                                                                                      | `(value: number) => `${Math.round(value * 100)}%`` |
-| `step`          | `step`           |             | `string`                                                                                                                                         | `"0.01"`                                           |
-| `value`         | `value`          |             | `number`                                                                                                                                         | `0`                                                |
+| `step`          | `step`           |             | `number`                                                                                                                                         | `0.01`                                             |
+| `value`         | `value`          |             | `number \| { lower: number; upper: number; }`                                                                                                    | `0`                                                |
 
 
 ## Dependencies
@@ -42,7 +42,6 @@ graph TD;
   fireenjin-input-percent --> ion-input
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
-  ion-item --> ion-note
   ion-input --> ion-icon
   style fireenjin-input-percent fill:#f9f,stroke:#333,stroke-width:4px
 ```

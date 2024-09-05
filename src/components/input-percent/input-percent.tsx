@@ -1,23 +1,23 @@
-import { Color } from "@ionic/core";
+import { Color, RangeValue } from "@ionic/core";
 import { Component, Prop, h } from "@stencil/core";
 
 @Component({
   tag: "fireenjin-input-percent",
 })
 export class InputPercent {
-  @Prop() lines = "none";
+  @Prop() lines: "none" | "full" | "inset" = "none";
   @Prop() label = "Percent";
-  @Prop() labelPosition = "stacked";
+  @Prop() labelPosition: "stacked" | "fixed" | "floating" = "stacked";
   @Prop() pin = true;
   @Prop() debounce: number = 300;
   @Prop() color: Color;
   @Prop() disabled = false;
   @Prop() min = 0;
   @Prop() max = 1;
-  @Prop() step = "0.01";
+  @Prop() step: number = 0.01;
   @Prop() pinFormatter = (value: number) => `${Math.round(value * 100)}%`;
   @Prop() name = "percent";
-  @Prop({ mutable: true }) value = 0;
+  @Prop({ mutable: true }) value: RangeValue = 0;
 
   render() {
     return (
@@ -58,7 +58,11 @@ export class InputPercent {
           type="number"
           min={Math.round(this.min * 100)}
           max={Math.round(this.max * 100)}
-          value={Math.round(this.value * 100)}
+          value={
+            typeof this.value === "number"
+              ? Math.round(this.value * 100)
+              : (this.value as any)
+          }
           style={{
             display: "inline-block",
             position: "absolute",

@@ -24,10 +24,6 @@
 
 ## Dependencies
 
-### Used by
-
- - [fireenjin-flow](../flow)
-
 ### Depends on
 
 - ion-list
@@ -44,8 +40,6 @@ graph TD;
   fireenjin-checklist --> ion-label
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
-  ion-item --> ion-note
-  fireenjin-flow --> fireenjin-checklist
   style fireenjin-checklist fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

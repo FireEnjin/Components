@@ -59,6 +59,12 @@
 
 
 
+#### Parameters
+
+| Name             | Type      | Description |
+| ---------------- | --------- | ----------- |
+| `reportValidity` | `boolean` |             |
+
 #### Returns
 
 Type: `Promise<boolean>`
@@ -99,6 +105,12 @@ Type: `Promise<void>`
 
 Emit fireenjinReset event with form data
 
+#### Parameters
+
+| Name    | Type  | Description          |
+| ------- | ----- | -------------------- |
+| `event` | `any` | The form reset event |
+
 #### Returns
 
 Type: `Promise<boolean>`
@@ -129,6 +141,12 @@ Type: `Promise<any>`
 
 
 
+#### Parameters
+
+| Name   | Type  | Description |
+| ------ | ----- | ----------- |
+| `data` | `any` |             |
+
 #### Returns
 
 Type: `Promise<void>`
@@ -138,6 +156,13 @@ Type: `Promise<void>`
 ### `submit(event?: any, options?: { manual: boolean; }) => Promise<void>`
 
 Emit fireenjinSubmit event with form data
+
+#### Parameters
+
+| Name      | Type                   | Description           |
+| --------- | ---------------------- | --------------------- |
+| `event`   | `any`                  | The form submit event |
+| `options` | `{ manual: boolean; }` |                       |
 
 #### Returns
 
@@ -150,7 +175,6 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [fireenjin-flow](../flow)
  - [fireenjin-popover-filter](../popover-filter)
 
 ### Depends on
@@ -168,7 +192,6 @@ graph TD;
   fireenjin-form --> ion-col
   fireenjin-form --> ion-button
   ion-button --> ion-ripple-effect
-  fireenjin-flow --> fireenjin-form
   fireenjin-popover-filter --> fireenjin-form
   style fireenjin-form fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -1,7 +1,5 @@
 import { Config } from "@stencil/core";
-// import nodePolyfills from "rollup-plugin-node-polyfills";
-
-const { namespace } = require("./package.json");
+import { namespace } from "./package.json";
 
 export const config: Config = {
   namespace,

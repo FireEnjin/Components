@@ -22,7 +22,6 @@ import { debounce } from "typescript-debounce-decorator";
 })
 export class Pagination implements ComponentInterface {
   paginationEl: HTMLElement;
-  virtualScrollEl: HTMLIonVirtualScrollElement;
   infiniteScrollEl: HTMLIonInfiniteScrollElement;
   resizeInterval: any;
   initailizedOnPath: string;
@@ -73,7 +72,6 @@ export class Pagination implements ComponentInterface {
   name = "pagination";
   @Prop() collection: string;
   @Prop() renderItem: (item: any, i: number) => any;
-  @Prop() disableVirtualScroll = false;
   @Prop() removeDuplicates = false;
   @Prop() fetchParams: any;
   @Prop() nextKey = "id";
@@ -152,12 +150,6 @@ export class Pagination implements ComponentInterface {
       ) {
         this.infiniteScrollEl.disabled = true;
       }
-      if (!this.disableVirtualScroll) {
-        await this.virtualScrollEl.checkEnd();
-        setTimeout(() => {
-          window.dispatchEvent(new window.Event("resize"));
-        }, 200);
-      }
       if (
         !this.infiniteScrollEl?.disabled &&
         this.fillScreen &&
@@ -177,35 +169,6 @@ export class Pagination implements ComponentInterface {
     this.getResults({
       next: true,
     });
-  }
-
-  @Listen("resize", { target: "window" })
-  onResize() {
-    if (this.disableVirtualScroll) return;
-    if (
-      this.display === "list" &&
-      this.virtualScrollEl?.querySelector("ion-item")
-    ) {
-      this.approxItemHeight =
-        this.virtualScrollEl.querySelector("ion-item").offsetHeight;
-    } else if (
-      this.display === "grid" &&
-      this.virtualScrollEl?.querySelectorAll("ion-col")
-    ) {
-      let i;
-      let lastCol;
-      const cols = this.virtualScrollEl.querySelectorAll("ion-col");
-      for (i = 0; i < cols.length; i++) {
-        const col = cols[i];
-        if (lastCol && col.offsetTop !== lastCol.offsetTop) {
-          break;
-        }
-        lastCol = col;
-      }
-      if (lastCol && lastCol.firstChild) {
-        this.approxItemHeight = lastCol.firstChild.scrollHeight / i + 18;
-      }
-    }
   }
 
   @Method()
@@ -339,20 +302,8 @@ export class Pagination implements ComponentInterface {
     if (window?.location?.pathname) {
       this.initailizedOnPath = window.location.pathname;
     }
-    if (!this.disableVirtualScroll) {
-      window.dispatchEvent(new window.Event("resize"));
-      this.resizeInterval = setInterval(() => {
-        window.dispatchEvent(new window.Event("resize"));
-      }, 3000);
-    }
     if (!this.results?.length) {
       this.getResults();
-    }
-  }
-
-  disconnectedCallback() {
-    if (Build.isBrowser && !this.disableVirtualScroll) {
-      clearInterval(this.resizeInterval);
     }
   }
 
@@ -422,19 +373,7 @@ export class Pagination implements ComponentInterface {
       [];
     return (
       <div class="pagination" ref={(el) => (this.paginationEl = el)}>
-        {this.disableVirtualScroll ? (
-          <div>{this.renderResults(results)}</div>
-        ) : (
-          <ion-virtual-scroll
-            items={results}
-            approxItemHeight={this.approxItemHeight}
-            renderItem={this.renderItem}
-            ref={(el) => (this.virtualScrollEl = el)}
-          >
-            {this.renderResults(results)}
-            <slot />
-          </ion-virtual-scroll>
-        )}
+        <div>{this.renderResults(results)}</div>
         {!this.disableInfiniteScroll && (
           <ion-infinite-scroll
             style={{ display: "block" }}

@@ -35,6 +35,12 @@
 
 Set the current date of the calendar
 
+#### Parameters
+
+| Name         | Type     | Description                                          |
+| ------------ | -------- | ---------------------------------------------------- |
+| `dateString` | `string` | The date in YYYY-MM-DD format to set the calendar to |
+
 #### Returns
 
 Type: `Promise<void>`
@@ -44,6 +50,13 @@ Type: `Promise<void>`
 ### `switchView(event: any, view: "calendar" | "months" | "years") => Promise<"calendar" | "months" | "years">`
 
 Switch the view of the calendar
+
+#### Parameters
+
+| Name    | Type                                | Description                                 |
+| ------- | ----------------------------------- | ------------------------------------------- |
+| `event` | `any`                               | The click event from the element being used |
+| `view`  | `"calendar" \| "months" \| "years"` | The view to switch to                       |
 
 #### Returns
 

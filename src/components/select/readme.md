@@ -53,7 +53,6 @@
 
 ### Used by
 
- - [fireenjin-flow](../flow)
  - [fireenjin-input-logic](../input-logic)
  - [fireenjin-input-path](../input-path)
  - [fireenjin-table](../table)
@@ -84,25 +83,24 @@ graph TD;
   fireenjin-select --> ion-icon
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
-  ion-item --> ion-note
   ion-popover --> ion-backdrop
   ion-select --> ion-select-popover
   ion-select --> ion-popover
   ion-select --> ion-action-sheet
   ion-select --> ion-alert
+  ion-select --> ion-icon
   ion-select-popover --> ion-item
   ion-select-popover --> ion-checkbox
-  ion-select-popover --> ion-label
   ion-select-popover --> ion-radio-group
   ion-select-popover --> ion-radio
   ion-select-popover --> ion-list
   ion-select-popover --> ion-list-header
+  ion-select-popover --> ion-label
   ion-action-sheet --> ion-backdrop
   ion-action-sheet --> ion-icon
   ion-action-sheet --> ion-ripple-effect
   ion-alert --> ion-ripple-effect
   ion-alert --> ion-backdrop
-  fireenjin-flow --> fireenjin-select
   fireenjin-input-logic --> fireenjin-select
   fireenjin-input-path --> fireenjin-select
   fireenjin-table --> fireenjin-select

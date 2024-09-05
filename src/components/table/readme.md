@@ -9,7 +9,7 @@
 
 | Property            | Attribute             | Description | Type                                                                                                                                                                                                         | Default                                                            |
 | ------------------- | --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| `columns`           | --                    |             | `{ label?: string; name?: string; key?: string; placeholder?: string; disabled?: boolean; type?: "string" \| "number" \| "boolean" \| "select" \| "file" \| "photo" \| "phone" \| "tel"; options?: any; }[]` | `undefined`                                                        |
+| `columns`           | --                    |             | `{ label?: string; name?: string; key?: string; placeholder?: string; disabled?: boolean; type?: "string" \| "number" \| "boolean" \| "select" \| "phone" \| "tel" \| "photo" \| "file"; options?: any; }[]` | `undefined`                                                        |
 | `deleteButtonAttrs` | `delete-button-attrs` |             | `any`                                                                                                                                                                                                        | `{     fill: "clear",     color: "danger",     size: "small",   }` |
 | `deleteEndpoint`    | `delete-endpoint`     |             | `string`                                                                                                                                                                                                     | `undefined`                                                        |
 | `edit`              | `edit`                |             | `boolean`                                                                                                                                                                                                    | `false`                                                            |
@@ -37,6 +37,12 @@
 ### `fetchData({ endpoint, params, }?: { endpoint?: string; params?: any; }) => Promise<void>`
 
 
+
+#### Parameters
+
+| Name  | Type                                   | Description |
+| ----- | -------------------------------------- | ----------- |
+| `__0` | `{ endpoint?: string; params?: any; }` |             |
 
 #### Returns
 
@@ -80,19 +86,19 @@ graph TD;
   fireenjin-select --> ion-icon
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
-  ion-item --> ion-note
   ion-popover --> ion-backdrop
   ion-select --> ion-select-popover
   ion-select --> ion-popover
   ion-select --> ion-action-sheet
   ion-select --> ion-alert
+  ion-select --> ion-icon
   ion-select-popover --> ion-item
   ion-select-popover --> ion-checkbox
-  ion-select-popover --> ion-label
   ion-select-popover --> ion-radio-group
   ion-select-popover --> ion-radio
   ion-select-popover --> ion-list
   ion-select-popover --> ion-list-header
+  ion-select-popover --> ion-label
   ion-action-sheet --> ion-backdrop
   ion-action-sheet --> ion-icon
   ion-action-sheet --> ion-ripple-effect

@@ -43,6 +43,12 @@
 
 
 
+#### Parameters
+
+| Name     | Type  | Description |
+| -------- | ----- | ----------- |
+| `_event` | `any` |             |
+
 #### Returns
 
 Type: `Promise<boolean>`
@@ -54,7 +60,6 @@ Type: `Promise<boolean>`
 
 ### Used by
 
- - [fireenjin-flow](../flow)
  - [fireenjin-table](../table)
 
 ### Depends on
@@ -68,7 +73,6 @@ graph TD;
   fireenjin-input-photo --> ion-button
   fireenjin-input-photo --> ion-icon
   ion-button --> ion-ripple-effect
-  fireenjin-flow --> fireenjin-input-photo
   fireenjin-table --> fireenjin-input-photo
   style fireenjin-input-photo fill:#f9f,stroke:#333,stroke-width:4px
 ```

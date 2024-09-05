@@ -65,6 +65,12 @@
 
 
 
+#### Parameters
+
+| Name      | Type                                                                                       | Description |
+| --------- | ------------------------------------------------------------------------------------------ | ----------- |
+| `options` | `{ setValidationClass?: boolean; validationClassOptions?: { ignoreInvalid?: boolean; }; }` |             |
+
 #### Returns
 
 Type: `Promise<boolean>`
@@ -84,6 +90,12 @@ Type: `Promise<void>`
 ### `getCardToken(options?: { name?: string; address_line1?: string; address_line2?: string; address_city?: string; address_state?: string; address_zip?: string; address_country?: string; currency?: string; }) => Promise<any>`
 
 
+
+#### Parameters
+
+| Name      | Type                                                                                                                                                                                   | Description |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `options` | `{ name?: string; address_line1?: string; address_line2?: string; address_city?: string; address_state?: string; address_zip?: string; address_country?: string; currency?: string; }` |             |
 
 #### Returns
 
@@ -126,7 +138,6 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [fireenjin-flow](../flow)
  - [fireenjin-table](../table)
 
 ### Depends on
@@ -146,8 +157,6 @@ graph TD;
   ion-input --> ion-icon
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
-  ion-item --> ion-note
-  fireenjin-flow --> fireenjin-input
   fireenjin-table --> fireenjin-input
   style fireenjin-input fill:#f9f,stroke:#333,stroke-width:4px
 ```

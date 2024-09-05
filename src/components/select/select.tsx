@@ -221,7 +221,7 @@ export class Select implements ComponentInterface {
                 ref={(el) => (this.popoverEl = el)}
                 dismissOnSelect={this.interfaceOptions?.dismissOnSelect || true}
                 class={this.interfaceOptions?.cssClass || null}
-                onClick={(event) => {
+                onClick={(event: any) => {
                   this.value =
                     event?.target?.closest?.("[value]")?.value ||
                     event?.target?.closest?.("[data-value]")?.dataset?.value;
@@ -244,11 +244,7 @@ export class Select implements ComponentInterface {
                       this.optionEl ? (
                         this.optionEl(option)
                       ) : (
-                        <ion-item
-                          value={option.value}
-                          disabled={option.disabled}
-                          detail
-                        >
+                        <ion-item disabled={option.disabled} detail>
                           {option.label}
                         </ion-item>
                       ),
@@ -257,9 +253,7 @@ export class Select implements ComponentInterface {
                       this.optionEl ? (
                         this.optionEl(result)
                       ) : (
-                        <ion-item detail value={result.id}>
-                          {result.name}
-                        </ion-item>
+                        <ion-item detail>{result.name}</ion-item>
                       ),
                     )}
                   </ion-list>

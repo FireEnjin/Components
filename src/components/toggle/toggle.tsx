@@ -48,7 +48,6 @@ export class Toggle implements ComponentInterface {
             });
           }}
           checked={!!this.value}
-          required
         />
         <slot name="end" slot="after" />
       </ion-item>

@@ -127,7 +127,7 @@ export class PopoverControls {
             detail-icon={control?.detailIcon}
             lines="full"
             href={control?.href || "#"}
-            onClick={(event) => {
+            onClick={(event: any) => {
               if (this.checkable && this.multiple) {
                 const checkbox = event?.target?.querySelector?.("ion-checkbox");
                 if (checkbox) checkbox.checked = !checkbox.checked;

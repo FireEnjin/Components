@@ -30,8 +30,8 @@ export class UploadButton {
   @Prop() placeholder: string;
   @Prop() iconEnd = "cloud-upload";
   @Prop() iconStart: string;
-  @Prop() fill = "outline";
-  @Prop() expand = "block";
+  @Prop() fill: "default" | "outline" | "solid" | "clear" = "outline";
+  @Prop() expand: "block" | "full" = "block";
   @Prop() shape: "round" = "round";
   @Prop() multiple = false;
   @Prop() endpoint = "upload";

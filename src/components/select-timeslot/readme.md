@@ -73,7 +73,6 @@ graph TD;
   fireenjin-select-timeslot --> ion-badge
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
-  ion-item --> ion-note
   ion-button --> ion-ripple-effect
   style fireenjin-select-timeslot fill:#f9f,stroke:#333,stroke-width:4px
 ```

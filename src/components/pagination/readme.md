@@ -16,7 +16,6 @@
 | `disableFetch`          | `disable-fetch`           |             | `boolean`                             | `false`                  |
 | `disableInfiniteScroll` | `disable-infinite-scroll` |             | `boolean`                             | `false`                  |
 | `disablePageCheck`      | `disable-page-check`      |             | `boolean`                             | `false`                  |
-| `disableVirtualScroll`  | `disable-virtual-scroll`  |             | `boolean`                             | `false`                  |
 | `display`               | `display`                 |             | `"grid" \| "list"`                    | `undefined`              |
 | `endpoint`              | `endpoint`                |             | `string`                              | `undefined`              |
 | `fetchData`             | `fetch-data`              |             | `any`                                 | `undefined`              |
@@ -57,15 +56,27 @@
 
 
 
+#### Parameters
+
+| Name      | Type    | Description |
+| --------- | ------- | ----------- |
+| `results` | `any[]` |             |
+
 #### Returns
 
 Type: `Promise<void>`
 
 
 
-### `clearParamData(key?: string) => Promise<{ query?: string; limit?: number; orderBy?: string; orderDirection?: "desc" | "asc"; whereEqual?: string; whereLessThan?: string; whereLessThanOrEqual?: string; whereGreaterThan?: string; whereGreaterThanOrEqual?: string; whereArrayContains?: string; whereArrayContainsAny?: string; whereIn?: string; next?: string; back?: string; }>`
+### `clearParamData(key?: string) => Promise<{ query?: string; limit?: number; orderBy?: string; orderDirection?: "asc" | "desc"; whereEqual?: string; whereLessThan?: string; whereLessThanOrEqual?: string; whereGreaterThan?: string; whereGreaterThanOrEqual?: string; whereArrayContains?: string; whereArrayContainsAny?: string; whereIn?: string; next?: string; back?: string; }>`
 
 
+
+#### Parameters
+
+| Name  | Type     | Description |
+| ----- | -------- | ----------- |
+| `key` | `string` |             |
 
 #### Returns
 
@@ -87,6 +98,12 @@ Type: `Promise<void>`
 
 
 
+#### Parameters
+
+| Name      | Type                                                                  | Description |
+| --------- | --------------------------------------------------------------------- | ----------- |
+| `options` | `{ page?: number; next?: boolean; limit?: number; paramData?: any; }` |             |
+
 #### Returns
 
 Type: `Promise<void>`
@@ -103,7 +120,6 @@ Type: `Promise<void>`
 - ion-col
 - ion-card
 - ion-list
-- ion-virtual-scroll
 - ion-infinite-scroll
 - ion-infinite-scroll-content
 
@@ -115,7 +131,6 @@ graph TD;
   fireenjin-pagination --> ion-col
   fireenjin-pagination --> ion-card
   fireenjin-pagination --> ion-list
-  fireenjin-pagination --> ion-virtual-scroll
   fireenjin-pagination --> ion-infinite-scroll
   fireenjin-pagination --> ion-infinite-scroll-content
   ion-card --> ion-ripple-effect

@@ -21,8 +21,8 @@ export class InputPath {
 
   @State() manualEdit = false;
   @State() pathType: string;
-  @State() pathPart: string;
-  @State() pathChips: { type?: string; part?: string }[] = [];
+  @State() pathPart: string | number;
+  @State() pathChips: { type?: string; part?: string | number }[] = [];
 
   @Method()
   async toggleManualEdit() {

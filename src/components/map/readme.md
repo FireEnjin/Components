@@ -28,6 +28,12 @@
 
 Add a marker to the map
 
+#### Parameters
+
+| Name       | Type                                                                                      | Description                                        |
+| ---------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `location` | `{ position: { lat: number; lng: number; }; name: string; icon: string; payload?: any; }` | The location information for the marker on the map |
+
 #### Returns
 
 Type: `Promise<Marker>`
@@ -48,6 +54,12 @@ Type: `Promise<boolean>`
 
 
 
+#### Parameters
+
+| Name     | Type                      | Description |
+| -------- | ------------------------- | ----------- |
+| `latLng` | `LatLng \| LatLngLiteral` |             |
+
 #### Returns
 
 Type: `Promise<void>`
@@ -58,6 +70,12 @@ Type: `Promise<void>`
 
 Set the list of map markers
 
+#### Parameters
+
+| Name      | Type                                                                                        | Description           |
+| --------- | ------------------------------------------------------------------------------------------- | --------------------- |
+| `markers` | `{ position: { lat: number; lng: number; }; name: string; icon: string; payload?: any; }[]` | A list of map markers |
+
 #### Returns
 
 Type: `Promise<{ position: { lat: number; lng: number; }; name: string; icon: string; payload?: any; }[]>`
@@ -67,6 +85,12 @@ Type: `Promise<{ position: { lat: number; lng: number; }; name: string; icon: st
 ### `setZoom(level: number) => Promise<void>`
 
 
+
+#### Parameters
+
+| Name    | Type     | Description |
+| ------- | -------- | ----------- |
+| `level` | `number` |             |
 
 #### Returns
 

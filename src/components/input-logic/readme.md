@@ -30,6 +30,12 @@
 
 
 
+#### Parameters
+
+| Name        | Type  | Description |
+| ----------- | ----- | ----------- |
+| `statement` | `any` |             |
+
 #### Returns
 
 Type: `Promise<void>`
@@ -39,6 +45,12 @@ Type: `Promise<void>`
 ### `removeStatement(index: number) => Promise<void>`
 
 
+
+#### Parameters
+
+| Name    | Type     | Description |
+| ------- | -------- | ----------- |
+| `index` | `number` |             |
 
 #### Returns
 
@@ -107,16 +119,16 @@ graph TD;
   ion-select --> ion-popover
   ion-select --> ion-action-sheet
   ion-select --> ion-alert
+  ion-select --> ion-icon
   ion-select-popover --> ion-item
   ion-select-popover --> ion-checkbox
-  ion-select-popover --> ion-label
   ion-select-popover --> ion-radio-group
   ion-select-popover --> ion-radio
   ion-select-popover --> ion-list
   ion-select-popover --> ion-list-header
+  ion-select-popover --> ion-label
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
-  ion-item --> ion-note
   ion-popover --> ion-backdrop
   ion-action-sheet --> ion-backdrop
   ion-action-sheet --> ion-icon

@@ -1,7 +1,7 @@
 {
   "name": "@fireenjin/components",
   "namespace": "fireenjin",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": false,
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -19,50 +19,45 @@
   "scripts": {
     "build": "stencil build",
     "prerender": "stencil build --prerender",
-    "deploy:build": "fireenjin env github && npm run docs && npm run presets:build",
-    "dev": " stencil build --docs --dev --watch --serve",
+    "deploy:build": "fireenjin env github && npm run docs && npm run build",
+    "dev": "stencil build --docs --dev --watch --serve",
     "debug": "",
     "docs": " stencil build --docs",
-    "start": "npm-run-all --parallel dev presets:watch",
     "test": "stencil test --spec",
     "test:e2e": "stencil test --e2e",
     "test:snapshot": "stencil test --e2e --screenshot",
     "test:generate": "stencil test --spec --json --outputFile=src/jest-test-results.json",
     "test:generate:watch": "stencil test --spec --json --outputFile=src/jest-test-results.json --watch",
-    "test:watch": "stencil test --spec --watch",
-    "presets": "fireenjin presets",
-    "presets:watch": "fireenjin presets watch"
+    "test:watch": "stencil test --spec --watch"
   },
   "dependencies": {
     "@fireenjin/sdk": "^1.5.7",
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
-    "@ionic/core": "^6.7.4",
-    "chart.js": "^4.4.3",
+    "@ionic/core": "^8.2.7",
+    "chart.js": "^4.4.4",
     "cleave.js": "^1.6.0",
     "clipboard": "^2.0.11",
-    "date-fns": "^2.30.0",
+    "date-fns": "^3.6.0",
     "dragula": "^3.7.3",
     "google-maps": "^4.3.3",
     "json-formatter-js": "^2.5.17",
     "leader-line": "^1.0.7",
     "localforage": "^1.10.0",
     "typescript-debounce-decorator": "^0.0.18",
-    "vanilla-jsoneditor": "^0.23.7"
+    "vanilla-jsoneditor": "^0.23.8"
   },
   "devDependencies": {
-    "@fireenjin/cli": "^1.1.13",
-    "@fireenjin/docs": "^1.0.19",
-    "@stencil/core": "^3.4.2",
+    "@fireenjin/cli": "^1.1.14",
+    "@stencil/core": "^4.21.0",
     "@stencil/store": "^2.0.16",
     "@types/cleave.js": "^1.4.12",
     "@types/jest": "^29.5.12",
     "@types/stripe-v3": "^3.1.33",
     "jest": "^29.7.0",
     "jest-cli": "^29.7.0",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "jest": {
     "preset": "@stencil/core/testing"
