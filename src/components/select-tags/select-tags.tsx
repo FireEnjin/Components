@@ -53,6 +53,7 @@ export class SelectTags implements ComponentInterface {
   @Prop() labelPosition?: "stacked" | "fixed" | "floating" = "stacked";
   @Prop() addPrompt: string;
   @Prop() addIcon = "add-circle";
+  @Prop() overflow = false;
 
   @State() hasValue = false;
   @State() paramData: {
@@ -123,10 +124,10 @@ export class SelectTags implements ComponentInterface {
       label: result.label
         ? result.label
         : result.name
-        ? result.name
-        : result.id
-        ? result.id
-        : null,
+          ? result.name
+          : result.id
+            ? result.id
+            : null,
       value: result.value ? result.value : result.id ? result.id : null,
     }));
   }
@@ -196,8 +197,8 @@ export class SelectTags implements ComponentInterface {
       dataPropsMap: this.dataPropsMap
         ? this.dataPropsMap
         : this.resultsKey
-        ? { [this.resultsKey]: "results" }
-        : null,
+          ? { [this.resultsKey]: "results" }
+          : null,
       disableFetch: this.disableFetch,
       params: {
         data: this.fetchData ? this.fetchData : this.paramData,
@@ -267,7 +268,7 @@ export class SelectTags implements ComponentInterface {
           <ion-input ref={(el) => (this.inputEl = el)} value={this.query} />
         )}
         <div class="options-wrapper">
-          <fireenjin-chip-bar>
+          <fireenjin-chip-bar overflow={this.overflow}>
             {this.allowAdding && (
               <ion-chip
                 class="add-tag"
@@ -281,6 +282,7 @@ export class SelectTags implements ComponentInterface {
             )}
             {(this.options || []).map((option) => (
               <ion-chip
+                class={(this.value || []).includes(option?.value) ? "selected" : ""}
                 outline={!(this.value || []).includes(option?.value)}
                 onClick={(event) =>
                   (this.value || []).includes(option?.value)

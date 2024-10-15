@@ -34,17 +34,17 @@
 
 ## Methods
 
-### `destroy() => Promise<void>`
+### `destroy() => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
-### `expand(callback: any) => Promise<void>`
+### `expand(callback: any) => Promise<any>`
 
 
 
@@ -56,7 +56,7 @@ Type: `Promise<void>`
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
@@ -66,21 +66,21 @@ Type: `Promise<void>`
 
 #### Returns
 
-Type: `Promise<JsonEditor>`
+Type: `Promise<JSONEditor>`
 
 
 
-### `refresh() => Promise<void>`
+### `refresh() => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
-### `scrollToPath(path: any) => Promise<void>`
+### `scrollToPath(path: any) => Promise<any>`
 
 
 
@@ -92,7 +92,7 @@ Type: `Promise<void>`
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
@@ -112,17 +112,17 @@ Type: `Promise<void>`
 
 
 
-### `setFocus() => Promise<void>`
+### `setFocus() => Promise<any>`
 
 
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
-### `update(content: Content) => Promise<void>`
+### `update(content: Content) => Promise<any>`
 
 
 
@@ -134,11 +134,11 @@ Type: `Promise<void>`
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
-### `updateOptions(options: JSONEditorPropsOptional) => Promise<void>`
+### `updateOptions(options: JSONEditorPropsOptional) => Promise<any>`
 
 
 
@@ -150,7 +150,7 @@ Type: `Promise<void>`
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<any>`
 
 
 
