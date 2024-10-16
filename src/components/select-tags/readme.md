@@ -26,6 +26,7 @@
 | `options`         | --                  |             | `{ label: string; value: any; }[]`   | `[]`            |
 | `orderBy`         | `order-by`          |             | `string`                             | `undefined`     |
 | `orderDirection`  | `order-direction`   |             | `string`                             | `undefined`     |
+| `overflow`        | `overflow`          |             | `boolean`                            | `false`         |
 | `page`            | `page`              |             | `number`                             | `0`             |
 | `placeholder`     | `placeholder`       |             | `string`                             | `"Select Tags"` |
 | `query`           | `query`             |             | `string`                             | `undefined`     |

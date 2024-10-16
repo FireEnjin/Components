@@ -10,7 +10,7 @@ import {
   Method,
   Watch,
 } from "@stencil/core";
-import { JSONEditor, JSONEditorPropsOptional } from "vanilla-jsoneditor";
+import { createJSONEditor, JSONEditorPropsOptional, JsonEditor as JSONEditor } from "vanilla-jsoneditor";
 
 export interface Content {
   json?: any;
@@ -118,7 +118,7 @@ export class JsonEditor implements ComponentInterface {
     if (!Build?.isBrowser) return;
     let value: any = this.value;
     if (this.value) this.setValue(this.value);
-    this.editor = new JSONEditor({
+    this.editor = createJSONEditor({
       target: this.jsonEditorEl,
       props: {
         content: this.content,
