@@ -2,7 +2,7 @@ fireenjin-select-tags {
   display: block;
   overflow: visible !important;
   position: relative;
-  z-index: 9;    
+  z-index: 9;
 }
 
 fireenjin-select-tags ion-label {
@@ -39,11 +39,11 @@ fireenjin-select-tags ion-item {
   --background: transparent !important;
 }
 
-fireenjin-select-tags .options-wrapper {
+fireenjin-select-tags .options-wrapper:not(.has-overflow) {
   height: 50px;
 }
 
-fireenjin-select-tags fireenjin-chip-bar {
+fireenjin-select-tags fireenjin-chip-bar:not(.overflow) {
   position: absolute;
   left: 0;
   right: 0;

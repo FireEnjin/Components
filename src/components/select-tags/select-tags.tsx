@@ -261,58 +261,56 @@ export class SelectTags implements ComponentInterface {
   render() {
     return (
       <ion-item ref={(el) => (this.itemEl = el)} lines={this.lines}>
-        <div>
-          {this.label && (
-            <ion-label position={this.labelPosition}>{this.label}</ion-label>
-          )}
-          {this.allowAdding && (
-            <ion-input ref={(el) => (this.inputEl = el)} value={this.query} />
-          )}
-          <div class="options-wrapper">
-            <fireenjin-chip-bar overflow={this.overflow}>
-              {this.allowAdding && (
-                <ion-chip
-                  class="add-tag"
-                  onClick={(event) =>
-                    this.addTag(this.inputEl?.value as string, event)
-                  }
-                >
-                  Add
-                  <ion-icon name={this.addIcon} />
-                </ion-chip>
-              )}
-              {(this.options || []).map((option) => (
-                <ion-chip
-                  class={(this.value || []).includes(option?.value) ? "selected" : ""}
-                  outline={!(this.value || []).includes(option?.value)}
-                  onClick={(event) =>
-                    (this.value || []).includes(option?.value)
-                      ? this.removeValue(option?.value, event)
-                      : this.addValue(option?.value, event)
-                  }
-                >
-                  {option?.label || ""}
-                  {(this.value || []).includes(option?.value) && (
-                    <ion-icon name="close-circle" />
-                  )}
-                </ion-chip>
-              ))}
-            </fireenjin-chip-bar>
-          </div>
-          <input
-            style={{
-              opacity: "0",
-              height: "0",
-              width: "0",
-              float: "left",
-              margin: "0",
-              padding: "0",
-            }}
-            type="text"
-            value={this.value}
-            required={this.required}
-          />
+        {this.label && (
+          <ion-label position={this.labelPosition}>{this.label}</ion-label>
+        )}
+        {this.allowAdding && (
+          <ion-input ref={(el) => (this.inputEl = el)} value={this.query} />
+        )}
+        <div class={{ "options-wrapper": true, "has-overflow": this.overflow }}>
+          <fireenjin-chip-bar overflow={this.overflow}>
+            {this.allowAdding && (
+              <ion-chip
+                class="add-tag"
+                onClick={(event) =>
+                  this.addTag(this.inputEl?.value as string, event)
+                }
+              >
+                Add
+                <ion-icon name={this.addIcon} />
+              </ion-chip>
+            )}
+            {(this.options || []).map((option) => (
+              <ion-chip
+                class={(this.value || []).includes(option?.value) ? "selected" : ""}
+                outline={!(this.value || []).includes(option?.value)}
+                onClick={(event) =>
+                  (this.value || []).includes(option?.value)
+                    ? this.removeValue(option?.value, event)
+                    : this.addValue(option?.value, event)
+                }
+              >
+                {option?.label || ""}
+                {(this.value || []).includes(option?.value) && (
+                  <ion-icon name="close-circle" />
+                )}
+              </ion-chip>
+            ))}
+          </fireenjin-chip-bar>
         </div>
+        <input
+          style={{
+            opacity: "0",
+            height: "0",
+            width: "0",
+            float: "left",
+            margin: "0",
+            padding: "0",
+          }}
+          type="text"
+          value={this.value}
+          required={this.required}
+        />
       </ion-item>
     );
   }
