@@ -8,6 +8,13 @@ fireenjin-chip-bar {
   white-space: nowrap;
 }
 
+fireenjin-chip-bar.overflow {
+  overflow: visible !important;
+  overflow-x: visible !important;
+  white-space: initial !important;
+  height: auto !important;
+}
+
 ion-chip ion-icon.ft-icon-style {
   height: 14px !important;
   width: 14px !important;
