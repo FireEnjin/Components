@@ -34,7 +34,7 @@ export class SelectTags implements ComponentInterface {
   @Prop() label;
   @Prop() placeholder = "Select Tags";
   @Prop({ mutable: true }) value: any;
-  @Prop({ mutable: true }) options: { label: string; value: any }[] = [];
+  @Prop({ mutable: true }) options: { label: string; value: any; image?: string; }[] = [];
   @Prop() required = false;
   @Prop() duplicates = false;
   @Prop() disabled = false;
@@ -290,6 +290,9 @@ export class SelectTags implements ComponentInterface {
                     : this.addValue(option?.value, event)
                 }
               >
+                {!!option?.image && <ion-avatar>
+                  <img alt={option?.label} src={option.image} />
+                </ion-avatar>}
                 {option?.label || ""}
                 {(this.value || []).includes(option?.value) && (
                   <ion-icon name="close-circle" />
