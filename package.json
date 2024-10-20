@@ -1,7 +1,7 @@
 {
   "name": "@fireenjin/components",
   "namespace": "fireenjin",
-  "version": "1.14.10",
+  "version": "1.15.1",
   "private": false,
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
