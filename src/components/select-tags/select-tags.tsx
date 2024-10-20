@@ -293,7 +293,7 @@ export class SelectTags implements ComponentInterface {
                 {!!option?.image && <ion-avatar>
                   <img alt={option?.label} src={option.image} />
                 </ion-avatar>}
-                {option?.label || ""}
+                <p>{option?.label || ""}</p>
                 {(this.value || []).includes(option?.value) && (
                   <ion-icon name="close-circle" />
                 )}
