@@ -7,34 +7,34 @@
 
 ## Properties
 
-| Property          | Attribute           | Description | Type                                 | Default         |
-| ----------------- | ------------------- | ----------- | ------------------------------------ | --------------- |
-| `addIcon`         | `add-icon`          |             | `string`                             | `"add-circle"`  |
-| `addPrompt`       | `add-prompt`        |             | `string`                             | `undefined`     |
-| `allowAdding`     | `allow-adding`      |             | `"custom" \| boolean`                | `false`         |
-| `dataPropsMap`    | `data-props-map`    |             | `any`                                | `undefined`     |
-| `disableFetch`    | `disable-fetch`     |             | `boolean`                            | `false`         |
-| `disabled`        | `disabled`          |             | `boolean`                            | `false`         |
-| `duplicates`      | `duplicates`        |             | `boolean`                            | `false`         |
-| `endpoint`        | `endpoint`          |             | `string`                             | `undefined`     |
-| `fetchData`       | `fetch-data`        |             | `any`                                | `undefined`     |
-| `label`           | `label`             |             | `any`                                | `undefined`     |
-| `labelPosition`   | `label-position`    |             | `"fixed" \| "floating" \| "stacked"` | `"stacked"`     |
-| `limit`           | `limit`             |             | `number`                             | `15`            |
-| `lines`           | `lines`             |             | `"full" \| "inset" \| "none"`        | `undefined`     |
-| `name`            | `name`              |             | `string`                             | `"tags"`        |
-| `options`         | --                  |             | `{ label: string; value: any; }[]`   | `[]`            |
-| `orderBy`         | `order-by`          |             | `string`                             | `undefined`     |
-| `orderDirection`  | `order-direction`   |             | `string`                             | `undefined`     |
-| `overflow`        | `overflow`          |             | `boolean`                            | `false`         |
-| `page`            | `page`              |             | `number`                             | `0`             |
-| `placeholder`     | `placeholder`       |             | `string`                             | `"Select Tags"` |
-| `query`           | `query`             |             | `string`                             | `undefined`     |
-| `required`        | `required`          |             | `boolean`                            | `false`         |
-| `results`         | --                  |             | `any[]`                              | `[]`            |
-| `resultsKey`      | `results-key`       |             | `string`                             | `undefined`     |
-| `tagsToLowercase` | `tags-to-lowercase` |             | `boolean`                            | `false`         |
-| `value`           | `value`             |             | `any`                                | `undefined`     |
+| Property          | Attribute           | Description | Type                                               | Default         |
+| ----------------- | ------------------- | ----------- | -------------------------------------------------- | --------------- |
+| `addIcon`         | `add-icon`          |             | `string`                                           | `"add-circle"`  |
+| `addPrompt`       | `add-prompt`        |             | `string`                                           | `undefined`     |
+| `allowAdding`     | `allow-adding`      |             | `"custom" \| boolean`                              | `false`         |
+| `dataPropsMap`    | `data-props-map`    |             | `any`                                              | `undefined`     |
+| `disableFetch`    | `disable-fetch`     |             | `boolean`                                          | `false`         |
+| `disabled`        | `disabled`          |             | `boolean`                                          | `false`         |
+| `duplicates`      | `duplicates`        |             | `boolean`                                          | `false`         |
+| `endpoint`        | `endpoint`          |             | `string`                                           | `undefined`     |
+| `fetchData`       | `fetch-data`        |             | `any`                                              | `undefined`     |
+| `label`           | `label`             |             | `any`                                              | `undefined`     |
+| `labelPosition`   | `label-position`    |             | `"fixed" \| "floating" \| "stacked"`               | `"stacked"`     |
+| `limit`           | `limit`             |             | `number`                                           | `15`            |
+| `lines`           | `lines`             |             | `"full" \| "inset" \| "none"`                      | `undefined`     |
+| `name`            | `name`              |             | `string`                                           | `"tags"`        |
+| `options`         | --                  |             | `{ label: string; value: any; image?: string; }[]` | `[]`            |
+| `orderBy`         | `order-by`          |             | `string`                                           | `undefined`     |
+| `orderDirection`  | `order-direction`   |             | `string`                                           | `undefined`     |
+| `overflow`        | `overflow`          |             | `boolean`                                          | `false`         |
+| `page`            | `page`              |             | `number`                                           | `0`             |
+| `placeholder`     | `placeholder`       |             | `string`                                           | `"Select Tags"` |
+| `query`           | `query`             |             | `string`                                           | `undefined`     |
+| `required`        | `required`          |             | `boolean`                                          | `false`         |
+| `results`         | --                  |             | `any[]`                                            | `[]`            |
+| `resultsKey`      | `results-key`       |             | `string`                                           | `undefined`     |
+| `tagsToLowercase` | `tags-to-lowercase` |             | `boolean`                                          | `false`         |
+| `value`           | `value`             |             | `any`                                              | `undefined`     |
 
 
 ## Events
@@ -139,6 +139,7 @@ Type: `Promise<void>`
 - [fireenjin-chip-bar](../chip-bar)
 - ion-chip
 - ion-icon
+- ion-avatar
 
 ### Graph
 ```mermaid
@@ -149,6 +150,7 @@ graph TD;
   fireenjin-select-tags --> fireenjin-chip-bar
   fireenjin-select-tags --> ion-chip
   fireenjin-select-tags --> ion-icon
+  fireenjin-select-tags --> ion-avatar
   ion-item --> ion-icon
   ion-item --> ion-ripple-effect
   ion-item --> ion-note
