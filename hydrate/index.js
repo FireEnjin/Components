@@ -54791,7 +54791,7 @@ class PopoverControls {
     });
   }
   render() {
-    const ControlListEl = () => (hAsync("ion-list", { class: "ion-no-padding" }, this.label && (hAsync("ion-item-divider", null, this.icon && (hAsync("ion-icon", { style: { marginRight: "0.5rem" }, name: this.icon.includes("/") ? this.icon : null, src: this.icon.includes("/") ? null : this.icon, slot: "start" })), this.label, this.showClear && (hAsync("ion-button", { fill: "clear", slot: "end", onClick: (event) => this.fireenjinTrigger.emit({
+    const ControlListEl = () => (hAsync("ion-list", { class: "ion-no-padding" }, this.label && (hAsync("ion-item-divider", null, this.icon && (hAsync("ion-icon", { style: { marginRight: "0.5rem" }, name: this.icon.includes("/") ? null : this.icon, src: this.icon.includes("/") ? this.icon : null, slot: "start" })), this.label, this.showClear && (hAsync("ion-button", { fill: "clear", slot: "end", onClick: (event) => this.fireenjinTrigger.emit({
         event,
         el: this.el,
         name: this.type,
