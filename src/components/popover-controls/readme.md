@@ -18,6 +18,7 @@
 | `label`         | `label`           | The label to display at the top of the popover                  | `string`                      | `undefined` |
 | `multiple`      | `multiple`        | Can you select multiple                                         | `boolean`                     | `false`     |
 | `name`          | `name`            | The name of the input                                           | `string`                      | `undefined` |
+| `payload`       | `payload`         | Payload to send along with selection event                      | `any`                         | `{}`        |
 | `showClear`     | `show-clear`      | Should we show the clear button                                 | `boolean`                     | `false`     |
 | `type`          | `type`            | The type of event to fire when a options are selected           | `"move" \| "select" \| "set"` | `"set"`     |
 | `value`         | `value`           | The value of the input                                          | `any`                         | `undefined` |
@@ -38,10 +39,10 @@
 - ion-item-divider
 - ion-icon
 - ion-button
+- ion-label
 - ion-item
 - ion-checkbox
 - ion-radio
-- ion-label
 - ion-content
 - ion-radio-group
 
@@ -52,10 +53,10 @@ graph TD;
   fireenjin-popover-controls --> ion-item-divider
   fireenjin-popover-controls --> ion-icon
   fireenjin-popover-controls --> ion-button
+  fireenjin-popover-controls --> ion-label
   fireenjin-popover-controls --> ion-item
   fireenjin-popover-controls --> ion-checkbox
   fireenjin-popover-controls --> ion-radio
-  fireenjin-popover-controls --> ion-label
   fireenjin-popover-controls --> ion-content
   fireenjin-popover-controls --> ion-radio-group
   ion-button --> ion-ripple-effect

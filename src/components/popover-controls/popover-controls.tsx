@@ -53,6 +53,10 @@ export class PopoverControls {
    * Should the popover close on clear?
    */
   @Prop() closeOnClear = true;
+  /**
+   * Payload to send along with selection event
+   */
+  @Prop() payload?: any = {};
 
   onChange(event) {
     if (
@@ -80,6 +84,7 @@ export class PopoverControls {
       payload: {
         name: this.name,
         value: this.value,
+        ...this.payload
       },
     });
   }
@@ -121,7 +126,8 @@ export class PopoverControls {
             )}
           </ion-item-divider>
         )}
-        {(this.controls || []).map((control) => (
+        {(this.controls || []).map((control, i) => [
+          control?.group !== this.controls?.[i - 1]?.group ? <ion-item-divider><ion-label>{control.group}</ion-label></ion-item-divider> : null,
           <ion-item
             detail={control.detail}
             detail-icon={control?.detailIcon}
@@ -176,7 +182,7 @@ export class PopoverControls {
               />
             )}
           </ion-item>
-        ))}
+        ])}
       </ion-list>
     );
     return (

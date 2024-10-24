@@ -110,6 +110,10 @@ export interface Control {
    * Should we show the clear button
    */
   showClear?: boolean;
+  /**
+   * The group 
+   */
+  group?: string;
 }
 
 export type Field = {
