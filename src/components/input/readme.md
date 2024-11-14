@@ -65,12 +65,6 @@
 
 
 
-#### Parameters
-
-| Name      | Type                                                                                       | Description |
-| --------- | ------------------------------------------------------------------------------------------ | ----------- |
-| `options` | `{ setValidationClass?: boolean; validationClassOptions?: { ignoreInvalid?: boolean; }; }` |             |
-
 #### Returns
 
 Type: `Promise<boolean>`
@@ -90,12 +84,6 @@ Type: `Promise<void>`
 ### `getCardToken(options?: { name?: string; address_line1?: string; address_line2?: string; address_city?: string; address_state?: string; address_zip?: string; address_country?: string; currency?: string; }) => Promise<any>`
 
 
-
-#### Parameters
-
-| Name      | Type                                                                                                                                                                                   | Description |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `options` | `{ name?: string; address_line1?: string; address_line2?: string; address_city?: string; address_state?: string; address_zip?: string; address_country?: string; currency?: string; }` |             |
 
 #### Returns
 

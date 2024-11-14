@@ -30,12 +30,6 @@
 
 
 
-#### Parameters
-
-| Name        | Type  | Description |
-| ----------- | ----- | ----------- |
-| `statement` | `any` |             |
-
 #### Returns
 
 Type: `Promise<void>`
@@ -45,12 +39,6 @@ Type: `Promise<void>`
 ### `removeStatement(index: number) => Promise<void>`
 
 
-
-#### Parameters
-
-| Name    | Type     | Description |
-| ------- | -------- | ----------- |
-| `index` | `number` |             |
 
 #### Returns
 

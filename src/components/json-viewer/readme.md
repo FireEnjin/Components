@@ -19,12 +19,6 @@
 
 
 
-#### Parameters
-
-| Name  | Type     | Description |
-| ----- | -------- | ----------- |
-| `str` | `string` |             |
-
 #### Returns
 
 Type: `Promise<void>`

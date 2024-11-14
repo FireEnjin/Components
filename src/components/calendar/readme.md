@@ -7,18 +7,18 @@
 
 ## Properties
 
-| Property     | Attribute     | Description                                           | Type       | Default               |
-| ------------ | ------------- | ----------------------------------------------------- | ---------- | --------------------- |
-| `available`  | --            | A list of available dates to select                   | `string[]` | `undefined`           |
-| `endDate`    | `end-date`    | The end date to select Y-m-d                          | `string`   | `undefined`           |
-| `locales`    | `locales`     | Language locale to use for calendar                   | `string`   | `undefined`           |
-| `max`        | `max`         | The maximum date that can be selected in Y-m-d format | `string`   | `undefined`           |
-| `min`        | `min`         | The minimum date that can be selected in Y-m-d format | `string`   | `undefined`           |
-| `month`      | `month`       | The month to set the calendar to                      | `number`   | `undefined`           |
-| `range`      | `range`       | Should the calendar be used to select a date range    | `boolean`  | `undefined`           |
-| `startDate`  | `start-date`  | The start date to select Y-m-d                        | `string`   | `undefined`           |
-| `year`       | `year`        | The year to set the calendar to                       | `number`   | `undefined`           |
-| `yearsTitle` | `years-title` | The title to use when showing the year selection view | `string`   | `` `Select a Year` `` |
+| Property     | Attribute     | Description                                           | Type       | Default           |
+| ------------ | ------------- | ----------------------------------------------------- | ---------- | ----------------- |
+| `available`  | --            | A list of available dates to select                   | `string[]` | `undefined`       |
+| `endDate`    | `end-date`    | The end date to select Y-m-d                          | `string`   | `undefined`       |
+| `locales`    | `locales`     | Language locale to use for calendar                   | `string`   | `undefined`       |
+| `max`        | `max`         | The maximum date that can be selected in Y-m-d format | `string`   | `undefined`       |
+| `min`        | `min`         | The minimum date that can be selected in Y-m-d format | `string`   | `undefined`       |
+| `month`      | `month`       | The month to set the calendar to                      | `number`   | `undefined`       |
+| `range`      | `range`       | Should the calendar be used to select a date range    | `boolean`  | `undefined`       |
+| `startDate`  | `start-date`  | The start date to select Y-m-d                        | `string`   | `undefined`       |
+| `year`       | `year`        | The year to set the calendar to                       | `number`   | `undefined`       |
+| `yearsTitle` | `years-title` | The title to use when showing the year selection view | `string`   | ``Select a Year`` |
 
 
 ## Events
@@ -35,12 +35,6 @@
 
 Set the current date of the calendar
 
-#### Parameters
-
-| Name         | Type     | Description                                          |
-| ------------ | -------- | ---------------------------------------------------- |
-| `dateString` | `string` | The date in YYYY-MM-DD format to set the calendar to |
-
 #### Returns
 
 Type: `Promise<void>`
@@ -50,13 +44,6 @@ Type: `Promise<void>`
 ### `switchView(event: any, view: "calendar" | "months" | "years") => Promise<"calendar" | "months" | "years">`
 
 Switch the view of the calendar
-
-#### Parameters
-
-| Name    | Type                                | Description                                 |
-| ------- | ----------------------------------- | ------------------------------------------- |
-| `event` | `any`                               | The click event from the element being used |
-| `view`  | `"calendar" \| "months" \| "years"` | The view to switch to                       |
 
 #### Returns
 

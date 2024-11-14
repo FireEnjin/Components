@@ -50,12 +50,6 @@
 
 
 
-#### Parameters
-
-| Name             | Type      | Description |
-| ---------------- | --------- | ----------- |
-| `reportValidity` | `boolean` |             |
-
 #### Returns
 
 Type: `Promise<void>`
@@ -126,12 +120,6 @@ Type: `Promise<any>`
 
 
 
-#### Parameters
-
-| Name   | Type      | Description |
-| ------ | --------- | ----------- |
-| `lock` | `boolean` |             |
-
 #### Returns
 
 Type: `Promise<any>`
@@ -142,12 +130,6 @@ Type: `Promise<any>`
 
 
 
-#### Parameters
-
-| Name   | Type      | Description |
-| ------ | --------- | ----------- |
-| `lock` | `boolean` |             |
-
 #### Returns
 
 Type: `Promise<any>`
@@ -157,12 +139,6 @@ Type: `Promise<any>`
 ### `lockSwipes(lock: boolean) => Promise<any>`
 
 
-
-#### Parameters
-
-| Name   | Type      | Description |
-| ------ | --------- | ----------- |
-| `lock` | `boolean` |             |
 
 #### Returns
 
@@ -184,12 +160,6 @@ Type: `Promise<void>`
 
 
 
-#### Parameters
-
-| Name    | Type  | Description |
-| ------- | ----- | ----------- |
-| `event` | `any` |             |
-
 #### Returns
 
 Type: `Promise<void>`
@@ -199,12 +169,6 @@ Type: `Promise<void>`
 ### `setFormData(data: any) => Promise<void>`
 
 
-
-#### Parameters
-
-| Name   | Type  | Description |
-| ------ | ----- | ----------- |
-| `data` | `any` |             |
 
 #### Returns
 
@@ -216,13 +180,6 @@ Type: `Promise<void>`
 
 
 
-#### Parameters
-
-| Name           | Type      | Description |
-| -------------- | --------- | ----------- |
-| `speed`        | `number`  |             |
-| `runCallbacks` | `boolean` |             |
-
 #### Returns
 
 Type: `Promise<any>`
@@ -233,13 +190,6 @@ Type: `Promise<any>`
 
 
 
-#### Parameters
-
-| Name           | Type      | Description |
-| -------------- | --------- | ----------- |
-| `speed`        | `number`  |             |
-| `runCallbacks` | `boolean` |             |
-
 #### Returns
 
 Type: `Promise<any>`
@@ -249,14 +199,6 @@ Type: `Promise<any>`
 ### `slideTo(index: number, speed?: number, runCallbacks?: boolean) => Promise<any>`
 
 
-
-#### Parameters
-
-| Name           | Type      | Description |
-| -------------- | --------- | ----------- |
-| `index`        | `number`  |             |
-| `speed`        | `number`  |             |
-| `runCallbacks` | `boolean` |             |
 
 #### Returns
 
@@ -288,13 +230,6 @@ Type: `Promise<any>`
 
 
 
-#### Parameters
-
-| Name      | Type  | Description |
-| --------- | ----- | ----------- |
-| `event`   | `any` |             |
-| `options` | `any` |             |
-
 #### Returns
 
 Type: `Promise<void>`
@@ -314,12 +249,6 @@ Type: `Promise<any>`
 ### `updateAutoHeight(speed?: number) => Promise<any>`
 
 
-
-#### Parameters
-
-| Name    | Type     | Description |
-| ------- | -------- | ----------- |
-| `speed` | `number` |             |
 
 #### Returns
 
