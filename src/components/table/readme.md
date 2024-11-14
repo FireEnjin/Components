@@ -38,6 +38,12 @@
 
 
 
+#### Parameters
+
+| Name  | Type                                   | Description |
+| ----- | -------------------------------------- | ----------- |
+| `__0` | `{ endpoint?: string; params?: any; }` |             |
+
 #### Returns
 
 Type: `Promise<void>`

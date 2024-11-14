@@ -37,6 +37,12 @@
 
 
 
+#### Parameters
+
+| Name      | Type                                                                                       | Description |
+| --------- | ------------------------------------------------------------------------------------------ | ----------- |
+| `options` | `{ setValidationClass?: boolean; validationClassOptions?: { ignoreInvalid?: boolean; }; }` |             |
+
 #### Returns
 
 Type: `Promise<boolean>`

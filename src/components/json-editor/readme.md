@@ -48,6 +48,12 @@ Type: `Promise<void>`
 
 
 
+#### Parameters
+
+| Name       | Type  | Description |
+| ---------- | ----- | ----------- |
+| `callback` | `any` |             |
+
 #### Returns
 
 Type: `Promise<void>`
@@ -78,6 +84,12 @@ Type: `Promise<void>`
 
 
 
+#### Parameters
+
+| Name   | Type  | Description |
+| ------ | ----- | ----------- |
+| `path` | `any` |             |
+
 #### Returns
 
 Type: `Promise<void>`
@@ -87,6 +99,12 @@ Type: `Promise<void>`
 ### `set(content: Content) => Promise<void>`
 
 
+
+#### Parameters
+
+| Name      | Type      | Description |
+| --------- | --------- | ----------- |
+| `content` | `Content` |             |
 
 #### Returns
 
@@ -108,6 +126,12 @@ Type: `Promise<void>`
 
 
 
+#### Parameters
+
+| Name      | Type      | Description |
+| --------- | --------- | ----------- |
+| `content` | `Content` |             |
+
 #### Returns
 
 Type: `Promise<void>`
@@ -117,6 +141,12 @@ Type: `Promise<void>`
 ### `updateOptions(options: JSONEditorPropsOptional) => Promise<void>`
 
 
+
+#### Parameters
+
+| Name      | Type                      | Description |
+| --------- | ------------------------- | ----------- |
+| `options` | `JSONEditorPropsOptional` |             |
 
 #### Returns
 

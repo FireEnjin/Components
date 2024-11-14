@@ -1,8 +1,4 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var stream = require('stream');
+import { Readable } from 'stream';
 
 const modeResolutionChain = [];
 
@@ -84147,7 +84143,7 @@ function renderStream(win2, opts, results) {
     const renderResult = await render(win2, opts, results);
     yield renderResult.html;
   }
-  return stream.Readable.from(processRender());
+  return Readable.from(processRender());
 }
 async function afterHydrate(win2, opts, results, resolve) {
   const afterHydrateFn = typeof opts.afterHydrate === "function" ? opts.afterHydrate : NOOP;
@@ -84257,8 +84253,4 @@ function removeScripts(elm) {
   }
 }
 
-exports.createWindowFromHtml = createWindowFromHtml;
-exports.hydrateDocument = hydrateDocument;
-exports.renderToString = renderToString;
-exports.serializeDocumentToString = serializeDocumentToString;
-exports.streamToString = streamToString;
+export { createWindowFromHtml, hydrateDocument, renderToString, serializeDocumentToString, streamToString };

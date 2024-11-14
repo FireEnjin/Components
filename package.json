@@ -1,7 +1,7 @@
 {
   "name": "@fireenjin/components",
   "namespace": "fireenjin",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "private": false,
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -39,7 +39,7 @@
     "@ionic-native/geolocation": "^5.36.0",
     "@ionic-native/social-sharing": "^5.36.0",
     "@ionic/core": "^6.7.4",
-    "chart.js": "^4.4.5",
+    "chart.js": "^4.4.6",
     "cleave.js": "^1.6.0",
     "clipboard": "^2.0.11",
     "date-fns": "^2.30.0",
@@ -49,12 +49,12 @@
     "leader-line": "^1.0.7",
     "localforage": "^1.10.0",
     "typescript-debounce-decorator": "^0.0.18",
-    "vanilla-jsoneditor": "^1.1.1"
+    "vanilla-jsoneditor": "^2.0.2"
   },
   "devDependencies": {
     "@fireenjin/cli": "^1.1.14",
     "@fireenjin/docs": "^1.0.19",
-    "@stencil/core": "^3.4.2",
+    "@stencil/core": "^4.22.2",
     "@stencil/store": "^2.0.16",
     "@types/cleave.js": "^1.4.12",
     "@types/jest": "^29.5.14",

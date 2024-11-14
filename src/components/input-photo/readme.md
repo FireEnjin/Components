@@ -43,6 +43,12 @@
 
 
 
+#### Parameters
+
+| Name     | Type  | Description |
+| -------- | ----- | ----------- |
+| `_event` | `any` |             |
+
 #### Returns
 
 Type: `Promise<boolean>`

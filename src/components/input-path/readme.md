@@ -38,6 +38,12 @@ Type: `Promise<any>`
 
 
 
+#### Parameters
+
+| Name    | Type     | Description |
+| ------- | -------- | ----------- |
+| `index` | `number` |             |
+
 #### Returns
 
 Type: `Promise<any>`

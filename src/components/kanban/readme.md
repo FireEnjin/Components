@@ -20,6 +20,12 @@
 
 
 
+#### Parameters
+
+| Name     | Type      | Description |
+| -------- | --------- | ----------- |
+| `boards` | `Board[]` |             |
+
 #### Returns
 
 Type: `Promise<any>`
@@ -29,6 +35,14 @@ Type: `Promise<any>`
 ### `addElement(boardId: string, element: any, position?: number) => Promise<any>`
 
 
+
+#### Parameters
+
+| Name       | Type     | Description |
+| ---------- | -------- | ----------- |
+| `boardId`  | `string` |             |
+| `element`  | `any`    |             |
+| `position` | `number` |             |
 
 #### Returns
 
@@ -40,6 +54,13 @@ Type: `Promise<any>`
 
 
 
+#### Parameters
+
+| Name       | Type     | Description |
+| ---------- | -------- | ----------- |
+| `boardId`  | `string` |             |
+| `formItem` | `any`    |             |
+
 #### Returns
 
 Type: `Promise<any>`
@@ -49,6 +70,12 @@ Type: `Promise<any>`
 ### `findBoard(id: string) => Promise<any>`
 
 
+
+#### Parameters
+
+| Name | Type     | Description |
+| ---- | -------- | ----------- |
+| `id` | `string` |             |
 
 #### Returns
 
@@ -60,6 +87,12 @@ Type: `Promise<any>`
 
 
 
+#### Parameters
+
+| Name | Type     | Description |
+| ---- | -------- | ----------- |
+| `id` | `string` |             |
+
 #### Returns
 
 Type: `Promise<any>`
@@ -69,6 +102,12 @@ Type: `Promise<any>`
 ### `getBoardElements(id: string) => Promise<any>`
 
 
+
+#### Parameters
+
+| Name | Type     | Description |
+| ---- | -------- | ----------- |
+| `id` | `string` |             |
 
 #### Returns
 
@@ -90,6 +129,12 @@ Type: `Promise<any>`
 
 
 
+#### Parameters
+
+| Name | Type     | Description |
+| ---- | -------- | ----------- |
+| `id` | `string` |             |
+
 #### Returns
 
 Type: `Promise<any>`
@@ -99,6 +144,12 @@ Type: `Promise<any>`
 ### `removeBoard(id: string) => Promise<any>`
 
 
+
+#### Parameters
+
+| Name | Type     | Description |
+| ---- | -------- | ----------- |
+| `id` | `string` |             |
 
 #### Returns
 
@@ -110,6 +161,12 @@ Type: `Promise<any>`
 
 
 
+#### Parameters
+
+| Name | Type     | Description |
+| ---- | -------- | ----------- |
+| `id` | `string` |             |
+
 #### Returns
 
 Type: `Promise<any>`
@@ -119,6 +176,13 @@ Type: `Promise<any>`
 ### `replaceElement(id: string, element: any) => Promise<any>`
 
 
+
+#### Parameters
+
+| Name      | Type     | Description |
+| --------- | -------- | ----------- |
+| `id`      | `string` |             |
+| `element` | `any`    |             |
 
 #### Returns
 

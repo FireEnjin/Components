@@ -52,6 +52,12 @@
 
 
 
+#### Parameters
+
+| Name      | Type    | Description |
+| --------- | ------- | ----------- |
+| `results` | `any[]` |             |
+
 #### Returns
 
 Type: `Promise<void>`
@@ -61,6 +67,13 @@ Type: `Promise<void>`
 ### `addTag(tag: string, event?: any) => Promise<void>`
 
 
+
+#### Parameters
+
+| Name    | Type     | Description |
+| ------- | -------- | ----------- |
+| `tag`   | `string` |             |
+| `event` | `any`    |             |
 
 #### Returns
 
@@ -72,15 +85,28 @@ Type: `Promise<void>`
 
 
 
+#### Parameters
+
+| Name    | Type  | Description |
+| ------- | ----- | ----------- |
+| `value` | `any` |             |
+| `event` | `any` |             |
+
 #### Returns
 
 Type: `Promise<void>`
 
 
 
-### `clearParamData(key?: string) => Promise<{ query?: string; limit?: number; orderBy?: string; orderDirection?: "desc" | "asc"; whereEqual?: string; whereLessThan?: string; whereLessThanOrEqual?: string; whereGreaterThan?: string; whereGreaterThanOrEqual?: string; whereArrayContains?: string; whereArrayContainsAny?: string; whereIn?: string; next?: string; back?: string; }>`
+### `clearParamData(key?: string) => Promise<{ query?: string; limit?: number; orderBy?: string; orderDirection?: "asc" | "desc"; whereEqual?: string; whereLessThan?: string; whereLessThanOrEqual?: string; whereGreaterThan?: string; whereGreaterThanOrEqual?: string; whereArrayContains?: string; whereArrayContainsAny?: string; whereIn?: string; next?: string; back?: string; }>`
 
 
+
+#### Parameters
+
+| Name  | Type     | Description |
+| ----- | -------- | ----------- |
+| `key` | `string` |             |
 
 #### Returns
 
@@ -102,6 +128,12 @@ Type: `Promise<void>`
 
 
 
+#### Parameters
+
+| Name      | Type                                                                  | Description |
+| --------- | --------------------------------------------------------------------- | ----------- |
+| `options` | `{ page?: number; next?: boolean; limit?: number; paramData?: any; }` |             |
+
 #### Returns
 
 Type: `Promise<void>`
@@ -111,6 +143,13 @@ Type: `Promise<void>`
 ### `removeValue(value: any, event?: any) => Promise<void>`
 
 
+
+#### Parameters
+
+| Name    | Type  | Description |
+| ------- | ----- | ----------- |
+| `value` | `any` |             |
+| `event` | `any` |             |
 
 #### Returns
 

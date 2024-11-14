@@ -26,6 +26,12 @@
 
 
 
+#### Parameters
+
+| Name     | Type  | Description |
+| -------- | ----- | ----------- |
+| `rating` | `any` |             |
+
 #### Returns
 
 Type: `Promise<void>`

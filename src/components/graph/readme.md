@@ -50,6 +50,12 @@ Type: `Promise<boolean>`
 
 Set the list datasets for the graph
 
+#### Parameters
+
+| Name       | Type             | Description            |
+| ---------- | ---------------- | ---------------------- |
+| `datasets` | `ChartDataset[]` | The datasets to render |
+
 #### Returns
 
 Type: `Promise<any>`
@@ -59,6 +65,12 @@ Type: `Promise<any>`
 ### `setLabels(labels: string[]) => Promise<any>`
 
 Set the list labels for the graph
+
+#### Parameters
+
+| Name     | Type       | Description              |
+| -------- | ---------- | ------------------------ |
+| `labels` | `string[]` | The labels for the graph |
 
 #### Returns
 
