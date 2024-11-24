@@ -388,7 +388,7 @@ export class Input implements ComponentInterface {
   }
 
   dateToYearMonthDay(timestamp: any): string {
-    const d = new Date(+timestamp);
+    const d = new Date(timestamp);
     let month = "" + (d.getMonth() + 1);
     let day = "" + d.getDate();
     const year = d.getFullYear();
@@ -415,8 +415,7 @@ export class Input implements ComponentInterface {
         this.inputType && !this.passwordVisible
           ? this.inputType
           : this.type === "phone" ||
-            this.type === "hours" ||
-            this.type === "date"
+            this.type === "hours"
           ? "tel"
           : "text";
 

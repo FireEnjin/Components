@@ -34804,7 +34804,7 @@ class Input$1 {
     });
   }
   dateToYearMonthDay(timestamp) {
-    const d = new Date(+timestamp);
+    const d = new Date(timestamp);
     let month = "" + (d.getMonth() + 1);
     let day = "" + d.getDate();
     const year = d.getFullYear();
@@ -34831,8 +34831,7 @@ class Input$1 {
       const inputType = this.inputType && !this.passwordVisible
         ? this.inputType
         : this.type === "phone" ||
-          this.type === "hours" ||
-          this.type === "date"
+          this.type === "hours"
           ? "tel"
           : "text";
       return (hAsync("ion-input", { fill: this.fill, type: inputType, name: this.name, spellcheck: this.spellCheck, readonly: this.readOnly, multiple: this.multiple, clearInput: this.clearInput, counter: this.counter, debounce: this.debounce, counterFormatter: this.counterFormatter, inputMode: this.inputMode, helperText: this.helperText, errorText: this.errorText, pattern: this.pattern
